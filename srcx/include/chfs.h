@@ -45,6 +45,7 @@ typedef struct fs {
 struct fsvmt {
   sysret_t (*read_root_node)(struct vnode *vp);
   sysret_t (*update_node)(struct vnode *vp);
+  sysret_t (*follow)(char *name, unsigned len, struct vnode **vpp);
 };
 
 #define FS_TYPE_FAT     0
