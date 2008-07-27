@@ -21,8 +21,6 @@
 
 #include "test.h"
 
-#define ALLOWED_DELAY 5
-
 static Mutex m1;
 static CondVar c1;
 
@@ -42,7 +40,7 @@ static void cond1_teardown(void) {
 
 static msg_t thread1(void *p) {
   chMtxLock(&m1);
-  chCondWait(&c1, &m1);
+  chCondWait(&c1);
   test_emit_token(*(char *)p);
   chMtxUnlock();
   return 0;

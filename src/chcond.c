@@ -43,7 +43,9 @@ void chCondInit(CondVar *cp) {
 void chCondSignal(CondVar *cp) {
 
   chSysLock();
+
   chCondSignalS(cp);
+
   chSysUnlock();
 }
 
@@ -69,8 +71,10 @@ void chCondSignalS(CondVar *cp) {
 void chCondBroadcast(CondVar *cp) {
 
   chSysLock();
+
   chCondBroadcastS(cp);
   chSchRescheduleS();
+
   chSysUnlock();
 }
 
@@ -103,26 +107,27 @@ void chCondBroadcastS(CondVar *cp) {
  * @param cp pointer to the \p CondVar structure
  * @note This function must be called within a \p chSysLock() / \p chSysUnlock()
  */
-msg_t chCondWait(CondVar *cp, Mutex *mp) {
+msg_t chCondWait(CondVar *cp) {
   msg_t msg;
+
   chSysLock();
-  msg = chCondWaitS(cp, mp);
+
+  msg = chCondWaitS(cp);
+
   chSysUnlock();
   return msg;
 }
 
-msg_t chCondWaitS(CondVar *cp, Mutex *mp) {
+msg_t chCondWaitS(CondVar *cp) {
+  Mutex *mp = currp->p_mtxlist; /* Last locked mutex. */
 
-  /* unlock the mutex that protects access to the condition variable */
-  chMtxUnlockS();
-  /* wait on the condition variable */
-  prio_insert(currp, &cp->c_queue);
-  /* Thread remembers the condition variable it waits on */
+  chDbgAssert(mp != NULL, "chcond.c, chCondWaitS()");
+
+  chMtxUnlockS();                       /* Unlocks it */
+  prio_insert(currp, &cp->c_queue);     /* enters the condvar queue */
   currp->p_wtcondp = cp;
-  /* sleep until signaled */
   chSchGoSleepS(PRWTCOND);
-  /* lock the mutex that protects access to the condition variable */
-  chMtxLockS(mp);
+  chMtxLockS(mp);                       /* atomically relocks the same mutex */
   return currp->p_rdymsg;
 }
 
