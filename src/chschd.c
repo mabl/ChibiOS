@@ -146,12 +146,14 @@ msg_t chSchGoSleepTimeoutS(tstate_t newstate, systime_t time) {
  */
 void chSchWakeupS(Thread *ntp, msg_t msg) {
   ntp->p_rdymsg = msg;
+  /* the woken thread has equal or lower priority than the running thread? */
   if (ntp->p_prio <= currp->p_prio)
-    /* the woken thread has equal or lower priority than the running thread */
+    /* put the woken thread on the ready queue */
     chSchReadyI(ntp);
-  else {
     /* the woken thread has higher priority than the running thread and thus
      * preempts the currently running thread. */
+  else {
+    /* put the currently running thread on the ready queue */
     Thread *otp = currp;
     chSchReadyI(otp);
     /* change the to-be-run thread to running state */

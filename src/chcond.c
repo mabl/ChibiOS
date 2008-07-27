@@ -55,9 +55,9 @@ void chCondSignal(CondVar *cp) {
  *       block.
  */
 void chCondSignalS(CondVar *cp) {
-
+  /* any thread waiting on the condition variable? */
   if (notempty(&cp->c_queue))
-    /* wake up the first thread, if any */
+    /* wake up the first thread */
     chSchWakeupS(fifo_remove(&cp->c_queue), RDY_OK);
 }
 
@@ -69,10 +69,8 @@ void chCondSignalS(CondVar *cp) {
 void chCondBroadcast(CondVar *cp) {
 
   chSysLock();
-
   chCondBroadcastS(cp);
   chSchRescheduleS();
-
   chSysUnlock();
 }
 
@@ -81,6 +79,9 @@ void chCondBroadcast(CondVar *cp) {
  *
  * @param cp pointer to the \p CondVar structure
  * @note This function must be called within a \p chSysLock() / \p chSysUnlock()
+ *
+ * @todo If priority inheritance is disabled, we want the threads to appear in
+ * FIFO order on the ready list. Check if we need to iterate backwards?
  */
 void chCondBroadcastS(CondVar *cp) {
 
@@ -97,24 +98,23 @@ void chCondBroadcastS(CondVar *cp) {
  * Release the mutex, wait on the condition variable, and lock the mutex. This
  * is done atomically.
  *
+ * The thread MUST already have locked the mutex when calling chCondWait().
+ *
  * @param cp pointer to the \p CondVar structure
  * @note This function must be called within a \p chSysLock() / \p chSysUnlock()
  */
 msg_t chCondWait(CondVar *cp, Mutex *mp) {
   msg_t msg;
-
   chSysLock();
-
   msg = chCondWaitS(cp, mp);
-
   chSysUnlock();
   return msg;
 }
 
 msg_t chCondWaitS(CondVar *cp, Mutex *mp) {
 
-  /* lock the mutex that protects access to the condition variable */
-  chMtxLockS(mp);
+  /* unlock the mutex that protects access to the condition variable */
+  chMtxUnlockS();
   /* wait on the condition variable */
   prio_insert(currp, &cp->c_queue);
   /* Thread remembers the condition variable it waits on */
@@ -123,7 +123,6 @@ msg_t chCondWaitS(CondVar *cp, Mutex *mp) {
   chSchGoSleepS(PRWTCOND);
   /* lock the mutex that protects access to the condition variable */
   chMtxLockS(mp);
-  currp->p_wtcondp = NULL;
   return currp->p_rdymsg;
 }
 
