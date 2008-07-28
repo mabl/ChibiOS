@@ -84,9 +84,6 @@ void chCondBroadcast(CondVar *cp) {
  *
  * @param cp pointer to the \p CondVar structure
  * @note This function must be called within a \p chSysLock() / \p chSysUnlock()
- *
- * @todo If priority inheritance is disabled, we want the threads to appear in
- * FIFO order on the ready list. Check if we need to iterate backwards?
  */
 void chCondBroadcastI(CondVar *cp) {
 
