@@ -32,6 +32,7 @@
  */
 void chCondInit(CondVar *cp) {
 
+  chMtxInit(&cp->c_mutex);
   fifo_init(&cp->c_queue);
 }
 
@@ -44,7 +45,8 @@ void chCondSignal(CondVar *cp) {
 
   chSysLock();
 
-  chCondSignalS(cp);
+  if (notempty(&cp->c_queue))                           /* any thread ? */
+    chSchWakeupS(fifo_remove(&cp->c_queue), RDY_OK);
 
   chSysUnlock();
 }
@@ -56,11 +58,10 @@ void chCondSignal(CondVar *cp) {
  * @note This function must be called within a \p chSysLock() / \p chSysUnlock()
  *       block.
  */
-void chCondSignalS(CondVar *cp) {
-  /* any thread waiting on the condition variable? */
-  if (notempty(&cp->c_queue))
-    /* wake up the first thread */
-    chSchWakeupS(fifo_remove(&cp->c_queue), RDY_OK);
+void chCondSignalI(CondVar *cp) {
+
+  if (notempty(&cp->c_queue))                           /* any thread ? */
+    chSchReadyI(fifo_remove(&cp->c_queue))->p_rdymsg = RDY_OK;
 }
 
 /**
@@ -72,7 +73,7 @@ void chCondBroadcast(CondVar *cp) {
 
   chSysLock();
 
-  chCondBroadcastS(cp);
+  chCondBroadcastI(cp);
   chSchRescheduleS();
 
   chSysUnlock();
@@ -87,7 +88,7 @@ void chCondBroadcast(CondVar *cp) {
  * @todo If priority inheritance is disabled, we want the threads to appear in
  * FIFO order on the ready list. Check if we need to iterate backwards?
  */
-void chCondBroadcastS(CondVar *cp) {
+void chCondBroadcastI(CondVar *cp) {
 
   /* empties the condition variable queue and inserts all the Threads into the
    * ready list in FIFO order. The wakeup message is set to \p RDY_RESET in
@@ -97,7 +98,7 @@ void chCondBroadcastS(CondVar *cp) {
 }
 
 /**
- * Wait on the condition variable protected by the given mutex.
+ * Wait on the condition variable releasing the lock.
  *
  * Release the mutex, wait on the condition variable, and lock the mutex. This
  * is done atomically.
@@ -105,7 +106,6 @@ void chCondBroadcastS(CondVar *cp) {
  * The thread MUST already have locked the mutex when calling chCondWait().
  *
  * @param cp pointer to the \p CondVar structure
- * @note This function must be called within a \p chSysLock() / \p chSysUnlock()
  */
 msg_t chCondWait(CondVar *cp) {
   msg_t msg;
@@ -118,17 +118,27 @@ msg_t chCondWait(CondVar *cp) {
   return msg;
 }
 
+/**
+ * Wait on the condition variable releasing the lock.
+ *
+ * Release the mutex, wait on the condition variable, and lock the mutex. This
+ * is done atomically.
+ *
+ * The thread MUST already have locked the mutex when calling chCondWait().
+ *
+ * @param cp pointer to the \p CondVar structure
+ * @note This function must be called within a \p chSysLock() / \p chSysUnlock()
+ */
 msg_t chCondWaitS(CondVar *cp) {
-  Mutex *mp = currp->p_mtxlist; /* Last locked mutex. */
 
-  chDbgAssert(mp != NULL, "chcond.c, chCondWaitS()");
+  chDbgAssert(currp->p_mtxlist == cp->c_mutex, "chcond.c, chCondWaitS()");
 
-  chMtxUnlockS();                       /* Unlocks it */
+  chMtxUnlockS();                       /* unlocks the condvar mutex */
   prio_insert(currp, &cp->c_queue);     /* enters the condvar queue */
-  currp->p_wtcondp = cp;
-  chSchGoSleepS(PRWTCOND);
-  chMtxLockS(mp);                       /* atomically relocks the same mutex */
-  return currp->p_rdymsg;
+  currp->p_wtcondp = cp;                /* needed by the tracer */
+  chSchGoSleepS(PRWTCOND);              /* waits on the condvar */
+  chMtxLockS(&cp->c_mutex);             /* atomically relocks the mutex */
+  return currp->p_rdymsg;               /* returns the wakeup message */
 }
 
 #endif /* CH_USE_CONDVARS */

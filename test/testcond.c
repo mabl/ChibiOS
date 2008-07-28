@@ -21,7 +21,6 @@
 
 #include "test.h"
 
-static Mutex m1;
 static CondVar c1;
 
 static char *cond1_gettest(void) {
@@ -32,17 +31,17 @@ static char *cond1_gettest(void) {
 static void cond1_setup(void) {
 
   chCondInit(&c1);
-  chMtxInit(&m1);
 }
 
 static void cond1_teardown(void) {
 }
 
 static msg_t thread1(void *p) {
-  chMtxLock(&m1);
+
+  chCondLock(&c1);
   chCondWait(&c1);
   test_emit_token(*(char *)p);
-  chMtxUnlock();
+  chCondUnlock();
   return 0;
 }
 
