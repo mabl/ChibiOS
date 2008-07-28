@@ -97,10 +97,10 @@ void chCondBroadcastI(CondVar *cp) {
 /**
  * Wait on the condition variable releasing the lock.
  *
- * Release the mutex, wait on the condition variable, and lock the mutex. This
- * is done atomically.
+ * Releases the lock, waits on the condition variable, and finally acquires
+ * the locks again. This is done atomically.
  *
- * The thread MUST already have locked the mutex when calling chCondWait().
+ * The thread MUST already have acquired the lock when calling chCondWait().
  *
  * @param cp pointer to the \p CondVar structure
  */
@@ -118,10 +118,10 @@ msg_t chCondWait(CondVar *cp) {
 /**
  * Wait on the condition variable releasing the lock.
  *
- * Release the mutex, wait on the condition variable, and lock the mutex. This
- * is done atomically.
+ * Releases the lock, waits on the condition variable, and finally acquires
+ * the locks again. This is done atomically.
  *
- * The thread MUST already have locked the mutex when calling chCondWait().
+ * The thread MUST already have acquired the lock when calling chCondWait().
  *
  * @param cp pointer to the \p CondVar structure
  * @note This function must be called within a \p chSysLock() / \p chSysUnlock()
