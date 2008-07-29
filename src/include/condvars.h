@@ -40,14 +40,16 @@ extern "C" {
   void chCondSignalI(CondVar *cp);
   void chCondBroadcast(CondVar *cp);
   void chCondBroadcastI(CondVar *cp);
-  msg_t chCondWait(CondVar *cp);
-  msg_t chCondWaitS(CondVar *cp);
+  msg_t chCondWaitTimeout(CondVar *cp, systime_t time);
+  msg_t chCondWaitTimeoutS(CondVar *cp, systime_t time);
 #ifdef __cplusplus
 }
 #endif
 
 #define chCondLock(cp) chMtxLock(&(cp)->c_mutex)
 #define chCondUnlock() chMtxUnlock()
+#define chCondWait(cp) chCondWaitTimeout(cp, TIME_INFINITE)
+#define chCondWaitS(cp) chCondWaitTimeoutS(cp, TIME_INFINITE)
 
 #endif /* CH_USE_CONDVARS */
 

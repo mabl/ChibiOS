@@ -103,13 +103,15 @@ void chCondBroadcastI(CondVar *cp) {
  * The thread MUST already have acquired the lock when calling chCondWait().
  *
  * @param cp pointer to the \p CondVar structure
+ * @param time the number of ticks before the operation timeouts
+ * @return the function can return \p RDY_OK, \p RDY_TIMEOUT or \p RDY_RESET.
  */
-msg_t chCondWait(CondVar *cp) {
+msg_t chCondWaitTimeout(CondVar *cp, systime_t time) {
   msg_t msg;
 
   chSysLock();
 
-  msg = chCondWaitS(cp);
+  msg = chCondWaitTimeoutS(cp, time);
 
   chSysUnlock();
   return msg;
@@ -124,18 +126,21 @@ msg_t chCondWait(CondVar *cp) {
  * The thread MUST already have acquired the lock when calling chCondWait().
  *
  * @param cp pointer to the \p CondVar structure
+ * @param time the number of ticks before the operation timeouts
+ * @return the function can return \p RDY_OK, \p RDY_TIMEOUT or \p RDY_RESET.
  * @note This function must be called within a \p chSysLock() / \p chSysUnlock()
  */
-msg_t chCondWaitS(CondVar *cp) {
+msg_t chCondWaitTimeoutS(CondVar *cp, systime_t time) {
+  msg_t msg;
 
   chDbgAssert(currp->p_mtxlist == cp->c_mutex, "chcond.c, chCondWaitS()");
 
   chMtxUnlockS();                       /* unlocks the condvar mutex */
   prio_insert(currp, &cp->c_queue);     /* enters the condvar queue */
   currp->p_wtcondp = cp;                /* needed by the tracer */
-  chSchGoSleepS(PRWTCOND);              /* waits on the condvar */
+  msg = chSchGoSleepTimeoutS(PRWTCOND, time);
   chMtxLockS(&cp->c_mutex);             /* atomically relocks the mutex */
-  return currp->p_rdymsg;               /* returns the wakeup message */
+  return msg;               /* returns the wakeup message */
 }
 
 #endif /* CH_USE_CONDVARS */
