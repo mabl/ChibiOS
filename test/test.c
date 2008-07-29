@@ -33,14 +33,14 @@
 static const struct testcase *tests[] = {
   &testrdy1,
   &testrdy2,
-  &testsem1,
-  &testsem2,
   &testmtx1,
   &testmtx2,
   &testmtx3,
+  &testmsg1,
+  &testsem1,
+  &testsem2,
   &testcond1,
   &testcond2,
-  &testmsg1,
   &testbmk1,
   &testbmk2,
   &testbmk3,
@@ -114,6 +114,9 @@ void test_emit_token(char token) {
 
   chSysLock();
   *tokp++ = token;
+#if 0
+  chFDDPut(comp, token);
+#endif
   chSysUnlock();
 }
 
