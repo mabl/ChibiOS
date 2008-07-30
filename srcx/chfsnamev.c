@@ -32,19 +32,26 @@ static sysret_t scan_path(char *path, struct vnode **vpp) {
 
   while (TRUE) {
     /* Trailing and consecutive '/' are skipped and ignored.*/
-    while (*path && (*path != '/'))
+    while (*path && (*path == '/'))
       path++;
+
     p = path;
     /* Sizes a single path element.*/
     while (*p && (*p != '/'))
       p++;
     if (p - path == 0)
       return SYSOK;
+
+    /* If not at the path end the vnode must represent a directory.*/
+    if ((*p == '/') && !S_ISDIR(*vpp->v_flags))
+      return -ENOTDIR;
+
     /* Note it is the virtual follow function that checks the syntax and the
        filename length of the path element, it is FS-dependent.*/
     ret = (*vpp)->v_fs->fs_vmt->follow(path, p - path, vpp);
     if (ret < SYSOK)
       return ret;
-    path = ++p;
+
+    path = p;
   }
 }
