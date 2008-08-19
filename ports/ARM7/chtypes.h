@@ -40,8 +40,11 @@ typedef uint32_t        systime_t;
 typedef int32_t         cnt_t;
 
 #define INLINE inline
+#define PACK_STRUCT_FIELD(x) x
 #define PACK_STRUCT_STRUCT __attribute__((packed))
 #define PACK_STRUCT_BEGIN
 #define PACK_STRUCT_END
+
+#define BYTE_ORDER BIG_ENDIAN
 
 #endif /* _CHTYPES_H_ */
