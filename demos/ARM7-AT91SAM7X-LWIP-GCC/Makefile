@@ -98,6 +98,7 @@ ASRC = ../../ports/ARM7-AT91SAM7X/chcore.c \
        ${TESTSRC} \
        ${LWCORESRC} \
        ${LWAPISRC} \
+       lwip/core/sys_arch.c \
        ../../src/lib/evtimer.c \
        at91lib/aic.c \
        board.c main.c
@@ -113,7 +114,8 @@ ASMSRC = ../../ports/ARM7-AT91SAM7X/crt0.s ../../ports/ARM7/chsys.s
 # List all user directories here
 UINCDIR = ../../src/include ../../src/lib ../../test \
           ../../ports/ARM7 ../../ports/ARM7-AT91SAM7X \
-          ../../ext/lwip/src/include ../../ext/lwip/src/include/ipv4
+          ../../ext/lwip/src/include ../../ext/lwip/src/include/ipv4 \
+          lwip
 
 # List the user directory to look for the libraries here
 ULIBDIR =
