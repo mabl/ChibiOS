@@ -66,6 +66,9 @@ include ../../src/kernel.mk
 include ../../test/test.mk
 
 # List of the required uIP source files.
+LWNETIFSRC = \
+        ../../ext/lwip/src/netif/etharp.c \
+        ../../ext/lwip/src/netif/loopif.c
 LWCORESRC = \
         ../../ext/lwip/src/core/dhcp.c \
         ../../ext/lwip/src/core/dns.c \
@@ -81,6 +84,15 @@ LWCORESRC = \
         ../../ext/lwip/src/core/tcp_in.c \
         ../../ext/lwip/src/core/tcp_out.c \
         ../../ext/lwip/src/core/udp.c
+LWIPV4SRC = \
+        ../../ext/lwip/src/core/ipv4/autoip.c \
+        ../../ext/lwip/src/core/ipv4/icmp.c \
+        ../../ext/lwip/src/core/ipv4/igmp.c \
+        ../../ext/lwip/src/core/ipv4/inet.c \
+        ../../ext/lwip/src/core/ipv4/inet_chksum.c \
+        ../../ext/lwip/src/core/ipv4/ip.c \
+        ../../ext/lwip/src/core/ipv4/ip_addr.c \
+        ../../ext/lwip/src/core/ipv4/ip_frag.c
 LWAPISRC = \
         ../../ext/lwip/src/api/api_lib.c \
         ../../ext/lwip/src/api/api_msg.c \
@@ -96,9 +108,12 @@ ASRC = ../../ports/ARM7-AT91SAM7X/chcore.c \
        ../../ports/ARM7-AT91SAM7X/sam7x_serial.c \
        ${KERNSRC} \
        ${TESTSRC} \
+       ${LWNETIFSRC} \
        ${LWCORESRC} \
+       ${LWIPV4SRC} \
        ${LWAPISRC} \
        lwip/arch/sys_arch.c \
+       lwip/netif/ethernetif.c \
        ../../src/lib/evtimer.c \
        at91lib/aic.c \
        board.c main.c

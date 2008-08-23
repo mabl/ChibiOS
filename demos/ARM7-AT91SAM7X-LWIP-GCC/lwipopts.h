@@ -828,7 +828,7 @@
  * LWIP_HAVE_LOOPIF==1: Support loop interface (127.0.0.1) and loopif.c
  */
 #ifndef LWIP_HAVE_LOOPIF
-#define LWIP_HAVE_LOOPIF                0
+#define LWIP_HAVE_LOOPIF                1       /* CHANGED */
 #endif
 
 /**
@@ -865,7 +865,7 @@
  * sys_thread_new() when the thread is created.
  */
 #ifndef TCPIP_THREAD_STACKSIZE
-#define TCPIP_THREAD_STACKSIZE          0
+#define TCPIP_THREAD_STACKSIZE          512     /* CHANGED */
 #endif
 
 /**
@@ -874,7 +874,7 @@
  * sys_thread_new() when the thread is created.
  */
 #ifndef TCPIP_THREAD_PRIO
-#define TCPIP_THREAD_PRIO               1
+#define TCPIP_THREAD_PRIO               LOWPRIO /* CHANGED */
 #endif
 
 /**
