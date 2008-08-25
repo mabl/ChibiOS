@@ -24,13 +24,15 @@
 
 static sysret_t read_root_node(struct vnode *vp);
 static sysret_t update_node(struct vnode *vp);
+static sysret_t follow(char *name, unsigned len, struct vnode **vpp);
 
 /*
  * FAT File System VMT.
  */
 struct fsvmt fatvmt = {
   read_root_node,
-  update_node
+  update_node,
+  follow
 };
 
 #define BPB_SECTOR_SIZE         0xB
@@ -136,6 +138,20 @@ static sysret_t read_root_node(struct vnode *vp) {
 }
 
 static sysret_t update_node(struct vnode *vp) {
+
+  return SYSOK;
+}
+
+static sysret_t follow(char *name, unsigned len, struct vnode **vpp) {
+  char buf[12];
+  unsigned i;
+
+  memset(buf, ' ', 11);
+  buf[11] = 0;
+
+  i = 0;
+  while (TRUE) {
+  }
 
   return SYSOK;
 }

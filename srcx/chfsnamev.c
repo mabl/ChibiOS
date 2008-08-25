@@ -43,7 +43,7 @@ static sysret_t scan_path(char *path, struct vnode **vpp) {
       return SYSOK;
 
     /* If not at the path end the vnode must represent a directory.*/
-    if ((*p == '/') && !S_ISDIR(*vpp->v_flags))
+    if ((*p == '/') && !S_ISDIR((*vpp)->v_flags))
       return -ENOTDIR;
 
     /* Note it is the virtual follow function that checks the syntax and the
