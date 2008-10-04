@@ -74,6 +74,80 @@ Win32-MinGW            - ChibiOS/RT simulator and demo into a WIN32 process,
 *** Releases                                                              ***
 *****************************************************************************
 
+*** 0.7.2 ***
+- Modified the STM32 demo makefile to use the latest YAGARTO toolchain as
+  default (arm-elf-gcc).
+  
+*** 0.7.1 ***
+- NEW: New chThdInit() and chThdCreateStatic() APIs now replace the old
+  chThdCreate() and chThdCreateFast() that are thus marked as deprecated.
+  The new APIs use one less parameter and are faster.
+- NEW: New dynamic chThdCreateFromHeap() and chthdCreateFromMemoryPool() APIs.
+  The dynamic APIs are only included if the CH_USE_DYNAMIC option is specified
+  into the project configuration file.
+- NEW: Added an THREAD_EXT_EXIT macro in chconf.h to add finalization code to
+  the chThdExit() API.
+- CHANGE: chThdCreateFast() is now a macro that uses chThdCreateStatic().
+- CHANGE: chThdWait() now releases the memory allocated by
+  chThdCreateFromHeap() and chthdCreateFromMemoryPool(). Threads created
+  through the static APIs are not affected thus the behavior is backward
+  compatible.
+- CHANGE: Modified the chThdResume() API to return the resumed thread pointer
+  instead of void. This allowed few optimization into the threads creation
+  code.
+- CHANGE: The chThdGetExitEventSource() API and the CH_USE_EXIT_EVENT
+  configuration option and the are now deprecated. Use the THREAD_EXT_EXIT
+  finalization macro in order to implement a similar functionality if needed.
+- FIX: The chThdCreate() had a regression in 0.7.0, the mode parameter was
+  ignored.
+- FIX: Removed duplicated call to chHeapInit() into chSysInit().
+- FIX: Fixed a syntax error in chheap.c triggered by the CH_USE_DEBUG option.
+- Added new test cases to the test suite for the new dynamic APIs.
+- Documentation fixes.
+
+*** 0.7.0 ***
+- NEW: Memory Heap Allocator functionality added. The allocator implements a
+  first-fit strategy but there is an option that allow it to wrap the compiler
+  provided malloc() that may implement a different strategy. The heap
+  allocator is thread-safe and can use both a mutex or a semaphore as
+  internal synchronization primitive.
+- NEW: Memory Pools functionality added, this mechanism allows constant-time
+  allocation/freeing of constant-size objects. It can be used to dynamically
+  allocate kernel objects like Semaphores, Mutexes, Threads etc fully in real
+  time, of course it is also possible to manage application-defined objects.
+  The pool allocator is thread-safe.
+  It is worth remembering that the kernel is still entirely static, it does
+  not use the allocation services internally, it is up to the application
+  code to use the allocators in order to use dynamic system objects.
+  Both the allocators can be disabled and removed from the memory image.
+- NEW: Added option macros in chconf.h to add custom fields and initialization
+  code to the Thread structure.
+- FIX: Corrected the wrong definition of the chThdResumeI() macro.
+- FIX: The API chSemWaitTimeout() was missing in the documentation.
+- CHANGE: Modified the chMtxUnlock() and chMtxUnlockS() APIs to return the
+  pointer to the released mutex instead of void.
+- CHANGE: Now the chThdResume() API asserts that the thread is in PRSUSPEND
+  state rather than test it.
+- CHANGE: Removed the CH_USE_TERMINATE, CH_USE_SLEEP, CH_USE_SUSPEND and
+  CH_USE_RESUME configuration options in order to make the chconf.h file
+  simpler. The related functions are very small and almost always required.
+- CHANGE: The P_MSGBYPRIO thread option has been removed, now the threads
+  always serve messages in priority order if the CH_USE_MESSAGES_PRIORITY
+  configuration option is active.
+- Added new test cases to the test suite.
+
+*** 0.6.10 ***
+- FIX: Fixed a case-sensitiveness error in lpc214x_ssp.c, it affected only
+  linux/unix users.
+- FIX: Fixed a regression introduced in version 0.6.9, the queues benchmark
+  test case was missing from the tests list.
+- NEW: Added an option to the ARM7 ports, by specifying -DREENTRANT_LOCKS in
+  the makefile options makes the chSysLock() and chSysUnlock() become
+  reentrant. The code becomes a bit larger and slower, use it only if your
+  application really needs to invoke system API under lock.
+- NEW: Added an option to the ARM7 and CM3 makefiles to strip any unused code
+  and data from the binary file (the default is on).
+
 *** 0.6.9 ***
 - NEW: Added an option to exclude the support for the round robin scheduling,
   this can save some extra program space and makes the context switch a bit
