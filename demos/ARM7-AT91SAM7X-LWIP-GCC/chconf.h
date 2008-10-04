@@ -46,23 +46,6 @@
  *  included in the kernel.*/
 #define CH_USE_SYSTEMTIME
 
-/** Configuration option: if specified then the \p chThdSleep() function is
- *  included in the kernel.
- * @note requires \p CH_USE_VIRTUAL_TIMERS.*/
-#define CH_USE_SLEEP
-
-/** Configuration option: if specified then the \p chThdResume()
- *  function is included in the kernel.*/
-#define CH_USE_RESUME
-
-/** Configuration option: if specified then the \p chThdSuspend()
- *  function is included in the kernel.*/
-#define CH_USE_SUSPEND
-
-/** Configuration option: if specified then the \p chThdTerminate()
- *  and \p chThdShouldTerminate() functions are included in the kernel.*/
-#define CH_USE_TERMINATE
-
 /** Configuration option: if specified then the \p chThdWait() function
  *  is included in the kernel.*/
 #define CH_USE_WAITEXIT
@@ -112,8 +95,10 @@
 
 /** Configuration option: if specified then the
  *  \p chThdGetExitEventSource() function is included in the kernel.
- * @note requires \p CH_USE_MESSAGES.
- * @note requires \p CH_USE_EVENTS.*/
+ * @note requires \p CH_USE_EVENTS.
+ * @deprecated \p THREAD_EXT_EXIT should be used, this functionality will be
+ *             removed in version 1.0.0.
+ */
 #define CH_USE_EXIT_EVENT
 
 /** Configuration option: if specified then the I/O queues APIs are included
@@ -136,6 +121,32 @@
 /** Configuration option: if specified then the half duplex serial driver APIs
  *  are included in the kernel.*/
 #define CH_USE_SERIAL_HALFDUPLEX
+
+/** Configuration option: if specified then the memory heap allocator APIs
+ *  are included in the kernel.*/
+#define CH_USE_HEAP
+
+/** Configuration option: Number of RAM bytes to use as system heap. If set to
+ *  zero then the whole available RAM is used as system heap.
+ * @note In order to use the whole RAM as system heap the linker script must
+ *       provide the \p __heap_base__ and \p __heap_end__ symbols.
+ * @note requires \p CH_USE_HEAP.
+ */
+#define CH_HEAP_SIZE 0
+
+/** Configuration option: enforces the use of the C-runtime \p malloc() and
+ *  \p free() functions as backend for the system heap allocator.*/
+//#define CH_USE_MALLOC_HEAP
+
+/** Configuration option: if specified then the memory pools allocator APIs
+ *  are included in the kernel.*/
+#define CH_USE_MEMPOOLS
+
+/** Configuration option: if specified then the dynamic objects creation APIs
+ *  are included in the kernel.
+ * @note requires \p CH_USE_WAITEXIT.
+ */
+#define CH_USE_DYNAMIC
 
 /** Configuration option: Frequency of the system timer that drives the system
  *  ticks. This also defines the system time unit.*/
@@ -168,6 +179,24 @@
 /** Debug option: Includes the threads context switch tracing feature.
  */
 //#define CH_USE_TRACE
+
+/** User fields added to the end of the \p Thread structure. */
+#define THREAD_EXT_FIELDS                                               \
+struct {                                                                \
+  /* Add thread custom fields here.*/                                   \
+};
+
+/** User initialization code added to the \p chThdCreate() API.
+ *  @note It is invoked from within \p chThdInit(). */
+#define THREAD_EXT_INIT(tp) {                                           \
+  /* Add thread initialization code here.*/                             \
+}
+
+/** User finalization code added to the \p chThdExit() API.
+ *  @note It is inserted into lock zone. */
+#define THREAD_EXT_EXIT(tp) {                                           \
+  /* Add thread finalization code here.*/                               \
+}
 
 #endif  /* _CHCONF_H_ */
 

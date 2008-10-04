@@ -18,53 +18,24 @@
 */
 
 /**
- * @addtogroup Initialization
+ * @addtogroup Heap
  * @{
  */
 
-#ifndef _CH_H_
-#define _CH_H_
-
-#define _CHIBIOS_RT_
-
-#include <chconf.h>
-#include <chtypes.h>
-#include "lists.h"
-#include <chcore.h>
-#include "delta.h"
-#include "scheduler.h"
-#include "semaphores.h"
-#include "mutexes.h"
-#include "events.h"
-#include "messages.h"
-#include "heap.h"
-#include "mempools.h"
-#include "threads.h"
-#include "inline.h"
-#include "sleep.h"
-#include "queues.h"
-#include "serial.h"
-#include "debug.h"
-
-/*
- * Common values.
- */
-#ifndef FALSE
-#define FALSE       0
-#endif
-#ifndef TRUE
-#define TRUE        (!FALSE)
-#endif
+#ifndef _HEAP_H_
+#define _HEAP_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-  void chSysInit(void);
-  void chSysTimerHandlerI(void);
+  void chHeapInit(void);
+  void *chHeapAlloc(size_t size);
+  void chHeapFree(void *p);
+  size_t chHeapStatus(size_t *sizep);
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* _CH_H_ */
+#endif  /* _HEAP_H_ */
 
 /** @} */

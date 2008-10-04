@@ -67,10 +67,6 @@ struct Thread {
     /** Mutex where the thread is waiting on (only in \p PRWTMTX state). */
     Mutex           *p_wtmtxp;
 #endif
-#ifdef CH_USE_CONDVARS
-    /** CondVar where the thread is waiting on (only in \p PRWTCOND state). */
-    CondVar         *p_wtcondp;
-#endif
 #ifdef CH_USE_MESSAGES
     /** Destination thread for message send (only in \p PRSNDMSG state). */
     Thread          *p_wtthdp;
@@ -110,6 +106,13 @@ struct Thread {
   /** Thread's own, non-inherited, priority. */
   tprio_t           p_realprio;
 #endif
+#if defined(CH_USE_DYNAMIC) && defined(CH_USE_MEMPOOLS)
+  /** Memory Pool where the thread workspace is returned. */
+  void              *p_mpool;
+#endif
+#ifdef CH_USE_THREAD_EXT
+  THREAD_EXT_FIELDS
+#endif
 };
 
 /** Thread state: Ready to run, waiting on the ready list.*/
@@ -135,18 +138,15 @@ struct Thread {
 /** Thread state: After termination.*/
 #define PREXIT      10
 
-#ifdef CH_USE_TERMINATE
-/** Thread option: Termination requested flag.*/
-#define P_TERMINATE 1
-#endif
-#ifdef CH_USE_RESUME
-/** Thread option: Create suspended thread.*/
-#define P_SUSPENDED 2
-#endif
-#ifdef CH_USE_MESSAGES_PRIORITY
-/** Thread option: Serve messages by priority instead of FIFO order.*/
-#define P_MSGBYPRIO 4
-#endif
+/*
+ * Various flags into the thread p_flags field.
+ */
+#define P_MEM_MODE_MASK         3       /* Thread memory mode mask.     */
+#define P_MEM_MODE_STATIC       0       /* Thread memory mode: static.  */
+#define P_MEM_MODE_HEAP         1       /* Thread memory mode: heap.    */
+#define P_MEM_MODE_MEMPOOL      2       /* Thread memory mode: mempool. */
+#define P_TERMINATE             4       /* Termination requested.       */
+#define P_SUSPENDED             8       /* Create suspended (old).      */
 
 /** Pseudo priority used by the ready list header, do not use.*/
 #define NOPRIO      0
@@ -162,7 +162,7 @@ struct Thread {
 #define ABSPRIO     255
 
 /* Not an API, don't use into the application code.*/
-void init_thread(tprio_t prio, tmode_t mode, Thread *tp);
+Thread *init_thread(Thread *tp, tprio_t prio);
 
 /** Thread function.*/
 typedef msg_t (*tfunc_t)(void *);
@@ -173,21 +173,25 @@ typedef msg_t (*tfunc_t)(void *);
 #ifdef __cplusplus
 extern "C" {
 #endif
+  Thread *chThdInit(void *workspace, size_t wsize,
+                    tprio_t prio, tfunc_t pf, void *arg);
+  Thread *chThdCreateStatic(void *workspace, size_t wsize,
+                            tprio_t prio, tfunc_t pf, void *arg);
+#if defined(CH_USE_DYNAMIC) && defined(CH_USE_WAITEXIT) && defined(CH_USE_HEAP)
+  Thread *chThdCreateFromHeap(size_t wsize, tprio_t prio,
+                              tfunc_t pf, void *arg);
+#endif
+#if defined(CH_USE_DYNAMIC) && defined(CH_USE_WAITEXIT) && defined(CH_USE_MEMPOOLS)
+  Thread *chThdCreateFromMemoryPool(MemoryPool *mp, tprio_t prio,
+                                    tfunc_t pf, void *arg);
+#endif
   Thread *chThdCreate(tprio_t prio, tmode_t mode, void *workspace,
                       size_t wsize, tfunc_t pf, void *arg);
-  Thread *chThdCreateFast(tprio_t prio, void *workspace,
-                          size_t wsize, tfunc_t pf);
   void chThdSetPriority(tprio_t newprio);
   void chThdExit(msg_t msg);
-#ifdef CH_USE_RESUME
-  void chThdResume(Thread *tp);
-#endif
-#ifdef CH_USE_SUSPEND
+  Thread *chThdResume(Thread *tp);
   void chThdSuspend(Thread **tpp);
-#endif
-#ifdef CH_USE_TERMINATE
   void chThdTerminate(Thread *tp);
-#endif
 #ifdef CH_USE_WAITEXIT
   msg_t chThdWait(Thread *tp);
 #endif
@@ -231,6 +235,8 @@ extern "C" {
  *       the event source becomes inactive.
  * @note The function is available only if the \p CH_USE_EXIT_EVENT
  *       option is enabled in \p chconf.h.
+ * @deprecated \p THREAD_EXT_EXIT should be used, this functionality will be
+ *             removed in version 1.0.0.
  */
 #define chThdGetExitEventSource(tp) (&(tp)->p_exitesource)
 
@@ -239,7 +245,25 @@ extern "C" {
  * \p chThdSuspend().
  * @param tp the pointer to the thread
  */
-#define chThdResumeI(tp) chSchReadyI((tp), RDY_OK)
+#define chThdResumeI(tp) chSchReadyI(tp)
+
+/**
+ * Creates a new thread, simplified variant.
+ * @param prio the priority level for the new thread. Usually the threads are
+ *             created with priority \p NORMALPRIO, priorities
+ *             can range from \p LOWPRIO to \p HIGHPRIO.
+ * @param workspace pointer to a working area dedicated to the thread stack
+ * @param wsize size of the working area.
+ * @param pf the thread function
+ * @return the pointer to the \p Thread structure allocated for the
+ *         thread into the working space area.
+ * @note A thread can terminate by calling \p chThdExit() or by simply
+ *       returning from its main function.
+ * @deprecated Please use \p chThdCreateStatic() or \p chThdInit() instead,
+ *             this function will be removed in version 1.0.0.
+ */
+#define chThdCreateFast(prio, workspace, wsize, pf) \
+        chThdCreateStatic(workspace, wsize, prio, pf, NULL)
 
 #endif  /* _THREADS_H_ */
 

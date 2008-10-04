@@ -101,7 +101,7 @@ namespace chibios_rt {
     /**
      * Thread constructor.
      */
-    BaseThread(tprio_t prio, tmode_t mode, void *workspace, size_t wsize);
+    BaseThread(void *workspace, size_t wsize, tprio_t prio);
 
     /**
      * Thread exit.
@@ -115,26 +115,21 @@ namespace chibios_rt {
     msg_t Wait(void);
 #endif /* CH_USE_WAITEXIT */
 
-#ifdef CH_USE_RESUME
     /**
      * Resumes thread.
      */
     void Resume(void);
-#endif /* CH_USE_RESUME */
 
     /**
      * Change thread priority.
      */
     static void SetPriority(tprio_t newprio);
 
-#ifdef CH_USE_TERMINATE
     /**
      * Requests thread termination.
      */
     void Terminate(void);
-#endif /* CH_USE_TERMINATE */
 
-#ifdef CH_USE_SLEEP
     /**
      * Suspends the thread execution for the specified number of system ticks.
      */
@@ -146,7 +141,6 @@ namespace chibios_rt {
      */
     static void SleepUntil(systime_t time);
 #endif /* CH_USE_SYSTEMTIME */
-#endif /* CH_USE_SLEEP */
 
 #ifdef CH_USE_MESSAGES
     /**
@@ -202,8 +196,8 @@ namespace chibios_rt {
      * Full constructor. It allows to set a priority level for the new thread
      * and specify the special option flags.
      */
-    EnhancedThread(const char *tname, tprio_t prio, tmode_t mode) :
-          BaseThread(prio, mode, wa, sizeof wa) {
+    EnhancedThread(const char *tname, tprio_t prio) :
+          BaseThread(wa, sizeof wa, prio) {
 
       name = tname;
     }
@@ -214,7 +208,7 @@ namespace chibios_rt {
      * and no special option flags.
      */
     EnhancedThread(const char *tname) :
-          BaseThread(NORMALPRIO, 0, wa, sizeof wa) {
+          BaseThread(wa, sizeof wa, NORMALPRIO) {
 
       name = tname;
     }

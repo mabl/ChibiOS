@@ -40,14 +40,15 @@ void chSysInit(void) {
 #ifdef CH_USE_VIRTUAL_TIMERS
   chVTInit();
 #endif
+#ifdef CH_USE_HEAP
+  chHeapInit();
+#endif
   /*
    * Now this instructions flow becomes the main thread.
    */
-  init_thread(NORMALPRIO, 0, &mainthread);
-  mainthread.p_state = PRCURR;
-  currp = &mainthread;
+  (currp = init_thread(&mainthread, NORMALPRIO))->p_state = PRCURR;
 
-  chSysUnlock();
+  chSysEnable();
 
   /*
    * The idle thread is created using the port-provided implementation.
@@ -55,8 +56,8 @@ void chSysInit(void) {
    * serve interrupts in its context while keeping the lowest energy saving
    * mode compatible with the system status.
    */
-  chThdCreateFast(IDLEPRIO, waIdleThread,
-                  sizeof(waIdleThread), (tfunc_t)_IdleThread);
+  chThdCreateStatic(waIdleThread, sizeof(waIdleThread),
+                    IDLEPRIO, (tfunc_t)_IdleThread, NULL);
 }
 
 /**
