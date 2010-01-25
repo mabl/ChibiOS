@@ -1,0 +1,189 @@
+[Information]
+DebChangeFlag=0
+MCUChangeFlag=0
+[Version]
+Version=1
+Level=1
+Revision=0
+[Debug Type]
+Type=1
+Virtual CPU File=wv907f3.dll
+Monitor Combination Version=10100
+Mcu Name=MB96F356RWB
+Monitor Select Count=0
+Core ID=0
+Monitor Load=0
+Monitor Load Condition=Disable
+[Device]
+Communication=RS
+ProductID=0
+Protocol=0
+[Target]
+AutoLoad=Disable
+Before Batch File=
+After Batch File=
+Non AutoMap=Disable
+Load DebInfo Only=Disable
+Ondemand Load Condition=Disable
+[Start]
+Batch File=
+[Window]
+Flag=Enable
+AssemblySize=0 0 420 240
+AssemblyState=0
+AssemblyFGColor=0 0 255
+CoverageSize=0 0 560 160
+CoverageState=2
+Layer0=2000,..\..\..\os\kernel\include\inline.h
+Layer1=2000,..\START.ASM
+Layer2=2000,..\..\..\os\hal\platforms\mb96f3xx\serial_lld.c
+Layer3=1002,
+Layer4=2000,..\..\..\os\kernel\src\chsys.c
+Layer5=2000,..\main.c
+Assembly Address=H'DF0506
+Memory Address=H'000000
+Memory Mode=H'FFFFFFFF
+Memory Ascii=H'00000001
+Memory Line Byte=H'00000000
+Memory SplitRow=0
+RMemory Address=H'000000
+RMemory Mode=H'FFFFFFFF
+RMemory Ascii=H'00000001
+RMemory SplitRow=0
+Trace ViewMode=FFFFFFFF
+Command Max History=H'00000032
+Source Display Mode=Enable
+Source Multi Mode=Enable
+Source Ask Mode=Enable
+Source Active Mode=Enable
+Assembly Coverage Mode=Enable
+Source Coverage Mode=Disable
+Abs Coverage Mode=Disable
+Abs Sort Mode=H'00000001
+Source PC Color=255 255 0
+Source Scope Color=255 0 255
+Source Back Trace=255 0 255
+Register Change Color=255 0 0
+Memory Change Color=255 0 0
+Memory Mark Color0=192 192 192
+Memory Mark Color1=192 0 0
+Memory Mark Color2=255 255 0
+Memory Mark Color3=0 255 0
+Memory Mark Color4=0 255 255
+Memory Mark Color5=0 128 192
+Memory Mark Color6=255 128 64
+Source Executed Color=0 128 0
+Source UnExecuted Color=128 0 0
+Source0Name=..\main.c
+Source0Size=44 44 582 239
+Source0State=2
+Source0Line=D0
+Source0Mode=2
+Source1Name=..\..\..\os\hal\platforms\mb96f3xx\serial_lld.c
+Source1Size=44 44 582 239
+Source1State=0
+Source1Line=212
+Source1Mode=2
+Source2Name=..\..\..\os\kernel\include\inline.h
+Source2Size=0 0 560 173
+Source2State=0
+Source2Line=31
+Source2Mode=2
+Source3Name=..\START.ASM
+Source3Size=44 44 604 198
+Source3State=0
+Source3Line=535
+Source3Mode=2
+Source4Name=..\..\..\os\kernel\src\chsys.c
+Source4Size=0 0 659 108
+Source4State=0
+Source4Line=2E
+Source4Mode=2
+Perfomance Mode=H'00000001
+Perfomance Scale=1 0 0,000000 0,000000
+Coverage Address=H'FD2560
+Coverage Type=H'00000000
+Coverage SplitRow=0
+RMemory Change Color=255 0 0
+RMemory Invalid Color=128 128 128
+[Path Environment]
+Flag=Enable
+Source=
+[Map]
+Flag=Enable
+Area0=00000000 000000EF 3 0 0
+Area2=00000100 0000017F 3 0 0
+Area3=00000180 0000018F 7 0 0
+Area4=00000190 00000197 3 0 0
+Area5=00000198 0000037F 7 0 0
+Area6=00000380 00000BFF 3 0 0
+Area8=00005240 00005465 3 0 0
+Area9=00005466 00007FFF 7 0 0
+Area11=000FE000 000FFFFF 5 0 0
+Area13=00DF0000 00DF7FFF 5 0 0
+Area15=00FC0000 00FFFFFF 5 0 0
+Inrom Image=Off
+[Radix Environment]
+Flag=Enable
+Mode=10
+Source=1
+[Watch Environment]
+Flag=Enable
+Size=0
+Mode=0
+MBuf=0
+Check=1
+CSiz=100
+[Exec Environment]
+Flag=Enable
+GoIntMask=0
+StepUnit=3
+StepIntMask=0
+StepIntpCtrl=4
+GoTrcCtrl=2
+OnTheFlyBreakAdmit=0
+[Break Environment]
+Flag=Enable
+Code1=00DF0475 1 0 1 main.c$171
+CodeBreakFlag1=Enable
+Code2=00DF04D6 1 0 1 main.c$216
+CodeBreakFlag2=Enable
+Code3=00DF0500 1 0 1 main.c$228
+CodeBreakFlag3=Enable
+Code4=00DF0568 1 0 1 main.c$274
+CodeBreakFlag4=Enable
+Code5=00DF059B 1 0 1 main.c$290
+CodeBreakFlag5=Enable
+[Emulation Environment]
+Flag=Disable
+[Monitor Environment]
+Flag=Enable
+MemoryWindow=0
+WatchWindow=0
+ObjectWindow=0
+ElapseTime=3E8
+Unit=1
+Mode=0
+RealtimeMemoryWindow=0
+[Error]
+Flag=Enable
+GuiErrorOutput=2
+CommandErrorOutput=1
+BatchErrorOutput=1
+ErrorOutputLevel=0
+[Color]
+Flag=Enable
+[Tab Environment]
+TabSize=8
+[Communication]
+Send=1000
+Receive=64
+[Coverage Environment]
+Coverage Status=0
+[Trace Environment]
+Trace Break=0
+Trace Status=1
+[Simulation Environment]
+Interrupt0=42 2 1000
+Interrupt1=43 2 1000
+Interrupt2=46 2 100000
