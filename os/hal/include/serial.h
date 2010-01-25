@@ -111,7 +111,7 @@ typedef struct _SerialDriver SerialDriver;
  * @brief @p SerialDriver virtual methods table.
  */
 struct SerialDriverVMT {
-  _serial_driver_methods;
+  _serial_driver_methods
 };
 
 /**
