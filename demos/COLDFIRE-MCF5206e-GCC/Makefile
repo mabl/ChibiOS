@@ -39,25 +39,32 @@ PROJECT = ch
 LDSCRIPT= ch.ld
 
 # Imported source files
-include ../../src/kernel.mk
-include ../../test/test.mk
+CHIBIOS = ../..
+include $(CHIBIOS)/boards/GENERIC_MCF5206e/board.mk
+include $(CHIBIOS)/os/hal/platforms/MCF5206e/platform.mk
+include $(CHIBIOS)/os/hal/hal.mk
+include $(CHIBIOS)/os/ports/GCC/CF/port.mk
+include $(CHIBIOS)/os/kernel/kernel.mk
+include $(CHIBIOS)/test/test.mk
 
 # C sources here.
-CSRC = ../../ports/ColdFire/chcore.c \
-       ../../ports/ColdFire/coldfire_serial.c \
-       ${KERNSRC} \
-       ${TESTSRC} \
-       board.c main.c
+CSRC = $(PORTSRC) \
+       $(KERNSRC) \
+       $(TESTSRC) \
+       $(HALSRC) \
+       $(PLATFORMSRC) \
+       $(BOARDSRC) \
+       main.c
 
 # C++ sources here.
 CPPSRC =
 
 # List ASM source files here
-ASMSRC = ../../ports/ColdFire/crt0.s
+ASMSRC = $(PORTASM)
 
-INCDIR = $(KERNINC) $(TESTINC) \
-         ../../src/lib \
-         ../../ports/ColdFire
+INCDIR = $(PORTINC) $(KERNINC) $(TESTINC) \
+         $(HALINC) $(PLATFORMINC) $(BOARDINC) \
+         $(CHIBIOS)/os/various
 
 #
 # Project, sources and paths
@@ -139,4 +146,4 @@ ULIBS =
 # End of user defines
 ##############################################################################
 
-include ../../ports/ColdFire/rules.mk
+include $(CHIBIOS)/os/ports/GCC/CF/rules.mk
