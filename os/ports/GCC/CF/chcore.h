@@ -114,9 +114,9 @@ struct context {
   tp->p_ctx.sp->d7 = 0xD7D7D7D7;                                            \
   tp->p_ctx.sp->a3 = 0xA3A3A3A3;                                            \
   tp->p_ctx.sp->a4 = 0xA4A4A4A4;                                            \
-  tp->p_ctx.sp->a5 = pf;                                                    \
-  tp->p_ctx.sp->a6 = arg;                                                   \
-  tp->p_ctx.sp->pc = threadstart;                                           \
+  tp->p_ctx.sp->a5 = (uint32_t)pf;                                          \
+  tp->p_ctx.sp->a6 = (uint32_t)arg;                                         \
+  tp->p_ctx.sp->pc = (uint32_t)_port_thread_start;                          \
 }
 
 /**
@@ -190,6 +190,12 @@ struct context {
 #define PORT_IRQ_HANDLER(id) void __attribute__((interrupt_handler)) id(void)
 
 /**
+ * @brief   Port-related initialization code.
+ * @note    Empty in this port.
+ */
+#define port_init()
+
+/**
  * @brief   Kernel-lock action.
  * @details Usually this function just disables interrupts but may perform more
  *          actions.
@@ -207,12 +213,47 @@ struct context {
  */
 #define port_unlock() asm volatile ("move.w    #0x2000, %sr")
 
+/**
+ * @brief   Kernel-lock action from an interrupt handler.
+ * @details This function is invoked before invoking I-class APIs from
+ *          interrupt handlers. The implementation is architecture dependent,
+ *          in its simplest form it is void.
+ * @note    Empty in this port.
+ */
+#define port_lock_from_isr()
+
+/**
+ * @brief   Kernel-unlock action from an interrupt handler.
+ * @details This function is invoked after invoking I-class APIs from interrupt
+ *          handlers. The implementation is architecture dependent, in its
+ *          simplest form it is void.
+ * @note    Empty in this port.
+ */
+#define port_unlock_from_isr()
+
+/**
+ * @brief   Disables all the interrupt sources.
+ * @note    Of course non maskable interrupt sources are not included.
+ */
+#define port_disable() asm volatile ("move.w    #0x2700, %sr")
+
+/**
+ * @brief   Disables the interrupt sources that are not supposed to preempt
+ *          the kernel.
+ */
+#define port_suspend() asm volatile ("move.w    #0x2700, %sr")
+
+/**
+ * @brief   Enables all the interrupt sources.
+ */
+#define port_enable() asm volatile ("move.w    #0x2000, %sr")
+
 #ifdef __cplusplus
 extern "C" {
 #endif
   void port_halt(void);
   void port_switch(Thread *otp, Thread *ntp);
-  void _port_thread_start(void)(void);
+  void _port_thread_start(void);
 #ifdef __cplusplus
 }
 #endif

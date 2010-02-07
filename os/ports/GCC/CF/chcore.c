@@ -32,39 +32,6 @@
 #include <ch.h>
 
 /**
- * @brief   ColdFire initialization code.
- * @note    This function is usually empty.
- */
-void port_init(void){
-}
-
-/**
- * @brief   Disables all the interrupt sources.
- * @note    Of course non maskable interrupt sources are not included.
- */
-void port_disable() {
-
-  asm volatile ("move.w  #0x2700, %sr");
-}
-
-/**
- * @brief   Disables the interrupt sources that are not supposed to preempt
- *          the kernel.
- */
-void port_suspend(void) {
-
-  asm volatile ("move.w  #0x2700, %sr");
-}
-
-/**
- * @brief   Enables all the interrupt sources.
- */
-void port_enable(void) {
-
-  asm volatile ("move.w  #0x2000, %sr");
-}
-
-/**
  * @brief   Halts the system.
  * @details This function is invoked by the operating system when an
  *          unrecoverable error is detected (as example because a programming
@@ -89,8 +56,20 @@ void port_halt(void) {
  * @param ntp   the thread to be switched in
  */
 void port_switch(Thread *otp, Thread *ntp) {
+  register struct intctx *sp asm("sp");
 
   asm volatile (
+    "lea     %%sp@(-44), %%sp                   \n\t"
+    "movem.l %%d2-%%d7/%%a2-%%a6, %%sp@         \n\t" : : "r" (sp));
+
+  otp->p_ctx.sp = sp;
+  sp = ntp->p_ctx.sp;
+
+  asm volatile (
+    "movem.l %%sp@, %%d2-%%d7/%%a2-%%a6         \n\t"
+    "lea     %%sp@(44), %%sp                    \n\t" : : "r" (sp));
+/* It is the same but not dependent on internal offsets.*/
+/*  asm volatile (
     "movel   %sp@(4), %a0                       \n\t"
     "movel   %sp@(8), %a1                       \n\t"
     "movel   %a1@(12), %a1                      \n\t"
@@ -100,7 +79,7 @@ void port_switch(Thread *otp, Thread *ntp) {
     "movel   %a1, %sp                           \n\t"
     "moveml  %sp@, %d2-%d7/%a2-%a6              \n\t"
     "lea     %sp@(44), %sp                      \n\t"
-   );
+  );*/
 }
 
 /**
