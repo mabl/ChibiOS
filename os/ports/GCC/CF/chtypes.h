@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2009 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -15,19 +15,17 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-                                      ---
-
-    A special exception to the GPL can be applied should you wish to distribute
-    a combined work that includes ChibiOS/RT, without being obliged to provide
-    the source code for any proprietary components. See the file exception.txt
-    for full details of how and when the exception can be applied.
 */
 
 /**
- * @file src/templates/chtypes.h
- * @brief System types template.
- * @addtogroup Types
+ * @file    CF/chtypes.h
+ * @brief   ColdFire architecture port system types.
+ * @details The types defined in this file may change depending on the target
+ *          architecture. You may also try to optimize the size of the various
+ *          types in order to privilege size or performance, be careful in
+ *          doing so.
+ *
+ * @addtogroup CF_CORE
  * @{
  */
 
@@ -42,43 +40,74 @@
 #include <stdint.h>
 #endif
 
-/** Signed boolean. */
+/**
+ * @brief   Boolean, recommended the fastest signed.
+ */
 typedef int32_t         bool_t;
 
-/** Thread mode flags, uint8_t is ok. */
+/**
+ * @brief   Thread mode flags, uint8_t is ok.
+ */
 typedef uint8_t         tmode_t;
 
-/** Thread state, uint8_t is ok. */
+/**
+ * @brief   Thread state, uint8_t is ok.
+ */
 typedef uint8_t         tstate_t;
 
-/** Priority, use the fastest unsigned type. */
+/**
+ * @brief   Thread references counter, uint8_t is ok.
+ */
+typedef uint8_t         trefs_t;
+
+/**
+ * @brief   Priority, use the fastest unsigned type.
+ */
 typedef uint32_t        tprio_t;
 
-/** Message, use signed pointer equivalent.*/
+/**
+ * @brief   Message, use signed pointer equivalent.
+ */
 typedef int32_t         msg_t;
 
-/** Event Id, use fastest signed.*/
+/**
+ * @brief   Event Id, use fastest signed.
+ */
 typedef int32_t         eventid_t;
 
-/** Event Mask, recommended fastest unsigned.*/
+/**
+ * @brief   Event Mask, recommended fastest unsigned.
+ */
 typedef uint32_t        eventmask_t;
 
-/** System Time, recommended fastest unsigned.*/
+/**
+ * @brief   System Time, recommended fastest unsigned.
+ */
 typedef uint32_t        systime_t;
 
-/** Counter, recommended fastest signed.*/
+/**
+ * @brief   Counter, recommended fastest signed.
+ */
 typedef int32_t         cnt_t;
 
-/** Inline function modifier. */
-#define INLINE      inline
+/**
+ * @brief   Inline function modifier.
+ */
+#define INLINE inline
 
-/** Packed structure modifier (within). */
+/**
+ * @brief   Packed structure modifier (within).
+ */
 #define PACK_STRUCT_STRUCT __attribute__((packed))
 
-/** Packed structure modifier (before). */
+/**
+ * @brief   Packed structure modifier (before).
+ */
 #define PACK_STRUCT_BEGIN
 
-/** Packed structure modifier (after). */
+/**
+ * @brief   Packed structure modifier (after).
+ */
 #define PACK_STRUCT_END
 
 #endif /* _CHTYPES_H_ */
