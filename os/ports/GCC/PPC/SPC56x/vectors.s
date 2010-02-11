@@ -172,15 +172,6 @@ IVOR33:
         .weak       IVOR34
         .globl      IVOR34
 IVOR34:
-        .weak       IVOR35
-        .globl      IVOR35
-IVOR35:
-        .weak       IVOR36
-        .globl      IVOR36
-IVOR36:
-        .weak       IVOR37
-        .globl      IVOR37
-IVOR37:
 
 here:   b           here
 
