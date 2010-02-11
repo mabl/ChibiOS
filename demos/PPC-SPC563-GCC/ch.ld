@@ -1,0 +1,96 @@
+/*
+    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+
+    This file is part of ChibiOS/RT.
+
+    ChibiOS/RT is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 3 of the License, or
+    (at your option) any later version.
+
+    ChibiOS/RT is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/*
+ * SPC563M64 memory setup.
+ */
+__irq_stack_size__      = 0x0400;
+__process_stack_size__  = 0x0800;
+__stacks_total_size__   = __irq_stack_size__ + __process_stack_size__;
+
+MEMORY
+{
+    flash : org = 0x00000000, len = 1536k
+    ram   : org = 0x40000000, len = 94k
+}
+
+/*
+ * Derived constants.
+ */
+__flash_size__          = LENGTH(flash);
+__flash_start__         = ORIGIN(flash);
+__flash_end__           = ORIGIN(flash) + LENGTH(flash);
+
+__ram_size__            = LENGTH(ram);
+__ram_start__           = ORIGIN(ram);
+__ram_end__             = ORIGIN(ram) + LENGTH(ram);
+
+SECTIONS
+{
+    . = ORIGIN(flash);
+
+    .text : ALIGN(16) SUBALIGN(16)
+    {
+        KEEP(*(.bam))
+        KEEP(*(vectors));
+        *(.text)
+        *(.text.*);
+        *(.rodata);
+        *(.rodata.*);
+        *(.glue_7t);
+        *(.glue_7);
+        *(.gcc*);
+        *(.ctors);
+        *(.dtors);
+        *(.rdata)
+        __sdata2_start__ = . + 0x8000;
+        *(.sdata2)
+        . = ALIGN(4);
+        __romdata_start__ = .;
+    } > flash
+
+    .data : AT(__romdata_start__)
+    {
+        . = ALIGN(0x10000);     /* This is ensured by being first in RAM.*/
+        __data_start__ = .;
+        __ivpr_table__ = .;
+        *(vectors)
+        . = ALIGN(4);
+        *(.data)
+        __sdata_start__ = . + 0x8000;
+        *(.sdata)
+        __data_end__ = .;
+    } > ram
+
+    .bss :
+    {
+        __bss_start__ = .;
+        *(.sbss)
+        *(.bss)
+        __bss_end__ = .;
+    } > ram
+    
+    /DISCARD/ :
+    {
+        *(.eh_*)
+    }
+
+    __heap_base__   = .;
+    __heap_end__    = __ram_end__ - __stacks_total_size__;
+}
