@@ -219,9 +219,20 @@ struct context {
 #define PORT_IRQ_HANDLER(id) void id(void)
 
 /**
- * @details This function is empty in this port.
+ * @brief   Kernel port layer initialization.
+ * @details IVPR4 and IVPR10 initialization, INTC_IACKR_PRC0 initialization.
  */
-#define port_init()
+#define port_init() {                                                       \
+	asm volatile ("li          %r3, IVOR4@l         \t\n"                   \
+  	              "mtIVOR4     %r3                  \t\n"                   \
+                  "li          %r3, IVOR10@l        \t\n"                   \
+  	              "mtIVOR10    %r3                  \t\n"                   \
+                  "lis         %r3, 0xfff4          \t\n"                   \
+                  "ori         %r3, %r3, 0x8010     \t\n"                   \
+                  "lis         %r4, _vectors@ha     \t\n"                   \
+                  "ori         %r4, %r4, _vectors@l \t\n"                   \
+                  "stw         %r4, 0(%r3)");                               \
+}
 
 /**
  * @details Implemented as global interrupt disable.

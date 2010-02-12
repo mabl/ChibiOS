@@ -47,8 +47,11 @@ SECTIONS
 
     .text : ALIGN(16) SUBALIGN(16)
     {
+        __ivpr_base__ = .;
         KEEP(*(.bam))
-        KEEP(*(vectors));
+        KEEP(*(.handlers))
+        . = ALIGN(0x800);
+        KEEP(*(.vectors))
         *(.text)
         *(.text.*);
         *(.rodata);
@@ -67,11 +70,8 @@ SECTIONS
 
     .data : AT(__romdata_start__)
     {
-        . = ALIGN(0x10000);     /* This is ensured by being first in RAM.*/
-        __data_start__ = .;
-        __ivpr_table__ = .;
-        *(vectors)
         . = ALIGN(4);
+        __data_start__ = .;
         *(.data)
         __sdata_start__ = . + 0x8000;
         *(.sdata)

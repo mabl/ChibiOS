@@ -91,8 +91,8 @@ boot_address:
         /*
          * IVPR initialization.
          */
-        lis         %r4, __ivpr_table__@ha
-        mtivpr      %r4    
+        lis         %r4, __ivpr_base__@ha
+        mtIVPR      %r4    
         /*
          * Late initialization.
          */

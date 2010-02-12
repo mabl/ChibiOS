@@ -32,11 +32,12 @@
         .equ  INTC_IACKR, 0xfff48010
         .equ  INTC_EOIR,  0xfff48018
 
+        .section    .handlers
+
         /*
          * IVOR10 handler (Book-E decrementer).
          */
-        .section    .text
-        .align		2
+        .align		4
         .globl      IVOR10
 IVOR10:
         /* Creation of the external stack frame (extctx structure).*/
@@ -76,8 +77,7 @@ IVOR10:
         /*
          * IVOR4 handler (Book-E external interrupt).
          */
-        .section    .text
-        .align		2
+        .align		4
         .globl      IVOR4
 IVOR4:
         /* Creation of the external stack frame (extctx structure).*/

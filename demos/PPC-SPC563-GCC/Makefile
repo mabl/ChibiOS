@@ -62,8 +62,8 @@ CPPSRC =
 
 # List ASM source files here
 ASMSRC = $(PORTASM) \
-         ${CHIBIOS}/os/ports/GCC/PPC/SPC56x/vectors.s \
-         ${CHIBIOS}/os/ports/GCC/PPC/SPC56x/ivor.s
+         $(CHIBIOS)/os/ports/GCC/PPC/SPC56x/ivor.s \
+         $(CHIBIOS)/os/ports/GCC/PPC/SPC56x/vectors.s
 
 INCDIR = $(PORTINC) $(KERNINC) $(TESTINC) \
          $(HALINC) $(PLATFORMINC) $(BOARDINC) \
