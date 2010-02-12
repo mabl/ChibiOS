@@ -18,8 +18,8 @@
 */
 
 /**
- * @file    PPC/ivor4.s
- * @brief   PowerPC IVOR4 handler.
+ * @file    PPC/ivor.s
+ * @brief   PowerPC IVORx handlers.
  *
  * @addtogroup PPC_CORE
  * @{
@@ -33,7 +33,48 @@
         .equ  INTC_EOIR,  0xfff48018
 
         /*
-         * IVOR4 handler.
+         * IVOR10 handler (Book-E decrementer).
+         */
+        .section    .text
+        .align		2
+        .globl      IVOR10
+IVOR10:
+        /* Creation of the external stack frame (extctx structure).*/
+        stwu        %sp, -76(%sp)           /* Size of the extctx structure.*/
+        stw         %r0, 32(%sp)            /* Saves GPR0.                  */
+        mfSRR0      %r0
+        stw         %r0, 8(%sp)             /* Saves PC.                    */
+        mfSRR1      %r0
+        stw         %r0, 12(%sp)            /* Saves MSR.                   */
+        mfCR        %r0
+        stw         %r0, 16(%sp)            /* Saves CR.                    */
+        mfLR        %r0
+        stw         %r0, 20(%sp)            /* Saves LR.                    */
+        mfCTR       %r0
+        stw         %r0, 24(%sp)            /* Saves CTR.                   */
+        mfXER       %r0
+        stw         %r0, 28(%sp)            /* Saves XER.                   */
+        stw         %r3, 36(%sp)            /* Saves GPR3...GPR12.          */
+        stw         %r4, 40(%sp)
+        stw         %r5, 44(%sp)
+        stw         %r6, 48(%sp)
+        stw         %r7, 52(%sp)
+        stw         %r8, 56(%sp)
+        stw         %r9, 60(%sp)
+        stw         %r10, 64(%sp)
+        stw         %r11, 68(%sp)
+        stw         %r12, 72(%sp)
+
+        /* System tick handler invokation.*/
+        bl          chSysTimerHandlerI
+        bl          chSchIsRescRequiredExI
+        cmpli       cr0, %r3, 0
+        bne         cr0, .ctxrestore
+        bl          chSchDoRescheduleI
+        b           .ctxrestore
+
+        /*
+         * IVOR4 handler (Book-E external interrupt).
          */
         .section    .text
         .align		2
@@ -93,11 +134,11 @@ IVOR4:
         /* Verifies if a reschedulation is required.*/
         bl          chSchIsRescRequiredExI
         cmpli       cr0, %r3, 0
-        bne         cr0, .noresch
+        bne         cr0, .ctxrestore
         bl          chSchDoRescheduleI
-.noresch:
 
         /* Context restore.*/
+.ctxrestore:
         lwz         %r3, 36(%sp)            /* Restores GPR3...GPR12.       */
         lwz         %r4, 40(%sp)
         lwz         %r5, 44(%sp)
