@@ -44,12 +44,9 @@
 
 /**
  * @brief   Base type for stack alignment.
- * @details This type is used only for stack alignment reasons thus can be
- *          anything from a char to a double.
+ * @note    No alignment constraints so uint8_t.
  */
 typedef uint8_t stkalign_t;
-
-typedef uint8_t regstm8s_t;
 
 /**
  * @brief   Interrupt saved context.
@@ -59,16 +56,16 @@ typedef uint8_t regstm8s_t;
  *          stack is handled as preincremented/postdecremented.
  */
 struct extctx {
-    regstm8s_t  _next;  /* Required because the stack is preincremented.    */
-    regstm8s_t  cc;
-    regstm8s_t  a;
-    regstm8s_t  xh;
-    regstm8s_t  xl;
-    regstm8s_t  yh;
-    regstm8s_t  yl;
-    regstm8s_t  pce;
-    regstm8s_t  pch;
-    regstm8s_t  pcl;
+    uint8_t     _next;
+    uint8_t     cc;
+    uint8_t     a;
+    uint8_t     xh;
+    uint8_t     xl;
+    uint8_t     yh;
+    uint8_t     yl;
+    uint8_t     pce;
+    uint8_t     pch;
+    uint8_t     pcl;
 };
 
 /**
@@ -82,9 +79,9 @@ struct extctx {
  *          stack is handled as preincremented/postdecremented.
  */
 struct intctx {
-    regstm8s_t  _next;  /* Required because the stack is preincremented.    */
-    regstm8s_t  pch;
-    regstm8s_t  pcl;
+    uint8_t     _next;
+    uint8_t     pch;
+    uint8_t     pcl;
 };
 
 /**
