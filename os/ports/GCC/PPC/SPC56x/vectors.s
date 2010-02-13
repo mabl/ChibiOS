@@ -1488,7 +1488,7 @@ vector359:
 
         .globl      _unhandled_irq
 _unhandled_irq:
-         b           _unhandled_irq
+         b          _unhandled_irq
 
 /** @endcond */
 /** @} */
