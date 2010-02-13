@@ -1,0 +1,115 @@
+
+<ApplicationBuild Header="ch" Extern=".\ch.rapp" Path=".\ch.rapp" OutputFile=".\ch.aof" sate="98" >
+	<Group Header="kernel" Marker="-1" OutputFile="" sate="96" >
+		<NodeC Path="..\..\os\kernel\src\chcond.c" Header="chcond.c" Marker="-1" OutputFile=".\chcond.obj" sate="0" />
+		<NodeC Path="..\..\os\kernel\src\chdebug.c" Header="chdebug.c" Marker="-1" OutputFile=".\chdebug.obj" sate="0" />
+		<NodeC Path="..\..\os\kernel\src\chevents.c" Header="chevents.c" Marker="-1" OutputFile=".\chevents.obj" sate="0" />
+		<NodeC Path="..\..\os\kernel\src\chheap.c" Header="chheap.c" Marker="0" OutputFile=".\chheap.obj" sate="0" >
+			<Options>
+				<Config Header="Standard" >
+					<Set Header="RCST7" >
+						<Section Header="Model" >
+							<Property Header="GlobalMemory" Value="" Removable="1" />
+									
+						</Section>
+							
+					</Set>
+				</Config>
+			</Options>
+		</NodeC>
+		<NodeC Path="..\..\os\kernel\src\chlists.c" Header="chlists.c" Marker="-1" OutputFile=".\chlists.obj" sate="0" />
+		<NodeC Path="..\..\os\kernel\src\chmboxes.c" Header="chmboxes.c" Marker="-1" OutputFile=".\chmboxes.obj" sate="0" />
+		<NodeC Path="..\..\os\kernel\src\chmemcore.c" Header="chmemcore.c" Marker="0" OutputFile=".\chmemcore.obj" sate="0" >
+			<Options>
+				<Config Header="Standard" >
+					<Set Header="RCST7" >
+						<Section Header="Model" >
+							<Property Header="GlobalMemory" Value="" Removable="1" />
+									
+						</Section>
+							
+					</Set>
+				</Config>
+			</Options>
+		</NodeC>
+		<NodeC Path="..\..\os\kernel\src\chmempools.c" Header="chmempools.c" Marker="-1" OutputFile=".\chmempools.obj" sate="0" >		</NodeC>
+		<NodeC Path="..\..\os\kernel\src\chmsg.c" Header="chmsg.c" Marker="-1" OutputFile=".\chmsg.obj" sate="0" />
+		<NodeC Path="..\..\os\kernel\src\chmtx.c" Header="chmtx.c" Marker="-1" OutputFile=".\chmtx.obj" sate="0" />
+		<NodeC Path="..\..\os\kernel\src\chqueues.c" Header="chqueues.c" Marker="-1" OutputFile=".\chqueues.obj" sate="0" />
+		<NodeC Path="..\..\os\kernel\src\chregistry.c" Header="chregistry.c" Marker="-1" OutputFile=".\chregistry.obj" sate="0" />
+		<NodeC Path="..\..\os\kernel\src\chschd.c" Header="chschd.c" Marker="0" OutputFile=".\chschd.obj" sate="0" >
+			<Options>
+				<Config Header="Standard" >
+					<Set Header="RCST7" >
+						<Section Header="Model" >
+							<Property Header="GlobalMemory" Value="" Removable="1" />
+									
+						</Section>
+							
+					</Set>
+				</Config>
+			</Options>
+		</NodeC>
+		<NodeC Path="..\..\os\kernel\src\chsem.c" Header="chsem.c" Marker="-1" OutputFile=".\chsem.obj" sate="0" />
+		<NodeC Path="..\..\os\kernel\src\chsys.c" Header="chsys.c" Marker="-1" OutputFile=".\chsys.obj" sate="0" />
+		<NodeC Path="..\..\os\kernel\src\chthreads.c" Header="chthreads.c" Marker="-1" OutputFile=".\chthreads.obj" sate="0" />
+		<NodeC Path="..\..\os\kernel\src\chvt.c" Header="chvt.c" Marker="0" OutputFile=".\chvt.obj" sate="0" >
+			<Options>
+				<Config Header="Standard" >
+					<Set Header="RCST7" >
+						<Section Header="Model" >
+							<Property Header="GlobalMemory" Value="" Removable="1" />
+									
+						</Section>
+							
+					</Set>
+				</Config>
+			</Options>
+		</NodeC>
+			
+	</Group>
+	<Group Header="port" Marker="-1" OutputFile="" sate="96" >
+		<NodeC Path="..\..\os\ports\RC\STM8\chcore.c" Header="chcore.c" Marker="-1" OutputFile=".\chcore.obj" sate="0" />
+			
+	</Group>
+	<NodeC Path=".\main.c" Header="main.c" Marker="-1" OutputFile=".\main.obj" sate="0" />
+	<Options>
+		<Config Header="Standard" >
+			<Set Header="ApplicationBuild" >
+				<Section Header="General" >
+					<Property Header="TargetFamily" Value="ST7" />
+																									
+				</Section>
+				<Section Header="Directories" >
+					<Property Header="IncDir" Value="$(RkitInc);$(RkitInc)\ST7;..\..\os\kernel\include;..\..\os\ports\RC\STM8" Removable="1" />
+							
+				</Section>
+					
+			</Set>
+			<Set Header="Target" >
+				<Section Header="ProcessorST7" >
+					<Property Header="Processor" Value="STM8S208MB" Removable="1" />
+																									
+				</Section>
+				<Section Header="ToolSetST7" >
+					<Property Header="BuildToolSetST7" Value="ST7\RaisonanceTools.config" Removable="1" />
+					<Property Header="ArelocInfo" Value="" Removable="1" />
+					<Property Header="Areloc" Value="REM" Removable="1" />
+							
+				</Section>
+					
+			</Set>
+			<Set Header="RCST7" >
+				<Section Header="CodeGen" >
+					<Property Header="ENUMTYPE" Value="ET(CHAR)" Removable="1" />
+																
+				</Section>
+				<Section Header="Model" >
+					<Property Header="GlobalMemory" Value="DGC(DATA)" Removable="1" />
+																
+				</Section>
+												
+			</Set>
+		</Config>
+	</Options>
+</ApplicationBuild>
