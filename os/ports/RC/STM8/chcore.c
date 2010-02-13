@@ -29,87 +29,7 @@
  * @{
  */
 
-//Required for inline assembly:
-#pragma SRC
-
 #include "ch.h"
-#include <intrins.h>
-
-/**
- * @brief   Port-related initialization code.
- * @note    This function is usually empty.
- */
-void port_init(void) {
-}
-
-/**
- * @brief   Kernel-lock action.
- * @details Usually this function just disables interrupts but may perform more
- *          actions.
- */
-void port_lock(void) {
-    _sim_();
-}
-
-/**
- * @brief   Kernel-unlock action.
- * @details Usually this function just disables interrupts but may perform more
- *          actions.
- */
-void port_unlock(void) {
-    _rim_();
-}
-
-/**
- * @brief   Kernel-lock action from an interrupt handler.
- * @details This function is invoked before invoking I-class APIs from
- *          interrupt handlers. The implementation is architecture dependent,
- *          in its simplest form it is void.
- */
-void port_lock_from_isr(void) {
-}
-
-/**
- * @brief   Kernel-unlock action from an interrupt handler.
- * @details This function is invoked after invoking I-class APIs from interrupt
- *          handlers. The implementation is architecture dependent, in its
- *          simplest form it is void.
- */
-void port_unlock_from_isr(void) {
-}
-
-/**
- * @brief   Disables all the interrupt sources.
- * @note    Of course non maskable interrupt sources are not included.
- */
-void port_disable() {
-    _sim_();
-}
-
-/**
- * @brief   Disables the interrupt sources that are not supposed to preempt
- *          the kernel.
- */
-void port_suspend(void) {
-    _sim_();
-}
-
-/**
- * @brief   Enables all the interrupt sources.
- */
-void port_enable(void) {
-    _rim_();
-}
-
-/**
- * @brief   Enters an architecture-dependent halt mode.
- * @details The function is meant to return when an interrupt becomes pending.
- *          The simplest implementation is an empty function or macro but this
- *          would not take advantage of architecture-specific power saving
- *          modes.
- */
-void port_wait_for_interrupt(void) {
-}
 
 /**
  * @brief   Halts the system.
@@ -129,25 +49,17 @@ void port_halt(void) {
  * @brief   Performs a context switch between two threads.
  * @details This is the most critical code in any port, this function
  *          is responsible for the context switch between 2 threads.
- * @note    The implementation of this code affects <b>directly</b> the context
- *          switch performance so optimize here as much as you can.
+ * @note    In this port swapping the stack pointers is enough, there are
+ *          no registers to be preserved across function calls and the
+ *          program counter is already in the stack.
  *
  * @param otp   the thread to be switched out
  * @param ntp   the thread to be switched in
  */
 void port_switch(Thread *otp, Thread *ntp) {
-#pragma ASM
 
-#pragma ENDASM
-
-    //Swap Stack Pointers
     otp->p_ctx.sp = (struct intctx*)_getSP_();
-    _setSP_((unsigned int)(ntp->p_ctx.sp));
-
-#pragma ASM
-    
-#pragma ENDASM
+    _setSP_((uint16_t)(ntp->p_ctx.sp));
 }
 
 /** @} */
-
