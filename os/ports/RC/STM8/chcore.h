@@ -56,16 +56,20 @@ typedef uint8_t stkalign_t;
  *          stack is handled as preincremented/postdecremented.
  */
 struct extctx {
-    uint8_t     _next;
-    uint8_t     cc;
-    uint8_t     a;
-    uint8_t     xh;
-    uint8_t     xl;
-    uint8_t     yh;
-    uint8_t     yl;
-    uint8_t     pce;
-    uint8_t     pch;
-    uint8_t     pcl;
+  uint8_t       _next;
+  uint8_t       cl;
+  uint8_t       ch;
+  uint8_t       bl;
+  uint8_t       bh;
+  uint8_t       cc;
+  uint8_t       a;
+  uint8_t       xh;
+  uint8_t       xl;
+  uint8_t       yh;
+  uint8_t       yl;
+  uint8_t       pce;
+  uint8_t       pch;
+  uint8_t       pcl;
 };
 
 /**
@@ -79,9 +83,25 @@ struct extctx {
  *          stack is handled as preincremented/postdecremented.
  */
 struct intctx {
-    uint8_t     _next;
-    uint8_t     pch;
-    uint8_t     pcl;
+  uint8_t       _next;
+  uint8_t       pch;
+  uint8_t       pcl;
+};
+
+/**
+ * @brief   Start context.
+ * @details This context is the stack organization for the trampoline code
+ *          @p _port_thread_start().
+ */
+struct startctx {
+  uint8_t     tsh;              /* Trampoline address high byte.            */
+  uint8_t     tsl;              /* Trampoline address low byte.             */
+  uint8_t     argh;             /* Thread argument high byte.               */
+  uint8_t     argl;             /* Thread argument low byte.                */
+  uint8_t     pch;              /* Thread function address high byte.       */
+  uint8_t     pcl;              /* Thread function address low byte.        */
+  uint8_t     reth;             /* chThdExit() address high byte.           */
+  uint8_t     tetl;             /* chThdExit() address low byte.            */
 };
 
 /**
@@ -99,6 +119,18 @@ struct context {
  *          by an @p intctx structure.
  */
 #define SETUP_CONTEXT(workspace, wsize, pf, arg) {                      \
+  struct startctx *scp;                                                 \
+  scp = (struct startctx *)((uint8_t *)workspace + wsize  -             \
+                            sizeof(struct startctx));                   \
+  scp->tsh  = (uint8_t)((uint16_t)_port_thread_start >> 8);             \
+  scp->tsl  = (uint8_t)_port_thread_start;                              \
+  scp->argh = (uint8_t)((uint16_t)arg >> 8);                            \
+  scp->argl = (uint8_t)arg;                                             \
+  scp->pch  = (uint8_t)((uint16_t)pf >> 8);                             \
+  scp->pcl  = (uint8_t)pf;                                              \
+  scp->reth  = (uint8_t)((uint16_t)chThdExit >> 8);                     \
+  scp->tetl  = (uint8_t)chThdExit;                                      \
+  tp->p_ctx.sp = (struct intctx *)scp;                                  \
 }
 
 /**
@@ -231,6 +263,7 @@ extern "C" {
 #endif
   void port_halt(void);
   void port_switch(Thread *otp, Thread *ntp);
+  void _port_thread_start(void);
 #ifdef __cplusplus
 }
 #endif
