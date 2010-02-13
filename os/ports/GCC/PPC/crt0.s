@@ -26,17 +26,10 @@
  */
 /** @cond never */
 
-        /*
-         * BAM info, SWT off, WTE off, VLE off.
-         */
-        .section    .bam
-        .long       0x005A0000
-        .long       boot_address
-
         .section    .text
         .align		2
-        .globl      boot_address
-boot_address:
+        .globl      _boot_address
+_boot_address:
         /*
          * Stack setup.
          */

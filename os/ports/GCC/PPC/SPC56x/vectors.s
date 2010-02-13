@@ -26,6 +26,19 @@
  */
 /** @cond never */
 
+        /*
+         * BAM info, SWT off, WTE off, VLE off.
+         */
+        .section    .bam
+        .long       0x005A0000
+        .long       _boot_address
+
+        /*
+         * Software vectors table. The vectors are accessed from the IVOR4
+         * handler only. In order to declare an interrupt handler just create
+         * a function withe the same name of a vector, the symbol will
+         * override the weak symbol declared here.
+         */
         .section    .vectors
         .align		2
         .globl      _vectors
@@ -1473,7 +1486,9 @@ vector358:
         .weak       vector359
 vector359:
 
-here:   b           here
+        .globl      _unhandled_irq
+_unhandled_irq:
+         b           _unhandled_irq
 
 /** @endcond */
 /** @} */
