@@ -18,8 +18,7 @@
 */
 
 #include "ch.h"
-#include "board.h"
-/*#include "hal.h"*/
+#include "hal.h"
 /*#include "test.h"*/
 
 /*

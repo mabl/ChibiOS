@@ -18,8 +18,7 @@
 */
 
 #include "ch.h"
-#include "board.h"
-//#include "hal.h"
+#include "hal.h"
 
 CH_IRQ_HANDLER(23) {
 
@@ -40,5 +39,5 @@ void hwinit(void) {
   /*
    * HAL initialization.
    */
-//  halInit();
+  halInit();
 }

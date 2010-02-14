@@ -30,6 +30,13 @@
 #define BOARD_STM8S20x
 #define BOARD_NAME "Generic STM8S20x"
 
+/*
+ * Board frequencies.
+ */
+#define LSICLK          128000
+#define HSICLK          16000000
+#define HSECLK          24000000
+
 #ifdef __cplusplus
 extern "C" {
 #endif
