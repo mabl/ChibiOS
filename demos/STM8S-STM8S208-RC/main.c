@@ -24,10 +24,7 @@
 /*
  * Entry point.
  */
-int main(int argc, char **argv) {
-
-  (void)argc;
-  (void)argv;
+void main(void) {
 
   /*
    * OS initialization.
@@ -39,5 +36,4 @@ int main(int argc, char **argv) {
    */
   while (!chThdShouldTerminate())
     chThdSleepMilliseconds(1000);
-  return 0;
 }
