@@ -19,27 +19,26 @@
 
 #include "ch.h"
 #include "board.h"
-/*#include "hal.h"*/
-/*#include "test.h"*/
+//#include "hal.h"
+
+CH_IRQ_HANDLER(23) {
+
+  CH_IRQ_PROLOGUE();
+
+  chSysLockFromIsr();
+  chSysTimerHandlerI();
+  chSysUnlockFromIsr();
+
+  CH_IRQ_EPILOGUE();
+}
 
 /*
- * Entry point.
+ * Board initialization code.
  */
-void main(void) {
+void hwinit(void) {
 
   /*
-   * Board/HAL initialization.
+   * HAL initialization.
    */
-  hwinit();
-
-  /*
-   * OS initialization.
-   */
-  chSysInit();
-
-  /*
-   * Normal main() thread activity.
-   */
-  while (!chThdShouldTerminate())
-    chThdSleepMilliseconds(1000);
+//  halInit();
 }

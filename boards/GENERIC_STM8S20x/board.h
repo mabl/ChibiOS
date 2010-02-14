@@ -17,29 +17,25 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ch.h"
-#include "board.h"
-/*#include "hal.h"*/
-/*#include "test.h"*/
+#ifndef _BOARD_H_
+#define _BOARD_H_
 
 /*
- * Entry point.
+ * Setup for a generic STM8S20x board.
  */
-void main(void) {
 
-  /*
-   * Board/HAL initialization.
-   */
-  hwinit();
+/*
+ * Board identifiers.
+ */
+#define BOARD_STM8S20x
+#define BOARD_NAME "Generic STM8S20x"
 
-  /*
-   * OS initialization.
-   */
-  chSysInit();
-
-  /*
-   * Normal main() thread activity.
-   */
-  while (!chThdShouldTerminate())
-    chThdSleepMilliseconds(1000);
+#ifdef __cplusplus
+extern "C" {
+#endif
+  void hwinit(void);
+#ifdef __cplusplus
 }
+#endif
+
+#endif /* _BOARD_H_ */
