@@ -33,9 +33,12 @@
 /*
  * Board frequencies.
  */
-#define LSICLK          128000
-#define HSICLK          16000000
 #define HSECLK          24000000
+
+/*
+ * Used MCU.
+ */
+#define BOARD_USES_STM8S208RB
 
 #ifdef __cplusplus
 extern "C" {

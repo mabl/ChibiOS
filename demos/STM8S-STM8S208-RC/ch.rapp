@@ -1,5 +1,5 @@
 
-<ApplicationBuild Header="ch" Extern=".\ch.rapp" Path=".\ch.rapp" OutputFile="..\STM8S-STM8S208-RC/bin\ch.aof" sate="96" >
+<ApplicationBuild Header="ch" Extern=".\ch.rapp" Path=".\ch.rapp" OutputFile="..\STM8S-STM8S208-RC/bin\ch.aof" sate="98" >
 	<Group Header="kernel" Marker="-1" OutputFile="" sate="0" >
 		<NodeC Path="..\..\os\kernel\src\chcond.c" Header="chcond.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\chcond.obj" sate="0" />
 		<NodeC Path="..\..\os\kernel\src\chdebug.c" Header="chdebug.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\chdebug.obj" sate="0" />
@@ -74,7 +74,7 @@
 		<NodeC Path="..\..\os\hal\platforms\STM8S20x\hal_lld.c" Header="hal_lld.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\hal_lld.obj" sate="0" />
 		<NodeC Path="..\..\os\hal\src\adc.c" Header="adc.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\adc.obj" sate="0" />
 		<NodeC Path="..\..\os\hal\src\can.c" Header="can.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\can.obj" sate="0" />
-		<NodeC Path="..\..\os\hal\src\hal.c" Header="hal.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\hal.obj" sate="2" />
+		<NodeC Path="..\..\os\hal\src\hal.c" Header="hal.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\hal.obj" sate="0" />
 		<NodeC Path="..\..\os\hal\src\mac.c" Header="mac.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\mac.obj" sate="0" />
 		<NodeC Path="..\..\os\hal\src\mmc_spi.c" Header="mmc_spi.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\mmc_spi.obj" sate="0" />
 		<NodeC Path="..\..\os\hal\src\pal.c" Header="pal.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\pal.obj" sate="0" />
@@ -86,7 +86,7 @@
 		<NodeC Path="..\..\boards\GENERIC_STM8S20x\board.c" Header="board.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\board.obj" sate="0" />
 			
 	</Group>
-	<NodeC Path=".\main.c" Header="main.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\main.obj" sate="0" />
+	<NodeC Path=".\main.c" Header="main.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\main.obj" sate="96" />
 	<Options>
 		<Config Header="Standard" >
 			<Set Header="ApplicationBuild" >
@@ -130,6 +130,13 @@
 																																																													
 				</Section>
 																																															
+			</Set>
+			<Set Header="MAST7" >
+				<Section Header="Set" >
+					<Property Header="Defines" Value="STM8S208RB" Removable="1" />
+							
+				</Section>
+					
 			</Set>
 		</Config>
 	</Options>

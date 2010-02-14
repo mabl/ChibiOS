@@ -20,13 +20,24 @@
 #include "ch.h"
 #include "hal.h"
 
-CH_IRQ_HANDLER(23) {
+/*
+ * TIM 2 clock after the prescaler.
+ */
+#define TIM2_CLOCK  (SYSCLK / 16)
+#define TIM2_ARR    ((TIM2_CLOCK / CH_FREQUENCY) - 1)
+
+/*
+ * TIM2 interrupt handler.
+ */
+CH_IRQ_HANDLER(13) {
 
   CH_IRQ_PROLOGUE();
 
   chSysLockFromIsr();
   chSysTimerHandlerI();
   chSysUnlockFromIsr();
+
+  TIM2_SR1 = 0;
 
   CH_IRQ_EPILOGUE();
 }
@@ -40,4 +51,17 @@ void hwinit(void) {
    * HAL initialization.
    */
   halInit();
+
+  /*
+   * TIM2 initialization as system tick.
+   */
+  CLK_PCKENR1 |= 32;            /* PCKEN15, TIM2 clock source.*/
+  TIM2_PSCR    = 4;             /* Prescaler divide by 2^4=16.*/
+  TIM2_ARRH    = TIM2_ARR >> 8;
+  TIM2_ARRL    = TIM2_ARR;
+  TIM2_CNTRH   = 0;
+  TIM2_CNTRL   = 0;
+  TIM2_SR1     = 0;
+  TIM2_IER     = 1;             /* UIE */
+  TIM2_CR1     = 1;             /* CEN */
 }
