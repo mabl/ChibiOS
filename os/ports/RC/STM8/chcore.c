@@ -45,21 +45,4 @@ void port_halt(void) {
   }
 }
 
-/**
- * @brief   Performs a context switch between two threads.
- * @details This is the most critical code in any port, this function
- *          is responsible for the context switch between 2 threads.
- * @note    In this port swapping the stack pointers is enough, there are
- *          no registers to be preserved across function calls and the
- *          program counter is already in the stack.
- *
- * @param otp   the thread to be switched out
- * @param ntp   the thread to be switched in
- */
-void port_switch(Thread *otp, Thread *ntp) {
-
-    otp->p_ctx.sp = (struct intctx*)_getSP_();
-    _setSP_((uint16_t)(ntp->p_ctx.sp));
-}
-
 /** @} */

@@ -75,10 +75,7 @@ struct extctx {
 /**
  * @brief   System saved context.
  * @details This structure represents the inner stack frame during a context
- *          switching.
- * @note    Only PCL and PCH are defined because the kernel code requires
- *          the small memory mode (the application code can use the extended
- *          address space).
+ *          switching..
  * @note    The structure requires one dummy field at its start because the
  *          stack is handled as preincremented/postdecremented.
  */
@@ -94,14 +91,15 @@ struct intctx {
  *          @p _port_thread_start().
  */
 struct startctx {
-  uint8_t     tsh;              /* Trampoline address high byte.            */
-  uint8_t     tsl;              /* Trampoline address low byte.             */
-  uint8_t     argh;             /* Thread argument high byte.               */
-  uint8_t     argl;             /* Thread argument low byte.                */
-  uint8_t     pch;              /* Thread function address high byte.       */
-  uint8_t     pcl;              /* Thread function address low byte.        */
-  uint8_t     reth;             /* chThdExit() address high byte.           */
-  uint8_t     tetl;             /* chThdExit() address low byte.            */
+  uint8_t       _next;
+  uint8_t       tsh;            /* Trampoline address high byte.            */
+  uint8_t       tsl;            /* Trampoline address low byte.             */
+  uint8_t       argh;           /* Thread argument high byte.               */
+  uint8_t       argl;           /* Thread argument low byte.                */
+  uint8_t       pch;            /* Thread function address high byte.       */
+  uint8_t       pcl;            /* Thread function address low byte.        */
+  uint8_t       reth;           /* chThdExit() address high byte.           */
+  uint8_t       tetl;           /* chThdExit() address low byte.            */
 };
 
 /**
@@ -164,11 +162,9 @@ struct context {
  * @brief   Computes the thread working area global size.
  */
 #define THD_WA_SIZE(n) STACK_ALIGN(sizeof(Thread) +                     \
-                                   sizeof(struct intctx) +              \
-                                   sizeof(struct extctx) +              \
-                                  (n) + (INT_REQUIRED_STACK))
-
-
+                                   (sizeof(struct intctx) - 1) +        \
+                                   (sizeof(struct extctx) - 1) +        \
+                                   (n) + (INT_REQUIRED_STACK))
 
 /**
  * @brief   Static working area allocation.

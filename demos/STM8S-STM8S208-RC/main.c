@@ -21,11 +21,6 @@
 /*#include "hal.h"*/
 /*#include "test.h"*/
 
-void timerA_handler(void) interrupt 8
-{
-  chSemWait(NULL);
-}
-
 /*
  * Entry point.
  */
