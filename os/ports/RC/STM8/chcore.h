@@ -57,16 +57,12 @@ typedef uint8_t stkalign_t;
  */
 struct extctx {
   uint8_t       _next;
-  uint8_t       cl;
-  uint8_t       ch;
-  uint8_t       bl;
-  uint8_t       bh;
+  uint16_t      cx;
+  uint16_t      bx;
   uint8_t       cc;
   uint8_t       a;
-  uint8_t       xh;
-  uint8_t       xl;
-  uint8_t       yh;
-  uint8_t       yl;
+  uint16_t      x;
+  uint16_t      y;
   uint8_t       pce;
   uint8_t       pch;
   uint8_t       pcl;
@@ -81,8 +77,7 @@ struct extctx {
  */
 struct intctx {
   uint8_t       _next;
-  uint8_t       pch;
-  uint8_t       pcl;
+  uint16_t      pc;
 };
 
 /**
@@ -92,14 +87,10 @@ struct intctx {
  */
 struct startctx {
   uint8_t       _next;
-  uint8_t       tsh;            /* Trampoline address high byte.            */
-  uint8_t       tsl;            /* Trampoline address low byte.             */
-  uint8_t       argh;           /* Thread argument high byte.               */
-  uint8_t       argl;           /* Thread argument low byte.                */
-  uint8_t       pch;            /* Thread function address high byte.       */
-  uint8_t       pcl;            /* Thread function address low byte.        */
-  uint8_t       reth;           /* chThdExit() address high byte.           */
-  uint8_t       tetl;           /* chThdExit() address low byte.            */
+  uint16_t      ts;             /* Trampoline address.                      */
+  uint16_t      arg;            /* Thread argument.                         */
+  uint16_t      pc;             /* Thread function address.                 */
+  uint16_t      ret;            /* chThdExit() address.                     */
 };
 
 /**
@@ -120,14 +111,10 @@ struct context {
   struct startctx *scp;                                                 \
   scp = (struct startctx *)((uint8_t *)workspace + wsize  -             \
                             sizeof(struct startctx));                   \
-  scp->tsh  = (uint8_t)((uint16_t)_port_thread_start >> 8);             \
-  scp->tsl  = (uint8_t)_port_thread_start;                              \
-  scp->argh = (uint8_t)((uint16_t)arg >> 8);                            \
-  scp->argl = (uint8_t)arg;                                             \
-  scp->pch  = (uint8_t)((uint16_t)pf >> 8);                             \
-  scp->pcl  = (uint8_t)pf;                                              \
-  scp->reth  = (uint8_t)((uint16_t)chThdExit >> 8);                     \
-  scp->tetl  = (uint8_t)chThdExit;                                      \
+  scp->ts   = (uint16_t)_port_thread_start;                             \
+  scp->arg  = (uint16_t)arg;                                            \
+  scp->pc   = (uint16_t)pf;                                             \
+  scp->ret  = (uint16_t)chThdExit;                                      \
   tp->p_ctx.sp = (struct intctx *)scp;                                  \
 }
 
