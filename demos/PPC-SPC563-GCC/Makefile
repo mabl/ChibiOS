@@ -40,9 +40,9 @@ LDSCRIPT = ./ch.ld
 
 # Imported source files
 CHIBIOS = ../..
-#include $(CHIBIOS)/boards//board.mk
-#include $(CHIBIOS)/os/hal/platforms//platform.mk
-#include $(CHIBIOS)/os/hal/hal.mk
+include $(CHIBIOS)/boards/GENERIC_SPC563/board.mk
+include $(CHIBIOS)/os/hal/platforms/SPC563/platform.mk
+include $(CHIBIOS)/os/hal/hal.mk
 include $(CHIBIOS)/os/ports/GCC/PPC/port.mk
 include $(CHIBIOS)/os/kernel/kernel.mk
 #include $(CHIBIOS)/test/test.mk
