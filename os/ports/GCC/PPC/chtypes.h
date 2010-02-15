@@ -35,16 +35,29 @@
 #include <stdint.h>
 #endif
 
-typedef int32_t         bool_t;         /**< Fast boolean type.             */
-typedef uint8_t         tmode_t;        /**< Thread flags.                  */
-typedef uint8_t         tstate_t;       /**< Thread state.                  */
-typedef uint8_t         trefs_t;        /**< Thread references counter.     */
-typedef uint32_t        tprio_t;        /**< Thread priority.               */
-typedef int32_t         msg_t;          /**< Inter-thread message.          */
-typedef int32_t         eventid_t;      /**< Event Id.                      */
-typedef uint32_t        eventmask_t;    /**< Events mask.                   */
-typedef uint32_t        systime_t;      /**< System time.                   */
-typedef int32_t         cnt_t;          /**< Resources counter.             */
+/*
+ * Derived generic types.
+ */
+typedef volatile int8_t     vint8_t;        /**< Volatile signed 8 bits.    */
+typedef volatile uint8_t    vuint8_t;       /**< Volatile unsigned 8 bits.  */
+typedef volatile int16_t    vint16_t;       /**< Volatile signed 16 bits.   */
+typedef volatile uint16_t   vuint16_t;      /**< Volatile unsigned 16 bits. */
+typedef volatile int32_t    vint32_t;       /**< Volatile signed 32 bits.   */
+typedef volatile uint32_t   vuint32_t;      /**< Volatile unsigned 32 bits. */
+
+/*
+ * Kernel types.
+ */
+typedef int32_t             bool_t;         /**< Fast boolean type.         */
+typedef uint8_t             tmode_t;        /**< Thread flags.              */
+typedef uint8_t             tstate_t;       /**< Thread state.              */
+typedef uint8_t             trefs_t;        /**< Thread references counter. */
+typedef uint32_t            tprio_t;        /**< Thread priority.           */
+typedef int32_t             msg_t;          /**< Inter-thread message.      */
+typedef int32_t             eventid_t;      /**< Event Id.                  */
+typedef uint32_t            eventmask_t;    /**< Events mask.               */
+typedef uint32_t            systime_t;      /**< System time.               */
+typedef int32_t             cnt_t;          /**< Resources counter.         */
 
 /** Inline function modifier. */
 #define INLINE      inline

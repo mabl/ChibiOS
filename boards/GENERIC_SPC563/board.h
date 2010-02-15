@@ -33,7 +33,9 @@
 /*
  * Board frequencies.
  */
-#define HSECLK          40000000
+#if !defined(EXTCLK)
+#define EXTCLK          8000000
+#endif
 
 #ifdef __cplusplus
 extern "C" {

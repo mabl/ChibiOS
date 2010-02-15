@@ -66,6 +66,10 @@ IVOR10:
         stw         %r11, 68(%sp)
         stw         %r12, 72(%sp)
 
+        /* Reset DIE bit in TSR register.*/
+        lis         %r3, 0x0800             /* DIE bit mask.                */
+        mtspr       336, %r3                /* TSR register.                */
+
         /* System tick handler invokation.*/
         bl          chSysTimerHandlerI
         bl          chSchIsRescRequiredExI

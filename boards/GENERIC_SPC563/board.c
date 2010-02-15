@@ -27,6 +27,7 @@
  */
 void hwinit0(void) {
 
+  spc563_clock_init();
 }
 
 /*
