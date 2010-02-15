@@ -1,6 +1,6 @@
 
 <ApplicationBuild Header="ch" Extern=".\ch.rapp" Path=".\ch.rapp" OutputFile="..\STM8S-STM8S208-RC/bin\ch.aof" sate="96" >
-	<Group Header="kernel" Marker="-1" OutputFile="" sate="96" >
+	<Group Header="kernel" Marker="-1" OutputFile="" sate="66" >
 		<NodeC Path="..\..\os\kernel\src\chcond.c" Header="chcond.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\chcond.obj" sate="0" />
 		<NodeC Path="..\..\os\kernel\src\chdebug.c" Header="chdebug.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\chdebug.obj" sate="0" />
 		<NodeC Path="..\..\os\kernel\src\chevents.c" Header="chevents.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\chevents.obj" sate="0" />
@@ -46,7 +46,7 @@
 		</NodeC>
 		<NodeC Path="..\..\os\kernel\src\chsem.c" Header="chsem.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\chsem.obj" sate="0" />
 		<NodeC Path="..\..\os\kernel\src\chsys.c" Header="chsys.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\chsys.obj" sate="0" />
-		<NodeC Path="..\..\os\kernel\src\chthreads.c" Header="chthreads.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\chthreads.obj" sate="2" />
+		<NodeC Path="..\..\os\kernel\src\chthreads.c" Header="chthreads.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\chthreads.obj" sate="0" />
 		<NodeC Path="..\..\os\kernel\src\chvt.c" Header="chvt.c" Marker="0" OutputFile="..\STM8S-STM8S208-RC/bin\chvt.obj" sate="0" >
 			<Options>
 				<Config Header="Standard" >
@@ -70,7 +70,7 @@
 		<NodeASM Path="..\..\os\ports\RC\STM8\chcoreasm.asm" Header="chcoreasm.asm" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\chcoreasm.obj" sate="0" />
 																					
 	</Group>
-	<Group Header="hal" Marker="-1" OutputFile="" sate="96" >
+	<Group Header="hal" Marker="-1" OutputFile="" sate="64" >
 		<NodeC Path="..\..\os\hal\platforms\STM8S20x\hal_lld.c" Header="hal_lld.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\hal_lld.obj" sate="0" />
 		<NodeC Path="..\..\os\hal\src\adc.c" Header="adc.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\adc.obj" sate="0" />
 		<NodeC Path="..\..\os\hal\src\can.c" Header="can.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\can.obj" sate="0" />
