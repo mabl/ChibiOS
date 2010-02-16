@@ -37,6 +37,19 @@
 #define EXTCLK          8000000
 #endif
 
+/*
+ * I/O definitions.
+ */
+#define GPIO_BUTTON1    179
+#define GPIO_BUTTON2    181
+#define GPIO_BUTTON3    183
+#define GPIO_BUTTON4    187
+
+#define GPIO_LED1       188
+#define GPIO_LED2       189
+#define GPIO_LED3       190
+#define GPIO_LED4       191
+
 #ifdef __cplusplus
 extern "C" {
 #endif

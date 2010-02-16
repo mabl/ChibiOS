@@ -41,7 +41,7 @@
         .globl      IVOR10
 IVOR10:
         /* Creation of the external stack frame (extctx structure).*/
-        stwu        %sp, -76(%sp)           /* Size of the extctx structure.*/
+        stwu        %sp, -80(%sp)           /* Size of the extctx structure.*/
         stw         %r0, 32(%sp)            /* Saves GPR0.                  */
         mfSRR0      %r0
         stw         %r0, 8(%sp)             /* Saves PC.                    */
@@ -67,14 +67,14 @@ IVOR10:
         stw         %r12, 72(%sp)
 
         /* Reset DIE bit in TSR register.*/
-        lis         %r3, 0x0800             /* DIE bit mask.                */
+        lis         %r3, 0x0800             /* DIS bit mask.                */
         mtspr       336, %r3                /* TSR register.                */
 
         /* System tick handler invokation.*/
         bl          chSysTimerHandlerI
         bl          chSchIsRescRequiredExI
         cmpli       cr0, %r3, 0
-        bne         cr0, .ctxrestore
+        beq         cr0, .ctxrestore
         bl          chSchDoRescheduleI
         b           .ctxrestore
 
@@ -85,7 +85,7 @@ IVOR10:
         .globl      IVOR4
 IVOR4:
         /* Creation of the external stack frame (extctx structure).*/
-        stwu        %sp, -76(%sp)           /* Size of the extctx structure.*/
+        stwu        %sp, -80(%sp)           /* Size of the extctx structure.*/
         stw         %r0, 32(%sp)            /* Saves GPR0.                  */
         mfSRR0      %r0
         stw         %r0, 8(%sp)             /* Saves PC.                    */
@@ -166,7 +166,7 @@ IVOR4:
         lwz         %r0, 28(%sp)
         mtXER       %r0                     /* Restores XER.                */
         lwz         %r0, 32(%sp)            /* Restores GPR0.               */
-        addi        %sp, %sp, 76            /* Back to the previous frame.  */
+        addi        %sp, %sp, 80            /* Back to the previous frame.  */
         rfi
 
 /** @endcond */

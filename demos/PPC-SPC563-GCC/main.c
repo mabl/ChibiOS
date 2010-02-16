@@ -18,10 +18,48 @@
 */
 
 #include "ch.h"
-/*#include "hal.h"*/
+#include "hal.h"
 /*#include "test.h"*/
 
 int a = 1234;
+
+/*
+ * LEDs blinker thread, times are in milliseconds.
+ */
+static WORKING_AREA(waThread1, 128);
+static msg_t Thread1(void *arg) {
+
+  (void)arg;
+  
+  SIU.PCR[GPIO_LED1].R = 0x0300;
+  SIU.PCR[GPIO_LED2].R = 0x0300;
+  SIU.PCR[GPIO_LED3].R = 0x0300;
+  SIU.PCR[GPIO_LED4].R = 0x0300;
+  SIU.GPDO[GPIO_LED1].R = 1;
+  SIU.GPDO[GPIO_LED2].R = 1;
+  SIU.GPDO[GPIO_LED3].R = 1;
+  SIU.GPDO[GPIO_LED4].R = 1;
+
+  while (TRUE) {
+    SIU.GPDO[GPIO_LED1].R = 0;
+    chThdSleepMilliseconds(100);
+    SIU.GPDO[GPIO_LED2].R = 0;
+    chThdSleepMilliseconds(100);
+    SIU.GPDO[GPIO_LED3].R = 0;
+    chThdSleepMilliseconds(100);
+    SIU.GPDO[GPIO_LED4].R = 0;
+    chThdSleepMilliseconds(100);
+    SIU.GPDO[GPIO_LED1].R = 1;
+    chThdSleepMilliseconds(100);
+    SIU.GPDO[GPIO_LED2].R = 1;
+    chThdSleepMilliseconds(100);
+    SIU.GPDO[GPIO_LED3].R = 1;
+    chThdSleepMilliseconds(100);
+    SIU.GPDO[GPIO_LED4].R = 1;
+    chThdSleepMilliseconds(300);
+  }
+  return 0;
+}
 
 /*
  * Entry point, note, the main() function is already a thread in the system
@@ -31,6 +69,11 @@ int main(int argc, char **argv) {
 
   (void)argc;
   (void)argv;
+
+  /*
+   * Creates the blinker thread.
+   */
+  chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO, Thread1, NULL);
 
   /*
    * Normal main() thread activity.

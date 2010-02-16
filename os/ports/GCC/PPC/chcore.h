@@ -98,6 +98,7 @@ struct extctx {
   regppc_t      r10;
   regppc_t      r11;
   regppc_t      r12;
+  regppc_t      padding;
  };
 
 /**
@@ -174,7 +175,7 @@ struct context {
  *          @p extctx is known to be zero.
  */
 #ifndef INT_REQUIRED_STACK
-#define INT_REQUIRED_STACK              256
+#define INT_REQUIRED_STACK              128
 #endif
 
 /**
