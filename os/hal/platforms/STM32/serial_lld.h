@@ -40,7 +40,7 @@
 /**
  * @brief USART1 driver enable switch.
  * @details If set to @p TRUE the support for USART1 is included.
- * @note The default is @p FALSE.
+ * @note The default is @p TRUE.
  */
 #if !defined(USE_STM32_USART1) || defined(__DOXYGEN__)
 #define USE_STM32_USART1            TRUE
@@ -58,18 +58,17 @@
 /**
  * @brief USART3 driver enable switch.
  * @details If set to @p TRUE the support for USART3 is included.
- * @note The default is @p FALSE.
+ * @note The default is @p TRUE.
  */
 #if !defined(USE_STM32_USART3) || defined(__DOXYGEN__)
 #define USE_STM32_USART3            TRUE
 #endif
 
-
 #if defined(STM32F10X_HD) || defined(STM32F10X_CL) || defined(__DOXYGEN__)
 /**
  * @brief UART4 driver enable switch.
  * @details If set to @p TRUE the support for UART4 is included.
- * @note The default is @p FALSE.
+ * @note The default is @p TRUE.
  */
 #if !defined(USE_STM32_UART4) || defined(__DOXYGEN__)
 #define USE_STM32_UART4            TRUE
@@ -78,7 +77,7 @@
 /**
  * @brief UART5 driver enable switch.
  * @details If set to @p TRUE the support for UART5 is included.
- * @note The default is @p FALSE.
+ * @note The default is @p TRUE.
  */
 #if !defined(USE_STM32_USART3) || defined(__DOXYGEN__)
 #define USE_STM32_UART5            TRUE
@@ -126,6 +125,7 @@
 #define STM32_UART5_PRIORITY        0xC0
 #endif
 #endif
+
 /*===========================================================================*/
 /* Derived constants and error checks.                                       */
 /*===========================================================================*/
