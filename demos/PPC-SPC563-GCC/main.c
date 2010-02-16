@@ -19,9 +19,11 @@
 
 #include "ch.h"
 #include "hal.h"
-/*#include "test.h"*/
+#include "test.h"
+#include "memstreams.h"
 
 int a = 1234;
+uint8_t report_buffer[8192];
 
 /*
  * LEDs blinker thread, times are in milliseconds.
@@ -70,6 +72,7 @@ int main(int argc, char **argv) {
   (void)argc;
   (void)argv;
 
+
   /*
    * Creates the blinker thread.
    */
@@ -78,7 +81,15 @@ int main(int argc, char **argv) {
   /*
    * Normal main() thread activity.
    */
-  while (!chThdShouldTerminate())
+  while (TRUE)
+    if (1) {
+      MemoryStream report;
+      volatile msg_t result;
+
+      msObjectInit(&report, report_buffer, sizeof(report_buffer), 0);
+      result = TestThread(&report);
+      continue;
+    }
     chThdSleepMilliseconds(1000);
   return 0;
 }

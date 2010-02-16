@@ -74,33 +74,32 @@ void * const wa[5] = {test.waT0, test.waT1, test.waT2, test.waT3, test.waT4};
 /*
  * Console output.
  */
-static BaseChannel *chp;
+static BaseSequentialStream *bssp;
 
 void test_printn(uint32_t n) {
   char buf[16], *p;
 
   if (!n)
-    chIOPut(chp, '0');
+    chSequentialStreamWrite(bssp, (uint8_t *)"0", 1);
   else {
     p = buf;
     while (n)
       *p++ = (n % 10) + '0', n /= 10;
     while (p > buf)
-      chIOPut(chp, *--p);
+      chSequentialStreamWrite(bssp, (uint8_t *)--p, 1);
   }
 }
 
 void test_print(char *msgp) {
 
   while (*msgp)
-    chIOPut(chp, *msgp++);
+    chSequentialStreamWrite(bssp, (uint8_t *)msgp++, 1);
 }
 
 void test_println(char *msgp) {
 
   test_print(msgp);
-  chIOPut(chp, '\r');
-  chIOPut(chp, '\n');
+  chSequentialStreamWrite(bssp, (uint8_t *)"\r\n", 2);
 }
 
 /*
@@ -114,8 +113,7 @@ static void clear_tokens(void) {
 static void print_tokens(void) {
   char *cp = tokens_buffer;
 
-  while (cp < tokp)
-    chIOPut(chp, *cp++);
+  chSequentialStreamWrite(bssp, (uint8_t *)cp, tokp - cp);
 }
 
 void test_emit_token(char token) {
@@ -250,15 +248,14 @@ static void print_line(void) {
   unsigned i;
 
   for (i = 0; i < 76; i++)
-    chIOPut(chp, '-');
-  chIOPut(chp, '\r');
-  chIOPut(chp, '\n');
+    chSequentialStreamWrite(bssp, (uint8_t *)"-", 1);
+  chSequentialStreamWrite(bssp, (uint8_t *)"\r\n", 2);
 }
 
 msg_t TestThread(void *p) {
   int i, j;
 
-  chp = p;
+  bssp = p;
   test_println("");
   test_println("*** ChibiOS/RT test suite");
   test_println("***");

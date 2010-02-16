@@ -33,7 +33,7 @@ LIBS    = $(DLIBS) $(ULIBS)
 MCFLAGS = -mcpu=$(MCU)
 ODFLAGS	= -x --syms
 ASFLAGS = $(MCFLAGS) -Wa,-amhls=$(<:.s=.lst) $(ADEFS)
-CPFLAGS = $(MCFLAGS) $(OPT) $(WARN) -Wa,-alms=$(<:.c=.lst) $(DEFS)
+CPFLAGS = $(MCFLAGS) $(OPT) $(CWARN) -Wa,-alms=$(<:.c=.lst) $(DEFS)
 ifeq ($(LINK_GC),yes)
   LDFLAGS = $(MCFLAGS) -nostartfiles -T$(LDSCRIPT) -Wl,-Map=$(PROJECT).map,--cref,--no-warn-mismatch,--gc-sections $(LLIBDIR)
 else

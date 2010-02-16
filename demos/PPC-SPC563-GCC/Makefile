@@ -5,7 +5,7 @@
 
 # Compiler options here.
 ifeq ($(USE_OPT),)
-  USE_OPT = -O2 -ggdb -fomit-frame-pointer
+  USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16
 endif
 
 # C++ specific options here (added to USE_OPT).
@@ -15,7 +15,7 @@ endif
 
 # Enable this if you want the linker to remove unused code and data
 ifeq ($(USE_LINK_GC),)
-  USE_LINK_GC = no
+  USE_LINK_GC = yes
 endif
 
 # Enable register caching optimization (read documentation).
@@ -45,7 +45,7 @@ include $(CHIBIOS)/os/hal/platforms/SPC563/platform.mk
 include $(CHIBIOS)/os/hal/hal.mk
 include $(CHIBIOS)/os/ports/GCC/PPC/port.mk
 include $(CHIBIOS)/os/kernel/kernel.mk
-#include $(CHIBIOS)/test/test.mk
+include $(CHIBIOS)/test/test.mk
 
 # C sources here.
 CSRC = $(PORTSRC) \
@@ -55,6 +55,7 @@ CSRC = $(PORTSRC) \
        $(PLATFORMSRC) \
        $(BOARDSRC) \
        $(CHIBIOS)/os/various/evtimer.c \
+       $(CHIBIOS)/os/various/memstreams.c \
        main.c
 
 # C++ sources here.
@@ -77,7 +78,7 @@ INCDIR = $(PORTINC) $(KERNINC) $(TESTINC) \
 # Compiler settings
 #
 
-MCU  = e500mc -mnew-mnemonics
+MCU  = e500mc -mnew-mnemonics -msdata=none
 
 TRGT = powerpc-eabi-
 CC   = $(TRGT)gcc

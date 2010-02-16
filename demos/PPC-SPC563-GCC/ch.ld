@@ -73,6 +73,7 @@ SECTIONS
         . = ALIGN(4);
         __data_start__ = .;
         *(.data)
+        *(.data.*)
         __sdata_start__ = . + 0x8000;
         *(.sdata)
         __data_end__ = .;
@@ -83,6 +84,7 @@ SECTIONS
         __bss_start__ = .;
         *(.sbss)
         *(.bss)
+        *(.bss.*)
         __bss_end__ = .;
     } > ram
     

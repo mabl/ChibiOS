@@ -111,7 +111,7 @@ IVOR4:
         stw         %r12, 72(%sp)
 
         /* Software vector address from the INTC register.*/
-        lis         %r3, INTC_IACKR@ha
+        lis         %r3, INTC_IACKR@h
         ori         %r3, %r3, INTC_IACKR@l  /* IACKR register address.      */
         lwz         %r3, 0(%r3)             /* IACKR register value.        */
         lwz         %r3, 0(%r3)
@@ -131,7 +131,7 @@ IVOR4:
 #endif
 
         /* Informs the INTC that the interrupt has been served.
-        lis         %r3, INTC_EOIR@ha
+        lis         %r3, INTC_EOIR@h
         ori         %r3, %r3, INTC_EOIR@l
         stw         %r3, 0(%r3)             /* Writing any value should do. */
 

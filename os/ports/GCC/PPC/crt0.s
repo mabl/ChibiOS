@@ -33,7 +33,7 @@ _boot_address:
         /*
          * Stack setup.
          */
-        lis         %r1, __ram_end__@ha
+        lis         %r1, __ram_end__@h
         ori         %r1, %r1, __ram_end__@l
         li          %r0, 0
         stwu        %r0, -8(%r1)
@@ -44,9 +44,9 @@ _boot_address:
         /*
          * BSS clearing.
          */
-        lis         %r4, __bss_start__@ha
+        lis         %r4, __bss_start__@h
         ori         %r4, %r4, __bss_start__@l
-        lis         %r5, __bss_end__@ha
+        lis         %r5, __bss_end__@h
         ori         %r5, %r5, __bss_end__@l
         li          %r7, 0
 .bssloop:
@@ -59,11 +59,11 @@ _boot_address:
         /*
          * DATA initialization.
          */
-        lis         %r4, __romdata_start__@ha
+        lis         %r4, __romdata_start__@h
         ori         %r4, %r4, __romdata_start__@l
-        lis         %r5, __data_start__@ha
+        lis         %r5, __data_start__@h
         ori         %r5, %r5, __data_start__@l
-        lis         %r6, __data_end__@ha
+        lis         %r6, __data_end__@h
         ori         %r6, %r6, __data_end__@l
 .dataloop:
         cmpl        cr0, %r5, %r6
@@ -77,14 +77,14 @@ _boot_address:
         /*
          * Small sections registers initialization.
          */
-        lis         %r2, __sdata2_start__@ha
+        lis         %r2, __sdata2_start__@h
         ori         %r2, %r2, __sdata2_start__@l
-        lis         %r13, __sdata_start__@ha
+        lis         %r13, __sdata_start__@h
         ori         %r13, %r13, __sdata_start__@l
         /*
          * IVPR initialization.
          */
-        lis         %r4, __ivpr_base__@ha
+        lis         %r4, __ivpr_base__@h
         mtIVPR      %r4    
         /*
          * Late initialization.
