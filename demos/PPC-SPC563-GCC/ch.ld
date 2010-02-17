@@ -52,19 +52,28 @@ SECTIONS
         KEEP(*(.handlers))
         . = ALIGN(0x800);
         KEEP(*(.vectors))
-        *(.text)
-        *(.text.*);
-        *(.rodata);
-        *(.rodata.*);
+        *(.text .stub .text.* .gnu.linkonce.t.*)
         *(.glue_7t);
         *(.glue_7);
-        *(.gcc*);
         *(.ctors);
         *(.dtors);
-        *(.rdata)
+    } > flash
+
+    .rodata : ALIGN(16) SUBALIGN(16)
+    {
+        *(.rodata .rodata.* .gnu.linkonce.r.*)
+        *(.rodata1)
+    } > flash
+    
+    .sdata2 : ALIGN(16) SUBALIGN(16)
+    {
         __sdata2_start__ = . + 0x8000;
-        *(.sdata2)
-        . = ALIGN(4);
+        *(.sdata2 .sdata2.* .gnu.linkonce.s2.*)
+        *(.sbss2 .sbss2.* .gnu.linkonce.sb2.*)
+    } > flash
+    
+    .romdata : ALIGN(16) SUBALIGN(16)
+    {
         __romdata_start__ = .;
     } > flash
 
@@ -72,19 +81,23 @@ SECTIONS
     {
         . = ALIGN(4);
         __data_start__ = .;
-        *(.data)
-        *(.data.*)
+        *(.data .data.* .gnu.linkonce.d.*)
         __sdata_start__ = . + 0x8000;
-        *(.sdata)
+        *(.sdata .sdata.* .gnu.linkonce.s.*)
         __data_end__ = .;
+    } > ram
+
+    .sbss :
+    {
+        __bss_start__ = .;
+        *(.sbss .sbss.* .gnu.linkonce.sb.*)
+        *(.scommon)
     } > ram
 
     .bss :
     {
-        __bss_start__ = .;
-        *(.sbss)
-        *(.bss)
-        *(.bss.*)
+        *(.bss .bss.* .gnu.linkonce.b.*)
+        *(COMMON)
         __bss_end__ = .;
     } > ram
     
@@ -93,6 +106,6 @@ SECTIONS
         *(.eh_*)
     }
 
-    __heap_base__   = .;
+    __heap_base__   = __bss_end__;
     __heap_end__    = __ram_end__ - __stacks_total_size__;
 }

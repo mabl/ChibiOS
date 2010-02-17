@@ -15,7 +15,7 @@ endif
 
 # Enable this if you want the linker to remove unused code and data
 ifeq ($(USE_LINK_GC),)
-  USE_LINK_GC = yes
+  USE_LINK_GC = no
 endif
 
 # Enable register caching optimization (read documentation).
@@ -78,7 +78,7 @@ INCDIR = $(PORTINC) $(KERNINC) $(TESTINC) \
 # Compiler settings
 #
 
-MCU  = e500mc -mnew-mnemonics -msdata=none
+MCU  = e500mc -meabi -msdata=none -mnew-mnemonics -mregnames
 
 TRGT = powerpc-eabi-
 CC   = $(TRGT)gcc

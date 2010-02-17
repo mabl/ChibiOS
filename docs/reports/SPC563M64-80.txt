@@ -125,7 +125,7 @@ Settings: SYSCLK=80, optimal wait states, prefetching enabled
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
 --- Test Case 11.10 (Benchmark, virtual timers set/reset)
---- Score : 1108950 timers/S
+--- Score : 1132448 timers/S
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
 --- Test Case 11.11 (Benchmark, semaphores wait/signal)
