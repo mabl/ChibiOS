@@ -33,10 +33,6 @@ static msg_t Thread1(void *arg) {
 
   (void)arg;
   
-  SIU.PCR[GPIO_LED1].R = 0x0300;
-  SIU.PCR[GPIO_LED2].R = 0x0300;
-  SIU.PCR[GPIO_LED3].R = 0x0300;
-  SIU.PCR[GPIO_LED4].R = 0x0300;
   SIU.GPDO[GPIO_LED1].R = 1;
   SIU.GPDO[GPIO_LED2].R = 1;
   SIU.GPDO[GPIO_LED3].R = 1;
@@ -72,6 +68,10 @@ int main(int argc, char **argv) {
   (void)argc;
   (void)argv;
 
+  /*
+   * Activates the serial driver 1 using the driver default configuration.
+   */
+  sdStart(&SD1, NULL);
 
   /*
    * Creates the blinker thread.
@@ -82,13 +82,16 @@ int main(int argc, char **argv) {
    * Normal main() thread activity.
    */
   while (TRUE)
-    if (1) {
-      MemoryStream report;
+    if (SIU.GPDI[GPIO_BUTTON1].B.PDI) {
       volatile msg_t result;
+#if 0
+      MemoryStream report;
 
       msObjectInit(&report, report_buffer, sizeof(report_buffer), 0);
       result = TestThread(&report);
-      continue;
+#else
+      result = TestThread(&SD1);
+#endif
     }
     chThdSleepMilliseconds(1000);
   return 0;

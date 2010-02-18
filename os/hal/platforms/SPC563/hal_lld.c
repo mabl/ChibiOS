@@ -52,6 +52,7 @@
  * @brief   Low level HAL driver initialization.
  */
 void hal_lld_init(void) {
+  extern void _vectors(void);
   uint32_t n;
 
   /* Enables the branch prediction, clears and enables the BTB into the
@@ -60,8 +61,10 @@ void hal_lld_init(void) {
                 "mtspr   1013, %%r3": : : "r3");
 
   /* FLASH wait states and prefetching setup.*/
-  FLASH.BIUCR.R = SPC563_FLASH_BIUCR | SPC563_FLASH_WS;
-    
+  CFLASH0.BIUCR.R  = SPC563_FLASH_BIUCR | SPC563_FLASH_WS;
+  CFLASH0.BIUCR2.R = 0;
+  CFLASH0.PFCR3.R  = 0;
+
   /* Optimal crossbar settings. The DMA priority is placed above the CPU
      priority in order to not starve I/O activities while the CPU is
      excuting tight loops (FLASH and SRAM slave ports only).
@@ -92,6 +95,12 @@ void hal_lld_init(void) {
                 "lis     %%r3, 0x0440       \t\n"   /* DIE ARE bits.        */
                 "mtspr   340, %%r3"                 /* TCR register.        */
                 : : [n] "r" (n) : "r3");
+
+  /* INTC initialization, software vector mode, 4 bytes vectors, starting
+     at priority 0.*/
+  INTC.MCR.R   = 0;
+  INTC.CPR.R   = 0;
+  INTC.IACKR.R = (uint32_t)_vectors;
 }
 
 /**

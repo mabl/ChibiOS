@@ -39,6 +39,7 @@
 #define SC_MODE_PARITY_EVEN     0x01        /**< @brief Even parity.        */
 #define SC_MODE_PARITY_ODD      0x02        /**< @brief Odd parity.         */
 
+#define SC_MODE_NORMAL          0x00        /**< @brief Normal operations.  */
 #define SC_MODE_LOOPBACK        0x80        /**< @brief Internal loopback.  */
 
 /*===========================================================================*/

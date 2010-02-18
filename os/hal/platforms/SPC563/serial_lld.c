@@ -56,7 +56,8 @@ SerialDriver SD2;
  * @brief   Driver default configuration.
  */
 static const SerialConfig default_config = {
-  SERIAL_DEFAULT_BITRATE
+  SERIAL_DEFAULT_BITRATE,
+  SC_MODE_NORMAL | SC_MODE_PARITY_NONE
 };
 
 /*===========================================================================*/
@@ -71,7 +72,26 @@ static const SerialConfig default_config = {
  */
 static void esci_init(SerialDriver *sdp) {
   volatile struct ESCI_tag *escip = sdp->escip;
+  uint8_t mode = sdp->config->sc_mode;
 
+  escip->LCR.R  = 0;
+  escip->CR1.R  = 0;
+  escip->CR1.B.SBR = SPC563_SYSCLK / (16 * sdp->config->sc_speed);
+  if (mode & SC_MODE_LOOPBACK)
+    escip->CR1.B.LOOPS = 1;
+  switch (mode & SC_MODE_PARITY) {
+  case SC_MODE_PARITY_ODD:
+    escip->CR1.B.PT = 1;
+  case SC_MODE_PARITY_EVEN:
+    escip->CR1.B.PE = 1;
+    escip->CR1.B.M  = 1;            /* Makes it 8 bits data + 1 bit parity. */
+  default:
+    ;
+  }
+  escip->LPR.R  = 0;
+  escip->SR.R   = 0xFFFFFFFF;       /* Resets status flags.                 */
+  escip->CR2.R  = 0x000F;           /* ORIE, NFIE, FEIE, PFIE to 1.         */
+  escip->CR1.R |= 0x0000002C;       /* RIE, TE, RE to 1.                    */
 }
 
 /**
@@ -82,6 +102,10 @@ static void esci_init(SerialDriver *sdp) {
  */
 static void esci_deinit(volatile struct ESCI_tag *escip) {
 
+  escip->LPR.R  = 0;
+  escip->SR.R   = 0xFFFFFFFF;
+  escip->CR1.R  = 0;
+  escip->CR2.R  = 0x8000;           /* MDIS on.                             */
 }
 
 /**
@@ -93,15 +117,15 @@ static void esci_deinit(volatile struct ESCI_tag *escip) {
 static void set_error(SerialDriver *sdp, uint32_t sr) {
   sdflags_t sts = 0;
 
-/*  if (sr & USART_SR_ORE)
+  if (sr & 0x08000000)
     sts |= SD_OVERRUN_ERROR;
-  if (sr & USART_SR_PE)
-    sts |= SD_PARITY_ERROR;
-  if (sr & USART_SR_FE)
-    sts |= SD_FRAMING_ERROR;
-  if (sr & USART_SR_NE)
+  if (sr & 0x04000000)
     sts |= SD_NOISE_ERROR;
-  if (sr & USART_SR_LBD)
+  if (sr & 0x02000000)
+    sts |= SD_FRAMING_ERROR;
+  if (sr & 0x01000000)
+    sts |= SD_PARITY_ERROR;
+/*  if (sr & 0x00000000)
     sts |= SD_BREAK_DETECTED;*/
   chSysLockFromIsr();
   sdAddFlagsI(sdp, sts);
@@ -115,18 +139,42 @@ static void set_error(SerialDriver *sdp, uint32_t sr) {
  */
 static void serve_interrupt(SerialDriver *sdp) {
   volatile struct ESCI_tag *escip = sdp->escip;
+  uint32_t sr;
 
+  sr = escip->SR.R;
+  escip->SR.R = 0xFFFFFFFF;
+  if (sr & 0x0F000000)                          /* OR | NF | FE | PF.       */
+    set_error(sdp, sr);
+  if (sr & 0x20000000) {                        /* RDRF.                    */
+    chSysLockFromIsr();
+    sdIncomingDataI(sdp, escip->DR.B.D);
+    chSysUnlockFromIsr();
+  }
+  if (escip->CR1.B.TIE && (sr & 0x80000000)) {  /* TDRE.                    */
+    msg_t b;
+    chSysLockFromIsr();
+    b = chOQGetI(&sdp->oqueue);
+    if (b < Q_OK) {
+      chEvtBroadcastI(&sdp->oevent);
+      escip->CR1.B.TIE = 0;
+    }
+    else
+      escip->DR.R = (uint16_t)b;
+    chSysUnlockFromIsr();
+  }
 }
 
 #if USE_SPC563_ESCIA || defined(__DOXYGEN__)
 static void notify1(void) {
 
+  ESCI_A.CR1.B.TIE = 1;
 }
 #endif
 
 #if USE_SPC563_ESCIB || defined(__DOXYGEN__)
 static void notify2(void) {
 
+  ESCI_B.CR1.B.TIE = 1;
 }
 #endif
 
@@ -173,12 +221,16 @@ void sd_lld_init(void) {
 
 #if USE_SPC563_ESCIA
   sdObjectInit(&SD1, NULL, notify1);
-  SD1.escip = &ESCI_A;
+  SD1.escip       = &ESCI_A;
+  ESCI_A.CR2.R    = 0x8000;                 /* MDIS ON.                     */
+  INTC.PSR[146].R = SPC563_ESCIA_PRIORITY;
 #endif
 
 #if USE_SPC563_ESCIB
   sdObjectInit(&SD2, NULL, notify2);
-  SD2.escip = &ESCI_B;
+  SD2.escip       = &ESCI_B;
+  ESCI_B.CR2.R    = 0x8000;                 /* MDIS ON.                     */
+  INTC.PSR[149].R = SPC563_ESCIB_PRIORITY;
 #endif
 }
 
@@ -191,42 +243,18 @@ void sd_lld_start(SerialDriver *sdp) {
 
   if (sdp->config == NULL)
     sdp->config = &default_config;
-
-  if (sdp->state == SD_STOP) {
-#if USE_SPC563_ESCIA
-    if (&SD1 == sdp) {
-    }
-#endif
-#if USE_SPC563_ESCIB
-    if (&SD2 == sdp) {
-    }
-#endif
-  }
   esci_init(sdp);
 }
 
 /**
  * @brief   Low level serial driver stop.
- * @details De-initializes the eSCI, stops the associated clock, resets the
- *          interrupt vector.
  *
  * @param[in] sdp       pointer to a @p SerialDriver object
  */
 void sd_lld_stop(SerialDriver *sdp) {
 
-  if (sdp->state == SD_READY) {
+  if (sdp->state == SD_READY)
     esci_deinit(sdp->escip);
-#if USE_SPC563_ESCIA
-    if (&SD1 == sdp) {
-      return;
-    }
-#endif
-#if USE_SPC563_ESCIB
-    if (&SD2 == sdp) {
-      return;
-    }
-#endif
-  }
 }
 
 #endif /* CH_HAL_USE_SERIAL */

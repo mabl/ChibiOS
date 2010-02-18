@@ -227,12 +227,7 @@ struct context {
 	asm volatile ("li          %r3, IVOR4@l         \t\n"                   \
   	              "mtIVOR4     %r3                  \t\n"                   \
                   "li          %r3, IVOR10@l        \t\n"                   \
-  	              "mtIVOR10    %r3                  \t\n"                   \
-                  "lis         %r3, 0xfff4          \t\n"                   \
-                  "ori         %r3, %r3, 0x8010     \t\n"                   \
-                  "lis         %r4, _vectors@ha     \t\n"                   \
-                  "ori         %r4, %r4, _vectors@l \t\n"                   \
-                  "stw         %r4, 0(%r3)");                               \
+  	              "mtIVOR10    %r3");                                       \
 }
 
 /**
