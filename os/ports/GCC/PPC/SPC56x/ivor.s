@@ -115,7 +115,7 @@ IVOR4:
         ori         %r3, %r3, INTC_IACKR@l  /* IACKR register address.      */
         lwz         %r3, 0(%r3)             /* IACKR register value.        */
         lwz         %r3, 0(%r3)
-        mtLR        %r3                     /* Software handler address.    */
+        mtCTR        %r3                    /* Software handler address.    */
 
 #if PPC_USE_IRQ_PREEMPTION
         /* Allows preemption while executing the software handler.*/
@@ -123,7 +123,7 @@ IVOR4:
 #endif
 
         /* Exectes the software handler.*/
-        blr
+        bctrl
 
 #if PPC_USE_IRQ_PREEMPTION
         /* Prevents preemption again.*/
