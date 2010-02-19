@@ -139,7 +139,7 @@ IVOR4:
         /* Verifies if a reschedulation is required.*/
         bl          chSchIsRescRequiredExI
         cmpli       cr0, %r3, 0
-        bne         cr0, .ctxrestore
+        beq         cr0, .ctxrestore
         bl          chSchDoRescheduleI
 
         /* Context restore.*/
