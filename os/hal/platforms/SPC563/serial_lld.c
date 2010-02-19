@@ -74,8 +74,9 @@ static void esci_init(SerialDriver *sdp) {
   volatile struct ESCI_tag *escip = sdp->escip;
   uint8_t mode = sdp->config->sc_mode;
 
-  escip->LCR.R  = 0;
+  escip->CR2.R  = 0;                /* MDIS off.                            */
   escip->CR1.R  = 0;
+  escip->LCR.R  = 0;
   escip->CR1.B.SBR = SPC563_SYSCLK / (16 * sdp->config->sc_speed);
   if (mode & SC_MODE_LOOPBACK)
     escip->CR1.B.LOOPS = 1;
@@ -89,9 +90,8 @@ static void esci_init(SerialDriver *sdp) {
     ;
   }
   escip->LPR.R  = 0;
-  escip->SR.R   = 0xFFFFFFFF;       /* Resets status flags.                 */
-  escip->CR2.R  = 0x000F;           /* ORIE, NFIE, FEIE, PFIE to 1.         */
   escip->CR1.R |= 0x0000002C;       /* RIE, TE, RE to 1.                    */
+  escip->CR2.R |= 0x000F;           /* ORIE, NFIE, FEIE, PFIE to 1.         */
 }
 
 /**
@@ -139,10 +139,9 @@ static void set_error(SerialDriver *sdp, uint32_t sr) {
  */
 static void serve_interrupt(SerialDriver *sdp) {
   volatile struct ESCI_tag *escip = sdp->escip;
-  uint32_t sr;
 
-  sr = escip->SR.R;
-  escip->SR.R = 0xFFFFFFFF;
+  uint32_t sr = escip->SR.R;
+  escip->SR.R = 0x3FFFFFFF;                     /* Does not clear TDRE | TC.*/
   if (sr & 0x0F000000)                          /* OR | NF | FE | PF.       */
     set_error(sdp, sr);
   if (sr & 0x20000000) {                        /* RDRF.                    */
@@ -158,8 +157,10 @@ static void serve_interrupt(SerialDriver *sdp) {
       chEvtBroadcastI(&sdp->oevent);
       escip->CR1.B.TIE = 0;
     }
-    else
+    else {
+      ESCI_A.SR.B.TDRE = 1;
       escip->DR.R = (uint16_t)b;
+    }
     chSysUnlockFromIsr();
   }
 }
@@ -167,14 +168,42 @@ static void serve_interrupt(SerialDriver *sdp) {
 #if USE_SPC563_ESCIA || defined(__DOXYGEN__)
 static void notify1(void) {
 
-  ESCI_A.CR1.B.TIE = 1;
+  if (ESCI_A.SR.B.TDRE) {
+    msg_t b = sdRequestDataI(&SD1);
+    if (b != Q_EMPTY) {
+      ESCI_A.SR.B.TDRE = 1;
+      ESCI_A.CR1.B.TIE = 1;
+      ESCI_A.DR.R = (uint16_t)b;
+    }
+  }
+/*  if (!ESCI_A.CR1.B.TIE) {
+    msg_t b = sdRequestDataI(&SD1);
+    if (b != Q_EMPTY) {
+      ESCI_A.CR1.B.TIE = 1;
+      ESCI_A.DR.R = (uint16_t)b;
+    }
+  }*/
 }
 #endif
 
 #if USE_SPC563_ESCIB || defined(__DOXYGEN__)
 static void notify2(void) {
 
-  ESCI_B.CR1.B.TIE = 1;
+  if (ESCI_B.SR.B.TDRE) {
+    msg_t b = sdRequestDataI(&SD2);
+    if (b != Q_EMPTY) {
+      ESCI_B.SR.B.TDRE = 1;
+      ESCI_B.CR1.B.TIE = 1;
+      ESCI_B.DR.R = (uint16_t)b;
+    }
+  }
+/*  if (!ESCI_B.CR1.B.TIE) {
+    msg_t b = sdRequestDataI(&SD2);
+    if (b != Q_EMPTY) {
+      ESCI_B.CR1.B.TIE = 1;
+      ESCI_B.DR.R = (uint16_t)b;
+    }
+  }*/
 }
 #endif
 

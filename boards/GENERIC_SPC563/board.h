@@ -40,6 +40,8 @@
 /*
  * I/O definitions.
  */
+#define GPIO_SCI_A_TX   89
+
 #define GPIO_BUTTON1    179
 #define GPIO_BUTTON2    181
 #define GPIO_BUTTON3    183

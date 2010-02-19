@@ -130,7 +130,8 @@ IVOR4:
         wrteei      0
 #endif
 
-        /* Informs the INTC that the interrupt has been served.
+        /* Informs the INTC that the interrupt has been served.*/
+        mbar        0
         lis         %r3, INTC_EOIR@h
         ori         %r3, %r3, INTC_EOIR@l
         stw         %r3, 0(%r3)             /* Writing any value should do. */

@@ -81,7 +81,7 @@ int main(int argc, char **argv) {
   /*
    * Normal main() thread activity.
    */
-  while (TRUE)
+  while (TRUE) {
     if (SIU.GPDI[GPIO_BUTTON1].B.PDI) {
       volatile msg_t result;
 #if 0
@@ -94,5 +94,6 @@ int main(int argc, char **argv) {
 #endif
     }
     chThdSleepMilliseconds(1000);
+  }
   return 0;
 }

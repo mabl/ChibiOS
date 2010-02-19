@@ -243,12 +243,12 @@ struct context {
 /**
  * @details Implemented as global interrupt disable.
  */
-#define port_lock_from_isr() asm ("wrteei  0")
+#define port_lock_from_isr() /*asm ("wrteei  0")*/
 
 /**
  * @details Implemented as global interrupt enable.
  */
-#define port_unlock_from_isr() asm ("wrteei  1")
+#define port_unlock_from_isr() /*asm ("wrteei  1")*/
 
 /**
  * @details Implemented as global interrupt disable.
