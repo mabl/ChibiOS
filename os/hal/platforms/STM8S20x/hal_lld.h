@@ -28,9 +28,7 @@
 #ifndef _HAL_LLD_H_
 #define _HAL_LLD_H_
 
-#ifdef BOARD_USES_STM8S208RB
-#include "STM8/STM8S208RB.h"
-#endif
+#include "stm8.h"
 
 /*===========================================================================*/
 /* Driver constants.                                                         */

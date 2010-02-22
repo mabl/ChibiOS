@@ -17,35 +17,25 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _BOARD_H_
-#define _BOARD_H_
+#ifndef _STM8_H_
+#define _STM8_H_
 
 /*
- * Setup for a generic STM8S20x board.
+ * Supported platforms.
  */
+#define PLATFORM_STM8S208RB     1
+#define PLATFORM_STM8AF51AA     2
 
-/*
- * Board identifiers.
- */
-#define BOARD_STM8S20x
-#define BOARD_NAME "Generic STM8S20x"
-
-/*
- * Board frequencies.
- */
-#define HSECLK          24000000
-
-/*
- * MCU model used on the board.
- */
-#define STM8_PLATFORM   PLATFORM_STM8S208RB
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-  void hwinit(void);
-#ifdef __cplusplus
-}
+#ifndef STM8_PLATFORM
+#error "STM8 platform not defined"
 #endif
 
-#endif /* _BOARD_H_ */
+#if STM8_PLATFORM == PLATFORM_STM8S208RB
+#include "STM8/STM8S208RB.h"
+#elif STM8_PLATFORM == PLATFORM_STM8AF51AA
+#include "STM8/STM8AF51AA.h"
+#else
+#error "unsupported or invalid STM8 platform"
+#endif
+
+#endif /* _STM8_H_ */
