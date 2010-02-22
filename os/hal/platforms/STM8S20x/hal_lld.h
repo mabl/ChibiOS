@@ -63,59 +63,59 @@
 /**
  * @brief Clock source setting.
  */
-#if !defined(STM8S_CLOCK_SOURCE) || defined(__DOXYGEN__)
-#define STM8S_CLOCK_SOURCE          CLK_SOURCE_DEFAULT
+#if !defined(STM8_CLOCK_SOURCE) || defined(__DOXYGEN__)
+#define STM8_CLOCK_SOURCE           CLK_SOURCE_DEFAULT
 #endif
 
 /**
  * @brief HSI clock divider.
  */
-#if !defined(STM8S_HSI_DIVIDER) || defined(__DOXYGEN__)
-#define STM8S_HSI_DIVIDER           CLK_HSI_DIV8
+#if !defined(STM8_HSI_DIVIDER) || defined(__DOXYGEN__)
+#define STM8_HSI_DIVIDER            CLK_HSI_DIV8
 #endif
 
 /**
  * @brief CPU clock divider.
  */
-#if !defined(STM8S_CPU_DIVIDER) || defined(__DOXYGEN__)
-#define STM8S_CPU_DIVIDER           CLK_CPU_DIV1
+#if !defined(STM8_CPU_DIVIDER) || defined(__DOXYGEN__)
+#define STM8_CPU_DIVIDER            CLK_CPU_DIV1
 #endif
 
 /*===========================================================================*/
 /* Derived constants and error checks.                                       */
 /*===========================================================================*/
 
-#if (STM8S_HSI_DIVIDER != CLK_HSI_DIV1)  &&                                 \
-    (STM8S_HSI_DIVIDER != CLK_HSI_DIV2)  &&                                 \
-    (STM8S_HSI_DIVIDER != CLK_HSI_DIV4)  &&                                 \
-    (STM8S_HSI_DIVIDER != CLK_HSI_DIV8)
+#if (STM8_HSI_DIVIDER != CLK_HSI_DIV1)  &&                                  \
+    (STM8_HSI_DIVIDER != CLK_HSI_DIV2)  &&                                  \
+    (STM8_HSI_DIVIDER != CLK_HSI_DIV4)  &&                                  \
+    (STM8_HSI_DIVIDER != CLK_HSI_DIV8)
 #error "specified invalid HSI divider"
 #endif
 
-#if (STM8S_CPU_DIVIDER != CLK_CPU_DIV1)  &&                                 \
-    (STM8S_CPU_DIVIDER != CLK_CPU_DIV2)  &&                                 \
-    (STM8S_CPU_DIVIDER != CLK_CPU_DIV4)  &&                                 \
-    (STM8S_CPU_DIVIDER != CLK_CPU_DIV8)  &&                                 \
-    (STM8S_CPU_DIVIDER != CLK_CPU_DIV16) &&                                 \
-    (STM8S_CPU_DIVIDER != CLK_CPU_DIV32) &&                                 \
-    (STM8S_CPU_DIVIDER != CLK_CPU_DIV64) &&                                 \
-    (STM8S_CPU_DIVIDER != CLK_CPU_DIV128)
+#if (STM8_CPU_DIVIDER != CLK_CPU_DIV1)  &&                                  \
+    (STM8_CPU_DIVIDER != CLK_CPU_DIV2)  &&                                  \
+    (STM8_CPU_DIVIDER != CLK_CPU_DIV4)  &&                                  \
+    (STM8_CPU_DIVIDER != CLK_CPU_DIV8)  &&                                  \
+    (STM8_CPU_DIVIDER != CLK_CPU_DIV16) &&                                  \
+    (STM8_CPU_DIVIDER != CLK_CPU_DIV32) &&                                  \
+    (STM8_CPU_DIVIDER != CLK_CPU_DIV64) &&                                  \
+    (STM8_CPU_DIVIDER != CLK_CPU_DIV128)
 #error "specified invalid CPU divider"
 #endif
 
-#if STM8S_CLOCK_SOURCE == CLK_SOURCE_DEFAULT
+#if STM8_CLOCK_SOURCE == CLK_SOURCE_DEFAULT
 #define SYSCLK                      (HSICLK / 8)
-#elif STM8S_CLOCK_SOURCE == CLK_SOURCE_HSI
-#define SYSCLK                      (HSICLK / (1 << STM8S_HSI_DIVIDER))
-#elif STM8S_CLOCK_SOURCE == CLK_SOURCE_LSI
+#elif STM8_CLOCK_SOURCE == CLK_SOURCE_HSI
+#define SYSCLK                      (HSICLK / (1 << STM8_HSI_DIVIDER))
+#elif STM8_CLOCK_SOURCE == CLK_SOURCE_LSI
 #define SYSCLK                      LSICLK
-#elif STM8S_CLOCK_SOURCE == CLK_SOURCE_HSE
+#elif STM8_CLOCK_SOURCE == CLK_SOURCE_HSE
 #define SYSCLK                      HSECLK
 #else
 #error "specified invalid clock source"
 #endif
 
-#define CPUCLK                      (SYSCLK / (1 << STM8S_CPU_DIVIDER))
+#define CPUCLK                      (SYSCLK / (1 << STM8_CPU_DIVIDER))
 
 /*===========================================================================*/
 /* Driver data structures and types.                                         */

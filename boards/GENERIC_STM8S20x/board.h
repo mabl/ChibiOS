@@ -37,6 +37,7 @@
 
 /*
  * MCU model used on the board.
+ * The available models are listed in the file ./os/hal/platforms/stm8/stm8.h
  */
 #define STM8_PLATFORM   PLATFORM_STM8S208RB
 

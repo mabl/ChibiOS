@@ -1,5 +1,5 @@
 
-<ApplicationBuild Header="ch" Extern=".\ch.rapp" Path=".\ch.rapp" OutputFile="..\STM8S-STM8S208-RC/bin\ch.aof" sate="96" >
+<ApplicationBuild Header="ch" Extern=".\ch.rapp" Path=".\ch.rapp" OutputFile="..\STM8S-STM8S208-RC/bin\ch.aof" sate="98" >
 	<Group Header="kernel" Marker="-1" OutputFile="" sate="0" >
 		<NodeC Path="..\..\os\kernel\src\chcond.c" Header="chcond.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\chcond.obj" sate="0" />
 		<NodeC Path="..\..\os\kernel\src\chdebug.c" Header="chdebug.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\chdebug.obj" sate="0" />
@@ -84,8 +84,8 @@
 		<NodeC Path="..\..\os\hal\src\spi.c" Header="spi.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\spi.obj" sate="0" />
 												
 	</Group>
-	<Group Header="board" Marker="-1" OutputFile="" sate="96" >
-		<NodeC Path="..\..\boards\GENERIC_STM8S20x\board.c" Header="board.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\board.obj" sate="98" />
+	<Group Header="board" Marker="-1" OutputFile="" sate="0" >
+		<NodeC Path="..\..\boards\GENERIC_STM8S20x\board.c" Header="board.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\board.obj" sate="0" />
 															
 	</Group>
 	<NodeC Path=".\main.c" Header="main.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\main.obj" sate="0" />

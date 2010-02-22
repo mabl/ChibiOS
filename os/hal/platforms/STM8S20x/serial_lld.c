@@ -28,6 +28,30 @@
 #include "ch.h"
 #include "hal.h"
 
+/* Because someone somewhere couldn't use the same name for the same thing.*/
+#if STM8_PLATFORM == PLATFORM_STM8AF51AA
+#define UART1_BRR1  USART_BRR1
+#define UART1_BRR2  USART_BRR2
+#define UART1_SR    USART_SR
+#define UART1_DR    USART_DR
+#define UART1_CR1   USART_CR1
+#define UART1_CR2   USART_CR2
+#define UART1_CR3   USART_CR3
+#define UART1_CR4   USART_CR4
+#define UART1_CR5   USART_CR5
+
+#define UART3_BRR1  LINUART_BRR1
+#define UART3_BRR2  LINUART_BRR2
+#define UART3_SR    LINUART_SR
+#define UART3_DR    LINUART_DR
+#define UART3_CR1   LINUART_CR1
+#define UART3_CR2   LINUART_CR2
+#define UART3_CR3   LINUART_CR3
+#define UART3_CR4   LINUART_CR4
+#define UART3_CR5   LINUART_CR5
+#define UART3_CR6   LINUART_CR6
+#endif
+
 #if CH_HAL_USE_SERIAL || defined(__DOXYGEN__)
 
 /*===========================================================================*/

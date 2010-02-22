@@ -53,29 +53,29 @@
  */
 void hal_lld_init(void) {
 
-#if STM8S_CLOCK_SOURCE != CLK_SOURCE_DEFAULT
-#if STM8S_CLOCK_SOURCE == CLK_SOURCE_HSI
+#if STM8_CLOCK_SOURCE != CLK_SOURCE_DEFAULT
+#if STM8_CLOCK_SOURCE == CLK_SOURCE_HSI
   CLK_ICKR    = 1;                  /* HSIEN */
   while ((CLK_ICKR & 2) == 0)       /* HSIRDY */
     ;
-#elif STM8S_CLOCK_SOURCE == CLK_SOURCE_LSI
+#elif STM8_CLOCK_SOURCE == CLK_SOURCE_LSI
   CLK_ICKR    = 8;                  /* LSIEN */             
   while ((CLK_ICKR & 16) == 0)      /* LSIRDY */
     ;
-#else /* STM8S_CLOCK_SOURCE == CLK_SOURCE_HSE */
+#else /* STM8_CLOCK_SOURCE == CLK_SOURCE_HSE */
   CLK_ECKR    = 1;                  /* HSEEN */
   while ((CLK_ECKR & 2) == 0)       /* HSERDY */
     ;
 #endif
   /* Switching clock (manual switch mode).*/
   CLK_SWCR    = 0;
-  CLK_SWR     = STM8S_CLOCK_SOURCE;
+  CLK_SWR     = STM8_CLOCK_SOURCE;
   while ((CLK_SWCR & 8) == 0)       /* SWIF */
     ;
   CLK_SWCR    = 4;                  /* SWEN */
 
   /* Setting up clock dividers.*/
-  CLK_CKDIVR  = (STM8S_HSI_DIVIDER << 3) | (STM8S_CPU_DIVIDER << 0);
+  CLK_CKDIVR  = (STM8_HSI_DIVIDER << 3) | (STM8_CPU_DIVIDER << 0);
 
   /* Clocks initially all disabled.*/
   CLK_PCKENR1 = 0;
@@ -85,7 +85,7 @@ void hal_lld_init(void) {
   CLK_CSSR    = 0;
   CLK_CCOR    = 0;
   CLK_CANCCR  = 0;
-#endif /* STM8S_CLOCK_SOURCE != CLK_SOURCE_DEFAULT */
+#endif /* STM8_CLOCK_SOURCE != CLK_SOURCE_DEFAULT */
 }
 
 /** @} */
