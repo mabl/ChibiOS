@@ -19,7 +19,7 @@
 
 #include "ch.h"
 #include "hal.h"
-/*#include "test.h"*/
+#include "test.h"
 
 /*
  * Entry point.
@@ -47,10 +47,10 @@ void main(void) {
    * Normal main() thread activity.
    */
   while (!chThdShouldTerminate()) {
-/*    volatile msg_t result;
-    result = TestThread(&SD1);*/
-    sdWriteTimeout(&SD1, "Hello World!\r\n", 14, TIME_INFINITE);
-    sdWriteTimeout(&SD3, "Hello World!\r\n", 14, TIME_INFINITE);
+    volatile msg_t result;
+    result = TestThread(&SD1);
+/*    sdWriteTimeout(&SD1, "Hello World!\r\n", 14, TIME_INFINITE);
+    sdWriteTimeout(&SD3, "Hello World!\r\n", 14, TIME_INFINITE);*/
     chThdSleepMilliseconds(10000);
   }
 }

@@ -85,7 +85,7 @@
  * @note    Requires @p CH_USE_COREMEM.
  */
 #if !defined(CH_MEMCORE_SIZE) || defined(__DOXYGEN__)
-#define CH_MEMCORE_SIZE                 4096
+#define CH_MEMCORE_SIZE                 3072
 #endif
 
 /*===========================================================================*/
@@ -190,7 +190,7 @@
  * @note    The default is @p TRUE.
  */
 #if !defined(CH_USE_MUTEXES) || defined(__DOXYGEN__)
-#define CH_USE_MUTEXES                  TRUE
+#define CH_USE_MUTEXES                  FALSE
 #endif
 
 /**
@@ -202,7 +202,7 @@
  * @note    Requires @p CH_USE_MUTEXES.
  */
 #if !defined(CH_USE_CONDVARS) || defined(__DOXYGEN__)
-#define CH_USE_CONDVARS                 TRUE
+#define CH_USE_CONDVARS                 FALSE
 #endif
 
 /**
@@ -271,7 +271,7 @@
  * @note    Requires @p CH_USE_SEMAPHORES.
  */
 #if !defined(CH_USE_MAILBOXES) || defined(__DOXYGEN__)
-#define CH_USE_MAILBOXES                TRUE
+#define CH_USE_MAILBOXES                FALSE
 #endif
 
 /**

@@ -35,12 +35,12 @@
 /**
  * @brief   Unique macro for the implemented architecture.
  */
-#define CH_ARCHITECTURE_STM8S
+#define CH_ARCHITECTURE_STM8
 
 /**
  * @brief   Name of the implemented architecture.
  */
-#define CH_ARCHITECTURE_NAME "STM8S"
+#define CH_ARCHITECTURE_NAME "STM8"
 
 /**
  * @brief   Base type for stack alignment.

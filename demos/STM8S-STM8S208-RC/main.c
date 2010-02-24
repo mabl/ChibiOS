@@ -19,7 +19,7 @@
 
 #include "ch.h"
 #include "hal.h"
-/*#include "test.h"*/
+#include "test.h"
 
 /*
  * Entry point.
@@ -32,6 +32,13 @@ void main(void) {
   hwinit();
 
   /*
+   * Activates the serial driver 1 and 3 using the driver default
+   * configuration.
+   */
+  sdStart(&SD1, NULL);
+  sdStart(&SD3, NULL);
+
+  /*
    * OS initialization.
    */
   chSysInit();
@@ -39,6 +46,11 @@ void main(void) {
   /*
    * Normal main() thread activity.
    */
-  while (!chThdShouldTerminate())
-    chThdSleepMilliseconds(1000);
+  while (!chThdShouldTerminate()) {
+    volatile msg_t result;
+    result = TestThread(&SD1);
+/*    sdWriteTimeout(&SD1, "Hello World!\r\n", 14, TIME_INFINITE);
+    sdWriteTimeout(&SD3, "Hello World!\r\n", 14, TIME_INFINITE);*/
+    chThdSleepMilliseconds(10000);
+  }
 }
