@@ -104,7 +104,7 @@ extern "C" {
 #endif
   void scheduler_init(void);
   Thread *chSchReadyI(Thread *tp);
-  void chSchGoSleepS(tstate_t newstate);
+  Thread *chSchGoSleepS(tstate_t newstate);
   msg_t chSchGoSleepTimeoutS(tstate_t newstate, systime_t time);
   Thread *chSchWakeupS(Thread *tp, msg_t msg);
   void chSchDoRescheduleI(void);

@@ -81,8 +81,9 @@ Thread *chSchReadyI(Thread *tp) {
  *          described into @p threads.h.
  *
  * @param[in] newstate  the new thread state
+ * @return              The @p currp value.
  */
-void chSchGoSleepS(tstate_t newstate) {
+Thread *chSchGoSleepS(tstate_t newstate) {
   Thread *otp;
 
   (otp = currp)->p_state = newstate;
@@ -91,7 +92,7 @@ void chSchGoSleepS(tstate_t newstate) {
   rlist.r_preempt = CH_TIME_QUANTUM;
 #endif
   chDbgTrace(currp, otp);
-  chSysSwitchI(currp, otp);
+  return chSysSwitchI(currp, otp);
 }
 
 /*
@@ -171,7 +172,6 @@ msg_t chSchGoSleepTimeoutS(tstate_t newstate, systime_t time) {
  * @return              The @p ntp parameter.
  */
 Thread *chSchWakeupS(Thread *ntp, msg_t msg) {
-  Thread *otp;
 
   ntp->p_u.rdymsg = msg;
   /* If the waken thread has a not-greater priority than the current
@@ -179,15 +179,18 @@ Thread *chSchWakeupS(Thread *ntp, msg_t msg) {
      running immediately and the invoking thread goes in the ready
      list instead.*/
   if (ntp->p_prio <= currp->p_prio)
-    return chSchReadyI(ntp);
-
-  chSchReadyI(otp = currp);
+    ntp = chSchReadyI(ntp);
+  else {
+    Thread *otp = currp;
+    chSchReadyI(otp);
 #if CH_TIME_QUANTUM > 0
-  rlist.r_preempt = CH_TIME_QUANTUM;
+    rlist.r_preempt = CH_TIME_QUANTUM;
 #endif
-  (currp = ntp)->p_state = THD_STATE_CURRENT;
-  chDbgTrace(ntp, otp);
-  return chSysSwitchI(ntp, otp);
+    (currp = ntp)->p_state = THD_STATE_CURRENT;
+    chDbgTrace(ntp, otp);
+    ntp = chSysSwitchI(ntp, otp);
+  }
+  return ntp;
 }
 
 /**
@@ -196,8 +199,8 @@ Thread *chSchWakeupS(Thread *ntp, msg_t msg) {
  *          to @p TRUE.
  */
 void chSchDoRescheduleI(void) {
-
   Thread *otp = currp;
+
   /* Pick the first thread from the ready queue and makes it current.*/
   (currp = fifo_remove(&rlist.r_queue))->p_state = THD_STATE_CURRENT;
   chSchReadyI(otp);
