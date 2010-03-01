@@ -106,7 +106,7 @@ extern "C" {
   Thread *chSchReadyI(Thread *tp);
   void chSchGoSleepS(tstate_t newstate);
   msg_t chSchGoSleepTimeoutS(tstate_t newstate, systime_t time);
-  void chSchWakeupS(Thread *tp, msg_t msg);
+  Thread *chSchWakeupS(Thread *tp, msg_t msg);
   void chSchDoRescheduleI(void);
   void chSchRescheduleS(void);
   bool_t chSchIsRescRequiredExI(void);

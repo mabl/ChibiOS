@@ -307,23 +307,18 @@ struct context {
 /**
  * This port function is implemented as inlined code for performance reasons.
  */
+static INLINE Thread *port_switch(Thread *ntp, Thread *otp) {
+  register Thread *_ntp asm ("r0") = (ntp);
+  register Thread *_otp asm ("r1") = (otp);
 #if CH_DBG_ENABLE_STACK_CHECK
-#define port_switch(otp, ntp) {                                         \
-  register Thread *_otp asm ("r0") = (otp);                             \
-  register Thread *_ntp asm ("r1") = (ntp);                             \
-  register char *sp asm ("sp");                                         \
-  if (sp - sizeof(struct intctx) - sizeof(Thread) < (char *)_otp)       \
-    asm volatile ("movs    r0, #0                               \n\t"   \
-                  "b       chDbgPanic");                                \
-  asm volatile ("svc     #0" : : "r" (_otp), "r" (_ntp) : "memory");    \
+  register char *sp asm ("sp");
+  if (sp - sizeof(struct intctx) - sizeof(Thread) < (char *)_otp)
+    asm volatile ("movs    r0, #0                               \n\t"
+                  "b       chDbgPanic");
+#endif /* CH_DBG_ENABLE_STACK_CHECK */
+  asm volatile ("svc     #0" : : "r" (_otp), "r" (_ntp) : "memory");
+  return _ntp;
 }
-#else /* !CH_DBG_ENABLE_STACK_CHECK */
-#define port_switch(otp, ntp) {                                         \
-  register Thread *_otp asm ("r0") = (otp);                             \
-  register Thread *_ntp asm ("r1") = (ntp);                             \
-  asm volatile ("svc     #0" : : "r" (_otp), "r" (_ntp) : "memory");    \
-}
-#endif /* !CH_DBG_ENABLE_STACK_CHECK */
 
 #ifdef __cplusplus
 extern "C" {

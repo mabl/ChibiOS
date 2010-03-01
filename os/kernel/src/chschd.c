@@ -90,8 +90,8 @@ void chSchGoSleepS(tstate_t newstate) {
 #if CH_TIME_QUANTUM > 0
   rlist.r_preempt = CH_TIME_QUANTUM;
 #endif
-  chDbgTrace(otp, currp);
-  chSysSwitchI(otp, currp);
+  chDbgTrace(currp, otp);
+  chSysSwitchI(currp, otp);
 }
 
 /*
@@ -168,8 +168,10 @@ msg_t chSchGoSleepTimeoutS(tstate_t newstate, systime_t time) {
  *
  * @param[in] ntp       the Thread to be made ready
  * @param[in] msg       message to the awakened thread
+ * @return              The @p ntp parameter.
  */
-void chSchWakeupS(Thread *ntp, msg_t msg) {
+Thread *chSchWakeupS(Thread *ntp, msg_t msg) {
+  Thread *otp;
 
   ntp->p_u.rdymsg = msg;
   /* If the waken thread has a not-greater priority than the current
@@ -177,17 +179,15 @@ void chSchWakeupS(Thread *ntp, msg_t msg) {
      running immediately and the invoking thread goes in the ready
      list instead.*/
   if (ntp->p_prio <= currp->p_prio)
-    chSchReadyI(ntp);
-  else {
-    Thread *otp = currp;
-    chSchReadyI(otp);
+    return chSchReadyI(ntp);
+
+  chSchReadyI(otp = currp);
 #if CH_TIME_QUANTUM > 0
-    rlist.r_preempt = CH_TIME_QUANTUM;
+  rlist.r_preempt = CH_TIME_QUANTUM;
 #endif
-    (currp = ntp)->p_state = THD_STATE_CURRENT;
-    chDbgTrace(otp, ntp);
-    chSysSwitchI(otp, ntp);
-  }
+  (currp = ntp)->p_state = THD_STATE_CURRENT;
+  chDbgTrace(ntp, otp);
+  return chSysSwitchI(ntp, otp);
 }
 
 /**
@@ -204,8 +204,8 @@ void chSchDoRescheduleI(void) {
 #if CH_TIME_QUANTUM > 0
   rlist.r_preempt = CH_TIME_QUANTUM;
 #endif
-  chDbgTrace(otp, currp);
-  chSysSwitchI(otp, currp);
+  chDbgTrace(currp, otp);
+  chSysSwitchI(currp, otp);
 }
 
 /**
@@ -272,8 +272,8 @@ void chSchDoYieldS(void) {
 #if CH_TIME_QUANTUM > 0
     rlist.r_preempt = CH_TIME_QUANTUM;
 #endif
-    chDbgTrace(otp, currp);
-    chSysSwitchI(otp, currp);
+    chDbgTrace(currp, otp);
+    chSysSwitchI(currp, otp);
   }
 }
 

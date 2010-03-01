@@ -74,8 +74,8 @@ void SysTickVector(void) {
  *          @p intctx are saved and restored from the process stacks of the
  *          switched threads.
  *
- * @param otp the thread to be switched out
- * @param ntp the thread to be switched it
+ * @param ntp the thread to be switched it (expected in r0)
+ * @param otp the thread to be switched out (expected in r1)
  */
 #if !defined(__DOXYGEN__)
 __attribute__((naked))
@@ -87,8 +87,8 @@ void SVCallVector(Thread *otp, Thread *ntp) {
   asm volatile ("mrs     r3, BASEPRI                            \n\t" \
                 "mrs     r12, PSP                               \n\t" \
                 "stmdb   r12!, {r3-r6,r8-r11, lr}               \n\t" \
-                "str     r12, [r0, #12]                         \n\t" \
-                "ldr     r12, [r1, #12]                         \n\t" \
+                "str     r12, [r1, #12]                         \n\t" \
+                "ldr     r12, [r0, #12]                         \n\t" \
                 "ldmia   r12!, {r3-r6,r8-r11, lr}               \n\t" \
                 "msr     PSP, r12                               \n\t" \
                 "msr     BASEPRI, r3                            \n\t" \
@@ -97,8 +97,8 @@ void SVCallVector(Thread *otp, Thread *ntp) {
   asm volatile ("mrs     r3, BASEPRI                            \n\t" \
                 "mrs     r12, PSP                               \n\t" \
                 "stmdb   r12!, {r3-r11, lr}                     \n\t" \
-                "str     r12, [r0, #12]                         \n\t" \
-                "ldr     r12, [r1, #12]                         \n\t" \
+                "str     r12, [r1, #12]                         \n\t" \
+                "ldr     r12, [r0, #12]                         \n\t" \
                 "ldmia   r12!, {r3-r11, lr}                     \n\t" \
                 "msr     PSP, r12                               \n\t" \
                 "msr     BASEPRI, r3                            \n\t" \
@@ -157,7 +157,7 @@ void PendSVVector(void) {
   /* Set the round-robin time quantum.*/
   rlist.r_preempt = CH_TIME_QUANTUM;
 #endif
-  chDbgTrace(otp, currp);
+  chDbgTrace(currp, otp);
   sp_thd = currp->p_ctx.r13;
 
   POP_CONTEXT(sp_thd);
