@@ -48,10 +48,14 @@ void main(void) {
   hwinit();
 
   /*
-   * Activates the serial driver 1 and 3 using the driver default
-   * configuration.
+   * OS initialization.
    */
-  sdStart(&SD1, NULL);
+  chSysInit();
+
+  /*
+   * Activates the serial driver 1 using the driver default configuration.
+   */
+//  sdStart(&SD1, NULL);
 
   /*
    * Creates the blinker thread.
@@ -59,17 +63,12 @@ void main(void) {
   chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO, Thread1, NULL);
 
   /*
-   * OS initialization.
-   */
-  chSysInit();
-
-  /*
    * Normal main() thread activity.
    */
   while (TRUE) {
-    volatile msg_t result;
-    result = TestThread(&SD1);
+/*    volatile msg_t result;
+    result = TestThread(&SD1);*/
 /*    sdWriteTimeout(&SD1, "Hello World!\r\n", 14, TIME_INFINITE);*/
-    chThdSleepMilliseconds(10000);
+    chThdSleepMilliseconds(1000);
   }
 }
