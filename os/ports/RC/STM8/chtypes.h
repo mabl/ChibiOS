@@ -46,7 +46,9 @@ typedef unsigned int    uint16_t;
 typedef signed int      int16_t;
 typedef unsigned long   uint32_t;
 typedef signed long     int32_t;
-
+typedef uint8_t         uint_fast8_t;
+typedef uint16_t        uint_fast16_t;
+typedef uint32_t        uint_fast32_t;
 
 /**
  * @brief   Boolean, recommended the fastest signed.

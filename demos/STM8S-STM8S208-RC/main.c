@@ -22,6 +22,22 @@
 #include "test.h"
 
 /*
+ * LEDs blinker thread, times are in milliseconds.
+ */
+static WORKING_AREA(waThread1, 64);
+static msg_t Thread1(void *arg) {
+
+  (void)arg;
+  while (TRUE) {
+    palClearPad(IOPORT2, PB_LED(7));
+    chThdSleepMilliseconds(500);
+    palSetPad(IOPORT2, PB_LED(7));
+    chThdSleepMilliseconds(500);
+  }
+  return 0;
+}
+
+/*
  * Entry point.
  */
 void main(void) {
@@ -36,7 +52,11 @@ void main(void) {
    * configuration.
    */
   sdStart(&SD1, NULL);
-  sdStart(&SD3, NULL);
+
+  /*
+   * Creates the blinker thread.
+   */
+  chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO, Thread1, NULL);
 
   /*
    * OS initialization.
@@ -46,11 +66,10 @@ void main(void) {
   /*
    * Normal main() thread activity.
    */
-  while (!chThdShouldTerminate()) {
+  while (TRUE) {
     volatile msg_t result;
     result = TestThread(&SD1);
-/*    sdWriteTimeout(&SD1, "Hello World!\r\n", 14, TIME_INFINITE);
-    sdWriteTimeout(&SD3, "Hello World!\r\n", 14, TIME_INFINITE);*/
+/*    sdWriteTimeout(&SD1, "Hello World!\r\n", 14, TIME_INFINITE);*/
     chThdSleepMilliseconds(10000);
   }
 }

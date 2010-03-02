@@ -18,10 +18,10 @@
 */
 
 /**
- * @file    templates/hal_lld.h
- * @brief   HAL subsystem low level driver header template.
+ * @file    STM8/hal_lld.h
+ * @brief   STM8 HAL subsystem low level driver source.
  *
- * @addtogroup HAL_LLD
+ * @addtogroup STM8_HAL
  * @{
  */
 
