@@ -107,7 +107,7 @@ static void set_error(SerialDriver *sdp, uint8_t sr) {
 #if USE_STM8_UART1 || defined(__DOXYGEN__)
 static void notify1(void) {
 
-  UART1_CR1 |= 0x80;                        /* TIEN bit.                    */
+  UART1_CR2 |= 0x80;                        /* TIEN bit.                    */
 }
 
 /**
@@ -117,15 +117,16 @@ static void notify1(void) {
  */
 static void uart1_init(const SerialConfig *config) {
 
+  UART1_BRR2 = ((uint8_t)(config->sc_brr >> 8) % (uint8_t)0xF0) |
+               ((uint8_t)config->sc_brr & (uint8_t)0x0F);
   UART1_BRR1 = (uint8_t)(config->sc_brr >> 4);
-  UART1_BRR2 = (uint8_t)(config->sc_brr >> 8) |
-               (uint8_t)(config->sc_brr & 0x0F);
   UART1_CR1  = config->sc_mode &
                SD_MODE_PARITY;              /* PIEN included.               */
   UART1_CR2  = 0x2C;                        /* RIEN | TEN | REN.            */
   UART1_CR3  = config->sc_mode & SD_MODE_STOP;
   UART1_CR4  = 0;
   UART1_CR5  = 0;
+  UART1_PSCR = 1;
   (void)UART1_SR;
   (void)UART1_DR;
 }
@@ -140,6 +141,7 @@ static void uart1_deinit(void) {
   UART1_CR3  = 0;
   UART1_CR4  = 0;
   UART1_CR5  = 0;
+  UART1_PSCR = 0;
 }
 #endif /* USE_STM8_UART1 */
 
@@ -196,7 +198,7 @@ CH_IRQ_HANDLER(17) {
   b = sdRequestDataI(&SD1);
   chSysUnlockFromIsr();
   if (b < Q_OK)
-    UART1_CR1 &= ~0x80;                         /* TIEN.                    */
+    UART1_CR2 &= ~0x80;                         /* TIEN.                    */
   else
     UART1_DR = b;
 
@@ -228,7 +230,7 @@ CH_IRQ_HANDLER(20) {
   b = sdRequestDataI(&SD3);
   chSysUnlockFromIsr();
   if (b < Q_OK)
-    UART3_CR1 &= ~0x80;                         /* TIEN.                    */
+    UART3_CR2 &= ~0x80;                         /* TIEN.                    */
   else
     UART3_DR = b;
 

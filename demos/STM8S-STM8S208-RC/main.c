@@ -55,7 +55,7 @@ void main(void) {
   /*
    * Activates the serial driver 1 using the driver default configuration.
    */
-//  sdStart(&SD1, NULL);
+  sdStart(&SD1, NULL);
 
   /*
    * Creates the blinker thread.
@@ -68,7 +68,7 @@ void main(void) {
   while (TRUE) {
 /*    volatile msg_t result;
     result = TestThread(&SD1);*/
-/*    sdWriteTimeout(&SD1, "Hello World!\r\n", 14, TIME_INFINITE);*/
+    sdWriteTimeout(&SD1, "Hello World!\r\n", 14, TIME_INFINITE);
     chThdSleepMilliseconds(1000);
   }
 }
