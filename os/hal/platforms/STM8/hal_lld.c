@@ -86,13 +86,14 @@ void hal_lld_init(void) {
   while ((CLK_ECKR & 2) == 0)       /* HSERDY */
     ;
 #endif
+#if STM8_CLOCK_SOURCE != CLK_SOURCE_HSI
   /* Switching clock (manual switch mode).*/
   CLK_SWCR    = 0;
   CLK_SWR     = STM8_CLOCK_SOURCE;
   while ((CLK_SWCR & 8) == 0)       /* SWIF */
     ;
-  CLK_SWCR    = 4;                  /* SWEN */
-
+  CLK_SWCR    = 2;                  /* SWEN */
+#endif
   /* Setting up clock dividers.*/
   CLK_CKDIVR  = (STM8_HSI_DIVIDER << 3) | (STM8_CPU_DIVIDER << 0);
 

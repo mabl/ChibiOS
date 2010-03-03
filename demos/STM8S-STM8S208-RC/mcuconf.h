@@ -26,6 +26,13 @@
  */
 
 /*
+ * HAL general settings.
+ */
+#define STM8_CLOCK_SOURCE           CLK_SOURCE_HSI
+#define STM8_HSI_DIVIDER            CLK_HSI_DIV1
+#define STM8_CPU_DIVIDER            CLK_CPU_DIV1
+
+/*
  * SERIAL driver system settings.
  */
 #define USE_STM8_UART1              TRUE

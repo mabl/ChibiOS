@@ -158,9 +158,9 @@ static void notify3(void) {
  */
 static void uart3_init(const SerialConfig *config) {
 
+  UART3_BRR2 = ((uint8_t)(config->sc_brr >> 8) % (uint8_t)0xF0) |
+               ((uint8_t)config->sc_brr & (uint8_t)0x0F);
   UART3_BRR1 = (uint8_t)(config->sc_brr >> 4);
-  UART3_BRR2 = (uint8_t)(config->sc_brr >> 8) |
-               (uint8_t)(config->sc_brr & 0x0F);
   UART3_CR1  = config->sc_mode &
                SD_MODE_PARITY;              /* PIEN included.               */
   UART3_CR2  = 0x2C;                        /* RIEN | TEN | REN.            */

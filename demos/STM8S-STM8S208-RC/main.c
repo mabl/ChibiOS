@@ -66,9 +66,10 @@ void main(void) {
    * Normal main() thread activity.
    */
   while (TRUE) {
-/*    volatile msg_t result;
-    result = TestThread(&SD1);*/
-    sdWriteTimeout(&SD1, "Hello World!\r\n", 14, TIME_INFINITE);
+    if (palReadPad(IOPORT7, PG_BT5) == PAL_LOW)
+      TestThread(&SD1);
+    if (palReadPad(IOPORT7, PG_BT6) == PAL_LOW)
+      sdWriteTimeout(&SD1, "Hello World!\r\n", 14, TIME_INFINITE);
     chThdSleepMilliseconds(1000);
   }
 }

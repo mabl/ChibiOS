@@ -85,7 +85,7 @@
 		<NodeASM Path="..\..\os\ports\RC\STM8\chcoreasm.asm" Header="chcoreasm.asm" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\chcoreasm.obj" sate="0" />
 																																																												
 	</Group>
-	<Group Header="hal" Marker="-1" OutputFile="" sate="96" >
+	<Group Header="hal" Marker="-1" OutputFile="" sate="0" >
 		<NodeC Path="..\..\os\hal\src\adc.c" Header="adc.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\adc.obj" sate="0" />
 		<NodeC Path="..\..\os\hal\src\can.c" Header="can.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\can.obj" sate="0" />
 		<NodeC Path="..\..\os\hal\src\hal.c" Header="hal.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\hal.obj" sate="0" />
@@ -101,7 +101,7 @@
 																																										
 	</Group>
 	<Group Header="board" Marker="-1" OutputFile="" sate="96" >
-		<NodeC Path="..\..\boards\RAISONANCE_REVA_STM8S\board.c" Header="board.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\board.obj" sate="2" />
+		<NodeC Path="..\..\boards\RAISONANCE_REVA_STM8S\board.c" Header="board.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\board.obj" sate="98" />
 																																													
 	</Group>
 	<NodeC Path=".\main.c" Header="main.c" Marker="-1" OutputFile="..\STM8S-STM8S208-RC/bin\main.obj" sate="0" />
