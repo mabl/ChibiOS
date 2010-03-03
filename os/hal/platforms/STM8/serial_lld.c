@@ -263,12 +263,14 @@ void sd_lld_init(void) {
 
 #if USE_STM8_UART1
   sdObjectInit(&SD1, NULL, notify1);
-  UART1_CR1 = 0x20;                        /* UARTD (low power).           */
+  CLK_PCKENR1 |= 4;                         /* PCKEN12, clock source.       */
+  UART1_CR1 = 0x20;                         /* UARTD (low power).           */
 #endif
 
 #if USE_STM8_UART3
   sdObjectInit(&SD3, NULL, notify3);
-  UART3_CR1 = 0x20;                        /* UARTD (low power).           */
+  CLK_PCKENR1 |= 8;                         /* PCKEN13, clock source.       */
+  UART3_CR1 = 0x20;                         /* UARTD (low power).           */
 #endif
 }
 
