@@ -18,10 +18,10 @@
 */
 
 /**
- * @file    templates/serial_lld.h
- * @brief   Serial Driver subsystem low level driver header template.
+ * @file    STM8/serial_lld.h
+ * @brief   STM8 low level serial driver header.
  *
- * @addtogroup SERIAL_LLD
+ * @addtogroup STM8_SERIAL
  * @{
  */
 
