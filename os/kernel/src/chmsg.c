@@ -77,7 +77,7 @@ msg_t chMsgWait(void) {
   chSysLock();
   if (!chMsgIsPendingI(currp))
     chSchGoSleepS(THD_STATE_WTMSG);
-  msg = chMsgGetI(currp);
+  msg = chMsgGetI((volatile Thread *)currp);
   chSysUnlock();
   return msg;
 }
