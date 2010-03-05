@@ -584,8 +584,9 @@ INPUT                  = ../docs/src \
                          ../os/ports/GCC/ARM7/chcoreasm.s \
                          ../os/ports/GCC/ARMCM3 \
                          ../os/ports/GCC/ARMCM3/crt0.s \
-                         ../os/ports/GCC/MSP430 \
                          ../os/ports/GCC/AVR \
+                         ../os/ports/GCC/MSP430 \
+                         ../os/ports/RC/STM8 \
                          ../os/hal \
                          ../os/hal/include \
                          ../os/hal/src \
@@ -595,6 +596,7 @@ INPUT                  = ../docs/src \
                          ../os/hal/platforms/LPC214x \
                          ../os/hal/platforms/MSP430 \
                          ../os/hal/platforms/STM32 \
+                         ../os/hal/platforms/STM8 \
                          ../os/various \
                          ../test
 
