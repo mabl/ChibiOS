@@ -120,8 +120,7 @@ msg_t chSemWaitS(Semaphore *sp) {
   if (--sp->s_cnt < 0) {
     currp->p_u.wtobjp = sp;
     sem_insert(currp, &sp->s_queue);
-    chSchGoSleepS(THD_STATE_WTSEM);
-    return currp->p_u.rdymsg;
+    return chSchGoSleepS(THD_STATE_WTSEM)->p_u.rdymsg;
   }
   return RDY_OK;
 }
