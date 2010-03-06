@@ -80,9 +80,9 @@ void SysTickVector(void) {
 #if !defined(__DOXYGEN__)
 __attribute__((naked))
 #endif
-void SVCallVector(Thread *otp, Thread *ntp) {
-  (void)otp;
+void SVCallVector(Thread *ntp, Thread *otp) {
   (void)ntp;
+  (void)otp;
 #ifdef CH_CURRP_REGISTER_CACHE
   asm volatile ("mrs     r3, BASEPRI                            \n\t" \
                 "mrs     r12, PSP                               \n\t" \
