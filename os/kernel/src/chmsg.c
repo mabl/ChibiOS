@@ -71,12 +71,13 @@ msg_t chMsgSend(Thread *tp, msg_t msg) {
  *                      top of the messages queue.
  */
 msg_t chMsgWait(void) {
+  Thread *ctp = currp;
   msg_t msg;
 
   chSysLock();
-  if (!chMsgIsPendingI(currp))
-    chSchGoSleepS(THD_STATE_WTMSG);
-  msg = chMsgGetI(currp);
+  if (!chMsgIsPendingI(ctp))
+    ctp = chSchGoSleepS(THD_STATE_WTMSG);
+  msg = chMsgGetI(ctp);
   chSysUnlock();
   return msg;
 }
