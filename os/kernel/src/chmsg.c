@@ -55,8 +55,7 @@ msg_t chMsgSend(Thread *tp, msg_t msg) {
   msg_insert(ctp, &tp->p_msgqueue);
   if (tp->p_state == THD_STATE_WTMSG)
     chSchReadyI(tp);
-  chSchGoSleepS(THD_STATE_SNDMSG);
-  msg = ctp->p_u.rdymsg;
+  msg = chSchGoSleepS(THD_STATE_SNDMSG)->p_u.rdymsg;
   chSysUnlock();
   return msg;
 }
