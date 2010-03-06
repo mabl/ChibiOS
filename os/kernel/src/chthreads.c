@@ -249,7 +249,7 @@ Thread *chThdResume(Thread *tp) {
   chDbgAssert(tp->p_state == THD_STATE_SUSPENDED,
               "chThdResume(), #1",
               "thread not in THD_STATE_SUSPENDED state");
-  chSchWakeupS(tp, RDY_OK);
+  tp = chSchWakeupS(tp, RDY_OK);
   chSysUnlock();
   return tp;
 }

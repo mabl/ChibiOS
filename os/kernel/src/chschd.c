@@ -169,27 +169,25 @@ msg_t chSchGoSleepTimeoutS(tstate_t newstate, systime_t time) {
  *
  * @param[in] ntp       the Thread to be made ready
  * @param[in] msg       message to the awakened thread
- * @return              The @p ntp parameter.
+ * @return              The waken thread.
  */
 Thread *chSchWakeupS(Thread *ntp, msg_t msg) {
+  Thread *otp = currp;
 
   ntp->p_u.rdymsg = msg;
   /* If the waken thread has a not-greater priority than the current
      one then it is just inserted in the ready list else it made
      running immediately and the invoking thread goes in the ready
      list instead.*/
-  if (ntp->p_prio <= currp->p_prio)
-    ntp = chSchReadyI(ntp);
-  else {
-    Thread *otp = currp;
-    chSchReadyI(otp);
+  if (ntp->p_prio <= otp->p_prio)
+    return chSchReadyI(ntp);
+  chSchReadyI(otp);
 #if CH_TIME_QUANTUM > 0
-    rlist.r_preempt = CH_TIME_QUANTUM;
+  rlist.r_preempt = CH_TIME_QUANTUM;
 #endif
-    (currp = ntp)->p_state = THD_STATE_CURRENT;
-    chDbgTrace(ntp, otp);
-    ntp = chSysSwitchI(ntp, otp);
-  }
+  (currp = ntp)->p_state = THD_STATE_CURRENT;
+  chDbgTrace(ntp, otp);
+  chSysSwitchI(ntp, otp);
   return ntp;
 }
 

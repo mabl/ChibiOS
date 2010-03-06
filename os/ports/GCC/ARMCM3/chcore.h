@@ -317,7 +317,7 @@ static INLINE Thread *port_switch(Thread *ntp, Thread *otp) {
                   "b       chDbgPanic");
 #endif /* CH_DBG_ENABLE_STACK_CHECK */
   asm volatile ("svc     #0" : : "r" (_otp), "r" (_ntp) : "memory");
-  return _ntp;
+  return _otp;
 }
 
 #ifdef __cplusplus
