@@ -25,6 +25,7 @@
  */
 #define PLATFORM_STM8S208RB     1
 #define PLATFORM_STM8AF51AA     2
+#define PLATFORM_STM8S208MB     3
 
 #ifndef STM8_PLATFORM
 #error "STM8 platform not defined"
@@ -34,8 +35,14 @@
 #include "STM8/STM8S208RB.h"
 #elif STM8_PLATFORM == PLATFORM_STM8AF51AA
 #include "STM8/STM8AF51AA.h"
+#elif STM8_PLATFORM == PLATFORM_STM8S208MB
+#include "STM8/STM8S208MB.h"
 #else
 #error "unsupported or invalid STM8 platform"
+#endif
+
+#ifdef CH_HAL_USE_CAN
+#include "stm8_can.h"
 #endif
 
 #endif /* _STM8_H_ */
