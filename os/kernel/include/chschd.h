@@ -176,7 +176,7 @@ extern "C" {
  *          equal or higher priority, if any.
  */
 #if !defined(PORT_OPTIMIZED_DOYIELDS) || defined(__DOXYGEN__)
-#define chSchDoYieldS(void) {                                               \
+#define chSchDoYieldS() {                                               \
   if (chSchCanYieldS())                                                     \
     chSchDoRescheduleI();                                                   \
 }
