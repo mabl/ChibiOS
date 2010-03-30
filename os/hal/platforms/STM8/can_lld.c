@@ -54,14 +54,14 @@ CANDriver CAND;
  * CAN TX/ER/SC interrupt handler.
  */
 CH_IRQ_HANDLER(9) {
-  uint8_t reg;
+  uint8_t regv;
   CH_IRQ_PROLOGUE();
 
-  reg = CAN->TSR;
+  regv = CAN->TSR;
   CAN->TSR = CAN_TSR_RQCP0 | CAN_TSR_RQCP1 | CAN_TSR_RQCP2;
 
   /* Transmit Event */
-  if (reg & (CAN_TSR_RQCP0 | CAN_TSR_RQCP1 | CAN_TSR_RQCP2)) {
+  if (regv & (CAN_TSR_RQCP0 | CAN_TSR_RQCP1 | CAN_TSR_RQCP2)) {
     /* No more events until a message is transmitted.*/
     chSysLockFromIsr();
     while (chSemGetCounterI(&CAND.cd_txsem) < 0)
@@ -70,18 +70,18 @@ CH_IRQ_HANDLER(9) {
     chSysUnlockFromIsr();
   }
 
-  reg = CAN->MSR;
+  regv = CAN->MSR;
   CAN->MSR = CAN_MSR_ERRI | CAN_MSR_WKUI;
 
   /* Wakeup event.*/
-  if (reg & CAN_MSR_WKUI) {
+  if (regv & CAN_MSR_WKUI) {
     chSysLockFromIsr();
     chEvtBroadcastI(&CAND.cd_wakeup_event);
     chSysUnlockFromIsr();
   }
 
   /* Error event.*/
-  if (reg & CAN_MSR_ERRI) {
+  if (regv & CAN_MSR_ERRI) {
     canstatus_t flags;
     STM8CAN_Page_t page;
     uint8_t esr;
@@ -95,7 +95,7 @@ CH_IRQ_HANDLER(9) {
     flags = (canstatus_t)(esr & 7);
     if ((esr & CAN_ESR_LEC) > 0)
       flags |= CAN_FRAMING_ERROR;
-    chSysLockFromIsr();
+        chSysLockFromIsr();
     canAddFlagsI(&CAND, flags);
     chEvtBroadcastI(&CAND.cd_error_event);
     chSysUnlockFromIsr();
@@ -174,8 +174,8 @@ void can_lld_start(CANDriver *canp) {
   canp->cd_can->Page.Config.BTR1 = canp->cd_config->cc_btr1;
   canp->cd_can->Page.Config.BTR2 = canp->cd_config->cc_btr2;
 
-  /* MCR initialization.*/
-  canp->cd_can->MCR = canp->cd_config->cc_mcr;
+  /* MCR initialization (except INRQ & SLEEP)*/
+  canp->cd_can->MCR = ((canp->cd_config->cc_mcr | CAN_MCR_INRQ) & ~CAN_MCR_SLEEP);
 
   /* Filters initialization.*/
   if (canp->cd_config->cc_num > 0) {
@@ -487,7 +487,6 @@ bool_t can_lld_can_receive(CANDriver *canp) {
  * @param[out] crfp     pointer to the buffer where the CAN frame is copied
  */
 void can_lld_receive(CANDriver *canp, CANRxFrame *crfp) {
-//TODO: port to stm8
   uint8_t r;
   /* Select FIFO Page */
   canp->cd_can->PSR = STM8CAN_Page_RxFifo;
