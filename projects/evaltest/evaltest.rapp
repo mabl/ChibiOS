@@ -1,0 +1,45 @@
+
+<ApplicationBuild Header="evaltest" Extern=".\evaltest.rapp" Path=".\evaltest.rapp" OutputFile=".\bin\evaltest.aof" sate="98" >
+	<NodeC Path=".\src\main.c" Header="main.c" Marker="-1" OutputFile=".\bin\main.obj" sate="0" />
+	<NodeLib Path=".\ch_bin\CH.LIB" Header="CH.LIB" Marker="-1" OutputFile=".\ch_bin\CH.LIB" sate="0" PropState="Invalid" />
+	<Options>
+		<Config Header="Standard" >
+			<Set Header="ApplicationBuild" >
+				<Section Header="General" >
+					<Property Header="TargetFamily" Value="ST7" />
+																																																																						
+				</Section>
+				<Section Header="Directories" >
+					<Property Header="IncDir" Value="$(RkitInc);$(RkitInc)\ST7;..\..\os\kernel\include;..\..\os\ports\RC\STM8;..\..\os\hal\include;..\..\os\hal\platforms\STM8;..\..\boards\ST_STM8128EVAL" Removable="1" />
+					<Property Header="OutDir" Value="$(ApplicationDir)\bin" Removable="1" />
+					<Property Header="ListDir" Value="$(ApplicationDir)\lst" Removable="1" />
+																																																													
+				</Section>
+																																															
+			</Set>
+			<Set Header="Target" >
+				<Section Header="ProcessorST7" >
+					<Property Header="Processor" Value="STM8S208MB" Removable="1" />
+																																																																						
+				</Section>
+				<Section Header="ToolSetST7" >
+					<Property Header="BuildToolSetST7" Value="ST7\RaisonanceTools.config" Removable="1" />
+					<Property Header="ArelocInfo" Value="" Removable="1" />
+							
+				</Section>
+				<Section Header="DebugST7" >
+					<Property Header="DebugTool_STM8" Value="RLINK_STM8" Removable="1" />
+																																											
+				</Section>
+					
+			</Set>
+			<Set Header="RCST7" >
+				<Section Header="Model" >
+					<Property Header="GlobalMemory" Value="DGC(DATA)" Removable="1" />
+																																		
+				</Section>
+																										
+			</Set>
+		</Config>
+	</Options>
+</ApplicationBuild>
