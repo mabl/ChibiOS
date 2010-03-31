@@ -48,14 +48,14 @@ static msg_t can_rx(void *p) {
   CANRxFrame rxmsg;
 
   (void)p;
-  //chEvtRegister(&CAND.cd_rxfull_event, &el, 0);
+  chEvtRegister(&CAND.cd_rxfull_event, &el, 0);
   while(!chThdShouldTerminate()) {
-    //if (chEvtWaitAnyTimeout(ALL_EVENTS, MS2ST(100)) == 0)
-    //  continue;
-    //while (canReceive(&CAND, &rxmsg, TIME_IMMEDIATE) == RDY_OK) {
+    if (chEvtWaitAnyTimeout(ALL_EVENTS, MS2ST(100)) == 0)
+      continue;
+    while (canReceive(&CAND, &rxmsg, TIME_IMMEDIATE) == RDY_OK) {
       /* Process message.*/
-    //  palTogglePad(IOPORT8, PH_LD2);
-    //}
+      palTogglePad(IOPORT8, PH_LD2);
+    }
     chThdSleepMilliseconds(10);
   }
   chEvtUnregister(&CAND.cd_rxfull_event, &el);
@@ -101,5 +101,3 @@ void main(void) {
     chThdSleepMilliseconds(1000);
   }
 }
-
-

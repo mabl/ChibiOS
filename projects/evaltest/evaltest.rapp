@@ -1,6 +1,6 @@
 
-<ApplicationBuild Header="evaltest" Extern=".\evaltest.rapp" Path=".\evaltest.rapp" OutputFile=".\bin\evaltest.aof" sate="98" >
-	<NodeC Path=".\src\main.c" Header="main.c" Marker="-1" OutputFile=".\bin\main.obj" sate="0" />
+<ApplicationBuild Header="evaltest" Extern=".\evaltest.rapp" Path=".\evaltest.rapp" OutputFile=".\bin\evaltest.aof" sate="96" >
+	<NodeC Path=".\src\main.c" Header="main.c" Marker="-1" OutputFile=".\bin\main.obj" sate="2" />
 	<NodeLib Path=".\ch_bin\CH.LIB" Header="CH.LIB" Marker="-1" OutputFile=".\ch_bin\CH.LIB" sate="0" PropState="Invalid" />
 	<Options>
 		<Config Header="Standard" >

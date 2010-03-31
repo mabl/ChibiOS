@@ -1,5 +1,5 @@
 
 <Project Header="Project 'evaltest'" Path=".\evaltest.rprj" Project="Yes" OutputFile="" sate="96" ActiveApp="evaltest" >
 	<ApplicationLib Header="ch" Extern=".\ch.rapp" Path=".\ch.rapp" OutputFile=".\ch_bin\ch.lib" sate="96" />
-	<ApplicationBuild Header="evaltest" Extern=".\evaltest.rapp" Path=".\evaltest.rapp" OutputFile=".\bin\evaltest.aof" sate="98" />
+	<ApplicationBuild Header="evaltest" Extern=".\evaltest.rapp" Path=".\evaltest.rapp" OutputFile=".\bin\evaltest.aof" sate="96" />
 </Project>
