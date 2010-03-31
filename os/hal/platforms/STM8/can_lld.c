@@ -115,7 +115,7 @@ CH_IRQ_HANDLER(8) {
   rfr = CAN->RFR;
   if ((rfr & CAN_RFR_FMP01) > 0) {
     /* No more receive events until the queue has been emptied.*/
-    CAN->IER &= ~CAN_IER_FMPIE;
+    CAN->IER &= ~(CAN_IER_FMPIE | CAN_IER_FFIE);
     chSysLockFromIsr();
     while (chSemGetCounterI(&CAND.cd_rxsem) < 0)
       chSemSignalI(&CAND.cd_rxsem);
@@ -363,12 +363,27 @@ void can_lld_start(CANDriver *canp) {
     }
   }
   else {
-    /* Disable all filters (default).*/
-    canp->cd_can->Page.Config.FCR1 = 0;
+    /* Set up a default filter */
+    canp->cd_can->Page.Config.FCR1 = 0x06; /* FSC0 = 11 = 32-bit Scale */
     canp->cd_can->Page.Config.FCR2 = 0;
     canp->cd_can->Page.Config.FCR3 = 0;
-    canp->cd_can->Page.Config.FMR1 = 0;
-    canp->cd_can->Page.Config.FMR2 = 0;
+    canp->cd_can->Page.Config.FMR1 = 0;    /* FMH0,FML0 = Mask mode */
+    canp->cd_can->Page.Config.FMR2 = 0;   
+  
+    /* Mask to allow all messages to accept */
+    canp->cd_can->PSR = STM8CAN_Page_Filter01;
+    canp->cd_can->Page.Filter.FR01 = 0;
+    canp->cd_can->Page.Filter.FR02 = 0;
+    canp->cd_can->Page.Filter.FR03 = 0;
+    canp->cd_can->Page.Filter.FR04 = 0;
+    canp->cd_can->Page.Filter.FR05 = 0;
+    canp->cd_can->Page.Filter.FR06 = 0;
+    canp->cd_can->Page.Filter.FR07 = 0;
+    canp->cd_can->Page.Filter.FR08 = 0;
+  
+    /* Activate */
+    canp->cd_can->PSR = STM8CAN_Page_Config;
+    canp->cd_can->Page.Config.FCR1 |= 0x01; /* FACT0 = 1 */
   }
 
   /* Leave Initialization */
@@ -528,7 +543,7 @@ void can_lld_receive(CANDriver *canp, CANRxFrame *crfp) {
   /* If the queue is empty re-enables the interrupt in order to generate
      events again.*/
   if ((canp->cd_can->RFR & CAN_RFR_FMP01) == 0)
-    canp->cd_can->IER |= CAN_IER_FMPIE;
+    canp->cd_can->IER |= (CAN_IER_FMPIE | CAN_IER_FFIE);
 }
 
 #if CAN_USE_SLEEP_MODE || defined(__DOXYGEN__)
