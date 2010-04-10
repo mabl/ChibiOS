@@ -466,8 +466,8 @@ void can_lld_transmit(CANDriver *canp, const CANTxFrame *ctfp) {
           (uint8_t)(ctfp->cf_RTR << 5);
   }
 
-  canp->cd_can->Page.TxMailbox.MDLCR &= 0xF0; /* Clear old DLC Value */
-  canp->cd_can->Page.TxMailbox.MDLCR |= ctfp->cf_DLC; /* Set new DLC */
+  canp->cd_can->Page.TxMailbox.MDLCR = 0x00; /* Clear old DLC Value */
+  canp->cd_can->Page.TxMailbox.MDLCR |= (ctfp->cf_DLC & 0x0F); /* Set new DLC */
 
   canp->cd_can->Page.TxMailbox.MDAR1 = ctfp->fd.cf_data8[0];
   canp->cd_can->Page.TxMailbox.MDAR2 = ctfp->fd.cf_data8[1];
