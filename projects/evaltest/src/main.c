@@ -23,6 +23,22 @@ const CANConfig cancfg = {
 #endif /* CH_HAL_USE_CAN */
 
 /*
+ * Debugging Output
+ */
+static void pulse_error(gpio_t* ioport, char iopad, char number) {
+  signed char ii;
+  while(1) {
+    for (ii = number; ii > 0; ii--) {
+      palSetPad(ioport, iopad);
+      chThdSleepMilliseconds(500);
+      palClearPad(ioport, iopad);
+      chThdSleepMilliseconds(500);
+    }
+    chThdSleepMilliseconds(1250);
+  }
+}
+
+/*
  * Threads
  */
 
@@ -53,6 +69,25 @@ static msg_t can_rx(void *p) {
     if (chEvtWaitAnyTimeout(ALL_EVENTS, MS2ST(100)) == 0)
       continue;
     while (canReceive(&CAND, &rxmsg, TIME_IMMEDIATE) == RDY_OK) {
+      if (rxmsg.cf_IDE != CAN_IDE_EXT) {
+        pulse_error(IOPORT8, PH_LD2, 1);
+      }
+      if (rxmsg.id.cf_EID != 0x01234567) {
+        pulse_error(IOPORT8, PH_LD2, 2);
+      }
+      if (rxmsg.cf_RTR != CAN_RTR_DATA) {
+        pulse_error(IOPORT8, PH_LD2, 3);
+      }
+      if (rxmsg.cf_DLC != 8) {
+        pulse_error(IOPORT8, PH_LD2, 4);
+      }
+      if (rxmsg.fd.cf_data32[0] != 0x55AA00FF) {
+        pulse_error(IOPORT8, PH_LD2, 5);
+      }
+      if (rxmsg.fd.cf_data32[1] != 0x55AA00FF) {
+        pulse_error(IOPORT8, PH_LD2, 6);
+      }
+  
       /* Process message.*/
       palTogglePad(IOPORT8, PH_LD2);
     }
@@ -71,8 +106,10 @@ static msg_t can_tx(void * p) {
   txmsg.id.cf_EID = 0x01234567;
   txmsg.cf_RTR = CAN_RTR_DATA;
   txmsg.cf_DLC = 8;
-  txmsg.fd.cf_data32[0] = 0x55AA55AA;
-  txmsg.fd.cf_data32[1] = 0x00FF00FF;
+  txmsg.fd.cf_data16[0] = 0x55AA;
+  txmsg.fd.cf_data16[1] = 0x00FF;
+  txmsg.fd.cf_data16[2] = 0x55AA;
+  txmsg.fd.cf_data16[3] = 0x00FF;
 
   while (!chThdShouldTerminate()) {
     canTransmit(&CAND, &txmsg, MS2ST(100));
