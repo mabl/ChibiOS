@@ -35,7 +35,7 @@
 #include <signal.h>
 
 #include "board.h"
-#include "coldfire_serial.h"
+//#include "coldfire_serial.h"
 #include "mcf5206e.h"
 
 static void SetError(uint8_t usr, FullDuplexDriver *com) {

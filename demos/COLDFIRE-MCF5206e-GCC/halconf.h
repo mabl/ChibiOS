@@ -38,7 +38,7 @@
  * settings file. This file can be used to include platform specific
  * header files or to override the low level drivers settings.
  */
-/*#include "mcuconf.h"*/
+#include "mcuconf.h"
 
 /*===========================================================================*/
 /* PAL driver related settings.                                              */
@@ -48,7 +48,7 @@
  * @brief Enables the PAL subsystem.
  */
 #if !defined(CH_HAL_USE_PAL) || defined(__DOXYGEN__)
-#define CH_HAL_USE_PAL              FALSE
+#define CH_HAL_USE_PAL              TRUE
 #endif
 
 /*===========================================================================*/
@@ -108,7 +108,7 @@
  * @brief Enables the SERIAL subsystem.
  */
 #if !defined(CH_HAL_USE_SERIAL) || defined(__DOXYGEN__)
-#define CH_HAL_USE_SERIAL           TRUE
+#define CH_HAL_USE_SERIAL           FALSE
 #endif
 
 /*

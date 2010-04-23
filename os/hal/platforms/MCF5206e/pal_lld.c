@@ -18,14 +18,16 @@
 */
 
 /**
- * @file templates/hal_lld.c
- * @brief HAL Driver subsystem low level driver source template.
- * @addtogroup HAL_LLD
+ * @file templates/pal_lld.c
+ * @brief PAL subsystem low level driver template.
+ * @addtogroup PAL_LLD
  * @{
  */
 
 #include "ch.h"
 #include "hal.h"
+
+#if CH_HAL_USE_PAL || defined(__DOXYGEN__)
 
 /*===========================================================================*/
 /* Driver exported variables.                                                */
@@ -34,15 +36,6 @@
 /*===========================================================================*/
 /* Driver local variables.                                                   */
 /*===========================================================================*/
-
-/**
- * @brief PAL setup.
- * @details Digital I/O ports static configuration as defined in @p board.h.
- */
-const MCF5206ePIOConfig pal_default_config =
-{
-  {VAL_PIO_OUT, VAL_PIO_DIR},
-};
 
 /*===========================================================================*/
 /* Driver local functions.                                                   */
@@ -57,10 +50,50 @@ const MCF5206ePIOConfig pal_default_config =
 /*===========================================================================*/
 
 /**
- * @brief Low level HAL driver initialization.
+ * @brief AT91SAM7 I/O ports configuration.
+ * @details PIO registers initialization.
+ *
+ * @param[in] config the AT91SAM7 ports configuration
  */
-void hal_lld_init(void) {
+void _pal_lld_init(const MCF5206ePIOConfig *config) {
 
+  sim->pp.PPDDR = config->P0data.dir;
+  sim->pp.PPDAT = config->P0data.out;
 }
+
+/**
+ * @brief Pads mode setup.
+ * @details This function programs a pads group belonging to the same port
+ *          with the specified mode.
+ *
+ * @param[in] port the port identifier
+ * @param[in] mask the group mask
+ * @param[in] mode the mode
+ *
+ * @note This function is not meant to be invoked directly by the application
+ *       code.
+ * @note @p PAL_MODE_UNCONNECTED is implemented as output as recommended by
+ *       the MSP430x1xx Family User's Guide. Unconnected pads are set to
+ *       high logic state by default.
+ * @note This function does not alter the @p PxSEL registers. Alternate
+ *       functions setup must be handled by device-specific code.
+ */
+// TODO: implement PAL_MODE_UNCONNECTED mode recommended for coldfire
+void _pal_lld_setgroupmode(ioportid_t port, ioportmask_t mask, uint_fast8_t mode) {
+
+  switch (mode) {
+  case PAL_MODE_RESET:
+  case PAL_MODE_INPUT:
+    port->PPDDR &= ~mask;
+    break;
+//  case PAL_MODE_UNCONNECTED:
+//    port->iop_common.out.reg_p |= mask;
+  case PAL_MODE_OUTPUT_PUSHPULL:
+    port->PPDDR |= mask;
+    break;
+  }
+}
+
+#endif /* CH_HAL_USE_PAL */
 
 /** @} */

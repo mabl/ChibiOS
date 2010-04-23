@@ -1,20 +1,25 @@
 
 #include <ch.h>
+#include <hal.h>
 #include <test.h>
 #include "board.h"
-#include <coldfire_serial.h>
+//#include <coldfire_serial.h>
+
 
 static WORKING_AREA(waThread1, 64);
 static msg_t Thread1(void *arg) {
 
   while (TRUE) {
-    LEDOn();
+    palClearPad(IOPORT1, PIO_LED);
+//    LEDOn();
     chThdSleepMilliseconds(100);
-    LEDOff();
+    palSetPad(IOPORT1, PIO_LED);
+//    LEDOff();
     chThdSleepMilliseconds(900);
   }
   return 0;
 }
+
 
 /*
  * Entry point, note, the main() function is already a thread in the system
@@ -22,6 +27,8 @@ static msg_t Thread1(void *arg) {
  */
 int main(int argc, char **argv) {
 
+//  sim->pp.PPDDR = 0xFF;
+//  sim->pp.PPDAT = 0x01;
   /*
    * Creates the blinker thread.
    */
@@ -32,19 +39,20 @@ int main(int argc, char **argv) {
    */
   while (TRUE) {
     chThdSleepMilliseconds(500);
-    chFDDWrite(&COM1, (uint8_t *)"Hello World!\r\n", 14);
-    TestThread(&COM1);
+//    chFDDWrite(&COM1, (uint8_t *)"Hello World!\r\n", 14);
+//    TestThread(&COM1);
+
 
 /*
-    switch (chFDDGetTimeout(&COM1, 500))
-    {
-      case '1':
-        chFDDWrite(&COM1, (uint8_t *)"Hello World!\r\n", 14);
-        break;
-      case '2':
-        TestThread(&COM1);
-        break;
-    }
+  switch (chFDDGetTimeout(&COM1, 500))
+  {
+    case '1':
+      chFDDWrite(&COM1, (uint8_t *)"Hello World!\r\n", 14);
+      break;
+    case '2':
+      TestThread(&COM1);
+      break;
+  }
 */
   }
   return 0;

@@ -85,7 +85,7 @@ extern "C" {
 #endif
 
 /** @cond never*/
-extern FullDuplexDriver COM1, COM2;
+//extern FullDuplexDriver COM1, COM2;
 /** @endcond*/
 
 #endif /* _COLDFIRE_SERIAL_H_ */

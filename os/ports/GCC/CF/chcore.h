@@ -178,7 +178,7 @@ struct context {
  *          enabled to invoke system APIs.
  */
 #define PORT_IRQ_EPILOGUE() {                                               \
-  if (chSchRescRequiredI())                                                 \
+  if (chSchIsRescRequiredExI())                                             \
     chSchDoRescheduleI();                                                   \
 }
 
@@ -247,6 +247,22 @@ struct context {
  * @brief   Enables all the interrupt sources.
  */
 #define port_enable() asm volatile ("move.w    #0x2000, %sr")
+
+/**
+ * This port function is implemented as inlined code for performance reasons.
+ * @note The port code does not define a low power mode, this macro has to be
+ *       defined externally. The default implementation is a "nop", not a
+ *       real low power mode.
+ */
+#if ENABLE_WFI_IDLE != 0
+#ifndef port_wait_for_interrupt
+#define port_wait_for_interrupt() {                                     \
+  asm volatile ("nop");                                                 \
+}
+#endif
+#else
+#define port_wait_for_interrupt()
+#endif
 
 #ifdef __cplusplus
 extern "C" {

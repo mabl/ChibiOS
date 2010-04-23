@@ -34,7 +34,7 @@ MCFLAGS = -m$(MCU)
 ODFLAGS	= -x --syms
 ASFLAGS = $(MCFLAGS) -Wa,-amhls=$(<:.s=.lst) $(ADEFS)
 CPFLAGS = $(MCFLAGS) $(OPT) $(WARN) -Wa,-ald=$(<:.c=.lst) $(DEFS)
-ifeq ($(LINK_GC),yes)
+ifeq ($(USE_LINK_GC),yes)
   LDFLAGS = $(MCFLAGS) -T$(LDSCRIPT) -nostartfiles -Wl,-Map=$(PROJECT).map,--cref,--no-warn-mismatch,--gc-sections,--relax $(LLIBDIR)
 else
   LDFLAGS = $(MCFLAGS) -T$(LDSCRIPT) -nostartfiles -Wl,-Map=$(PROJECT).map,--cref,--no-warn-mismatch $(LLIBDIR)
@@ -42,8 +42,8 @@ endif
 
 # Generate dependency information
 CPFLAGS += -MD -MP -MF .dep/$(@F).d
-# Option -fno-optimize-sibling-calls must be enabled. It is enabled if we use -O2, -O3 or -Os oprimisations.
-# Without disable this option (-foptimize-sibling-calls enabled) the OS didn't pass all tests (it hangs on Test Case 2.1).
+# Sibling calls optimizations must be disabled (-fno-optimize-sibling-calls). It is enabled by default in -O2, -O3 or -Os.
+# Leaving this option enabled (-foptimize-sibling-calls) the OS don't pass all tests (it hangs on Test Case 2.1).
 CPFLAGS += -fno-optimize-sibling-calls
 CPFLAGS += --param inline-call-cost=4
 

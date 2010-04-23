@@ -56,6 +56,8 @@ void port_halt(void) {
  * @param ntp   the thread to be switched in
  */
 void port_switch(Thread *otp, Thread *ntp) {
+/* It doesn't work */
+/*
   register struct intctx *sp asm("sp");
 
   asm volatile (
@@ -68,8 +70,10 @@ void port_switch(Thread *otp, Thread *ntp) {
   asm volatile (
     "movem.l %%sp@, %%d2-%%d7/%%a2-%%a6         \n\t"
     "lea     %%sp@(44), %%sp                    \n\t" : : "r" (sp));
+*/
 /* It is the same but not dependent on internal offsets.*/
-/*  asm volatile (
+
+  asm volatile (
     "movel   %sp@(4), %a0                       \n\t"
     "movel   %sp@(8), %a1                       \n\t"
     "movel   %a1@(12), %a1                      \n\t"
@@ -79,7 +83,8 @@ void port_switch(Thread *otp, Thread *ntp) {
     "movel   %a1, %sp                           \n\t"
     "moveml  %sp@, %d2-%d7/%a2-%a6              \n\t"
     "lea     %sp@(44), %sp                      \n\t"
-  );*/
+  );
+
 }
 
 /**
