@@ -55,8 +55,9 @@ void port_halt(void) {
  * @param otp   the thread to be switched out
  * @param ntp   the thread to be switched in
  */
+//void __attribute__((optimize("-fno-toplevel-reorder"))) port_switch(Thread *otp, Thread *ntp) {
 void port_switch(Thread *otp, Thread *ntp) {
-/* It doesn't work */
+/* It doesn't work, optimizer makes incorrect code */
 /*
   register struct intctx *sp asm("sp");
 
@@ -73,14 +74,43 @@ void port_switch(Thread *otp, Thread *ntp) {
 */
 /* It is the same but not dependent on internal offsets.*/
 
+/* It doesn't work too, optimizer makes incorrect code */
+/*
+  register struct intctx *sp asm("sp");
+  register struct intctx *ctx asm("a0");
+
+  otp->p_ctx.sp = sp;
+  ctx = ntp->p_ctx.sp;
+  asm volatile (
+    "lea     %%sp@(-44), %%sp                   \n\t"
+    "movem.l %%d2-%%d7/%%a2-%%a6, %%sp@         \n\t" : : "r" (sp));
+
+  sp = ctx;
+
+  asm volatile (
+    "movem.l %%sp@, %%d2-%%d7/%%a2-%%a6         \n\t"
+    "lea     %%sp@(44), %%sp                    \n\t" : : "r" (sp));
+
+// 3001080a <port_switch>:
+// 3001080a:	206f 0004      	moveal %sp@(4),%a0
+// 3001080e:	214f 000c      	movel %sp,%a0@(12)
+// 30010812:	4fef ffd4      	lea %sp@(-44),%sp
+// 30010816:	48d7 7cfc      	moveml %d2-%d7/%a2-%fp,%sp@
+// 3001081a:	206f 0008      	moveal %sp@(8),%a0
+// 3001081e:	2e68 000c      	moveal %a0@(12),%sp
+// 30010822:	4cd7 7cfc      	moveml %sp@,%d2-%d7/%a2-%fp
+// 30010826:	4fef 002c      	lea %sp@(44),%sp
+// 3001082a:	4e75           	rts
+
+*/
+
   asm volatile (
     "movel   %sp@(4), %a0                       \n\t"
     "movel   %sp@(8), %a1                       \n\t"
-    "movel   %a1@(12), %a1                      \n\t"
     "lea     %sp@(-44), %sp                     \n\t"
     "moveml  %d2-%d7/%a2-%a6, %sp@              \n\t"
     "movel   %sp, %a0@(12)                      \n\t"
-    "movel   %a1, %sp                           \n\t"
+    "movel   %a1@(12), %sp                      \n\t"
     "moveml  %sp@, %d2-%d7/%a2-%a6              \n\t"
     "lea     %sp@(44), %sp                      \n\t"
   );

@@ -44,8 +44,8 @@
 /*
  * SERIAL driver system settings.
  */
-#define USE_MCF5206E_UART0          TRUE
-#define USE_MCF5206E_UART1          FALSE
+#define USE_COLDFIRE_UART1          TRUE
+#define USE_COLDFIRE_UART2          FALSE
 //#define MCF5206E_UART1_PRIORITY     1
 //#define MCF5206E_UART2_PRIORITY     2
 

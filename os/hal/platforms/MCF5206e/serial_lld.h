@@ -25,69 +25,131 @@
 */
 
 /**
- * @file ports/ColdFire/coldfire_serial.h
- * @brief COLDFIRE Serial driver macros and structures.
+ * @file ColdFire/serial_lld.h
+ * @brief COLDFIRE low level serial driver header.
  * @addtogroup COLDFIRE_SERIAL
  * @{
  */
 
-#ifndef _COLDFIRE_SERIAL_H_
-#define _COLDFIRE_SERIAL_H_
+#ifndef _SERIAL_LLD_H_
+#define _SERIAL_LLD_H_
+
+#if CH_HAL_USE_SERIAL || defined(__DOXYGEN__)
+
+/*===========================================================================*/
+/* Driver constants.                                                         */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Driver pre-compile time settings.                                         */
+/*===========================================================================*/
 
 /**
- * @brief Serial buffers size.
- * @details Configuration parameter, you can change the depth of the queue
- * buffers depending on the requirements of your application.
- * @note The default is 32 bytes for both the transmission and receive buffers.
- */
-#if !defined(SERIAL_BUFFERS_SIZE) || defined(__DOXYGEN__)
-#define SERIAL_BUFFERS_SIZE 32
-#endif
-
-/**
- * @brief Default bit rate.
- * @details Configuration parameter, at startup the UARTs are configured at
- * this speed.
- * @note It is possible to use @p SetUART() in order to change the working
- *       parameters at runtime.
- */
-#if !defined(DEFAULT_USART_BITRATE) || defined(__DOXYGEN__)
-#define DEFAULT_USART_BITRATE 57600
-#endif
-
-/**
- * @brief USART0 driver enable switch.
- * @details If set to @p TRUE the support for USART0 is included.
+ * @brief UART1 driver enable switch.
+ * @details If set to @p TRUE the support for UART1 is included.
  * @note The default is @p TRUE.
  */
-#if !defined(USE_COLDFIRE_USART0) || defined(__DOXYGEN__)
-#define USE_COLDFIRE_USART0 TRUE
+#if !defined(USE_COLDFIRE_UART1) || defined(__DOXYGEN__)
+#define USE_COLDFIRE_USART1 TRUE
 #endif
 
 /**
- * @brief USART1 driver enable switch.
- * @details If set to @p TRUE the support for USART1 is included.
+ * @brief UART2 driver enable switch.
+ * @details If set to @p TRUE the support for UART2 is included.
  * @note The default is @p FALSE.
  */
-#if !defined(USE_COLDFIRE_USART1) || defined(__DOXYGEN__)
-#define USE_COLDFIRE_USART1 FALSE
+#if !defined(USE_COLDFIRE_UART2) || defined(__DOXYGEN__)
+#define USE_COLDFIRE_USART2 FALSE
 #endif
 
+/*===========================================================================*/
+/* Derived constants and error checks.                                       */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Driver data structures and types.                                         */
+/*===========================================================================*/
+
+/**
+ * @brief Serial Driver condition flags type.
+ */
+typedef uint8_t sdflags_t;
+
+/**
+ * @brief AVR Serial Driver configuration structure.
+ * @details An instance of this structure must be passed to @p sdStart()
+ *          in order to configure and start a serial driver operations.
+ */
+typedef struct {
+  /**
+   * @brief Initialization value for the UBG register.
+   */
+  uint32_t                  sc_speed;
+  /**
+   * @brief Initialization value for the USR register.
+   */
+  uint8_t                   sc_usr;
+  /**
+   * @brief Initialization value for the UMR register.
+   */
+  uint8_t                   sc_umr;
+} SerialConfig;
+
+/**
+ * @brief @p SerialDriver specific data.
+ */
+#define _serial_driver_data                                                 \
+  _base_asynchronous_channel_data                                           \
+  /* Driver state.*/                                                        \
+  sdstate_t                 state;                                          \
+  /* Current configuration data.*/                                          \
+  const SerialConfig        *config;                                        \
+  /* Input queue.*/                                                         \
+  InputQueue                iqueue;                                         \
+  /* Output queue.*/                                                        \
+  OutputQueue               oqueue;                                         \
+  /* Status Change @p EventSource.*/                                        \
+  EventSource               sevent;                                         \
+  /* I/O driver status flags.*/                                             \
+  sdflags_t                 flags;                                          \
+  /* Input circular buffer.*/                                               \
+  uint8_t                   ib[SERIAL_BUFFERS_SIZE];                        \
+  /* Output circular buffer.*/                                              \
+  uint8_t                   ob[SERIAL_BUFFERS_SIZE];                        \
+  /* End of the mandatory fields.*/                                         \
+  /* Pointer to the USART registers block.*/                                \
+  mcf5206e_UART1            *uart1;                                         \
+  mcf5206e_UART2            *uart2;
+
+/*===========================================================================*/
+/* Driver macros.                                                            */
+/*===========================================================================*/
+
+
+/*===========================================================================*/
+/* External declarations.                                                    */
+/*===========================================================================*/
+
+/** @cond never*/
+#if USE_COLDFIRE_UART1
+extern SerialDriver SD1;
+#endif
+#if USE_COLDFIRE_UART2
+extern SerialDriver SD2;
+#endif
+#endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-  void serial_init(void);
-  void usart0_setup(uint32_t baud);
-  void usart1_setup(uint32_t baud);
+  void sd_lld_init(void);
+  void sd_lld_start(SerialDriver *sdp);
+  void sd_lld_stop(SerialDriver *sdp);
 #ifdef __cplusplus
 }
 #endif
-
-/** @cond never*/
-//extern FullDuplexDriver COM1, COM2;
 /** @endcond*/
 
-#endif /* _COLDFIRE_SERIAL_H_ */
+#endif /* _SERIAL_LLD_H_ */
 
 /** @} */

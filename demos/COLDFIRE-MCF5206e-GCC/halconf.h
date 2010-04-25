@@ -108,13 +108,13 @@
  * @brief Enables the SERIAL subsystem.
  */
 #if !defined(CH_HAL_USE_SERIAL) || defined(__DOXYGEN__)
-#define CH_HAL_USE_SERIAL           FALSE
+#define CH_HAL_USE_SERIAL           TRUE
 #endif
 
 /*
  * Default SERIAL settings overrides (uncomment to override).
  */
-/*#define SERIAL_DEFAULT_BITRATE      38400*/
+/*#define SERIAL_DEFAULT_BITRATE      57600*/
 /*#define SERIAL_BUFFERS_SIZE         64*/
 
 /*===========================================================================*/

@@ -7,7 +7,7 @@ ifeq ($(USE_CURRP_CACHING),yes)
   OPT += -ffixed-a2 -DCH_CURRP_REGISTER_CACHE='"a2"'
 endif
 ifeq ($(USE_LINK_GC),yes)
-  OPT += -ffunction-sections -fdata-sections
+  OPT += -ffunction-sections
 endif
 
 # Source files groups

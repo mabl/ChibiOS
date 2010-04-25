@@ -3,18 +3,22 @@
 #include <hal.h>
 #include <test.h>
 #include "board.h"
-//#include <coldfire_serial.h>
 
+
+static const SerialConfig sd1_config =
+{
+  57600,
+  mcf5206e_UART_UCSR_RX_TIMER|mcf5206e_UART_UCSR_TX_TIMER,
+  mcf5206e_UART_UMR1_PM_NONE|mcf5206e_UART_UMR1_BC_8
+};
 
 static WORKING_AREA(waThread1, 64);
 static msg_t Thread1(void *arg) {
 
   while (TRUE) {
     palClearPad(IOPORT1, PIO_LED);
-//    LEDOn();
     chThdSleepMilliseconds(100);
     palSetPad(IOPORT1, PIO_LED);
-//    LEDOff();
     chThdSleepMilliseconds(900);
   }
   return 0;
@@ -27,8 +31,8 @@ static msg_t Thread1(void *arg) {
  */
 int main(int argc, char **argv) {
 
-//  sim->pp.PPDDR = 0xFF;
-//  sim->pp.PPDAT = 0x01;
+  sdStart(&SD1, &sd1_config);
+
   /*
    * Creates the blinker thread.
    */
@@ -38,9 +42,9 @@ int main(int argc, char **argv) {
    * Normal main() thread activity.
    */
   while (TRUE) {
-    chThdSleepMilliseconds(500);
-//    chFDDWrite(&COM1, (uint8_t *)"Hello World!\r\n", 14);
-//    TestThread(&COM1);
+    chThdSleepMilliseconds(1000);
+    sdWrite(&SD1, (uint8_t *)"Hello World!\r\n", 14);
+    TestThread(&SD1);
 
 
 /*
