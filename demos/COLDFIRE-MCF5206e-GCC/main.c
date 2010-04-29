@@ -12,13 +12,13 @@ static const SerialConfig sd1_config =
   mcf5206e_UART_UMR1_PM_NONE|mcf5206e_UART_UMR1_BC_8
 };
 
-static WORKING_AREA(waThread1, 64);
-static msg_t Thread1(void *arg) {
+static WORKING_AREA(waBlinker, 64);
+static msg_t blinker_thread(void *arg) {
 
   while (TRUE) {
-    palClearPad(IOPORT1, PIO_LED);
+    palClearPad(IOPORT1, GPIO_LED);
     chThdSleepMilliseconds(100);
-    palSetPad(IOPORT1, PIO_LED);
+    palSetPad(IOPORT1, GPIO_LED);
     chThdSleepMilliseconds(900);
   }
   return 0;
@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
   /*
    * Creates the blinker thread.
    */
-  chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO, Thread1, NULL);
+  chThdCreateStatic(waBlinker, sizeof(waBlinker), NORMALPRIO, blinker_thread, NULL);
 
   /*
    * Normal main() thread activity.
@@ -45,19 +45,7 @@ int main(int argc, char **argv) {
     chThdSleepMilliseconds(1000);
     sdWrite(&SD1, (uint8_t *)"Hello World!\r\n", 14);
     TestThread(&SD1);
-
-
-/*
-  switch (chFDDGetTimeout(&COM1, 500))
-  {
-    case '1':
-      chFDDWrite(&COM1, (uint8_t *)"Hello World!\r\n", 14);
-      break;
-    case '2':
-      TestThread(&COM1);
-      break;
   }
-*/
-  }
+
   return 0;
 }

@@ -31,26 +31,27 @@
 
 #define BOARD_MY_COLDFIRE
 
-#define	MBAR		0x10000000
+#define	MBAR            0x10000000
+#define VBR				0x30000000
 
-#define _BV(x)		(1<<x)
+#define _BV(x)          (1<<x)
 
-#define bitLED		0
+//#define bitLED          0
 
-#define LEDOn()		sim->pp.PPDAT &= ~_BV(bitLED)
-#define LEDOff()	sim->pp.PPDAT |= _BV(bitLED)
+//#define LEDOn()         sim->pp.PPDAT &= ~_BV(bitLED)
+//#define LEDOff()        sim->pp.PPDAT |= _BV(bitLED)
 
 /*
  * Initial I/O setup.
  */
-#define VAL_PIO_OUT		0x00      /* Output data. */
-#define VAL_PIO_DIR		0x01      /* Direction. */
+#define VAL_GPIO_OUT    0x00      /* Output data. */
+#define VAL_GPIO_DIR    0x01      /* Direction. */
 
 /*
  * I/O definitions.
  */
-#define PIO_LED			0
-#define PIO_LED_MASK	(1<<PIO_LED)
+#define GPIO_LED        0
+#define GPIO_LED_MASK   (1<<GPIO_LED)
 
 extern volatile mcf5206e_IMM *sim;
 

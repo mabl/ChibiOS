@@ -171,7 +171,6 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="..\..\test\test.h" />
-		<Unit filename="..\..\test\test.mk" />
 		<Unit filename="..\..\test\testbmk.c">
 			<Option compilerVar="CC" />
 		</Unit>

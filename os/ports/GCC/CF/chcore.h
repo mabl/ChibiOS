@@ -56,6 +56,7 @@ typedef uint32_t stkalign_t;
  * @brief   Interrupt saved context.
  * @details This structure represents the stack frame saved during a
  *          preemption-capable interrupt handler.
+ * @note    Checked for O2 and Os optimizations only.
  */
 struct extctx {
   uint32_t  d0;
@@ -102,6 +103,7 @@ struct context {
  * @brief   Platform dependent part of the @p chThdInit() API.
  * @details This code usually setup the context switching frame represented
  *          by an @p intctx structure.
+ * @note    Initial values for registers d2-d7 and a3-a4 are for test purposes only.
  */
 #define SETUP_CONTEXT(workspace, wsize, pf, arg) {                          \
   tp->p_ctx.sp = (struct intctx *)((uint8_t *)workspace +                   \

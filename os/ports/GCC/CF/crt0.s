@@ -20,12 +20,12 @@ start:
 */
 	movel	#__ram_end__, %a7
 
-
+/* enable cache */
 	movel	#0x01000000, %d0
 	movec	%d0, %CACR
 	movel	#0x80000100, %d0
 	movec	%d0, %CACR
-
+/* init bss section */
 	movel	#__bss_start,%d1
 	movel	#__bss_end, %d0
 	cmpl	%d0, %d1
@@ -36,7 +36,7 @@ start:
 1:	clrb	(%a0)+
 	subql	#1, %d0
 	bpl		1b
-
+/* init data section */
 2:	lea		_etext,%a1
 	lea		_data,%a0
 	cmpl	%a0,%a1
@@ -49,13 +49,14 @@ COPYLOOPTEST:
 	cmpl	%d0,%a0
 	bcs.s	COPYLOOP
 NOCOPY:
-
+/* init hardware */
 	jsr		hwinit
 
 /*
 	TODO: Insert ctors init here.
 */
 
+/* enable global interrupts */
 	move	#0x2000, %sr
 	jsr		main
 	rts

@@ -18,9 +18,9 @@
 */
 
 /**
- * @file templates/hal_lld.h
- * @brief HAL subsystem low level driver header template.
- * @addtogroup HAL_LLD
+ * @file COLDFIRE/hal_lld.h
+ * @brief COLDFIRE HAL subsystem low level driver header.
+ * @addtogroup COLDFIRE_HAL
  * @{
  */
 
@@ -37,6 +37,13 @@
 /*===========================================================================*/
 /* Driver pre-compile time settings.                                         */
 /*===========================================================================*/
+
+/**
+ * @brief Default action for the spurious handler, nothing.
+ */
+#if !defined(COLDFIRE_SPURIOUS_HANDLER_HOOK) || defined(__DOXYGEN__)
+#define COLDFIRE_SPURIOUS_HANDLER_HOOK()
+#endif
 
 /*===========================================================================*/
 /* Derived constants and error checks.                                       */

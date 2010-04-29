@@ -18,9 +18,9 @@
 */
 
 /**
- * @file templates/pal_lld.h
- * @brief PAL subsystem low level driver header template.
- * @addtogroup PAL_LLD
+ * @file COLDFIRE/pal_lld.h
+ * @brief COLDFIRE GPIO low level driver header.
+ * @addtogroup COLDFIRE_PAL
  * @{
  */
 
@@ -44,12 +44,12 @@
 /*===========================================================================*/
 
 /**
- * @brief Setup registers common to all the Coldfire ports.
+ * @brief MCF5206e setup registers.
  */
 typedef struct  {
   uint8_t  out;
   uint8_t  dir;
-} mcf5206e_pio_setup_t;
+} mcf5206e_gpio_setup_t;
 
 /**
  * @brief Generic I/O ports static initializer.
@@ -67,19 +67,19 @@ typedef struct  {
  *       .
  */
 typedef struct {
-	mcf5206e_pio_setup_t P0data;
-} MCF5206ePIOConfig;
+	mcf5206e_gpio_setup_t P0data;
+} MCF5206eGPIOConfig;
 
 /**
  * @brief Width, in bits, of an I/O port.
  */
-#define PAL_IOPORTS_WIDTH 16
+#define PAL_IOPORTS_WIDTH 8
 
 /**
  * @brief Whole port mask.
  * @brief This macro specifies all the valid bits into a port.
  */
-#define PAL_WHOLE_PORT ((ioportmask_t)0xFFFFFFFF)
+#define PAL_WHOLE_PORT ((ioportmask_t)0xFF)
 
 /**
  * @brief Digital I/O port sized unsigned type.
@@ -333,12 +333,12 @@ typedef mcf5206e_PP * ioportid_t;
  */
 //#define pal_lld_setpadmode(port, pad, mode)
 
-extern const MCF5206ePIOConfig pal_default_config;
+extern const MCF5206eGPIOConfig pal_default_config;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-  void _pal_lld_init(const MCF5206ePIOConfig *config);
+  void _pal_lld_init(const MCF5206eGPIOConfig *config);
   void _pal_lld_setgroupmode(ioportid_t port,
                              ioportmask_t mask,
                              uint_fast8_t mode);

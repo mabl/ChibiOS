@@ -10,7 +10,7 @@ __stacks_total_size__	=	8k;
 
 MEMORY
 {
-	rom (rx)    : ORIGIN = 0x30010000, LENGTH = 448k
+	rom (rx)    : ORIGIN = 0x30010000, LENGTH = 448k /* 0x30000000-0x30010000 reserved for monitor */
 	ram (rw)    : ORIGIN = 0x30080000, LENGTH = 512k
 /*	eram (rw)    : ORIGIN = 0x00080000, LENGTH = 512k*/
 }

@@ -25,7 +25,7 @@
 */
 
 /**
- * @file ColdFire/serial_lld.h
+ * @file COLDFIRE/serial_lld.h
  * @brief COLDFIRE low level serial driver header.
  * @addtogroup COLDFIRE_SERIAL
  * @{
@@ -82,7 +82,7 @@ typedef uint8_t sdflags_t;
  */
 typedef struct {
   /**
-   * @brief Initialization value for the UBG register.
+   * @brief Bit rate.
    */
   uint32_t                  sc_speed;
   /**
@@ -97,6 +97,7 @@ typedef struct {
 
 /**
  * @brief @p SerialDriver specific data.
+ * @note Structure mcf5206e_UART1 differs from mcf5206e_UART2 !!!.
  */
 #define _serial_driver_data                                                 \
   _base_asynchronous_channel_data                                           \
@@ -117,7 +118,7 @@ typedef struct {
   /* Output circular buffer.*/                                              \
   uint8_t                   ob[SERIAL_BUFFERS_SIZE];                        \
   /* End of the mandatory fields.*/                                         \
-  /* Pointer to the USART registers block.*/                                \
+  /* Pointers to the UART registers blocks.*/                               \
   mcf5206e_UART1            *uart1;                                         \
   mcf5206e_UART2            *uart2;
 
@@ -137,7 +138,6 @@ extern SerialDriver SD1;
 #if USE_COLDFIRE_UART2
 extern SerialDriver SD2;
 #endif
-#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -149,6 +149,8 @@ extern "C" {
 }
 #endif
 /** @endcond*/
+
+#endif /* CH_HAL_USE_SERIAL */
 
 #endif /* _SERIAL_LLD_H_ */
 

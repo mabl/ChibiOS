@@ -18,9 +18,9 @@
 */
 
 /**
- * @file templates/pal_lld.c
- * @brief PAL subsystem low level driver template.
- * @addtogroup PAL_LLD
+ * @file COLDFIRE/pal_lld.c
+ * @brief COLDFIRE GPIO low level driver template.
+ * @addtogroup COLDFIRE_LLD
  * @{
  */
 
@@ -50,12 +50,12 @@
 /*===========================================================================*/
 
 /**
- * @brief AT91SAM7 I/O ports configuration.
- * @details PIO registers initialization.
+ * @brief COLDFIRE GPIO ports configuration.
+ * @details GPIO registers initialization.
  *
- * @param[in] config the AT91SAM7 ports configuration
+ * @param[in] config the COLDFIRE ports configuration
  */
-void _pal_lld_init(const MCF5206ePIOConfig *config) {
+void _pal_lld_init(const MCF5206eGPIOConfig *config) {
 
   sim->pp.PPDDR = config->P0data.dir;
   sim->pp.PPDAT = config->P0data.out;

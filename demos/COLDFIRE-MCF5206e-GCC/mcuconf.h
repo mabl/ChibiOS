@@ -46,10 +46,10 @@
  */
 #define USE_COLDFIRE_UART1          TRUE
 #define USE_COLDFIRE_UART2          FALSE
-//#define MCF5206E_UART1_PRIORITY     1
-//#define MCF5206E_UART2_PRIORITY     2
+#define COLDFIRE_UART1_PRIORITY     2
+#define COLDFIRE_UART2_PRIORITY     2
 
 /*
  * SPI driver system settings.
  */
-//#define USE_MCF5206E_SPI1           TRUE
+//#define USE_COLDFIRE_SPI1           TRUE

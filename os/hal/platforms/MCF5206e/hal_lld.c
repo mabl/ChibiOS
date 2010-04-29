@@ -18,9 +18,9 @@
 */
 
 /**
- * @file templates/hal_lld.c
- * @brief HAL Driver subsystem low level driver source template.
- * @addtogroup HAL_LLD
+ * @file COLDFIRE/hal_lld.c
+ * @brief COLDFIRE HAL subsystem low level driver source template.
+ * @addtogroup COLDFIRE_HAL
  * @{
  */
 
@@ -39,9 +39,9 @@
  * @brief PAL setup.
  * @details Digital I/O ports static configuration as defined in @p board.h.
  */
-const MCF5206ePIOConfig pal_default_config =
+const MCF5206eGPIOConfig pal_default_config =
 {
-  {VAL_PIO_OUT, VAL_PIO_DIR},
+  {VAL_GPIO_OUT, VAL_GPIO_DIR},
 };
 
 /*===========================================================================*/
@@ -52,6 +52,15 @@ const MCF5206ePIOConfig pal_default_config =
 /* Driver interrupt handlers.                                                */
 /*===========================================================================*/
 
+CH_IRQ_HANDLER(SpuriousIrqHandler) {
+
+  CH_IRQ_PROLOGUE();
+
+  COLDFIRE_SPURIOUS_HANDLER_HOOK();
+
+  CH_IRQ_EPILOGUE();
+}
+
 /*===========================================================================*/
 /* Driver exported functions.                                                */
 /*===========================================================================*/
@@ -60,6 +69,11 @@ const MCF5206ePIOConfig pal_default_config =
  * @brief Low level HAL driver initialization.
  */
 void hal_lld_init(void) {
+
+  /*
+   * Spurious interrupt setup
+   */
+  *(volatile uint32_t *)(VBR+0x60) = (uint32_t)SpuriousIrqHandler;
 
 }
 
