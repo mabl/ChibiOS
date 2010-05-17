@@ -4,8 +4,6 @@
 
 #include "board.h"
 
-//volatile mcf5206e_IMM *sim = (mcf5206e_IMM *)MBAR;
-
 CH_IRQ_HANDLER(SYSIrqHandler) {
 
   CH_IRQ_PROLOGUE();
@@ -61,4 +59,3 @@ void hwinit(void) {
    */
   chSysInit();
 }
-

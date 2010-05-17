@@ -78,13 +78,22 @@
 
 
 typedef struct {
-	volatile unsigned char ddr;
-	unsigned char reserved1[303];
-	volatile unsigned char in;
-	unsigned char reserved2[15];
-	volatile unsigned char out;
+  volatile unsigned char ddr;
+  unsigned char reserved1[303];
+  volatile unsigned char in;
+  unsigned char reserved2[15];
+  volatile unsigned char out;
 } h8s_ioport;
 
+typedef struct {
+  volatile unsigned char smr;
+  volatile unsigned char brr;
+  volatile unsigned char scr;
+  volatile unsigned char tdr;
+  volatile unsigned char ssr;
+  volatile unsigned char rdr;
+  volatile unsigned char scmr;
+} h8s_uart;
 
 #endif
 

@@ -25,7 +25,6 @@
 				<ExtraCommands>
 					<Add after="h8300-elf-objcopy -O binary $(TARGET_OUTPUT_FILE)  $(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).bin" />
 					<Add after="h8300-elf-objcopy -O srec --srec-forceS3 $(TARGET_OUTPUT_FILE)  $(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).srec" />
-					<Add after="h8300-elf-objcopy -O srec --srec-forceS3 $(TARGET_OUTPUT_FILE)  f:\!prj\!firmware\coldfire.srec" />
 					<Add after="h8300-elf-size $(TARGET_OUTPUT_FILE)" />
 					<Mode after="always" />
 				</ExtraCommands>
@@ -41,7 +40,7 @@
 			<Add option="-ffunction-sections" />
 			<Add option="-ms" />
 			<Add option="-mint32" />
-			<Add option="--param inline-call-cost=4" />
+			<Add option="--param inline-call-cost=2" />
 			<Add option="-DF_CPU=32000000" />
 			<Add option="-DROMSTART=1" />
 			<Add directory="..\..\os\kernel\include" />

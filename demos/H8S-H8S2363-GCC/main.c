@@ -4,12 +4,13 @@
 #include <test.h>
 #include "board.h"
 
-/*
+
 static const SerialConfig sd1_config =
 {
-  115200,
+  .sc_speed = 115200,
+  .sc_smr = 0,
 };
-*/
+
 static WORKING_AREA(waBlinker, 64);
 static msg_t blinker_thread(void *arg) {
 
@@ -29,7 +30,7 @@ static msg_t blinker_thread(void *arg) {
  */
 int main(int argc, char **argv) {
 
-//  sdStart(&SD1, &sd1_config);
+  sdStart(&SD1, &sd1_config);
 
   /*
    * Creates the blinker thread.
@@ -41,8 +42,8 @@ int main(int argc, char **argv) {
    */
   while (TRUE) {
     chThdSleepMilliseconds(1000);
-//    sdWrite(&SD1, (uint8_t *)"Hello World!\r\n", 14);
-//    TestThread(&SD1);
+    sdWrite(&SD1, (uint8_t *)"Hello World!\r\n", 14);
+    TestThread(&SD1);
   }
 
   return 0;

@@ -105,7 +105,6 @@ typedef uint8_t ioportmask_t;
  *          any assumption about it, use the provided macros when populating
  *          variables of this type.
  */
-//typedef mcf5206e_PP * ioportid_t;
 typedef h8s_ioport * ioportid_t;
 
 /*===========================================================================*/

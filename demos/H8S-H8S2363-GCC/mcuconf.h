@@ -46,8 +46,8 @@
  */
 #define USE_H8S_UART1          TRUE
 #define USE_H8S_UART2          FALSE
-#define H8S_UART1_PRIORITY     2
-#define H8S_UART2_PRIORITY     2
+//#define H8S_UART1_PRIORITY     1
+//#define H8S_UART2_PRIORITY     2
 
 /*
  * SPI driver system settings.

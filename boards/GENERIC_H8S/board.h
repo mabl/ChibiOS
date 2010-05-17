@@ -31,9 +31,6 @@
 
 #define BOARD_MY_H8S
 
-//#define	MBAR            0x10000000
-//#define VBR				0x30000000
-
 #define _BV(x)          (1<<x)
 
 #define bitLED          2
@@ -52,8 +49,6 @@
  */
 #define GPIO_LED        2
 #define GPIO_LED_MASK   (1<<GPIO_LED)
-
-//extern volatile mcf5206e_IMM *sim;
 
 void hwinit(void);
 
