@@ -117,7 +117,7 @@ typedef h8s_ioport * ioportid_t;
  * @details Low level drivers can define multiple ports, it is suggested to
  *          use this naming convention.
  */
-#define IOPORT1 (h8s_ioport *)(P2DDR)
+#define IOPORT2 (h8s_ioport *)(0xFFFE21)
 
 /*===========================================================================*/
 /* Implementation, some of the following macros could be implemented as      */

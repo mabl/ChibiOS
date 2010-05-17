@@ -76,7 +76,7 @@ _start:
 	bne     1b
 2:
 
-	jsr		@_hwinit:24
+	jsr		@_hwinit
 
 /*
 	TODO: Insert ctors init here.

@@ -89,14 +89,18 @@ void _pal_lld_setgroupmode(ioportid_t port, ioportmask_t mask, uint_fast8_t mode
   switch (mode) {
   case PAL_MODE_RESET:
   case PAL_MODE_INPUT:
-    ddr_tab[2] &= ~mask;
-    port->ddr = ddr_tab[2];
+    if (port == IOPORT2) {
+      ddr_tab[2] &= ~mask;
+      port->ddr = ddr_tab[2];
+    }
     break;
 //  case PAL_MODE_UNCONNECTED:
 //    port->iop_common.out.reg_p |= mask;
   case PAL_MODE_OUTPUT_PUSHPULL:
-    ddr_tab[2] |= mask;
-    port->ddr = ddr_tab[2];
+    if (port == IOPORT2) {
+      ddr_tab[2] |= mask;
+      port->ddr = ddr_tab[2];
+    }
     break;
   }
 }

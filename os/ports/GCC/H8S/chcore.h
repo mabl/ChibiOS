@@ -164,20 +164,29 @@ struct context {
  * @note    Currently the H8S port prevents the IRQ handlers preemption
  *          by raising the mask into the SR register to 7.
  */
+/*
 #define PORT_IRQ_PROLOGUE() {                               \
   asm volatile (    "stm.l      er0-er3,@-sp         \n\t");\
 }
+*/
+#define PORT_IRQ_PROLOGUE()
 
 /**
  * @brief   IRQ epilogue code.
  * @details This macro must be inserted at the end of all IRQ handlers
  *          enabled to invoke system APIs.
  */
+/*
 #define PORT_IRQ_EPILOGUE() {                               \
   if (chSchIsRescRequiredExI())                             \
       chSchDoRescheduleI();                                 \
   asm volatile (    "ldm.l      @sp+,er0-er3         \n\t"  \
                     "rte                             \n\t");\
+}
+*/
+#define PORT_IRQ_EPILOGUE() {                               \
+  if (chSchIsRescRequiredExI())                             \
+      chSchDoRescheduleI();                                 \
 }
 
 /**

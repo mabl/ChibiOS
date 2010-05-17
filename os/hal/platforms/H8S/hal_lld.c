@@ -39,10 +39,12 @@
  * @brief PAL setup.
  * @details Digital I/O ports static configuration as defined in @p board.h.
  */
+#if CH_HAL_USE_PAL
 const H8SGPIOConfig pal_default_config =
 {
-  {VAL_GPIO_OUT, VAL_GPIO_DIR},
+  {VAL_GPIO2_OUT, VAL_GPIO2_DIR},
 };
+#endif
 
 /*===========================================================================*/
 /* Driver local functions.                                                   */

@@ -7,18 +7,16 @@
 /*
 static const SerialConfig sd1_config =
 {
-  57600,
-  mcf5206e_UART_UCSR_RX_TIMER|mcf5206e_UART_UCSR_TX_TIMER,
-  mcf5206e_UART_UMR1_PM_NONE|mcf5206e_UART_UMR1_BC_8
+  115200,
 };
 */
 static WORKING_AREA(waBlinker, 64);
 static msg_t blinker_thread(void *arg) {
 
   while (TRUE) {
-//    palClearPad(IOPORT1, GPIO_LED);
+    palClearPad(IOPORT2, GPIO_LED);
     chThdSleepMilliseconds(100);
-//    palSetPad(IOPORT1, GPIO_LED);
+    palSetPad(IOPORT2, GPIO_LED);
     chThdSleepMilliseconds(900);
   }
   return 0;

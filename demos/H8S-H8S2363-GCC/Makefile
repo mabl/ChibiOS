@@ -87,7 +87,7 @@ LD   = $(TRGT)gcc
 CP   = $(TRGT)objcopy
 AS   = $(TRGT)gcc -x assembler-with-cpp
 OD   = $(TRGT)objdump
-HEX  = $(CP) -O srec
+HEX  = $(CP) -O srec --srec-forceS3
 BIN  = $(CP) -O binary
 
 # Define C warning options here

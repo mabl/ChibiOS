@@ -36,21 +36,21 @@
 
 #define _BV(x)          (1<<x)
 
-#define bitLED          0
+#define bitLED          2
 
 #define LEDOn()         P2DR &= ~_BV(bitLED)
-#define LEDOff()        P9DR |= _BV(bitLED)
+#define LEDOff()        P2DR |= _BV(bitLED)
 
 /*
  * Initial I/O setup.
  */
-#define VAL_GPIO_OUT    0x00      /* Output data. */
-#define VAL_GPIO_DIR    0x01      /* Direction. */
+#define VAL_GPIO2_OUT   0x01      /* Output data. */
+#define VAL_GPIO2_DIR   0xFF      /* Direction. */
 
 /*
  * I/O definitions.
  */
-#define GPIO_LED        0
+#define GPIO_LED        2
 #define GPIO_LED_MASK   (1<<GPIO_LED)
 
 //extern volatile mcf5206e_IMM *sim;

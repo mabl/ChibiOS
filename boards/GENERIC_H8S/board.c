@@ -32,14 +32,14 @@ void hwinit(void) {
   /*
    * PAL initialization.
    */
-//  palClearPad(IOPORT1, GPIO_LED);
-//  palSetPad(IOPORT1, GPIO_LED);
-//  palSetPadMode(IOPORT1, GPIO_LED, PAL_MODE_OUTPUT_PUSHPULL);
+//  palClearPad(IOPORT2, GPIO_LED);
+//  palSetPad(IOPORT2, GPIO_LED);
+//  palSetPadMode(IOPORT2, GPIO_LED, PAL_MODE_OUTPUT_PUSHPULL);
 
   /*
-   * Disable interrupts from SIM.
+   * Disable interrupts from TPU.
    */
-//  sim->sim.IMR = 0xFFFF;
+  TPU_TIER1 = 0;
 
   /*
    * Timer 1 setup.
@@ -47,7 +47,7 @@ void hwinit(void) {
   TPU_TSTR &= ~TSTR_T1;                                     // stop timer
   TPU_TCNT1 = 0x0000;
 
-  *(uint32_t *)(TPU_TGI1A) = (uint32_t)&SYSIrqHandler;      // init TPU1 interrupt vector
+  *(uint32_t *)(TPU_TGI1A) = (uint32_t)SYSIrqHandler;       // init TPU1 interrupt vector
 
   TPU_TCR1 = TCR_PRESC64|TCR_TGRA;                          // fi/64, compare match TGRA
   TPU_TIOR1 = 0x00;                                         // output compare disabled
