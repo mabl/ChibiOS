@@ -1,0 +1,3 @@
+---- _serial_driver_data Matches (2 in 2 files) ----
+Serial.h (c:\rtos\fujitsu_dev\os\hal\include):  _serial_driver_data
+Serial_lld.h (c:\rtos\fujitsu_dev\os\hal\platforms\mb96f3xx):#define _serial_driver_data                                                 \

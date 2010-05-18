@@ -1,0 +1,19 @@
+-g
+-K SCHAR
+-w 1
+-INF LIST
+-I "C:\rtos\fujitsu_dev\boards\EUROTEK_356FX_TFT43"
+-I "C:\rtos\fujitsu_dev\os\hal\include"
+-I "C:\rtos\fujitsu_dev\os\hal\platforms\MB96F3xx"
+-I "C:\rtos\fujitsu_dev\os\kernel\include"
+-I "C:\rtos\fujitsu_dev\os\ports\FCC907\F2MC_16FX"
+-I "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907"
+-O 1
+-model MEDIUM
+-B
+-K NOEOPT
+-K NOLIB
+-K NOUNROLL
+-c
+-cwno
+-cpu MB96F356RWB

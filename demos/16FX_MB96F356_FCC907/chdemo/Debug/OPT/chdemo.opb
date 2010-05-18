@@ -1,0 +1,42 @@
+-dt s,d,r,a
+-pl 60
+-pw 132
+-g
+-cwno
+-cpu MB96F356RWB
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\ABS\chdemo.abs"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\START.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\appboard.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\main.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\chcond.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\chdebug.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\chevents.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\chheap.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\chlists.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\chmboxes.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\chmemcore.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\chmempools.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\chmsg.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\chmtx.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\chqueues.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\chschd.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\chsem.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\chsys.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\chthreads.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\chvt.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\mb96356rw.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\board.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\adc.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\can.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\hal.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\mac.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\mmc_spi.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\pal.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\pwm.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\serial.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\spi.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\hal_lld.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\serial_lld.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\irq96F356.obj"
+-a "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\Debug\OBJ\chcore.obj"
+

@@ -424,7 +424,7 @@ void sd_lld_init(void) {
   sdObjectInit(&SD0, (qnotify_t) NULL, notifyUSART0);
 
   /* I/O pins for USART0.*/
-#if defined (__CPU_MB96330_SERIES)
+#if defined (__CPU_MB96330_SERIES) || defined (__CPU_MB96340_SERIES)
   SD0.reg = USART0_Base;
   DDR08_D2 = 0;		// set SIN0 as input
   PIER08_IE2 = 1;	// enable port input
@@ -437,7 +437,7 @@ void sd_lld_init(void) {
   sdObjectInit(&SD1, (qnotify_t) NULL, notifyUSART1);
 
   /* I/O pins for USART1.*/
-#if defined (__CPU_MB96330_SERIES)
+#if defined (__CPU_MB96330_SERIES)  || defined (__CPU_MB96340_SERIES)
   SD1.reg = USART1_Base;
   DDR08_D5 = 0;		// set SIN1 as input
   PIER08_IE5 = 1;	// enable port input
@@ -455,7 +455,7 @@ void sd_lld_init(void) {
   DDR05_D0 = 0;		// set SIN2 as input
   PIER05_IE0 = 1;	// enable port input
 #else
-#error USART1 unavailable
+#error USART2 unavailable
 #endif
 #endif
 
@@ -468,7 +468,7 @@ void sd_lld_init(void) {
   DDR01_D2 = 0;		// set SIN3 as input
   PIER01_IE2 = 1;	// enable port input
 #else
-#error USART1 unavailable
+#error USART3 unavailable
 #endif
 #endif
 
@@ -506,7 +506,7 @@ void sd_lld_init(void) {
   DDR00_D2 = 0;		// set SIN7_R as input
   PIER00_IE2 = 1;	// enable port input
 #else
-#error USART1 unavailable
+#error USART7 unavailable
 #endif
 #endif
 

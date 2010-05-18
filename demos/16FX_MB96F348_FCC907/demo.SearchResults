@@ -1,0 +1,3 @@
+---- serial.h Matches (2 in 2 files) ----
+Hal.h (c:\rtos\fujitsu_dev\os\hal\include):#include "serial.h"
+Serial.h (c:\rtos\fujitsu_dev\os\hal\include): * @file serial.h
