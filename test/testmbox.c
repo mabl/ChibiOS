@@ -58,7 +58,7 @@
  * variables are explicitly initialized in each test case. It is done in order
  * to test the macros.
  */
-static MAILBOX_DECL(mb1, test.waT0, MB_SIZE);
+static MAILBOX_DECL(mb1, test.stacks.waT0, MB_SIZE);
 
 /**
  * @page test_mbox_001 Queuing and timeouts
@@ -76,7 +76,7 @@ static char *mbox1_gettest(void) {
 
 static void mbox1_setup(void) {
 
-  chMBInit(&mb1, (msg_t *)test.waT0, MB_SIZE);
+  chMBInit(&mb1, (msg_t *)test.stacks.waT0, MB_SIZE);
 }
 
 static void mbox1_execute(void) {
@@ -161,7 +161,7 @@ static void mbox1_execute(void) {
 const struct testcase testmbox1 = {
   mbox1_gettest,
   mbox1_setup,
-  NULL,
+  (void (*)(void)) NULL,
   mbox1_execute
 };
 

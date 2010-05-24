@@ -49,10 +49,6 @@
 											// adesso si chiama EUROSCOPE ma non 
 											// stiamo a cambiare le defines
 
-#define SYSTEM_FREQ    	48000000.0          // frequenza di sistema con PLL=6x
-#define CLKP1_FREQ    	16000000.0          // frequenza periferal clock CLKP1
-#define CLKP2_FREQ    	16000000.0          // frequenza periferal clock CLKP2 -> usato per CAN & soundgen
-
 //--------------------------------------------------------//
 // Definizione delle costanti
 //--------------------------------------------------------//

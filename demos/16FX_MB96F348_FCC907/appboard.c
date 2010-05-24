@@ -28,6 +28,8 @@
 #include "f2mc_16fxs.h"
 
 #include <ch.h>
+#include <hal.h>
+
 #include "appboard.h"
 
 void pin_init(void);
@@ -84,6 +86,27 @@ int irq;
 
 	irq = 55;   /* PPGRLT - RLT6                */
     ICR = (irq << 8) | CH_IRQ_PRIORITY;	// livello irq = come richiesto
+
+	/* init uart3 interrupt levels
+	*/
+	irq = 83;   /* UART2_RX                */
+    ICR = (irq << 8) | CH_IRQ_PRIORITY;	// livello irq = come richiesto
+
+	irq = 84;   /* UART2_TX                */
+    ICR = (irq << 8) | CH_IRQ_PRIORITY;	// livello irq = come richiesto
+
+
+/*
+irq_uart0_rx			79  
+irq_uart0_tx			80  
+irq_uart1_rx			81  
+irq_uart1_tx			82  
+irq_uart2_rx			83  
+irq_uart2_tx			84  
+irq_uart3_rx			85  
+irq_uart3_tx			86  
+*/
+
 
 }
 

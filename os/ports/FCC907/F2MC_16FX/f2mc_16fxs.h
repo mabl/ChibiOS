@@ -161,6 +161,6 @@
 	#error "This ChibiOS/RT is for MB963xx only. Please check project settings"
 #endif
 
-#define	CPU_CLOCK	48000000L
+//#define	CPU_CLOCK	48000000L
 
 #endif	// _f16fxs_h

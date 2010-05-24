@@ -221,7 +221,7 @@ struct context {
  * Macro used to allocate a thread working area aligned as both position and
  * size.
  */
-#define WORKING_AREA(s, n) stkalign_t s[THD_WA_SIZE(n) / sizeof(stkalign_t)];
+#define WORKING_AREA(s, n) stkalign_t s[THD_WA_SIZE(n) / sizeof(stkalign_t)]
 
 /**
  * Macro used to calculate the thread space area aligned as both position and

@@ -625,68 +625,80 @@ __interrupt void  irq_uart0_tx			(void)
 	sw_reset();
 }
 
+#if USE_MB96F3xx_USART1 || defined(__DOXYGEN__)
+#else
 
 __interrupt void  irq_uart1_rx			(void)
 {
-	ErrorLevel = 85;   /* LIN-UART 2 RX                */
+	ErrorLevel = 85;   // LIN-UART 2 RX                
 	sw_reset();
 }
 
 __interrupt void  irq_uart1_tx			(void)
 {
-	ErrorLevel = 86;   /* LIN-UART 2 TX                */
+	ErrorLevel = 86;   // LIN-UART 2 TX                
 	sw_reset();
 }
+#endif
 
+#if USE_MB96F3xx_USART1 || defined(__DOXYGEN__)
+#else
 __interrupt void  irq_uart2_rx			(void)
 {
-	ErrorLevel = 85;   /* LIN-UART 2 RX                */
+	ErrorLevel = 85;   // LIN-UART 2 RX                
 	sw_reset();
 }
 
 __interrupt void  irq_uart2_tx			(void)
 {
-	ErrorLevel = 86;   /* LIN-UART 2 TX                */
+	ErrorLevel = 86;   // LIN-UART 2 TX                
 	sw_reset();
 }
+#endif
 
-__interrupt void  irq_uart3_rx			(void)
+
+#if USE_MB96F3xx_USART3 || defined(__DOXYGEN__)
+#else
+__interrupt void  irq_uart3_rx(void)
 {
-	ErrorLevel = 87;   /* LIN-UART 3 RX                */
+	ErrorLevel = 87;   // LIN-UART 3 RX                
 	sw_reset();
 }
 
-__interrupt void  irq_uart3_tx			(void)
+__interrupt void  irq_uart3_tx(void)
 {
-	ErrorLevel = 88;   /* LIN-UART 3 TX                */
+	ErrorLevel = 88;   // LIN-UART 3 TX
 	sw_reset();
 }
 
-__interrupt void  irq_uart7_rx			(void)
+#endif
+
+
+__interrupt void  irq_uart7_rx(void)
 {
 	ErrorLevel = 89;   /* LIN-UART 7 RX                */
 	sw_reset();
 }
 
-__interrupt void  irq_uart7_tx			(void)
+__interrupt void  irq_uart7_tx(void)
 {
 	ErrorLevel = 90;   /* LIN-UART 7 TX                */
 	sw_reset();
 }
 
-__interrupt void  irq_uart8_rx			(void)
+__interrupt void  irq_uart8_rx(void)
 {
 	ErrorLevel = 91;   /* LIN-UART 8 RX                */
 	sw_reset();
 }
 
-__interrupt void  irq_uart8_tx			(void)
+__interrupt void  irq_uart8_tx(void)
 {
 	ErrorLevel = 92;   /* LIN-UART 8 TX                */
 	sw_reset();
 }
 
-__interrupt void  irq_uart9_rx			(void)
+__interrupt void  irq_uart9_rx(void)
 {
 	ErrorLevel = 91;   /* LIN-UART 8 RX                */
 	sw_reset();

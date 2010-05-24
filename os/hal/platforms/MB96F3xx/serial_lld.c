@@ -80,7 +80,7 @@ SerialDriver SD8;
 static const SerialConfig default_config = {
   DEFAULT_USART_BITRATE,
   0x17, 	// 8 Data, No parity, 1 Stop, Clear all errors, Enable Rx+Tx
-  0x0d		// Async, Internal BRG, Restart, SW reset, SOT output enable
+  0x01		// Async, Internal BRG, Restart, SW reset, SOT output enable
 };
 
 /*===========================================================================*/
@@ -97,6 +97,9 @@ static void usart_init(SerialDriver *sdp) {
 	struct _uart_lin_reg *pReg = sdp->reg;
 	uint32_t baudr;
 
+	/* remove reset bit */
+	pReg->SMR.byte = sdp->config->smr;
+
 	/* clear pending bits */
 	pReg->SCR.bit._RXE = 0;
 	pReg->SCR.bit._TXE = 0;
@@ -105,23 +108,16 @@ static void usart_init(SerialDriver *sdp) {
 	pReg->SSR.bit._RIE = 0;
 	pReg->SSR.bit._TIE = 0;
 
-	/* Baudrate setting based on machine clock speed */
-	baudr = (CPU_CLOCK*10) / sdp->config->speed;
-	baudr *= 2;
-	baudr += 1;
-	baudr /= 2;
-	baudr /= 10;
+	/* Baudrate setting based on CLKP1 domain clock speed */
+	baudr = CLKP1_FREQ / sdp->config->speed;
     baudr -= 1;
     pReg->BGR.word = baudr;
 
 	/*  */
 	pReg->SCR.byte = sdp->config->scr;
 
-	/*  */
-	pReg->SMR.byte = sdp->config->smr;
-
 	pReg->SCR.bit._CRE = 1;	// clear error
-	pReg->SMR.bit._UPCL = 1;	// software reset uart
+	pReg->SMR.bit._UPCL = 0;	// software reset uart
 
 	/* interrupt enable	*/
 	pReg->SSR.bit._RIE = 1;
@@ -221,7 +217,6 @@ static void notifyUSARTx(SerialDriver *sdp) {
 	}
 }
 
-
 #if USE_MB96F3xx_USART0 || defined(__DOXYGEN__)
 NOTIFY_USART_X(notifyUSART0, &SD0);
 #endif
@@ -284,45 +279,48 @@ CH_IRQ_HANDLER(USART0_IrqTx) {
 #endif	/* USE_MB96F3xx_USART0 */
 
 #if USE_MB96F3xx_USART1 || defined(__DOXYGEN__)
-CH_IRQ_HANDLER(USART1_IrqRx) {
+CH_IRQ_HANDLER(irq_uart1_rx) {
   CH_IRQ_PROLOGUE();
   USARTx_IrqRx(&SD1);
   CH_IRQ_EPILOGUE();
 }
 
-CH_IRQ_HANDLER(USART1_IrqTx) {
+CH_IRQ_HANDLER(irq_uart1_tx) {
   CH_IRQ_PROLOGUE();
   USARTx_IrqTx(&SD1);
   CH_IRQ_EPILOGUE();
 }
-#endif	/* USE_MB96F3xx_USART0 */
+
+#endif	/* USE_MB96F3xx_USART1 */
 
 #if USE_MB96F3xx_USART2 || defined(__DOXYGEN__)
-CH_IRQ_HANDLER(USART2_IrqRx) {
+CH_IRQ_HANDLER(irq_uart2_rx) {
   CH_IRQ_PROLOGUE();
   USARTx_IrqRx(&SD2);
   CH_IRQ_EPILOGUE();
 }
 
-CH_IRQ_HANDLER(USART2_IrqTx) {
+CH_IRQ_HANDLER(irq_uart2_tx) {
   CH_IRQ_PROLOGUE();
   USARTx_IrqTx(&SD2);
   CH_IRQ_EPILOGUE();
 }
-#endif	/* USE_MB96F3xx_USART0 */
+
+#endif	/* USE_MB96F3xx_USART2 */
 
 #if USE_MB96F3xx_USART3 || defined(__DOXYGEN__)
-CH_IRQ_HANDLER(USART3_IrqRx) {
+CH_IRQ_HANDLER(irq_uart3_rx) {
   CH_IRQ_PROLOGUE();
   USARTx_IrqRx(&SD3);
   CH_IRQ_EPILOGUE();
 }
 
-CH_IRQ_HANDLER(USART3_IrqTx) {
+CH_IRQ_HANDLER(irq_uart3_tx) {
   CH_IRQ_PROLOGUE();
   USARTx_IrqTx(&SD3);
   CH_IRQ_EPILOGUE();
 }
+
 #endif	/* USE_MB96F3xx_USART0 */
 
 #if USE_MB96F3xx_USART4 || defined(__DOXYGEN__)
@@ -450,7 +448,7 @@ void sd_lld_init(void) {
   sdObjectInit(&SD2, (qnotify_t) NULL, notifyUSART2);
 
   /* I/O pins for USART2.*/
-#if defined (__CPU_MB96330_SERIES) || defined (__CPU_MB96350_SERIES)
+#if defined (__CPU_MB96330_SERIES) || defined (__CPU_MB96340_SERIES) || defined (__CPU_MB96350_SERIES)
   SD2.reg = USART2_Base;
   DDR05_D0 = 0;		// set SIN2 as input
   PIER05_IE0 = 1;	// enable port input
@@ -463,7 +461,7 @@ void sd_lld_init(void) {
   sdObjectInit(&SD3, (qnotify_t) NULL, notifyUSART3);
 
   /* I/O pins for USART3.*/
-#if defined (__CPU_MB96330_SERIES) || defined (__CPU_MB96350_SERIES)
+#if defined (__CPU_MB96330_SERIES) || defined (__CPU_MB96340_SERIES) || defined (__CPU_MB96350_SERIES)
   SD3.reg = USART3_Base;
   DDR01_D2 = 0;		// set SIN3 as input
   PIER01_IE2 = 1;	// enable port input
@@ -544,6 +542,8 @@ void sd_lld_init(void) {
  */
 void sd_lld_start(SerialDriver *sdp) {
 
+  if (sdp->config == NULL)
+    sdp->config = &default_config;
 
 if (
 #if USE_MB96F3xx_USART0

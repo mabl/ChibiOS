@@ -11,17 +11,19 @@ $0
 -I "C:\rtos\fujitsu_dev\os\ports\FCC907\F2MC_16FX"
 -I "C:\rtos\fujitsu_dev\demos\16FX_MB96F348_FCC907"
 -I "C:\rtos\fujitsu_dev\boards\DEMO_348FX_GEN"
--O 1
+-I "C:\rtos\fujitsu_dev\test"
+-O 4
+-K SPEED
 -model MEDIUM
 -B
 -Xdof
 -INF STACK
--K NOEOPT
--K NOLIB
--K NOUNROLL
+-K EOPT
+-K LIB
+-K UNROLL
 $other
 $time
-1272124405
+1274652378
 $end
 $1
 -linf ON
@@ -61,7 +63,7 @@ $2
 -Xdof
 $other
 $time
-1272123400
+1274641485
 $end
 $3
 -dt s,d,r,a
@@ -71,7 +73,7 @@ $3
 -Xdof
 $other
 $time
-1272123400
+1274641485
 $end
 $4
 -Xdof

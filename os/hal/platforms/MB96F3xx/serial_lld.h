@@ -80,7 +80,7 @@
  * @note The default is @p TRUE.
  */
 #if !defined(USE_MB96F3xx_USART2) || defined(__DOXYGEN__)
-#define USE_MB96F3xx_USART2           FALSE
+#define USE_MB96F3xx_USART2           TRUE
 #endif
 
 /**

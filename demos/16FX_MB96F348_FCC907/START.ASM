@@ -644,7 +644,8 @@ Revision 0.1  2006/01/25 15:37:46  phu
 #set      CPU_56MHZ_CLKP2_8MHZ                0x38380838L
 #set      CPU_56MHZ_CLKP2_14MHZ               0x38380E38L
 
-#set      CLOCK_SPEED     CPU_48MHZ_CLKP1_16MHZ_CLKP2_16MHZ  ; <<< set clock speeds
+;#set      CLOCK_SPEED     CPU_48MHZ_CLKP1_16MHZ_CLKP2_16MHZ  ; <<< set clock speeds
+#set      CLOCK_SPEED     CPU_56MHZ_CLKP2_14MHZ ; <<< set clock speeds
 
 
 ; If not specified seperately, the peripheral clock CLKP1 is set to

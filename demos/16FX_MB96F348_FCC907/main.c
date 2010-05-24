@@ -29,6 +29,7 @@
 
 #include <ch.h>
 #include <hal.h>
+#include <test.h>
 
 
 /*
@@ -84,7 +85,7 @@ byte c;
   /*
    * Activates the serial driver 1 using the driver default configuration.
    */
-    sdStart(&SD1, NULL);
+    sdStart(&SD2, NULL);
 
   /*
    * Creates the plc thread.
@@ -93,6 +94,9 @@ byte c;
     chThdCreateStatic(waThreadFastPLC, sizeof(waThreadFastPLC), NORMALPRIO+10, ThreadFastPLC, NULL);
     chThdCreateStatic(waThreadWatchDog, sizeof(waThreadWatchDog), HIGHPRIO, ThreadWatchdog, NULL);
 
+
+   TestThread(&SD2);
+   
   /*
    * Normal main() thread activity, in this demo it does nothing except
    * sleeping in a loop.

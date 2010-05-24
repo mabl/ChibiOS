@@ -72,7 +72,9 @@ static msg_t thread1(void *p) {
   return 0;
 }
 
+#ifdef __GNUC__
 __attribute__((noinline))
+#endif
 static unsigned int msg_loop_test(Thread *tp) {
 
   uint32_t n = 0;
@@ -98,8 +100,8 @@ static unsigned int msg_loop_test(Thread *tp) {
  * printed in the output log.
  */
 
-static char *bmk1_gettest(void) {
-
+static char *bmk1_gettest(void) 
+{
   return "Benchmark, messages #1";
 }
 
@@ -119,8 +121,8 @@ static void bmk1_execute(void) {
 
 const struct testcase testbmk1 = {
   bmk1_gettest,
-  NULL,
-  NULL,
+  (void (*)(void)) NULL,
+  (void (*)(void)) NULL,
   bmk1_execute
 };
 
@@ -154,8 +156,8 @@ static void bmk2_execute(void) {
 
 const struct testcase testbmk2 = {
   bmk2_gettest,
-  NULL,
-  NULL,
+  (void (*)(void)) NULL,
+  (void (*)(void)) NULL,
   bmk2_execute
 };
 
@@ -199,8 +201,8 @@ static void bmk3_execute(void) {
 
 const struct testcase testbmk3 = {
   bmk3_gettest,
-  NULL,
-  NULL,
+  (void (*)(void)) NULL,
+  (void (*)(void)) NULL,
   bmk3_execute
 };
 
@@ -233,13 +235,16 @@ msg_t thread4(void *p) {
   return 0;
 }
 
-static void bmk4_execute(void) {
-  Thread *tp;
+static void bmk4_execute(void) 
+{
+Thread *tp;
+uint32_t n = 0;
 
   tp = threads[0] = chThdCreateStatic(wa[0], WA_SIZE, chThdGetPriority()+1, thread4, NULL);
-  uint32_t n = 0;
+
   test_wait_tick();
   test_start_timer(1000);
+
   do {
     chSysLock();
     chSchWakeupS(tp, RDY_OK);
@@ -264,8 +269,8 @@ static void bmk4_execute(void) {
 
 const struct testcase testbmk4 = {
   bmk4_gettest,
-  NULL,
-  NULL,
+  (void (*)(void)) NULL,
+  (void (*)(void)) NULL,
   bmk4_execute
 };
 
@@ -306,8 +311,8 @@ static void bmk5_execute(void) {
 
 const struct testcase testbmk5 = {
   bmk5_gettest,
-  NULL,
-  NULL,
+  (void (*)(void)) NULL,
+  (void (*)(void)) NULL,
   bmk5_execute
 };
 
@@ -350,8 +355,8 @@ static void bmk6_execute(void) {
 
 const struct testcase testbmk6 = {
   bmk6_gettest,
-  NULL,
-  NULL,
+  (void (*)(void)) NULL,
+  (void (*)(void)) NULL,
   bmk6_execute
 };
 
@@ -417,7 +422,7 @@ static void bmk7_execute(void) {
 const struct testcase testbmk7 = {
   bmk7_gettest,
   bmk7_setup,
-  NULL,
+  (void (*)(void)) NULL,
   bmk7_execute
 };
 
@@ -476,8 +481,8 @@ static void bmk8_execute(void) {
 
 const struct testcase testbmk8 = {
   bmk8_gettest,
-  NULL,
-  NULL,
+  (void (*)(void)) NULL,
+  (void (*)(void)) NULL,
   bmk8_execute
 };
 
@@ -499,9 +504,10 @@ static char *bmk9_gettest(void) {
 static void bmk9_execute(void) {
   static uint8_t ib[16];
   static InputQueue iq;
-
-  chIQInit(&iq, ib, sizeof(ib), NULL);
   uint32_t n = 0;
+
+  chIQInit(&iq, ib, sizeof(ib), (qnotify_t) NULL);
+  
   test_wait_tick();
   test_start_timer(1000);
   do {
@@ -525,8 +531,8 @@ static void bmk9_execute(void) {
 
 const struct testcase testbmk9 = {
   bmk9_gettest,
-  NULL,
-  NULL,
+  (void (*)(void)) NULL,
+  (void (*)(void)) NULL,
   bmk9_execute
 };
 
@@ -571,8 +577,8 @@ static void bmk10_execute(void) {
 
 const struct testcase testbmk10 = {
   bmk10_gettest,
-  NULL,
-  NULL,
+  (void (*)(void)) NULL,
+  (void (*)(void)) NULL,
   bmk10_execute
 };
 
@@ -623,7 +629,7 @@ static void bmk11_execute(void) {
 const struct testcase testbmk11 = {
   bmk11_gettest,
   bmk11_setup,
-  NULL,
+  (void (*)(void)) NULL,
   bmk11_execute
 };
 
@@ -675,7 +681,7 @@ static void bmk12_execute(void) {
 const struct testcase testbmk12 = {
   bmk12_gettest,
   bmk12_setup,
-  NULL,
+  (void (*)(void)) NULL,
   bmk12_execute
 };
 #endif
@@ -740,8 +746,8 @@ static void bmk13_execute(void) {
 
 const struct testcase testbmk13 = {
   bmk13_gettest,
-  NULL,
-  NULL,
+  (void (*)(void)) NULL,
+  (void (*)(void)) NULL,
   bmk13_execute
 };
 

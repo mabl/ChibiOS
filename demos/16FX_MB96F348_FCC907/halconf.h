@@ -109,6 +109,7 @@
 #define SERIAL_BUFFERS_SIZE             128
 #define DEFAULT_USART_BITRATE           38400
 #define USE_MB96F3xx_USART1             TRUE
+#define USE_MB96F3xx_USART2             TRUE
 
 
 /*===========================================================================*/
