@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -23,6 +23,8 @@
 /**
  * @page test_dynamic Dynamic APIs test
  *
+ * File: @ref testdyn.c
+ *
  * <h2>Description</h2>
  * This module implements the test sequence for the dynamic thread creation
  * APIs.
@@ -42,6 +44,7 @@
  * <h2>Test Cases</h2>
  * - @subpage test_dynamic_001
  * - @subpage test_dynamic_002
+ * - @subpage test_dynamic_003
  * .
  * @file testdyn.c
  * @brief Dynamic thread APIs test source file
@@ -50,6 +53,12 @@
  */
 
 #if CH_USE_DYNAMIC
+#if CH_USE_HEAP
+static MemoryHeap heap1;
+#endif
+#if CH_USE_MEMPOOLS
+static MemoryPool mp1;
+#endif
 
 /**
  * @page test_dynamic_001 Threads creation from Memory Heap
@@ -69,9 +78,6 @@ static msg_t thread(void *p) {
 }
 
 #if CH_USE_HEAP
-
-static MemoryHeap heap1;
-
 static char *dyn1_gettest(void) {
 
   return "Dynamic APIs, threads creation from heap";
@@ -135,8 +141,6 @@ const struct testcase testdyn1 = {
  * one to fail.
  */
 
-static MemoryPool mp1;
-
 static char *dyn2_gettest(void) {
 
   return "Dynamic APIs, threads creation from memory pool";
@@ -187,10 +191,81 @@ const struct testcase testdyn2 = {
 };
 #endif /* CH_USE_MEMPOOLS */
 
+#if CH_USE_HEAP && CH_USE_REGISTRY
+/**
+ * @page test_dynamic_003 Registry and References test
+ *
+ * <h2>Description</h2>
+ * Registry and Thread References APIs are tested for functionality and
+ * coverage.
+ */
+
+static unsigned regscan(void) {
+  Thread *tp;
+  unsigned i = 0;
+
+  tp = chRegFirstThread();
+  do {
+    i++;
+    tp = chRegNextThread(tp);
+  } while (tp != NULL);
+  return i;
+}
+
+static char *dyn3_gettest(void) {
+
+  return "Dynamic APIs, registry and references";
+}
+
+static void dyn3_setup(void) {
+
+  chHeapInit(&heap1, test.buffer, sizeof(union test_buffers));
+}
+
+static void dyn3_execute(void) {
+  unsigned n1, n2, n3;
+  Thread *tp;
+  tprio_t prio = chThdGetPriority();
+
+  /* Current number of threads in the system, two times just in case some
+     external detached thread terminated.*/
+  (void)regscan();
+  n1 = regscan();
+
+  /* Testing references increase/decrease and final detach.*/
+  tp = chThdCreateFromHeap(&heap1, WA_SIZE, prio-1, thread, "A");
+  test_assert(1, tp->p_refs == 1, "wrong initial reference counter");
+  chThdAddRef(tp);
+  test_assert(2, tp->p_refs == 2, "references increase failure");
+  chThdRelease(tp);
+  test_assert(3, tp->p_refs == 1, "references decrease failure");
+
+  /* Verify the new threads count.*/
+  n2 = regscan();
+  test_assert(4, n1 == n2 - 1, "unexpected threads count");
+
+  /* Detach and let the thread execute and terminate.*/
+  chThdRelease(tp);
+  test_assert(5, tp->p_refs == 0, "detach failure");
+  chThdSleepMilliseconds(50);           /* The thread just terminates.      */
+  test_assert(6, tp->p_state == THD_STATE_FINAL, "invalid state");
+
+  /* Clearing the zombie by scanning the registry.*/
+  n3 = regscan();
+  test_assert(7, n1 == n3, "unexpected threads count");
+}
+
+const struct testcase testdyn3 = {
+  dyn3_gettest,
+  dyn3_setup,
+  NULL,
+  dyn3_execute
+};
+#endif /* CH_USE_HEAP && CH_USE_REGISTRY */
 #endif /* CH_USE_DYNAMIC */
 
-/*
- * Test sequence for dynamic APIs pattern.
+/**
+ * @brief   Test sequence for dynamic APIs.
  */
 const struct testcase * const patterndyn[] = {
 #if CH_USE_DYNAMIC
@@ -199,6 +274,9 @@ const struct testcase * const patterndyn[] = {
 #endif
 #if CH_USE_MEMPOOLS
   &testdyn2,
+#endif
+#if CH_USE_HEAP && CH_USE_REGISTRY
+  &testdyn3,
 #endif
 #endif
   NULL

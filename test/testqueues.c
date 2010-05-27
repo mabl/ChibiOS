@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -22,6 +22,8 @@
 
 /**
  * @page test_queues I/O Queues test
+ *
+ * File: @ref testqueues.c
  *
  * <h2>Description</h2>
  * This module implements the test sequence for the @ref io_queues subsystem.
@@ -62,8 +64,8 @@ static void notify(void) {}
  * variables are explicitly initialized in each test case. It is done in order
  * to test the macros.
  */
-static INPUTQUEUE_DECL(iq, test.stacks.waT0, TEST_QUEUES_SIZE, notify);
-static OUTPUTQUEUE_DECL(oq, test.stacks.waT1, TEST_QUEUES_SIZE, notify);
+static INPUTQUEUE_DECL(iq, test.wa.T0, TEST_QUEUES_SIZE, notify);
+static OUTPUTQUEUE_DECL(oq, test.wa.T1, TEST_QUEUES_SIZE, notify);
 
 /**
  * @page test_queues_001 Input Queues functionality and APIs
@@ -204,8 +206,8 @@ const struct testcase testqueues2 = {
 };
 #endif /* CH_USE_QUEUES */
 
-/*
- * Test sequence for queues pattern.
+/**
+ * @brief   Test sequence for queues.
  */
 const struct testcase * const patternqueues[] = {
 #if CH_USE_QUEUES

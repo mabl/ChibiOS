@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -22,6 +22,8 @@
 
 /**
  * @page test_mbox Mailboxes test
+ *
+ * File: @ref testmbox.c
  *
  * <h2>Description</h2>
  * This module implements the test sequence for the @ref mailboxes subsystem.
@@ -58,7 +60,7 @@
  * variables are explicitly initialized in each test case. It is done in order
  * to test the macros.
  */
-static MAILBOX_DECL(mb1, test.stacks.waT0, MB_SIZE);
+static MAILBOX_DECL(mb1, test.wa.T0, MB_SIZE);
 
 /**
  * @page test_mbox_001 Queuing and timeouts
@@ -76,7 +78,7 @@ static char *mbox1_gettest(void) {
 
 static void mbox1_setup(void) {
 
-  chMBInit(&mb1, (msg_t *)test.stacks.waT0, MB_SIZE);
+  chMBInit(&mb1, (msg_t *)test.wa.T0, MB_SIZE);
 }
 
 static void mbox1_execute(void) {
@@ -161,14 +163,14 @@ static void mbox1_execute(void) {
 const struct testcase testmbox1 = {
   mbox1_gettest,
   mbox1_setup,
-  (void (*)(void)) NULL,
+  NULL,
   mbox1_execute
 };
 
 #endif /* CH_USE_MAILBOXES */
 
-/*
- * Test sequence for mailboxes pattern.
+/**
+ * @brief   Test sequence for mailboxes.
  */
 const struct testcase * const patternmbox[] = {
 #if CH_USE_MAILBOXES

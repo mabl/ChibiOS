@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -18,9 +18,15 @@
 */
 
 /**
- * @file templates/chtypes.h
- * @brief System types template.
+ * @file    templates/chtypes.h
+ * @brief   System types template.
+ * @details The types defined in this file may change depending on the target
+ *          architecture. You may also try to optimize the size of the various
+ *          types in order to privilege size or performance, be careful in
+ *          doing so.
+ *
  * @addtogroup types
+ * @details System types and macros.
  * @{
  */
 
@@ -35,43 +41,87 @@
 #include <stdint.h>
 #endif
 
-/** Signed boolean. */
+/**
+ * @brief   Boolean, recommended the fastest signed.
+ */
 typedef int32_t         bool_t;
 
-/** Thread mode flags, uint8_t is ok. */
+/**
+ * @brief   Thread mode flags, uint8_t is ok.
+ */
 typedef uint8_t         tmode_t;
 
-/** Thread state, uint8_t is ok. */
+/**
+ * @brief   Thread state, uint8_t is ok.
+ */
 typedef uint8_t         tstate_t;
 
-/** Priority, use the fastest unsigned type. */
+/**
+ * @brief   Thread references counter, uint8_t is ok.
+ */
+typedef uint8_t         trefs_t;
+
+/**
+ * @brief   Priority, use the fastest unsigned type.
+ */
 typedef uint32_t        tprio_t;
 
-/** Message, use signed pointer equivalent.*/
+/**
+ * @brief   Message, use signed pointer equivalent.
+ */
 typedef int32_t         msg_t;
 
-/** Event Id, use fastest signed.*/
+/**
+ * @brief   Event Id, use fastest signed.
+ */
 typedef int32_t         eventid_t;
 
-/** Event Mask, recommended fastest unsigned.*/
+/**
+ * @brief   Event Mask, recommended fastest unsigned.
+ */
 typedef uint32_t        eventmask_t;
 
-/** System Time, recommended fastest unsigned.*/
+/**
+ * @brief   System Time, recommended fastest unsigned.
+ */
 typedef uint32_t        systime_t;
 
-/** Counter, recommended fastest signed.*/
+/**
+ * @brief   Counter, recommended fastest signed.
+ */
 typedef int32_t         cnt_t;
 
-/** Inline function modifier. */
-#define INLINE      inline
+/**
+ * @brief   Inline function modifier.
+ */
+#define INLINE inline
 
-/** Packed structure modifier (within). */
+/**
+ * @brief   ROM constant modifier.
+ * @note    This is required because some compilers require a custom keyword,
+ *          usually this macro is just set to "const" for the GCC compiler.
+ * @note    This macro is not used to place constants in different address
+ *          spaces (like AVR requires as example) because it is assumed that
+ *          a pointer to a ROMCONST constant is compatible with a pointer
+ *          to a normal variable. It is just like the "const" keyword but
+ *          requires that the constant is placed in ROM if the architecture
+ *          supports it.
+ */
+#define ROMCONST const
+
+/**
+ * @brief   Packed structure modifier (within).
+ */
 #define PACK_STRUCT_STRUCT __attribute__((packed))
 
-/** Packed structure modifier (before). */
+/**
+ * @brief   Packed structure modifier (before).
+ */
 #define PACK_STRUCT_BEGIN
 
-/** Packed structure modifier (after). */
+/**
+ * @brief   Packed structure modifier (after).
+ */
 #define PACK_STRUCT_END
 
 #endif /* _CHTYPES_H_ */

@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -22,6 +22,8 @@
 
 /**
  * @page test_mtx Mutexes test
+ *
+ * File: @ref testmtx.c
  *
  * <h2>Description</h2>
  * This module implements the test sequence for the @ref mutexes and
@@ -68,7 +70,9 @@
  */
 static MUTEX_DECL(m1);
 static MUTEX_DECL(m2);
+#if CH_USE_CONDVARS
 static CONDVAR_DECL(c1);
+#endif
 
 /**
  * @page test_mtx_001 Priority enqueuing test
@@ -641,8 +645,8 @@ const struct testcase testmtx8 = {
 #endif /* CH_USE_CONDVARS */
 #endif /* CH_USE_MUTEXES */
 
-/*
- * Test sequence for mutexes pattern.
+/**
+ * @brief   Test sequence for mutexes.
  */
 const struct testcase * const patternmtx[] = {
 #if CH_USE_MUTEXES

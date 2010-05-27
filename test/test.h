@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -17,21 +17,37 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * @file    test.h
+ * @brief   Tests support header.
+ *
+ * @addtogroup test
+ * @{
+ */
+
 #ifndef _TEST_H_
 #define _TEST_H_
 
-#ifndef DELAY_BETWEEN_TESTS
+/**
+ * @brief   Delay inserted between test cases.
+ */
+#if !defined(DELAY_BETWEEN_TESTS) || defined(__DOXYGEN__)
 #define DELAY_BETWEEN_TESTS     200
 #endif
 
-#ifndef TEST_NO_BENCHMARKS
+/**
+ * @brief   If @p TRUE then benchmarks are not included.
+ */
+#if !defined(TEST_NO_BENCHMARKS) || defined(__DOXYGEN__)
 #define TEST_NO_BENCHMARKS      FALSE
 #endif
 
 #define MAX_THREADS             5
 #define MAX_TOKENS              16
 
-#if defined(CH_ARCHITECTURE_AVR) || defined(CH_ARCHITECTURE_MSP430)
+#if defined(CH_ARCHITECTURE_AVR) ||                                         \
+    defined(CH_ARCHITECTURE_MSP430) ||                                      \
+    defined(CH_ARCHITECTURE_STM8)
 #define THREADS_STACK_SIZE      48
 #elif defined(CH_ARCHITECTURE_SIMIA32)
 #define THREADS_STACK_SIZE      512
@@ -40,24 +56,25 @@
 #endif
 #define WA_SIZE THD_WA_SIZE(THREADS_STACK_SIZE)
 
+/**
+ * @brief   Structure representing a test case.
+ */
 struct testcase {
-  char *(*gettest)(void);
-  void (*setup)(void);
-  void (*teardown)(void);
-  void (*execute)(void);
+  char *(*gettest)(void);       /**< @brief Test case name get function.    */
+  void (*setup)(void);          /**< @brief Test case preparation function. */
+  void (*teardown)(void);       /**< @brief Test case clean up function.    */
+  void (*execute)(void);        /**< @brief Test case execution function.   */
 };
 
 #ifndef __DOXYGEN__
 union test_buffers {
-
   struct {
-    WORKING_AREA(waT0, THREADS_STACK_SIZE);
-    WORKING_AREA(waT1, THREADS_STACK_SIZE);
-    WORKING_AREA(waT2, THREADS_STACK_SIZE);
-    WORKING_AREA(waT3, THREADS_STACK_SIZE);
-    WORKING_AREA(waT4, THREADS_STACK_SIZE);
-  }stacks;
-
+    WORKING_AREA(T0, THREADS_STACK_SIZE);
+    WORKING_AREA(T1, THREADS_STACK_SIZE);
+    WORKING_AREA(T2, THREADS_STACK_SIZE);
+    WORKING_AREA(T3, THREADS_STACK_SIZE);
+    WORKING_AREA(T4, THREADS_STACK_SIZE);
+  } wa;
   uint8_t buffer[WA_SIZE * 5];
 };
 #endif
@@ -88,29 +105,56 @@ extern "C" {
 }
 #endif
 
-#define test_fail(point) {                                              \
-  _test_fail(point);                                                    \
-  return;                                                               \
+/**
+ * @brief   Test failure enforcement.
+ */
+#define test_fail(point) {                                                  \
+  _test_fail(point);                                                        \
+  return;                                                                   \
 }
 
-#define test_assert(point, condition, msg) {                            \
-  if (_test_assert(point, condition))                                   \
-    return;                                                             \
+/**
+ * @brief   Test assertion.
+ *
+ * @param[in] point     numeric assertion identifier
+ * @param[in] condition a boolean expression that must be verified to be true
+ * @param[in] msg       failure message
+ */
+#define test_assert(point, condition, msg) {                                \
+  if (_test_assert(point, condition))                                       \
+    return;                                                                 \
 }
 
-#define test_assert_sequence(point, expected) {                         \
-  if (_test_assert_sequence(point, expected))                           \
-    return;                                                             \
+/**
+ * @brief   Test sequence assertion.
+ *
+ * @param[in] point     numeric assertion identifier
+ * @param[in] expected  string to be matched with the tokens buffer
+ */
+#define test_assert_sequence(point, expected) {                             \
+  if (_test_assert_sequence(point, expected))                               \
+    return;                                                                 \
 }
 
-#define test_assert_time_window(point, start, end) {                    \
-  if (_test_assert_time_window(point, start, end))                      \
-    return;                                                             \
+/**
+ * @brief   Test time window assertion.
+ *
+ * @param[in] point     numeric assertion identifier
+ * @param[in] start     initial time in the window (included)
+ * @param[in] end       final time in the window (not included)
+ */
+#define test_assert_time_window(point, start, end) {                        \
+  if (_test_assert_time_window(point, start, end))                          \
+    return;                                                                 \
 }
 
+#if !defined(__DOXYGEN__)
 extern Thread *threads[MAX_THREADS];
 extern union test_buffers test;
 extern void * const wa[];
 extern bool_t test_timer_done;
+#endif
 
 #endif /* _TEST_H_ */
+
+/** @} */

@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -22,6 +22,8 @@
 
 /**
  * @page test_pools Memory Pools test
+ *
+ * File: @ref testpools.c
  *
  * <h2>Description</h2>
  * This module implements the test sequence for the @ref pools subsystem.
@@ -58,6 +60,12 @@ static MEMORYPOOL_DECL(mp1, THD_WA_SIZE(THREADS_STACK_SIZE), NULL);
  * operation.
  */
 
+static void *null_provider(size_t size) {
+
+  (void)size;
+  return NULL;
+}
+
 static char *pools1_gettest(void) {
 
   return "Memory Pools, queue/dequeue";
@@ -81,6 +89,10 @@ static void pools1_execute(void) {
 
   /* Now must be empty. */
   test_assert(2, chPoolAlloc(&mp1) == NULL, "list not empty");
+
+  /* Covering the case where a provider is unable to return more memory.*/
+  chPoolInit(&mp1, 16, null_provider);
+  test_assert(3, chPoolAlloc(&mp1) == NULL, "provider returned memory");
 }
 
 const struct testcase testpools1 = {
@@ -93,7 +105,7 @@ const struct testcase testpools1 = {
 #endif /* CH_USE_MEMPOOLS */
 
 /*
- * Test sequence for pools pattern.
+ * @brief   Test sequence for pools.
  */
 const struct testcase * const patternpools[] = {
 #if CH_USE_MEMPOOLS

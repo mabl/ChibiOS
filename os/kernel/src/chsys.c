@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -18,9 +18,17 @@
 */
 
 /**
- * @file chsys.c
- * @brief System related code.
+ * @file    chsys.c
+ * @brief   System related code.
+ *
  * @addtogroup system
+ * @details System related APIs and services:
+ *          - Initialization.
+ *          - Locks.
+ *          - Interrupt Handling.
+ *          - Power Management.
+ *          - Abnormal Termination.
+ *          .
  * @{
  */
 
@@ -29,7 +37,7 @@
 static WORKING_AREA(idle_thread_wa, IDLE_THREAD_STACK_SIZE);
 
 /**
- * @brief This function implements the idle thread infinite loop.
+ * @brief   This function implements the idle thread infinite loop.
  * @details The function puts the processor in the lowest power mode capable
  *          to serve interrupts.<br>
  *          The priority is internally set to the minimum system value so
@@ -48,13 +56,12 @@ static void idle_thread(void *p) {
 }
 
 /**
- * @brief ChibiOS/RT initialization.
+ * @brief   ChibiOS/RT initialization.
  * @details After executing this function the current instructions stream
  *          becomes the main thread.
- *
- * @note Interrupts should be still disabled when @p chSysInit() is invoked
- *       and are internally enabled.
- * @note The main thread is created with priority @p NORMALPRIO.
+ * @note    Interrupts should be still disabled when @p chSysInit() is invoked
+ *          and are internally enabled.
+ * @note    The main thread is created with priority @p NORMALPRIO.
  */
 void chSysInit(void) {
   static Thread mainthread;
@@ -72,29 +79,27 @@ void chSysInit(void) {
   trace_init();
 #endif
 
-  /*
-   * Now this instructions flow becomes the main thread.
-   */
-  (currp = init_thread(&mainthread, NORMALPRIO))->p_state = THD_STATE_CURRENT;
+  /* Now this instructions flow becomes the main thread.*/
+  setcurrp(init_thread(&mainthread, NORMALPRIO));
+  currp->p_state = THD_STATE_CURRENT;
   chSysEnable();
 
-  /*
-   * This thread has the lowest priority in the system, its role is just to
-   * serve interrupts in its context while keeping the lowest energy saving
-   * mode compatible with the system status.
-   */
+  /* This thread has the lowest priority in the system, its role is just to
+     serve interrupts in its context while keeping the lowest energy saving
+     mode compatible with the system status.*/
   chThdCreateStatic(idle_thread_wa, sizeof(idle_thread_wa), IDLEPRIO,
                     (tfunc_t)idle_thread, NULL);
 }
 
 /**
- * @brief Handles time ticks for round robin preemption and timer increments.
+ * @brief   Handles time ticks for round robin preemption and timer increments.
  * @details Decrements the remaining time quantum of the running thread
  *          and preempts it when the quantum is used up. Increments system
  *          time and manages the timers.
  *
- * @note The frequency of the timer determines the system tick granularity and,
- *       together with the @p CH_TIME_QUANTUM macro, the round robin interval.
+ * @note    The frequency of the timer determines the system tick granularity
+ *          and, together with the @p CH_TIME_QUANTUM macro, the round robin
+ *          interval.
  */
 void chSysTimerHandlerI(void) {
 

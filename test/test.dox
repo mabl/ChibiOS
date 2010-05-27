@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -16,6 +16,12 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+/**
+ * @defgroup test Test Runtime
+ * @details Runtime code for the test suite execution, this code is not part
+ *          of the OS and should not be included in user applications.
+ */
 
 /**
  * @page testsuite Testing Strategy
@@ -37,7 +43,7 @@
  *   kernel code is expected to compile without errors nor warnings and
  *   execute the test suite without failures (a specific simulator is used
  *   for this execution test, it is done automatically by a script because
- *   the entire sequence can require hours).<br>
+ *   the entire sequence can take hours).<br>
  *   All the tests results are included as reports in the OS distribution
  *   under @p ./docs/reports.
  * - <b>Ports</b>. The port code is tested by executing the kernel test

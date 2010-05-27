@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -18,9 +18,22 @@
 */
 
 /**
- * @file chheap.c
- * @brief Heaps code.
+ * @file    chheap.c
+ * @brief   Heaps code.
+ *
  * @addtogroup heaps
+ * @details Heap Allocator related APIs.
+ *          <h2>Operation mode</h2>
+ *          The heap allocator implements a first-fit strategy and its APIs
+ *          are functionally equivalent to the usual @p malloc() and @p free()
+ *          library functions. The main difference is that the OS heap APIs
+ *          are guaranteed to be thread safe.<br>
+ *          By enabling the @p CH_USE_MALLOC_HEAP option the heap manager
+ *          will use the runtime-provided @p malloc() and @p free() as
+ *          backend for the heap APIs instead of the system provided
+ *          allocator.<br>
+ *          In order to use the heap APIs the @p CH_USE_HEAP option must
+ *          be enabled in @p chconf.h.
  * @{
  */
 
@@ -42,19 +55,18 @@
 #if !CH_USE_MALLOC_HEAP
 
 /**
- * @brief Default heap descriptor.
+ * @brief   Default heap descriptor.
  */
 static MemoryHeap default_heap;
 
 /**
- * @brief Initializes the default heap.
- *
- * @note Internal use only.
+ * @brief   Initializes the default heap.
+ * @note    Internal use only.
  */
 void heap_init(void) {
   default_heap.h_provider = chCoreAlloc;
-  default_heap.h_free.h_u.next = (struct heap_header  *)NULL;
-  default_heap.h_free.h_size = 0;
+  default_heap.h_free.h.u.next = (union heap_header *)NULL;
+  default_heap.h_free.h.size = 0;
 #if CH_USE_MUTEXES
   chMtxInit(&default_heap.h_mtx);
 #else
@@ -63,25 +75,24 @@ void heap_init(void) {
 }
 
 /**
- * @brief Initializes a memory heap from a static memory area.
+ * @brief   Initializes a memory heap from a static memory area.
+ * @note    Both the heap buffer base and the heap size must be aligned to
+ *          the @p align_t type size.
  *
- * @param[out] heapp pointer to a memory heap descriptor to be initialized
- * @param[in] buf heap buffer base
- * @param[in] size heap size
- *
- * @note Both the heap buffer base and the heap size must be aligned to
- *       the @p align_t type size.
+ * @param[out] heapp    pointer to the memory heap descriptor to be initialized
+ * @param[in] buf       heap buffer base
+ * @param[in] size      heap size
  */
 void chHeapInit(MemoryHeap *heapp, void *buf, size_t size) {
-  struct heap_header *hp;
+  union heap_header *hp;
 
   chDbgCheck(MEM_IS_ALIGNED(buf) && MEM_IS_ALIGNED(size), "chHeapInit");
 
   heapp->h_provider = (memgetfunc_t)NULL;
-  heapp->h_free.h_u.next = hp = buf;
-  heapp->h_free.h_size = 0;
-  hp->h_u.next = NULL;
-  hp->h_size = size - sizeof(struct heap_header);
+  heapp->h_free.h.u.next = hp = buf;
+  heapp->h_free.h.size = 0;
+  hp->h.u.next = NULL;
+  hp->h.size = size - sizeof(union heap_header);
 #if CH_USE_MUTEXES
   chMtxInit(&heapp->h_mtx);
 #else
@@ -90,21 +101,21 @@ void chHeapInit(MemoryHeap *heapp, void *buf, size_t size) {
 }
 
 /**
- * @brief Allocates a block of memory from the heap by using the first-fit
- *        algorithm.
+ * @brief   Allocates a block of memory from the heap by using the first-fit
+ *          algorithm.
  * @details The allocated block is guaranteed to be properly aligned for a
  *          pointer data type (@p align_t).
  *
- * @param[in] heapp pointer to a heap descriptor or @p NULL in order to access
- *                  the default heap.
- * @param[in] size the size of the block to be allocated. Note that the
- *                 allocated block may be a bit bigger than the requested
- *                 size for alignment and fragmentation reasons.
- * @return A pointer to the allocated block.
- * @retval NULL if the block cannot be allocated.
+ * @param[in] heapp     pointer to a heap descriptor or @p NULL in order to
+ *                      access the default heap.
+ * @param[in] size      the size of the block to be allocated. Note that the
+ *                      allocated block may be a bit bigger than the requested
+ *                      size for alignment and fragmentation reasons.
+ * @return              A pointer to the allocated block.
+ * @retval NULL         if the block cannot be allocated.
  */
 void *chHeapAlloc(MemoryHeap *heapp, size_t size) {
-  struct heap_header *qp, *hp, *fp;
+  union heap_header *qp, *hp, *fp;
 
   if (heapp == NULL)
     heapp = &default_heap;
@@ -113,28 +124,24 @@ void *chHeapAlloc(MemoryHeap *heapp, size_t size) {
   qp = &heapp->h_free;
   H_LOCK(heapp);
 
-  while (qp->h_u.next != NULL) {
-    hp = qp->h_u.next;
-    if (hp->h_size >= size) {
-      if (hp->h_size < size + sizeof(struct heap_header)) {
-        /*
-         * Gets the whole block even if it is slightly bigger than the
-         * requested size because the fragment would be too small to be
-         * useful.
-         */
-        qp->h_u.next = hp->h_u.next;
+  while (qp->h.u.next != NULL) {
+    hp = qp->h.u.next;
+    if (hp->h.size >= size) {
+      if (hp->h.size < size + sizeof(union heap_header)) {
+        /* Gets the whole block even if it is slightly bigger than the
+           requested size because the fragment would be too small to be
+           useful.*/
+        qp->h.u.next = hp->h.u.next;
       }
       else {
-        /*
-         * Block bigger enough, must split it.
-         */
-        fp = (void *)((uint8_t *)(hp) + sizeof(struct heap_header) + size);
-        fp->h_u.next = hp->h_u.next;
-        fp->h_size = hp->h_size - sizeof(struct heap_header) - size;
-        qp->h_u.next = fp;
-        hp->h_size = size;
+        /* Block bigger enough, must split it.*/
+        fp = (void *)((uint8_t *)(hp) + sizeof(union heap_header) + size);
+        fp->h.u.next = hp->h.u.next;
+        fp->h.size = hp->h.size - sizeof(union heap_header) - size;
+        qp->h.u.next = fp;
+        hp->h.size = size;
       }
-      hp->h_u.heap = heapp;
+      hp->h.u.heap = heapp;
 
       H_UNLOCK(heapp);
       return (void *)(hp + 1);
@@ -144,14 +151,13 @@ void *chHeapAlloc(MemoryHeap *heapp, size_t size) {
 
   H_UNLOCK(heapp);
 
-  /*
-   * More memory is required, tries to get it from the associated provider.
-   */
+  /* More memory is required, tries to get it from the associated provider
+     else fails.*/
   if (heapp->h_provider) {
-    hp = heapp->h_provider(size + sizeof(struct heap_header));
+    hp = heapp->h_provider(size + sizeof(union heap_header));
     if (hp != NULL) {
-      hp->h_u.heap = heapp;
-      hp->h_size = size;
+      hp->h.u.heap = heapp;
+      hp->h.size = size;
       hp++;
       return (void *)hp;
     }
@@ -159,23 +165,23 @@ void *chHeapAlloc(MemoryHeap *heapp, size_t size) {
   return NULL;
 }
 
-#define LIMIT(p) (struct heap_header *)((uint8_t *)(p) + \
-                                        sizeof(struct heap_header) + \
-                                        (p)->h_size)
+#define LIMIT(p) (union heap_header *)((uint8_t *)(p) + \
+                                        sizeof(union heap_header) + \
+                                        (p)->h.size)
 
 /**
- * @brief Frees a previously allocated memory block.
+ * @brief   Frees a previously allocated memory block.
  *
- * @param[in] p the memory block pointer
+ * @param[in] p         pointer to the memory block to be freed
  */
 void chHeapFree(void *p) {
-  struct heap_header *qp, *hp;
+  union heap_header *qp, *hp;
   MemoryHeap *heapp;
 
   chDbgCheck(p != NULL, "chHeapFree");
 
-  hp = (struct heap_header *)p - 1;
-  heapp = hp->h_u.heap;
+  hp = (union heap_header *)p - 1;
+  heapp = hp->h.u.heap;
   qp = &heapp->h_free;
   H_LOCK(heapp);
 
@@ -185,32 +191,24 @@ void chHeapFree(void *p) {
                 "within free block");
 
     if (((qp == &heapp->h_free) || (hp > qp)) &&
-        ((qp->h_u.next == NULL) || (hp < qp->h_u.next))) {
-      /*
-       * Insertion after qp.
-       */
-      hp->h_u.next = qp->h_u.next;
-      qp->h_u.next = hp;
-      /*
-       * Verifies if the newly inserted block should be merged.
-       */
-      if (LIMIT(hp) == hp->h_u.next) {
-        /*
-         * Merge with the next block.
-         */
-        hp->h_size += hp->h_u.next->h_size + sizeof(struct heap_header);
-        hp->h_u.next = hp->h_u.next->h_u.next;
+        ((qp->h.u.next == NULL) || (hp < qp->h.u.next))) {
+      /* Insertion after qp.*/
+      hp->h.u.next = qp->h.u.next;
+      qp->h.u.next = hp;
+      /* Verifies if the newly inserted block should be merged.*/
+      if (LIMIT(hp) == hp->h.u.next) {
+        /* Merge with the next block.*/
+        hp->h.size += hp->h.u.next->h.size + sizeof(union heap_header);
+        hp->h.u.next = hp->h.u.next->h.u.next;
       }
       if ((LIMIT(qp) == hp)) {
-        /*
-         * Merge with the previous block.
-         */
-        qp->h_size += hp->h_size + sizeof(struct heap_header);
-        qp->h_u.next = hp->h_u.next;
+        /* Merge with the previous block.*/
+        qp->h.size += hp->h.size + sizeof(union heap_header);
+        qp->h.u.next = hp->h.u.next;
       }
       break;
     }
-    qp = qp->h_u.next;
+    qp = qp->h.u.next;
   }
 
   H_UNLOCK(heapp);
@@ -218,20 +216,20 @@ void chHeapFree(void *p) {
 }
 
 /**
- * @brief Reports the heap status.
+ * @brief   Reports the heap status.
+ * @note    This function is meant to be used in the test suite, it should
+ *          not be really useful for the application code.
+ * @note    This function is not implemented when the @p CH_USE_MALLOC_HEAP
+ *          configuration option is used (it always returns zero).
  *
- * @param[in] heapp pointer to a heap descriptor or @p NULL in order to access
- *                  the default heap.
- * @param[in] sizep pointer to a variable that will receive the total
- *                  fragmented free space
- * @return The number of fragments in the heap.
- * @note This function is meant to be used in the test suite, it should not be
- *       really useful for the application code.
- * @note This function is not implemented when the @p CH_USE_MALLOC_HEAP
- *       configuration option is used (it always returns zero).
+ * @param[in] heapp     pointer to a heap descriptor or @p NULL in order to
+ *                      access the default heap.
+ * @param[in] sizep     pointer to a variable that will receive the total
+ *                      fragmented free space
+ * @return              The number of fragments in the heap.
  */
 size_t chHeapStatus(MemoryHeap *heapp, size_t *sizep) {
-  struct heap_header *qp;
+  union heap_header *qp;
   size_t n, sz;
 
   if (heapp == NULL)
@@ -240,8 +238,8 @@ size_t chHeapStatus(MemoryHeap *heapp, size_t *sizep) {
   H_LOCK(heapp);
 
   sz = 0;
-  for (n = 0, qp = &heapp->h_free; qp->h_u.next; n++, qp = qp->h_u.next)
-    sz += qp->h_u.next->h_size;
+  for (n = 0, qp = &heapp->h_free; qp->h.u.next; n++, qp = qp->h.u.next)
+    sz += qp->h.u.next->h.size;
   if (sizep)
     *sizep = sz;
 

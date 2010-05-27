@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -78,7 +78,7 @@ int _read_r(struct _reent *r, int file, char * ptr, int len)
     __errno_r(r) = EINVAL;
     return -1;
   }
-  len = sdRead(&STDOUT_SD, (uint8_t *)ptr, (size_t)len);
+  len = sdRead(&STDIN_SD, (uint8_t *)ptr, (size_t)len);
   return len;
 #else
   (void)file;

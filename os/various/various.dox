@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -34,6 +34,15 @@
  * @brief C++ wrapper module.
  * @details This module allows to use the ChibiOS/RT functionalities
  * from C++ as classes and objects rather the traditional "C" APIs.
+ *
+ * @ingroup various
+ */
+
+/**
+ * @defgroup memory_streams Memory Streams
+ * @brief Memory Streams.
+ * @details This module allows to use a memory area (RAM or ROM) using a
+ * @ref data_streams interface.
  *
  * @ingroup various
  */

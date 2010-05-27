@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -22,6 +22,8 @@
 
 /**
  * @page test_benchmarks Kernel Benchmarks
+ *
+ * File: @ref testbmk.c
  *
  * <h2>Description</h2>
  * This module implements a series of system benchmarks. The benchmarks are
@@ -100,8 +102,8 @@ static unsigned int msg_loop_test(Thread *tp) {
  * printed in the output log.
  */
 
-static char *bmk1_gettest(void) 
-{
+static char *bmk1_gettest(void) {
+
   return "Benchmark, messages #1";
 }
 
@@ -110,7 +112,6 @@ static void bmk1_execute(void) {
 
   threads[0] = chThdCreateStatic(wa[0], WA_SIZE, chThdGetPriority()-1, thread1, NULL);
   n = msg_loop_test(threads[0]);
-  chThdTerminate(threads[0]);
   test_wait_threads();
   test_print("--- Score : ");
   test_printn(n);
@@ -121,8 +122,8 @@ static void bmk1_execute(void) {
 
 const struct testcase testbmk1 = {
   bmk1_gettest,
-  (void (*)(void)) NULL,
-  (void (*)(void)) NULL,
+  NULL,
+  NULL,
   bmk1_execute
 };
 
@@ -145,7 +146,6 @@ static void bmk2_execute(void) {
 
   threads[0] = chThdCreateStatic(wa[0], WA_SIZE, chThdGetPriority()+1, thread1, NULL);
   n = msg_loop_test(threads[0]);
-  chThdTerminate(threads[0]);
   test_wait_threads();
   test_print("--- Score : ");
   test_printn(n);
@@ -156,8 +156,8 @@ static void bmk2_execute(void) {
 
 const struct testcase testbmk2 = {
   bmk2_gettest,
-  (void (*)(void)) NULL,
-  (void (*)(void)) NULL,
+  NULL,
+  NULL,
   bmk2_execute
 };
 
@@ -190,7 +190,6 @@ static void bmk3_execute(void) {
   threads[3] = chThdCreateStatic(wa[3], WA_SIZE, chThdGetPriority()-4, thread2, NULL);
   threads[4] = chThdCreateStatic(wa[4], WA_SIZE, chThdGetPriority()-5, thread2, NULL);
   n = msg_loop_test(threads[0]);
-  chThdTerminate(threads[0]);
   test_wait_threads();
   test_print("--- Score : ");
   test_printn(n);
@@ -201,8 +200,8 @@ static void bmk3_execute(void) {
 
 const struct testcase testbmk3 = {
   bmk3_gettest,
-  (void (*)(void)) NULL,
-  (void (*)(void)) NULL,
+  NULL,
+  NULL,
   bmk3_execute
 };
 
@@ -235,16 +234,14 @@ msg_t thread4(void *p) {
   return 0;
 }
 
-static void bmk4_execute(void) 
-{
-Thread *tp;
-uint32_t n = 0;
+static void bmk4_execute(void) {
+  Thread *tp;
+  uint32_t n;
 
   tp = threads[0] = chThdCreateStatic(wa[0], WA_SIZE, chThdGetPriority()+1, thread4, NULL);
-
+  n = 0;
   test_wait_tick();
   test_start_timer(1000);
-
   do {
     chSysLock();
     chSchWakeupS(tp, RDY_OK);
@@ -269,8 +266,8 @@ uint32_t n = 0;
 
 const struct testcase testbmk4 = {
   bmk4_gettest,
-  (void (*)(void)) NULL,
-  (void (*)(void)) NULL,
+  NULL,
+  NULL,
   bmk4_execute
 };
 
@@ -311,8 +308,8 @@ static void bmk5_execute(void) {
 
 const struct testcase testbmk5 = {
   bmk5_gettest,
-  (void (*)(void)) NULL,
-  (void (*)(void)) NULL,
+  NULL,
+  NULL,
   bmk5_execute
 };
 
@@ -355,16 +352,16 @@ static void bmk6_execute(void) {
 
 const struct testcase testbmk6 = {
   bmk6_gettest,
-  (void (*)(void)) NULL,
-  (void (*)(void)) NULL,
+  NULL,
+  NULL,
   bmk6_execute
 };
 
 /**
- * @page test_benchmarks_007 Mass reschedulation performance
+ * @page test_benchmarks_007 Mass reschedule performance
  *
  * <h2>Description</h2>
- * Five threads are created and atomically reschedulated by resetting the
+ * Five threads are created and atomically rescheduled by resetting the
  * semaphore where they are waiting on. The operation is performed into a
  * continuous loop.<br>
  * The performance is calculated by measuring the number of iterations after
@@ -381,7 +378,7 @@ static msg_t thread3(void *p) {
 
 static char *bmk7_gettest(void) {
 
-  return "Benchmark, mass reschedulation, 5 threads";
+  return "Benchmark, mass reschedule, 5 threads";
 }
 
 static void bmk7_setup(void) {
@@ -414,7 +411,7 @@ static void bmk7_execute(void) {
 
   test_print("--- Score : ");
   test_printn(n);
-  test_print(" reschedulations/S, ");
+  test_print(" reschedules/S, ");
   test_printn(n * 6);
   test_println(" ctxswc/S");
 }
@@ -422,12 +419,12 @@ static void bmk7_execute(void) {
 const struct testcase testbmk7 = {
   bmk7_gettest,
   bmk7_setup,
-  (void (*)(void)) NULL,
+  NULL,
   bmk7_execute
 };
 
 /**
- * @page test_benchmarks_008 I/O Round-Robin voluntary reschedulation.
+ * @page test_benchmarks_008 I/O Round-Robin voluntary reschedule.
  *
  * <h2>Description</h2>
  * Five threads are created at equal priority, each thread just increases a
@@ -474,15 +471,13 @@ static void bmk8_execute(void) {
 
   test_print("--- Score : ");
   test_printn(n);
-  test_print(" reschedulations/S, ");
-  test_printn(n);
   test_println(" ctxswc/S");
 }
 
 const struct testcase testbmk8 = {
   bmk8_gettest,
-  (void (*)(void)) NULL,
-  (void (*)(void)) NULL,
+  NULL,
+  NULL,
   bmk8_execute
 };
 
@@ -502,12 +497,12 @@ static char *bmk9_gettest(void) {
 }
 
 static void bmk9_execute(void) {
+  uint32_t n;
   static uint8_t ib[16];
   static InputQueue iq;
-  uint32_t n = 0;
 
-  chIQInit(&iq, ib, sizeof(ib), (qnotify_t) NULL);
-  
+  chIQInit(&iq, ib, sizeof(ib), NULL);
+  n = 0;
   test_wait_tick();
   test_start_timer(1000);
   do {
@@ -531,8 +526,8 @@ static void bmk9_execute(void) {
 
 const struct testcase testbmk9 = {
   bmk9_gettest,
-  (void (*)(void)) NULL,
-  (void (*)(void)) NULL,
+  NULL,
+  NULL,
   bmk9_execute
 };
 
@@ -577,8 +572,8 @@ static void bmk10_execute(void) {
 
 const struct testcase testbmk10 = {
   bmk10_gettest,
-  (void (*)(void)) NULL,
-  (void (*)(void)) NULL,
+  NULL,
+  NULL,
   bmk10_execute
 };
 
@@ -629,7 +624,7 @@ static void bmk11_execute(void) {
 const struct testcase testbmk11 = {
   bmk11_gettest,
   bmk11_setup,
-  (void (*)(void)) NULL,
+  NULL,
   bmk11_execute
 };
 
@@ -681,7 +676,7 @@ static void bmk12_execute(void) {
 const struct testcase testbmk12 = {
   bmk12_gettest,
   bmk12_setup,
-  (void (*)(void)) NULL,
+  NULL,
   bmk12_execute
 };
 #endif
@@ -746,13 +741,13 @@ static void bmk13_execute(void) {
 
 const struct testcase testbmk13 = {
   bmk13_gettest,
-  (void (*)(void)) NULL,
-  (void (*)(void)) NULL,
+  NULL,
+  NULL,
   bmk13_execute
 };
 
-/*
- * Test sequence for benchmarks pattern.
+/**
+ * @brief   Test sequence for benchmarks.
  */
 const struct testcase * const patternbmk[] = {
 #if !TEST_NO_BENCHMARKS

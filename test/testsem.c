@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -22,6 +22,8 @@
 
 /**
  * @page test_sem Semaphores test
+ *
+ * File: @ref testsem.c
  *
  * <h2>Description</h2>
  * This module implements the test sequence for the @ref semaphores subsystem.
@@ -242,8 +244,8 @@ const struct testcase testsem3 = {
 #endif /* CH_USE_SEMSW */
 #endif /* CH_USE_SEMAPHORES */
 
-/*
- * Test sequence for semaphores pattern.
+/**
+ * @brief   Test sequence for semaphores.
  */
 const struct testcase * const patternsem[] = {
 #if CH_USE_SEMAPHORES

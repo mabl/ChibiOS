@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -22,6 +22,8 @@
 
 /**
  * @page test_heap Memory Heap test
+ *
+ * File: @ref testheap.c
  *
  * <h2>Description</h2>
  * This module implements the test sequence for the @ref heaps subsystem.
@@ -76,6 +78,9 @@ static void heap1_execute(void) {
   void *p1, *p2, *p3;
   size_t n, sz;
 
+  /* Unrelated, for coverage only.*/
+  (void)chCoreStatus();
+
   /*
    * Test on the default heap in order to cover the core allocator at
    * least one time.
@@ -114,7 +119,10 @@ static void heap1_execute(void) {
   chHeapFree(p1);
   test_assert(5, chHeapStatus(&test_heap, &n) == 2, "invalid state");
   p1 = chHeapAlloc(&test_heap, SIZE);
-  test_assert(6, chHeapStatus(&test_heap, &n) == 1, "heap fragmented");
+  /* Note, the first situation happens when the alignment size is smaller
+     than the header size, the second in the other cases.*/
+  test_assert(6, (chHeapStatus(&test_heap, &n) == 1) ||
+                 (chHeapStatus(&test_heap, &n) == 2), "heap fragmented");
   chHeapFree(p2);
   chHeapFree(p1);
   test_assert(7, chHeapStatus(&test_heap, &n) == 1, "heap fragmented");
@@ -148,8 +156,8 @@ const struct testcase testheap1 = {
 
 #endif /* CH_USE_HEAP.*/
 
-/*
- * Test sequence for heap pattern.
+/**
+ * @brief   Test sequence for heap.
  */
 const struct testcase * const patternheap[] = {
 #if CH_USE_HEAP

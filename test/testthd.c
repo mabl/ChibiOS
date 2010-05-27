@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -22,6 +22,8 @@
 
 /**
  * @page test_threads Threads and Scheduler test
+ *
+ * File: @ref testthd.c
  *
  * <h2>Description</h2>
  * This module implements the test sequence for the @ref scheduler,
@@ -236,8 +238,8 @@ const struct testcase testthd4 = {
   thd4_execute
 };
 
-/*
- * Test sequence for threads patterns.
+/**
+ * @brief   Test sequence for threads.
  */
 const struct testcase * const patternthd[] = {
   &testthd1,
