@@ -86,7 +86,7 @@
  * @note    Requires @p CH_USE_COREMEM.
  */
 #if !defined(CH_MEMCORE_SIZE) || defined(__DOXYGEN__)
-#define CH_MEMCORE_SIZE                 3072
+#define CH_MEMCORE_SIZE                 512
 #endif
 
 /*===========================================================================*/

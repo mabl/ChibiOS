@@ -14,7 +14,7 @@ Toolset=STM8 Cosmic
 
 [Config.0]
 ConfigName=Debug
-Target=cosmic.elf
+Target=$(ProjectSFile).elf
 OutputFolder=Debug
 Debug=$(TargetFName)
 
@@ -54,19 +54,19 @@ Settings.1.7=Root.Config.1.Settings.7
 Settings.1.8=Root.Config.1.Settings.8
 
 [Root.Config.0.Settings.0]
-String.6.0=2010,5,25,14,45,56
+String.6.0=2010,5,29,12,43,54
 String.100.0=ST Assembler Linker
 String.100.1=ST7 Cosmic
 String.100.2=STM8 Cosmic
 String.100.3=ST7 Metrowerks V1.1
 String.100.4=Raisonance
 String.101.0=STM8 Cosmic
-String.102.0=C:\Program Files\COSMIC\CXSTM8_32K
+String.102.0=C:\Programmi\COSMIC\CXSTM8_16K
 String.103.0=
 String.104.0=Hstm8
 String.105.0=Lib
 String.106.0=Debug
-String.107.0=cosmic.elf
+String.107.0=$(ProjectSFile).elf
 Int.108=0
 
 [Root.Config.0.Settings.1]
@@ -83,10 +83,10 @@ String.100.0=STM8S105C6
 
 [Root.Config.0.Settings.3]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 -i..\..\..\os\hal\include  -i..\..\..\os\hal\platforms\stm8  -i..\..\..\boards\st_stm8s_discovery  +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,5,26,14,8,57
+String.6.0=2010,5,29,12,43,54
 
 [Root.Config.0.Settings.4]
 String.2.0=Assembling $(InputFile)...
@@ -102,27 +102,28 @@ String.8.0=
 
 [Root.Config.0.Settings.6]
 String.2.0=Running Linker
-String.3.0=clnk -customMapFile -customMapFile-m $(OutputPath)$(TargetSName).map -fakeRunConv -fakeInteger -fakeSemiAutoGen $(ToolsetLibOpts) -o $(OutputPath)$(TargetSName).sm8 -fakeOutFile$(ProjectSFile).elf -customCfgFile $(OutputPath)$(TargetSName).lkf -fakeVectFilestm8_interrupt_vector.c -fakeStartupcrtsi0.sm8 
-String.3.1=cvdwarf $(OutputPath)$(TargetSName).sm8 -fakeVectAddr0x8000
+String.3.0=clnk $(ToolsetLibOpts) -o $(OutputPath)$(TargetSName).sm8 -fakeInteger -fakeOutFile$(ProjectSFile).elf -fakeRunConv -fakeStartupcrtsi0.sm8 -fakeSemiAutoGen -fakeVectFilestm8_interrupt_vector.c -fakeVectAddr0x8000 -customMapFile -customMapFile-m$(OutputPath)$(TargetSName).map -customMapAddress -customCfgFile$(OutputPath)$(TargetSName).lkf 
+String.3.1=cvdwarf $(OutputPath)$(TargetSName).sm8
 String.4.0=$(OutputPath)$(TargetFName)
-String.5.0=
-String.6.0=2010,5,26,14,9,12
+String.5.0=$(OutputPath)$(ProjectSFile).elf $(OutputPath)$(TargetSName).map
+String.6.0=2010,5,29,12,52,54
 String.100.0=
 String.101.0=crtsi.st7
-String.102.0=+seg .const -b 0x8080 -m 0x7f80  -n .const -it 
-String.102.1=+seg .text -a .const  -n .text 
-String.102.2=+seg .eeprom -b 0x4000 -m 0x400  -n .eeprom 
-String.102.3=+seg .bsct -b 0x0 -m 0x100  -n .bsct 
-String.102.4=+seg .ubsct -a .bsct  -n .ubsct 
-String.102.5=+seg .bit -a .ubsct  -n .bit -id 
-String.102.6=+seg .share -a .bit  -n .share -is 
-String.102.7=+seg .data -b 0x100 -m 0x500  -n .data 
-String.102.8=+seg .bss -a .data  -n .bss 
+String.102.0=+seg .const -b 0x8080 -m 0x7f80 -n .const -it
+String.102.1=+seg .text -a .const -n .text
+String.102.2=+seg .eeprom -b 0x4000 -m 0x400 -n .eeprom
+String.102.3=+seg .bsct -b 0x0 -m 0x100 -n .bsct
+String.102.4=+seg .ubsct -a .bsct -n .ubsct
+String.102.5=+seg .bit -a .ubsct -n .bit -id
+String.102.6=+seg .share -a .bit -n .share -is
+String.102.7=+seg .data -b 0x100 -m 0x700 -n .data
+String.102.8=+seg .bss -a .data -n .bss
 String.103.0=Code,Constants[0x8080-0xffff]=.const,.text
 String.103.1=Eeprom[0x4000-0x43ff]=.eeprom
 String.103.2=Zero Page[0x0-0xff]=.bsct,.ubsct,.bit,.share
-String.103.3=Ram[0x100-0x5ff]=.data,.bss
+String.103.3=Ram[0x100-0x7ff]=.data,.bss
 String.104.0=0x7ff
+String.105.0=libisl0.sm8;libm0.sm8
 Int.0=0
 Int.1=0
 
@@ -143,7 +144,7 @@ String.100.2=STM8 Cosmic
 String.100.3=ST7 Metrowerks V1.1
 String.100.4=Raisonance
 String.101.0=STM8 Cosmic
-String.102.0=C:\Program Files\COSMIC\CXSTM8_32K
+String.102.0=C:\Programmi\COSMIC\CXSTM8_16K
 String.103.0=
 String.104.0=Hstm8
 String.105.0=Lib
@@ -218,7 +219,7 @@ String.6.0=2010,5,25,14,45,56
 [Root.Source Files]
 ElemType=Folder
 PathName=Source Files
-Child=Root.Source Files.Source Files\os
+Child=Root.Source Files.Source Files\board
 Next=Root.Include Files
 Config.0=Root.Source Files.Config.0
 Config.1=Root.Source Files.Config.1
@@ -243,10 +244,10 @@ Int.1=0
 
 [Root.Source Files.Config.0.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 -i..\..\..\os\hal\include  -i..\..\..\os\hal\platforms\stm8  -i..\..\..\boards\st_stm8s_discovery  +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,5,26,14,8,57
+String.6.0=2010,5,29,12,43,54
 
 [Root.Source Files.Config.0.Settings.2]
 String.2.0=Assembling $(InputFile)...
@@ -289,21 +290,21 @@ String.4.0=
 String.5.0=
 String.6.0=2010,5,25,14,45,56
 
+[Root.Source Files.Source Files\board]
+ElemType=Folder
+PathName=Source Files\board
+Child=Root.Source Files.Source Files\board...\..\..\boards\st_stm8s_discovery\board.c
+Next=Root.Source Files.Source Files\os
+
+[Root.Source Files.Source Files\board...\..\..\boards\st_stm8s_discovery\board.c]
+ElemType=File
+PathName=..\..\..\boards\st_stm8s_discovery\board.c
+
 [Root.Source Files.Source Files\os]
 ElemType=Folder
 PathName=Source Files\os
-Child=Root.Source Files.Source Files\os.Source Files\os\board
+Child=Root.Source Files.Source Files\os.Source Files\os\kernel
 Next=Root.Source Files.main.c
-
-[Root.Source Files.Source Files\os.Source Files\os\board]
-ElemType=Folder
-PathName=Source Files\os\board
-Child=Root.Source Files.Source Files\os.Source Files\os\board...\..\..\boards\st_stm8s_discovery\board.c
-Next=Root.Source Files.Source Files\os.Source Files\os\kernel
-
-[Root.Source Files.Source Files\os.Source Files\os\board...\..\..\boards\st_stm8s_discovery\board.c]
-ElemType=File
-PathName=..\..\..\boards\st_stm8s_discovery\board.c
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel]
 ElemType=Folder
@@ -416,7 +417,7 @@ PathName=stm8_interrupt_vector.c
 [Root.Include Files]
 ElemType=Folder
 PathName=Include Files
-Child=Root.Include Files.Include Files\os
+Child=Root.Include Files.Include Files\board
 Config.0=Root.Include Files.Config.0
 Config.1=Root.Include Files.Config.1
 
@@ -440,10 +441,10 @@ Int.1=0
 
 [Root.Include Files.Config.0.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 -i..\..\..\os\hal\include  -i..\..\..\os\hal\platforms\stm8  -i..\..\..\boards\st_stm8s_discovery  +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,5,26,14,8,57
+String.6.0=2010,5,29,12,43,54
 
 [Root.Include Files.Config.0.Settings.2]
 String.2.0=Assembling $(InputFile)...
@@ -486,20 +487,21 @@ String.4.0=
 String.5.0=
 String.6.0=2010,5,25,14,45,56
 
+[Root.Include Files.Include Files\board]
+ElemType=Folder
+PathName=Include Files\board
+Child=Root.Include Files.Include Files\board...\..\..\boards\st_stm8s_discovery\board.h
+Next=Root.Include Files.Include Files\os
+
+[Root.Include Files.Include Files\board...\..\..\boards\st_stm8s_discovery\board.h]
+ElemType=File
+PathName=..\..\..\boards\st_stm8s_discovery\board.h
+
 [Root.Include Files.Include Files\os]
 ElemType=Folder
 PathName=Include Files\os
-Child=Root.Include Files.Include Files\os.Include Files\os\board
-
-[Root.Include Files.Include Files\os.Include Files\os\board]
-ElemType=Folder
-PathName=Include Files\os\board
-Child=Root.Include Files.Include Files\os.Include Files\os\board...\..\..\boards\st_stm8s_discovery\board.h
-Next=Root.Include Files.Include Files\os.Include Files\os\hal
-
-[Root.Include Files.Include Files\os.Include Files\os\board...\..\..\boards\st_stm8s_discovery\board.h]
-ElemType=File
-PathName=..\..\..\boards\st_stm8s_discovery\board.h
+Child=Root.Include Files.Include Files\os.Include Files\os\hal
+Next=Root.Include Files.chconf.h
 
 [Root.Include Files.Include Files\os.Include Files\os\hal]
 ElemType=Folder
@@ -714,3 +716,7 @@ Next=Root.Include Files.Include Files\os.Include Files\os\port...\..\..\os\ports
 [Root.Include Files.Include Files\os.Include Files\os\port...\..\..\os\ports\cosmic\stm8\chtypes.h]
 ElemType=File
 PathName=..\..\..\os\ports\cosmic\stm8\chtypes.h
+
+[Root.Include Files.chconf.h]
+ElemType=File
+PathName=chconf.h
