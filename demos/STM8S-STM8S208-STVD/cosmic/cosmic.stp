@@ -1,0 +1,716 @@
+;	STMicroelectronics Project file
+
+[Version]
+Keyword=ST7Project
+Number=1.3
+
+[Project]
+Name=cosmic
+Toolset=STM8 Cosmic
+
+[Config]
+0=Config.0
+1=Config.1
+
+[Config.0]
+ConfigName=Debug
+Target=cosmic.elf
+OutputFolder=Debug
+Debug=$(TargetFName)
+
+[Config.1]
+ConfigName=Release
+Target=cosmic.elf
+OutputFolder=Release
+Debug=$(TargetFName)
+
+[Root]
+ElemType=Project
+PathName=cosmic
+Child=Root.Source Files
+Config.0=Root.Config.0
+Config.1=Root.Config.1
+
+[Root.Config.0]
+Settings.0.0=Root.Config.0.Settings.0
+Settings.0.1=Root.Config.0.Settings.1
+Settings.0.2=Root.Config.0.Settings.2
+Settings.0.3=Root.Config.0.Settings.3
+Settings.0.4=Root.Config.0.Settings.4
+Settings.0.5=Root.Config.0.Settings.5
+Settings.0.6=Root.Config.0.Settings.6
+Settings.0.7=Root.Config.0.Settings.7
+Settings.0.8=Root.Config.0.Settings.8
+
+[Root.Config.1]
+Settings.1.0=Root.Config.1.Settings.0
+Settings.1.1=Root.Config.1.Settings.1
+Settings.1.2=Root.Config.1.Settings.2
+Settings.1.3=Root.Config.1.Settings.3
+Settings.1.4=Root.Config.1.Settings.4
+Settings.1.5=Root.Config.1.Settings.5
+Settings.1.6=Root.Config.1.Settings.6
+Settings.1.7=Root.Config.1.Settings.7
+Settings.1.8=Root.Config.1.Settings.8
+
+[Root.Config.0.Settings.0]
+String.6.0=2010,5,25,14,45,56
+String.100.0=ST Assembler Linker
+String.100.1=ST7 Cosmic
+String.100.2=STM8 Cosmic
+String.100.3=ST7 Metrowerks V1.1
+String.100.4=Raisonance
+String.101.0=STM8 Cosmic
+String.102.0=C:\Program Files\COSMIC\CXSTM8_32K
+String.103.0=
+String.104.0=Hstm8
+String.105.0=Lib
+String.106.0=Debug
+String.107.0=cosmic.elf
+Int.108=0
+
+[Root.Config.0.Settings.1]
+String.6.0=2010,5,25,14,45,56
+String.100.0=$(TargetFName)
+String.101.0=
+String.102.0=
+String.103.0=.\;..\..\..\os\kernel\src;..\..\..\os\kernel\include;..\..\..\os\ports\cosmic\stm8;..\..\..\boards\st_stm8s_discovery;..\..\..\os\hal\platforms\stm8;..\..\..\os\hal\include;
+
+[Root.Config.0.Settings.2]
+String.2.0=
+String.6.0=2010,5,25,14,45,56
+String.100.0=STM8S105C6
+
+[Root.Config.0.Settings.3]
+String.2.0=Compiling $(InputFile)...
+String.3.0=cxstm8 -i..\..\..\os\hal\include  -i..\..\..\os\hal\platforms\stm8  -i..\..\..\boards\st_stm8s_discovery  +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
+String.5.0=$(IntermPath)$(InputName).ls
+String.6.0=2010,5,26,14,8,57
+
+[Root.Config.0.Settings.4]
+String.2.0=Assembling $(InputFile)...
+String.3.0=castm8 -xx -l $(ToolsetIncOpts) -o$(IntermPath)$(InputName).$(ObjectExt) $(InputFile)
+String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
+String.5.0=$(IntermPath)$(InputName).ls
+String.6.0=2010,5,25,14,45,56
+
+[Root.Config.0.Settings.5]
+String.2.0=Running Pre-Link step
+String.6.0=2010,5,25,14,45,56
+String.8.0=
+
+[Root.Config.0.Settings.6]
+String.2.0=Running Linker
+String.3.0=clnk -customMapFile -customMapFile-m $(OutputPath)$(TargetSName).map -fakeRunConv -fakeInteger -fakeSemiAutoGen $(ToolsetLibOpts) -o $(OutputPath)$(TargetSName).sm8 -fakeOutFile$(ProjectSFile).elf -customCfgFile $(OutputPath)$(TargetSName).lkf -fakeVectFilestm8_interrupt_vector.c -fakeStartupcrtsi0.sm8 
+String.3.1=cvdwarf $(OutputPath)$(TargetSName).sm8 -fakeVectAddr0x8000
+String.4.0=$(OutputPath)$(TargetFName)
+String.5.0=
+String.6.0=2010,5,26,14,9,12
+String.100.0=
+String.101.0=crtsi.st7
+String.102.0=+seg .const -b 0x8080 -m 0x7f80  -n .const -it 
+String.102.1=+seg .text -a .const  -n .text 
+String.102.2=+seg .eeprom -b 0x4000 -m 0x400  -n .eeprom 
+String.102.3=+seg .bsct -b 0x0 -m 0x100  -n .bsct 
+String.102.4=+seg .ubsct -a .bsct  -n .ubsct 
+String.102.5=+seg .bit -a .ubsct  -n .bit -id 
+String.102.6=+seg .share -a .bit  -n .share -is 
+String.102.7=+seg .data -b 0x100 -m 0x500  -n .data 
+String.102.8=+seg .bss -a .data  -n .bss 
+String.103.0=Code,Constants[0x8080-0xffff]=.const,.text
+String.103.1=Eeprom[0x4000-0x43ff]=.eeprom
+String.103.2=Zero Page[0x0-0xff]=.bsct,.ubsct,.bit,.share
+String.103.3=Ram[0x100-0x5ff]=.data,.bss
+String.104.0=0x7ff
+Int.0=0
+Int.1=0
+
+[Root.Config.0.Settings.7]
+String.2.0=Running Post-Build step
+String.3.0=chex -o $(OutputPath)$(TargetSName).s19 $(OutputPath)$(TargetSName).sm8
+String.6.0=2010,5,25,14,45,56
+
+[Root.Config.0.Settings.8]
+String.2.0=Performing Custom Build on $(InputFile)
+String.6.0=2010,5,25,14,45,56
+
+[Root.Config.1.Settings.0]
+String.6.0=2010,5,25,14,45,56
+String.100.0=ST Assembler Linker
+String.100.1=ST7 Cosmic
+String.100.2=STM8 Cosmic
+String.100.3=ST7 Metrowerks V1.1
+String.100.4=Raisonance
+String.101.0=STM8 Cosmic
+String.102.0=C:\Program Files\COSMIC\CXSTM8_32K
+String.103.0=
+String.104.0=Hstm8
+String.105.0=Lib
+String.106.0=Release
+String.107.0=cosmic.elf
+Int.108=0
+
+[Root.Config.1.Settings.1]
+String.6.0=2010,5,25,14,45,56
+String.100.0=$(TargetFName)
+String.101.0=
+String.103.0=.\;..\..\..\os\kernel\src;..\..\..\os\kernel\include;..\..\..\os\ports\cosmic\stm8;..\..\..\boards\st_stm8s_discovery;..\..\..\os\hal\platforms\stm8;..\..\..\os\hal\include;
+
+[Root.Config.1.Settings.2]
+String.2.0=
+String.6.0=2010,5,25,14,45,56
+String.100.0=STM8S105C6
+
+[Root.Config.1.Settings.3]
+String.2.0=Compiling $(InputFile)...
+String.3.0=cxstm8 -i..\..\..\os\hal\include  -i..\..\..\os\hal\platforms\stm8  -i..\..\..\boards\st_stm8s_discovery  +modsl0 -customC-pp -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
+String.5.0=$(IntermPath)$(InputName).ls
+String.6.0=2010,5,26,14,9,12
+
+[Root.Config.1.Settings.4]
+String.2.0=Assembling $(InputFile)...
+String.3.0=castm8 $(ToolsetIncOpts) -o$(IntermPath)$(InputName).$(ObjectExt) $(InputFile)
+String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
+String.5.0=$(IntermPath)$(InputName).ls
+String.6.0=2010,5,25,14,45,56
+
+[Root.Config.1.Settings.5]
+String.2.0=Running Pre-Link step
+String.6.0=2010,5,25,14,45,56
+
+[Root.Config.1.Settings.6]
+String.2.0=Running Linker
+String.3.0=clnk -fakeRunConv -fakeInteger -fakeSemiAutoGen $(ToolsetLibOpts) -o $(OutputPath)$(TargetSName).sm8 -fakeOutFile$(ProjectSFile).elf -customCfgFile $(OutputPath)$(TargetSName).lkf -fakeVectFilestm8_interrupt_vector.c -fakeStartupcrtsi0.sm8 
+String.3.1=cvdwarf $(OutputPath)$(TargetSName).sm8 -fakeVectAddr0x8000
+String.4.0=$(OutputPath)$(TargetFName)
+String.5.0=
+String.6.0=2010,5,26,14,10,16
+String.100.0=
+String.101.0=crtsi.st7
+String.102.0=+seg .const -b 0x8080 -m 0x7f80  -n .const -it 
+String.102.1=+seg .text -a .const  -n .text 
+String.102.2=+seg .eeprom -b 0x4000 -m 0x400  -n .eeprom 
+String.102.3=+seg .bsct -b 0x0 -m 0x100  -n .bsct 
+String.102.4=+seg .ubsct -a .bsct  -n .ubsct 
+String.102.5=+seg .bit -a .ubsct  -n .bit -id 
+String.102.6=+seg .share -a .bit  -n .share -is 
+String.102.7=+seg .data -b 0x100 -m 0x500  -n .data 
+String.102.8=+seg .bss -a .data  -n .bss 
+String.103.0=Code,Constants[0x8080-0xffff]=.const,.text
+String.103.1=Eeprom[0x4000-0x43ff]=.eeprom
+String.103.2=Zero Page[0x0-0xff]=.bsct,.ubsct,.bit,.share
+String.103.3=Ram[0x100-0x5ff]=.data,.bss
+String.104.0=0x7ff
+Int.0=0
+Int.1=0
+
+[Root.Config.1.Settings.7]
+String.2.0=Running Post-Build step
+String.3.0=chex -o $(OutputPath)$(TargetSName).s19 $(OutputPath)$(TargetSName).sm8
+String.6.0=2010,5,25,14,45,56
+
+[Root.Config.1.Settings.8]
+String.2.0=Performing Custom Build on $(InputFile)
+String.6.0=2010,5,25,14,45,56
+
+[Root.Source Files]
+ElemType=Folder
+PathName=Source Files
+Child=Root.Source Files.Source Files\os
+Next=Root.Include Files
+Config.0=Root.Source Files.Config.0
+Config.1=Root.Source Files.Config.1
+
+[Root.Source Files.Config.0]
+Settings.0.0=Root.Source Files.Config.0.Settings.0
+Settings.0.1=Root.Source Files.Config.0.Settings.1
+Settings.0.2=Root.Source Files.Config.0.Settings.2
+Settings.0.3=Root.Source Files.Config.0.Settings.3
+
+[Root.Source Files.Config.1]
+Settings.1.0=Root.Source Files.Config.1.Settings.0
+Settings.1.1=Root.Source Files.Config.1.Settings.1
+Settings.1.2=Root.Source Files.Config.1.Settings.2
+Settings.1.3=Root.Source Files.Config.1.Settings.3
+
+[Root.Source Files.Config.0.Settings.0]
+String.6.0=2010,5,25,14,45,56
+String.8.0=Debug
+Int.0=0
+Int.1=0
+
+[Root.Source Files.Config.0.Settings.1]
+String.2.0=Compiling $(InputFile)...
+String.3.0=cxstm8 -i..\..\..\os\hal\include  -i..\..\..\os\hal\platforms\stm8  -i..\..\..\boards\st_stm8s_discovery  +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
+String.5.0=$(IntermPath)$(InputName).ls
+String.6.0=2010,5,26,14,8,57
+
+[Root.Source Files.Config.0.Settings.2]
+String.2.0=Assembling $(InputFile)...
+String.3.0=castm8 -xx -l $(ToolsetIncOpts) -o$(IntermPath)$(InputName).$(ObjectExt) $(InputFile)
+String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
+String.5.0=$(IntermPath)$(InputName).ls
+String.6.0=2010,5,25,14,45,56
+
+[Root.Source Files.Config.0.Settings.3]
+String.2.0=Performing Custom Build on $(InputFile)
+String.3.0=
+String.4.0=
+String.5.0=
+String.6.0=2010,5,25,14,45,56
+
+[Root.Source Files.Config.1.Settings.0]
+String.6.0=2010,5,25,14,45,56
+String.8.0=Release
+Int.0=0
+Int.1=0
+
+[Root.Source Files.Config.1.Settings.1]
+String.2.0=Compiling $(InputFile)...
+String.3.0=cxstm8 -i..\..\..\os\hal\include  -i..\..\..\os\hal\platforms\stm8  -i..\..\..\boards\st_stm8s_discovery  +modsl0 -customC-pp -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
+String.5.0=$(IntermPath)$(InputName).ls
+String.6.0=2010,5,26,14,9,12
+
+[Root.Source Files.Config.1.Settings.2]
+String.2.0=Assembling $(InputFile)...
+String.3.0=castm8 $(ToolsetIncOpts) -o$(IntermPath)$(InputName).$(ObjectExt) $(InputFile)
+String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
+String.5.0=$(IntermPath)$(InputName).ls
+String.6.0=2010,5,25,14,45,56
+
+[Root.Source Files.Config.1.Settings.3]
+String.2.0=Performing Custom Build on $(InputFile)
+String.3.0=
+String.4.0=
+String.5.0=
+String.6.0=2010,5,25,14,45,56
+
+[Root.Source Files.Source Files\os]
+ElemType=Folder
+PathName=Source Files\os
+Child=Root.Source Files.Source Files\os.Source Files\os\board
+Next=Root.Source Files.main.c
+
+[Root.Source Files.Source Files\os.Source Files\os\board]
+ElemType=Folder
+PathName=Source Files\os\board
+Child=Root.Source Files.Source Files\os.Source Files\os\board...\..\..\boards\st_stm8s_discovery\board.c
+Next=Root.Source Files.Source Files\os.Source Files\os\kernel
+
+[Root.Source Files.Source Files\os.Source Files\os\board...\..\..\boards\st_stm8s_discovery\board.c]
+ElemType=File
+PathName=..\..\..\boards\st_stm8s_discovery\board.c
+
+[Root.Source Files.Source Files\os.Source Files\os\kernel]
+ElemType=Folder
+PathName=Source Files\os\kernel
+Child=Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chcond.c
+Next=Root.Source Files.Source Files\os.Source Files\os\port
+
+[Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chcond.c]
+ElemType=File
+PathName=..\..\..\os\kernel\src\chcond.c
+Next=Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chdebug.c
+
+[Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chdebug.c]
+ElemType=File
+PathName=..\..\..\os\kernel\src\chdebug.c
+Next=Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chevents.c
+
+[Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chevents.c]
+ElemType=File
+PathName=..\..\..\os\kernel\src\chevents.c
+Next=Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chheap.c
+
+[Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chheap.c]
+ElemType=File
+PathName=..\..\..\os\kernel\src\chheap.c
+Next=Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chlists.c
+
+[Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chlists.c]
+ElemType=File
+PathName=..\..\..\os\kernel\src\chlists.c
+Next=Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmboxes.c
+
+[Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmboxes.c]
+ElemType=File
+PathName=..\..\..\os\kernel\src\chmboxes.c
+Next=Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmemcore.c
+
+[Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmemcore.c]
+ElemType=File
+PathName=..\..\..\os\kernel\src\chmemcore.c
+Next=Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmempools.c
+
+[Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmempools.c]
+ElemType=File
+PathName=..\..\..\os\kernel\src\chmempools.c
+Next=Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmsg.c
+
+[Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmsg.c]
+ElemType=File
+PathName=..\..\..\os\kernel\src\chmsg.c
+Next=Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmtx.c
+
+[Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmtx.c]
+ElemType=File
+PathName=..\..\..\os\kernel\src\chmtx.c
+Next=Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chqueues.c
+
+[Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chqueues.c]
+ElemType=File
+PathName=..\..\..\os\kernel\src\chqueues.c
+Next=Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chregistry.c
+
+[Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chregistry.c]
+ElemType=File
+PathName=..\..\..\os\kernel\src\chregistry.c
+Next=Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chschd.c
+
+[Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chschd.c]
+ElemType=File
+PathName=..\..\..\os\kernel\src\chschd.c
+Next=Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chsem.c
+
+[Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chsem.c]
+ElemType=File
+PathName=..\..\..\os\kernel\src\chsem.c
+Next=Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chsys.c
+
+[Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chsys.c]
+ElemType=File
+PathName=..\..\..\os\kernel\src\chsys.c
+Next=Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chthreads.c
+
+[Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chthreads.c]
+ElemType=File
+PathName=..\..\..\os\kernel\src\chthreads.c
+Next=Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chvt.c
+
+[Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chvt.c]
+ElemType=File
+PathName=..\..\..\os\kernel\src\chvt.c
+
+[Root.Source Files.Source Files\os.Source Files\os\port]
+ElemType=Folder
+PathName=Source Files\os\port
+Child=Root.Source Files.Source Files\os.Source Files\os\port...\..\..\os\ports\cosmic\stm8\chcore.c
+
+[Root.Source Files.Source Files\os.Source Files\os\port...\..\..\os\ports\cosmic\stm8\chcore.c]
+ElemType=File
+PathName=..\..\..\os\ports\cosmic\stm8\chcore.c
+
+[Root.Source Files.main.c]
+ElemType=File
+PathName=main.c
+Next=Root.Source Files.stm8_interrupt_vector.c
+
+[Root.Source Files.stm8_interrupt_vector.c]
+ElemType=File
+PathName=stm8_interrupt_vector.c
+
+[Root.Include Files]
+ElemType=Folder
+PathName=Include Files
+Child=Root.Include Files.Include Files\os
+Config.0=Root.Include Files.Config.0
+Config.1=Root.Include Files.Config.1
+
+[Root.Include Files.Config.0]
+Settings.0.0=Root.Include Files.Config.0.Settings.0
+Settings.0.1=Root.Include Files.Config.0.Settings.1
+Settings.0.2=Root.Include Files.Config.0.Settings.2
+Settings.0.3=Root.Include Files.Config.0.Settings.3
+
+[Root.Include Files.Config.1]
+Settings.1.0=Root.Include Files.Config.1.Settings.0
+Settings.1.1=Root.Include Files.Config.1.Settings.1
+Settings.1.2=Root.Include Files.Config.1.Settings.2
+Settings.1.3=Root.Include Files.Config.1.Settings.3
+
+[Root.Include Files.Config.0.Settings.0]
+String.6.0=2010,5,25,14,45,56
+String.8.0=Debug
+Int.0=0
+Int.1=0
+
+[Root.Include Files.Config.0.Settings.1]
+String.2.0=Compiling $(InputFile)...
+String.3.0=cxstm8 -i..\..\..\os\hal\include  -i..\..\..\os\hal\platforms\stm8  -i..\..\..\boards\st_stm8s_discovery  +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
+String.5.0=$(IntermPath)$(InputName).ls
+String.6.0=2010,5,26,14,8,57
+
+[Root.Include Files.Config.0.Settings.2]
+String.2.0=Assembling $(InputFile)...
+String.3.0=castm8 -xx -l $(ToolsetIncOpts) -o$(IntermPath)$(InputName).$(ObjectExt) $(InputFile)
+String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
+String.5.0=$(IntermPath)$(InputName).ls
+String.6.0=2010,5,25,14,45,56
+
+[Root.Include Files.Config.0.Settings.3]
+String.2.0=Performing Custom Build on $(InputFile)
+String.3.0=
+String.4.0=
+String.5.0=
+String.6.0=2010,5,25,14,45,56
+
+[Root.Include Files.Config.1.Settings.0]
+String.6.0=2010,5,25,14,45,56
+String.8.0=Release
+Int.0=0
+Int.1=0
+
+[Root.Include Files.Config.1.Settings.1]
+String.2.0=Compiling $(InputFile)...
+String.3.0=cxstm8 -i..\..\..\os\hal\include  -i..\..\..\os\hal\platforms\stm8  -i..\..\..\boards\st_stm8s_discovery  +modsl0 -customC-pp -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
+String.5.0=$(IntermPath)$(InputName).ls
+String.6.0=2010,5,26,14,9,12
+
+[Root.Include Files.Config.1.Settings.2]
+String.2.0=Assembling $(InputFile)...
+String.3.0=castm8 $(ToolsetIncOpts) -o$(IntermPath)$(InputName).$(ObjectExt) $(InputFile)
+String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
+String.5.0=$(IntermPath)$(InputName).ls
+String.6.0=2010,5,25,14,45,56
+
+[Root.Include Files.Config.1.Settings.3]
+String.2.0=Performing Custom Build on $(InputFile)
+String.3.0=
+String.4.0=
+String.5.0=
+String.6.0=2010,5,25,14,45,56
+
+[Root.Include Files.Include Files\os]
+ElemType=Folder
+PathName=Include Files\os
+Child=Root.Include Files.Include Files\os.Include Files\os\board
+
+[Root.Include Files.Include Files\os.Include Files\os\board]
+ElemType=Folder
+PathName=Include Files\os\board
+Child=Root.Include Files.Include Files\os.Include Files\os\board...\..\..\boards\st_stm8s_discovery\board.h
+Next=Root.Include Files.Include Files\os.Include Files\os\hal
+
+[Root.Include Files.Include Files\os.Include Files\os\board...\..\..\boards\st_stm8s_discovery\board.h]
+ElemType=File
+PathName=..\..\..\boards\st_stm8s_discovery\board.h
+
+[Root.Include Files.Include Files\os.Include Files\os\hal]
+ElemType=Folder
+PathName=Include Files\os\hal
+Child=Root.Include Files.Include Files\os.Include Files\os\hal...\..\..\os\hal\include\adc.h
+Next=Root.Include Files.Include Files\os.Include Files\os\kernel
+
+[Root.Include Files.Include Files\os.Include Files\os\hal...\..\..\os\hal\include\adc.h]
+ElemType=File
+PathName=..\..\..\os\hal\include\adc.h
+Next=Root.Include Files.Include Files\os.Include Files\os\hal...\..\..\os\hal\include\can.h
+
+[Root.Include Files.Include Files\os.Include Files\os\hal...\..\..\os\hal\include\can.h]
+ElemType=File
+PathName=..\..\..\os\hal\include\can.h
+Next=Root.Include Files.Include Files\os.Include Files\os\hal...\..\..\os\hal\include\hal.h
+
+[Root.Include Files.Include Files\os.Include Files\os\hal...\..\..\os\hal\include\hal.h]
+ElemType=File
+PathName=..\..\..\os\hal\include\hal.h
+Next=Root.Include Files.Include Files\os.Include Files\os\hal...\..\..\os\hal\include\mac.h
+
+[Root.Include Files.Include Files\os.Include Files\os\hal...\..\..\os\hal\include\mac.h]
+ElemType=File
+PathName=..\..\..\os\hal\include\mac.h
+Next=Root.Include Files.Include Files\os.Include Files\os\hal...\..\..\os\hal\include\mii.h
+
+[Root.Include Files.Include Files\os.Include Files\os\hal...\..\..\os\hal\include\mii.h]
+ElemType=File
+PathName=..\..\..\os\hal\include\mii.h
+Next=Root.Include Files.Include Files\os.Include Files\os\hal...\..\..\os\hal\include\mmc_spi.h
+
+[Root.Include Files.Include Files\os.Include Files\os\hal...\..\..\os\hal\include\mmc_spi.h]
+ElemType=File
+PathName=..\..\..\os\hal\include\mmc_spi.h
+Next=Root.Include Files.Include Files\os.Include Files\os\hal...\..\..\os\hal\include\pal.h
+
+[Root.Include Files.Include Files\os.Include Files\os\hal...\..\..\os\hal\include\pal.h]
+ElemType=File
+PathName=..\..\..\os\hal\include\pal.h
+Next=Root.Include Files.Include Files\os.Include Files\os\hal...\..\..\os\hal\include\pwm.h
+
+[Root.Include Files.Include Files\os.Include Files\os\hal...\..\..\os\hal\include\pwm.h]
+ElemType=File
+PathName=..\..\..\os\hal\include\pwm.h
+Next=Root.Include Files.Include Files\os.Include Files\os\hal...\..\..\os\hal\include\serial.h
+
+[Root.Include Files.Include Files\os.Include Files\os\hal...\..\..\os\hal\include\serial.h]
+ElemType=File
+PathName=..\..\..\os\hal\include\serial.h
+Next=Root.Include Files.Include Files\os.Include Files\os\hal...\..\..\os\hal\include\spi.h
+
+[Root.Include Files.Include Files\os.Include Files\os\hal...\..\..\os\hal\include\spi.h]
+ElemType=File
+PathName=..\..\..\os\hal\include\spi.h
+Next=Root.Include Files.Include Files\os.Include Files\os\hal.Include Files\os\hal\stm8
+
+[Root.Include Files.Include Files\os.Include Files\os\hal.Include Files\os\hal\stm8]
+ElemType=Folder
+PathName=Include Files\os\hal\stm8
+Child=Root.Include Files.Include Files\os.Include Files\os\hal.Include Files\os\hal\stm8...\..\..\os\hal\platforms\stm8\hal_lld.h
+
+[Root.Include Files.Include Files\os.Include Files\os\hal.Include Files\os\hal\stm8...\..\..\os\hal\platforms\stm8\hal_lld.h]
+ElemType=File
+PathName=..\..\..\os\hal\platforms\stm8\hal_lld.h
+Next=Root.Include Files.Include Files\os.Include Files\os\hal.Include Files\os\hal\stm8...\..\..\os\hal\platforms\stm8\pal_lld.h
+
+[Root.Include Files.Include Files\os.Include Files\os\hal.Include Files\os\hal\stm8...\..\..\os\hal\platforms\stm8\pal_lld.h]
+ElemType=File
+PathName=..\..\..\os\hal\platforms\stm8\pal_lld.h
+Next=Root.Include Files.Include Files\os.Include Files\os\hal.Include Files\os\hal\stm8...\..\..\os\hal\platforms\stm8\serial_lld.h
+
+[Root.Include Files.Include Files\os.Include Files\os\hal.Include Files\os\hal\stm8...\..\..\os\hal\platforms\stm8\serial_lld.h]
+ElemType=File
+PathName=..\..\..\os\hal\platforms\stm8\serial_lld.h
+Next=Root.Include Files.Include Files\os.Include Files\os\hal.Include Files\os\hal\stm8...\..\..\os\hal\platforms\stm8\stm8.h
+
+[Root.Include Files.Include Files\os.Include Files\os\hal.Include Files\os\hal\stm8...\..\..\os\hal\platforms\stm8\stm8.h]
+ElemType=File
+PathName=..\..\..\os\hal\platforms\stm8\stm8.h
+Next=Root.Include Files.Include Files\os.Include Files\os\hal.Include Files\os\hal\stm8...\..\..\os\hal\platforms\stm8\stm8s.h
+
+[Root.Include Files.Include Files\os.Include Files\os\hal.Include Files\os\hal\stm8...\..\..\os\hal\platforms\stm8\stm8s.h]
+ElemType=File
+PathName=..\..\..\os\hal\platforms\stm8\stm8s.h
+Next=Root.Include Files.Include Files\os.Include Files\os\hal.Include Files\os\hal\stm8...\..\..\os\hal\platforms\stm8\stm8s_type.h
+
+[Root.Include Files.Include Files\os.Include Files\os\hal.Include Files\os\hal\stm8...\..\..\os\hal\platforms\stm8\stm8s_type.h]
+ElemType=File
+PathName=..\..\..\os\hal\platforms\stm8\stm8s_type.h
+
+[Root.Include Files.Include Files\os.Include Files\os\kernel]
+ElemType=Folder
+PathName=Include Files\os\kernel
+Child=Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\ch.h
+Next=Root.Include Files.Include Files\os.Include Files\os\port
+
+[Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\ch.h]
+ElemType=File
+PathName=..\..\..\os\kernel\include\ch.h
+Next=Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chcond.h
+
+[Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chcond.h]
+ElemType=File
+PathName=..\..\..\os\kernel\include\chcond.h
+Next=Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chdebug.h
+
+[Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chdebug.h]
+ElemType=File
+PathName=..\..\..\os\kernel\include\chdebug.h
+Next=Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chevents.h
+
+[Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chevents.h]
+ElemType=File
+PathName=..\..\..\os\kernel\include\chevents.h
+Next=Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chheap.h
+
+[Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chheap.h]
+ElemType=File
+PathName=..\..\..\os\kernel\include\chheap.h
+Next=Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chinline.h
+
+[Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chinline.h]
+ElemType=File
+PathName=..\..\..\os\kernel\include\chinline.h
+Next=Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chioch.h
+
+[Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chioch.h]
+ElemType=File
+PathName=..\..\..\os\kernel\include\chioch.h
+Next=Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chlists.h
+
+[Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chlists.h]
+ElemType=File
+PathName=..\..\..\os\kernel\include\chlists.h
+Next=Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chmboxes.h
+
+[Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chmboxes.h]
+ElemType=File
+PathName=..\..\..\os\kernel\include\chmboxes.h
+Next=Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chmemcore.h
+
+[Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chmemcore.h]
+ElemType=File
+PathName=..\..\..\os\kernel\include\chmemcore.h
+Next=Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chmempools.h
+
+[Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chmempools.h]
+ElemType=File
+PathName=..\..\..\os\kernel\include\chmempools.h
+Next=Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chmsg.h
+
+[Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chmsg.h]
+ElemType=File
+PathName=..\..\..\os\kernel\include\chmsg.h
+Next=Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chmtx.h
+
+[Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chmtx.h]
+ElemType=File
+PathName=..\..\..\os\kernel\include\chmtx.h
+Next=Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chqueues.h
+
+[Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chqueues.h]
+ElemType=File
+PathName=..\..\..\os\kernel\include\chqueues.h
+Next=Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chregistry.h
+
+[Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chregistry.h]
+ElemType=File
+PathName=..\..\..\os\kernel\include\chregistry.h
+Next=Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chschd.h
+
+[Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chschd.h]
+ElemType=File
+PathName=..\..\..\os\kernel\include\chschd.h
+Next=Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chsem.h
+
+[Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chsem.h]
+ElemType=File
+PathName=..\..\..\os\kernel\include\chsem.h
+Next=Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chstreams.h
+
+[Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chstreams.h]
+ElemType=File
+PathName=..\..\..\os\kernel\include\chstreams.h
+Next=Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chsys.h
+
+[Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chsys.h]
+ElemType=File
+PathName=..\..\..\os\kernel\include\chsys.h
+Next=Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chthreads.h
+
+[Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chthreads.h]
+ElemType=File
+PathName=..\..\..\os\kernel\include\chthreads.h
+Next=Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chvt.h
+
+[Root.Include Files.Include Files\os.Include Files\os\kernel...\..\..\os\kernel\include\chvt.h]
+ElemType=File
+PathName=..\..\..\os\kernel\include\chvt.h
+
+[Root.Include Files.Include Files\os.Include Files\os\port]
+ElemType=Folder
+PathName=Include Files\os\port
+Child=Root.Include Files.Include Files\os.Include Files\os\port...\..\..\os\ports\cosmic\stm8\chcore.h
+
+[Root.Include Files.Include Files\os.Include Files\os\port...\..\..\os\ports\cosmic\stm8\chcore.h]
+ElemType=File
+PathName=..\..\..\os\ports\cosmic\stm8\chcore.h
+Next=Root.Include Files.Include Files\os.Include Files\os\port...\..\..\os\ports\cosmic\stm8\chtypes.h
+
+[Root.Include Files.Include Files\os.Include Files\os\port...\..\..\os\ports\cosmic\stm8\chtypes.h]
+ElemType=File
+PathName=..\..\..\os\ports\cosmic\stm8\chtypes.h
