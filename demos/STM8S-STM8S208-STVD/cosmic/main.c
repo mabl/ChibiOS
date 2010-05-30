@@ -18,8 +18,7 @@
 */
 
 #include "ch.h"
-#include "board.h" /*tmp*/
-//#include "hal.h"
+#include "hal.h"
 //#include "test.h"
 
 /*
@@ -30,9 +29,9 @@ static msg_t Thread1(void *arg) {
 
   (void)arg;
   while (TRUE) {
-//    palClearPad(IOPORT2, PB_LED(7));
+    palClearPad(GPIOD, PD_LD10);
     chThdSleepMilliseconds(500);
-//    palSetPad(IOPORT2, PB_LED(7));
+    palSetPad(GPIOD, PD_LD10);
     chThdSleepMilliseconds(500);
   }
   return 0;
@@ -42,6 +41,7 @@ static msg_t Thread1(void *arg) {
  * Entry point.
  */
 void main(void) {
+
   /*
    * Board/HAL initialization.
    */

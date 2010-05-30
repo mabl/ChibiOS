@@ -18,15 +18,7 @@
 */
 
 #include "ch.h"
-//#include "hal.h"
-#include "board.h"
-#undef FALSE
-#undef TRUE
-#include "stm8s.h"
-#define FALSE 0
-#define TRUE (!FALSE)
-
-#define SYSCLK HSECLK /*tmp*/
+#include "hal.h"
 
 /*
  * TIM 2 clock after the prescaler.
@@ -58,7 +50,7 @@ void hwinit(void) {
   /*
    * HAL initialization.
    */
-//  halInit();
+  halInit();
 
   /*
    * TIM2 initialization as system tick.
