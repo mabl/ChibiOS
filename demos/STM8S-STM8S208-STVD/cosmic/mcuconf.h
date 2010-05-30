@@ -17,20 +17,23 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _STM8_H_
-#define _STM8_H_
+/*
+ * STM8 drivers configuration.
+ * The following settings override the default settings present in
+ * the various device driver implementation headers.
+ * Note that the settings for each driver only have effect if the driver
+ * is enabled in halconf.h.
+ */
 
-#undef FALSE
-#undef TRUE
+/*
+ * HAL general settings.
+ */
+#define STM8_CLOCK_SOURCE           CLK_SOURCE_HSI
+#define STM8_HSI_DIVIDER            CLK_HSI_DIV1
+#define STM8_CPU_DIVIDER            CLK_CPU_DIV1
 
-#if defined(STM8S208) || defined(STM8S207) || defined(STM8S105) ||          \
-    defined(STM8S103) || defined (STM8S903)
-#include "stm8s.h"
-#else
-#error "unsupported or invalid STM8 platform"
-#endif
-
-#define FALSE 0
-#define TRUE (!FALSE)
-
-#endif /* _STM8_H_ */
+/*
+ * SERIAL driver system settings.
+ */
+#define USE_STM8_UART1              TRUE
+#define USE_STM8_UART3              FALSE

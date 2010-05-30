@@ -74,7 +74,7 @@ String.6.0=2010,5,25,14,45,56
 String.100.0=$(TargetFName)
 String.101.0=
 String.102.0=
-String.103.0=.\;..\..\..\os\kernel\src;..\..\..\os\kernel\include;..\..\..\os\ports\cosmic\stm8;..\..\..\boards\st_stm8s_discovery;..\..\..\os\hal\platforms\stm8;..\..\..\os\hal\include;
+String.103.0=.\;..\..\..\os\kernel\src;..\..\..\os\kernel\include;..\..\..\os\ports\cosmic\stm8;..\..\..\boards\st_stm8s_discovery;..\..\..\os\hal\platforms\stm8;..\..\..\os\hal\include;..\..\..\os\hal\src;
 
 [Root.Config.0.Settings.2]
 String.2.0=
@@ -102,11 +102,11 @@ String.8.0=
 
 [Root.Config.0.Settings.6]
 String.2.0=Running Linker
-String.3.0=clnk $(ToolsetLibOpts) -o $(OutputPath)$(TargetSName).sm8 -fakeInteger -fakeOutFile$(ProjectSFile).elf -fakeRunConv -fakeStartupcrtsi0.sm8 -fakeSemiAutoGen -fakeVectFilestm8_interrupt_vector.c -fakeVectAddr0x8000 -customMapFile -customMapFile-m$(OutputPath)$(TargetSName).map -customMapAddress -customCfgFile$(OutputPath)$(TargetSName).lkf 
+String.3.0=clnk $(ToolsetLibOpts) -o $(OutputPath)$(TargetSName).sm8 -fakeInteger -fakeOutFile$(ProjectSFile).elf -fakeRunConv -fakeStartupcrtsi0.sm8 -fakeSemiAutoGen -fakeVectFilevectors.c -fakeVectAddr0x8000 -customMapFile -customMapFile-m$(OutputPath)$(TargetSName).map -customMapAddress -customCfgFile$(OutputPath)$(TargetSName).lkf 
 String.3.1=cvdwarf $(OutputPath)$(TargetSName).sm8
 String.4.0=$(OutputPath)$(TargetFName)
 String.5.0=$(OutputPath)$(ProjectSFile).elf $(OutputPath)$(TargetSName).map
-String.6.0=2010,5,29,12,52,54
+String.6.0=2010,5,30,9,21,13
 String.100.0=
 String.101.0=crtsi.st7
 String.102.0=+seg .const -b 0x8080 -m 0x7f80 -n .const -it
@@ -156,7 +156,7 @@ Int.108=0
 String.6.0=2010,5,25,14,45,56
 String.100.0=$(TargetFName)
 String.101.0=
-String.103.0=.\;..\..\..\os\kernel\src;..\..\..\os\kernel\include;..\..\..\os\ports\cosmic\stm8;..\..\..\boards\st_stm8s_discovery;..\..\..\os\hal\platforms\stm8;..\..\..\os\hal\include;
+String.103.0=.\;..\..\..\os\kernel\src;..\..\..\os\kernel\include;..\..\..\os\ports\cosmic\stm8;..\..\..\boards\st_stm8s_discovery;..\..\..\os\hal\platforms\stm8;..\..\..\os\hal\include;..\..\..\os\hal\src;
 
 [Root.Config.1.Settings.2]
 String.2.0=
@@ -183,11 +183,11 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Config.1.Settings.6]
 String.2.0=Running Linker
-String.3.0=clnk -fakeRunConv -fakeInteger -fakeSemiAutoGen $(ToolsetLibOpts) -o $(OutputPath)$(TargetSName).sm8 -fakeOutFile$(ProjectSFile).elf -customCfgFile $(OutputPath)$(TargetSName).lkf -fakeVectFilestm8_interrupt_vector.c -fakeStartupcrtsi0.sm8 
+String.3.0=clnk -fakeRunConv -fakeInteger -fakeSemiAutoGen $(ToolsetLibOpts) -o $(OutputPath)$(TargetSName).sm8 -fakeOutFile$(ProjectSFile).elf -customCfgFile $(OutputPath)$(TargetSName).lkf -fakeVectFilevectors.c -fakeStartupcrtsi0.sm8 
 String.3.1=cvdwarf $(OutputPath)$(TargetSName).sm8 -fakeVectAddr0x8000
 String.4.0=$(OutputPath)$(TargetFName)
 String.5.0=
-String.6.0=2010,5,26,14,10,16
+String.6.0=2010,5,30,9,21,13
 String.100.0=
 String.101.0=crtsi.st7
 String.102.0=+seg .const -b 0x8080 -m 0x7f80  -n .const -it 
@@ -303,8 +303,78 @@ PathName=..\..\..\boards\st_stm8s_discovery\board.c
 [Root.Source Files.Source Files\os]
 ElemType=Folder
 PathName=Source Files\os
-Child=Root.Source Files.Source Files\os.Source Files\os\kernel
+Child=Root.Source Files.Source Files\os.Source Files\os\hal
 Next=Root.Source Files.main.c
+
+[Root.Source Files.Source Files\os.Source Files\os\hal]
+ElemType=Folder
+PathName=Source Files\os\hal
+Child=Root.Source Files.Source Files\os.Source Files\os\hal...\..\..\os\hal\src\adc.c
+Next=Root.Source Files.Source Files\os.Source Files\os\kernel
+
+[Root.Source Files.Source Files\os.Source Files\os\hal...\..\..\os\hal\src\adc.c]
+ElemType=File
+PathName=..\..\..\os\hal\src\adc.c
+Next=Root.Source Files.Source Files\os.Source Files\os\hal...\..\..\os\hal\src\can.c
+
+[Root.Source Files.Source Files\os.Source Files\os\hal...\..\..\os\hal\src\can.c]
+ElemType=File
+PathName=..\..\..\os\hal\src\can.c
+Next=Root.Source Files.Source Files\os.Source Files\os\hal...\..\..\os\hal\src\hal.c
+
+[Root.Source Files.Source Files\os.Source Files\os\hal...\..\..\os\hal\src\hal.c]
+ElemType=File
+PathName=..\..\..\os\hal\src\hal.c
+Next=Root.Source Files.Source Files\os.Source Files\os\hal...\..\..\os\hal\src\mac.c
+
+[Root.Source Files.Source Files\os.Source Files\os\hal...\..\..\os\hal\src\mac.c]
+ElemType=File
+PathName=..\..\..\os\hal\src\mac.c
+Next=Root.Source Files.Source Files\os.Source Files\os\hal...\..\..\os\hal\src\mmc_spi.c
+
+[Root.Source Files.Source Files\os.Source Files\os\hal...\..\..\os\hal\src\mmc_spi.c]
+ElemType=File
+PathName=..\..\..\os\hal\src\mmc_spi.c
+Next=Root.Source Files.Source Files\os.Source Files\os\hal...\..\..\os\hal\src\pal.c
+
+[Root.Source Files.Source Files\os.Source Files\os\hal...\..\..\os\hal\src\pal.c]
+ElemType=File
+PathName=..\..\..\os\hal\src\pal.c
+Next=Root.Source Files.Source Files\os.Source Files\os\hal...\..\..\os\hal\src\pwm.c
+
+[Root.Source Files.Source Files\os.Source Files\os\hal...\..\..\os\hal\src\pwm.c]
+ElemType=File
+PathName=..\..\..\os\hal\src\pwm.c
+Next=Root.Source Files.Source Files\os.Source Files\os\hal...\..\..\os\hal\src\serial.c
+
+[Root.Source Files.Source Files\os.Source Files\os\hal...\..\..\os\hal\src\serial.c]
+ElemType=File
+PathName=..\..\..\os\hal\src\serial.c
+Next=Root.Source Files.Source Files\os.Source Files\os\hal...\..\..\os\hal\src\spi.c
+
+[Root.Source Files.Source Files\os.Source Files\os\hal...\..\..\os\hal\src\spi.c]
+ElemType=File
+PathName=..\..\..\os\hal\src\spi.c
+Next=Root.Source Files.Source Files\os.Source Files\os\hal.Source Files\os\hal\stm8
+
+[Root.Source Files.Source Files\os.Source Files\os\hal.Source Files\os\hal\stm8]
+ElemType=Folder
+PathName=Source Files\os\hal\stm8
+Child=Root.Source Files.Source Files\os.Source Files\os\hal.Source Files\os\hal\stm8...\..\..\os\hal\platforms\stm8\hal_lld.c
+
+[Root.Source Files.Source Files\os.Source Files\os\hal.Source Files\os\hal\stm8...\..\..\os\hal\platforms\stm8\hal_lld.c]
+ElemType=File
+PathName=..\..\..\os\hal\platforms\stm8\hal_lld.c
+Next=Root.Source Files.Source Files\os.Source Files\os\hal.Source Files\os\hal\stm8...\..\..\os\hal\platforms\stm8\pal_lld.c
+
+[Root.Source Files.Source Files\os.Source Files\os\hal.Source Files\os\hal\stm8...\..\..\os\hal\platforms\stm8\pal_lld.c]
+ElemType=File
+PathName=..\..\..\os\hal\platforms\stm8\pal_lld.c
+Next=Root.Source Files.Source Files\os.Source Files\os\hal.Source Files\os\hal\stm8...\..\..\os\hal\platforms\stm8\serial_lld.c
+
+[Root.Source Files.Source Files\os.Source Files\os\hal.Source Files\os\hal\stm8...\..\..\os\hal\platforms\stm8\serial_lld.c]
+ElemType=File
+PathName=..\..\..\os\hal\platforms\stm8\serial_lld.c
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel]
 ElemType=Folder
@@ -408,11 +478,11 @@ PathName=..\..\..\os\ports\cosmic\stm8\chcore.c
 [Root.Source Files.main.c]
 ElemType=File
 PathName=main.c
-Next=Root.Source Files.stm8_interrupt_vector.c
+Next=Root.Source Files.vectors.c
 
-[Root.Source Files.stm8_interrupt_vector.c]
+[Root.Source Files.vectors.c]
 ElemType=File
-PathName=stm8_interrupt_vector.c
+PathName=vectors.c
 
 [Root.Include Files]
 ElemType=Folder
@@ -707,6 +777,7 @@ PathName=..\..\..\os\kernel\include\chvt.h
 ElemType=Folder
 PathName=Include Files\os\port
 Child=Root.Include Files.Include Files\os.Include Files\os\port...\..\..\os\ports\cosmic\stm8\chcore.h
+Next=Root.Include Files.Include Files\os.halconf.h
 
 [Root.Include Files.Include Files\os.Include Files\os\port...\..\..\os\ports\cosmic\stm8\chcore.h]
 ElemType=File
@@ -716,6 +787,15 @@ Next=Root.Include Files.Include Files\os.Include Files\os\port...\..\..\os\ports
 [Root.Include Files.Include Files\os.Include Files\os\port...\..\..\os\ports\cosmic\stm8\chtypes.h]
 ElemType=File
 PathName=..\..\..\os\ports\cosmic\stm8\chtypes.h
+
+[Root.Include Files.Include Files\os.halconf.h]
+ElemType=File
+PathName=halconf.h
+Next=Root.Include Files.Include Files\os.mcuconf.h
+
+[Root.Include Files.Include Files\os.mcuconf.h]
+ElemType=File
+PathName=mcuconf.h
 
 [Root.Include Files.chconf.h]
 ElemType=File
