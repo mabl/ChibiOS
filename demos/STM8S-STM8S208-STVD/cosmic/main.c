@@ -19,7 +19,7 @@
 
 #include "ch.h"
 #include "hal.h"
-//#include "test.h"
+#include "test.h"
 
 /*
  * LEDs blinker thread, times are in milliseconds.
@@ -55,7 +55,7 @@ void main(void) {
   /*
    * Activates the serial driver 1 using the driver default configuration.
    */
-//  sdStart(&SD1, NULL);
+  sdStart(&SD2, NULL);
 
   /*
    * Creates the blinker thread.
@@ -67,9 +67,9 @@ void main(void) {
    */
   while (TRUE) {
 //    if (palReadPad(IOPORT7, PG_BT5) == PAL_LOW)
-//      TestThread(&SD1);
+//      TestThread(&SD2);
 //    if (palReadPad(IOPORT7, PG_BT6) == PAL_LOW)
-//      sdWriteTimeout(&SD1, "Hello World!\r\n", 14, TIME_INFINITE);
+      sdWriteTimeout(&SD2, "Hello World!\r\n", 14, TIME_INFINITE);
     chThdSleepMilliseconds(1000);
   }
 }

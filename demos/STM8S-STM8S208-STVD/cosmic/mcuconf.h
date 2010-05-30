@@ -35,5 +35,6 @@
 /*
  * SERIAL driver system settings.
  */
-#define USE_STM8_UART1              TRUE
+#define USE_STM8_UART1              FALSE
+#define USE_STM8_UART2              TRUE
 #define USE_STM8_UART3              FALSE

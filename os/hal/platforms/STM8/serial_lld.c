@@ -42,6 +42,13 @@ SerialDriver SD1;
 #endif
 
 /**
+ * @brief   UART2 serial driver identifier.
+ */
+#if USE_STM8_UART2 || defined(__DOXYGEN__)
+SerialDriver SD2;
+#endif
+
+/**
  * @brief   UART3 serial driver identifier.
  */
 #if USE_STM8_UART3 || defined(__DOXYGEN__)
@@ -123,6 +130,49 @@ static void uart1_deinit(void) {
 }
 #endif /* USE_STM8_UART1 */
 
+#if USE_STM8_UART2 || defined(__DOXYGEN__)
+static void notify2(void) {
+
+  UART2->CR2 |= UART2_CR2_TIEN;
+}
+
+/**
+ * @brief   UART2 initialization.
+ *
+ * @param[in] config    architecture-dependent serial driver configuration
+ */
+static void uart2_init(const SerialConfig *config) {
+
+  UART2->BRR2 = ((uint8_t)(config->sc_brr >> 8) % (uint8_t)0xF0) |
+                ((uint8_t)config->sc_brr & (uint8_t)0x0F);
+  UART2->BRR1 = (uint8_t)(config->sc_brr >> 4);
+  UART2->CR1  = config->sc_mode &
+                SD_MODE_PARITY;             /* PIEN included.               */
+  UART2->CR2  = UART2_CR2_RIEN | UART2_CR2_TEN | UART2_CR2_REN;
+  UART2->CR3  = config->sc_mode & SD_MODE_STOP;
+  UART2->CR4  = 0;
+  UART2->CR5  = 0;
+  UART2->CR6  = 0;
+  UART2->PSCR = 1;
+  (void)UART2->SR;
+  (void)UART2->DR;
+}
+
+/**
+ * @brief   UART1 de-initialization.
+ */
+static void uart2_deinit(void) {
+
+  UART2->CR1  = UART2_CR1_UARTD;
+  UART2->CR2  = 0;
+  UART2->CR3  = 0;
+  UART2->CR4  = 0;
+  UART2->CR5  = 0;
+  UART2->CR6  = 0;
+  UART2->PSCR = 0;
+}
+#endif /* USE_STM8_UART1 */
+
 #if USE_STM8_UART3 || defined(__DOXYGEN__)
 static void notify3(void) {
 
@@ -182,10 +232,6 @@ CH_IRQ_HANDLER(17) {
 
   CH_IRQ_EPILOGUE();
 }
-#define UART1_SR_OR   ((u8)0x08) /*!< OverRun error mask */
-#define UART1_SR_NF    ((u8)0x04) /*!< Noise Flag mask */
-#define UART1_SR_FE    ((u8)0x02) /*!< Framing Error mask */
-#define UART1_SR_PE    ((u8)0x01) /*!< Parity Error mask */
 
 CH_IRQ_HANDLER(18) {
   uint8_t sr = UART1->SR;
@@ -202,6 +248,39 @@ CH_IRQ_HANDLER(18) {
   CH_IRQ_EPILOGUE();
 }
 #endif /* USE_STM8_UART1 */
+
+#if USE_STM8_UART2 || defined(__DOXYGEN__)
+CH_IRQ_HANDLER(20) {
+  msg_t b;
+
+  CH_IRQ_PROLOGUE();
+
+  chSysLockFromIsr();
+  b = sdRequestDataI(&SD2);
+  chSysUnlockFromIsr();
+  if (b < Q_OK)
+    UART2->CR2 &= ~UART2_CR2_TIEN;
+  else
+    UART2->DR = b;
+
+  CH_IRQ_EPILOGUE();
+}
+
+CH_IRQ_HANDLER(21) {
+  uint8_t sr = UART2->SR;
+
+  CH_IRQ_PROLOGUE();
+
+  if ((sr = UART2->SR) & (UART2_SR_OR | UART2_SR_NF |
+                          UART2_SR_FE | UART2_SR_PE))
+    set_error(&SD2, sr);
+  chSysLockFromIsr();
+  sdIncomingDataI(&SD2, UART2->DR);
+  chSysUnlockFromIsr();
+
+  CH_IRQ_EPILOGUE();
+}
+#endif /* USE_STM8_UART2 */
 
 #if USE_STM8_UART3 || defined(__DOXYGEN__)
 CH_IRQ_HANDLER(20) {

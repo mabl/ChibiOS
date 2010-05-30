@@ -18,6 +18,7 @@
 */
 
 #include "ch.h"
+#include "hal.h"
 
 /**
  * @brief   Exception handler type.
@@ -29,6 +30,10 @@ typedef void @far @interrupt (*interrupt_handler_t)(void);
  */
 void _stext(void);
 @far @interrupt void vector13(void);
+@far @interrupt void vector17(void);
+@far @interrupt void vector18(void);
+@far @interrupt void vector20(void);
+@far @interrupt void vector21(void);
 
 /**
  * @brief   Exception vector type.
@@ -70,11 +75,21 @@ exception_vector_t const _vectab[] = {
 	{0x82, vector},                             /* vector14 */
 	{0x82, vector},                             /* vector15 */
 	{0x82, vector},                             /* vector16 */
+#if USE_STM8_UART1
+	{0x82, vector17},                           /* vector17 */
+	{0x82, vector18},                           /* vector18 */
+#else
 	{0x82, vector},                             /* vector17 */
 	{0x82, vector},                             /* vector18 */
+#endif
 	{0x82, vector},                             /* vector19 */
-	{0x82, vector},                             /* vector20 */
+#if USE_STM8_UART2 || USE_STM8_UART3
+  {0x82, vector20},                           /* vector20 */
+	{0x82, vector21},                           /* vector21 */
+#else
+  {0x82, vector},                             /* vector20 */
 	{0x82, vector},                             /* vector21 */
+#endif
 	{0x82, vector},                             /* vector22 */
 	{0x82, vector},                             /* vector23 */
 	{0x82, vector},                             /* vector24 */
