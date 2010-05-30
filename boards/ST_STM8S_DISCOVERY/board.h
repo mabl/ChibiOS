@@ -53,6 +53,8 @@
 
 #define PD_LD10         0
 #define PD_SWIM         1
+#define PD_TX           5
+#define PD_RX           6
 
 /*
  * Port A initial setup.
@@ -81,8 +83,8 @@
 /*
  * Port D initial setup.
  */
-#define VAL_GPIODODR    (1 << PD_LD10)
-#define VAL_GPIODDDR    (1 << PD_LD10)  /* All inputs except LD1.           */
+#define VAL_GPIODODR    (1 << PD_LD10) | (1 << PD_TX)
+#define VAL_GPIODDDR    (1 << PD_LD10) | (1 << PD_TX)
 #define VAL_GPIODCR1    0xFF            /* All pull-up.                     */
 #define VAL_GPIODCR2    0
 

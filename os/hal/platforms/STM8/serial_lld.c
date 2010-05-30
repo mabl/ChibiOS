@@ -330,6 +330,12 @@ void sd_lld_init(void) {
   UART1->CR1 = UART1_CR1_UARTD;             /* UARTD (low power).           */
 #endif
 
+#if USE_STM8_UART2
+  sdObjectInit(&SD2, NULL, notify2);
+  CLK->PCKENR1 |= CLK_PCKENR1_UART2;        /* PCKEN13, clock source.       */
+  UART2->CR1 = UART2_CR1_UARTD;             /* UARTD (low power).           */
+#endif
+
 #if USE_STM8_UART3
   sdObjectInit(&SD3, NULL, notify3);
   CLK->PCKENR1 |= CLK_PCKENR1_UART3;        /* PCKEN13, clock source.       */
@@ -356,6 +362,12 @@ void sd_lld_start(SerialDriver *sdp, const SerialConfig *config) {
     return;
   }
 #endif
+#if USE_STM8_UART2
+  if (&SD2 == sdp) {
+    uart2_init(config);
+    return;
+  }
+#endif
 #if USE_STM8_UART3
   if (&SD3 == sdp) {
     uart3_init(config);
@@ -376,6 +388,12 @@ void sd_lld_stop(SerialDriver *sdp) {
 #if USE_STM8_UART1
   if (&SD1 == sdp) {
     uart1_deinit();
+    return;
+  }
+#endif
+#if USE_STM8_UART2
+  if (&SD2 == sdp) {
+    uart2_deinit();
     return;
   }
 #endif

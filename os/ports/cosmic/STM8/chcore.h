@@ -248,7 +248,7 @@ struct stm8_startctx {
  * @brief   Enters an architecture-dependent halt mode.
  * @note    Implemented with the specific "wfi" instruction.
  */
-#define port_wait_for_interrupt() _asm("wfi")
+#define port_wait_for_interrupt() //_asm("wfi")
 
 /**
  * @brief   Performs a context switch between two threads.
