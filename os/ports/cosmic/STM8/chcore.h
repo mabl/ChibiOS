@@ -28,6 +28,21 @@
 #ifndef _CHCORE_H_
 #define _CHCORE_H_
 
+/*===========================================================================*/
+/* Port configurable parameters.                                             */
+/*===========================================================================*/
+
+/**
+ * @brief   Enables the use of the WFI instruction in the idle thread loop.
+ */
+#ifndef STM8_ENABLE_WFI_IDLE
+#define STM8_ENABLE_WFI_IDLE    FALSE
+#endif
+
+/*===========================================================================*/
+/* Port exported info.                                                       */
+/*===========================================================================*/
+
 /**
  * @brief   Unique macro for the implemented architecture.
  */
@@ -36,7 +51,11 @@
 /**
  * @brief   Name of the implemented architecture.
  */
-#define CH_ARCHITECTURE_NAME "STM8"
+#define CH_ARCHITECTURE_NAME    "STM8"
+
+/*===========================================================================*/
+/* Port implementation part.                                                 */
+/*===========================================================================*/
 
 /**
  * @brief   Base type for stack alignment.
@@ -248,7 +267,11 @@ struct stm8_startctx {
  * @brief   Enters an architecture-dependent halt mode.
  * @note    Implemented with the specific "wfi" instruction.
  */
-#define port_wait_for_interrupt() //_asm("wfi")
+#if STM8_ENABLE_WFI_IDLE || defined(__DOXYGEN__)
+#define port_wait_for_interrupt() _asm("wfi")
+#else
+#define port_wait_for_interrupt()
+#endif
 
 /**
  * @brief   Performs a context switch between two threads.

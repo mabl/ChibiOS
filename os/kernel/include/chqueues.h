@@ -163,7 +163,7 @@ typedef GenericQueue OutputQueue;
 /**
  * @brief   Evaluates to @p TRUE if the specified Output Queue is empty.
  */
-#define chOQIsEmpty(q) (chQSpace(q) >= chQSize(q))
+#define chOQIsEmpty(q) (chQSize(q) <= chQSpace(q)) /***** COSMIC WORKAROUND *****/
 
 /**
  * @brief   Evaluates to @p TRUE if the specified Output Queue is full.
