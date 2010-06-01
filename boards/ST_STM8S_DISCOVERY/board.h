@@ -45,8 +45,6 @@
  */
 #define PA_OSCIN        1
 #define PA_OSCOUT       2
-#define PA_RX           4
-#define PA_TX           5
 
 #define PC_TS_KEY       1
 #define PC_TS_LOADREF   2
