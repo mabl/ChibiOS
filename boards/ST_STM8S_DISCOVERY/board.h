@@ -48,8 +48,9 @@
 #define PA_RX           4
 #define PA_TX           5
 
-#define PC_TS_DRIVE     2
-#define PC_TS_PAD       3
+#define PC_TS_KEY       1
+#define PC_TS_LOADREF   2
+#define PC_TS_SHIELD    3
 
 #define PD_LD10         0
 #define PD_SWIM         1
