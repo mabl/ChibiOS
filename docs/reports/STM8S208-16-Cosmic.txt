@@ -1,0 +1,109 @@
+***************************************************************************
+Options:  Optimized for speed
+Settings: CPUCLK=16MHz (HSI)
+Compiler: Cosmic STM8 compiler 4.3.3.3.
+***************************************************************************
+
+*** ChibiOS/RT test suite
+***
+*** Kernel:       1.5.8unstable
+*** Architecture: STM8
+*** Platform:     STM8x
+*** Test Board:   ST STM8S-Discovery
+
+----------------------------------------------------------------------------
+--- Test Case 1.1 (Threads, enqueuing test #1)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 1.2 (Threads, enqueuing test #2)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 1.3 (Threads, priority change)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 1.4 (Threads, delays)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 2.1 (Semaphores, enqueuing)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 2.2 (Semaphores, timeout)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 2.3 (Semaphores, atomic signal-wait)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 4.1 (Messages, loop)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 6.1 (Events, registration and dispatch)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 6.2 (Events, wait and broadcast)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 6.3 (Events, timeouts)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 10.1 (Queues, input queues)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 10.2 (Queues, output queues)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 11.1 (Benchmark, messages #1)
+--- Score : 36244 msgs/S, 72488 ctxswc/S
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 11.2 (Benchmark, messages #2)
+--- Score : 28697 msgs/S, 57394 ctxswc/S
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 11.3 (Benchmark, messages #3)
+--- Score : 28696 msgs/S, 57392 ctxswc/S
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 11.4 (Benchmark, context switch)
+--- Score : 138392 ctxswc/S
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 11.5 (Benchmark, threads, full cycle)
+--- Score : 22200 threads/S
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 11.6 (Benchmark, threads, create only)
+--- Score : 32821 threads/S
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 11.7 (Benchmark, mass reschedule, 5 threads)
+--- Score : 8817 reschedules/S, 52902 ctxswc/S
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 11.8 (Benchmark, round robin context switching)
+--- Score : 70644 ctxswc/S
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 11.9 (Benchmark, I/O Queues throughput)
+--- Score : 85560 bytes/S
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 11.10 (Benchmark, virtual timers set/reset)
+--- Score : 71998 timers/S
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 11.11 (Benchmark, semaphores wait/signal)
+--- Score : 244020 wait+signal/S
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 11.12 (Benchmark, RAM footprint)
+--- System: 174 bytes
+--- Thread: 26 bytes
+--- Timer : 10 bytes
+--- Semaph: 5 bytes
+--- EventS: 2 bytes
+--- EventL: 5 bytes
+--- Queue : 15 bytes
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+
+Final result: SUCCESS
