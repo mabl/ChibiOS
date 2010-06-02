@@ -57,8 +57,8 @@ void hwinit(void) {
    */
   CLK->PCKENR1 |= 32;           /* PCKEN15, TIM2 clock source.*/
   TIM2->PSCR    = 4;            /* Prescaler divide by 2^4=16.*/
-  TIM2->ARRH    = TIM2_ARR >> 8;
-  TIM2->ARRL    = TIM2_ARR;
+  TIM2->ARRH    = (uint8_t)(TIM2_ARR >> 8);
+  TIM2->ARRL    = (uint8_t)(TIM2_ARR);
   TIM2->CNTRH   = 0;
   TIM2->CNTRL   = 0;
   TIM2->SR1     = 0;

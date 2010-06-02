@@ -102,13 +102,13 @@ static void notify1(void) {
  */
 static void uart1_init(const SerialConfig *config) {
 
-  UART1->BRR2 = ((uint8_t)(config->sc_brr >> 8) % (uint8_t)0xF0) |
-                ((uint8_t)config->sc_brr & (uint8_t)0x0F);
+  UART1->BRR2 = (uint8_t)(((uint8_t)(config->sc_brr >> 8) & (uint8_t)0xF0) |
+                          ((uint8_t)config->sc_brr & (uint8_t)0x0F));
   UART1->BRR1 = (uint8_t)(config->sc_brr >> 4);
-  UART1->CR1  = config->sc_mode &
-                SD_MODE_PARITY;             /* PIEN included.               */
+  UART1->CR1  = (uint8_t)(config->sc_mode &
+                          SD_MODE_PARITY);  /* PIEN included.               */
   UART1->CR2  = UART1_CR2_RIEN | UART1_CR2_TEN | UART1_CR2_REN;
-  UART1->CR3  = config->sc_mode & SD_MODE_STOP;
+  UART1->CR3  = (uint8_t)(config->sc_mode & SD_MODE_STOP);
   UART1->CR4  = 0;
   UART1->CR5  = 0;
   UART1->PSCR = 1;
@@ -143,13 +143,13 @@ static void notify2(void) {
  */
 static void uart2_init(const SerialConfig *config) {
 
-  UART2->BRR2 = ((uint8_t)(config->sc_brr >> 8) % (uint8_t)0xF0) |
-                ((uint8_t)config->sc_brr & (uint8_t)0x0F);
+  UART2->BRR2 = (uint8_t)(((uint8_t)(config->sc_brr >> 8) & (uint8_t)0xF0) |
+                          ((uint8_t)config->sc_brr & (uint8_t)0x0F));
   UART2->BRR1 = (uint8_t)(config->sc_brr >> 4);
-  UART2->CR1  = config->sc_mode &
-                SD_MODE_PARITY;             /* PIEN included.               */
+  UART2->CR1  = (uint8_t)(config->sc_mode &
+                          SD_MODE_PARITY);  /* PIEN included.               */
   UART2->CR2  = UART2_CR2_RIEN | UART2_CR2_TEN | UART2_CR2_REN;
-  UART2->CR3  = config->sc_mode & SD_MODE_STOP;
+  UART2->CR3  = (uint8_t)(config->sc_mode & SD_MODE_STOP);
   UART2->CR4  = 0;
   UART2->CR5  = 0;
   UART2->CR6  = 0;
@@ -186,13 +186,13 @@ static void notify3(void) {
  */
 static void uart3_init(const SerialConfig *config) {
 
-  UART3->BRR2 = ((uint8_t)(config->sc_brr >> 8) % (uint8_t)0xF0) |
-                ((uint8_t)config->sc_brr & (uint8_t)0x0F);
+  UART3->BRR2 = (uint8_t)(((uint8_t)(config->sc_brr >> 8) & (uint8_t)0xF0) |
+                          ((uint8_t)config->sc_brr & (uint8_t)0x0F));
   UART3->BRR1 = (uint8_t)(config->sc_brr >> 4);
-  UART3->CR1  = config->sc_mode &
-                SD_MODE_PARITY;             /* PIEN included.               */
+  UART3->CR1  = (uint8_t)(config->sc_mode &
+                          SD_MODE_PARITY);  /* PIEN included.               */
   UART3->CR2  = UART3_CR2_RIEN | UART3_CR2_TEN | UART3_CR2_REN;
-  UART3->CR3  = config->sc_mode & SD_MODE_STOP;
+  UART3->CR3  = (uint8_t)(config->sc_mode & SD_MODE_STOP);
   UART3->CR4  = 0;
   UART3->CR6  = 0;
   (void)UART3->SR;
@@ -226,9 +226,9 @@ CH_IRQ_HANDLER(17) {
   b = sdRequestDataI(&SD1);
   chSysUnlockFromIsr();
   if (b < Q_OK)
-    UART1->CR2 &= ~UART1_CR2_TIEN;
+    UART1->CR2 &= (uint8_t)~UART1_CR2_TIEN;
   else
-    UART1->DR = b;
+    UART1->DR = (uint8_t)b;
 
   CH_IRQ_EPILOGUE();
 }
@@ -259,9 +259,9 @@ CH_IRQ_HANDLER(20) {
   b = sdRequestDataI(&SD2);
   chSysUnlockFromIsr();
   if (b < Q_OK)
-    UART2->CR2 &= ~UART2_CR2_TIEN;
+    UART2->CR2 &= (uint8_t)~UART2_CR2_TIEN;
   else
-    UART2->DR = b;
+    UART2->DR = (uint8_t)b;
 
   CH_IRQ_EPILOGUE();
 }
@@ -292,9 +292,9 @@ CH_IRQ_HANDLER(20) {
   b = sdRequestDataI(&SD3);
   chSysUnlockFromIsr();
   if (b < Q_OK)
-    UART3->CR2 &= ~UART3_CR2_TIEN;
+    UART3->CR2 &= (uint8_t)~UART3_CR2_TIEN;
   else
-    UART3->DR = b;
+    UART3->DR = (uint8_t)b;
 
   CH_IRQ_EPILOGUE();
 }
