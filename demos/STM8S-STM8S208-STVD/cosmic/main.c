@@ -66,9 +66,9 @@ void main(void) {
    * Normal main() thread activity.
    */
   while (TRUE) {
-//    if (palReadPad(IOPORT7, PG_BT5) == PAL_LOW)
-//      TestThread(&SD2);
-//    if (palReadPad(IOPORT7, PG_BT6) == PAL_LOW)
+    if (palReadPad(GPIOG, 0) == PAL_LOW)
+      TestThread(&SD2);
+    if (palReadPad(GPIOG, 1) == PAL_LOW)
       sdWriteTimeout(&SD2, "Hello World!\r\n", 14, TIME_INFINITE);
     chThdSleepMilliseconds(1000);
   }

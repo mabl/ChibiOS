@@ -73,7 +73,7 @@ typedef struct {
 /**
  * @brief   Returns the queue's buffer size.
  */
-#define chQSize(q) ((q)->q_top - (q)->q_buffer)
+#define chQSize(q) ((cnt_t)((q)->q_top - (q)->q_buffer))
 
 /**
  * @brief   Queue space.
@@ -82,7 +82,7 @@ typedef struct {
  * @note    The returned value can be less than zero when there are waiting
  *          threads on the internal semaphore.
  */
-#define chQSpace(q) chSemGetCounterI(&(q)->q_sem)
+#define chQSpace(q) ((cnt_t)chSemGetCounterI(&(q)->q_sem))
 
 /**
  * @extends GenericQueue

@@ -94,7 +94,7 @@ typedef uint16_t        systime_t;
 /**
  * @brief   Counter, recommended fastest signed.
  */
-typedef int16_t         cnt_t;
+typedef int8_t          cnt_t;
 
 /**
  * @brief   Inline function modifier.

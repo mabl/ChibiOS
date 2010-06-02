@@ -27,6 +27,7 @@
 
 #include "ch.h"
 
+@tiny ReadyList rlist;
 
 /**
  * @brief   Performs a context switch between two threads.
@@ -38,7 +39,7 @@ void _port_switch(Thread *otp) {
   _asm("        xref    _rlist          \n"
        "        ldw     y,sp            \n"
        "        ldw     (5,x),y         \n"
-       "        ldw     x,_rlist+13     \n"
+       "        ldw     x,_rlist+5      \n"
        "        ldw     x,(5,x)         \n"
        "        ldw     sp,x            \n", otp);
 }
