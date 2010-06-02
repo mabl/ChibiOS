@@ -45,6 +45,12 @@ Compiler: Cosmic STM8 compiler 4.3.3.3.
 --- Test Case 6.3 (Events, timeouts)
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
+--- Test Case 7.1 (Heap, allocation and fragmentation test)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 8.1 (Memory Pools, queue/dequeue)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
 --- Test Case 10.1 (Queues, input queues)
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
@@ -52,19 +58,19 @@ Compiler: Cosmic STM8 compiler 4.3.3.3.
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
 --- Test Case 11.1 (Benchmark, messages #1)
---- Score : 36244 msgs/S, 72488 ctxswc/S
+--- Score : 36080 msgs/S, 72160 ctxswc/S
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
 --- Test Case 11.2 (Benchmark, messages #2)
---- Score : 28697 msgs/S, 57394 ctxswc/S
+--- Score : 28594 msgs/S, 57188 ctxswc/S
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
 --- Test Case 11.3 (Benchmark, messages #3)
---- Score : 28696 msgs/S, 57392 ctxswc/S
+--- Score : 28594 msgs/S, 57188 ctxswc/S
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
 --- Test Case 11.4 (Benchmark, context switch)
---- Score : 138392 ctxswc/S
+--- Score : 138384 ctxswc/S
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
 --- Test Case 11.5 (Benchmark, threads, full cycle)
@@ -76,15 +82,15 @@ Compiler: Cosmic STM8 compiler 4.3.3.3.
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
 --- Test Case 11.7 (Benchmark, mass reschedule, 5 threads)
---- Score : 8817 reschedules/S, 52902 ctxswc/S
+--- Score : 8890 reschedules/S, 53340 ctxswc/S
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
 --- Test Case 11.8 (Benchmark, round robin context switching)
---- Score : 70644 ctxswc/S
+--- Score : 71916 ctxswc/S
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
 --- Test Case 11.9 (Benchmark, I/O Queues throughput)
---- Score : 85560 bytes/S
+--- Score : 85132 bytes/S
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
 --- Test Case 11.10 (Benchmark, virtual timers set/reset)
