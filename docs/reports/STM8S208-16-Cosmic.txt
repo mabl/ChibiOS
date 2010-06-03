@@ -33,7 +33,34 @@ Compiler: Cosmic STM8 compiler 4.3.3.3.
 --- Test Case 2.3 (Semaphores, atomic signal-wait)
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
+--- Test Case 3.1 (Mutexes, priority enqueuing test)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 3.2 (Mutexes, priority inheritance, simple case)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 3.3 (Mutexes, priority inheritance, complex case)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 3.4 (Mutexes, priority return)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 3.5 (Mutexes, status)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 3.6 (CondVar, signal test)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 3.7 (CondVar, broadcast test)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 3.8 (CondVar, boost test)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
 --- Test Case 4.1 (Messages, loop)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 5.1 (Mailboxes, queuing and timeouts)
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
 --- Test Case 6.1 (Events, registration and dispatch)
@@ -51,6 +78,15 @@ Compiler: Cosmic STM8 compiler 4.3.3.3.
 --- Test Case 8.1 (Memory Pools, queue/dequeue)
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
+--- Test Case 9.1 (Dynamic APIs, threads creation from heap)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 9.2 (Dynamic APIs, threads creation from memory pool)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 9.3 (Dynamic APIs, registry and references)
+--- Result: SUCCESS
+----------------------------------------------------------------------------
 --- Test Case 10.1 (Queues, input queues)
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
@@ -58,7 +94,7 @@ Compiler: Cosmic STM8 compiler 4.3.3.3.
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
 --- Test Case 11.1 (Benchmark, messages #1)
---- Score : 36080 msgs/S, 72160 ctxswc/S
+--- Score : 36081 msgs/S, 72162 ctxswc/S
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
 --- Test Case 11.2 (Benchmark, messages #2)
@@ -70,45 +106,52 @@ Compiler: Cosmic STM8 compiler 4.3.3.3.
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
 --- Test Case 11.4 (Benchmark, context switch)
---- Score : 138384 ctxswc/S
+--- Score : 138392 ctxswc/S
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
 --- Test Case 11.5 (Benchmark, threads, full cycle)
---- Score : 22200 threads/S
+--- Score : 20867 threads/S
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
 --- Test Case 11.6 (Benchmark, threads, create only)
---- Score : 32821 threads/S
+--- Score : 32356 threads/S
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
 --- Test Case 11.7 (Benchmark, mass reschedule, 5 threads)
---- Score : 8890 reschedules/S, 53340 ctxswc/S
+--- Score : 9234 reschedules/S, 55404 ctxswc/S
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
 --- Test Case 11.8 (Benchmark, round robin context switching)
---- Score : 71916 ctxswc/S
+--- Score : 70960 ctxswc/S
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
 --- Test Case 11.9 (Benchmark, I/O Queues throughput)
---- Score : 85132 bytes/S
+--- Score : 89420 bytes/S
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
 --- Test Case 11.10 (Benchmark, virtual timers set/reset)
---- Score : 71998 timers/S
+--- Score : 72654 timers/S
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
 --- Test Case 11.11 (Benchmark, semaphores wait/signal)
---- Score : 244020 wait+signal/S
+--- Score : 291932 wait+signal/S
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
---- Test Case 11.12 (Benchmark, RAM footprint)
---- System: 174 bytes
---- Thread: 26 bytes
+--- Test Case 11.12 (Benchmark, mutexes lock/unlock)
+--- Score : 147316 lock+unlock/S
+--- Result: SUCCESS
+----------------------------------------------------------------------------
+--- Test Case 11.13 (Benchmark, RAM footprint)
+--- System: 218 bytes
+--- Thread: 32 bytes
 --- Timer : 10 bytes
 --- Semaph: 5 bytes
 --- EventS: 2 bytes
 --- EventL: 5 bytes
+--- Mutex : 8 bytes
+--- CondV.: 4 bytes
 --- Queue : 15 bytes
+--- MailB.: 18 bytes
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
 

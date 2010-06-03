@@ -45,10 +45,10 @@
 #define MAX_THREADS             5
 #define MAX_TOKENS              16
 
-#if defined(CH_ARCHITECTURE_AVR) ||                                         \
-    defined(CH_ARCHITECTURE_MSP430) ||                                      \
-    defined(CH_ARCHITECTURE_STM8)
+#if defined(CH_ARCHITECTURE_AVR) || defined(CH_ARCHITECTURE_MSP430)
 #define THREADS_STACK_SIZE      48
+#elif defined(CH_ARCHITECTURE_STM8)
+#define THREADS_STACK_SIZE      64
 #elif defined(CH_ARCHITECTURE_SIMIA32)
 #define THREADS_STACK_SIZE      512
 #else
