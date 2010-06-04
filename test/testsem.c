@@ -117,7 +117,7 @@ static void sem1_execute(void) {
  * in each of the above scenario and that the semaphore structure status is
  * correct after each operation.
  */
-const struct testcase testsem1 = {
+ROMCONST struct testcase testsem1 = {
   sem1_gettest,
   sem1_setup,
   NULL,
@@ -185,7 +185,7 @@ static void sem2_execute(void) {
   test_assert_time_window(11, target_time, target_time + ALLOWED_DELAY);
 }
 
-const struct testcase testsem2 = {
+ROMCONST struct testcase testsem2 = {
   sem2_gettest,
   sem2_setup,
   NULL,
@@ -235,7 +235,7 @@ static void sem3_execute(void) {
   test_assert(4, sem1.s_cnt == 0, "counter not zero");
 }
 
-const struct testcase testsem3 = {
+ROMCONST struct testcase testsem3 = {
   sem3_gettest,
   sem3_setup,
   NULL,
@@ -247,7 +247,7 @@ const struct testcase testsem3 = {
 /**
  * @brief   Test sequence for semaphores.
  */
-const struct testcase * const patternsem[] = {
+ROMCONST struct testcase * ROMCONST patternsem[] = {
 #if CH_USE_SEMAPHORES
   &testsem1,
   &testsem2,

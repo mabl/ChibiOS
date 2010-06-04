@@ -19,9 +19,9 @@
 
 /**
  * @file    RC/STM8/chcore.h
- * @brief   STM8 architecture port macros and structures.
+ * @brief   STM8 (Raisonance) architecture port macros and structures.
  *
- * @addtogroup STM8_CORE
+ * @addtogroup STM8_RAISONANCE_CORE
  * @{
  */
 
@@ -29,6 +29,21 @@
 #define _CHCORE_H_
 
 #include <intrins.h>
+
+/*===========================================================================*/
+/* Port configurable parameters.                                             */
+/*===========================================================================*/
+
+/**
+ * @brief   Enables the use of the WFI instruction in the idle thread loop.
+ */
+#ifndef STM8_ENABLE_WFI_IDLE
+#define STM8_ENABLE_WFI_IDLE    FALSE
+#endif
+
+/*===========================================================================*/
+/* Port exported info.                                                       */
+/*===========================================================================*/
 
 /**
  * @brief   Unique macro for the implemented architecture.
@@ -38,7 +53,11 @@
 /**
  * @brief   Name of the implemented architecture.
  */
-#define CH_ARCHITECTURE_NAME "STM8"
+#define CH_ARCHITECTURE_NAME    "STM8"
+
+/*===========================================================================*/
+/* Port implementation part.                                                 */
+/*===========================================================================*/
 
 /**
  * @brief   Base type for stack alignment.
@@ -136,19 +155,16 @@ struct stm8_startctx {
  *          by @p INT_REQUIRED_STACK.
  */
 #ifndef IDLE_THREAD_STACK_SIZE
-#define IDLE_THREAD_STACK_SIZE  0
+#define IDLE_THREAD_STACK_SIZE      0
 #endif
 
 /**
  * @brief   Per-thread stack overhead for interrupts servicing.
- * @details This constant is used in the calculation of the correct working
- *          area size.
- *          This value can be zero on those architecture where there is a
- *          separate interrupt stack and the stack space between @p intctx and
- *          @p extctx is known to be zero.
+ * @details This is a safe value, you may trim it down after reading the
+ *          right size in the map file.
  */
 #ifndef INT_REQUIRED_STACK
-#define INT_REQUIRED_STACK      32
+#define INT_REQUIRED_STACK          48
 #endif
 
 /**
@@ -193,7 +209,7 @@ struct stm8_startctx {
  * @note    @p id can be a function name or a vector number depending on the
  *          port implementation.
  */
-#define PORT_IRQ_HANDLER(id) void irq##id(void) interrupt id
+#define PORT_IRQ_HANDLER(id) void vector##id(void) interrupt id
 
 /**
  * @brief   Port-related initialization code.
@@ -250,7 +266,11 @@ struct stm8_startctx {
  * @brief   Enters an architecture-dependent halt mode.
  * @note    Implemented with the specific "wfi" instruction.
  */
+#if STM8_ENABLE_WFI_IDLE || defined(__DOXYGEN__)
 #define port_wait_for_interrupt() _wfi_()
+#else
+#define port_wait_for_interrupt()
+#endif
 
 /**
  * @brief   Performs a context switch between two threads.
@@ -266,12 +286,36 @@ struct stm8_startctx {
 #ifdef __cplusplus
 extern "C" {
 #endif
-  void port_halt(void);
   void _port_switch(Thread *otp);
   void _port_thread_start(void);
+  void port_halt(void);
 #ifdef __cplusplus
 }
 #endif
+
+/*===========================================================================*/
+/* Scheduler captured code.                                                  */
+/*===========================================================================*/
+
+#define PORT_OPTIMIZED_RLIST_VAR
+#define PORT_OPTIMIZED_RLIST_EXT
+#define PORT_OPTIMIZED_READYLIST_STRUCT
+
+typedef struct {
+  ThreadsQueue          r_queue;
+  tprio_t               r_prio;
+  Thread                *r_current;
+#if CH_USE_REGISTRY
+  Thread                *r_newer;
+  Thread                *r_older;
+#endif
+  /* End of the fields shared with the Thread structure.*/
+#if CH_TIME_QUANTUM > 0
+  cnt_t                 r_preempt;
+#endif
+} ReadyList;
+
+page0 extern ReadyList rlist;
 
 #endif /* _CHCORE_H_ */
 

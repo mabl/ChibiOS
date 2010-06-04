@@ -122,7 +122,7 @@ static void dyn1_execute(void) {
   test_assert(4, n == sz, "heap size changed");
 }
 
-const struct testcase testdyn1 = {
+ROMCONST struct testcase testdyn1 = {
   dyn1_gettest,
   dyn1_setup,
   NULL,
@@ -183,7 +183,7 @@ static void dyn2_execute(void) {
   test_assert(4, chPoolAlloc(&mp1) == NULL, "pool list not empty");
 }
 
-const struct testcase testdyn2 = {
+ROMCONST struct testcase testdyn2 = {
   dyn2_gettest,
   dyn2_setup,
   NULL,
@@ -255,7 +255,7 @@ static void dyn3_execute(void) {
   test_assert(7, n1 == n3, "unexpected threads count");
 }
 
-const struct testcase testdyn3 = {
+ROMCONST struct testcase testdyn3 = {
   dyn3_gettest,
   dyn3_setup,
   NULL,
@@ -267,7 +267,7 @@ const struct testcase testdyn3 = {
 /**
  * @brief   Test sequence for dynamic APIs.
  */
-const struct testcase * const patterndyn[] = {
+ROMCONST struct testcase * ROMCONST patterndyn[] = {
 #if CH_USE_DYNAMIC
 #if CH_USE_HEAP
   &testdyn1,

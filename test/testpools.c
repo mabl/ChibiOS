@@ -95,7 +95,7 @@ static void pools1_execute(void) {
   test_assert(3, chPoolAlloc(&mp1) == NULL, "provider returned memory");
 }
 
-const struct testcase testpools1 = {
+ROMCONST struct testcase testpools1 = {
   pools1_gettest,
   pools1_setup,
   NULL,
@@ -107,7 +107,7 @@ const struct testcase testpools1 = {
 /*
  * @brief   Test sequence for pools.
  */
-const struct testcase * const patternpools[] = {
+ROMCONST struct testcase * ROMCONST patternpools[] = {
 #if CH_USE_MEMPOOLS
   &testpools1,
 #endif

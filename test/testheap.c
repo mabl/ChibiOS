@@ -147,7 +147,7 @@ static void heap1_execute(void) {
   test_assert(12, n == sz, "size changed");
 }
 
-const struct testcase testheap1 = {
+ROMCONST struct testcase testheap1 = {
   heap1_gettest,
   heap1_setup,
   NULL,
@@ -159,7 +159,7 @@ const struct testcase testheap1 = {
 /**
  * @brief   Test sequence for heap.
  */
-const struct testcase * const patternheap[] = {
+ROMCONST struct testcase * ROMCONST patternheap[] = {
 #if CH_USE_HEAP
   &testheap1,
 #endif

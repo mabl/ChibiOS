@@ -134,7 +134,7 @@ static void queues1_execute(void) {
   test_assert(12, chIQGetTimeout(&iq, 10) == Q_TIMEOUT, "wrong timeout return");
 }
 
-const struct testcase testqueues1 = {
+ROMCONST struct testcase testqueues1 = {
   queues1_gettest,
   queues1_setup,
   NULL,
@@ -198,7 +198,7 @@ static void queues2_execute(void) {
   test_assert(12, chOQPutTimeout(&oq, 0, 10) == Q_TIMEOUT, "wrong timeout return");
 }
 
-const struct testcase testqueues2 = {
+ROMCONST struct testcase testqueues2 = {
   queues2_gettest,
   queues2_setup,
   NULL,
@@ -209,7 +209,7 @@ const struct testcase testqueues2 = {
 /**
  * @brief   Test sequence for queues.
  */
-const struct testcase * const patternqueues[] = {
+ROMCONST struct testcase * ROMCONST patternqueues[] = {
 #if CH_USE_QUEUES
   &testqueues1,
   &testqueues2,
