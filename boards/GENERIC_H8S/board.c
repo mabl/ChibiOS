@@ -30,9 +30,11 @@ void hwinit(void) {
   /*
    * PAL initialization.
    */
+#if CH_HAL_USE_PAL
 //  palClearPad(IOPORT2, GPIO_LED);
 //  palSetPad(IOPORT2, GPIO_LED);
 //  palSetPadMode(IOPORT2, GPIO_LED, PAL_MODE_OUTPUT_PUSHPULL);
+#endif
 
   /*
    * Disable interrupts from TPU.

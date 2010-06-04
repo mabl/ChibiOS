@@ -28,27 +28,38 @@
 #define _BOARD_H_
 
 #include "ioh82368.h"
+#include "cs8900a.h"
 
 #define BOARD_MY_H8S
 
-#define _BV(x)          (1<<x)
+#define _BV(x)                  (1<<x)
 
-#define bitLED          2
+#define bitLED                  2
 
-#define LEDOn()         P2DR &= ~_BV(bitLED)
-#define LEDOff()        P2DR |= _BV(bitLED)
+#define LEDOn()                 P2DR &= ~_BV(bitLED)
+#define LEDOff()                P2DR |= _BV(bitLED)
 
 /*
  * Initial I/O setup.
  */
-#define VAL_GPIO2_OUT   0x01      /* Output data. */
-#define VAL_GPIO2_DIR   0xFF      /* Direction. */
+#define VAL_GPIO2_OUT           0x01      /* Output data. */
+#define VAL_GPIO2_DIR           0xFF      /* Direction. */
 
 /*
  * I/O definitions.
  */
-#define GPIO_LED        2
-#define GPIO_LED_MASK   (1<<GPIO_LED)
+#define GPIO_LED                2
+#define GPIO_LED_MASK           (1<<GPIO_LED)
+
+/*
+ * CS8900A definitions.
+ */
+#define CS8900A_BASE_ADDRESS    0x00A00300 /* CS8900A base address */
+#define CS8900A_IRQ_NUMBER      0x0002 /* CS8900A interrupt number connected to H8S */
+#define CS8900A_READ(adr)       ( *(volatile uint16_t *)(CS8900A_BASE_ADDRESS+adr) )
+#define CS8900A_WRITE(adr,dat)  ( *(volatile uint16_t *)(CS8900A_BASE_ADDRESS+adr) = dat )
+#define CS8900A_IRQENABLE()     (IER |= _BV(7))
+#define CS8900A_IRQDISABLE()    (IER &= ~_BV(7))
 
 void hwinit(void);
 

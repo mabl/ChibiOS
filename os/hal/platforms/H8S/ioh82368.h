@@ -35,13 +35,27 @@
 #define PE							5			// Parity Enable
 #define O_E_						4			// Parity Mode (1 - odd parity)
 
+// Interrupt Controller
+#define ITSR            (*(volatile unsigned short *) (0x00FFFE16))
+#define ISCRL           (*(volatile unsigned short *) (0x00FFFE1C))
+#define IER             (*(volatile unsigned short *) (0xFFFFFF32))
+#define ISR             (*(volatile unsigned short *) (0xFFFFFF34))
 
+
+// Bus Controller
+#define ABWCR          (*(volatile unsigned char *)  (0x00FFFEC0))
+#define ASTCR          (*(volatile unsigned char *)  (0x00FFFEC1))
+#define WTCRAH         (*(volatile unsigned char *)  (0x00FFFEC2))
+#define WTCRAL         (*(volatile unsigned char *)  (0x00FFFEC3))
 
 // I/O Port 2
-#define P2DDR          (*(volatile unsigned char *)  (0xFFFE21))
+#define P2DDR          (*(volatile unsigned char *)  (0x00FFFE21))
 #define PORT2          (*(volatile unsigned char *)  (0xFFFFFF51))
 #define P2DR           (*(volatile unsigned char *)  (0xFFFFFF61))
 
+// I/O Port F
+#define PFDDR          (*(volatile unsigned char *)  (0x00FFFE2E))
+#define PFCR0          (*(volatile unsigned char *)  (0x00FFFE32))
 
 // TPU1
 #define TPU_TCR1       (*(volatile unsigned char *)  (0xFFFFFFE0))
@@ -70,7 +84,9 @@
 #define SCI0_RDR0      (*(volatile unsigned char *)  (0xFFFFFF7D))
 
 // Interrupt vectors
-#define TPU_TGI1A      0xC0
+#define IRQ_7          0x05C
+
+#define TPU_TGI1A      0x0C0
 
 #define SCI_ERI0       0x160
 #define SCI_RXI0       0x164

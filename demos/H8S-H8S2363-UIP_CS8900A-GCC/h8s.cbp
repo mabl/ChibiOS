@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="h8s" />
+		<Option pch_mode="2" />
+		<Option compiler="armelfgcc" />
+		<Build>
+			<Target title="Release">
+				<Option output="bin\Release\h8s" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="1" />
+				<Option compiler="gnu_gcc_compiler_for_h8" />
+				<Compiler>
+					<Add option="-Os" />
+					<Add option="-Wall" />
+					<Add option="-fomit-frame-pointer" />
+					<Add option="-fno-strict-aliasing" />
+				</Compiler>
+				<Linker>
+					<Add option="-Tch.ld" />
+					<Add option="-nostartfiles" />
+					<Add option="-Wl,--relax" />
+					<Add option="-Wl,-gc-sections" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="h8300-elf-objcopy -O binary $(TARGET_OUTPUT_FILE)  $(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).bin" />
+					<Add after="h8300-elf-objcopy -O srec --srec-forceS3 $(TARGET_OUTPUT_FILE)  $(TARGET_OUTPUT_DIR)$(TARGET_OUTPUT_BASENAME).srec" />
+					<Add after="h8300-elf-size $(TARGET_OUTPUT_FILE)" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-std=gnu99" />
+			<Add option="-fshort-enums" />
+			<Add option="-Wswitch" />
+			<Add option="-Wunused-variable" />
+			<Add option="-Wno-pointer-sign" />
+			<Add option="-ffunction-sections" />
+			<Add option="-ms" />
+			<Add option="-mint32" />
+			<Add option="--param inline-call-cost=2" />
+			<Add option="-DF_CPU=32000000" />
+			<Add directory="..\..\os\kernel\include" />
+			<Add directory="..\..\os\ports\GCC\H8S" />
+			<Add directory="..\..\boards\GENERIC_H8S" />
+			<Add directory="..\..\os\hal\platforms\H8S" />
+			<Add directory="..\..\os\hal\include" />
+			<Add directory="..\..\test" />
+			<Add directory="." />
+			<Add directory="..\..\ext\uip-1.0\uip" />
+			<Add directory="..\..\ext\uip-1.0\apps\webserver" />
+			<Add directory="web" />
+			<Add directory="..\..\os\various" />
+		</Compiler>
+		<Linker>
+			<Add directory="c:\Program Files\KPIT Cummins\GNUH8v10.01-ELF\h8300-elf\lib\gcc\h8300-elf\4.4-GNUH8_v10.01\h8300s\int32" />
+			<Add directory="c:\Program Files\KPIT Cummins\GNUH8v10.01-ELF\h8300-elf\h8300-elf\lib" />
+			<Add directory="c:\Program Files\KPIT Cummins\GNUH8v10.01-ELF\h8300-elf\h8300-elf\lib\h8300s\int32" />
+		</Linker>
+		<Unit filename="..\..\boards\GENERIC_H8S\board.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\boards\GENERIC_H8S\board.h" />
+		<Unit filename="ch.ld" />
+		<Unit filename="chconf.h" />
+		<Unit filename="halconf.h" />
+		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="mcuconf.h" />
+		<Unit filename="web\cc-arch.h" />
+		<Unit filename="web\clock-arch.h" />
+		<Unit filename="web\uip-conf.h" />
+		<Unit filename="web\webthread.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="web\webthread.h" />
+		<Unit filename="..\..\ext\uip-1.0\apps\webserver\http-strings.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\ext\uip-1.0\apps\webserver\http-strings.h" />
+		<Unit filename="..\..\ext\uip-1.0\apps\webserver\httpd-cgi.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\ext\uip-1.0\apps\webserver\httpd-cgi.h" />
+		<Unit filename="..\..\ext\uip-1.0\apps\webserver\httpd-fs.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\ext\uip-1.0\apps\webserver\httpd-fs.h" />
+		<Unit filename="..\..\ext\uip-1.0\apps\webserver\httpd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\ext\uip-1.0\apps\webserver\httpd.h" />
+		<Unit filename="..\..\ext\uip-1.0\uip\psock.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\ext\uip-1.0\uip\psock.h" />
+		<Unit filename="..\..\ext\uip-1.0\uip\uip.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\ext\uip-1.0\uip\uip.h" />
+		<Unit filename="..\..\ext\uip-1.0\uip\uip_arp.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\ext\uip-1.0\uip\uip_arp.h" />
+		<Unit filename="..\..\os\hal\include\hal.h" />
+		<Unit filename="..\..\os\hal\include\mac.h" />
+		<Unit filename="..\..\os\hal\include\pal.h" />
+		<Unit filename="..\..\os\hal\platforms\H8S\cs8900a.h" />
+		<Unit filename="..\..\os\hal\platforms\H8S\hal_lld.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\hal\platforms\H8S\hal_lld.h" />
+		<Unit filename="..\..\os\hal\platforms\H8S\ioh82368.h" />
+		<Unit filename="..\..\os\hal\platforms\H8S\mac_lld.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\hal\platforms\H8S\mac_lld.h" />
+		<Unit filename="..\..\os\hal\platforms\H8S\pal_lld.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\hal\platforms\H8S\pal_lld.h" />
+		<Unit filename="..\..\os\hal\platforms\H8S\serial_lld.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\hal\platforms\H8S\serial_lld.h" />
+		<Unit filename="..\..\os\hal\src\hal.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\hal\src\mac.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\hal\src\pal.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\hal\src\serial.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\kernel\include\ch.h" />
+		<Unit filename="..\..\os\kernel\include\channels.h" />
+		<Unit filename="..\..\os\kernel\include\condvars.h" />
+		<Unit filename="..\..\os\kernel\include\debug.h" />
+		<Unit filename="..\..\os\kernel\include\events.h" />
+		<Unit filename="..\..\os\kernel\include\heap.h" />
+		<Unit filename="..\..\os\kernel\include\inline.h" />
+		<Unit filename="..\..\os\kernel\include\lists.h" />
+		<Unit filename="..\..\os\kernel\include\mailboxes.h" />
+		<Unit filename="..\..\os\kernel\include\memcore.h" />
+		<Unit filename="..\..\os\kernel\include\mempools.h" />
+		<Unit filename="..\..\os\kernel\include\messages.h" />
+		<Unit filename="..\..\os\kernel\include\mutexes.h" />
+		<Unit filename="..\..\os\kernel\include\queues.h" />
+		<Unit filename="..\..\os\kernel\include\registry.h" />
+		<Unit filename="..\..\os\kernel\include\scheduler.h" />
+		<Unit filename="..\..\os\kernel\include\semaphores.h" />
+		<Unit filename="..\..\os\kernel\include\streams.h" />
+		<Unit filename="..\..\os\kernel\include\sys.h" />
+		<Unit filename="..\..\os\kernel\include\threads.h" />
+		<Unit filename="..\..\os\kernel\include\vt.h" />
+		<Unit filename="..\..\os\kernel\src\chcond.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\kernel\src\chdebug.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\kernel\src\chevents.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\kernel\src\chheap.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\kernel\src\chlists.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\kernel\src\chmboxes.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\kernel\src\chmemcore.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\kernel\src\chmempools.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\kernel\src\chmsg.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\kernel\src\chmtx.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\kernel\src\chqueues.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\kernel\src\chregistry.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\kernel\src\chschd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\kernel\src\chsem.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\kernel\src\chsys.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\kernel\src\chthreads.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\kernel\src\chvt.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\ports\GCC\H8S\chcore.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\ports\GCC\H8S\chcore.h" />
+		<Unit filename="..\..\os\ports\GCC\H8S\chtypes.h" />
+		<Unit filename="..\..\os\ports\GCC\H8S\crt0.S" />
+		<Unit filename="..\..\os\various\evtimer.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\os\various\evtimer.h" />
+		<Unit filename="..\..\os\various\syscalls.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\test\test.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\test\test.h" />
+		<Unit filename="..\..\test\testbmk.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\test\testbmk.h" />
+		<Unit filename="..\..\test\testdyn.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\test\testdyn.h" />
+		<Unit filename="..\..\test\testevt.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\test\testevt.h" />
+		<Unit filename="..\..\test\testheap.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\test\testheap.h" />
+		<Unit filename="..\..\test\testmbox.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\test\testmbox.h" />
+		<Unit filename="..\..\test\testmsg.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\test\testmsg.h" />
+		<Unit filename="..\..\test\testmtx.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\test\testmtx.h" />
+		<Unit filename="..\..\test\testpools.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\test\testpools.h" />
+		<Unit filename="..\..\test\testqueues.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\test\testqueues.h" />
+		<Unit filename="..\..\test\testsem.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\test\testsem.h" />
+		<Unit filename="..\..\test\testthd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="..\..\test\testthd.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
