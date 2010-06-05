@@ -74,7 +74,7 @@ String.6.0=2010,5,25,14,45,56
 String.100.0=$(TargetFName)
 String.101.0=
 String.102.0=
-String.103.0=.\;..\..\..\os\kernel\src;..\..\..\os\kernel\include;..\..\..\os\ports\cosmic\stm8;..\..\..\boards\st_stm8s_discovery;..\..\..\os\hal\platforms\stm8;..\..\..\os\hal\include;..\..\..\os\hal\src;..\..\..\test;
+String.103.0=.\;..\..\..\os\kernel\src;..\..\..\os\kernel\include;..\..\..\os\ports\cosmic\stm8;..\..\..\boards\st_stm8s_discovery;..\..\..\os\hal\platforms\stm8;..\..\..\os\hal\include;..\..\..\os\hal\src;..\..\..\test;..\demo;
 
 [Root.Config.0.Settings.2]
 String.2.0=
@@ -83,10 +83,10 @@ String.100.0=STM8S105C6
 
 [Root.Config.0.Settings.3]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +warn +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
+String.6.0=2010,6,5,11,53,48
 
 [Root.Config.0.Settings.4]
 String.2.0=Assembling $(InputFile)...
@@ -156,7 +156,7 @@ Int.108=0
 String.6.0=2010,5,25,14,45,56
 String.100.0=$(TargetFName)
 String.101.0=
-String.103.0=.\;..\..\..\os\kernel\src;..\..\..\os\kernel\include;..\..\..\os\ports\cosmic\stm8;..\..\..\boards\st_stm8s_discovery;..\..\..\os\hal\platforms\stm8;..\..\..\os\hal\include;..\..\..\os\hal\src;..\..\..\test;
+String.103.0=.\;..\..\..\os\kernel\src;..\..\..\os\kernel\include;..\..\..\os\ports\cosmic\stm8;..\..\..\boards\st_stm8s_discovery;..\..\..\os\hal\platforms\stm8;..\..\..\os\hal\include;..\..\..\os\hal\src;..\..\..\test;..\demo;
 
 [Root.Config.1.Settings.2]
 String.2.0=
@@ -165,10 +165,10 @@ String.100.0=STM8S105C6
 
 [Root.Config.1.Settings.3]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 -customC-pp -customLst-l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,3,14,56,54
+String.6.0=2010,6,5,11,53,48
 
 [Root.Config.1.Settings.4]
 String.2.0=Assembling $(InputFile)...
@@ -187,8 +187,8 @@ String.2.0=Running Linker
 String.3.0=clnk $(ToolsetLibOpts) -o $(OutputPath)$(TargetSName).sm8 -fakeInteger -fakeOutFile$(ProjectSFile).elf -fakeRunConv -fakeStartupcrtsi0.sm8 -fakeSemiAutoGen -fakeVectFilevectors.c -fakeVectAddr0x8000 -customMapFile -customMapFile-m$(OutputPath)$(TargetSName).map -customMapAddress -customCfgFile$(OutputPath)$(TargetSName).lkf 
 String.3.1=cvdwarf $(OutputPath)$(TargetSName).sm8
 String.4.0=$(OutputPath)$(TargetFName)
-String.5.0=$(OutputPath)$(ProjectSFile).elf $(OutputPath)$(TargetSName).map
-String.6.0=2010,6,3,15,59,36
+String.5.0=
+String.6.0=2010,6,5,11,53,48
 String.100.0=
 String.101.0=crtsi.st7
 String.102.0=+seg .const -b 0x8080 -m 0x7f80 -n .const -it
@@ -221,7 +221,7 @@ String.6.0=2010,5,25,14,45,56
 [Root.Source Files]
 ElemType=Folder
 PathName=Source Files
-Child=Root.Source Files.Source Files\board
+Child=Root.Source Files...\demo\main.c
 Next=Root.Include Files
 Config.0=Root.Source Files.Config.0
 Config.1=Root.Source Files.Config.1
@@ -246,10 +246,10 @@ Int.1=0
 
 [Root.Source Files.Config.0.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +warn +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
+String.6.0=2010,6,5,11,53,48
 
 [Root.Source Files.Config.0.Settings.2]
 String.2.0=Assembling $(InputFile)...
@@ -273,10 +273,10 @@ Int.1=0
 
 [Root.Source Files.Config.1.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 -customC-pp -customLst-l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,3,14,56,54
+String.6.0=2010,6,5,11,53,48
 
 [Root.Source Files.Config.1.Settings.2]
 String.2.0=Assembling $(InputFile)...
@@ -291,6 +291,16 @@ String.3.0=
 String.4.0=
 String.5.0=
 String.6.0=2010,5,25,14,45,56
+
+[Root.Source Files...\demo\main.c]
+ElemType=File
+PathName=..\demo\main.c
+Next=Root.Source Files.vectors.c
+
+[Root.Source Files.vectors.c]
+ElemType=File
+PathName=vectors.c
+Next=Root.Source Files.Source Files\board
 
 [Root.Source Files.Source Files\board]
 ElemType=Folder
@@ -320,10 +330,10 @@ Int.1=0
 
 [Root.Source Files.Source Files\board.Config.0.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +warn +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
+String.6.0=2010,6,5,11,53,48
 
 [Root.Source Files.Source Files\board.Config.0.Settings.2]
 String.2.0=Assembling $(InputFile)...
@@ -347,10 +357,10 @@ Int.1=0
 
 [Root.Source Files.Source Files\board.Config.1.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +modsl0 -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +modsl0 -customC-pp -customLst-l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,19,50
+String.6.0=2010,6,5,11,53,48
 
 [Root.Source Files.Source Files\board.Config.1.Settings.2]
 String.2.0=Assembling $(InputFile)...
@@ -404,10 +414,10 @@ Int.1=0
 
 [Root.Source Files.Source Files\os.Source Files\os\hal.Config.0.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +warn +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
+String.6.0=2010,6,5,11,53,48
 
 [Root.Source Files.Source Files\os.Source Files\os\hal.Config.0.Settings.2]
 String.2.0=Assembling $(InputFile)...
@@ -431,10 +441,10 @@ Int.1=0
 
 [Root.Source Files.Source Files\os.Source Files\os\hal.Config.1.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +modsl0 -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +modsl0 -customC-pp -customLst-l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,19,50
+String.6.0=2010,6,5,11,53,48
 
 [Root.Source Files.Source Files\os.Source Files\os\hal.Config.1.Settings.2]
 String.2.0=Assembling $(InputFile)...
@@ -552,10 +562,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chcond.c.Config.0.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +warn +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
+String.6.0=2010,6,5,11,53,48
 String.8.0=Debug
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chcond.c.Config.1.Settings.0]
@@ -573,10 +583,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chcond.c.Config.1.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +modsl0 -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +modsl0 -customC-pp -customLst-l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,19,50
+String.6.0=2010,6,5,11,53,48
 String.8.0=Release
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chdebug.c]
@@ -611,10 +621,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chdebug.c.Config.0.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +warn +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
+String.6.0=2010,6,5,11,53,48
 String.8.0=Debug
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chdebug.c.Config.1.Settings.0]
@@ -632,10 +642,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chdebug.c.Config.1.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +modsl0 -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +modsl0 -customC-pp -customLst-l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,19,50
+String.6.0=2010,6,5,11,53,48
 String.8.0=Release
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chevents.c]
@@ -670,10 +680,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chevents.c.Config.0.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +warn +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
+String.6.0=2010,6,5,11,53,48
 String.8.0=Debug
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chevents.c.Config.1.Settings.0]
@@ -691,10 +701,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chevents.c.Config.1.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +modsl0 -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +modsl0 -customC-pp -customLst-l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,19,50
+String.6.0=2010,6,5,11,53,48
 String.8.0=Release
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chheap.c]
@@ -729,10 +739,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chheap.c.Config.0.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +warn +mods0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
+String.6.0=2010,6,5,11,54,38
 String.8.0=Debug
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chheap.c.Config.1.Settings.0]
@@ -750,10 +760,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chheap.c.Config.1.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +mods0 -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +mods0 -customC-pp -customLst-l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,3,11,43,7
+String.6.0=2010,6,5,11,53,48
 String.8.0=Release
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chlists.c]
@@ -788,10 +798,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chlists.c.Config.0.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +warn +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
+String.6.0=2010,6,5,11,53,48
 String.8.0=Debug
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chlists.c.Config.1.Settings.0]
@@ -809,10 +819,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chlists.c.Config.1.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +modsl0 -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +modsl0 -customC-pp -customLst-l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,19,50
+String.6.0=2010,6,5,11,53,48
 String.8.0=Release
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmboxes.c]
@@ -847,10 +857,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmboxes.c.Config.0.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +warn +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
+String.6.0=2010,6,5,11,53,48
 String.8.0=Debug
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmboxes.c.Config.1.Settings.0]
@@ -868,10 +878,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmboxes.c.Config.1.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +modsl0 -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +modsl0 -customC-pp -customLst-l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,19,50
+String.6.0=2010,6,5,11,53,48
 String.8.0=Release
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmemcore.c]
@@ -906,10 +916,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmemcore.c.Config.0.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +warn +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
+String.6.0=2010,6,5,11,53,48
 String.8.0=Debug
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmemcore.c.Config.1.Settings.0]
@@ -927,10 +937,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmemcore.c.Config.1.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +modsl0 -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +modsl0 -customC-pp -customLst-l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,19,50
+String.6.0=2010,6,5,11,53,48
 String.8.0=Release
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmempools.c]
@@ -965,10 +975,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmempools.c.Config.0.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +warn +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
+String.6.0=2010,6,5,11,53,48
 String.8.0=Debug
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmempools.c.Config.1.Settings.0]
@@ -986,10 +996,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmempools.c.Config.1.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +modsl0 -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +modsl0 -customC-pp -customLst-l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,19,50
+String.6.0=2010,6,5,11,53,48
 String.8.0=Release
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmsg.c]
@@ -1024,10 +1034,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmsg.c.Config.0.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +warn +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
+String.6.0=2010,6,5,11,53,48
 String.8.0=Debug
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmsg.c.Config.1.Settings.0]
@@ -1045,10 +1055,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmsg.c.Config.1.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +modsl0 -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +modsl0 -customC-pp -customLst-l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,19,50
+String.6.0=2010,6,5,11,53,48
 String.8.0=Release
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmtx.c]
@@ -1083,10 +1093,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmtx.c.Config.0.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +warn +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
+String.6.0=2010,6,5,11,53,48
 String.8.0=Debug
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmtx.c.Config.1.Settings.0]
@@ -1104,10 +1114,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chmtx.c.Config.1.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +modsl0 -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +modsl0 -customC-pp -customLst-l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,19,50
+String.6.0=2010,6,5,11,53,48
 String.8.0=Release
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chqueues.c]
@@ -1142,10 +1152,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chqueues.c.Config.0.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +warn +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
+String.6.0=2010,6,5,11,53,48
 String.8.0=Debug
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chqueues.c.Config.1.Settings.0]
@@ -1163,10 +1173,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chqueues.c.Config.1.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +modsl0 -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +modsl0 -customC-pp -customLst-l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,19,50
+String.6.0=2010,6,5,11,53,48
 String.8.0=Release
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chregistry.c]
@@ -1201,10 +1211,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chregistry.c.Config.0.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +warn +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
+String.6.0=2010,6,5,11,53,48
 String.8.0=Debug
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chregistry.c.Config.1.Settings.0]
@@ -1222,10 +1232,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chregistry.c.Config.1.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +modsl0 -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +modsl0 -customC-pp -customLst-l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,19,50
+String.6.0=2010,6,5,11,53,48
 String.8.0=Release
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chschd.c]
@@ -1260,10 +1270,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chschd.c.Config.0.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +warn +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
+String.6.0=2010,6,5,11,53,48
 String.8.0=Debug
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chschd.c.Config.1.Settings.0]
@@ -1281,10 +1291,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chschd.c.Config.1.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +modsl0 -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +modsl0 -customC-pp -customLst-l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,19,50
+String.6.0=2010,6,5,11,53,48
 String.8.0=Release
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chsem.c]
@@ -1319,10 +1329,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chsem.c.Config.0.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +warn +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
+String.6.0=2010,6,5,11,53,48
 String.8.0=Debug
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chsem.c.Config.1.Settings.0]
@@ -1340,10 +1350,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chsem.c.Config.1.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +modsl0 -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +modsl0 -customC-pp -customLst-l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,19,50
+String.6.0=2010,6,5,11,53,48
 String.8.0=Release
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chsys.c]
@@ -1378,10 +1388,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chsys.c.Config.0.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +warn +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
+String.6.0=2010,6,5,11,53,48
 String.8.0=Debug
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chsys.c.Config.1.Settings.0]
@@ -1399,10 +1409,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chsys.c.Config.1.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +modsl0 -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +modsl0 -customC-pp -customLst-l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,19,50
+String.6.0=2010,6,5,11,53,48
 String.8.0=Release
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chthreads.c]
@@ -1437,10 +1447,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chthreads.c.Config.0.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +warn +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
+String.6.0=2010,6,5,11,53,48
 String.8.0=Debug
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chthreads.c.Config.1.Settings.0]
@@ -1458,10 +1468,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chthreads.c.Config.1.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +modsl0 -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +modsl0 -customC-pp -customLst-l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,19,50
+String.6.0=2010,6,5,11,53,48
 String.8.0=Release
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chvt.c]
@@ -1495,10 +1505,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chvt.c.Config.0.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +warn +mods0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
+String.6.0=2010,6,5,11,54,38
 String.8.0=Debug
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chvt.c.Config.1.Settings.0]
@@ -1516,10 +1526,10 @@ String.6.0=2010,5,25,14,45,56
 
 [Root.Source Files.Source Files\os.Source Files\os\kernel...\..\..\os\kernel\src\chvt.c.Config.1.Settings.2]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +mods0 -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +mods0 -customC-pp -customLst-l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,3,11,42,52
+String.6.0=2010,6,5,11,53,48
 String.8.0=Release
 
 [Root.Source Files.Source Files\os.Source Files\os\port]
@@ -1549,10 +1559,10 @@ Int.1=0
 
 [Root.Source Files.Source Files\os.Source Files\os\port.Config.0.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +warn +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
+String.6.0=2010,6,5,11,53,48
 
 [Root.Source Files.Source Files\os.Source Files\os\port.Config.0.Settings.2]
 String.2.0=Assembling $(InputFile)...
@@ -1576,10 +1586,10 @@ Int.1=0
 
 [Root.Source Files.Source Files\os.Source Files\os\port.Config.1.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +modsl0 -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +modsl0 -customC-pp -customLst-l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,19,50
+String.6.0=2010,6,5,11,53,48
 
 [Root.Source Files.Source Files\os.Source Files\os\port.Config.1.Settings.2]
 String.2.0=Assembling $(InputFile)...
@@ -1603,7 +1613,6 @@ PathName=..\..\..\os\ports\cosmic\stm8\chcore.c
 ElemType=Folder
 PathName=Source Files\test
 Child=Root.Source Files.Source Files\test...\..\..\test\test.c
-Next=Root.Source Files.main.c
 Config.0=Root.Source Files.Source Files\test.Config.0
 Config.1=Root.Source Files.Source Files\test.Config.1
 
@@ -1627,10 +1636,10 @@ Int.1=0
 
 [Root.Source Files.Source Files\test.Config.0.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +warn +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
+String.6.0=2010,6,5,11,53,48
 
 [Root.Source Files.Source Files\test.Config.0.Settings.2]
 String.2.0=Assembling $(InputFile)...
@@ -1654,10 +1663,10 @@ Int.1=0
 
 [Root.Source Files.Source Files\test.Config.1.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +modsl0 -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +modsl0 -customC-pp -customLst-l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,19,50
+String.6.0=2010,6,5,11,53,48
 
 [Root.Source Files.Source Files\test.Config.1.Settings.2]
 String.2.0=Assembling $(InputFile)...
@@ -1732,127 +1741,10 @@ Next=Root.Source Files.Source Files\test...\..\..\test\testthd.c
 ElemType=File
 PathName=..\..\..\test\testthd.c
 
-[Root.Source Files.main.c]
-ElemType=File
-PathName=main.c
-Next=Root.Source Files.vectors.c
-Config.0=Root.Source Files.main.c.Config.0
-Config.1=Root.Source Files.main.c.Config.1
-
-[Root.Source Files.main.c.Config.0]
-Settings.0.0=Root.Source Files.main.c.Config.0.Settings.0
-Settings.0.1=Root.Source Files.main.c.Config.0.Settings.1
-Settings.0.2=Root.Source Files.main.c.Config.0.Settings.2
-
-[Root.Source Files.main.c.Config.1]
-Settings.1.0=Root.Source Files.main.c.Config.1.Settings.0
-Settings.1.1=Root.Source Files.main.c.Config.1.Settings.1
-Settings.1.2=Root.Source Files.main.c.Config.1.Settings.2
-
-[Root.Source Files.main.c.Config.0.Settings.0]
-String.6.0=2010,6,3,14,55,17
-String.8.0=Debug
-Int.0=0
-Int.1=0
-
-[Root.Source Files.main.c.Config.0.Settings.1]
-String.2.0=Performing Custom Build on $(InputFile)
-String.3.0=
-String.4.0=
-String.5.0=
-String.6.0=2010,5,25,14,45,56
-
-[Root.Source Files.main.c.Config.0.Settings.2]
-String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
-String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
-String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
-String.8.0=Debug
-
-[Root.Source Files.main.c.Config.1.Settings.0]
-String.6.0=2010,6,3,14,55,17
-String.8.0=Release
-Int.0=0
-Int.1=0
-
-[Root.Source Files.main.c.Config.1.Settings.1]
-String.2.0=Performing Custom Build on $(InputFile)
-String.3.0=
-String.4.0=
-String.5.0=
-String.6.0=2010,5,25,14,45,56
-
-[Root.Source Files.main.c.Config.1.Settings.2]
-String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +modsl0 -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
-String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
-String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,19,50
-String.8.0=Release
-
-[Root.Source Files.vectors.c]
-ElemType=File
-PathName=vectors.c
-Config.0=Root.Source Files.vectors.c.Config.0
-Config.1=Root.Source Files.vectors.c.Config.1
-
-[Root.Source Files.vectors.c.Config.0]
-Settings.0.0=Root.Source Files.vectors.c.Config.0.Settings.0
-Settings.0.1=Root.Source Files.vectors.c.Config.0.Settings.1
-Settings.0.2=Root.Source Files.vectors.c.Config.0.Settings.2
-
-[Root.Source Files.vectors.c.Config.1]
-Settings.1.0=Root.Source Files.vectors.c.Config.1.Settings.0
-Settings.1.1=Root.Source Files.vectors.c.Config.1.Settings.1
-Settings.1.2=Root.Source Files.vectors.c.Config.1.Settings.2
-
-[Root.Source Files.vectors.c.Config.0.Settings.0]
-String.6.0=2010,6,3,14,55,17
-String.8.0=Debug
-Int.0=0
-Int.1=0
-
-[Root.Source Files.vectors.c.Config.0.Settings.1]
-String.2.0=Performing Custom Build on $(InputFile)
-String.3.0=
-String.4.0=
-String.5.0=
-String.6.0=2010,5,25,14,45,56
-
-[Root.Source Files.vectors.c.Config.0.Settings.2]
-String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
-String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
-String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
-String.8.0=Debug
-
-[Root.Source Files.vectors.c.Config.1.Settings.0]
-String.6.0=2010,6,3,14,55,17
-String.8.0=Release
-Int.0=0
-Int.1=0
-
-[Root.Source Files.vectors.c.Config.1.Settings.1]
-String.2.0=Performing Custom Build on $(InputFile)
-String.3.0=
-String.4.0=
-String.5.0=
-String.6.0=2010,5,25,14,45,56
-
-[Root.Source Files.vectors.c.Config.1.Settings.2]
-String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +modsl0 -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
-String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
-String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,19,50
-String.8.0=Release
-
 [Root.Include Files]
 ElemType=Folder
 PathName=Include Files
-Child=Root.Include Files.Include Files\board
+Child=Root.Include Files...\demo\halconf.h
 Config.0=Root.Include Files.Config.0
 Config.1=Root.Include Files.Config.1
 
@@ -1876,10 +1768,10 @@ Int.1=0
 
 [Root.Include Files.Config.0.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +warn +modsl0 -customDebCompat -customOpt-no -customC-pp -customLst -l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,24,12
+String.6.0=2010,6,5,11,53,48
 
 [Root.Include Files.Config.0.Settings.2]
 String.2.0=Assembling $(InputFile)...
@@ -1903,10 +1795,10 @@ Int.1=0
 
 [Root.Include Files.Config.1.Settings.1]
 String.2.0=Compiling $(InputFile)...
-String.3.0=cxstm8 +warn +modsl0 -customC-pp -customLst-l -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
+String.3.0=cxstm8 +modsl0 -customC-pp -customLst-l -i..\demo -i..\..\..\test -i..\..\..\os\hal\include -i..\..\..\os\hal\platforms\stm8 -i..\..\..\boards\st_stm8s_discovery -i..\..\..\os\ports\cosmic\stm8 -i..\..\..\os\kernel\include $(ToolsetIncOpts) -cl$(IntermPath) -co$(IntermPath) $(InputFile)
 String.4.0=$(IntermPath)$(InputName).$(ObjectExt)
 String.5.0=$(IntermPath)$(InputName).ls
-String.6.0=2010,6,2,18,19,50
+String.6.0=2010,6,5,11,53,48
 
 [Root.Include Files.Config.1.Settings.2]
 String.2.0=Assembling $(InputFile)...
@@ -1921,6 +1813,21 @@ String.3.0=
 String.4.0=
 String.5.0=
 String.6.0=2010,5,25,14,45,56
+
+[Root.Include Files...\demo\halconf.h]
+ElemType=File
+PathName=..\demo\halconf.h
+Next=Root.Include Files...\demo\chconf.h
+
+[Root.Include Files...\demo\chconf.h]
+ElemType=File
+PathName=..\demo\chconf.h
+Next=Root.Include Files...\demo\mcuconf.h
+
+[Root.Include Files...\demo\mcuconf.h]
+ElemType=File
+PathName=..\demo\mcuconf.h
+Next=Root.Include Files.Include Files\board
 
 [Root.Include Files.Include Files\board]
 ElemType=Folder
@@ -2156,7 +2063,6 @@ PathName=..\..\..\os\ports\cosmic\stm8\chtypes.h
 ElemType=Folder
 PathName=Include Files\test
 Child=Root.Include Files.Include Files\test...\..\..\test\test.h
-Next=Root.Include Files.chconf.h
 
 [Root.Include Files.Include Files\test...\..\..\test\test.h]
 ElemType=File
@@ -2216,17 +2122,3 @@ Next=Root.Include Files.Include Files\test...\..\..\test\testthd.h
 [Root.Include Files.Include Files\test...\..\..\test\testthd.h]
 ElemType=File
 PathName=..\..\..\test\testthd.h
-
-[Root.Include Files.chconf.h]
-ElemType=File
-PathName=chconf.h
-Next=Root.Include Files.halconf.h
-
-[Root.Include Files.halconf.h]
-ElemType=File
-PathName=halconf.h
-Next=Root.Include Files.mcuconf.h
-
-[Root.Include Files.mcuconf.h]
-ElemType=File
-PathName=mcuconf.h
