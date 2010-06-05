@@ -19,7 +19,7 @@
 
 /**
  * @file    cosmic/STM8/chtypes.h
- * @brief   STM8 (Cosmic Compiler) port system types.
+ * @brief   STM8 (Cosmic) port system types.
  *
  * @addtogroup STM8_CORE
  * @{
