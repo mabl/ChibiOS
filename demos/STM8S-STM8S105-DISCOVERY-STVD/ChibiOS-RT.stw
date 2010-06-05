@@ -10,7 +10,3 @@ Dependencies=
 [Project1]
 Filename=raisonance\raisonance.stp
 Dependencies=
-[Options]
-ActiveProject=raisonance
-ActiveConfig=Release
-AddSortedElements=0

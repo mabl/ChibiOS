@@ -1,5 +1,5 @@
 ***************************************************************************
-Options:  Optimized for speed (3)
+Options:  Optimized for speed
 Settings: CPUCLK=16MHz (HSI)
 Compiler: Raisonance RKit-STM8_2.28.10.0092
 ***************************************************************************
@@ -130,7 +130,7 @@ Compiler: Raisonance RKit-STM8_2.28.10.0092
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
 --- Test Case 11.10 (Benchmark, virtual timers set/reset)
---- Score : 55884 timers/S
+--- Score : 55688 timers/S
 --- Result: SUCCESS
 ----------------------------------------------------------------------------
 --- Test Case 11.11 (Benchmark, semaphores wait/signal)
