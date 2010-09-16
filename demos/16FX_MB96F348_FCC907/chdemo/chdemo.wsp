@@ -18,5 +18,6 @@ AutoLoad=1
 WSP=C:\rtos\fujitsu_dev\demos\16FX_MB96F348_FCC907\chdemo\
 
 [EditState]
-Count=0
+STATE-1=..\main.c:180
+Count=1
 
