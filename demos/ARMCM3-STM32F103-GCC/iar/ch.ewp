@@ -1781,6 +1781,9 @@
         <file>
           <name>$PROJ_DIR$\..\..\..\os\hal\include\uart.h</name>
         </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\os\hal\include\usb.h</name>
+        </file>
       </group>
       <group>
         <name>src</name>
@@ -1816,6 +1819,9 @@
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\..\os\hal\src\uart.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\os\hal\src\usb.c</name>
         </file>
       </group>
     </group>
@@ -2011,6 +2017,9 @@
         <name>$PROJ_DIR$\..\..\..\os\hal\platforms\STM32\stm32_dma.h</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\..\os\hal\platforms\STM32\stm32_usb.h</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\..\os\hal\platforms\STM32\stm32f10x.h</name>
       </file>
       <file>
@@ -2018,6 +2027,12 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\os\hal\platforms\STM32\uart_lld.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\os\hal\platforms\STM32\usb_lld.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\os\hal\platforms\STM32\usb_lld.h</name>
       </file>
     </group>
     <group>

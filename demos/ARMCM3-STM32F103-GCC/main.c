@@ -19,6 +19,7 @@
 
 #include "ch.h"
 #include "hal.h"
+#include "usb.h"
 #include "test.h"
 
 /*
@@ -37,6 +38,8 @@ static msg_t Thread1(void *arg) {
   return 0;
 }
 
+const USBConfig usbcfg;
+
 /*
  * Application entry point.
  */
@@ -50,7 +53,11 @@ int main(void) {
    *   RTOS is active.
    */
   halInit();
+  usbInit();
   chSysInit();
+
+  palClearPad(GPIOC, GPIOC_USB_DISC);
+  usbStart(&USBD1, &usbcfg);
 
   /*
    * Activates the serial driver 2 using the driver default configuration.
