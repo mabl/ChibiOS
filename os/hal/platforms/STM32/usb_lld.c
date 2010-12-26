@@ -108,7 +108,6 @@ CH_IRQ_HANDLER(USB_HP_IRQHandler) {
  */
 CH_IRQ_HANDLER(USB_LP_IRQHandler) {
   uint32_t istr;
-  uint32_t id;
   USBDriver *usbp = &USBD1;
 
   CH_IRQ_PROLOGUE();
