@@ -176,8 +176,9 @@ typedef struct {
 #define DADDR_ADD_MASK          0x007F
 #define DADDR_EF                0x0080
 
-#define SET_EPR_TOGGLE(ep, mode)                                            \
-  STM32_USB->EPR[ep] = (STM32_USB->EPR[ep] & ~EPR_TOGGLE_MASK) ^ (mode)
+#define SET_EPR_TOGGLE(ep, epr)                                             \
+  STM32_USB->EPR[ep] = (STM32_USB->EPR[ep] & ~EPR_TOGGLE_MASK) ^            \
+                       ((epr) & EPR_TOGGLE_MASK)
 
 #define SET_EPR(ep, epr)                                                    \
   STM32_USB->EPR[ep] = (epr) & ~EPR_TOGGLE_MASK

@@ -156,6 +156,14 @@ typedef void (*usbdevrequest_t)(void);
  */
 typedef struct {
   /**
+   * @brief   IN endpoint notification callback.
+   */
+  usbepcallback_t               uepc_in_cb;
+  /**
+   * @brief   OUT endpoint notification callback.
+   */
+  usbepcallback_t               uepc_out_cb;
+  /**
    * @brief   Endpoint address.
    */
   uint32_t                      uepc_addr;
@@ -171,34 +179,14 @@ typedef struct {
   /* End of the mandatory fields.*/
   /**
    * @brief   EPxR register initialization value.
-   * @note    Only the EP_TYPE and EP_KIND bits can be specified in this
-   *          field.
+   * @note    Do not specify the EA field, leave it to zero.
    */
   uint16_t                      uepc_epr;
-  /**
-   * @brief   EPxR STAT_TX initialization value.
-   */
-  uint16_t                      uepc_stattx;
-  /**
-   * @brief   EPxR STAT_RX initialization value.
-   */
-  uint16_t                      uepc_statrx;
   /**
    * @brief   Endpoint buffer address as offset in the PMA.
    */
   uint16_t                      uepc_offset;
 } USBEndpointConfig;
-
-/**
- * @brief   Endpoint descriptor.
- */
-struct USBEndpoint {
-  /**
-   * @brief   Endpoint notification callback.
-   */
-  usbepcallback_t               uep_callback;
-  /* End of the mandatory fields.*/
-};
 
 /**
  * @brief   Type of an USB driver configuration structure.
@@ -237,7 +225,7 @@ struct USBDriver {
   /**
    * @brief   Active endpoint descriptors.
    */
-  USBEndpoint               *usb_ep[USB_ENDOPOINTS_NUMBER + 1];
+  const USBEndpointConfig   *usb_epc[USB_ENDOPOINTS_NUMBER + 1];
   /* End of the mandatory fields.*/
 };
 
@@ -259,8 +247,7 @@ extern "C" {
   void usb_lld_init(void);
   void usb_lld_start(USBDriver *usbp);
   void usb_lld_stop(USBDriver *usbp);
-  void usb_lld_ep_open(USBDriver *usbp, const USBEndpointConfig *epcp,
-                       USBEndpoint *epp, usbepcallback_t epcb);
+  void usb_lld_ep_open(USBDriver *usbp, const USBEndpointConfig *epcp);
 #ifdef __cplusplus
 }
 #endif

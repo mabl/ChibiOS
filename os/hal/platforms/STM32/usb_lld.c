@@ -48,14 +48,15 @@ USBDriver USBD1;
 /* Driver local variables.                                                   */
 /*===========================================================================*/
 
-static USBEndpoint ep0;
-
+/**
+ * @brief   EP0 initialization structure.
+ */
 static const USBEndpointConfig ep0config = {
+  NULL,
+  NULL,
   0,
   0x40,
-  EPR_EP_TYPE_CONTROL,
-  EPR_STAT_TX_STALL,
-  EPR_STAT_RX_VALID,
+  EPR_EP_TYPE_CONTROL | EPR_STAT_TX_STALL | EPR_STAT_RX_VALID,
   0x40
 };
 
@@ -69,7 +70,7 @@ static void usb_reset(USBDriver *usbp) {
   /* Invalidates all endpoints into the USBDriver structure.*/
   i = USB_ENDOPOINTS_NUMBER + 1;
   do {
-    usbp->usb_ep[--i] = NULL;
+    usbp->usb_epc[--i] = NULL;
   } while (i > 0);
 
   /* Powers up the transceiver while holding the USB in reset state.*/
@@ -81,7 +82,7 @@ static void usb_reset(USBDriver *usbp) {
   STM32_USB->DADDR  = DADDR_EF;
   STM32_USB->CNTR   = /*CNTR_ESOFM | CNTR_SOFM |*/ CNTR_RESETM  | /*CNTR_SUSPM |*/
                           /*CNTR_WKUPM | CNTR_ERRM | CNTR_PMAOVRM |*/ CNTR_CTRM;
-  usb_lld_ep_open(usbp, &ep0config, &ep0, NULL);
+  usb_lld_ep_open(usbp, &ep0config);
 }
 
 /*===========================================================================*/
@@ -222,16 +223,14 @@ void usb_lld_stop(USBDriver *usbp) {
 /**
  * @brief   Activates an endpoint.
  */
-void usb_lld_ep_open(USBDriver *usbp, const USBEndpointConfig *epcp,
-                     USBEndpoint *epp, usbepcallback_t epcb) {
+void usb_lld_ep_open(USBDriver *usbp, const USBEndpointConfig *epcp) {
   uint16_t nblocks;
   stm32_usb_descriptor_t *dp;
  
   /* EPxR register setup.*/
   SET_EPR(epcp->uepc_addr, epcp->uepc_epr | epcp->uepc_addr);
-  SET_EPR_TOGGLE(epcp->uepc_addr, epcp->uepc_stattx);
-  SET_EPR_TOGGLE(epcp->uepc_addr, epcp->uepc_statrx);
-  
+  SET_EPR_TOGGLE(epcp->uepc_addr, epcp->uepc_epr);
+
   /* Endpoint size and address initialization.*/
   if (epcp->uepc_size > 62) 
     nblocks = (((((epcp->uepc_size - 1) | 0x1f) + 1) / 32) << 10) | 0x8000;
@@ -243,11 +242,8 @@ void usb_lld_ep_open(USBDriver *usbp, const USBEndpointConfig *epcp,
   dp->RXADDR  = epcp->uepc_offset;
   dp->TXADDR  = epcp->uepc_offset + epcp->uepc_size; 
 
-  /* Endpoint callback setup.*/
-  epp->uep_callback = epcb;
-
   /* Logically enabling the endpoint in the USBDriver structure.*/
-  usbp->usb_ep[epcp->uepc_addr] = epp;
+  usbp->usb_epc[epcp->uepc_addr] = epcp;
 }
 
 #endif /* HAL_USE_USB */
