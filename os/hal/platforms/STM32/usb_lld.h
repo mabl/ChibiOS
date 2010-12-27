@@ -142,9 +142,11 @@ typedef void (*usbcallback_t)(USBDriver *usbp, usbevent_t event);
 typedef void (*usbepcallback_t)(USBDriver *usbp, uint32_t ep);
 
 /**
- * @brief   Type of an USB device request handling callback.
+ * @brief   Type of an USB descriptor-retrieving callback.
  */
-typedef void (*usbdevrequest_t)(void);
+typedef const USBDescriptor * (*usbgetdescriptor_t)(USBDriver *usbp,
+                                                    uint8_t dtype,
+                                                    uint8_t dindex);
 
 /**
  * @brief   Type of an USB Endpoint configuration structure.
@@ -200,9 +202,10 @@ typedef struct {
    */
   USBDescriptor                 uc_dev_descriptor;
   /**
-   * @brief   Device requests callback.
+   * @brief   Device GET_DESCRIPTOR request callback.
+   * @note    This callback is mandatory and cannot be set to @p NULL.
    */
-  usbdevrequest_t               uc_dev_req_callback;
+  usbgetdescriptor_t            uc_get_descriptor;
   /* End of the mandatory fields.*/
 } USBConfig;
 
@@ -213,27 +216,27 @@ struct USBDriver {
   /**
    * @brief   Driver state.
    */
-  usbstate_t                usb_state;
+  usbstate_t                    usb_state;
   /**
    * @brief   Current configuration data.
    */
-  const USBConfig           *usb_config;
+  const USBConfig               *usb_config;
   /**
    * @brief   Active endpoint descriptors.
    */
-  const USBEndpointConfig   *usb_epc[USB_ENDOPOINTS_NUMBER + 1];
+  const USBEndpointConfig       *usb_epc[USB_ENDOPOINTS_NUMBER + 1];
   /**
    * @brief   Endpoint 0 state.
    */
-  usbep0state_t             usb_ep0state;
+  usbep0state_t                 usb_ep0state;
   /**
    * @brief   Next position in endpoint 0 buffer.
    */
-  uint8_t                   *usb_ep0next;
+  uint8_t                       *usb_ep0next;
   /**
    * @brief   Buffer for endpoint 0 transactions.
    */
-  uint8_t                   usb_ep0buf[USB_EP0_BUFSIZE];
+  uint8_t                       usb_ep0buf[USB_EP0_BUFSIZE];
   /* End of the mandatory fields.*/
 };
 

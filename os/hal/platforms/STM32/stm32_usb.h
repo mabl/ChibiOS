@@ -179,20 +179,27 @@ typedef struct {
 #define RXCOUNT_COUNT_MASK      0x03FF
 #define TXCOUNT_COUNT_MASK      0x03FF
 
-#define SET_EPR(ep, epr)                                                    \
+#define EPR_SET(ep, epr)                                                    \
   STM32_USB->EPR[ep] = (epr) & ~EPR_TOGGLE_MASK
 
-#define SET_EPR_TOGGLE(ep, epr)                                             \
-  STM32_USB->EPR[ep] = (STM32_USB->EPR[ep] & ~EPR_TOGGLE_MASK) ^            \
-                       ((epr) & EPR_TOGGLE_MASK)
+#define EPR_TOGGLE(ep, epr)                                                 \
+  STM32_USB->EPR[ep] = (STM32_USB->EPR[ep] ^ ((epr) & EPR_TOGGLE_MASK))
 
-#define SET_EPR_STAT_RX(ep, epr)                                            \
-  STM32_USB->EPR[ep] = (STM32_USB->EPR[ep] & ~EPR_STAT_RX_MASK) ^           \
-                       ((epr) & EPR_TOGGLE_MASK)
+#define EPR_SET_STAT_RX(ep, epr)                                            \
+  STM32_USB->EPR[ep] = (STM32_USB->EPR[ep] &                                \
+                        ~(EPR_TOGGLE_MASK & ~EPR_STAT_RX_MASK)) ^           \
+                       (epr)
 
-#define SET_EPR_STAT_TX(ep, epr)                                            \
-  STM32_USB->EPR[ep] = (STM32_USB->EPR[ep] & ~EPR_STAT_TX_MASK) ^           \
-                       ((epr) & EPR_TOGGLE_MASK)
+#define EPR_SET_STAT_TX(ep, epr)                                            \
+  STM32_USB->EPR[ep] = (STM32_USB->EPR[ep] &                                \
+                        ~(EPR_TOGGLE_MASK & ~EPR_STAT_TX_MASK)) ^           \
+                       (epr)
+
+#define EPR_CLEAR_CTR_RX(ep)                                                \
+  STM32_USB->EPR[ep] &= ~EPR_CTR_RX & ~EPR_TOGGLE_MASK
+
+#define EPR_CLEAR_CTR_TX(ep)                                                \
+  STM32_USB->EPR[ep] &= ~EPR_CTR_TX & ~EPR_TOGGLE_MASK
 
 /**
  * @brief   Returns an endpoint descriptor pointer.

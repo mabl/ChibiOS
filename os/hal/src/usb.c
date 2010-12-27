@@ -137,6 +137,22 @@ void usb_reset(USBDriver *usbp) {
   usb_lld_reset(usbp);
 }
 
+const USBDescriptor *usb_get_descriptor(USBDriver *usbp,
+                                        uint8_t dtype,
+                                        uint8_t dindex) {
+  
+  /* The device descriptor is a special case because it is statically
+     assigned to the USB driver configuration. Just returning the
+     pointer.*/
+  if (dtype == USB_DESCRIPTOR_DEVICE)
+    return &usbp->usb_config->uc_dev_descriptor;
+  
+  /* Any other descriptor must be provided by the application in
+     order to provide an interface for complicated devices with
+     multiple configurations or languages.*/
+  return usbp->usb_config->uc_get_descriptor(usbp, dtype, dindex);
+}
+
 #endif /* HAL_USE_USB */
 
 /** @} */

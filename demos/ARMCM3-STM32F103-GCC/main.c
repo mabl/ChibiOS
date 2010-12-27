@@ -38,6 +38,10 @@ static msg_t Thread1(void *arg) {
   return 0;
 }
 
+static const USBDescriptor *get_descriptor(USBDriver *usbp,
+                                           uint8_t dtype,
+                                           uint8_t dindex);
+
 /* USB Standard Device Descriptor */
 static const uint8_t vcom_device_descriptor[] = {
   0x12,                         /* bLength.                 */
@@ -49,7 +53,7 @@ static const uint8_t vcom_device_descriptor[] = {
   0x40,                         /* bMaxPacketSize.          */
   0x83, 0x04,                   /* idVendor (0x0483).       */
   0x40, 0x57,                   /* idProduct (0x7540).      */
-  0x00, 0x02,                   /* bcdDevice.               */
+  0x00, 0x02,                   /* bcdDevice (2.00).        */
   1,                            /* iManufacturer.           */
   2,                            /* iProduct.                */
   3,                            /* IiSerialNumber.          */
@@ -58,8 +62,15 @@ static const uint8_t vcom_device_descriptor[] = {
 
 static const USBConfig usbcfg = {
   NULL,
-  {sizeof(vcom_device_descriptor), vcom_device_descriptor}
+  {sizeof(vcom_device_descriptor), vcom_device_descriptor},
+  get_descriptor,
 };
+
+static const USBDescriptor *get_descriptor(USBDriver *usbp,
+                                           uint8_t dtype,
+                                           uint8_t dindex) {
+  return NULL;
+}
 
 /*
  * Application entry point.

@@ -112,7 +112,15 @@ static void ep0out(USBDriver *usbp, uint32_t ep) {
     case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_ADDRESS << 2):
       break;
     case USB_REQ_TYPE_DEVICE | (USB_REQ_GET_DESCRIPTOR << 2):
-      break;
+      {
+        const USBDescriptor *dp = usb_get_descriptor(usbp,
+                                                     usbp->usb_ep0buf[3],
+                                                     usbp->usb_ep0buf[2]);
+        if (dp == NULL)
+          break;
+        usb_lld_write(usbp, 0, dp->ud_string, dp->ud_size);
+      } 
+     return;
     case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_DESCRIPTOR << 2):                
       break;
     case USB_REQ_TYPE_DEVICE | (USB_REQ_GET_CONFIGURATION << 2):            
@@ -138,14 +146,11 @@ static void ep0out(USBDriver *usbp, uint32_t ep) {
     case USB_REQ_TYPE_ENDPOINT | (USB_REQ_SYNCH_FRAME << 2):
       break;
     default:
-      goto error;
+      break;
     }
-//    usb_lld_write(usbp, 0, NULL, 0);
-//    usbp->usb_ep0state = USB_EP0_IN_TRANSACTION;
-    break;
-  default:
-error:
     /* Stalled because it should never happen.*/
+  default:
+  error:
     usb_lld_stall_in(usbp, 0);
     usb_lld_stall_out(usbp, 0);
     usbp->usb_ep0state = USB_EP0_FATAL;
@@ -198,15 +203,15 @@ CH_IRQ_HANDLER(USB_LP_IRQHandler) {
 
     if (epr & EPR_CTR_TX) {
       /* IN endpoint, transmission.*/
+      EPR_CLEAR_CTR_TX(ep);
       if (usbp->usb_epc[ep]->uepc_in_cb)
         usbp->usb_epc[ep]->uepc_in_cb(usbp, ep);
-      STM32_USB->EPR[ep] = ~EPR_CTR_TX;
     }
     if (epr & EPR_CTR_RX) {
       /* OUT endpoint, receive.*/
+      EPR_CLEAR_CTR_RX(ep);
       if (usbp->usb_epc[ep]->uepc_out_cb)
         usbp->usb_epc[ep]->uepc_out_cb(usbp, ep);
-      STM32_USB->EPR[ep] = ~EPR_CTR_RX;
     }
     istr = STM32_USB->ISTR;
   }
@@ -320,8 +325,8 @@ void usb_lld_ep_open(USBDriver *usbp, const USBEndpointConfig *epcp) {
   stm32_usb_descriptor_t *dp;
  
   /* EPxR register setup.*/
-  SET_EPR(epcp->uepc_addr, epcp->uepc_epr | epcp->uepc_addr);
-  SET_EPR_TOGGLE(epcp->uepc_addr, epcp->uepc_epr);
+  EPR_SET(epcp->uepc_addr, epcp->uepc_epr | epcp->uepc_addr);
+  EPR_TOGGLE(epcp->uepc_addr, epcp->uepc_epr);
 
   /* Endpoint size and address initialization.*/
   if (epcp->uepc_size > 62) 
@@ -366,7 +371,7 @@ size_t usb_lld_read(USBDriver *usbp, uint32_t ep, uint8_t *buf, size_t n) {
     buf += 2;
     count--;
   }
-  SET_EPR_STAT_RX(ep, EPR_STAT_RX_VALID);
+  EPR_SET_STAT_RX(ep, EPR_STAT_RX_VALID);
   return n;
 }
 
@@ -384,17 +389,17 @@ void usb_lld_write(USBDriver *usbp, uint32_t ep, const uint8_t *buf, size_t n) {
     buf += 2;
     count--;
   }
-  SET_EPR_STAT_TX(ep, EPR_STAT_TX_VALID);
+  EPR_SET_STAT_TX(ep, EPR_STAT_TX_VALID);
 }
 
 void usb_lld_stall_out(USBDriver *usbp, uint32_t ep) {
 
-  SET_EPR_STAT_RX(ep, EPR_STAT_RX_STALL);
+  EPR_SET_STAT_RX(ep, EPR_STAT_RX_STALL);
 }
 
 void usb_lld_stall_in(USBDriver *usbp, uint32_t ep) {
 
-  SET_EPR_STAT_TX(ep, EPR_STAT_TX_STALL);
+  EPR_SET_STAT_TX(ep, EPR_STAT_TX_STALL);
 }
 
 #endif /* HAL_USE_USB */

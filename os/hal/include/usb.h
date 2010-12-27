@@ -115,6 +115,9 @@ extern "C" {
   void usbStart(USBDriver *usbp, const USBConfig *config);
   void usbStop(USBDriver *usbp);
   void usb_reset(USBDriver *usbp);
+  const USBDescriptor *usb_get_descriptor(USBDriver *usbp,
+                                          uint8_t dtype,
+                                          uint8_t dindex);
 #ifdef __cplusplus
 }
 #endif
