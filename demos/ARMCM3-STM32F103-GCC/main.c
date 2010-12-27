@@ -38,7 +38,28 @@ static msg_t Thread1(void *arg) {
   return 0;
 }
 
-const USBConfig usbcfg;
+/* USB Standard Device Descriptor */
+static const uint8_t vcom_device_descriptor[] = {
+  0x12,                         /* bLength.                 */
+  USB_DESCRIPTOR_DEVICE,        /* bDescriptorType.         */
+  0x00, 0x02,                   /* bcdUSB (2.00).           */
+  0x02,                         /* bDeviceClass (CDC).      */
+  0x00,                         /* bDeviceSubClass.         */
+  0x00,                         /* bDeviceProtocol.         */
+  0x40,                         /* bMaxPacketSize.          */
+  0x83, 0x04,                   /* idVendor (0x0483).       */
+  0x40, 0x57,                   /* idProduct (0x7540).      */
+  0x00, 0x02,                   /* bcdDevice.               */
+  1,                            /* iManufacturer.           */
+  2,                            /* iProduct.                */
+  3,                            /* IiSerialNumber.          */
+  1                             /* bNumConfigurations.      */
+};
+
+static const USBConfig usbcfg = {
+  NULL,
+  {sizeof(vcom_device_descriptor), vcom_device_descriptor}
+};
 
 /*
  * Application entry point.

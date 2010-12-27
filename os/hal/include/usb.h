@@ -34,9 +34,42 @@
 /* Driver constants.                                                         */
 /*===========================================================================*/
 
+#define USB_REQ_GET_STATUS                  0
+#define USB_REQ_CLEAR_FEATURE               1
+#define USB_REQ_SET_FEATURE                 3
+#define USB_REQ_SET_ADDRESS                 5
+#define USB_REQ_GET_DESCRIPTOR              6
+#define USB_REQ_SET_DESCRIPTOR              7
+#define USB_REQ_GET_CONFIGURATION           8
+#define USB_REQ_SET_CONFIGURATION           9
+#define USB_REQ_GET_INTERFACE               10
+#define USB_REQ_SET_INTERFACE               11
+#define USB_REQ_SYNCH_FRAME                 12
+
+#define USB_REQ_TYPE_DEVICE                 0
+#define USB_REQ_TYPE_INTERFACE              1
+#define USB_REQ_TYPE_ENDPOINT               3
+
+#define USB_DESCRIPTOR_DEVICE               1
+#define USB_DESCRIPTOR_CONFIGURATION        2
+#define USB_DESCRIPTOR_STRING               3
+#define USB_DESCRIPTOR_INTERFACE            4
+#define USB_DESCRIPTOR_ENDPOINT             5
+#define USB_DESCRIPTOR_DEVICE_QUALIFIER     6
+#define USB_DESCRIPTOR_OTHER_SPEED_CFG      7
+#define USB_DESCRIPTOR_INTERFACE_POWER      8
+
 /*===========================================================================*/
 /* Driver pre-compile time settings.                                         */
 /*===========================================================================*/
+
+/**
+ * @brief   USB endpoint zero buffer size.
+ * @note    The default is 64.
+ */
+#if !defined(USB_EP0_BUFSIZE) || defined(__DOXYGEN__)
+#define USB_EP0_BUFSIZE                     64
+#endif
 
 /*===========================================================================*/
 /* Derived constants and error checks.                                       */
@@ -56,6 +89,14 @@ typedef enum {
   USB_ACTIVE = 3,                   /**< Active, after enumeration.         */
 } usbstate_t;
 
+/**
+ * @brief   Endpoint zero state machine states.
+ */
+typedef enum {
+  USB_EP0_SETUP_DATA,               /**< Waiting for SETUP data.            */
+  USB_EP0_FATAL                     /**< Final state because fatal error.   */    
+} usbep0state_t;
+ 
 #include "usb_lld.h"
 
 /*===========================================================================*/
@@ -73,7 +114,7 @@ extern "C" {
   void usbObjectInit(USBDriver *usbp);
   void usbStart(USBDriver *usbp, const USBConfig *config);
   void usbStop(USBDriver *usbp);
-  void usbAcknowledge(USBEndpoint *uepp);
+  void usb_reset(USBDriver *usbp);
 #ifdef __cplusplus
 }
 #endif

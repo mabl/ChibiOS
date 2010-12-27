@@ -109,24 +109,19 @@ typedef enum {
  */
 typedef struct {
   /**
-   * @brief   Descriptor string size in unicode characters.
+   * @brief   Descriptor size in unicode characters.
    */
   size_t                        ud_size;
   /**
-   * @brief   Pointer to the descriptor unicode string.
+   * @brief   Pointer to the descriptor.
    */
-  uint8_t                       ud_string;
+  const uint8_t                 *ud_string;
 } USBDescriptor;
 
 /**
  * @brief   Type of a structure representing an USB driver.
  */
 typedef struct USBDriver USBDriver;
-
-/**
- * @brief   Type of a structure representing an USB endpoint.
- */
-typedef struct USBEndpoint USBEndpoint;
 
 /**
  * @brief   Type of an USB notification callback.
@@ -140,10 +135,11 @@ typedef void (*usbcallback_t)(USBDriver *usbp, usbevent_t event);
 /**
  * @brief   Type of an USB endpoint callback.
  *
- * @param[in] uepp      pointer to the @p USBEndpoint object triggering the
+ * @param[in] usbp      pointer to the @p USBDriver object triggering the
  *                      callback
+ * @param[in] ep        endpoint number
  */
-typedef void (*usbepcallback_t)(USBEndpoint *uepp);
+typedef void (*usbepcallback_t)(USBDriver *usbp, uint32_t ep);
 
 /**
  * @brief   Type of an USB device request handling callback.
@@ -200,13 +196,13 @@ typedef struct {
    */
   usbcallback_t                 uc_callback;
   /**
-   * @brief   Device descriptor for this USB device configuration.
+   * @brief   Device descriptor for this USB device.
    */
   USBDescriptor                 uc_dev_descriptor;
   /**
    * @brief   Device requests callback.
    */
-  usbdevrequest_t               uc_dev_rq_callback;
+  usbdevrequest_t               uc_dev_req_callback;
   /* End of the mandatory fields.*/
 } USBConfig;
 
@@ -226,6 +222,18 @@ struct USBDriver {
    * @brief   Active endpoint descriptors.
    */
   const USBEndpointConfig   *usb_epc[USB_ENDOPOINTS_NUMBER + 1];
+  /**
+   * @brief   Endpoint 0 state.
+   */
+  usbep0state_t             usb_ep0state;
+  /**
+   * @brief   Next position in endpoint 0 buffer.
+   */
+  uint8_t                   *usb_ep0next;
+  /**
+   * @brief   Buffer for endpoint 0 transactions.
+   */
+  uint8_t                   usb_ep0buf[USB_EP0_BUFSIZE];
   /* End of the mandatory fields.*/
 };
 
@@ -247,7 +255,12 @@ extern "C" {
   void usb_lld_init(void);
   void usb_lld_start(USBDriver *usbp);
   void usb_lld_stop(USBDriver *usbp);
+  void usb_lld_reset(USBDriver *usbp);
   void usb_lld_ep_open(USBDriver *usbp, const USBEndpointConfig *epcp);
+  size_t usb_lld_read(USBDriver *usbp, uint32_t ep, uint8_t *buf, size_t n);
+  void usb_lld_write(USBDriver *usbp, uint32_t ep, const uint8_t *buf, size_t n);
+  void usb_lld_stall_out(USBDriver *usbp, uint32_t ep);
+  void usb_lld_stall_in(USBDriver *usbp, uint32_t ep);
 #ifdef __cplusplus
 }
 #endif

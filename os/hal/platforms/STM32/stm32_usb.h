@@ -176,12 +176,23 @@ typedef struct {
 #define DADDR_ADD_MASK          0x007F
 #define DADDR_EF                0x0080
 
+#define RXCOUNT_COUNT_MASK      0x03FF
+#define TXCOUNT_COUNT_MASK      0x03FF
+
+#define SET_EPR(ep, epr)                                                    \
+  STM32_USB->EPR[ep] = (epr) & ~EPR_TOGGLE_MASK
+
 #define SET_EPR_TOGGLE(ep, epr)                                             \
   STM32_USB->EPR[ep] = (STM32_USB->EPR[ep] & ~EPR_TOGGLE_MASK) ^            \
                        ((epr) & EPR_TOGGLE_MASK)
 
-#define SET_EPR(ep, epr)                                                    \
-  STM32_USB->EPR[ep] = (epr) & ~EPR_TOGGLE_MASK
+#define SET_EPR_STAT_RX(ep, epr)                                            \
+  STM32_USB->EPR[ep] = (STM32_USB->EPR[ep] & ~EPR_STAT_RX_MASK) ^           \
+                       ((epr) & EPR_TOGGLE_MASK)
+
+#define SET_EPR_STAT_TX(ep, epr)                                            \
+  STM32_USB->EPR[ep] = (STM32_USB->EPR[ep] & ~EPR_STAT_TX_MASK) ^           \
+                       ((epr) & EPR_TOGGLE_MASK)
 
 /**
  * @brief   Returns an endpoint descriptor pointer.
@@ -192,6 +203,12 @@ typedef struct {
                               (uint32_t)(ep) *                              \
                               sizeof(stm32_usb_descriptor_t)))
  
+/**
+ * @brief   Converts from a PMA address to a physical address.
+ */
+#define USB_ADDR2PTR(addr)                                                  \
+  ((uint32_t *)((addr) * 2 + STM32_USBRAM_BASE))
+
 #endif /* _STM32_USB_H_ */
 
 /** @} */

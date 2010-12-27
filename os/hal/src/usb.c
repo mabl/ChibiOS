@@ -114,6 +114,29 @@ void usbStop(USBDriver *usbp) {
   chSysUnlock();
 }
 
+/**
+ * @brief   USB reset routine.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object triggering the
+ *                      callback
+ *
+ * @notapi
+ */
+void usb_reset(USBDriver *usbp) {
+  int32_t i;
+
+  /* Invalidates all endpoints into the USBDriver structure.*/
+  for (i = 0; i < USB_ENDOPOINTS_NUMBER + 1; i++)
+    usbp->usb_epc[i] = NULL;
+  
+  /* EP0 state machine initialization.*/
+  usbp->usb_ep0state = USB_EP0_SETUP_DATA;
+  usbp->usb_ep0next = usbp->usb_ep0buf;
+
+  /* Low level reset.*/
+  usb_lld_reset(usbp);
+}
+
 #endif /* HAL_USE_USB */
 
 /** @} */
