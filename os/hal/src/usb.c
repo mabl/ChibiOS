@@ -133,8 +133,6 @@ void usb_reset(USBDriver *usbp) {
 
   /* EP0 state machine initialization.*/
   usbp->usb_ep0state     = USB_EP0_WAITING_SETUP;
-  usbp->usb_ep0next      = usbp->usb_ep0buf;
-  usbp->usb_ep0remaining = 0;
 
   /* Low level reset.*/
   usb_lld_reset(usbp);

@@ -80,6 +80,28 @@ static void usb_lld_set_address(USBDriver *usbp, uint8_t addr) {
 }
 
 /**
+ * @brief   Starts a receive phase on the endpoint zero.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object triggering the
+ *                      callback
+ * @param[in] buf       buffer where to put the received data
+ * @param[in] n         number of bytes to receive
+ *
+ * @notapi
+ */
+static void usb_lld_rx_ep0(USBDriver *usbp, uint8_t *buf, size_t n) {
+
+  if (n > 0) {
+    /* TO BE IMPLEMENTED.*/
+  }
+  else {
+    /* Sending zero sized status packet.*/
+    usb_lld_write(usbp, 0, NULL, 0);
+    usbp->usb_ep0state = USB_EP0_SENDING_STS;
+  }
+}
+
+/**
  * @brief   Starts a transmission phase on the endpoint zero.
  *
  * @param[in] usbp      pointer to the @p USBDriver object triggering the
@@ -87,8 +109,8 @@ static void usb_lld_set_address(USBDriver *usbp, uint8_t addr) {
  * @param[in] buf       buffer where to fetch the data to be transmitted
  * @param[in] n         number of bytes to transmit
  * @param[in] max       number of bytes requested by the setup packet
- * @return              The number of bytes that were effectively available.
- * @param
+ *
+ * @notapi
  */
 static void usb_lld_tx_ep0(USBDriver *usbp, const uint8_t *buf,
                            size_t n, size_t max) {
@@ -139,6 +161,14 @@ static void ep0in(USBDriver *usbp, uint32_t ep) {
     }
     return;
   case USB_EP0_SENDING_STS:
+    /* Special case of the SET_ADDRESS request, it is the only one handled
+       after the status phase.*/
+    if (usbp->usb_setup[1] == USB_REQ_SET_ADDRESS) {
+      usb_lld_set_address(usbp, usbp->usb_setup[2]);
+      if (usbp->usb_config->uc_callback)
+        usbp->usb_config->uc_callback(usbp, USB_EVENT_ADDRESS);
+    }
+    usbp->usb_ep0state = USB_EP0_WAITING_SETUP;
     return;
   default:
     usb_lld_stall_in(usbp, 0);
@@ -160,23 +190,21 @@ static void ep0in(USBDriver *usbp, uint32_t ep) {
  */
 static void ep0out(USBDriver *usbp, uint32_t ep) {
   size_t n;
+  uint8_t buf[1];
 
   switch (usbp->usb_ep0state) {
   case USB_EP0_WAITING_SETUP:
     /*
      * SETUP packet handling.
      */
-    n = usb_lld_read(usbp, 0, usbp->usb_ep0buf, 8);
-    if (n != 8) {
-xxx = STM32_USB->EPR[0];
-      asm ("nop");
+    n = usb_lld_read(usbp, 0, usbp->usb_setup, 8);
+    if (n != 8)
       break;
-    }
 
     /*
      * Decoding the request.
      */
-    switch ((usbp->usb_ep0buf[0] & 3) | (usbp->usb_ep0buf[1] << 2)) {
+    switch ((usbp->usb_setup[0] & 3) | (usbp->usb_setup[1] << 2)) {
     case USB_REQ_TYPE_DEVICE | (USB_REQ_GET_STATUS << 2):
       break;
     case USB_REQ_TYPE_DEVICE | (USB_REQ_CLEAR_FEATURE << 2):
@@ -184,27 +212,25 @@ xxx = STM32_USB->EPR[0];
     case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_FEATURE << 2):
       break;
     case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_ADDRESS << 2):
-      usb_lld_set_address(usbp, usbp->usb_ep0buf[2]);
-      if (usbp->usb_config->uc_callback)
-        usbp->usb_config->uc_callback(usbp, USB_EVENT_ADDRESS);
-xxx = STM32_USB->EPR[0];
+      /* The handling is posponed to after the status phase in order to allow
+         the proper completion of the transaction.*/
+      usb_lld_rx_ep0(usbp, NULL, 0);
       return;
     case USB_REQ_TYPE_DEVICE | (USB_REQ_GET_DESCRIPTOR << 2):
       {
         const USBDescriptor *dp;
 
         dp = usb_get_descriptor(usbp,
-                                usbp->usb_ep0buf[3],
-                                usbp->usb_ep0buf[2],
-                                usb_lld_fetch_word(&usbp->usb_ep0buf[4]));
+                                usbp->usb_setup[3],
+                                usbp->usb_setup[2],
+                                usb_lld_fetch_word(&usbp->usb_setup[4]));
         if (STM32_USB->DADDR != 0x80) {
           asm ("nop");
         }
         if (dp == NULL)
           break;
-//        usb_lld_write(usbp, 0, dp->ud_string, dp->ud_size);
         usb_lld_tx_ep0(usbp, dp->ud_string, dp->ud_size,
-                       usb_lld_fetch_word(&usbp->usb_ep0buf[6]));
+                       usb_lld_fetch_word(&usbp->usb_setup[6]));
       }
       return;
     case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_DESCRIPTOR << 2):
@@ -237,24 +263,20 @@ xxx = STM32_USB->EPR[0];
     break;
   case USB_EP0_WAITING_STS:
     /*
-     * STATUS received packet handling.
+     * STATUS received packet handling, it must be zero sized.
      */
-    n = usb_lld_read(usbp, 0, usbp->usb_ep0buf, 8);
-    if (n != 0) {
-xxx = STM32_USB->EPR[0];
-      asm ("nop");
+    n = usb_lld_read(usbp, 0, buf, 1);
+    if (n != 0)
       break;
-    }
+    usbp->usb_ep0state = USB_EP0_WAITING_SETUP;
+    return;
   case USB_EP0_RX:
     break;
   default:
     /* Stalled because it should never happen.*/
-  error:
     usb_lld_stall_in(usbp, 0);
     usb_lld_stall_out(usbp, 0);
     usbp->usb_ep0state = USB_EP0_FATAL;
-xxx = STM32_USB->EPR[0];
-asm ("nop");
   }
 }
 

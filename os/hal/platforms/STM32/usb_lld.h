@@ -190,9 +190,9 @@ struct USBDriver {
    */
   size_t                        usb_ep0lastsize;
   /**
-   * @brief   Buffer for endpoint 0 transactions.
+   * @brief   Setup packet buffer.
    */
-  uint8_t                       usb_ep0buf[USB_EP0_BUFSIZE];
+  uint8_t                       usb_setup[8];
   /* End of the mandatory fields.*/
 };
 
