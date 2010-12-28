@@ -35,6 +35,8 @@
 #define EP0IN_ADDR      0x0040
 #define EP0OUT_ADDR     0x00C0
 
+volatile uint32_t xxx;
+
 /*===========================================================================*/
 /* Driver exported variables.                                                */
 /*===========================================================================*/
@@ -54,7 +56,7 @@ static void ep0out(USBDriver *usbp, uint32_t ep);
   /**
  * @brief   EP0 initialization structure.
  */
-static const USBEndpointConfig ep0config = {
+static const USBEndpointConfig usb_lld_ep0config = {
   ep0in,
   ep0out,
   0,
@@ -66,6 +68,46 @@ static const USBEndpointConfig ep0config = {
 /*===========================================================================*/
 /* Driver local functions.                                                   */
 /*===========================================================================*/
+
+static uint16_t usb_lld_fetch_word(uint8_t *p) {
+
+  return *(uint16_t *)p;
+}
+
+static void usb_lld_set_address(USBDriver *usbp, uint8_t addr) {
+
+  STM32_USB->DADDR = (uint32_t)addr | DADDR_EF;
+}
+
+/**
+ * @brief   Starts a transmission phase on the endpoint zero.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object triggering the
+ *                      callback
+ * @param[in] buf       buffer where to fetch the data to be transmitted
+ * @param[in] n         number of bytes to transmit
+ * @param[in] max       number of bytes requested by the setup packet
+ * @return              The number of bytes that were effectively available.
+ * @param
+ */
+static void usb_lld_tx_ep0(USBDriver *usbp, const uint8_t *buf,
+                           size_t n, size_t max) {
+
+  if (n > 0) {
+    size_t size;
+    n = n > max ? max : n;
+    size = n > usb_lld_ep0config.uepc_size ? usb_lld_ep0config.uepc_size : n;
+
+    usbp->usb_ep0next      = buf;
+    usbp->usb_ep0max       = max;
+    usbp->usb_ep0remaining = n;
+    usbp->usb_ep0lastsize  = size;
+    usbp->usb_ep0state     = USB_EP0_TX;
+    usb_lld_write(usbp, 0, buf, size);
+  }
+  else
+    usbp->usb_ep0state = USB_EP0_WAITING_STS;
+}
 
 /**
  * @brief   Default EP0 IN callback.
@@ -79,6 +121,30 @@ static const USBEndpointConfig ep0config = {
  * @notapi
  */
 static void ep0in(USBDriver *usbp, uint32_t ep) {
+
+  switch (usbp->usb_ep0state) {
+  case USB_EP0_TX:
+    usbp->usb_ep0next      += usbp->usb_ep0lastsize;
+    usbp->usb_ep0max       -= usbp->usb_ep0lastsize;
+    usbp->usb_ep0remaining -= usbp->usb_ep0lastsize;
+
+    /* The final condition is when the requested size has been transmitted or when a
+       packet has been sent with size less than the maximum packet size.*/
+    if ((usbp->usb_ep0max == 0) || (usbp->usb_ep0lastsize < usb_lld_ep0config.uepc_size))
+      usbp->usb_ep0state = USB_EP0_WAITING_STS;
+    else {
+      size_t psize = usbp->usb_ep0remaining > usb_lld_ep0config.uepc_size ?
+                     usb_lld_ep0config.uepc_size : usbp->usb_ep0remaining;
+      usb_lld_write(usbp, 0, usbp->usb_ep0next, psize);
+    }
+    return;
+  case USB_EP0_SENDING_STS:
+    return;
+  default:
+    usb_lld_stall_in(usbp, 0);
+    usb_lld_stall_out(usbp, 0);
+    usbp->usb_ep0state = USB_EP0_FATAL;
+  }
 }
 
 /**
@@ -96,64 +162,99 @@ static void ep0out(USBDriver *usbp, uint32_t ep) {
   size_t n;
 
   switch (usbp->usb_ep0state) {
-  case USB_EP0_SETUP_DATA:
-    /* Reading data after setup packet has been received.*/
+  case USB_EP0_WAITING_SETUP:
+    /*
+     * SETUP packet handling.
+     */
     n = usb_lld_read(usbp, 0, usbp->usb_ep0buf, 8);
-    if (n != 8)
-      goto error;
-    /* Decoding the request.*/
+    if (n != 8) {
+xxx = STM32_USB->EPR[0];
+      asm ("nop");
+      break;
+    }
+
+    /*
+     * Decoding the request.
+     */
     switch ((usbp->usb_ep0buf[0] & 3) | (usbp->usb_ep0buf[1] << 2)) {
-    case USB_REQ_TYPE_DEVICE | (USB_REQ_GET_STATUS << 2):                  
+    case USB_REQ_TYPE_DEVICE | (USB_REQ_GET_STATUS << 2):
       break;
-    case USB_REQ_TYPE_DEVICE | (USB_REQ_CLEAR_FEATURE << 2):               
+    case USB_REQ_TYPE_DEVICE | (USB_REQ_CLEAR_FEATURE << 2):
       break;
-    case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_FEATURE << 2):                 
+    case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_FEATURE << 2):
       break;
     case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_ADDRESS << 2):
-      break;
+      usb_lld_set_address(usbp, usbp->usb_ep0buf[2]);
+      if (usbp->usb_config->uc_callback)
+        usbp->usb_config->uc_callback(usbp, USB_EVENT_ADDRESS);
+xxx = STM32_USB->EPR[0];
+      return;
     case USB_REQ_TYPE_DEVICE | (USB_REQ_GET_DESCRIPTOR << 2):
       {
-        const USBDescriptor *dp = usb_get_descriptor(usbp,
-                                                     usbp->usb_ep0buf[3],
-                                                     usbp->usb_ep0buf[2]);
+        const USBDescriptor *dp;
+
+        dp = usb_get_descriptor(usbp,
+                                usbp->usb_ep0buf[3],
+                                usbp->usb_ep0buf[2],
+                                usb_lld_fetch_word(&usbp->usb_ep0buf[4]));
+        if (STM32_USB->DADDR != 0x80) {
+          asm ("nop");
+        }
         if (dp == NULL)
           break;
-        usb_lld_write(usbp, 0, dp->ud_string, dp->ud_size);
-      } 
-     return;
-    case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_DESCRIPTOR << 2):                
+//        usb_lld_write(usbp, 0, dp->ud_string, dp->ud_size);
+        usb_lld_tx_ep0(usbp, dp->ud_string, dp->ud_size,
+                       usb_lld_fetch_word(&usbp->usb_ep0buf[6]));
+      }
+      return;
+    case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_DESCRIPTOR << 2):
       break;
-    case USB_REQ_TYPE_DEVICE | (USB_REQ_GET_CONFIGURATION << 2):            
+    case USB_REQ_TYPE_DEVICE | (USB_REQ_GET_CONFIGURATION << 2):
       break;
-    case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_CONFIGURATION << 2):            
+    case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_CONFIGURATION << 2):
       break;
-    case USB_REQ_TYPE_INTERFACE | (USB_REQ_GET_STATUS << 2):                  
+    case USB_REQ_TYPE_INTERFACE | (USB_REQ_GET_STATUS << 2):
       break;
-    case USB_REQ_TYPE_INTERFACE | (USB_REQ_CLEAR_FEATURE << 2):               
+    case USB_REQ_TYPE_INTERFACE | (USB_REQ_CLEAR_FEATURE << 2):
       break;
-    case USB_REQ_TYPE_INTERFACE | (USB_REQ_SET_FEATURE << 2):                 
+    case USB_REQ_TYPE_INTERFACE | (USB_REQ_SET_FEATURE << 2):
       break;
-    case USB_REQ_TYPE_INTERFACE | (USB_REQ_GET_INTERFACE << 2):              
+    case USB_REQ_TYPE_INTERFACE | (USB_REQ_GET_INTERFACE << 2):
       break;
     case USB_REQ_TYPE_INTERFACE | (USB_REQ_SET_INTERFACE << 2):
       break;
-    case USB_REQ_TYPE_ENDPOINT | (USB_REQ_GET_STATUS << 2):                  
+    case USB_REQ_TYPE_ENDPOINT | (USB_REQ_GET_STATUS << 2):
       break;
-    case USB_REQ_TYPE_ENDPOINT | (USB_REQ_CLEAR_FEATURE << 2):               
+    case USB_REQ_TYPE_ENDPOINT | (USB_REQ_CLEAR_FEATURE << 2):
       break;
-    case USB_REQ_TYPE_ENDPOINT | (USB_REQ_SET_FEATURE << 2):                 
+    case USB_REQ_TYPE_ENDPOINT | (USB_REQ_SET_FEATURE << 2):
       break;
     case USB_REQ_TYPE_ENDPOINT | (USB_REQ_SYNCH_FRAME << 2):
       break;
     default:
       break;
     }
-    /* Stalled because it should never happen.*/
+    break;
+  case USB_EP0_WAITING_STS:
+    /*
+     * STATUS received packet handling.
+     */
+    n = usb_lld_read(usbp, 0, usbp->usb_ep0buf, 8);
+    if (n != 0) {
+xxx = STM32_USB->EPR[0];
+      asm ("nop");
+      break;
+    }
+  case USB_EP0_RX:
+    break;
   default:
+    /* Stalled because it should never happen.*/
   error:
     usb_lld_stall_in(usbp, 0);
     usb_lld_stall_out(usbp, 0);
     usbp->usb_ep0state = USB_EP0_FATAL;
+xxx = STM32_USB->EPR[0];
+asm ("nop");
   }
 }
 
@@ -196,10 +297,14 @@ CH_IRQ_HANDLER(USB_LP_IRQHandler) {
     STM32_USB->ISTR = ~ISTR_RESET;
   }
 
+  if (STM32_USB->DADDR != 0x80) {
+    asm ("nop");
+  }
+
   /* Endpoint events handling.*/
   while (istr & ISTR_CTR) {
     uint32_t ep;
-    uint32_t epr = STM32_USB->EPR[ep = istr & ISTR_EP_ID_MASK]; 
+    uint32_t epr = STM32_USB->EPR[ep = istr & ISTR_EP_ID_MASK];
 
     if (epr & EPR_CTR_TX) {
       /* IN endpoint, transmission.*/
@@ -230,7 +335,7 @@ CH_IRQ_HANDLER(USB_LP_IRQHandler) {
  * @notapi
  */
 void usb_lld_init(void) {
-  
+
   /* USB reset, ensures reset state in order to avoid trouble with JTAGs.*/
   RCC->APB1RSTR = RCC_APB1RSTR_USBRST;
   RCC->APB1RSTR = 0;
@@ -262,7 +367,7 @@ void usb_lld_start(USBDriver *usbp) {
                        CORTEX_PRIORITY_MASK(STM32_USB_USB1_HP_IRQ_PRIORITY));
       NVICEnableVector(USB_LP_CAN1_RX0_IRQn,
                        CORTEX_PRIORITY_MASK(STM32_USB_USB1_LP_IRQ_PRIORITY));
-      
+
       /* Reset procedure enforced on driver start.*/
       usb_reset(&USBD1);
     }
@@ -292,7 +397,6 @@ void usb_lld_stop(USBDriver *usbp) {
   }
 }
 
-
 /**
  * @brief   USB low level reset routine.
  *
@@ -312,7 +416,7 @@ void usb_lld_reset(USBDriver *usbp) {
   STM32_USB->DADDR  = DADDR_EF;
   STM32_USB->CNTR   = /*CNTR_ESOFM | CNTR_SOFM |*/ CNTR_RESETM  | /*CNTR_SUSPM |*/
                           /*CNTR_WKUPM | CNTR_ERRM | CNTR_PMAOVRM |*/ CNTR_CTRM;
-  usb_lld_ep_open(usbp, &ep0config);
+  usb_lld_ep_open(usbp, &usb_lld_ep0config);
 }
 
 /**
@@ -323,21 +427,21 @@ void usb_lld_reset(USBDriver *usbp) {
 void usb_lld_ep_open(USBDriver *usbp, const USBEndpointConfig *epcp) {
   uint16_t nblocks;
   stm32_usb_descriptor_t *dp;
- 
+
   /* EPxR register setup.*/
   EPR_SET(epcp->uepc_addr, epcp->uepc_epr | epcp->uepc_addr);
   EPR_TOGGLE(epcp->uepc_addr, epcp->uepc_epr);
 
   /* Endpoint size and address initialization.*/
-  if (epcp->uepc_size > 62) 
+  if (epcp->uepc_size > 62)
     nblocks = (((((epcp->uepc_size - 1) | 0x1f) + 1) / 32) << 10) | 0x8000;
-  else 
+  else
     nblocks = ((((epcp->uepc_size - 1) | 1) + 1) / 2) << 10;
   dp = USB_GET_DESCRIPTOR(epcp->uepc_addr);
   dp->TXCOUNT = 0;
   dp->RXCOUNT = nblocks;
   dp->RXADDR  = epcp->uepc_offset;
-  dp->TXADDR  = epcp->uepc_offset + epcp->uepc_size; 
+  dp->TXADDR  = epcp->uepc_offset + epcp->uepc_size;
 
   /* Logically enabling the endpoint in the USBDriver structure.*/
   usbp->usb_epc[epcp->uepc_addr] = epcp;
@@ -359,7 +463,7 @@ size_t usb_lld_read(USBDriver *usbp, uint32_t ep, uint8_t *buf, size_t n) {
   uint32_t *pmap;
   stm32_usb_descriptor_t *udp;
   size_t count;
-  
+
   udp = USB_GET_DESCRIPTOR(ep);
   pmap = USB_ADDR2PTR(udp->RXADDR);
   count = udp->RXCOUNT & RXCOUNT_COUNT_MASK;

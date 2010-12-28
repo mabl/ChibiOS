@@ -125,32 +125,47 @@ void usbStop(USBDriver *usbp) {
 void usb_reset(USBDriver *usbp) {
   int32_t i;
 
+  usbp->usb_state = USB_READY;
+
   /* Invalidates all endpoints into the USBDriver structure.*/
   for (i = 0; i < USB_ENDOPOINTS_NUMBER + 1; i++)
     usbp->usb_epc[i] = NULL;
-  
+
   /* EP0 state machine initialization.*/
-  usbp->usb_ep0state = USB_EP0_SETUP_DATA;
-  usbp->usb_ep0next = usbp->usb_ep0buf;
+  usbp->usb_ep0state     = USB_EP0_WAITING_SETUP;
+  usbp->usb_ep0next      = usbp->usb_ep0buf;
+  usbp->usb_ep0remaining = 0;
 
   /* Low level reset.*/
   usb_lld_reset(usbp);
 }
 
+/**
+ * @brief   USB descriptor fetch.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object triggering the
+ *                      callback
+ * @param[in] dtype     descriptor type
+ * @param[in[ dindex    descriptor index
+ * @param[in] lang      language id, for string descriptors only
+ *
+ * @notapi
+ */
 const USBDescriptor *usb_get_descriptor(USBDriver *usbp,
                                         uint8_t dtype,
-                                        uint8_t dindex) {
-  
+                                        uint8_t dindex,
+                                        uint16_t lang) {
+
   /* The device descriptor is a special case because it is statically
      assigned to the USB driver configuration. Just returning the
      pointer.*/
   if (dtype == USB_DESCRIPTOR_DEVICE)
     return &usbp->usb_config->uc_dev_descriptor;
-  
+
   /* Any other descriptor must be provided by the application in
      order to provide an interface for complicated devices with
      multiple configurations or languages.*/
-  return usbp->usb_config->uc_get_descriptor(usbp, dtype, dindex);
+  return usbp->usb_config->uc_get_descriptor(usbp, dtype, dindex, lang);
 }
 
 #endif /* HAL_USE_USB */

@@ -80,23 +80,85 @@
 /*===========================================================================*/
 
 /**
+ * @brief   Type of a structure representing an USB driver.
+ */
+typedef struct USBDriver USBDriver;
+
+/**
  * @brief   Driver state machine possible states.
  */
 typedef enum {
-  USB_UNINIT = 0,                   /**< Not initialized.                   */
-  USB_STOP   = 1,                   /**< Stopped.                           */
-  USB_READY  = 2,                   /**< Ready, before enumeration.         */
-  USB_ACTIVE = 3,                   /**< Active, after enumeration.         */
+  USB_UNINIT = 0,                       /**< Not initialized.               */
+  USB_STOP   = 1,                       /**< Stopped.                       */
+  USB_READY  = 2,                       /**< Ready, before enumeration.     */
+  USB_ACTIVE = 3,                       /**< Active, after enumeration.     */
 } usbstate_t;
+
+/**
+ * @brief   Endpoint type.
+ */
+typedef enum {
+  EP_TYPE_CTRL = 0,                     /**< Control endpoint.              */
+  EP_TYPE_ISOC = 1,                     /**< Isochronous endpoint.          */
+  EP_TYPE_BULK = 2,                     /**< Bulk endpoint.                 */
+  EP_TYPE_INTR = 3                      /**< Interrupt endpoint.            */
+} usbeptype_t;
 
 /**
  * @brief   Endpoint zero state machine states.
  */
 typedef enum {
-  USB_EP0_SETUP_DATA,               /**< Waiting for SETUP data.            */
-  USB_EP0_FATAL                     /**< Final state because fatal error.   */    
+  USB_EP0_WAITING_SETUP,                /**< Waiting for SETUP data.        */
+  USB_EP0_TX,                           /**< Trasmitting.                   */
+  USB_EP0_WAITING_STS,                  /**< Waiting status.                */
+  USB_EP0_RX,                           /**< Receiving.                     */
+  USB_EP0_SENDING_STS,                  /**< Sending status.                */
+  USB_EP0_FATAL                         /**< Final state because fatal
+                                             error.                         */
 } usbep0state_t;
- 
+
+/**
+ * @brief   Enumeration of the possible USB events.
+ */
+typedef enum {
+  USB_EVENT_RESET = 0,                  /**< Driver has been reset by host. */
+  USB_EVENT_ADDRESS = 1,                /**< Address assigned.              */
+  USB_EVENT_CONFIGURED = 2,             /**< Configuration selected.        */
+  USB_EVENT_SUSPEND = 3,                /**< Entering suspend mode.         */
+  USB_EVENT_RESUME = 4,                 /**< Leaving suspend mode.          */
+} usbevent_t;
+
+/**
+ * @brief   USB descriptor.
+ */
+typedef struct {
+  /**
+   * @brief   Descriptor size in unicode characters.
+   */
+  size_t                        ud_size;
+  /**
+   * @brief   Pointer to the descriptor.
+   */
+  const uint8_t                 *ud_string;
+} USBDescriptor;
+
+/**
+ * @brief   Type of an USB notification callback.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object triggering the
+ *                      callback
+ * @param[in] event     event type
+ */
+typedef void (*usbcallback_t)(USBDriver *usbp, usbevent_t event);
+
+/**
+ * @brief   Type of an USB descriptor-retrieving callback.
+ */
+typedef const USBDescriptor * (*usbgetdescriptor_t)(USBDriver *usbp,
+                                                    uint8_t dtype,
+                                                    uint8_t dindex,
+                                                    uint16_t lang);
+
 #include "usb_lld.h"
 
 /*===========================================================================*/
@@ -117,7 +179,8 @@ extern "C" {
   void usb_reset(USBDriver *usbp);
   const USBDescriptor *usb_get_descriptor(USBDriver *usbp,
                                           uint8_t dtype,
-                                          uint8_t dindex);
+                                          uint8_t dindex,
+                                          uint16_t lang);
 #ifdef __cplusplus
 }
 #endif

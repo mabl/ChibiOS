@@ -84,55 +84,6 @@
 /*===========================================================================*/
 
 /**
- * @brief   Enumeration of the possible USB events.
- */
-typedef enum {
-  USB_EVENT_RESET = 0,                  /**< Driver has been reset by host. */
-  USB_EVENT_ADDRESS = 1,                /**< Address assigned.              */
-  USB_EVENT_CONFIGURED = 2,             /**< Configuration selected.        */
-  USB_EVENT_SUSPEND = 3,                /**< Entering suspend mode.         */
-  USB_EVENT_RESUME = 4,                 /**< Leaving suspend mode.          */
-} usbevent_t;
-
-/**
- * @brief   Endpoint type.
- */
-typedef enum {
-  EP_TYPE_CTRL = 0,                     /**< Control endpoint.              */
-  EP_TYPE_ISOC = 1,                     /**< Isochronous endpoint.          */
-  EP_TYPE_BULK = 2,                     /**< Bulk endpoint.                 */
-  EP_TYPE_INTR = 3                      /**< Interrupt endpoint.            */
-} usb_ep_type_t;
-
-/**
- * @brief   USB descriptor.
- */
-typedef struct {
-  /**
-   * @brief   Descriptor size in unicode characters.
-   */
-  size_t                        ud_size;
-  /**
-   * @brief   Pointer to the descriptor.
-   */
-  const uint8_t                 *ud_string;
-} USBDescriptor;
-
-/**
- * @brief   Type of a structure representing an USB driver.
- */
-typedef struct USBDriver USBDriver;
-
-/**
- * @brief   Type of an USB notification callback.
- *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
- * @param[in] event     event type
- */
-typedef void (*usbcallback_t)(USBDriver *usbp, usbevent_t event);
-
-/**
  * @brief   Type of an USB endpoint callback.
  *
  * @param[in] usbp      pointer to the @p USBDriver object triggering the
@@ -140,13 +91,6 @@ typedef void (*usbcallback_t)(USBDriver *usbp, usbevent_t event);
  * @param[in] ep        endpoint number
  */
 typedef void (*usbepcallback_t)(USBDriver *usbp, uint32_t ep);
-
-/**
- * @brief   Type of an USB descriptor-retrieving callback.
- */
-typedef const USBDescriptor * (*usbgetdescriptor_t)(USBDriver *usbp,
-                                                    uint8_t dtype,
-                                                    uint8_t dindex);
 
 /**
  * @brief   Type of an USB Endpoint configuration structure.
@@ -166,14 +110,14 @@ typedef struct {
    */
   uint32_t                      uepc_addr;
   /**
-   * @brief   Endpoint buffer size.
+   * @brief   Endpoint maximum packet size.
    * @note    This size is allocated twice for:
    *          - Isochronous endpoints.
    *          - Double buffered bulk endpoint.
    *          - Endpoints with both IN and OUT directions enabled.
    *          .
    */
-  uint32_t                      uepc_size;
+  size_t                        uepc_size;
   /* End of the mandatory fields.*/
   /**
    * @brief   EPxR register initialization value.
@@ -230,9 +174,21 @@ struct USBDriver {
    */
   usbep0state_t                 usb_ep0state;
   /**
-   * @brief   Next position in endpoint 0 buffer.
+   * @brief   Next position to be transmitted through endpoint 0.
    */
-  uint8_t                       *usb_ep0next;
+  const uint8_t                 *usb_ep0next;
+  /**
+   * @brief   Maximum number of bytes to be tranferred through endpoint 0.
+   */
+  size_t                        usb_ep0max;
+  /**
+   * @brief   Number of bytes yet to be tranferred through endpoint 0.
+   */
+  size_t                        usb_ep0remaining;
+  /**
+   * @brief   Size of the last packet transferred through endpoint 0.
+   */
+  size_t                        usb_ep0lastsize;
   /**
    * @brief   Buffer for endpoint 0 transactions.
    */
