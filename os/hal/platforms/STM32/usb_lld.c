@@ -285,7 +285,7 @@ void usb_lld_ep_open(USBDriver *usbp, const USBEndpointConfig *epcp) {
  *
  * @notapi
  */
-size_t usb_lld_read(USBDriver *usbp, uint32_t ep, uint8_t *buf, size_t n) {
+size_t usb_lld_read(USBDriver *usbp, usbep_t ep, uint8_t *buf, size_t n) {
   uint32_t *pmap;
   stm32_usb_descriptor_t *udp;
   size_t count;
@@ -320,7 +320,7 @@ size_t usb_lld_read(USBDriver *usbp, uint32_t ep, uint8_t *buf, size_t n) {
  *
  * @notapi
  */
-void usb_lld_write(USBDriver *usbp, uint32_t ep, const uint8_t *buf, size_t n) {
+void usb_lld_write(USBDriver *usbp, usbep_t ep, const uint8_t *buf, size_t n) {
   uint32_t *pmap;
   stm32_usb_descriptor_t *udp;
   size_t count;
@@ -346,7 +346,7 @@ void usb_lld_write(USBDriver *usbp, uint32_t ep, const uint8_t *buf, size_t n) {
  *
  * @notapi
  */
-void usb_lld_stall_in(USBDriver *usbp, uint32_t ep) {
+void usb_lld_stall_in(USBDriver *usbp, usbep_t ep) {
 
   EPR_SET_STAT_TX(ep, EPR_STAT_TX_STALL);
 }
@@ -360,7 +360,7 @@ void usb_lld_stall_in(USBDriver *usbp, uint32_t ep) {
  *
  * @notapi
  */
-void usb_lld_stall_out(USBDriver *usbp, uint32_t ep) {
+void usb_lld_stall_out(USBDriver *usbp, usbep_t ep) {
 
   EPR_SET_STAT_RX(ep, EPR_STAT_RX_STALL);
 }

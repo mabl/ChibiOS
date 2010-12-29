@@ -114,6 +114,7 @@ static void start_tx_ep0(USBDriver *usbp) {
  * @retval TRUE         Request handled.
  */
 static bool_t default_handler(USBDriver *usbp) {
+  const USBDescriptor *dp;
 
   /* Decoding the request.*/
   switch ((usbp->usb_setup[0] & USB_RTYPE_RECIPIENT_MASK) |
@@ -131,29 +132,25 @@ static bool_t default_handler(USBDriver *usbp) {
     return TRUE;
   case USB_REQ_TYPE_DEVICE | (USB_REQ_GET_DESCRIPTOR << 5):
     /* Handling descriptor requests from the host.*/
-    {
-      const USBDescriptor *dp;
-
-      if (usbp->usb_setup[3] == USB_DESCRIPTOR_DEVICE) {
-        /* The device descriptor is a special case because it is statically
-           assigned to the USB driver configuration. Just returning the
-           pointer.*/
-        dp = &usbp->usb_config->uc_dev_descriptor;
-      }
-      else {
-        /* Any other descriptor must be provided by the application in
-           order to provide an interface for complicated devices with
-           multiple configurations or languages.*/
-        dp = usbp->usb_config->uc_get_descriptor_cb(usbp,
-                                                    usbp->usb_setup[3],
-                                                    usbp->usb_setup[2],
-                                                    usb_lld_fetch_word(&usbp->usb_setup[4]));
-      }
-      if (dp == NULL)
-        return FALSE;
-      usbSetupTransfer(usbp, dp->ud_string, dp->ud_size, NULL);
-      return TRUE;
+    if (usbp->usb_setup[3] == USB_DESCRIPTOR_DEVICE) {
+      /* The device descriptor is a special case because it is statically
+         assigned to the USB driver configuration. Just returning the
+         pointer.*/
+      dp = &usbp->usb_config->uc_dev_descriptor;
     }
+    else {
+      /* Any other descriptor must be provided by the application in
+         order to provide an interface for complicated devices with
+         multiple configurations or languages.*/
+      dp = usbp->usb_config->uc_get_descriptor_cb(usbp,
+                                                  usbp->usb_setup[3],
+                                                  usbp->usb_setup[2],
+                                                  usb_lld_fetch_word(&usbp->usb_setup[4]));
+    }
+    if (dp == NULL)
+      return FALSE;
+    usbSetupTransfer(usbp, dp->ud_string, dp->ud_size, NULL);
+    return TRUE;
   case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_DESCRIPTOR << 5):
     return FALSE;
   case USB_REQ_TYPE_DEVICE | (USB_REQ_GET_CONFIGURATION << 5):
@@ -293,6 +290,7 @@ void _usb_reset(USBDriver *usbp) {
 
   usbp->usb_state         = USB_READY;
   usbp->usb_address       = 0;
+  usbp->usb_status        = 0;
   usbp->usb_configuration = 0;
 
   /* Invalidates all endpoints into the USBDriver structure.*/
@@ -317,7 +315,7 @@ void _usb_reset(USBDriver *usbp) {
  *
  * @notapi
  */
-void _usb_ep0in(USBDriver *usbp, uint32_t ep) {
+void _usb_ep0in(USBDriver *usbp, usbep_t ep) {
 
   switch (usbp->usb_ep0state) {
   case USB_EP0_TX:
@@ -364,7 +362,7 @@ void _usb_ep0in(USBDriver *usbp, uint32_t ep) {
  *
  * @notapi
  */
-void _usb_ep0out(USBDriver *usbp, uint32_t ep) {
+void _usb_ep0out(USBDriver *usbp, usbep_t ep) {
   size_t n;
   uint8_t buf[1];
 

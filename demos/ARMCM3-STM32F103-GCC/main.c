@@ -191,13 +191,13 @@ static const USBDescriptor vcom_strings[] = {
   {sizeof(vcom_string3), vcom_string3}
 };
 
-void ep1in(USBDriver *usbp, uint32_t ep) {
+void ep1in(USBDriver *usbp, usbep_t ep) {
 }
 
-void ep2in(USBDriver *usbp, uint32_t ep) {
+void ep2in(USBDriver *usbp, usbep_t ep) {
 }
 
-void ep3out(USBDriver *usbp, uint32_t ep) {
+void ep3out(USBDriver *usbp, usbep_t ep) {
 }
 
 /**

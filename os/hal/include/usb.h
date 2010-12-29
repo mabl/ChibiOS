@@ -91,6 +91,11 @@
 typedef struct USBDriver USBDriver;
 
 /**
+ * @brief   Type of an endpoint identifier.
+ */
+typedef uint8_t usbep_t;
+
+/**
  * @brief   Driver state machine possible states.
  */
 typedef enum {
@@ -157,6 +162,15 @@ typedef struct {
  *                      callback
  */
 typedef void (*usbcallback_t)(USBDriver *usbp);
+
+/**
+ * @brief   Type of an USB endpoint callback.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object triggering the
+ *                      callback
+ * @param[in] ep        endpoint number
+ */
+typedef void (*usbepcallback_t)(USBDriver *usbp, usbep_t ep);
 
 /**
  * @brief   Type of an USB event notification callback.
@@ -235,8 +249,8 @@ extern "C" {
   void usbStop(USBDriver *usbp);
   void usbEPOpen(USBDriver *usbp, const USBEndpointConfig *epcp);
   void _usb_reset(USBDriver *usbp);
-  void _usb_ep0in(USBDriver *usbp, uint32_t ep);
-  void _usb_ep0out(USBDriver *usbp, uint32_t ep);
+  void _usb_ep0in(USBDriver *usbp, usbep_t ep);
+  void _usb_ep0out(USBDriver *usbp, usbep_t ep);
 #ifdef __cplusplus
 }
 #endif
