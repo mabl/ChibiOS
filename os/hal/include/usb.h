@@ -63,14 +63,6 @@
 /* Driver pre-compile time settings.                                         */
 /*===========================================================================*/
 
-/**
- * @brief   USB endpoint zero buffer size.
- * @note    The default is 64.
- */
-#if !defined(USB_EP0_BUFSIZE) || defined(__DOXYGEN__)
-#define USB_EP0_BUFSIZE                     64
-#endif
-
 /*===========================================================================*/
 /* Derived constants and error checks.                                       */
 /*===========================================================================*/
@@ -90,8 +82,8 @@ typedef struct USBDriver USBDriver;
 typedef enum {
   USB_UNINIT = 0,                       /**< Not initialized.               */
   USB_STOP   = 1,                       /**< Stopped.                       */
-  USB_READY  = 2,                       /**< Ready, before enumeration.     */
-  USB_ACTIVE = 3,                       /**< Active, after enumeration.     */
+  USB_READY  = 2,                       /**< Ready, after bus reset.        */
+  USB_ACTIVE = 3,                       /**< Active, after SET_ADDRESS.     */
 } usbstate_t;
 
 /**
@@ -126,6 +118,7 @@ typedef enum {
   USB_EVENT_CONFIGURED = 2,             /**< Configuration selected.        */
   USB_EVENT_SUSPEND = 3,                /**< Entering suspend mode.         */
   USB_EVENT_RESUME = 4,                 /**< Leaving suspend mode.          */
+  USB_EVENT_STALLED = 5,                /**< Endpoint 0 error, stalled.     */
 } usbevent_t;
 
 /**
@@ -176,11 +169,9 @@ extern "C" {
   void usbObjectInit(USBDriver *usbp);
   void usbStart(USBDriver *usbp, const USBConfig *config);
   void usbStop(USBDriver *usbp);
-  void usb_reset(USBDriver *usbp);
-  const USBDescriptor *usb_get_descriptor(USBDriver *usbp,
-                                          uint8_t dtype,
-                                          uint8_t dindex,
-                                          uint16_t lang);
+  void _usb_reset(USBDriver *usbp);
+  void _usb_ep0in(USBDriver *usbp, uint32_t ep);
+  void _usb_ep0out(USBDriver *usbp, uint32_t ep);
 #ifdef __cplusplus
 }
 #endif

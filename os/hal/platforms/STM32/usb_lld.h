@@ -200,12 +200,25 @@ struct USBDriver {
 /* Driver macros.                                                            */
 /*===========================================================================*/
 
+/**
+ * @brief   Fetches a 16 bits word value from an USB message.
+ *
+ * @param[in] p         pointer to the 16 bits word
+ *
+ * @notapi
+ */
+#define usb_lld_fetch_word(p) (*(uint16_t *)p)
+
 /*===========================================================================*/
 /* External declarations.                                                    */
 /*===========================================================================*/
 
 #if STM32_USB_USE_USB1 && !defined(__DOXYGEN__)
 extern USBDriver USBD1;
+#endif
+
+#if !defined(__DOXYGEN__)
+extern const USBEndpointConfig usb_lld_ep0config;
 #endif
 
 #ifdef __cplusplus
@@ -215,11 +228,12 @@ extern "C" {
   void usb_lld_start(USBDriver *usbp);
   void usb_lld_stop(USBDriver *usbp);
   void usb_lld_reset(USBDriver *usbp);
+  void usb_lld_set_address(USBDriver *usbp, uint8_t addr);
   void usb_lld_ep_open(USBDriver *usbp, const USBEndpointConfig *epcp);
   size_t usb_lld_read(USBDriver *usbp, uint32_t ep, uint8_t *buf, size_t n);
   void usb_lld_write(USBDriver *usbp, uint32_t ep, const uint8_t *buf, size_t n);
-  void usb_lld_stall_out(USBDriver *usbp, uint32_t ep);
   void usb_lld_stall_in(USBDriver *usbp, uint32_t ep);
+  void usb_lld_stall_out(USBDriver *usbp, uint32_t ep);
 #ifdef __cplusplus
 }
 #endif

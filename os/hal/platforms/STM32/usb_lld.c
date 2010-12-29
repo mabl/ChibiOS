@@ -35,8 +35,6 @@
 #define EP0IN_ADDR      0x0040
 #define EP0OUT_ADDR     0x00C0
 
-volatile uint32_t xxx;
-
 /*===========================================================================*/
 /* Driver exported variables.                                                */
 /*===========================================================================*/
@@ -46,19 +44,12 @@ volatile uint32_t xxx;
 USBDriver USBD1;
 #endif
 
-/*===========================================================================*/
-/* Driver local variables.                                                   */
-/*===========================================================================*/
-
-static void ep0in(USBDriver *usbp, uint32_t ep);
-static void ep0out(USBDriver *usbp, uint32_t ep);
-
-  /**
+/**
  * @brief   EP0 initialization structure.
  */
-static const USBEndpointConfig usb_lld_ep0config = {
-  ep0in,
-  ep0out,
+const USBEndpointConfig usb_lld_ep0config = {
+  _usb_ep0in,
+  _usb_ep0out,
   0,
   0x40,
   EPR_EP_TYPE_CONTROL | EPR_STAT_TX_STALL | EPR_STAT_RX_VALID,
@@ -66,222 +57,12 @@ static const USBEndpointConfig usb_lld_ep0config = {
 };
 
 /*===========================================================================*/
-/* Driver local functions.                                                   */
+/* Driver local variables.                                                   */
 /*===========================================================================*/
 
-static uint16_t usb_lld_fetch_word(uint8_t *p) {
-
-  return *(uint16_t *)p;
-}
-
-static void usb_lld_set_address(USBDriver *usbp, uint8_t addr) {
-
-  STM32_USB->DADDR = (uint32_t)addr | DADDR_EF;
-}
-
-/**
- * @brief   Starts a receive phase on the endpoint zero.
- *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
- * @param[in] buf       buffer where to put the received data
- * @param[in] n         number of bytes to receive
- *
- * @notapi
- */
-static void usb_lld_rx_ep0(USBDriver *usbp, uint8_t *buf, size_t n) {
-
-  if (n > 0) {
-    /* TO BE IMPLEMENTED.*/
-  }
-  else {
-    /* Sending zero sized status packet.*/
-    usb_lld_write(usbp, 0, NULL, 0);
-    usbp->usb_ep0state = USB_EP0_SENDING_STS;
-  }
-}
-
-/**
- * @brief   Starts a transmission phase on the endpoint zero.
- *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
- * @param[in] buf       buffer where to fetch the data to be transmitted
- * @param[in] n         number of bytes to transmit
- * @param[in] max       number of bytes requested by the setup packet
- *
- * @notapi
- */
-static void usb_lld_tx_ep0(USBDriver *usbp, const uint8_t *buf,
-                           size_t n, size_t max) {
-
-  if (n > 0) {
-    n = n > max ? max : n;
-
-    usbp->usb_ep0lastsize = n > usb_lld_ep0config.uepc_size ?
-                            usb_lld_ep0config.uepc_size : n;
-    usbp->usb_ep0next      = buf;
-    usbp->usb_ep0max       = max;
-    usbp->usb_ep0remaining = n;
-    usbp->usb_ep0state     = USB_EP0_TX;
-    usb_lld_write(usbp, 0, buf, usbp->usb_ep0lastsize);
-  }
-  else
-    usbp->usb_ep0state = USB_EP0_WAITING_STS;
-}
-
-/**
- * @brief   Default EP0 IN callback.
- * @details This function is used by the low level driver as default handler
- *          for EP0 IN events.
- *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
- * @param[in] ep        endpoint number, always zero
- *
- * @notapi
- */
-static void ep0in(USBDriver *usbp, uint32_t ep) {
-
-  switch (usbp->usb_ep0state) {
-  case USB_EP0_TX:
-    usbp->usb_ep0next      += usbp->usb_ep0lastsize;
-    usbp->usb_ep0max       -= usbp->usb_ep0lastsize;
-    usbp->usb_ep0remaining -= usbp->usb_ep0lastsize;
-
-    /* The final condition is when the requested size has been transmitted or when a
-       packet has been sent with size less than the maximum packet size.*/
-    if ((usbp->usb_ep0max == 0) || (usbp->usb_ep0lastsize < usb_lld_ep0config.uepc_size)) {
-      if ((usbp->usb_setup[6] > 64) && (usbp->usb_setup[3] == 2)) {
-        asm("nop");
-      }
-      usbp->usb_ep0state = USB_EP0_WAITING_STS;
-    }
-    else {
-      usbp->usb_ep0lastsize = usbp->usb_ep0remaining > usb_lld_ep0config.uepc_size ?
-                              usb_lld_ep0config.uepc_size : usbp->usb_ep0remaining;
-      usb_lld_write(usbp, 0, usbp->usb_ep0next, usbp->usb_ep0lastsize);
-    }
-    return;
-  case USB_EP0_SENDING_STS:
-    /* Special case of the SET_ADDRESS request, it is the only one handled
-       after the status phase.*/
-    if (usbp->usb_setup[1] == USB_REQ_SET_ADDRESS) {
-      usb_lld_set_address(usbp, usbp->usb_setup[2]);
-      if (usbp->usb_config->uc_callback)
-        usbp->usb_config->uc_callback(usbp, USB_EVENT_ADDRESS);
-    }
-    usbp->usb_ep0state = USB_EP0_WAITING_SETUP;
-    return;
-  default:
-    usb_lld_stall_in(usbp, 0);
-    usb_lld_stall_out(usbp, 0);
-    usbp->usb_ep0state = USB_EP0_FATAL;
-  }
-}
-
-/**
- * @brief   Default EP0 OUT callback.
- * @details This function is used by the low level driver as default handler
- *          for EP0 OUT events.
- *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
- * @param[in] ep        endpoint number, always zero
- *
- * @notapi
- */
-static void ep0out(USBDriver *usbp, uint32_t ep) {
-  size_t n;
-  uint8_t buf[1];
-
-  switch (usbp->usb_ep0state) {
-  case USB_EP0_WAITING_SETUP:
-    /*
-     * SETUP packet handling.
-     */
-    n = usb_lld_read(usbp, 0, usbp->usb_setup, 8);
-    if (n != 8)
-      break;
-
-    /*
-     * Decoding the request.
-     */
-    switch ((usbp->usb_setup[0] & 3) | (usbp->usb_setup[1] << 2)) {
-    case USB_REQ_TYPE_DEVICE | (USB_REQ_GET_STATUS << 2):
-      break;
-    case USB_REQ_TYPE_DEVICE | (USB_REQ_CLEAR_FEATURE << 2):
-      break;
-    case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_FEATURE << 2):
-      break;
-    case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_ADDRESS << 2):
-      /* The handling is posponed to after the status phase in order to allow
-         the proper completion of the transaction.*/
-      usb_lld_rx_ep0(usbp, NULL, 0);
-      return;
-    case USB_REQ_TYPE_DEVICE | (USB_REQ_GET_DESCRIPTOR << 2):
-      {
-        const USBDescriptor *dp;
-
-        dp = usb_get_descriptor(usbp,
-                                usbp->usb_setup[3],
-                                usbp->usb_setup[2],
-                                usb_lld_fetch_word(&usbp->usb_setup[4]));
-        if (STM32_USB->DADDR != 0x80) {
-          asm ("nop");
-        }
-        if (dp == NULL)
-          break;
-        usb_lld_tx_ep0(usbp, dp->ud_string, dp->ud_size,
-                       usb_lld_fetch_word(&usbp->usb_setup[6]));
-      }
-      return;
-    case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_DESCRIPTOR << 2):
-      break;
-    case USB_REQ_TYPE_DEVICE | (USB_REQ_GET_CONFIGURATION << 2):
-      break;
-    case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_CONFIGURATION << 2):
-      break;
-    case USB_REQ_TYPE_INTERFACE | (USB_REQ_GET_STATUS << 2):
-      break;
-    case USB_REQ_TYPE_INTERFACE | (USB_REQ_CLEAR_FEATURE << 2):
-      break;
-    case USB_REQ_TYPE_INTERFACE | (USB_REQ_SET_FEATURE << 2):
-      break;
-    case USB_REQ_TYPE_INTERFACE | (USB_REQ_GET_INTERFACE << 2):
-      break;
-    case USB_REQ_TYPE_INTERFACE | (USB_REQ_SET_INTERFACE << 2):
-      break;
-    case USB_REQ_TYPE_ENDPOINT | (USB_REQ_GET_STATUS << 2):
-      break;
-    case USB_REQ_TYPE_ENDPOINT | (USB_REQ_CLEAR_FEATURE << 2):
-      break;
-    case USB_REQ_TYPE_ENDPOINT | (USB_REQ_SET_FEATURE << 2):
-      break;
-    case USB_REQ_TYPE_ENDPOINT | (USB_REQ_SYNCH_FRAME << 2):
-      break;
-    default:
-      break;
-    }
-    break;
-  case USB_EP0_WAITING_STS:
-    /*
-     * STATUS received packet handling, it must be zero sized.
-     */
-    n = usb_lld_read(usbp, 0, buf, 1);
-    if (n != 0)
-      break;
-    usbp->usb_ep0state = USB_EP0_WAITING_SETUP;
-    return;
-  case USB_EP0_RX:
-    break;
-  default:
-    /* Stalled because it should never happen.*/
-    usb_lld_stall_in(usbp, 0);
-    usb_lld_stall_out(usbp, 0);
-    usbp->usb_ep0state = USB_EP0_FATAL;
-  }
-}
+/*===========================================================================*/
+/* Driver local functions.                                                   */
+/*===========================================================================*/
 
 /*===========================================================================*/
 /* Driver interrupt handlers.                                                */
@@ -316,7 +97,7 @@ CH_IRQ_HANDLER(USB_LP_IRQHandler) {
    */
   istr = STM32_USB->ISTR;
   if (istr & ISTR_RESET) {
-    usb_reset(usbp);
+    _usb_reset(usbp);
     if (usbp->usb_config->uc_callback)
       usbp->usb_config->uc_callback(usbp, USB_EVENT_RESET);
     STM32_USB->ISTR = ~ISTR_RESET;
@@ -394,7 +175,7 @@ void usb_lld_start(USBDriver *usbp) {
                        CORTEX_PRIORITY_MASK(STM32_USB_USB1_LP_IRQ_PRIORITY));
 
       /* Reset procedure enforced on driver start.*/
-      usb_reset(&USBD1);
+      _usb_reset(&USBD1);
     }
 #endif
   }
@@ -445,7 +226,25 @@ void usb_lld_reset(USBDriver *usbp) {
 }
 
 /**
+ * @brief   Sets the USB address.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object triggering the
+ *                      callback
+ * @param[in] addr      the USB address
+ *
+ * @notapi
+ */
+void usb_lld_set_address(USBDriver *usbp, uint8_t addr) {
+
+  STM32_USB->DADDR = (uint32_t)addr | DADDR_EF;
+}
+
+/**
  * @brief   Activates an endpoint.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object triggering the
+ *                      callback
+ * @param[in] epcp      the endpoint configuration
  *
  * @notapi
  */
@@ -474,10 +273,13 @@ void usb_lld_ep_open(USBDriver *usbp, const USBEndpointConfig *epcp) {
 
 /**
  * @brief   Endpoint read.
+ * @details The buffered packet is copied into the user buffer and then
+ *          the endpoint is brought to the valid state in order to allow
+ *          reception of more data.
  *
  * @param[in] usbp      pointer to the @p USBDriver object triggering the
  *                      callback
- * @param[in] ep        endpoint number, always zero
+ * @param[in] ep        endpoint number
  * @param[in] buf       buffer where to copy the endpoint data
  * @param[in] n         maximum number of bytes to copy
  * @return              The number of bytes that were effectively available.
@@ -504,6 +306,21 @@ size_t usb_lld_read(USBDriver *usbp, uint32_t ep, uint8_t *buf, size_t n) {
   return n;
 }
 
+/**
+ * @brief   Endpoint write.
+ * @details The user data is copied in the packer memory and then
+ *          the endpoint is brought to the valid state in order to allow
+ *          transmission.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object triggering the
+ *                      callback
+ * @param[in] ep        endpoint number
+ * @param[in] buf       buffer where to copy the endpoint data
+ * @param[in] n         maximum number of bytes to copy
+ * @return              The number of bytes that were effectively available.
+ *
+ * @notapi
+ */
 void usb_lld_write(USBDriver *usbp, uint32_t ep, const uint8_t *buf, size_t n) {
   uint32_t *pmap;
   stm32_usb_descriptor_t *udp;
@@ -521,14 +338,32 @@ void usb_lld_write(USBDriver *usbp, uint32_t ep, const uint8_t *buf, size_t n) {
   EPR_SET_STAT_TX(ep, EPR_STAT_TX_VALID);
 }
 
-void usb_lld_stall_out(USBDriver *usbp, uint32_t ep) {
-
-  EPR_SET_STAT_RX(ep, EPR_STAT_RX_STALL);
-}
-
+/**
+ * @brief   Brings an IN endpoint in the stalled state.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object triggering the
+ *                      callback
+ * @param[in] ep        endpoint number, always zero
+ *
+ * @notapi
+ */
 void usb_lld_stall_in(USBDriver *usbp, uint32_t ep) {
 
   EPR_SET_STAT_TX(ep, EPR_STAT_TX_STALL);
+}
+
+/**
+ * @brief   Brings an OUT endpoint in the stalled state.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object triggering the
+ *                      callback
+ * @param[in] ep        endpoint number, always zero
+ *
+ * @notapi
+ */
+void usb_lld_stall_out(USBDriver *usbp, uint32_t ep) {
+
+  EPR_SET_STAT_RX(ep, EPR_STAT_RX_STALL);
 }
 
 #endif /* HAL_USE_USB */
