@@ -42,6 +42,7 @@
 #include "serial.h"
 #include "spi.h"
 #include "uart.h"
+#include "usb.h"
 #include "mmc_spi.h"
 
 /*===========================================================================*/

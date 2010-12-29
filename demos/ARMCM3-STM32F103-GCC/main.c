@@ -19,29 +19,11 @@
 
 #include "ch.h"
 #include "hal.h"
-#include "usb.h"
 #include "test.h"
 
-/*
- * Red LED blinker thread, times are in milliseconds.
- */
-static WORKING_AREA(waThread1, 128);
-static msg_t Thread1(void *arg) {
-
-  (void)arg;
-  while (TRUE) {
-    palClearPad(IOPORT3, GPIOC_LED);
-    chThdSleepMilliseconds(500);
-    palSetPad(IOPORT3, GPIOC_LED);
-    chThdSleepMilliseconds(500);
-  }
-  return 0;
-}
-
-static const USBDescriptor *get_descriptor(USBDriver *usbp,
-                                           uint8_t dtype,
-                                           uint8_t dindex,
-                                           uint16_t lang);
+/*===========================================================================*/
+/* USB related stuff.                                                        */
+/*===========================================================================*/
 
 /* USB Standard Device Descriptor.*/
 static const uint8_t vcom_device_descriptor_data[] = {
@@ -147,6 +129,9 @@ const uint8_t vcom_configuration_descriptor_data[] = {
   0x00                              /* bInterval (ignored for bulk.         */
 };
 
+/*
+ * Configuration descriptor wrapper.
+ */
 static const USBDescriptor vcom_configuration_descriptor = {
   sizeof (vcom_configuration_descriptor_data),
   vcom_configuration_descriptor_data
@@ -173,6 +158,9 @@ const uint8_t vcom_string1[] = {
   'c', 0, 's', 0
 };
 
+/*
+ * Device description string.
+ */
 const uint8_t vcom_string2[] = {
   56,                               /* bLength.                             */
   USB_DESCRIPTOR_STRING,            /* bDescriptorType.                     */
@@ -182,6 +170,9 @@ const uint8_t vcom_string2[] = {
   'o', 0, 'r', 0, 't', 0
 };
 
+/*
+ * Serial number string.
+ */
 const uint8_t vcom_string3[] = {
   8,                                /* bLength.                             */
   USB_DESCRIPTOR_STRING,            /* bDescriptorType.                     */
@@ -190,6 +181,9 @@ const uint8_t vcom_string3[] = {
   '0' + CH_KERNEL_PATCH, 0
 };
 
+/*
+ * Strings wrappers array.
+ */
 static const USBDescriptor vcom_strings[] = {
   {sizeof(vcom_string0), vcom_string0},
   {sizeof(vcom_string1), vcom_string1},
@@ -197,12 +191,35 @@ static const USBDescriptor vcom_strings[] = {
   {sizeof(vcom_string3), vcom_string3}
 };
 
-static const USBConfig usbcfg = {
-  NULL,
-  {sizeof(vcom_device_descriptor_data), vcom_device_descriptor_data},
-  get_descriptor,
-};
+/*
+ * Handles the USB driver global events.
+ */
+static void usb_event(USBDriver *usbp, usbevent_t event) {
 
+  switch (event) {
+  case USB_EVENT_RESET:
+    asm("nop");
+    return;
+  case USB_EVENT_ADDRESS:
+
+    return;
+  case USB_EVENT_SUSPEND:
+    asm("nop");
+    return;
+  case USB_EVENT_RESUME:
+    asm("nop");
+    return;
+  case USB_EVENT_STALLED:
+    asm("nop");
+    return;
+  }
+  return;
+}
+
+/*
+ * Handles the GET_DESCRIPTOR callback. Except for the device descriptor
+ * any other descriptor must be handled here.
+ */
 static const USBDescriptor *get_descriptor(USBDriver *usbp,
                                            uint8_t dtype,
                                            uint8_t dindex,
@@ -219,6 +236,35 @@ static const USBDescriptor *get_descriptor(USBDriver *usbp,
 }
 
 /*
+ * USB driver configuration.
+ */
+static const USBConfig usbcfg = {
+  usb_event,
+  {sizeof(vcom_device_descriptor_data), vcom_device_descriptor_data},
+  get_descriptor,
+};
+
+/*===========================================================================*/
+/* Generic code.                                                             */
+/*===========================================================================*/
+
+/*
+ * Red LED blinker thread, times are in milliseconds.
+ */
+static WORKING_AREA(waThread1, 128);
+static msg_t Thread1(void *arg) {
+
+  (void)arg;
+  while (TRUE) {
+    palClearPad(IOPORT3, GPIOC_LED);
+    chThdSleepMilliseconds(500);
+    palSetPad(IOPORT3, GPIOC_LED);
+    chThdSleepMilliseconds(500);
+  }
+  return 0;
+}
+
+/*
  * Application entry point.
  */
 int main(void) {
@@ -231,9 +277,11 @@ int main(void) {
    *   RTOS is active.
    */
   halInit();
-  usbInit();
   chSysInit();
 
+  /*
+   * Activates the USB bus and then the USB driver.
+   */
   palClearPad(GPIOC, GPIOC_USB_DISC);
   usbStart(&USBD1, &usbcfg);
 
