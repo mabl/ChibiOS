@@ -97,8 +97,8 @@ CH_IRQ_HANDLER(USB_LP_IRQHandler) {
   istr = STM32_USB->ISTR;
   if (istr & ISTR_RESET) {
     _usb_reset(usbp);
-    if (usbp->usb_config->uc_callback)
-      usbp->usb_config->uc_callback(usbp, USB_EVENT_RESET);
+    if (usbp->usb_config->uc_state_change_cb)
+      usbp->usb_config->uc_state_change_cb(usbp, USB_EVENT_RESET);
     STM32_USB->ISTR = ~ISTR_RESET;
   }
 

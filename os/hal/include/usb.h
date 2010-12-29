@@ -34,6 +34,20 @@
 /* Driver constants.                                                         */
 /*===========================================================================*/
 
+#define USB_RTYPE_DIR_MASK                  0x80
+#define USB_RTYPE_DIR_HOST2DEV              0x00
+#define USB_RTYPE_DIR_DEV2HOST              0x80
+#define USB_RTYPE_TYPE_MASK                 0x60
+#define USB_RTYPE_TYPE_STANDARD             0x00
+#define USB_RTYPE_TYPE_CLASS                0x20
+#define USB_RTYPE_TYPE_VENDOR               0x40
+#define USB_RTYPE_TYPE_RESERVED             0x60
+#define USB_RTYPE_RECIPIENT_MASK            0x1F
+#define USB_RTYPE_RECIPIENT_DEVICE          0x00
+#define USB_RTYPE_RECIPIENT_INTERFACE       0x01
+#define USB_RTYPE_RECIPIENT_ENDPOINT        0x02
+#define USB_RTYPE_RECIPIENT_OTHER           0x03
+
 #define USB_REQ_GET_STATUS                  0
 #define USB_REQ_CLEAR_FEATURE               1
 #define USB_REQ_SET_FEATURE                 3
@@ -80,10 +94,11 @@ typedef struct USBDriver USBDriver;
  * @brief   Driver state machine possible states.
  */
 typedef enum {
-  USB_UNINIT = 0,                       /**< Not initialized.               */
-  USB_STOP   = 1,                       /**< Stopped.                       */
-  USB_READY  = 2,                       /**< Ready, after bus reset.        */
-  USB_ACTIVE = 3,                       /**< Active, after SET_ADDRESS.     */
+  USB_UNINIT   = 0,                     /**< Not initialized.               */
+  USB_STOP     = 1,                     /**< Stopped.                       */
+  USB_READY    = 2,                     /**< Ready, after bus reset.        */
+  USB_SELECTED = 3,                     /**< Address assigned.              */
+  USB_ACTIVE = 3,                       /**< Active, configuration selected.*/
 } usbstate_t;
 
 /**
@@ -136,13 +151,34 @@ typedef struct {
 } USBDescriptor;
 
 /**
- * @brief   Type of an USB notification callback.
+ * @brief   Type of an USB generic notification callback.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object triggering the
+ *                      callback
+ */
+typedef void (*usbcallback_t)(USBDriver *usbp);
+
+/**
+ * @brief   Type of an USB event notification callback.
  *
  * @param[in] usbp      pointer to the @p USBDriver object triggering the
  *                      callback
  * @param[in] event     event type
  */
-typedef void (*usbcallback_t)(USBDriver *usbp, usbevent_t event);
+typedef void (*usbeventcb_t)(USBDriver *usbp, usbevent_t event);
+
+/**
+ * @brief   Type of a requests handler callback.
+ * @details The request is encoded in the @p usb_setup buffer.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object triggering the
+ *                      callback
+ * @return              The request handling exit code.
+ * @retval FALSE        Request recognized.
+ * @retval TRUE         Request not recognized, the endpoint zero must go
+ *                      in the stalled state.
+ */
+typedef bool_t (*usbreqhandler_t)(USBDriver *usbp);
 
 /**
  * @brief   Type of an USB descriptor-retrieving callback.
@@ -168,6 +204,24 @@ typedef const USBDescriptor * (*usbgetdescriptor_t)(USBDriver *usbp,
  * @iclass
  */
 #define usbEPOpenI(usbp, epcp) usb_lld_ep_open(usbp, epcp)
+
+/**
+ * @brief   Request transfer setup.
+ * @details This macro is used by the request handling callbacks in order to
+ *          prepare a transaction over the endpoint zero.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object triggering the
+ *                      callback
+ * @param[in] buf       pointer to a buffer for the transaction data
+ * @param[in] n         number of bytes to be transferred
+ *
+ * @api
+ */
+#define usbSetupTransfer(usbp, buf, n, endcb) {                             \
+  (usbp)->usb_ep0next  = (buf);                                             \
+  (usbp)->usb_ep0n     = (n);                                               \
+  (usbp)->usb_ep0endcb = (endcb);                                           \
+}
 
 /*===========================================================================*/
 /* External declarations.                                                    */

@@ -44,16 +44,29 @@
 /*===========================================================================*/
 
 /**
+ * @brief  SET ADDRESS transaction callback.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object triggering the
+ *                      callback
+ */
+void set_address(USBDriver *usbp) {
+
+  usbp->usb_address = usbp->usb_setup[2];
+  usb_lld_set_address(usbp, usbp->usb_address);
+  if (usbp->usb_config->uc_state_change_cb)
+    usbp->usb_config->uc_state_change_cb(usbp, USB_EVENT_ADDRESS);
+  usbp->usb_state = USB_SELECTED;
+}
+
+/**
  * @brief   Starts a receive phase on the endpoint zero.
  *
  * @param[in] usbp      pointer to the @p USBDriver object triggering the
  *                      callback
- * @param[in] buf       buffer where to put the received data
- * @param[in] n         number of bytes to receive
  */
-static void start_rx_ep0(USBDriver *usbp, uint8_t *buf, size_t n) {
+static void start_rx_ep0(USBDriver *usbp) {
 
-  if (n > 0) {
+  if (usbp->usb_ep0n > 0) {
     /* TO BE IMPLEMENTED.*/
   }
   else {
@@ -68,26 +81,107 @@ static void start_rx_ep0(USBDriver *usbp, uint8_t *buf, size_t n) {
  *
  * @param[in] usbp      pointer to the @p USBDriver object triggering the
  *                      callback
- * @param[in] buf       buffer where to fetch the data to be transmitted
- * @param[in] n         number of bytes to transmit
- * @param[in] max       number of bytes requested by the setup packet
  */
-static void start_tx_ep0(USBDriver *usbp, const uint8_t *buf,
-                           size_t n, size_t max) {
+static void start_tx_ep0(USBDriver *usbp) {
 
-  if (n > 0) {
-    n = n > max ? max : n;
+  if (usbp->usb_ep0n > 0) {
+    /* The transmitted data cannot exceed the requested amount.*/
+    if (usbp->usb_ep0n > usbp->usb_ep0max)
+      usbp->usb_ep0n = usbp->usb_ep0max;
 
-    usbp->usb_ep0lastsize = n > usb_lld_ep0config.uepc_size ?
-                            usb_lld_ep0config.uepc_size : n;
-    usbp->usb_ep0next      = buf;
-    usbp->usb_ep0max       = max;
-    usbp->usb_ep0remaining = n;
-    usbp->usb_ep0state     = USB_EP0_TX;
-    usb_lld_write(usbp, 0, buf, usbp->usb_ep0lastsize);
+    /* Determines the maximum amount that can be transmitted using a
+       single packet.*/
+    if (usbp->usb_ep0n > usb_lld_ep0config.uepc_size)
+      usbp->usb_ep0lastsize = usb_lld_ep0config.uepc_size;
+    else
+      usbp->usb_ep0lastsize = usbp->usb_ep0n;
+
+    /* Starts transmission.*/
+    usb_lld_write(usbp, 0, usbp->usb_ep0next, usbp->usb_ep0lastsize);
+    usbp->usb_ep0state = USB_EP0_TX;
   }
   else
     usbp->usb_ep0state = USB_EP0_WAITING_STS;
+}
+
+/**
+ * @brief   Standard requests handler.
+ */
+static bool_t handle_standard_requests(USBDriver *usbp) {
+
+    /* Decoding the request.*/
+  switch ((usbp->usb_setup[0] & USB_RTYPE_RECIPIENT_MASK) |
+          (usbp->usb_setup[1] << 5)) {
+  case USB_REQ_TYPE_DEVICE | (USB_REQ_GET_STATUS << 5):
+    return TRUE;
+  case USB_REQ_TYPE_DEVICE | (USB_REQ_CLEAR_FEATURE << 5):
+    return TRUE;
+  case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_FEATURE << 5):
+    return TRUE;
+  case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_ADDRESS << 5):
+    /* The handling is posponed to after the status phase in order to allow
+       the proper completion of the transaction.*/
+    usbSetupTransfer(usbp, NULL, 0, set_address);
+    return FALSE;
+  case USB_REQ_TYPE_DEVICE | (USB_REQ_GET_DESCRIPTOR << 5):
+    /* Handling descriptor requests from the host.*/
+    {
+      const USBDescriptor *dp;
+
+      if (usbp->usb_setup[3] == USB_DESCRIPTOR_DEVICE) {
+        /* The device descriptor is a special case because it is statically
+           assigned to the USB driver configuration. Just returning the
+           pointer.*/
+        dp = &usbp->usb_config->uc_dev_descriptor;
+      }
+      else {
+        /* Any other descriptor must be provided by the application in
+           order to provide an interface for complicated devices with
+           multiple configurations or languages.*/
+        dp = usbp->usb_config->uc_get_descriptor_cb(usbp,
+                                                    usbp->usb_setup[3],
+                                                    usbp->usb_setup[2],
+                                                    usb_lld_fetch_word(&usbp->usb_setup[4]));
+      }
+      if (dp == NULL)
+        return TRUE;
+
+      usbSetupTransfer(usbp, dp->ud_string, dp->ud_size, NULL);
+      return FALSE;
+    }
+  case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_DESCRIPTOR << 5):
+    return TRUE;
+  case USB_REQ_TYPE_DEVICE | (USB_REQ_GET_CONFIGURATION << 5):
+    return TRUE;
+  case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_CONFIGURATION << 5):
+    /* Handling configuration selection from the host.*/
+    usbp->usb_configuration = usbp->usb_setup[2];
+    if (usbp->usb_config->uc_state_change_cb)
+      usbp->usb_config->uc_state_change_cb(usbp, USB_EVENT_CONFIGURED);
+    usbSetupTransfer(usbp, NULL, 0, NULL);
+    usbp->usb_state = USB_ACTIVE;
+    return FALSE;
+  case USB_REQ_TYPE_INTERFACE | (USB_REQ_GET_STATUS << 5):
+    return TRUE;
+  case USB_REQ_TYPE_INTERFACE | (USB_REQ_CLEAR_FEATURE << 5):
+    return TRUE;
+  case USB_REQ_TYPE_INTERFACE | (USB_REQ_SET_FEATURE << 5):
+    return TRUE;
+  case USB_REQ_TYPE_INTERFACE | (USB_REQ_GET_INTERFACE << 5):
+    return TRUE;
+  case USB_REQ_TYPE_INTERFACE | (USB_REQ_SET_INTERFACE << 5):
+    return TRUE;
+  case USB_REQ_TYPE_ENDPOINT | (USB_REQ_GET_STATUS << 5):
+    return TRUE;
+  case USB_REQ_TYPE_ENDPOINT | (USB_REQ_CLEAR_FEATURE << 5):
+    return TRUE;
+  case USB_REQ_TYPE_ENDPOINT | (USB_REQ_SET_FEATURE << 5):
+    return TRUE;
+  case USB_REQ_TYPE_ENDPOINT | (USB_REQ_SYNCH_FRAME << 5):
+    return TRUE;
+  default:
+    return TRUE;
+  }
 }
 
 /*===========================================================================*/
@@ -192,6 +286,7 @@ void _usb_reset(USBDriver *usbp) {
   int32_t i;
 
   usbp->usb_state = USB_READY;
+  usbp->usb_address = 0;
 
   /* Invalidates all endpoints into the USBDriver structure.*/
   for (i = 0; i < USB_ENDOPOINTS_NUMBER + 1; i++)
@@ -202,34 +297,6 @@ void _usb_reset(USBDriver *usbp) {
 
   /* Low level reset.*/
   usb_lld_reset(usbp);
-}
-
-/**
- * @brief   USB descriptor fetch.
- *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
- * @param[in] dtype     descriptor type
- * @param[in[ dindex    descriptor index
- * @param[in] lang      language id, for string descriptors only
- *
- * @notapi
- */
-const USBDescriptor *usb_get_descriptor(USBDriver *usbp,
-                                        uint8_t dtype,
-                                        uint8_t dindex,
-                                        uint16_t lang) {
-
-  /* The device descriptor is a special case because it is statically
-     assigned to the USB driver configuration. Just returning the
-     pointer.*/
-  if (dtype == USB_DESCRIPTOR_DEVICE)
-    return &usbp->usb_config->uc_dev_descriptor;
-
-  /* Any other descriptor must be provided by the application in
-     order to provide an interface for complicated devices with
-     multiple configurations or languages.*/
-  return usbp->usb_config->uc_get_descriptor(usbp, dtype, dindex, lang);
 }
 
 /**
@@ -249,34 +316,29 @@ void _usb_ep0in(USBDriver *usbp, uint32_t ep) {
   case USB_EP0_TX:
     usbp->usb_ep0next      += usbp->usb_ep0lastsize;
     usbp->usb_ep0max       -= usbp->usb_ep0lastsize;
-    usbp->usb_ep0remaining -= usbp->usb_ep0lastsize;
+    usbp->usb_ep0n -= usbp->usb_ep0lastsize;
 
     /* The final condition is when the requested size has been transmitted or when a
        packet has been sent with size less than the maximum packet size.*/
     if ((usbp->usb_ep0max == 0) || (usbp->usb_ep0lastsize < usb_lld_ep0config.uepc_size))
       usbp->usb_ep0state = USB_EP0_WAITING_STS;
     else {
-      usbp->usb_ep0lastsize = usbp->usb_ep0remaining > usb_lld_ep0config.uepc_size ?
-                              usb_lld_ep0config.uepc_size : usbp->usb_ep0remaining;
+      usbp->usb_ep0lastsize = usbp->usb_ep0n > usb_lld_ep0config.uepc_size ?
+                              usb_lld_ep0config.uepc_size : usbp->usb_ep0n;
       usb_lld_write(usbp, 0, usbp->usb_ep0next, usbp->usb_ep0lastsize);
     }
     return;
   case USB_EP0_SENDING_STS:
-    /* Special case of the SET_ADDRESS request, it is the only one handled
-       after the status phase.*/
-    if (usbp->usb_setup[1] == USB_REQ_SET_ADDRESS) {
-      usb_lld_set_address(usbp, usbp->usb_setup[2]);
-      if (usbp->usb_config->uc_callback)
-        usbp->usb_config->uc_callback(usbp, USB_EVENT_ADDRESS);
-      usbp->usb_state = USB_ACTIVE;
-    }
+    if (usbp->usb_ep0endcb)
+      usbp->usb_ep0endcb(usbp);
     usbp->usb_ep0state = USB_EP0_WAITING_SETUP;
     return;
   default:
+//stall:
     usb_lld_stall_in(usbp, 0);
     usb_lld_stall_out(usbp, 0);
-    if (usbp->usb_config->uc_callback)
-      usbp->usb_config->uc_callback(usbp, USB_EVENT_STALLED);
+    if (usbp->usb_config->uc_state_change_cb)
+      usbp->usb_config->uc_state_change_cb(usbp, USB_EVENT_STALLED);
     usbp->usb_ep0state = USB_EP0_FATAL;
   }
 }
@@ -303,94 +365,51 @@ void _usb_ep0out(USBDriver *usbp, uint32_t ep) {
      */
     n = usb_lld_read(usbp, 0, usbp->usb_setup, 8);
     if (n != 8)
-      break;
+      goto stall;
 
-    /*
-     * Decoding the request.
-     */
-    switch ((usbp->usb_setup[0] & 3) | (usbp->usb_setup[1] << 2)) {
-    case USB_REQ_TYPE_DEVICE | (USB_REQ_GET_STATUS << 2):
-      break;
-    case USB_REQ_TYPE_DEVICE | (USB_REQ_CLEAR_FEATURE << 2):
-      break;
-    case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_FEATURE << 2):
-      break;
-    case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_ADDRESS << 2):
-      /* The handling is posponed to after the status phase in order to allow
-         the proper completion of the transaction.*/
-      start_rx_ep0(usbp, NULL, 0);
-      return;
-    case USB_REQ_TYPE_DEVICE | (USB_REQ_GET_DESCRIPTOR << 2):
-      /* Handling descriptor requests from the host.*/
-      {
-        const USBDescriptor *dp;
-
-        if (usbp->usb_setup[3] == USB_DESCRIPTOR_DEVICE) {
-          /* The device descriptor is a special case because it is statically
-             assigned to the USB driver configuration. Just returning the
-             pointer.*/
-          dp = &usbp->usb_config->uc_dev_descriptor;
-        }
-        else {
-          /* Any other descriptor must be provided by the application in
-             order to provide an interface for complicated devices with
-             multiple configurations or languages.*/
-          dp = usbp->usb_config->uc_get_descriptor(usbp,
-                                                   usbp->usb_setup[3],
-                                                   usbp->usb_setup[2],
-                                                   usb_lld_fetch_word(&usbp->usb_setup[4]));
-        }
-        if (dp == NULL)
-          break;
-        start_tx_ep0(usbp, dp->ud_string, dp->ud_size,
-                       usb_lld_fetch_word(&usbp->usb_setup[6]));
-      }
-      return;
-    case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_DESCRIPTOR << 2):
-      break;
-    case USB_REQ_TYPE_DEVICE | (USB_REQ_GET_CONFIGURATION << 2):
-      break;
-    case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_CONFIGURATION << 2):
-      break;
-    case USB_REQ_TYPE_INTERFACE | (USB_REQ_GET_STATUS << 2):
-      break;
-    case USB_REQ_TYPE_INTERFACE | (USB_REQ_CLEAR_FEATURE << 2):
-      break;
-    case USB_REQ_TYPE_INTERFACE | (USB_REQ_SET_FEATURE << 2):
-      break;
-    case USB_REQ_TYPE_INTERFACE | (USB_REQ_GET_INTERFACE << 2):
-      break;
-    case USB_REQ_TYPE_INTERFACE | (USB_REQ_SET_INTERFACE << 2):
-      break;
-    case USB_REQ_TYPE_ENDPOINT | (USB_REQ_GET_STATUS << 2):
-      break;
-    case USB_REQ_TYPE_ENDPOINT | (USB_REQ_CLEAR_FEATURE << 2):
-      break;
-    case USB_REQ_TYPE_ENDPOINT | (USB_REQ_SET_FEATURE << 2):
-      break;
-    case USB_REQ_TYPE_ENDPOINT | (USB_REQ_SYNCH_FRAME << 2):
-      break;
-    default:
-      break;
+    /* Invoking the appropriate requests handler (standard or user).*/
+    if ((usbp->usb_setup[0] & USB_RTYPE_TYPE_MASK) == USB_RTYPE_TYPE_STANDARD) {
+      if (handle_standard_requests(usbp))
+        goto stall;
     }
-    break;
+    else {
+      if ((usbp->usb_config->uc_user_request_cb) &&
+          (usbp->usb_config->uc_user_request_cb(usbp)))
+        goto stall;
+    }
+
+    /* Transfer preparation. The request handler must have populated
+       correctly the fields usb_ep0next, usb_ep0n and usb_ep0endcb using
+       the macro usbSetupTransfer().*/
+    usbp->usb_ep0max = usb_lld_fetch_word(&usbp->usb_setup[6]);
+
+    if ((usbp->usb_setup[0] & USB_RTYPE_DIR_MASK) == USB_RTYPE_DIR_DEV2HOST)
+      start_tx_ep0(usbp);
+    else
+      start_rx_ep0(usbp);
+
+    return;
+
   case USB_EP0_WAITING_STS:
     /*
      * STATUS received packet handling, it must be zero sized.
      */
     n = usb_lld_read(usbp, 0, buf, 1);
     if (n != 0)
-      break;
+      goto stall;
+    if (usbp->usb_ep0endcb)
+      usbp->usb_ep0endcb(usbp);
     usbp->usb_ep0state = USB_EP0_WAITING_SETUP;
     return;
   case USB_EP0_RX:
-    break;
+    goto stall;
   default:
+stall:
     /* Stalled because it should never happen.*/
     usb_lld_stall_in(usbp, 0);
     usb_lld_stall_out(usbp, 0);
-    if (usbp->usb_config->uc_callback)
-      usbp->usb_config->uc_callback(usbp, USB_EVENT_STALLED);
+    if (usbp->usb_config->uc_state_change_cb)
+      usbp->usb_config->uc_state_change_cb(usbp, USB_EVENT_STALLED);
     usbp->usb_ep0state = USB_EP0_FATAL;
   }
 }

@@ -144,7 +144,7 @@ typedef struct {
    * @details This callback is invoked when the USB driver changes state
    *          because an external event.
    */
-  usbcallback_t                 uc_callback;
+  usbeventcb_t                  uc_state_change_cb;
   /**
    * @brief   Device descriptor for this USB device.
    */
@@ -153,7 +153,11 @@ typedef struct {
    * @brief   Device GET_DESCRIPTOR request callback.
    * @note    This callback is mandatory and cannot be set to @p NULL.
    */
-  usbgetdescriptor_t            uc_get_descriptor;
+  usbgetdescriptor_t            uc_get_descriptor_cb;
+  /**
+   * @brief   Non standard requests callback.
+   */
+  usbreqhandler_t               uc_user_request_cb;
   /* End of the mandatory fields.*/
 } USBConfig;
 
@@ -188,15 +192,27 @@ struct USBDriver {
   /**
    * @brief   Number of bytes yet to be tranferred through endpoint 0.
    */
-  size_t                        usb_ep0remaining;
+  size_t                        usb_ep0n;
   /**
    * @brief   Size of the last packet transferred through endpoint 0.
    */
   size_t                        usb_ep0lastsize;
   /**
+   * @brief   Endpoint 0 end transaction callback.
+   */
+  usbcallback_t                 usb_ep0endcb;
+  /**
    * @brief   Setup packet buffer.
    */
   uint8_t                       usb_setup[8];
+  /**
+   * @brief   Assigned USB address.
+   */
+  uint8_t                       usb_address;
+  /**
+   * @brief   Selected configuration.
+   */
+  uint8_t                       usb_configuration;
   /* End of the mandatory fields.*/
 };
 

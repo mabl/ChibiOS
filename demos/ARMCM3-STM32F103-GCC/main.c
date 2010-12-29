@@ -246,21 +246,19 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
 
   switch (event) {
   case USB_EVENT_RESET:
-    asm("nop");
-    return;
-  case USB_EVENT_ADDRESS:
     usbEPOpenI(usbp, &ep1config);
     usbEPOpenI(usbp, &ep2config);
     usbEPOpenI(usbp, &ep3config);
     return;
+  case USB_EVENT_ADDRESS:
+    return;
+  case USB_EVENT_CONFIGURED:
+    return;
   case USB_EVENT_SUSPEND:
-    asm("nop");
     return;
   case USB_EVENT_RESUME:
-    asm("nop");
     return;
   case USB_EVENT_STALLED:
-    asm("nop");
     return;
   }
   return;
@@ -285,6 +283,14 @@ static const USBDescriptor *get_descriptor(USBDriver *usbp,
   return NULL;
 }
 
+/**
+ * Handler of the non -standard requests received on endpoint 0.
+ */
+bool_t user_requests(USBDriver *usbp) {
+
+  return TRUE;
+}
+
 /*
  * USB driver configuration.
  */
@@ -292,6 +298,7 @@ static const USBConfig usbcfg = {
   usb_event,
   {sizeof(vcom_device_descriptor_data), vcom_device_descriptor_data},
   get_descriptor,
+  user_requests,
 };
 
 /*===========================================================================*/
