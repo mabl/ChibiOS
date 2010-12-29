@@ -116,16 +116,15 @@ static void usb_lld_tx_ep0(USBDriver *usbp, const uint8_t *buf,
                            size_t n, size_t max) {
 
   if (n > 0) {
-    size_t size;
     n = n > max ? max : n;
-    size = n > usb_lld_ep0config.uepc_size ? usb_lld_ep0config.uepc_size : n;
 
+    usbp->usb_ep0lastsize = n > usb_lld_ep0config.uepc_size ?
+                            usb_lld_ep0config.uepc_size : n;
     usbp->usb_ep0next      = buf;
     usbp->usb_ep0max       = max;
     usbp->usb_ep0remaining = n;
-    usbp->usb_ep0lastsize  = size;
     usbp->usb_ep0state     = USB_EP0_TX;
-    usb_lld_write(usbp, 0, buf, size);
+    usb_lld_write(usbp, 0, buf, usbp->usb_ep0lastsize);
   }
   else
     usbp->usb_ep0state = USB_EP0_WAITING_STS;
@@ -152,12 +151,16 @@ static void ep0in(USBDriver *usbp, uint32_t ep) {
 
     /* The final condition is when the requested size has been transmitted or when a
        packet has been sent with size less than the maximum packet size.*/
-    if ((usbp->usb_ep0max == 0) || (usbp->usb_ep0lastsize < usb_lld_ep0config.uepc_size))
+    if ((usbp->usb_ep0max == 0) || (usbp->usb_ep0lastsize < usb_lld_ep0config.uepc_size)) {
+      if ((usbp->usb_setup[6] > 64) && (usbp->usb_setup[3] == 2)) {
+        asm("nop");
+      }
       usbp->usb_ep0state = USB_EP0_WAITING_STS;
+    }
     else {
-      size_t psize = usbp->usb_ep0remaining > usb_lld_ep0config.uepc_size ?
-                     usb_lld_ep0config.uepc_size : usbp->usb_ep0remaining;
-      usb_lld_write(usbp, 0, usbp->usb_ep0next, psize);
+      usbp->usb_ep0lastsize = usbp->usb_ep0remaining > usb_lld_ep0config.uepc_size ?
+                              usb_lld_ep0config.uepc_size : usbp->usb_ep0remaining;
+      usb_lld_write(usbp, 0, usbp->usb_ep0next, usbp->usb_ep0lastsize);
     }
     return;
   case USB_EP0_SENDING_STS:

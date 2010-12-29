@@ -152,6 +152,51 @@ static const USBDescriptor vcom_configuration_descriptor = {
   vcom_configuration_descriptor_data
 };
 
+
+/*
+ * U.S. English language identifier.
+ */
+const uint8_t vcom_string0[] = {
+  4,                                /* bLength.                             */
+  USB_DESCRIPTOR_STRING,            /* bDescriptorType.                     */
+  0x09, 0x04                        /* wLANGID (0x0409, U.S. English).      */
+};
+
+/*
+ * Vendor string.
+ */
+const uint8_t vcom_string1[] = {
+  38,                               /* bLength.                             */
+  USB_DESCRIPTOR_STRING,            /* bDescriptorType.                     */
+  'S', 0, 'T', 0, 'M', 0, 'i', 0, 'c', 0, 'r', 0, 'o', 0, 'e', 0,
+  'l', 0, 'e', 0, 'c', 0, 't', 0, 'r', 0, 'o', 0, 'n', 0, 'i', 0,
+  'c', 0, 's', 0
+};
+
+const uint8_t vcom_string2[] = {
+  56,                               /* bLength.                             */
+  USB_DESCRIPTOR_STRING,            /* bDescriptorType.                     */
+  'C', 0, 'h', 0, 'i', 0, 'b', 0, 'i', 0, 'O', 0, 'S', 0, '/', 0,
+  'R', 0, 'T', 0, ' ', 0, 'V', 0, 'i', 0, 'r', 0, 't', 0, 'u', 0,
+  'a', 0, 'l', 0, ' ', 0, 'C', 0, 'O', 0, 'M', 0, ' ', 0, 'P', 0,
+  'o', 0, 'r', 0, 't', 0
+};
+
+const uint8_t vcom_string3[] = {
+  8,                                /* bLength.                             */
+  USB_DESCRIPTOR_STRING,            /* bDescriptorType.                     */
+  '0' + CH_KERNEL_MAJOR, 0,
+  '0' + CH_KERNEL_MINOR, 0,
+  '0' + CH_KERNEL_PATCH, 0
+};
+
+static const USBDescriptor vcom_strings[] = {
+  {sizeof(vcom_string0), vcom_string0},
+  {sizeof(vcom_string1), vcom_string1},
+  {sizeof(vcom_string2), vcom_string2},
+  {sizeof(vcom_string3), vcom_string3}
+};
+
 static const USBConfig usbcfg = {
   NULL,
   {sizeof(vcom_device_descriptor_data), vcom_device_descriptor_data},
@@ -167,7 +212,8 @@ static const USBDescriptor *get_descriptor(USBDriver *usbp,
   case USB_DESCRIPTOR_CONFIGURATION:
     return &vcom_configuration_descriptor;
   case USB_DESCRIPTOR_STRING:
-  default:
+    if (dindex < 4)
+      return &vcom_strings[dindex];
   }
   return NULL;
 }
