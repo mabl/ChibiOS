@@ -152,7 +152,8 @@ static bool_t handle_standard_requests(USBDriver *usbp) {
   case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_DESCRIPTOR << 5):
     return TRUE;
   case USB_REQ_TYPE_DEVICE | (USB_REQ_GET_CONFIGURATION << 5):
-    return TRUE;
+    usbSetupTransfer(usbp, &usbp->usb_configuration, 1, NULL);
+    return FALSE;
   case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_CONFIGURATION << 5):
     /* Handling configuration selection from the host.*/
     usbp->usb_configuration = usbp->usb_setup[2];
@@ -285,8 +286,9 @@ void usbEPOpen(USBDriver *usbp, const USBEndpointConfig *epcp) {
 void _usb_reset(USBDriver *usbp) {
   int32_t i;
 
-  usbp->usb_state = USB_READY;
-  usbp->usb_address = 0;
+  usbp->usb_state         = USB_READY;
+  usbp->usb_address       = 0;
+  usbp->usb_configuration = 0;
 
   /* Invalidates all endpoints into the USBDriver structure.*/
   for (i = 0; i < USB_ENDOPOINTS_NUMBER + 1; i++)
