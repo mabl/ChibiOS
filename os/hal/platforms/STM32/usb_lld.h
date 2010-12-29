@@ -125,9 +125,13 @@ typedef struct {
    */
   uint16_t                      uepc_epr;
   /**
-   * @brief   Endpoint buffer address as offset in the PMA.
+   * @brief   Endpoint IN buffer address as offset in the PMA.
    */
-  uint16_t                      uepc_offset;
+  uint16_t                      uepc_inaddr;
+  /**
+   * @brief   Endpoint OUT buffer address as offset in the PMA.
+   */
+  uint16_t                      uepc_outaddr;
 } USBEndpointConfig;
 
 /**

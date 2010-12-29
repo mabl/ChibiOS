@@ -32,8 +32,6 @@
 #if HAL_USE_USB || defined(__DOXYGEN__)
 
 #define BTABLE_ADDR     0x0000
-#define EP0IN_ADDR      0x0040
-#define EP0OUT_ADDR     0x00C0
 
 /*===========================================================================*/
 /* Driver exported variables.                                                */
@@ -53,7 +51,8 @@ const USBEndpointConfig usb_lld_ep0config = {
   0,
   0x40,
   EPR_EP_TYPE_CONTROL | EPR_STAT_TX_STALL | EPR_STAT_RX_VALID,
-  0x40
+  0x40,
+  0x80
 };
 
 /*===========================================================================*/
@@ -264,8 +263,8 @@ void usb_lld_ep_open(USBDriver *usbp, const USBEndpointConfig *epcp) {
   dp = USB_GET_DESCRIPTOR(epcp->uepc_addr);
   dp->TXCOUNT = 0;
   dp->RXCOUNT = nblocks;
-  dp->RXADDR  = epcp->uepc_offset;
-  dp->TXADDR  = epcp->uepc_offset + epcp->uepc_size;
+  dp->TXADDR  = epcp->uepc_inaddr;
+  dp->RXADDR  = epcp->uepc_outaddr;
 
   /* Logically enabling the endpoint in the USBDriver structure.*/
   usbp->usb_epc[epcp->uepc_addr] = epcp;

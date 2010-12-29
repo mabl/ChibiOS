@@ -191,6 +191,54 @@ static const USBDescriptor vcom_strings[] = {
   {sizeof(vcom_string3), vcom_string3}
 };
 
+void ep1in(USBDriver *usbp, uint32_t ep) {
+}
+
+void ep2in(USBDriver *usbp, uint32_t ep) {
+}
+
+void ep3out(USBDriver *usbp, uint32_t ep) {
+}
+
+/**
+ * @brief   EP1 initialization structure (IN only).
+ */
+const USBEndpointConfig ep1config = {
+  ep1in,
+  NULL,
+  1,
+  0x0040,
+  EPR_EP_TYPE_BULK | EPR_STAT_TX_NAK | EPR_STAT_RX_DIS,
+  0x00C0,
+  0x0000
+};
+
+/**
+ * @brief   EP2 initialization structure (IN only).
+ */
+const USBEndpointConfig ep2config = {
+  ep2in,
+  NULL,
+  2,
+  0x0010,
+  EPR_EP_TYPE_INTERRUPT | EPR_STAT_TX_NAK | EPR_STAT_RX_DIS,
+  0x0100,
+  0x0000
+};
+
+/**
+ * @brief   EP3 initialization structure (OUT only).
+ */
+const USBEndpointConfig ep3config = {
+  NULL,
+  ep3out,
+  3,
+  0x0040,
+  EPR_EP_TYPE_BULK | EPR_STAT_TX_DIS | EPR_STAT_RX_NAK,
+  0x0000,
+  0x0110
+};
+
 /*
  * Handles the USB driver global events.
  */
@@ -201,7 +249,9 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
     asm("nop");
     return;
   case USB_EVENT_ADDRESS:
-
+    usbEPOpenI(usbp, &ep1config);
+    usbEPOpenI(usbp, &ep2config);
+    usbEPOpenI(usbp, &ep3config);
     return;
   case USB_EVENT_SUSPEND:
     asm("nop");

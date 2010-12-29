@@ -162,6 +162,25 @@ void usbStop(USBDriver *usbp) {
 }
 
 /**
+ * @brief   Activates an endpoint.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object triggering the
+ *                      callback
+ * @param[in] epcp      the endpoint configuration
+ *
+ * @notapi
+ */
+void usbEPOpen(USBDriver *usbp, const USBEndpointConfig *epcp) {
+
+  chDbgAssert(usbp->usb_state == USB_READY,
+              "usbEPOpen(), #1", "invalid state");
+
+  chSysLock();
+  usb_lld_ep_open(usbp, epcp);
+  chSysUnlock();
+}
+
+/**
  * @brief   USB reset routine.
  *
  * @param[in] usbp      pointer to the @p USBDriver object triggering the

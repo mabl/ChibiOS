@@ -158,6 +158,17 @@ typedef const USBDescriptor * (*usbgetdescriptor_t)(USBDriver *usbp,
 /* Driver macros.                                                            */
 /*===========================================================================*/
 
+/**
+ * @brief   Activates an endpoint.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object triggering the
+ *                      callback
+ * @param[in] epcp      the endpoint configuration
+ *
+ * @iclass
+ */
+#define usbEPOpenI(usbp, epcp) usb_lld_ep_open(usbp, epcp)
+
 /*===========================================================================*/
 /* External declarations.                                                    */
 /*===========================================================================*/
@@ -169,6 +180,7 @@ extern "C" {
   void usbObjectInit(USBDriver *usbp);
   void usbStart(USBDriver *usbp, const USBConfig *config);
   void usbStop(USBDriver *usbp);
+  void usbEPOpen(USBDriver *usbp, const USBEndpointConfig *epcp);
   void _usb_reset(USBDriver *usbp);
   void _usb_ep0in(USBDriver *usbp, uint32_t ep);
   void _usb_ep0out(USBDriver *usbp, uint32_t ep);
