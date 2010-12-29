@@ -38,7 +38,7 @@
 #define USB_RTYPE_DIR_HOST2DEV              0x00
 #define USB_RTYPE_DIR_DEV2HOST              0x80
 #define USB_RTYPE_TYPE_MASK                 0x60
-#define USB_RTYPE_TYPE_STANDARD             0x00
+#define USB_RTYPE_TYPE_STD                  0x00
 #define USB_RTYPE_TYPE_CLASS                0x20
 #define USB_RTYPE_TYPE_VENDOR               0x40
 #define USB_RTYPE_TYPE_RESERVED             0x60
@@ -174,9 +174,8 @@ typedef void (*usbeventcb_t)(USBDriver *usbp, usbevent_t event);
  * @param[in] usbp      pointer to the @p USBDriver object triggering the
  *                      callback
  * @return              The request handling exit code.
- * @retval FALSE        Request recognized.
- * @retval TRUE         Request not recognized, the endpoint zero must go
- *                      in the stalled state.
+ * @retval FALSE        Request not recognized by the handler.
+ * @retval TRUE         Request handled.
  */
 typedef bool_t (*usbreqhandler_t)(USBDriver *usbp);
 

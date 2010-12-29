@@ -155,9 +155,11 @@ typedef struct {
    */
   usbgetdescriptor_t            uc_get_descriptor_cb;
   /**
-   * @brief   Non standard requests callback.
+   * @brief   Requests hook callback.
+   * @details This hook allows to be notified of standard requests or to
+   *          handle non standard requests.
    */
-  usbreqhandler_t               uc_user_request_cb;
+  usbreqhandler_t               uc_requests_hook_cb;
   /* End of the mandatory fields.*/
 } USBConfig;
 

@@ -106,23 +106,29 @@ static void start_tx_ep0(USBDriver *usbp) {
 
 /**
  * @brief   Standard requests handler.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object triggering the
+ *                      callback
+ * @return              The request handling exit code.
+ * @retval FALSE        Request not recognized by the handler or error.
+ * @retval TRUE         Request handled.
  */
-static bool_t handle_standard_requests(USBDriver *usbp) {
+static bool_t default_handler(USBDriver *usbp) {
 
-    /* Decoding the request.*/
+  /* Decoding the request.*/
   switch ((usbp->usb_setup[0] & USB_RTYPE_RECIPIENT_MASK) |
           (usbp->usb_setup[1] << 5)) {
   case USB_REQ_TYPE_DEVICE | (USB_REQ_GET_STATUS << 5):
-    return TRUE;
+    return FALSE;
   case USB_REQ_TYPE_DEVICE | (USB_REQ_CLEAR_FEATURE << 5):
-    return TRUE;
+    return FALSE;
   case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_FEATURE << 5):
-    return TRUE;
+    return FALSE;
   case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_ADDRESS << 5):
     /* The handling is posponed to after the status phase in order to allow
        the proper completion of the transaction.*/
     usbSetupTransfer(usbp, NULL, 0, set_address);
-    return FALSE;
+    return TRUE;
   case USB_REQ_TYPE_DEVICE | (USB_REQ_GET_DESCRIPTOR << 5):
     /* Handling descriptor requests from the host.*/
     {
@@ -144,16 +150,15 @@ static bool_t handle_standard_requests(USBDriver *usbp) {
                                                     usb_lld_fetch_word(&usbp->usb_setup[4]));
       }
       if (dp == NULL)
-        return TRUE;
-
+        return FALSE;
       usbSetupTransfer(usbp, dp->ud_string, dp->ud_size, NULL);
-      return FALSE;
+      return TRUE;
     }
   case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_DESCRIPTOR << 5):
-    return TRUE;
+    return FALSE;
   case USB_REQ_TYPE_DEVICE | (USB_REQ_GET_CONFIGURATION << 5):
     usbSetupTransfer(usbp, &usbp->usb_configuration, 1, NULL);
-    return FALSE;
+    return TRUE;
   case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_CONFIGURATION << 5):
     /* Handling configuration selection from the host.*/
     usbp->usb_configuration = usbp->usb_setup[2];
@@ -161,27 +166,27 @@ static bool_t handle_standard_requests(USBDriver *usbp) {
       usbp->usb_config->uc_state_change_cb(usbp, USB_EVENT_CONFIGURED);
     usbSetupTransfer(usbp, NULL, 0, NULL);
     usbp->usb_state = USB_ACTIVE;
-    return FALSE;
+    return TRUE;
   case USB_REQ_TYPE_INTERFACE | (USB_REQ_GET_STATUS << 5):
-    return TRUE;
+    return FALSE;
   case USB_REQ_TYPE_INTERFACE | (USB_REQ_CLEAR_FEATURE << 5):
-    return TRUE;
+    return FALSE;
   case USB_REQ_TYPE_INTERFACE | (USB_REQ_SET_FEATURE << 5):
-    return TRUE;
+    return FALSE;
   case USB_REQ_TYPE_INTERFACE | (USB_REQ_GET_INTERFACE << 5):
-    return TRUE;
+    return FALSE;
   case USB_REQ_TYPE_INTERFACE | (USB_REQ_SET_INTERFACE << 5):
-    return TRUE;
+    return FALSE;
   case USB_REQ_TYPE_ENDPOINT | (USB_REQ_GET_STATUS << 5):
-    return TRUE;
+    return FALSE;
   case USB_REQ_TYPE_ENDPOINT | (USB_REQ_CLEAR_FEATURE << 5):
-    return TRUE;
+    return FALSE;
   case USB_REQ_TYPE_ENDPOINT | (USB_REQ_SET_FEATURE << 5):
-    return TRUE;
+    return FALSE;
   case USB_REQ_TYPE_ENDPOINT | (USB_REQ_SYNCH_FRAME << 5):
-    return TRUE;
+    return FALSE;
   default:
-    return TRUE;
+    return FALSE;
   }
 }
 
@@ -329,10 +334,12 @@ void _usb_ep0in(USBDriver *usbp, uint32_t ep) {
                               usb_lld_ep0config.uepc_size : usbp->usb_ep0n;
       usb_lld_write(usbp, 0, usbp->usb_ep0next, usbp->usb_ep0lastsize);
     }
+
     return;
   case USB_EP0_SENDING_STS:
     if (usbp->usb_ep0endcb)
       usbp->usb_ep0endcb(usbp);
+
     usbp->usb_ep0state = USB_EP0_WAITING_SETUP;
     return;
   default:
@@ -341,6 +348,7 @@ void _usb_ep0in(USBDriver *usbp, uint32_t ep) {
     usb_lld_stall_out(usbp, 0);
     if (usbp->usb_config->uc_state_change_cb)
       usbp->usb_config->uc_state_change_cb(usbp, USB_EVENT_STALLED);
+
     usbp->usb_ep0state = USB_EP0_FATAL;
   }
 }
@@ -367,53 +375,49 @@ void _usb_ep0out(USBDriver *usbp, uint32_t ep) {
      */
     n = usb_lld_read(usbp, 0, usbp->usb_setup, 8);
     if (n != 8)
-      goto stall;
+      break;
 
-    /* Invoking the appropriate requests handler (standard or user).*/
-    if ((usbp->usb_setup[0] & USB_RTYPE_TYPE_MASK) == USB_RTYPE_TYPE_STANDARD) {
-      if (handle_standard_requests(usbp))
-        goto stall;
-    }
-    else {
-      if ((usbp->usb_config->uc_user_request_cb) &&
-          (usbp->usb_config->uc_user_request_cb(usbp)))
-        goto stall;
+    /* First verify if the application has an handler installed for this
+       request.*/
+    if (!(usbp->usb_config->uc_requests_hook_cb) ||
+        !(usbp->usb_config->uc_requests_hook_cb(usbp))) {
+      /* Invoking the default handler, if this fails then stalls the
+         endpoint zero as error.*/
+      if (((usbp->usb_setup[0] & USB_RTYPE_TYPE_MASK) != USB_RTYPE_TYPE_STD) ||
+          !default_handler(usbp))
+        break;
     }
 
     /* Transfer preparation. The request handler must have populated
        correctly the fields usb_ep0next, usb_ep0n and usb_ep0endcb using
        the macro usbSetupTransfer().*/
     usbp->usb_ep0max = usb_lld_fetch_word(&usbp->usb_setup[6]);
-
     if ((usbp->usb_setup[0] & USB_RTYPE_DIR_MASK) == USB_RTYPE_DIR_DEV2HOST)
       start_tx_ep0(usbp);
     else
       start_rx_ep0(usbp);
 
     return;
-
   case USB_EP0_WAITING_STS:
     /*
      * STATUS received packet handling, it must be zero sized.
      */
     n = usb_lld_read(usbp, 0, buf, 1);
     if (n != 0)
-      goto stall;
+      break;
     if (usbp->usb_ep0endcb)
       usbp->usb_ep0endcb(usbp);
     usbp->usb_ep0state = USB_EP0_WAITING_SETUP;
     return;
-  case USB_EP0_RX:
-    goto stall;
   default:
-stall:
-    /* Stalled because it should never happen.*/
-    usb_lld_stall_in(usbp, 0);
-    usb_lld_stall_out(usbp, 0);
-    if (usbp->usb_config->uc_state_change_cb)
-      usbp->usb_config->uc_state_change_cb(usbp, USB_EVENT_STALLED);
-    usbp->usb_ep0state = USB_EP0_FATAL;
+    break;
   }
+  /* Stalled because it should never happen.*/
+  usb_lld_stall_in(usbp, 0);
+  usb_lld_stall_out(usbp, 0);
+  if (usbp->usb_config->uc_state_change_cb)
+    usbp->usb_config->uc_state_change_cb(usbp, USB_EVENT_STALLED);
+  usbp->usb_ep0state = USB_EP0_FATAL;
 }
 
 #endif /* HAL_USE_USB */

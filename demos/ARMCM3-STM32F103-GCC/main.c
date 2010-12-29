@@ -284,11 +284,11 @@ static const USBDescriptor *get_descriptor(USBDriver *usbp,
 }
 
 /**
- * Handler of the non -standard requests received on endpoint 0.
+ * Requests hook.
  */
-bool_t user_requests(USBDriver *usbp) {
+bool_t requests_hook(USBDriver *usbp) {
 
-  return TRUE;
+  return FALSE;
 }
 
 /*
@@ -298,7 +298,7 @@ static const USBConfig usbcfg = {
   usb_event,
   {sizeof(vcom_device_descriptor_data), vcom_device_descriptor_data},
   get_descriptor,
-  user_requests,
+  requests_hook,
 };
 
 /*===========================================================================*/
