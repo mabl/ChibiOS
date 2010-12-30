@@ -175,9 +175,9 @@ struct USBDriver {
    */
   usbep0state_t                 usb_ep0state;
   /**
-   * @brief   Next position to be transmitted through endpoint 0.
+   * @brief   Next position in the buffer to be transferred through endpoint 0.
    */
-  const uint8_t                 *usb_ep0next;
+  uint8_t                       *usb_ep0next;
   /**
    * @brief   Maximum number of bytes to be tranferred through endpoint 0.
    */
@@ -247,6 +247,7 @@ extern "C" {
   void usb_lld_reset(USBDriver *usbp);
   void usb_lld_set_address(USBDriver *usbp, uint8_t addr);
   void usb_lld_ep_open(USBDriver *usbp, const USBEndpointConfig *epcp);
+  size_t usb_lld_get_available(USBDriver *usbp, usbep_t ep);
   size_t usb_lld_read(USBDriver *usbp, usbep_t ep, uint8_t *buf, size_t n);
   void usb_lld_write(USBDriver *usbp, usbep_t ep, const uint8_t *buf, size_t n);
   void usb_lld_stall_in(USBDriver *usbp, usbep_t ep);

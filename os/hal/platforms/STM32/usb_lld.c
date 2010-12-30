@@ -205,8 +205,7 @@ void usb_lld_stop(USBDriver *usbp) {
 /**
  * @brief   USB low level reset routine.
  *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
+ * @param[in] usbp      pointer to the @p USBDriver object
  *
  * @notapi
  */
@@ -227,8 +226,7 @@ void usb_lld_reset(USBDriver *usbp) {
 /**
  * @brief   Sets the USB address.
  *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
+ * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] addr      the USB address
  *
  * @notapi
@@ -241,8 +239,7 @@ void usb_lld_set_address(USBDriver *usbp, uint8_t addr) {
 /**
  * @brief   Activates an endpoint.
  *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
+ * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] epcp      the endpoint configuration
  *
  * @notapi
@@ -271,13 +268,28 @@ void usb_lld_ep_open(USBDriver *usbp, const USBEndpointConfig *epcp) {
 }
 
 /**
+ * @brief   Returns the number of bytes available in the packet buffer.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object
+ * @param[in] ep        endpoint number
+ * @return              The number of bytes that are effectively available.
+ *
+ * @notapi
+ */
+size_t usb_lld_get_available(USBDriver *usbp, usbep_t ep) {
+
+  if ((STM32_USB->EPR[ep] & EPR_STAT_RX_MASK) != EPR_STAT_RX_NAK)
+    return 0;
+  return (size_t)(USB_GET_DESCRIPTOR(ep)->RXCOUNT & RXCOUNT_COUNT_MASK);
+}
+
+/**
  * @brief   Endpoint read.
  * @details The buffered packet is copied into the user buffer and then
  *          the endpoint is brought to the valid state in order to allow
  *          reception of more data.
  *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
+ * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] ep        endpoint number
  * @param[in] buf       buffer where to copy the endpoint data
  * @param[in] n         maximum number of bytes to copy

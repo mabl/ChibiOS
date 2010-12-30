@@ -46,8 +46,7 @@
 /**
  * @brief  SET ADDRESS transaction callback.
  *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
+ * @param[in] usbp      pointer to the @p USBDriver object
  */
 void set_address(USBDriver *usbp) {
 
@@ -61,13 +60,22 @@ void set_address(USBDriver *usbp) {
 /**
  * @brief   Starts a receive phase on the endpoint zero.
  *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
+ * @param[in] usbp      pointer to the @p USBDriver object
  */
 static void start_rx_ep0(USBDriver *usbp) {
 
   if (usbp->usb_ep0n > 0) {
-    /* TO BE IMPLEMENTED.*/
+    /* The received data cannot exceed the available amount.*/
+    if (usbp->usb_ep0n > usbp->usb_ep0max)
+      usbp->usb_ep0n = usbp->usb_ep0max;
+
+    /* Determines the maximum amount that can be received using a
+       single packet.*/
+    if (usbp->usb_ep0n > usb_lld_ep0config.uepc_size)
+      usbp->usb_ep0lastsize = usb_lld_ep0config.uepc_size;
+    else
+      usbp->usb_ep0lastsize = usbp->usb_ep0n;
+    usbp->usb_ep0state = USB_EP0_RX;
   }
   else {
     /* Sending zero sized status packet.*/
@@ -79,8 +87,7 @@ static void start_rx_ep0(USBDriver *usbp) {
 /**
  * @brief   Starts a transmission phase on the endpoint zero.
  *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
+ * @param[in] usbp      pointer to the @p USBDriver object
  */
 static void start_tx_ep0(USBDriver *usbp) {
 
@@ -107,8 +114,7 @@ static void start_tx_ep0(USBDriver *usbp) {
 /**
  * @brief   Standard requests handler.
  *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
+ * @param[in] usbp      pointer to the @p USBDriver object
  * @return              The request handling exit code.
  * @retval FALSE        Request not recognized by the handler or error.
  * @retval TRUE         Request handled.
@@ -149,7 +155,7 @@ static bool_t default_handler(USBDriver *usbp) {
     }
     if (dp == NULL)
       return FALSE;
-    usbSetupTransfer(usbp, dp->ud_string, dp->ud_size, NULL);
+    usbSetupTransfer(usbp, (uint8_t *)dp->ud_string, dp->ud_size, NULL);
     return TRUE;
   case USB_REQ_TYPE_DEVICE | (USB_REQ_SET_DESCRIPTOR << 5):
     return FALSE;
@@ -261,8 +267,7 @@ void usbStop(USBDriver *usbp) {
 /**
  * @brief   Activates an endpoint.
  *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
+ * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] epcp      the endpoint configuration
  *
  * @notapi
@@ -280,8 +285,7 @@ void usbEPOpen(USBDriver *usbp, const USBEndpointConfig *epcp) {
 /**
  * @brief   USB reset routine.
  *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
+ * @param[in] usbp      pointer to the @p USBDriver object
  *
  * @notapi
  */
@@ -309,8 +313,7 @@ void _usb_reset(USBDriver *usbp) {
  * @details This function is used by the low level driver as default handler
  *          for EP0 IN events.
  *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
+ * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] ep        endpoint number, always zero
  *
  * @notapi
@@ -319,9 +322,9 @@ void _usb_ep0in(USBDriver *usbp, usbep_t ep) {
 
   switch (usbp->usb_ep0state) {
   case USB_EP0_TX:
-    usbp->usb_ep0next      += usbp->usb_ep0lastsize;
-    usbp->usb_ep0max       -= usbp->usb_ep0lastsize;
-    usbp->usb_ep0n -= usbp->usb_ep0lastsize;
+    usbp->usb_ep0next += usbp->usb_ep0lastsize;
+    usbp->usb_ep0max  -= usbp->usb_ep0lastsize;
+    usbp->usb_ep0n    -= usbp->usb_ep0lastsize;
 
     /* The final condition is when the requested size has been transmitted or when a
        packet has been sent with size less than the maximum packet size.*/
@@ -332,7 +335,6 @@ void _usb_ep0in(USBDriver *usbp, usbep_t ep) {
                               usb_lld_ep0config.uepc_size : usbp->usb_ep0n;
       usb_lld_write(usbp, 0, usbp->usb_ep0next, usbp->usb_ep0lastsize);
     }
-
     return;
   case USB_EP0_SENDING_STS:
     if (usbp->usb_ep0endcb)
@@ -341,14 +343,13 @@ void _usb_ep0in(USBDriver *usbp, usbep_t ep) {
     usbp->usb_ep0state = USB_EP0_WAITING_SETUP;
     return;
   default:
-//stall:
-    usb_lld_stall_in(usbp, 0);
-    usb_lld_stall_out(usbp, 0);
-    if (usbp->usb_config->uc_state_change_cb)
-      usbp->usb_config->uc_state_change_cb(usbp, USB_EVENT_STALLED);
-
-    usbp->usb_ep0state = USB_EP0_FATAL;
+    break;
   }
+  usb_lld_stall_in(usbp, 0);
+  usb_lld_stall_out(usbp, 0);
+  if (usbp->usb_config->uc_state_change_cb)
+    usbp->usb_config->uc_state_change_cb(usbp, USB_EVENT_STALLED);
+  usbp->usb_ep0state = USB_EP0_FATAL;
 }
 
 /**
@@ -356,21 +357,18 @@ void _usb_ep0in(USBDriver *usbp, usbep_t ep) {
  * @details This function is used by the low level driver as default handler
  *          for EP0 OUT events.
  *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
+ * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] ep        endpoint number, always zero
  *
  * @notapi
  */
 void _usb_ep0out(USBDriver *usbp, usbep_t ep) {
-  size_t n;
+  size_t n, size;
   uint8_t buf[1];
 
   switch (usbp->usb_ep0state) {
   case USB_EP0_WAITING_SETUP:
-    /*
-     * SETUP packet handling.
-     */
+    /* SETUP packet handling.*/
     n = usb_lld_read(usbp, 0, usbp->usb_setup, 8);
     if (n != 8)
       break;
@@ -394,12 +392,24 @@ void _usb_ep0out(USBDriver *usbp, usbep_t ep) {
       start_tx_ep0(usbp);
     else
       start_rx_ep0(usbp);
-
+    return;
+  case USB_EP0_RX:
+    /* Check for buffer overflow.*/
+    n = size = usb_lld_get_available(usbp, 0);
+    if (n > usbp->usb_ep0n)
+      n = usbp->usb_ep0n;
+    /* Fetching received data packet.*/
+    n = usb_lld_read(usbp, 0, usbp->usb_ep0next, n);
+    if (n > usbp->usb_ep0max)
+      break;
+    usbp->usb_ep0max  -= size;
+    usbp->usb_ep0n    -= n;
+    usbp->usb_ep0next += n;
+    if (usbp->usb_ep0max == 0)
+      usbp->usb_ep0state = USB_EP0_SENDING_STS;
     return;
   case USB_EP0_WAITING_STS:
-    /*
-     * STATUS received packet handling, it must be zero sized.
-     */
+    /* STATUS received packet handling, it must be zero sized.*/
     n = usb_lld_read(usbp, 0, buf, 1);
     if (n != 0)
       break;

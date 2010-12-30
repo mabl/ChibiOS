@@ -210,8 +210,7 @@ typedef const USBDescriptor * (*usbgetdescriptor_t)(USBDriver *usbp,
 /**
  * @brief   Activates an endpoint.
  *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
+ * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] epcp      the endpoint configuration
  *
  * @iclass
@@ -223,8 +222,7 @@ typedef const USBDescriptor * (*usbgetdescriptor_t)(USBDriver *usbp,
  * @details This macro is used by the request handling callbacks in order to
  *          prepare a transaction over the endpoint zero.
  *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
+ * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] buf       pointer to a buffer for the transaction data
  * @param[in] n         number of bytes to be transferred
  *
