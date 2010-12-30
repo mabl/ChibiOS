@@ -188,10 +188,17 @@ static bool_t default_handler(USBDriver *usbp) {
   case USB_RTYPE_RECIPIENT_DEVICE | (USB_REQ_SET_CONFIGURATION << 5):
     /* Handling configuration selection from the host.*/
     usbp->usb_configuration = usbp->usb_setup[2];
-    if (usbp->usb_config->uc_state_change_cb)
-      usbp->usb_config->uc_state_change_cb(usbp, USB_EVENT_CONFIGURED);
+    if (usbp->usb_configuration == 0) {
+      if (usbp->usb_config->uc_state_change_cb)
+        usbp->usb_config->uc_state_change_cb(usbp, USB_EVENT_ADDRESS);
+      usbp->usb_state = USB_SELECTED;
+    }
+    else {
+      if (usbp->usb_config->uc_state_change_cb)
+        usbp->usb_config->uc_state_change_cb(usbp, USB_EVENT_CONFIGURED);
+      usbp->usb_state = USB_ACTIVE;
+    }
     usbSetupTransfer(usbp, NULL, 0, NULL);
-    usbp->usb_state = USB_ACTIVE;
     return TRUE;
   case USB_RTYPE_RECIPIENT_INTERFACE | (USB_REQ_GET_STATUS << 5):
   case USB_RTYPE_RECIPIENT_ENDPOINT | (USB_REQ_SYNCH_FRAME << 5):
