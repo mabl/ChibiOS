@@ -233,26 +233,26 @@ static bool_t default_handler(USBDriver *usbp) {
     /* Only ENDPOINT_HALT is handled as feature.*/
     if (usbp->usb_setup[2] != USB_FEATURE_ENDPOINT_HALT)
       return FALSE;
-    /* Clearing the EP status, not valid for EP0.*/
-    if ((usbp->usb_setup[4] & 0x0F) == 0)
-      return FALSE;
-    if (usbp->usb_setup[4] & 0x80)
-      usb_lld_clear_in(usbp, usbp->usb_setup[4] & 0x0F);
-    else
-      usb_lld_clear_out(usbp, usbp->usb_setup[4] & 0x0F);
+    /* Clearing the EP status, not valid for EP0, it is ignored in that case.*/
+    if ((usbp->usb_setup[4] & 0x0F) > 0) {
+      if (usbp->usb_setup[4] & 0x80)
+        usb_lld_clear_in(usbp, usbp->usb_setup[4] & 0x0F);
+      else
+        usb_lld_clear_out(usbp, usbp->usb_setup[4] & 0x0F);
+    }
     usbSetupTransfer(usbp, NULL, 0, NULL);
     return TRUE;
   case USB_RTYPE_RECIPIENT_ENDPOINT | (USB_REQ_SET_FEATURE << 5):
     /* Only ENDPOINT_HALT is handled as feature.*/
     if (usbp->usb_setup[2] != USB_FEATURE_ENDPOINT_HALT)
       return FALSE;
-    /* Stalling the EP, not valid for EP0.*/
-    if ((usbp->usb_setup[4] & 0x0F) == 0)
-      return FALSE;
-    if (usbp->usb_setup[4] & 0x80)
-      usb_lld_stall_in(usbp, usbp->usb_setup[4] & 0x0F);
-    else
-      usb_lld_stall_out(usbp, usbp->usb_setup[4] & 0x0F);
+    /* Stalling the EP, not valid for EP0, it is ignored in that case.*/
+    if ((usbp->usb_setup[4] & 0x0F) > 0) {
+      if (usbp->usb_setup[4] & 0x80)
+        usb_lld_stall_in(usbp, usbp->usb_setup[4] & 0x0F);
+      else
+        usb_lld_stall_out(usbp, usbp->usb_setup[4] & 0x0F);
+    }
     usbSetupTransfer(usbp, NULL, 0, NULL);
     return TRUE;
   case USB_RTYPE_RECIPIENT_DEVICE | (USB_REQ_SET_DESCRIPTOR << 5):
