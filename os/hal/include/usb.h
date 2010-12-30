@@ -60,10 +60,6 @@
 #define USB_REQ_SET_INTERFACE               11
 #define USB_REQ_SYNCH_FRAME                 12
 
-#define USB_REQ_TYPE_DEVICE                 0
-#define USB_REQ_TYPE_INTERFACE              1
-#define USB_REQ_TYPE_ENDPOINT               3
-
 #define USB_DESCRIPTOR_DEVICE               1
 #define USB_DESCRIPTOR_CONFIGURATION        2
 #define USB_DESCRIPTOR_STRING               3
@@ -72,6 +68,10 @@
 #define USB_DESCRIPTOR_DEVICE_QUALIFIER     6
 #define USB_DESCRIPTOR_OTHER_SPEED_CFG      7
 #define USB_DESCRIPTOR_INTERFACE_POWER      8
+
+#define USB_FEATURE_ENDPOINT_HALT           0
+#define USB_FEATURE_DEVICE_REMOTE_WAKEUP    1
+#define USB_FEATURE_TEST_MODE               2
 
 /*===========================================================================*/
 /* Driver pre-compile time settings.                                         */
@@ -115,6 +115,15 @@ typedef enum {
   EP_TYPE_BULK = 2,                     /**< Bulk endpoint.                 */
   EP_TYPE_INTR = 3                      /**< Interrupt endpoint.            */
 } usbeptype_t;
+
+/**
+ * @brief   Endpoint status.
+ */
+typedef enum {
+  EP_STATUS_DISABLED = 0,               /**< Endpoint not opened.           */
+  EP_STATUS_STALLED = 1,                /**< Endpoint opened but stalled.   */
+  EP_STATUS_ACTIVE = 2                  /**< Active endpoint.               */
+} usbepstatus_t;
 
 /**
  * @brief   Endpoint zero state machine states.

@@ -201,11 +201,11 @@ struct USBDriver {
   /**
    * @brief   Assigned USB address.
    */
-  uint8_t                       usb_address;
+  uint16_t                      usb_status;
   /**
    * @brief   Assigned USB address.
    */
-  uint8_t                       usb_status;
+  uint8_t                       usb_address;
   /**
    * @brief   Selected configuration.
    */
@@ -250,8 +250,12 @@ extern "C" {
   size_t usb_lld_get_available(USBDriver *usbp, usbep_t ep);
   size_t usb_lld_read(USBDriver *usbp, usbep_t ep, uint8_t *buf, size_t n);
   void usb_lld_write(USBDriver *usbp, usbep_t ep, const uint8_t *buf, size_t n);
+  usbepstatus_t usb_lld_get_status_in(USBDriver *usbp, usbep_t ep);
+  usbepstatus_t usb_lld_get_status_out(USBDriver *usbp, usbep_t ep);
   void usb_lld_stall_in(USBDriver *usbp, usbep_t ep);
   void usb_lld_stall_out(USBDriver *usbp, usbep_t ep);
+  void usb_lld_clear_in(USBDriver *usbp, usbep_t ep);
+  void usb_lld_clear_out(USBDriver *usbp, usbep_t ep);
 #ifdef __cplusplus
 }
 #endif

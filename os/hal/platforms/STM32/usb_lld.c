@@ -350,11 +350,53 @@ void usb_lld_write(USBDriver *usbp, usbep_t ep, const uint8_t *buf, size_t n) {
 }
 
 /**
+ * @brief   Returns the status of an IN endpoint.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object triggering the
+ *                      callback
+ * @param[in] ep        endpoint number
+ *
+ * @notapi
+ */
+usbepstatus_t usb_lld_get_status_in(USBDriver *usbp, usbep_t ep) {
+
+  switch (STM32_USB->EPR[ep] & EPR_STAT_TX_MASK) {
+  case EPR_STAT_TX_DIS:
+    return EP_STATUS_DISABLED;
+  case EPR_STAT_TX_STALL:
+    return EP_STATUS_STALLED;
+  default:
+    return EP_STATUS_ACTIVE;
+  }
+}
+
+/**
+ * @brief   Returns the status of an OUT endpoint.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object triggering the
+ *                      callback
+ * @param[in] ep        endpoint number
+ *
+ * @notapi
+ */
+usbepstatus_t usb_lld_get_status_out(USBDriver *usbp, usbep_t ep) {
+
+  switch (STM32_USB->EPR[ep] & EPR_STAT_RX_MASK) {
+  case EPR_STAT_RX_DIS:
+    return EP_STATUS_DISABLED;
+  case EPR_STAT_RX_STALL:
+    return EP_STATUS_STALLED;
+  default:
+    return EP_STATUS_ACTIVE;
+  }
+}
+
+/**
  * @brief   Brings an IN endpoint in the stalled state.
  *
  * @param[in] usbp      pointer to the @p USBDriver object triggering the
  *                      callback
- * @param[in] ep        endpoint number, always zero
+ * @param[in] ep        endpoint number
  *
  * @notapi
  */
@@ -368,7 +410,7 @@ void usb_lld_stall_in(USBDriver *usbp, usbep_t ep) {
  *
  * @param[in] usbp      pointer to the @p USBDriver object triggering the
  *                      callback
- * @param[in] ep        endpoint number, always zero
+ * @param[in] ep        endpoint number
  *
  * @notapi
  */
@@ -378,5 +420,39 @@ void usb_lld_stall_out(USBDriver *usbp, usbep_t ep) {
 }
 
 #endif /* HAL_USE_USB */
+
+/**
+ * @brief   Brings an IN endpoint in the active state.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object triggering the
+ *                      callback
+ * @param[in] ep        endpoint number
+ *
+ * @notapi
+ */
+void usb_lld_clear_in(USBDriver *usbp, usbep_t ep) {
+
+  /* Makes sure to not put to NAK an endpoint that is already
+     transferring.*/
+  if ((STM32_USB->EPR[ep] & EPR_STAT_TX_MASK) != EPR_STAT_TX_VALID)
+    EPR_SET_STAT_TX(ep, EPR_STAT_TX_NAK);
+}
+
+/**
+ * @brief   Brings an OUT endpoint in the active state.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object triggering the
+ *                      callback
+ * @param[in] ep        endpoint number
+ *
+ * @notapi
+ */
+void usb_lld_clear_out(USBDriver *usbp, usbep_t ep) {
+
+  /* Makes sure to not put to NAK an endpoint that is already
+     transferring.*/
+  if ((STM32_USB->EPR[ep] & EPR_STAT_RX_MASK) != EPR_STAT_RX_VALID)
+    EPR_SET_STAT_TX(ep, EPR_STAT_RX_NAK);
+}
 
 /** @} */
