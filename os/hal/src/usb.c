@@ -131,13 +131,14 @@ static bool_t default_handler(USBDriver *usbp) {
   const USBDescriptor *dp;
 
   /* Decoding the request.*/
-  switch ((usbp->usb_setup[0] & USB_RTYPE_RECIPIENT_MASK) |
-          (usbp->usb_setup[1] << 5)) {
-  case USB_RTYPE_RECIPIENT_DEVICE | (USB_REQ_GET_STATUS << 5):
+  switch ((usbp->usb_setup[0] & (USB_RTYPE_RECIPIENT_MASK |
+                                 USB_RTYPE_TYPE_MASK) |
+          (usbp->usb_setup[1] << 8))) {
+  case USB_RTYPE_RECIPIENT_DEVICE | (USB_REQ_GET_STATUS << 8):
     /* Just returns the current status word.*/
     usbSetupTransfer(usbp, (uint8_t *)&usbp->usb_status, 2, NULL);
     return TRUE;
-  case USB_RTYPE_RECIPIENT_DEVICE | (USB_REQ_CLEAR_FEATURE << 5):
+  case USB_RTYPE_RECIPIENT_DEVICE | (USB_REQ_CLEAR_FEATURE << 8):
     /* Only the DEVICE_REMOTE_WAKEUP is handled here, any other feature
        number is handled as an error.*/
     if (usbp->usb_setup[2] == USB_FEATURE_DEVICE_REMOTE_WAKEUP) {
@@ -146,7 +147,7 @@ static bool_t default_handler(USBDriver *usbp) {
       return TRUE;
     }
     return FALSE;
-  case USB_RTYPE_RECIPIENT_DEVICE | (USB_REQ_SET_FEATURE << 5):
+  case USB_RTYPE_RECIPIENT_DEVICE | (USB_REQ_SET_FEATURE << 8):
     /* Only the DEVICE_REMOTE_WAKEUP is handled here, any other feature
        number is handled as an error.*/
     if (usbp->usb_setup[2] == USB_FEATURE_DEVICE_REMOTE_WAKEUP) {
@@ -155,12 +156,12 @@ static bool_t default_handler(USBDriver *usbp) {
       return TRUE;
     }
     return FALSE;
-  case USB_RTYPE_RECIPIENT_DEVICE | (USB_REQ_SET_ADDRESS << 5):
+  case USB_RTYPE_RECIPIENT_DEVICE | (USB_REQ_SET_ADDRESS << 8):
     /* The handling is posponed to after the status phase in order to allow
        the proper completion of the transaction.*/
     usbSetupTransfer(usbp, NULL, 0, set_address);
     return TRUE;
-  case USB_RTYPE_RECIPIENT_DEVICE | (USB_REQ_GET_DESCRIPTOR << 5):
+  case USB_RTYPE_RECIPIENT_DEVICE | (USB_REQ_GET_DESCRIPTOR << 8):
     /* Handling descriptor requests from the host.*/
     if (usbp->usb_setup[3] == USB_DESCRIPTOR_DEVICE) {
       /* The device descriptor is a special case because it is statically
@@ -181,11 +182,11 @@ static bool_t default_handler(USBDriver *usbp) {
       return FALSE;
     usbSetupTransfer(usbp, (uint8_t *)dp->ud_string, dp->ud_size, NULL);
     return TRUE;
-  case USB_RTYPE_RECIPIENT_DEVICE | (USB_REQ_GET_CONFIGURATION << 5):
+  case USB_RTYPE_RECIPIENT_DEVICE | (USB_REQ_GET_CONFIGURATION << 8):
     /* Returninh the last selected configuration.*/
     usbSetupTransfer(usbp, &usbp->usb_configuration, 1, NULL);
     return TRUE;
-  case USB_RTYPE_RECIPIENT_DEVICE | (USB_REQ_SET_CONFIGURATION << 5):
+  case USB_RTYPE_RECIPIENT_DEVICE | (USB_REQ_SET_CONFIGURATION << 8):
     /* Handling configuration selection from the host.*/
     usbp->usb_configuration = usbp->usb_setup[2];
     if (usbp->usb_configuration == 0) {
@@ -200,13 +201,13 @@ static bool_t default_handler(USBDriver *usbp) {
     }
     usbSetupTransfer(usbp, NULL, 0, NULL);
     return TRUE;
-  case USB_RTYPE_RECIPIENT_INTERFACE | (USB_REQ_GET_STATUS << 5):
-  case USB_RTYPE_RECIPIENT_ENDPOINT | (USB_REQ_SYNCH_FRAME << 5):
+  case USB_RTYPE_RECIPIENT_INTERFACE | (USB_REQ_GET_STATUS << 8):
+  case USB_RTYPE_RECIPIENT_ENDPOINT | (USB_REQ_SYNCH_FRAME << 8):
     /* Just sending two zero bytes, the application can change the behavior
        using a hook..*/
     usbSetupTransfer(usbp, (uint8_t *)zero_status, 2, NULL);
     return TRUE;
-  case USB_RTYPE_RECIPIENT_ENDPOINT | (USB_REQ_GET_STATUS << 5):
+  case USB_RTYPE_RECIPIENT_ENDPOINT | (USB_REQ_GET_STATUS << 8):
     /* Sending the EP status.*/
     if (usbp->usb_setup[4] & 0x80) {
       switch (usb_lld_get_status_in(usbp, usbp->usb_setup[4] & 0x0F)) {
@@ -229,7 +230,7 @@ static bool_t default_handler(USBDriver *usbp) {
       }
     }
     return FALSE;
-  case USB_RTYPE_RECIPIENT_ENDPOINT | (USB_REQ_CLEAR_FEATURE << 5):
+  case USB_RTYPE_RECIPIENT_ENDPOINT | (USB_REQ_CLEAR_FEATURE << 8):
     /* Only ENDPOINT_HALT is handled as feature.*/
     if (usbp->usb_setup[2] != USB_FEATURE_ENDPOINT_HALT)
       return FALSE;
@@ -242,7 +243,7 @@ static bool_t default_handler(USBDriver *usbp) {
     }
     usbSetupTransfer(usbp, NULL, 0, NULL);
     return TRUE;
-  case USB_RTYPE_RECIPIENT_ENDPOINT | (USB_REQ_SET_FEATURE << 5):
+  case USB_RTYPE_RECIPIENT_ENDPOINT | (USB_REQ_SET_FEATURE << 8):
     /* Only ENDPOINT_HALT is handled as feature.*/
     if (usbp->usb_setup[2] != USB_FEATURE_ENDPOINT_HALT)
       return FALSE;
@@ -255,11 +256,11 @@ static bool_t default_handler(USBDriver *usbp) {
     }
     usbSetupTransfer(usbp, NULL, 0, NULL);
     return TRUE;
-  case USB_RTYPE_RECIPIENT_DEVICE | (USB_REQ_SET_DESCRIPTOR << 5):
-  case USB_RTYPE_RECIPIENT_INTERFACE | (USB_REQ_CLEAR_FEATURE << 5):
-  case USB_RTYPE_RECIPIENT_INTERFACE | (USB_REQ_SET_FEATURE << 5):
-  case USB_RTYPE_RECIPIENT_INTERFACE | (USB_REQ_GET_INTERFACE << 5):
-  case USB_RTYPE_RECIPIENT_INTERFACE | (USB_REQ_SET_INTERFACE << 5):
+  case USB_RTYPE_RECIPIENT_DEVICE | (USB_REQ_SET_DESCRIPTOR << 8):
+  case USB_RTYPE_RECIPIENT_INTERFACE | (USB_REQ_CLEAR_FEATURE << 8):
+  case USB_RTYPE_RECIPIENT_INTERFACE | (USB_REQ_SET_FEATURE << 8):
+  case USB_RTYPE_RECIPIENT_INTERFACE | (USB_REQ_GET_INTERFACE << 8):
+  case USB_RTYPE_RECIPIENT_INTERFACE | (USB_REQ_SET_INTERFACE << 8):
     /* All the above requestes are not handled here, if you need them then
        use the hook mechanism and provide handling.*/
   default:

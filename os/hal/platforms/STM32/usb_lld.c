@@ -18,8 +18,8 @@
 */
 
 /**
- * @file    templates/usb_lld.c
- * @brief   USB Driver subsystem low level driver source template.
+ * @file    STM32/usb_lld.c
+ * @brief   STM32 USB subsystem low level driver source.
  *
  * @addtogroup USB
  * @{

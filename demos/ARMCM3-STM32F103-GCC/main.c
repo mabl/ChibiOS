@@ -25,6 +25,8 @@
 /* USB related stuff.                                                        */
 /*===========================================================================*/
 
+#include "usb_cdc.h"
+
 /* USB Standard Device Descriptor.*/
 static const uint8_t vcom_device_descriptor_data[] = {
   18,                               /* bLength.                             */
@@ -108,8 +110,8 @@ const uint8_t vcom_configuration_descriptor_data[] = {
   0x01,                             /* bInterfaceNumber.                    */
   0x00,                             /* bAlternateSetting.                   */
   0x02,                             /* bNumEndpoints.                       */
-  0x0A,                             /* bInterfaceClass (Communication Device
-                                       Class, CDC section 4.5).             */
+  0x0A,                             /* bInterfaceClass (Data Class
+                                       Interface, CDC section 4.5).         */
   0x00,                             /* bInterfaceSubClass (CDC section 4.6).*/
   0x00,                             /* bInterfaceProtocol (CDC section 4.7).*/
   0x00,                             /* iInterface.                          */
@@ -283,11 +285,35 @@ static const USBDescriptor *get_descriptor(USBDriver *usbp,
   return NULL;
 }
 
-/**
+/*
+ * Current Line Coding.
+ */
+static cdc_linecoding_t linecoding = {
+  {0x00, 0x96, 0x00, 0x00},             /* 38400.                           */
+  LC_STOP_1, LC_PARITY_NONE, 8
+};
+
+/*
  * Requests hook.
  */
 bool_t requests_hook(USBDriver *usbp) {
 
+  if ((usbp->usb_setup[0] & USB_RTYPE_TYPE_MASK) == USB_RTYPE_TYPE_CLASS) {
+    switch (usbp->usb_setup[1]) {
+    case CDC_GET_LINE_CODING:
+      usbSetupTransfer(usbp, (uint8_t *)&linecoding, sizeof(linecoding), NULL);
+      return TRUE;
+    case CDC_SET_LINE_CODING:
+      usbSetupTransfer(usbp, (uint8_t *)&linecoding, sizeof(linecoding), NULL);
+      return TRUE;
+    case CDC_SET_CONTROL_LINE_STATE:
+      /* Nothing to do, there are no control lines.*/
+      usbSetupTransfer(usbp, NULL, 0, NULL);
+      return TRUE;
+    default:
+      return FALSE;
+    }
+  }
   return FALSE;
 }
 

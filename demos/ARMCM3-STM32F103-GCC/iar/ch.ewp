@@ -1784,6 +1784,9 @@
         <file>
           <name>$PROJ_DIR$\..\..\..\os\hal\include\usb.h</name>
         </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\os\hal\include\usb_cdc.h</name>
+        </file>
       </group>
       <group>
         <name>src</name>
