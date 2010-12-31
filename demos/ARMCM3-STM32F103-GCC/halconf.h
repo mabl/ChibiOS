@@ -90,6 +90,13 @@
 #endif
 
 /**
+ * @brief   Enables the SERIAL over USB subsystem.
+ */
+#if !defined(HAL_USE_SERIAL_USB) || defined(__DOXYGEN__)
+#define HAL_USE_SERIAL_USB          TRUE
+#endif
+
+/**
  * @brief   Enables the SPI subsystem.
  */
 #if !defined(HAL_USE_SPI) || defined(__DOXYGEN__)

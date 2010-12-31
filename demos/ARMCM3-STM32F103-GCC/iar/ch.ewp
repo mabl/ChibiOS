@@ -1776,6 +1776,9 @@
           <name>$PROJ_DIR$\..\..\..\os\hal\include\serial.h</name>
         </file>
         <file>
+          <name>$PROJ_DIR$\..\..\..\os\hal\include\serial_usb.h</name>
+        </file>
+        <file>
           <name>$PROJ_DIR$\..\..\..\os\hal\include\spi.h</name>
         </file>
         <file>
@@ -1816,6 +1819,9 @@
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\..\os\hal\src\serial.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\os\hal\src\serial_usb.c</name>
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\..\os\hal\src\spi.c</name>

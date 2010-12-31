@@ -44,6 +44,7 @@
 #include "uart.h"
 #include "usb.h"
 #include "mmc_spi.h"
+#include "serial_usb.h"
 
 /*===========================================================================*/
 /* External declarations.                                                    */

@@ -25,7 +25,7 @@
 /* USB related stuff.                                                        */
 /*===========================================================================*/
 
-#include "usb_cdc.h"
+static SerialUSBDriver SDU1;
 
 /* USB Standard Device Descriptor.*/
 static const uint8_t vcom_device_descriptor_data[] = {
@@ -296,44 +296,15 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
 }
 
 /*
- * Current Line Coding.
+ * Serial over USB driver configuration.
  */
-static cdc_linecoding_t linecoding = {
-  {0x00, 0x96, 0x00, 0x00},             /* 38400.                           */
-  LC_STOP_1, LC_PARITY_NONE, 8
-};
-
-/*
- * Requests hook.
- */
-bool_t requests_hook(USBDriver *usbp) {
-
-  if ((usbp->usb_setup[0] & USB_RTYPE_TYPE_MASK) == USB_RTYPE_TYPE_CLASS) {
-    switch (usbp->usb_setup[1]) {
-    case CDC_GET_LINE_CODING:
-      usbSetupTransfer(usbp, (uint8_t *)&linecoding, sizeof(linecoding), NULL);
-      return TRUE;
-    case CDC_SET_LINE_CODING:
-      usbSetupTransfer(usbp, (uint8_t *)&linecoding, sizeof(linecoding), NULL);
-      return TRUE;
-    case CDC_SET_CONTROL_LINE_STATE:
-      /* Nothing to do, there are no control lines.*/
-      usbSetupTransfer(usbp, NULL, 0, NULL);
-      return TRUE;
-    default:
-      return FALSE;
-    }
+static const SerialUSBConfig serusbcfg = {
+  &USBD1,
+  {
+    usb_event,
+    get_descriptor,
+    sduRequestsHook
   }
-  return FALSE;
-}
-
-/*
- * USB driver configuration.
- */
-static const USBConfig usbcfg = {
-  usb_event,
-  get_descriptor,
-  requests_hook,
 };
 
 /*===========================================================================*/
@@ -375,7 +346,8 @@ int main(void) {
    * Activates the USB bus and then the USB driver.
    */
   palClearPad(GPIOC, GPIOC_USB_DISC);
-  usbStart(&USBD1, &usbcfg);
+  sduObjectInit(&SDU1);
+  sduStart(&SDU1, &serusbcfg);
 
   /*
    * Activates the serial driver 2 using the driver default configuration.
