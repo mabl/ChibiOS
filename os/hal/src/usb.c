@@ -163,21 +163,10 @@ static bool_t default_handler(USBDriver *usbp) {
     return TRUE;
   case USB_RTYPE_RECIPIENT_DEVICE | (USB_REQ_GET_DESCRIPTOR << 8):
     /* Handling descriptor requests from the host.*/
-    if (usbp->usb_setup[3] == USB_DESCRIPTOR_DEVICE) {
-      /* The device descriptor is a special case because it is statically
-         assigned to the USB driver configuration. Just returning the
-         pointer.*/
-      dp = &usbp->usb_config->uc_dev_descriptor;
-    }
-    else {
-      /* Any other descriptor must be provided by the application in
-         order to provide an interface for complicated devices with
-         multiple configurations or languages.*/
-      dp = usbp->usb_config->uc_get_descriptor_cb(usbp,
-                                                  usbp->usb_setup[3],
-                                                  usbp->usb_setup[2],
-                                                  usb_lld_fetch_word(&usbp->usb_setup[4]));
-    }
+    dp = usbp->usb_config->uc_get_descriptor_cb(usbp,
+                                                usbp->usb_setup[3],
+                                                usbp->usb_setup[2],
+                                                usb_lld_fetch_word(&usbp->usb_setup[4]));
     if (dp == NULL)
       return FALSE;
     usbSetupTransfer(usbp, (uint8_t *)dp->ud_string, dp->ud_size, NULL);

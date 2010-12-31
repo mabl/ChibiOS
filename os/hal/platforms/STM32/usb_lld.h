@@ -127,7 +127,6 @@ typedef struct {
 
 /**
  * @brief   Type of an USB driver configuration structure.
- * @note    It could be empty on some architectures.
  */
 typedef struct {
   /**
@@ -136,10 +135,6 @@ typedef struct {
    *          because an external event.
    */
   usbeventcb_t                  uc_state_change_cb;
-  /**
-   * @brief   Device descriptor for this USB device.
-   */
-  USBDescriptor                 uc_dev_descriptor;
   /**
    * @brief   Device GET_DESCRIPTOR request callback.
    * @note    This callback is mandatory and cannot be set to @p NULL.

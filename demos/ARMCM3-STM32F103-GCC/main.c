@@ -45,6 +45,14 @@ static const uint8_t vcom_device_descriptor_data[] = {
   1                                 /* bNumConfigurations.                  */
 };
 
+/*
+ * Configuration descriptor wrapper.
+ */
+static const USBDescriptor vcom_device_descriptor = {
+  sizeof (vcom_device_descriptor_data),
+  vcom_device_descriptor_data
+};
+
 /* Configuration Descriptor tree for a VCOM.*/
 const uint8_t vcom_configuration_descriptor_data[] = {
   /* Configuration descriptor.*/
@@ -193,6 +201,27 @@ static const USBDescriptor vcom_strings[] = {
   {sizeof(vcom_string3), vcom_string3}
 };
 
+/*
+ * Handles the GET_DESCRIPTOR callback. All required descriptors must be
+ * handled here.
+ */
+static const USBDescriptor *get_descriptor(USBDriver *usbp,
+                                           uint8_t dtype,
+                                           uint8_t dindex,
+                                           uint16_t lang) {
+
+  switch (dtype) {
+  case USB_DESCRIPTOR_DEVICE:
+    return &vcom_device_descriptor;
+  case USB_DESCRIPTOR_CONFIGURATION:
+    return &vcom_configuration_descriptor;
+  case USB_DESCRIPTOR_STRING:
+    if (dindex < 4)
+      return &vcom_strings[dindex];
+  }
+  return NULL;
+}
+
 void ep1in(USBDriver *usbp, usbep_t ep) {
 }
 
@@ -267,25 +296,6 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
 }
 
 /*
- * Handles the GET_DESCRIPTOR callback. Except for the device descriptor
- * any other descriptor must be handled here.
- */
-static const USBDescriptor *get_descriptor(USBDriver *usbp,
-                                           uint8_t dtype,
-                                           uint8_t dindex,
-                                           uint16_t lang) {
-
-  switch (dtype) {
-  case USB_DESCRIPTOR_CONFIGURATION:
-    return &vcom_configuration_descriptor;
-  case USB_DESCRIPTOR_STRING:
-    if (dindex < 4)
-      return &vcom_strings[dindex];
-  }
-  return NULL;
-}
-
-/*
  * Current Line Coding.
  */
 static cdc_linecoding_t linecoding = {
@@ -322,7 +332,6 @@ bool_t requests_hook(USBDriver *usbp) {
  */
 static const USBConfig usbcfg = {
   usb_event,
-  {sizeof(vcom_device_descriptor_data), vcom_device_descriptor_data},
   get_descriptor,
   requests_hook,
 };
