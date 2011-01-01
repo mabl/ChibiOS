@@ -93,6 +93,24 @@ typedef enum {
 typedef uint8_t sduflags_t;
 
 /**
+ * @brief   Type of an I/O buffer.
+ */
+typedef struct {
+  /**
+   * @brief   Buffer guard semaphore.
+   */
+  Semaphore                     sem;
+  /**
+   * @brief   Next position to read or write.
+   */
+  uint8_t                       *next;
+  /**
+   * @brief   Buffer area.
+   */
+  uint8_t                       *buffer[SERIAL_USB_BUFFERS_SIZE];
+} sdubuffer_t;
+
+/**
  * @brief   Structure representing a serial over USB driver.
  */
 typedef struct SerialUSBDriver SerialUSBDriver;
@@ -106,11 +124,11 @@ typedef struct {
   /**
    * @brief   USB driver to use.
    */
-  USBDriver                     *sduc_usbp;
+  USBDriver                     *usbp;
   /**
    * @brief   USB driver configuration structure.
    */
-  USBConfig                     sduc_usb_config;
+  USBConfig                     usb_config;
 } SerialUSBConfig;
 
 /**
@@ -123,12 +141,16 @@ typedef struct {
   /** Current configuration data.*/                                         \
   const SerialUSBConfig         *config;                                    \
   /* I/O driver status flags.*/                                             \
-  sduflags_t                    flags;
+  sduflags_t                    flags;                                      \
+  /* Receive buffer.*/                                                      \
+  sdubuffer_t                   rxbuf;                                      \
+  /* Transmit buffer.*/                                                     \
+  sdubuffer_t                   txbuf;
 
 /**
  * @brief   @p SerialUSBDriver specific methods.
  */
-#define _serial_usb_driver_methods                                              \
+#define _serial_usb_driver_methods                                          \
   _base_asynchronous_channel_methods
 
 /**

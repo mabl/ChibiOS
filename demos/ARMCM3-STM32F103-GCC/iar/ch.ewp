@@ -281,6 +281,7 @@
           <state>$PROJ_DIR$\..\..\..\os\ports\IAR\ARMCMx\STM32</state>
           <state>$PROJ_DIR$\..\..\..\os\hal\include</state>
           <state>$PROJ_DIR$\..\..\..\os\hal\platforms\STM32</state>
+          <state>$PROJ_DIR$\..\..\..\os\oslib\include</state>
           <state>$PROJ_DIR$\..\..\..\boards\OLIMEX_STM32_P103</state>
           <state>$PROJ_DIR$\..\..\..\test</state>
         </option>

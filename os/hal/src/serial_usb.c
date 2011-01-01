@@ -29,6 +29,7 @@
 #include "hal.h"
 
 #include "usb_cdc.h"
+#include "iobuffers.h"
 
 #if HAL_USE_SERIAL_USB || defined(__DOXYGEN__)
 
@@ -52,9 +53,20 @@ static cdc_linecoding_t linecoding = {
 /* Driver local functions.                                                   */
 /*===========================================================================*/
 
+static void init_rx_buffer(sdubuffer_t *sdubp) {
+
+  chSemInit(&sdubp->sem, 0);
+  sdubp->next = 0;
+}
+
+static void init_tx_buffer(sdubuffer_t *sdubp) {
+
+  chSemInit(&sdubp->sem, SERIAL_USB_BUFFERS_SIZE);
+  sdubp->next = 0;
+}
+
 /*
- * Interface implementation, the following functions just invoke the equivalent
- * queue-level function or macro.
+ * Interface implementation.
  */
 
 static size_t writes(void *ip, const uint8_t *bp, size_t n) {
@@ -65,16 +77,15 @@ static size_t reads(void *ip, uint8_t *bp, size_t n) {
 
 }
 
-static bool_t putwouldblock(void *ip) {
+static bool_t wouldblock(void *ip) {
 
-}
-
-static bool_t getwouldblock(void *ip) {
-
+  return chSemGetCounterI(&((sdubuffer_t *)ip)->sem) <= 0;
 }
 
 static msg_t putt(void *ip, uint8_t b, systime_t timeout) {
 
+  if (wouldblock(ip))
+    return Q_FULL;
 }
 
 static msg_t gett(void *ip, systime_t timeout) {
@@ -90,7 +101,7 @@ static size_t readt(void *ip, uint8_t *bp, size_t n, systime_t time) {
 }
 
 static const struct SerialUSBDriverVMT vmt = {
-  writes, reads, putwouldblock, getwouldblock, putt, gett, writet, readt
+  writes, reads, wouldblock, wouldblock, putt, gett, writet, readt
 };
 
 /*===========================================================================*/
@@ -128,6 +139,8 @@ void sduObjectInit(SerialUSBDriver *sdup) {
   sdup->state  = SDU_STOP;
   sdup->config = NULL;
   sdup->flags  = 0;
+  init_rx_buffer(&sdup->rxbuf);
+  init_tx_buffer(&sdup->rxbuf);
 }
 
 /**
@@ -147,7 +160,7 @@ void sduStart(SerialUSBDriver *sdup, const SerialUSBConfig *config) {
               "sduStart(), #1",
               "invalid state");
   sdup->config = config;
-  usbStart(config->sduc_usbp, &config->sduc_usb_config);
+  usbStart(config->usbp, &config->usb_config);
   sdup->state = SDU_READY;
   chSysUnlock();
 }
@@ -169,7 +182,7 @@ void sduStop(SerialUSBDriver *sdup) {
   chDbgAssert((sdup->state == SDU_STOP) || (sdup->state == SDU_READY),
               "sduStop(), #1",
               "invalid state");
-  usbStop(sdup->config->sduc_usbp);
+  usbStop(sdup->config->usbp);
   sdup->state = SDU_STOP;
   chSysUnlock();
 }
