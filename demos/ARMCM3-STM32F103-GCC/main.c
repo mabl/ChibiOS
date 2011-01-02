@@ -329,6 +329,7 @@ static msg_t Thread1(void *arg) {
  * Application entry point.
  */
 int main(void) {
+   int i = 0;
 
   /*
    * System initializations.
@@ -364,7 +365,9 @@ int main(void) {
   while (TRUE) {
     if (palReadPad(IOPORT1, GPIOA_BUTTON))
       TestThread(&SD2);
+    chIOPutTimeout(&SDU1, '0' + i,  TIME_INFINITE);
     chIOWriteTimeout(&SDU1, "Hello World!\r\n", 14, TIME_INFINITE);
-    chThdSleepMilliseconds(1000);
+    i = (i + 1) % 10;
+    chThdSleepMilliseconds(4000);
   }
 }
