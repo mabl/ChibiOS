@@ -132,14 +132,14 @@ static void onotify(GenericQueue *qp) {
   /* If there is any data in the output queue then it is sent within a
      single packet and the queue is emptied.*/
   n = chOQGetFullI(&sdup->oqueue);
-  if (n > 0) {
+//  if (n > 0) {
     n = usbWriteI(sdup->config->usbp, sdup->config->data_request_ep,
                   sdup->oqueue.q_buffer, n);
     if (n > 0) {
       sdup->oqueue.q_wrptr = sdup->oqueue.q_buffer;
       chSemSetCounterI(&sdup->iqueue.q_sem, SERIAL_USB_BUFFERS_SIZE);
     }
-  }
+//  }
 }
 
 /*===========================================================================*/

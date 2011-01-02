@@ -364,7 +364,7 @@ int main(void) {
   while (TRUE) {
     if (palReadPad(IOPORT1, GPIOA_BUTTON))
       TestThread(&SD2);
-//    chIOWriteTimeout(&SDU1, "Hello World!\r\n", 14, TIME_INFINITE);
-    chThdSleepMilliseconds(500);
+    chIOWriteTimeout(&SDU1, "Hello World!\r\n", 14, TIME_INFINITE);
+    chThdSleepMilliseconds(1000);
   }
 }

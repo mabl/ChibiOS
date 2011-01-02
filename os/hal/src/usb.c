@@ -470,8 +470,10 @@ void _usb_ep0out(USBDriver *usbp, usbep_t ep) {
     usbp->usb_ep0max  -= size;
     usbp->usb_ep0n    -= n;
     usbp->usb_ep0next += n;
-    if (usbp->usb_ep0max == 0)
+    if (usbp->usb_ep0max == 0) {
+      usb_lld_write(usbp, 0, NULL, 0);
       usbp->usb_ep0state = USB_EP0_SENDING_STS;
+    }
     return;
   case USB_EP0_WAITING_STS:
     /* STATUS received packet handling, it must be zero sized.*/
