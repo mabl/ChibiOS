@@ -227,6 +227,53 @@ typedef const USBDescriptor * (*usbgetdescriptor_t)(USBDriver *usbp,
 #define usbEPOpenI(usbp, epcp) usb_lld_ep_open(usbp, epcp)
 
 /**
+ * @brief   Returns the number of bytes readable from the packet buffer.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object
+ * @param[in] ep        endpoint number
+ * @return              The number of bytes that are effectively available.
+ * @retval 0            There is no data available to read.
+ *
+ * @iclass
+ */
+#define usbGetReadableI(usbp, ep) usb_lld_get_readable(usbp, ep)
+
+/**
+ * @brief   Endpoint read.
+ * @details The buffered packet is copied into the user buffer and then
+ *          the endpoint is brought to the valid state in order to allow
+ *          reception of more data.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object
+ * @param[in] ep        endpoint number
+ * @param[in] buf       buffer where to copy the endpoint data
+ * @param[in] n         maximum number of bytes to copy
+ * @return              The number of bytes that were effectively available.
+ * @retval 0            There is no data available to read.
+ *
+ * @iclass
+ */
+#define usbReadI(usbp, ep, buf, n) usb_lld_read(usbp, ep, buf, n)
+
+/**
+ * @brief   Endpoint write.
+ * @details The user data is copied in the packer memory and then
+ *          the endpoint is brought to the valid state in order to allow
+ *          transmission.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object triggering the
+ *                      callback
+ * @param[in] ep        endpoint number
+ * @param[in] buf       buffer where to copy the endpoint data
+ * @param[in] n         maximum number of bytes to copy
+ * @return              The number of bytes that were effectively written.
+ * @retval 0            Endpoint not ready for transmission.
+ *
+ * @iclass
+ */
+#define usbWriteI(usbp, ep, buf, n) usb_lld_write(usbp, ep, buf, n)
+
+/**
  * @brief   Request transfer setup.
  * @details This macro is used by the request handling callbacks in order to
  *          prepare a transaction over the endpoint zero.

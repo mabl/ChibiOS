@@ -268,15 +268,16 @@ void usb_lld_ep_open(USBDriver *usbp, const USBEndpointConfig *epcp) {
 }
 
 /**
- * @brief   Returns the number of bytes available in the packet buffer.
+ * @brief   Returns the number of bytes readable from the packet buffer.
  *
  * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] ep        endpoint number
  * @return              The number of bytes that are effectively available.
+ * @retval 0            There is no data available to read.
  *
  * @notapi
  */
-size_t usb_lld_get_available(USBDriver *usbp, usbep_t ep) {
+size_t usb_lld_get_readable(USBDriver *usbp, usbep_t ep) {
 
   if ((STM32_USB->EPR[ep] & EPR_STAT_RX_MASK) != EPR_STAT_RX_NAK)
     return 0;
@@ -294,6 +295,7 @@ size_t usb_lld_get_available(USBDriver *usbp, usbep_t ep) {
  * @param[in] buf       buffer where to copy the endpoint data
  * @param[in] n         maximum number of bytes to copy
  * @return              The number of bytes that were effectively available.
+ * @retval 0            There is no data available to read.
  *
  * @notapi
  */
@@ -301,6 +303,9 @@ size_t usb_lld_read(USBDriver *usbp, usbep_t ep, uint8_t *buf, size_t n) {
   uint32_t *pmap;
   stm32_usb_descriptor_t *udp;
   size_t count;
+
+  if ((STM32_USB->EPR[ep] & EPR_STAT_RX_MASK) != EPR_STAT_RX_NAK)
+    return 0;
 
   udp = USB_GET_DESCRIPTOR(ep);
   pmap = USB_ADDR2PTR(udp->RXADDR);
@@ -328,14 +333,18 @@ size_t usb_lld_read(USBDriver *usbp, usbep_t ep, uint8_t *buf, size_t n) {
  * @param[in] ep        endpoint number
  * @param[in] buf       buffer where to copy the endpoint data
  * @param[in] n         maximum number of bytes to copy
- * @return              The number of bytes that were effectively available.
+ * @return              The number of bytes that were effectively written.
+ * @retval 0            Endpoint not ready for transmission.
  *
  * @notapi
  */
-void usb_lld_write(USBDriver *usbp, usbep_t ep, const uint8_t *buf, size_t n) {
+size_t usb_lld_write(USBDriver *usbp, usbep_t ep, const uint8_t *buf, size_t n) {
   uint32_t *pmap;
   stm32_usb_descriptor_t *udp;
   size_t count;
+
+  if ((STM32_USB->EPR[ep] & EPR_STAT_TX_MASK) != EPR_STAT_TX_NAK)
+    return 0;
 
   udp = USB_GET_DESCRIPTOR(ep);
   pmap = USB_ADDR2PTR(udp->TXADDR);
@@ -347,6 +356,7 @@ void usb_lld_write(USBDriver *usbp, usbep_t ep, const uint8_t *buf, size_t n) {
     count--;
   }
   EPR_SET_STAT_TX(ep, EPR_STAT_TX_VALID);
+  return n;
 }
 
 /**

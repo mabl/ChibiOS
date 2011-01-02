@@ -247,9 +247,9 @@ extern "C" {
   void usb_lld_reset(USBDriver *usbp);
   void usb_lld_set_address(USBDriver *usbp, uint8_t addr);
   void usb_lld_ep_open(USBDriver *usbp, const USBEndpointConfig *epcp);
-  size_t usb_lld_get_available(USBDriver *usbp, usbep_t ep);
+  size_t usb_lld_get_readable(USBDriver *usbp, usbep_t ep);
   size_t usb_lld_read(USBDriver *usbp, usbep_t ep, uint8_t *buf, size_t n);
-  void usb_lld_write(USBDriver *usbp, usbep_t ep, const uint8_t *buf, size_t n);
+  size_t usb_lld_write(USBDriver *usbp, usbep_t ep, const uint8_t *buf, size_t n);
   usbepstatus_t usb_lld_get_status_in(USBDriver *usbp, usbep_t ep);
   usbepstatus_t usb_lld_get_status_out(USBDriver *usbp, usbep_t ep);
   void usb_lld_stall_in(USBDriver *usbp, usbep_t ep);

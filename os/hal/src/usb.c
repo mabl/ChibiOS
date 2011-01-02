@@ -460,7 +460,7 @@ void _usb_ep0out(USBDriver *usbp, usbep_t ep) {
     return;
   case USB_EP0_RX:
     /* Check for buffer overflow.*/
-    n = size = usb_lld_get_available(usbp, 0);
+    n = size = usb_lld_get_readable(usbp, 0);
     if (n > usbp->usb_ep0n)
       n = usbp->usb_ep0n;
     /* Fetching received data packet.*/

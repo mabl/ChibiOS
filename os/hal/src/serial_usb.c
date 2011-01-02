@@ -281,12 +281,18 @@ void sduDataAvailable(USBDriver *usbp, usbep_t ep) {
   SerialUSBDriver *sdup = usbp->usb_param;
 
   chSysLockFromIsr();
+  /* Writes in the output queue can only happen when the queue has been
+     emptied, then a whole packet is loaded in the queue.*/
   if (chOQIsEmptyI(&sdup->oqueue)) {
+    size_t n;
+
     sdup->oqueue.q_rdptr = sdup->oqueue.q_wrptr = sdup->oqueue.q_buffer;
+    n = usbReadI(usbp, ep, sdup->oqueue.q_buffer, SERIAL_USB_BUFFERS_SIZE);
+    sdup->oqueue.q_rdptr = sdup->oqueue.q_wrptr = sdup->oqueue.q_buffer;
+    chSemSetCounterI(&sdup->oqueue.q_sem, n);
   }
   chSysUnlockFromIsr();
 }
-
 
 /**
  * @brief   Default data received callback.
