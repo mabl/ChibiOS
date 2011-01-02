@@ -102,10 +102,24 @@ static const struct SerialUSBDriverVMT vmt = {
   writes, reads, putwouldblock, getwouldblock, putt, gett, writet, readt
 };
 
-static void inotify(void) {
+static void inotify(GenericQueue *qp) {
+  SerialUSBDriver *sdup = (SerialUSBDriver *)qp->q_wrptr;
+
+  /* Writes in the output queue can only happen when the queue has been
+     emptied, then a whole packet is loaded in the queue.*/
+  if (chOQIsEmptyI(qp)) {
+    size_t n;
+
+    n = usbReadI(sdup->config->usbp,
+                 sdup->config->data_available_ep,
+                 sdup->oqueue.q_buffer,
+                 SERIAL_USB_BUFFERS_SIZE);
+    qp->q_rdptr = qp->q_buffer;
+    chSemSetCounterI(&qp->q_sem, n);
+  }
 }
 
-static void onotify(void) {
+static void onotify(GenericQueue *qp) {
 }
 
 /*===========================================================================*/
@@ -147,6 +161,10 @@ void sduObjectInit(SerialUSBDriver *sdup) {
   sdup->flags = SDU_NO_ERROR;
   chIQInit(&sdup->iqueue, sdup->ib, SERIAL_USB_BUFFERS_SIZE, inotify);
   chOQInit(&sdup->oqueue, sdup->ob, SERIAL_USB_BUFFERS_SIZE, onotify);
+  /* This is a dirty trick but those pointers are never used because queues
+     are accessed in block mode from the low level.*/
+  sdup->iqueue.q_wrptr = (uint8_t *)sdup;
+  sdup->oqueue.q_rdptr = (uint8_t *)sdup;
 }
 
 /**
@@ -264,16 +282,27 @@ bool_t sduRequestsHook(USBDriver *usbp) {
 }
 
 /**
- * @brief   Default data received callback.
+ * @brief   Default data request callback.
  * @details The application must use this function as callback for the IN
  *          data endpoint.
  */
 void sduDataRequest(USBDriver *usbp, usbep_t ep) {
+  SerialUSBDriver *sdup = usbp->usb_param;
+  size_t n;
+
+  chSysLockFromIsr();
+  /* If there is any data in the output queue then it is sent within a
+     single packet and the queue is emptied.*/
+  n = chQSizeI(&sdup->oqueue) - chQSpaceI(&sdup->oqueue);
+  if (n > 0) {
+//    usbWriteI(usbp, ep, sdup->oqueue.q_buffer, chOQS);
+  }
+  chSysUnlockFromIsr();
 }
 
 
 /**
- * @brief   Default data received callback.
+ * @brief   Default data available callback.
  * @details The application must use this function as callback for the OUT
  *          data endpoint.
  */
@@ -281,15 +310,14 @@ void sduDataAvailable(USBDriver *usbp, usbep_t ep) {
   SerialUSBDriver *sdup = usbp->usb_param;
 
   chSysLockFromIsr();
-  /* Writes in the output queue can only happen when the queue has been
+  /* Writes to the input queue can only happen when the queue has been
      emptied, then a whole packet is loaded in the queue.*/
-  if (chOQIsEmptyI(&sdup->oqueue)) {
+  if (chIQIsEmptyI(&sdup->iqueue)) {
     size_t n;
 
-    sdup->oqueue.q_rdptr = sdup->oqueue.q_wrptr = sdup->oqueue.q_buffer;
-    n = usbReadI(usbp, ep, sdup->oqueue.q_buffer, SERIAL_USB_BUFFERS_SIZE);
-    sdup->oqueue.q_rdptr = sdup->oqueue.q_wrptr = sdup->oqueue.q_buffer;
-    chSemSetCounterI(&sdup->oqueue.q_sem, n);
+    n = usbReadI(usbp, ep, sdup->iqueue.q_buffer, SERIAL_USB_BUFFERS_SIZE);
+    sdup->iqueue.q_rdptr = sdup->iqueue.q_buffer;
+    chSemSetCounterI(&sdup->iqueue.q_sem, n);
   }
   chSysUnlockFromIsr();
 }

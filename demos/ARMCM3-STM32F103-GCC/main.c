@@ -25,6 +25,10 @@
 /* USB related stuff.                                                        */
 /*===========================================================================*/
 
+#define DATA_REQUEST_EP         1
+#define INTERRUPT_REQUEST_EP    2
+#define DATA_AVAILABLE_EP       3
+
 static SerialUSBDriver SDU1;
 
 /* USB Standard Device Descriptor.*/
@@ -108,7 +112,7 @@ const uint8_t vcom_configuration_descriptor_data[] = {
   /* Endpoint 2 Descriptor.*/
   7,                                /* bLength.                             */
   USB_DESCRIPTOR_ENDPOINT,          /* bDescriptorType.                     */
-  0x82,                             /* bEndpointAddress (IN2).              */
+  INTERRUPT_REQUEST_EP | 0x80,      /* bEndpointAddress (IN).               */
   0x03,                             /* bmAttributes (Interrupt).            */
   0x08, 0x00,                       /* wMaxPacketSize.                      */
   0xFF,                             /* bInterval.                           */
@@ -126,14 +130,14 @@ const uint8_t vcom_configuration_descriptor_data[] = {
   /* Endpoint 3 Descriptor.*/
   7,                                /* bLength.                             */
   USB_DESCRIPTOR_ENDPOINT,          /* bDescriptorType.                     */
-  0x03,                             /* bEndpointAddress (OUT3).             */
+  DATA_AVAILABLE_EP,                /* bEndpointAddress (OUT).              */
   0x02,                             /* bmAttributes (Bulk).                 */
   0x40, 0x00,                       /* wMaxPacketSize.                      */
   0x00,                             /* bInterval (ignored for bulk.         */
   /* Endpoint 1 Descriptor.*/
   7,                                /* bLength.                             */
   USB_DESCRIPTOR_ENDPOINT,          /* bDescriptorType.                     */
-  0x81,                             /* bEndpointAddress (IN1).              */
+  DATA_REQUEST_EP | 0x80,           /* bEndpointAddress (IN).               */
   0x02,                             /* bmAttributes (Bulk).                 */
   0x40, 0x00,                       /* wMaxPacketSize.                      */
   0x00                              /* bInterval (ignored for bulk.         */
@@ -228,7 +232,7 @@ static const USBDescriptor *get_descriptor(USBDriver *usbp,
 const USBEndpointConfig ep1config = {
   sduDataRequest,
   NULL,
-  1,
+  DATA_REQUEST_EP,
   0x0040,
   EPR_EP_TYPE_BULK | EPR_STAT_TX_NAK | EPR_STAT_RX_DIS,
   0x00C0,
@@ -241,7 +245,7 @@ const USBEndpointConfig ep1config = {
 const USBEndpointConfig ep2config = {
   sduInterruptRequest,
   NULL,
-  2,
+  INTERRUPT_REQUEST_EP,
   0x0010,
   EPR_EP_TYPE_INTERRUPT | EPR_STAT_TX_NAK | EPR_STAT_RX_DIS,
   0x0100,
@@ -254,7 +258,7 @@ const USBEndpointConfig ep2config = {
 const USBEndpointConfig ep3config = {
   NULL,
   sduDataAvailable,
-  3,
+  DATA_AVAILABLE_EP,
   0x0040,
   EPR_EP_TYPE_BULK | EPR_STAT_TX_DIS | EPR_STAT_RX_NAK,
   0x0000,
@@ -295,7 +299,10 @@ static const SerialUSBConfig serusbcfg = {
     usb_event,
     get_descriptor,
     sduRequestsHook
-  }
+  },
+  DATA_REQUEST_EP,
+  DATA_AVAILABLE_EP,
+  INTERRUPT_REQUEST_EP
 };
 
 /*===========================================================================*/
