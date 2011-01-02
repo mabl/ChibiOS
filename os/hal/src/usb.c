@@ -284,6 +284,7 @@ void usbObjectInit(USBDriver *usbp) {
 
   usbp->usb_state    = USB_STOP;
   usbp->usb_config   = NULL;
+  usbp->usb_param    = NULL;
 }
 
 /**

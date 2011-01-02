@@ -222,20 +222,11 @@ static const USBDescriptor *get_descriptor(USBDriver *usbp,
   return NULL;
 }
 
-void ep1in(USBDriver *usbp, usbep_t ep) {
-}
-
-void ep2in(USBDriver *usbp, usbep_t ep) {
-}
-
-void ep3out(USBDriver *usbp, usbep_t ep) {
-}
-
 /**
  * @brief   EP1 initialization structure (IN only).
  */
 const USBEndpointConfig ep1config = {
-  ep1in,
+  sduDataRequest,
   NULL,
   1,
   0x0040,
@@ -248,7 +239,7 @@ const USBEndpointConfig ep1config = {
  * @brief   EP2 initialization structure (IN only).
  */
 const USBEndpointConfig ep2config = {
-  ep2in,
+  sduInterruptRequest,
   NULL,
   2,
   0x0010,
@@ -262,7 +253,7 @@ const USBEndpointConfig ep2config = {
  */
 const USBEndpointConfig ep3config = {
   NULL,
-  ep3out,
+  sduDataAvailable,
   3,
   0x0040,
   EPR_EP_TYPE_BULK | EPR_STAT_TX_DIS | EPR_STAT_RX_NAK,

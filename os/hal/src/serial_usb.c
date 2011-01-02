@@ -29,7 +29,6 @@
 #include "hal.h"
 
 #include "usb_cdc.h"
-#include "iobuffers.h"
 
 #if HAL_USE_SERIAL_USB || defined(__DOXYGEN__)
 
@@ -53,56 +52,61 @@ static cdc_linecoding_t linecoding = {
 /* Driver local functions.                                                   */
 /*===========================================================================*/
 
-static void init_rx_buffer(sdubuffer_t *sdubp) {
-
-  chSemInit(&sdubp->sem, 0);
-  sdubp->next = 0;
-}
-
-static void init_tx_buffer(sdubuffer_t *sdubp) {
-
-  chSemInit(&sdubp->sem, SERIAL_USB_BUFFERS_SIZE);
-  sdubp->next = 0;
-}
-
 /*
  * Interface implementation.
  */
 
 static size_t writes(void *ip, const uint8_t *bp, size_t n) {
 
+  return chOQWriteTimeout(&((SerialDriver *)ip)->oqueue, bp,
+                          n, TIME_INFINITE);
 }
 
 static size_t reads(void *ip, uint8_t *bp, size_t n) {
 
+  return chIQReadTimeout(&((SerialDriver *)ip)->iqueue, bp,
+                         n, TIME_INFINITE);
 }
 
-static bool_t wouldblock(void *ip) {
+static bool_t putwouldblock(void *ip) {
 
-  return chSemGetCounterI(&((sdubuffer_t *)ip)->sem) <= 0;
+  return chOQIsFullI(&((SerialDriver *)ip)->oqueue);
+}
+
+static bool_t getwouldblock(void *ip) {
+
+  return chIQIsEmptyI(&((SerialDriver *)ip)->iqueue);
 }
 
 static msg_t putt(void *ip, uint8_t b, systime_t timeout) {
 
-  if (wouldblock(ip))
-    return Q_FULL;
+  return chOQPutTimeout(&((SerialDriver *)ip)->oqueue, b, timeout);
 }
 
 static msg_t gett(void *ip, systime_t timeout) {
 
+  return chIQGetTimeout(&((SerialDriver *)ip)->iqueue, timeout);
 }
 
 static size_t writet(void *ip, const uint8_t *bp, size_t n, systime_t time) {
 
+  return chOQWriteTimeout(&((SerialDriver *)ip)->oqueue, bp, n, time);
 }
 
 static size_t readt(void *ip, uint8_t *bp, size_t n, systime_t time) {
 
+  return chIQReadTimeout(&((SerialDriver *)ip)->iqueue, bp, n, time);
 }
 
 static const struct SerialUSBDriverVMT vmt = {
-  writes, reads, wouldblock, wouldblock, putt, gett, writet, readt
+  writes, reads, putwouldblock, getwouldblock, putt, gett, writet, readt
 };
+
+static void inotify(void) {
+}
+
+static void onotify(void) {
+}
 
 /*===========================================================================*/
 /* Driver exported functions.                                                */
@@ -135,12 +139,14 @@ void sduInit(void) {
  */
 void sduObjectInit(SerialUSBDriver *sdup) {
 
-  sdup->vmt    = &vmt;
-  sdup->state  = SDU_STOP;
-  sdup->config = NULL;
-  sdup->flags  = 0;
-  init_rx_buffer(&sdup->rxbuf);
-  init_tx_buffer(&sdup->rxbuf);
+  sdup->vmt = &vmt;
+  chEvtInit(&sdup->ievent);
+  chEvtInit(&sdup->oevent);
+  chEvtInit(&sdup->sevent);
+  sdup->state = SDU_STOP;
+  sdup->flags = SDU_NO_ERROR;
+  chIQInit(&sdup->iqueue, sdup->ib, SERIAL_USB_BUFFERS_SIZE, inotify);
+  chOQInit(&sdup->oqueue, sdup->ob, SERIAL_USB_BUFFERS_SIZE, onotify);
 }
 
 /**
@@ -161,6 +167,7 @@ void sduStart(SerialUSBDriver *sdup, const SerialUSBConfig *config) {
               "invalid state");
   sdup->config = config;
   usbStart(config->usbp, &config->usb_config);
+  config->usbp->usb_param = sdup;
   sdup->state = SDU_READY;
   chSysUnlock();
 }
@@ -220,7 +227,7 @@ sduflags_t sduGetAndClearFlags(SerialUSBDriver *sdup) {
 
   chSysLock();
   mask = sdup->flags;
-  sdup->flags = 0;
+  sdup->flags = SDU_NO_ERROR;
   chSysUnlock();
   return mask;
 }
@@ -254,6 +261,39 @@ bool_t sduRequestsHook(USBDriver *usbp) {
     }
   }
   return FALSE;
+}
+
+/**
+ * @brief   Default data received callback.
+ * @details The application must use this function as callback for the IN
+ *          data endpoint.
+ */
+void sduDataRequest(USBDriver *usbp, usbep_t ep) {
+}
+
+
+/**
+ * @brief   Default data received callback.
+ * @details The application must use this function as callback for the OUT
+ *          data endpoint.
+ */
+void sduDataAvailable(USBDriver *usbp, usbep_t ep) {
+  SerialUSBDriver *sdup = usbp->usb_param;
+
+  chSysLockFromIsr();
+  if (chOQIsEmptyI(&sdup->oqueue)) {
+    sdup->oqueue.q_rdptr = sdup->oqueue.q_wrptr = sdup->oqueue.q_buffer;
+  }
+  chSysUnlockFromIsr();
+}
+
+
+/**
+ * @brief   Default data received callback.
+ * @details The application must use this function as callback for the IN
+ *          interrupt endpoint.
+ */
+void sduInterruptRequest(USBDriver *usbp, usbep_t ep) {
 }
 
 #endif /* HAL_USE_SERIAL */

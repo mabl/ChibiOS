@@ -35,21 +35,13 @@
 /*===========================================================================*/
 
 /** @brief No pending conditions.*/
-#define SD_NO_ERROR             0
+#define SDU_NO_ERROR             0
 /** @brief Connection happened.*/
-#define SD_CONNECTED            1
+#define SDU_CONNECTED            1
 /** @brief Disconnection happened.*/
-#define SD_DISCONNECTED         2
-/** @brief Parity error happened.*/
-#define SD_PARITY_ERROR         4
-/** @brief Framing error happened.*/
-#define SD_FRAMING_ERROR        8
-/** @brief Overflow happened.*/
-#define SD_OVERRUN_ERROR        16
-/** @brief Noise on the line.*/
-#define SD_NOISE_ERROR          32
+#define SDU_DISCONNECTED         2
 /** @brief Break detected.*/
-#define SD_BREAK_DETECTED       64
+#define SDU_BREAK_DETECTED       64
 
 /*===========================================================================*/
 /* Driver pre-compile time settings.                                         */
@@ -93,24 +85,6 @@ typedef enum {
 typedef uint8_t sduflags_t;
 
 /**
- * @brief   Type of an I/O buffer.
- */
-typedef struct {
-  /**
-   * @brief   Buffer guard semaphore.
-   */
-  Semaphore                     sem;
-  /**
-   * @brief   Next position to read or write.
-   */
-  uint8_t                       *next;
-  /**
-   * @brief   Buffer area.
-   */
-  uint8_t                       *buffer[SERIAL_USB_BUFFERS_SIZE];
-} sdubuffer_t;
-
-/**
  * @brief   Structure representing a serial over USB driver.
  */
 typedef struct SerialUSBDriver SerialUSBDriver;
@@ -137,15 +111,22 @@ typedef struct {
 #define _serial_usb_driver_data                                             \
   _base_asynchronous_channel_data                                           \
   /* Driver state.*/                                                        \
-  sdustate_t                    state;                                      \
-  /** Current configuration data.*/                                         \
-  const SerialUSBConfig         *config;                                    \
+  sdustate_t                state;                                          \
+  /* Input queue.*/                                                         \
+  InputQueue                iqueue;                                         \
+  /* Output queue.*/                                                        \
+  OutputQueue               oqueue;                                         \
+  /* Status Change @p EventSource.*/                                        \
+  EventSource               sevent;                                         \
   /* I/O driver status flags.*/                                             \
-  sduflags_t                    flags;                                      \
-  /* Receive buffer.*/                                                      \
-  sdubuffer_t                   rxbuf;                                      \
-  /* Transmit buffer.*/                                                     \
-  sdubuffer_t                   txbuf;
+  sduflags_t                flags;                                          \
+  /* Input circular buffer.*/                                               \
+  uint8_t                   ib[SERIAL_USB_BUFFERS_SIZE];                    \
+  /* Output circular buffer.*/                                              \
+  uint8_t                   ob[SERIAL_USB_BUFFERS_SIZE];                    \
+  /* End of the mandatory fields.*/                                         \
+  /* Current configuration data.*/                                          \
+  const SerialUSBConfig     *config;
 
 /**
  * @brief   @p SerialUSBDriver specific methods.
@@ -191,6 +172,9 @@ extern "C" {
   void sduAddFlagsI(SerialUSBDriver *sdup, sduflags_t mask);
   sduflags_t sduGetAndClearFlags(SerialUSBDriver *sdup);
   bool_t sduRequestsHook(USBDriver *usbp);
+  void sduDataRequest(USBDriver *usbp, usbep_t ep);
+  void sduDataAvailable(USBDriver *usbp, usbep_t ep);
+  void sduInterruptRequest(USBDriver *usbp, usbep_t ep);
 #ifdef __cplusplus
 }
 #endif

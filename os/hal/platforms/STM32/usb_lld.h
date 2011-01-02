@@ -162,6 +162,11 @@ struct USBDriver {
    */
   const USBConfig               *usb_config;
   /**
+   * @brief   Field available to user, it can be used to associate an
+   *          application-defined handler to the USB driver.
+   */
+  void                          *usb_param;
+  /**
    * @brief   Active endpoint descriptors.
    */
   const USBEndpointConfig       *usb_epc[USB_ENDOPOINTS_NUMBER + 1];
