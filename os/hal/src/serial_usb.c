@@ -102,24 +102,44 @@ static const struct SerialUSBDriverVMT vmt = {
   writes, reads, putwouldblock, getwouldblock, putt, gett, writet, readt
 };
 
+/**
+ * @brief   Notification of data removed from the input queue.
+ */
 static void inotify(GenericQueue *qp) {
   SerialUSBDriver *sdup = (SerialUSBDriver *)qp->q_wrptr;
+  size_t n;
 
-  /* Writes in the output queue can only happen when the queue has been
+  /* Writes to the input queue can only happen when the queue has been
      emptied, then a whole packet is loaded in the queue.*/
-  if (chOQIsEmptyI(qp)) {
-    size_t n;
+  if (chIQIsEmptyI(&sdup->iqueue)) {
 
-    n = usbReadI(sdup->config->usbp,
-                 sdup->config->data_available_ep,
-                 sdup->oqueue.q_buffer,
-                 SERIAL_USB_BUFFERS_SIZE);
-    qp->q_rdptr = qp->q_buffer;
-    chSemSetCounterI(&qp->q_sem, n);
+    n = usbReadI(sdup->config->usbp, sdup->config->data_available_ep,
+                 sdup->iqueue.q_buffer, SERIAL_USB_BUFFERS_SIZE);
+    if (n > 0) {
+      sdup->iqueue.q_rdptr = sdup->iqueue.q_buffer;
+      chSemSetCounterI(&sdup->iqueue.q_sem, n);
+    }
   }
 }
 
+/**
+ * @brief   Notification of data inserted into the output queue.
+ */
 static void onotify(GenericQueue *qp) {
+  SerialUSBDriver *sdup = (SerialUSBDriver *)qp->q_rdptr;
+  size_t n;
+
+  /* If there is any data in the output queue then it is sent within a
+     single packet and the queue is emptied.*/
+  n = chOQGetFullI(&sdup->oqueue);
+  if (n > 0) {
+    n = usbWriteI(sdup->config->usbp, sdup->config->data_request_ep,
+                  sdup->oqueue.q_buffer, n);
+    if (n > 0) {
+      sdup->oqueue.q_wrptr = sdup->oqueue.q_buffer;
+      chSemSetCounterI(&sdup->iqueue.q_sem, SERIAL_USB_BUFFERS_SIZE);
+    }
+  }
 }
 
 /*===========================================================================*/
@@ -293,13 +313,16 @@ void sduDataRequest(USBDriver *usbp, usbep_t ep) {
   chSysLockFromIsr();
   /* If there is any data in the output queue then it is sent within a
      single packet and the queue is emptied.*/
-  n = chQSizeI(&sdup->oqueue) - chQSpaceI(&sdup->oqueue);
+  n = chOQGetFullI(&sdup->oqueue);
   if (n > 0) {
-//    usbWriteI(usbp, ep, sdup->oqueue.q_buffer, chOQS);
+    n = usbWriteI(usbp, ep, sdup->oqueue.q_buffer, n);
+    if (n > 0) {
+      sdup->oqueue.q_wrptr = sdup->oqueue.q_buffer;
+      chSemSetCounterI(&sdup->iqueue.q_sem, SERIAL_USB_BUFFERS_SIZE);
+    }
   }
   chSysUnlockFromIsr();
 }
-
 
 /**
  * @brief   Default data available callback.
@@ -316,8 +339,10 @@ void sduDataAvailable(USBDriver *usbp, usbep_t ep) {
     size_t n;
 
     n = usbReadI(usbp, ep, sdup->iqueue.q_buffer, SERIAL_USB_BUFFERS_SIZE);
-    sdup->iqueue.q_rdptr = sdup->iqueue.q_buffer;
-    chSemSetCounterI(&sdup->iqueue.q_sem, n);
+    if (n > 0) {
+      sdup->iqueue.q_rdptr = sdup->iqueue.q_buffer;
+      chSemSetCounterI(&sdup->iqueue.q_sem, n);
+    }
   }
   chSysUnlockFromIsr();
 }
