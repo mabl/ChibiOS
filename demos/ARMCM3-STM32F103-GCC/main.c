@@ -58,7 +58,7 @@ static const USBDescriptor vcom_device_descriptor = {
 };
 
 /* Configuration Descriptor tree for a VCOM.*/
-const uint8_t vcom_configuration_descriptor_data[] = {
+static const uint8_t vcom_configuration_descriptor_data[] = {
   /* Configuration descriptor.*/
   9,                                /* bLength.                             */
   USB_DESCRIPTOR_CONFIGURATION,     /* bDescriptorType.                     */
@@ -155,7 +155,7 @@ static const USBDescriptor vcom_configuration_descriptor = {
 /*
  * U.S. English language identifier.
  */
-const uint8_t vcom_string0[] = {
+static const uint8_t vcom_string0[] = {
   4,                                /* bLength.                             */
   USB_DESCRIPTOR_STRING,            /* bDescriptorType.                     */
   0x09, 0x04                        /* wLANGID (0x0409, U.S. English).      */
@@ -164,7 +164,7 @@ const uint8_t vcom_string0[] = {
 /*
  * Vendor string.
  */
-const uint8_t vcom_string1[] = {
+static const uint8_t vcom_string1[] = {
   38,                               /* bLength.                             */
   USB_DESCRIPTOR_STRING,            /* bDescriptorType.                     */
   'S', 0, 'T', 0, 'M', 0, 'i', 0, 'c', 0, 'r', 0, 'o', 0, 'e', 0,
@@ -175,7 +175,7 @@ const uint8_t vcom_string1[] = {
 /*
  * Device description string.
  */
-const uint8_t vcom_string2[] = {
+static const uint8_t vcom_string2[] = {
   56,                               /* bLength.                             */
   USB_DESCRIPTOR_STRING,            /* bDescriptorType.                     */
   'C', 0, 'h', 0, 'i', 0, 'b', 0, 'i', 0, 'O', 0, 'S', 0, '/', 0,
@@ -187,7 +187,7 @@ const uint8_t vcom_string2[] = {
 /*
  * Serial number string.
  */
-const uint8_t vcom_string3[] = {
+static const uint8_t vcom_string3[] = {
   8,                                /* bLength.                             */
   USB_DESCRIPTOR_STRING,            /* bDescriptorType.                     */
   '0' + CH_KERNEL_MAJOR, 0,
@@ -229,7 +229,7 @@ static const USBDescriptor *get_descriptor(USBDriver *usbp,
 /**
  * @brief   EP1 initialization structure (IN only).
  */
-const USBEndpointConfig ep1config = {
+static const USBEndpointConfig ep1config = {
   sduDataRequest,
   NULL,
   DATA_REQUEST_EP,
@@ -242,7 +242,7 @@ const USBEndpointConfig ep1config = {
 /**
  * @brief   EP2 initialization structure (IN only).
  */
-const USBEndpointConfig ep2config = {
+static const USBEndpointConfig ep2config = {
   sduInterruptRequest,
   NULL,
   INTERRUPT_REQUEST_EP,
@@ -255,12 +255,12 @@ const USBEndpointConfig ep2config = {
 /**
  * @brief   EP3 initialization structure (OUT only).
  */
-const USBEndpointConfig ep3config = {
+static const USBEndpointConfig ep3config = {
   NULL,
   sduDataAvailable,
   DATA_AVAILABLE_EP,
   0x0040,
-  EPR_EP_TYPE_BULK | EPR_STAT_TX_DIS | EPR_STAT_RX_NAK,
+  EPR_EP_TYPE_BULK | EPR_STAT_TX_DIS | EPR_STAT_RX_VALID,
   0x0000,
   0x0110
 };
@@ -364,7 +364,7 @@ int main(void) {
   while (TRUE) {
     if (palReadPad(IOPORT1, GPIOA_BUTTON))
       TestThread(&SD2);
-    chIOWriteTimeout(&SDU1, "Hello World!\r\n", 14, TIME_INFINITE);
+//    chIOWriteTimeout(&SDU1, "Hello World!\r\n", 14, TIME_INFINITE);
     chThdSleepMilliseconds(500);
   }
 }
