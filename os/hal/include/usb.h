@@ -134,8 +134,7 @@ typedef enum {
   USB_EP0_WAITING_STS,                  /**< Waiting status.                */
   USB_EP0_RX,                           /**< Receiving.                     */
   USB_EP0_SENDING_STS,                  /**< Sending status.                */
-  USB_EP0_FATAL                         /**< Final state because fatal
-                                             error.                         */
+  USB_EP0_ERROR                         /**< Error state untile next setup. */
 } usbep0state_t;
 
 /**

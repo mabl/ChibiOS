@@ -407,14 +407,14 @@ void _usb_ep0in(USBDriver *usbp, usbep_t ep) {
 
     usbp->usb_ep0state = USB_EP0_WAITING_SETUP;
     return;
-  default:
-    break;
+  case USB_EP0_ERROR:
+    return;
   }
   usb_lld_stall_in(usbp, 0);
   usb_lld_stall_out(usbp, 0);
   if (usbp->usb_config->uc_state_change_cb)
     usbp->usb_config->uc_state_change_cb(usbp, USB_EVENT_STALLED);
-  usbp->usb_ep0state = USB_EP0_FATAL;
+  usbp->usb_ep0state = USB_EP0_ERROR;
 }
 
 /**
@@ -484,15 +484,15 @@ void _usb_ep0out(USBDriver *usbp, usbep_t ep) {
       usbp->usb_ep0endcb(usbp);
     usbp->usb_ep0state = USB_EP0_WAITING_SETUP;
     return;
-  default:
-    break;
+  case USB_EP0_ERROR:
+    return;
   }
   /* Stalled because it should never happen.*/
   usb_lld_stall_in(usbp, 0);
   usb_lld_stall_out(usbp, 0);
   if (usbp->usb_config->uc_state_change_cb)
     usbp->usb_config->uc_state_change_cb(usbp, USB_EVENT_STALLED);
-  usbp->usb_ep0state = USB_EP0_FATAL;
+  usbp->usb_ep0state = USB_EP0_ERROR;
 }
 
 #endif /* HAL_USE_USB */

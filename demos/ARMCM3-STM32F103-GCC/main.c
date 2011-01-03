@@ -272,13 +272,14 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
 
   switch (event) {
   case USB_EVENT_RESET:
-    usbEPOpenI(usbp, &ep1config);
-    usbEPOpenI(usbp, &ep2config);
-    usbEPOpenI(usbp, &ep3config);
     return;
   case USB_EVENT_ADDRESS:
     return;
   case USB_EVENT_CONFIGURED:
+    /* Opens the endpoints specified into the configuration.*/
+    usbEPOpenI(usbp, &ep1config);
+    usbEPOpenI(usbp, &ep2config);
+    usbEPOpenI(usbp, &ep3config);
     return;
   case USB_EVENT_SUSPEND:
     return;
