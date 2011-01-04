@@ -167,7 +167,7 @@ struct USBDriver {
    */
   void                          *usb_param;
   /**
-   * @brief   Active endpoint descriptors.
+   * @brief   Active endpoints configurations.
    */
   const USBEndpointConfig       *usb_epc[USB_ENDOPOINTS_NUMBER + 1];
   /**
@@ -199,7 +199,7 @@ struct USBDriver {
    */
   uint8_t                       usb_setup[8];
   /**
-   * @brief   Assigned USB address.
+   * @brief   Current USB device status.
    */
   uint16_t                      usb_status;
   /**
@@ -207,7 +207,7 @@ struct USBDriver {
    */
   uint8_t                       usb_address;
   /**
-   * @brief   Selected configuration.
+   * @brief   Current USB device configuration.
    */
   uint8_t                       usb_configuration;
   /* End of the mandatory fields.*/

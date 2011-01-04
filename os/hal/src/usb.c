@@ -163,16 +163,15 @@ static bool_t default_handler(USBDriver *usbp) {
     return TRUE;
   case USB_RTYPE_RECIPIENT_DEVICE | (USB_REQ_GET_DESCRIPTOR << 8):
     /* Handling descriptor requests from the host.*/
-    dp = usbp->usb_config->uc_get_descriptor_cb(usbp,
-                                                usbp->usb_setup[3],
-                                                usbp->usb_setup[2],
-                                                usb_lld_fetch_word(&usbp->usb_setup[4]));
+    dp = usbp->usb_config->uc_get_descriptor_cb(
+           usbp, usbp->usb_setup[3], usbp->usb_setup[2],
+           usb_lld_fetch_word(&usbp->usb_setup[4]));
     if (dp == NULL)
       return FALSE;
     usbSetupTransfer(usbp, (uint8_t *)dp->ud_string, dp->ud_size, NULL);
     return TRUE;
   case USB_RTYPE_RECIPIENT_DEVICE | (USB_REQ_GET_CONFIGURATION << 8):
-    /* Returninh the last selected configuration.*/
+    /* Returning the last selected configuration.*/
     usbSetupTransfer(usbp, &usbp->usb_configuration, 1, NULL);
     return TRUE;
   case USB_RTYPE_RECIPIENT_DEVICE | (USB_REQ_SET_CONFIGURATION << 8):
@@ -250,7 +249,7 @@ static bool_t default_handler(USBDriver *usbp) {
   case USB_RTYPE_RECIPIENT_INTERFACE | (USB_REQ_SET_FEATURE << 8):
   case USB_RTYPE_RECIPIENT_INTERFACE | (USB_REQ_GET_INTERFACE << 8):
   case USB_RTYPE_RECIPIENT_INTERFACE | (USB_REQ_SET_INTERFACE << 8):
-    /* All the above requestes are not handled here, if you need them then
+    /* All the above requests are not handled here, if you need them then
        use the hook mechanism and provide handling.*/
   default:
     return FALSE;
@@ -276,7 +275,7 @@ void usbInit(void) {
 /**
  * @brief   Initializes the standard part of a @p USBDriver structure.
  *
- * @param[in] usbp      pointer to the @p USBDriver object
+ * @param[out] usbp     pointer to the @p USBDriver object
  *
  * @init
  */
@@ -391,9 +390,11 @@ void _usb_ep0in(USBDriver *usbp, usbep_t ep) {
     usbp->usb_ep0max  -= usbp->usb_ep0lastsize;
     usbp->usb_ep0n    -= usbp->usb_ep0lastsize;
 
-    /* The final condition is when the requested size has been transmitted or when a
-       packet has been sent with size less than the maximum packet size.*/
-    if ((usbp->usb_ep0max == 0) || (usbp->usb_ep0lastsize < usb_lld_ep0config.uepc_size))
+    /* The final condition is when the requested size has been transmitted or
+       when a packet has been sent with size less than the maximum packet
+       size.*/
+    if ((usbp->usb_ep0max == 0) ||
+        (usbp->usb_ep0lastsize < usb_lld_ep0config.uepc_size))
       usbp->usb_ep0state = USB_EP0_WAITING_STS;
     else {
       usbp->usb_ep0lastsize = usbp->usb_ep0n > usb_lld_ep0config.uepc_size ?
@@ -410,6 +411,7 @@ void _usb_ep0in(USBDriver *usbp, usbep_t ep) {
   case USB_EP0_ERROR:
     return;
   }
+  /* Error response.*/
   usb_lld_stall_in(usbp, 0);
   usb_lld_stall_out(usbp, 0);
   if (usbp->usb_config->uc_state_change_cb)
@@ -487,7 +489,7 @@ void _usb_ep0out(USBDriver *usbp, usbep_t ep) {
   case USB_EP0_ERROR:
     return;
   }
-  /* Stalled because it should never happen.*/
+  /* Error response.*/
   usb_lld_stall_in(usbp, 0);
   usb_lld_stall_out(usbp, 0);
   if (usbp->usb_config->uc_state_change_cb)

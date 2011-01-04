@@ -96,7 +96,7 @@ typedef struct USBDriver USBDriver;
 typedef uint8_t usbep_t;
 
 /**
- * @brief   Driver state machine possible states.
+ * @brief   Type of a driver state machine possible states.
  */
 typedef enum {
   USB_UNINIT   = 0,                     /**< Not initialized.               */
@@ -107,7 +107,7 @@ typedef enum {
 } usbstate_t;
 
 /**
- * @brief   Endpoint type.
+ * @brief   Type of an endpoint type.
  */
 typedef enum {
   EP_TYPE_CTRL = 0,                     /**< Control endpoint.              */
@@ -117,7 +117,7 @@ typedef enum {
 } usbeptype_t;
 
 /**
- * @brief   Endpoint status.
+ * @brief   Type of an endpoint status.
  */
 typedef enum {
   EP_STATUS_DISABLED = 0,               /**< Endpoint not opened.           */
@@ -126,7 +126,7 @@ typedef enum {
 } usbepstatus_t;
 
 /**
- * @brief   Endpoint zero state machine states.
+ * @brief   Type of an endpoint zero state machine states.
  */
 typedef enum {
   USB_EP0_WAITING_SETUP,                /**< Waiting for SETUP data.        */
@@ -138,7 +138,7 @@ typedef enum {
 } usbep0state_t;
 
 /**
- * @brief   Enumeration of the possible USB events.
+ * @brief   Type of an enumeration of the possible USB events.
  */
 typedef enum {
   USB_EVENT_RESET = 0,                  /**< Driver has been reset by host. */
@@ -150,7 +150,7 @@ typedef enum {
 } usbevent_t;
 
 /**
- * @brief   USB descriptor.
+ * @brief   Type of an USB descriptor.
  */
 typedef struct {
   /**
@@ -245,7 +245,7 @@ typedef const USBDescriptor * (*usbgetdescriptor_t)(USBDriver *usbp,
  *
  * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] ep        endpoint number
- * @param[in] buf       buffer where to copy the endpoint data
+ * @param[out] buf      buffer where to copy the endpoint data
  * @param[in] n         maximum number of bytes to copy
  * @return              The number of bytes that were effectively available.
  * @retval 0            There is no data available to read.

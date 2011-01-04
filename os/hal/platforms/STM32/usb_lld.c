@@ -294,7 +294,7 @@ size_t usb_lld_get_readable(USBDriver *usbp, usbep_t ep) {
  *
  * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] ep        endpoint number
- * @param[in] buf       buffer where to copy the endpoint data
+ * @param[out] buf      buffer where to copy the endpoint data
  * @param[in] n         maximum number of bytes to copy
  * @return              The number of bytes that were effectively available.
  * @retval 0            There is no data available to read.
@@ -330,8 +330,7 @@ size_t usb_lld_read(USBDriver *usbp, usbep_t ep, uint8_t *buf, size_t n) {
  *          the endpoint is brought to the valid state in order to allow
  *          transmission.
  *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
+ * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] ep        endpoint number
  * @param[in] buf       buffer where to copy the endpoint data
  * @param[in] n         maximum number of bytes to copy
@@ -340,7 +339,9 @@ size_t usb_lld_read(USBDriver *usbp, usbep_t ep, uint8_t *buf, size_t n) {
  *
  * @notapi
  */
-size_t usb_lld_write(USBDriver *usbp, usbep_t ep, const uint8_t *buf, size_t n) {
+size_t usb_lld_write(USBDriver *usbp, usbep_t ep,
+                     const uint8_t *buf,
+                     size_t n) {
   uint32_t *pmap;
   stm32_usb_descriptor_t *udp;
   size_t count;
@@ -364,8 +365,7 @@ size_t usb_lld_write(USBDriver *usbp, usbep_t ep, const uint8_t *buf, size_t n) 
 /**
  * @brief   Returns the status of an IN endpoint.
  *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
+ * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] ep        endpoint number
  *
  * @notapi
@@ -385,8 +385,7 @@ usbepstatus_t usb_lld_get_status_in(USBDriver *usbp, usbep_t ep) {
 /**
  * @brief   Returns the status of an OUT endpoint.
  *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
+ * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] ep        endpoint number
  *
  * @notapi
@@ -406,8 +405,7 @@ usbepstatus_t usb_lld_get_status_out(USBDriver *usbp, usbep_t ep) {
 /**
  * @brief   Brings an IN endpoint in the stalled state.
  *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
+ * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] ep        endpoint number
  *
  * @notapi
@@ -420,8 +418,7 @@ void usb_lld_stall_in(USBDriver *usbp, usbep_t ep) {
 /**
  * @brief   Brings an OUT endpoint in the stalled state.
  *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
+ * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] ep        endpoint number
  *
  * @notapi
@@ -436,8 +433,7 @@ void usb_lld_stall_out(USBDriver *usbp, usbep_t ep) {
 /**
  * @brief   Brings an IN endpoint in the active state.
  *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
+ * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] ep        endpoint number
  *
  * @notapi
@@ -453,8 +449,7 @@ void usb_lld_clear_in(USBDriver *usbp, usbep_t ep) {
 /**
  * @brief   Brings an OUT endpoint in the active state.
  *
- * @param[in] usbp      pointer to the @p USBDriver object triggering the
- *                      callback
+ * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] ep        endpoint number
  *
  * @notapi
