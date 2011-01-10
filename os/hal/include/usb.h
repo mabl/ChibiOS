@@ -214,6 +214,15 @@ typedef const USBDescriptor * (*usbgetdescriptor_t)(USBDriver *usbp,
 /*===========================================================================*/
 /* Driver macros.                                                            */
 /*===========================================================================*/
+/**
+ * @brief   Returns the current frame number.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object
+ * @return              The current frame number.
+ *
+ * @notapi
+ */
+#define usbGetFrameNumber(usbp) usb_lld_get_frame_number(usbp)
 
 /**
  * @brief   Activates an endpoint.

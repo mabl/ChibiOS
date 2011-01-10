@@ -91,15 +91,21 @@ CH_IRQ_HANDLER(USB_LP_IRQHandler) {
 
   CH_IRQ_PROLOGUE();
 
-  /*
-   * USB bus reset condition handling.
-   */
   istr = STM32_USB->ISTR;
+
+  /* USB bus reset condition handling.*/
   if (istr & ISTR_RESET) {
     _usb_reset(usbp);
-    if (usbp->usb_config->uc_state_change_cb)
-      usbp->usb_config->uc_state_change_cb(usbp, USB_EVENT_RESET);
+    if (usbp->usb_config->uc_event_cb)
+      usbp->usb_config->uc_event_cb(usbp, USB_EVENT_RESET);
     STM32_USB->ISTR = ~ISTR_RESET;
+  }
+
+  /* SOF handling.*/
+  if (istr & ISTR_SOF) {
+    if (usbp->usb_config->uc_event_cb)
+      usbp->usb_config->uc_event_cb(usbp, USB_EVENT_SOF);
+    STM32_USB->ISTR = ~ISTR_SOF;
   }
 
   /* Endpoint events handling.*/
@@ -212,6 +218,7 @@ void usb_lld_stop(USBDriver *usbp) {
  * @notapi
  */
 void usb_lld_reset(USBDriver *usbp) {
+  uint32_t cntr;
 
   /* Powers up the transceiver while holding the USB in reset state.*/
   STM32_USB->CNTR   = CNTR_FRES;
@@ -220,8 +227,13 @@ void usb_lld_reset(USBDriver *usbp) {
   STM32_USB->CNTR   = 0;
   STM32_USB->ISTR   = 0;
   STM32_USB->DADDR  = DADDR_EF;
-  STM32_USB->CNTR   = /*CNTR_ESOFM | CNTR_SOFM |*/ CNTR_RESETM  | /*CNTR_SUSPM |*/
-                          /*CNTR_WKUPM | CNTR_ERRM | CNTR_PMAOVRM |*/ CNTR_CTRM;
+  cntr              = /*CNTR_ESOFM | */ CNTR_RESETM  | /*CNTR_SUSPM |*/
+                      /*CNTR_WKUPM | CNTR_ERRM | CNTR_PMAOVRM |*/ CNTR_CTRM;
+  /* The SOF interrupt is only enabled if a callback is defined for
+     this service because it is an high rate source.*/
+  if (usbp->usb_config->uc_sof_cb != NULL)
+    cntr |= CNTR_SOFM;
+  STM32_USB->CNTR = cntr;
   usb_lld_ep_open(usbp, &usb_lld_ep0config);
 }
 

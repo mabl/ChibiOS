@@ -131,10 +131,9 @@ typedef struct {
 typedef struct {
   /**
    * @brief   USB events callback.
-   * @details This callback is invoked when the USB driver changes state
-   *          because an external event.
+   * @details This callback is invoked when an USB driver event is registered.
    */
-  usbeventcb_t                  uc_state_change_cb;
+  usbeventcb_t                  uc_event_cb;
   /**
    * @brief   Device GET_DESCRIPTOR request callback.
    * @note    This callback is mandatory and cannot be set to @p NULL.
@@ -146,6 +145,10 @@ typedef struct {
    *          handle non standard requests.
    */
   usbreqhandler_t               uc_requests_hook_cb;
+  /**
+   * @brief   Start Of Frame callback.
+   */
+  usbcallback_t                 uc_sof_cb;
   /* End of the mandatory fields.*/
 } USBConfig;
 
@@ -225,6 +228,16 @@ struct USBDriver {
  * @notapi
  */
 #define usb_lld_fetch_word(p) (*(uint16_t *)p)
+
+/**
+ * @brief   Returns the current frame number.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object
+ * @return              The current frame number.
+ *
+ * @notapi
+ */
+#define usb_lld_get_frame_number(usbp) (STM32_USB->FNR & FNR_FN_MASK)
 
 /*===========================================================================*/
 /* External declarations.                                                    */

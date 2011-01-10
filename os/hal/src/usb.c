@@ -56,8 +56,8 @@ void set_address(USBDriver *usbp) {
 
   usbp->usb_address = usbp->usb_setup[2];
   usb_lld_set_address(usbp, usbp->usb_address);
-  if (usbp->usb_config->uc_state_change_cb)
-    usbp->usb_config->uc_state_change_cb(usbp, USB_EVENT_ADDRESS);
+  if (usbp->usb_config->uc_event_cb)
+    usbp->usb_config->uc_event_cb(usbp, USB_EVENT_ADDRESS);
   usbp->usb_state = USB_SELECTED;
 }
 
@@ -177,16 +177,12 @@ static bool_t default_handler(USBDriver *usbp) {
   case USB_RTYPE_RECIPIENT_DEVICE | (USB_REQ_SET_CONFIGURATION << 8):
     /* Handling configuration selection from the host.*/
     usbp->usb_configuration = usbp->usb_setup[2];
-    if (usbp->usb_configuration == 0) {
-      if (usbp->usb_config->uc_state_change_cb)
-        usbp->usb_config->uc_state_change_cb(usbp, USB_EVENT_ADDRESS);
+    if (usbp->usb_configuration == 0)
       usbp->usb_state = USB_SELECTED;
-    }
-    else {
-      if (usbp->usb_config->uc_state_change_cb)
-        usbp->usb_config->uc_state_change_cb(usbp, USB_EVENT_CONFIGURED);
+    else
       usbp->usb_state = USB_ACTIVE;
-    }
+    if (usbp->usb_config->uc_event_cb)
+      usbp->usb_config->uc_event_cb(usbp, USB_EVENT_CONFIGURED);
     usbSetupTransfer(usbp, NULL, 0, NULL);
     return TRUE;
   case USB_RTYPE_RECIPIENT_INTERFACE | (USB_REQ_GET_STATUS << 8):
@@ -414,8 +410,8 @@ void _usb_ep0in(USBDriver *usbp, usbep_t ep) {
   /* Error response.*/
   usb_lld_stall_in(usbp, 0);
   usb_lld_stall_out(usbp, 0);
-  if (usbp->usb_config->uc_state_change_cb)
-    usbp->usb_config->uc_state_change_cb(usbp, USB_EVENT_STALLED);
+  if (usbp->usb_config->uc_event_cb)
+    usbp->usb_config->uc_event_cb(usbp, USB_EVENT_STALLED);
   usbp->usb_ep0state = USB_EP0_ERROR;
 }
 
@@ -492,8 +488,8 @@ void _usb_ep0out(USBDriver *usbp, usbep_t ep) {
   /* Error response.*/
   usb_lld_stall_in(usbp, 0);
   usb_lld_stall_out(usbp, 0);
-  if (usbp->usb_config->uc_state_change_cb)
-    usbp->usb_config->uc_state_change_cb(usbp, USB_EVENT_STALLED);
+  if (usbp->usb_config->uc_event_cb)
+    usbp->usb_config->uc_event_cb(usbp, USB_EVENT_STALLED);
   usbp->usb_ep0state = USB_EP0_ERROR;
 }
 

@@ -299,7 +299,8 @@ static const SerialUSBConfig serusbcfg = {
   {
     usb_event,
     get_descriptor,
-    sduRequestsHook
+    sduRequestsHook,
+    NULL
   },
   DATA_REQUEST_EP,
   DATA_AVAILABLE_EP,
