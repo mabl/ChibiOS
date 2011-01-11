@@ -103,8 +103,8 @@ CH_IRQ_HANDLER(USB_LP_IRQHandler) {
 
   /* SOF handling.*/
   if (istr & ISTR_SOF) {
-    if (usbp->usb_config->uc_event_cb)
-      usbp->usb_config->uc_event_cb(usbp, USB_EVENT_SOF);
+    if (usbp->usb_config->uc_sof_cb)
+      usbp->usb_config->uc_sof_cb(usbp);
     STM32_USB->ISTR = ~ISTR_SOF;
   }
 
