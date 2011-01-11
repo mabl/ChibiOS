@@ -88,7 +88,7 @@
  * @brief Enables the MAC subsystem.
  */
 #if !defined(CH_HAL_USE_MAC) || defined(__DOXYGEN__)
-#define CH_HAL_USE_MAC              FALSE
+#define CH_HAL_USE_MAC              TRUE
 #endif
 
 /*===========================================================================*/

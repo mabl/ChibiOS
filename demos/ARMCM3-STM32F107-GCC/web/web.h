@@ -24,44 +24,38 @@
     for full details of how and when the exception can be applied.
 */
 
-#include "ch.h"
-#include "hal.h"
-
-/*
- * Early initialization code.
- * This initialization is performed just after reset before BSS and DATA
- * segments initialization.
+/**
+ * @file web.h
+ * @brief HTTP server wrapper thread macros and structures.
+ * @addtogroup WEB_THREAD
+ * @{
  */
-void hwinit0(void) {
 
-  stm32_clock_init();
+#ifndef _WEB_H_
+#define _WEB_H_
+
+#ifndef WEB_THREAD_STACK_SIZE
+#define WEB_THREAD_STACK_SIZE   1024
+#endif
+
+#ifndef WEB_THREAD_PORT
+#define WEB_THREAD_PORT         80
+#endif
+
+#ifndef WEB_THREAD_PRIORITY
+#define WEB_THREAD_PRIORITY     (LOWPRIO + 2)
+#endif
+
+extern WORKING_AREA(wa_http_server, WEB_THREAD_STACK_SIZE);
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+  msg_t http_server(void *p);
+#ifdef __cplusplus
 }
+#endif
 
-/*
- * Late initialization code.
- * This initialization is performed after BSS and DATA segments initialization
- * and before invoking the main() function.
- */
-void hwinit1(void) {
+#endif /* _WEB_H_ */
 
-  /*
-   * HAL initialization.
-   */
-  halInit();
-
-  /*
-   * Remap USART2 to the PD5/PD6 pins, done after halInit since HAL resets
-   * these.
-   */
-  AFIO->MAPR |= AFIO_MAPR_USART2_REMAP;
-
-  /*
-   * Remap Ethernet RX_DV and RxD[3:0]
-   */
-  AFIO->MAPR |= AFIO_MAPR_ETH_REMAP;
-
-  /*
-   * ChibiOS/RT initialization.
-   */
-  chSysInit();
-}
+/** @} */

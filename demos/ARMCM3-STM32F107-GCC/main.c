@@ -27,6 +27,8 @@
 #include "ch.h"
 #include "hal.h"
 #include "test.h"
+#include "lwip/lwipthread.h"
+#include "web/web.h"
 
 /*
  * Red LEDs blinker thread, times are in milliseconds.
@@ -62,6 +64,18 @@ int main(int argc, char **argv) {
    * Creates the blinker thread.
    */
   chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO, Thread1, NULL);
+
+  /*
+   * Creates the LWIP threads (it changes priority internally).
+   */
+  chThdCreateStatic(wa_lwip_thread, LWIP_THREAD_STACK_SIZE, NORMALPRIO + 1,
+                    lwip_thread, NULL);
+
+  /*
+   * Creates the HTTP thread (it changes priority internally).
+   */
+  chThdCreateStatic(wa_http_server, sizeof(wa_http_server), NORMALPRIO + 1,
+                    http_server, NULL);
 
   /*
    * Normal main() thread activity, in this demo it does nothing except
