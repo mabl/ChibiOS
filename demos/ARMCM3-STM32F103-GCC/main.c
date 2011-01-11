@@ -35,7 +35,7 @@ static SerialUSBDriver SDU1;
 static const uint8_t vcom_device_descriptor_data[] = {
   18,                               /* bLength.                             */
   USB_DESCRIPTOR_DEVICE,            /* bDescriptorType.                     */
-  0x00, 0x02,                       /* bcdUSB (2.00).                       */
+  0x10, 0x01,                       /* bcdUSB (1.1).                        */
   0x02,                             /* bDeviceClass (CDC).                  */
   0x00,                             /* bDeviceSubClass.                     */
   0x00,                             /* bDeviceProtocol.                     */
@@ -324,7 +324,6 @@ static msg_t Thread1(void *arg) {
     palSetPad(IOPORT3, GPIOC_LED);
     chThdSleepMilliseconds(500);
   }
-  return 0;
 }
 
 /*
