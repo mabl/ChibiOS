@@ -31,7 +31,9 @@
 
 static SerialUSBDriver SDU1;
 
-/* USB Standard Device Descriptor.*/
+/*
+ * USB Device Descriptor.
+ */
 static const uint8_t vcom_device_descriptor_data[] = {
   18,                               /* bLength.                             */
   USB_DESCRIPTOR_DEVICE,            /* bDescriptorType.                     */
@@ -50,7 +52,7 @@ static const uint8_t vcom_device_descriptor_data[] = {
 };
 
 /*
- * Configuration descriptor wrapper.
+ * Device descriptor wrapper.
  */
 static const USBDescriptor vcom_device_descriptor = {
   sizeof (vcom_device_descriptor_data),
@@ -150,7 +152,6 @@ static const USBDescriptor vcom_configuration_descriptor = {
   sizeof (vcom_configuration_descriptor_data),
   vcom_configuration_descriptor_data
 };
-
 
 /*
  * U.S. English language identifier.
