@@ -226,13 +226,32 @@ typedef const USBDescriptor * (*usbgetdescriptor_t)(USBDriver *usbp,
 
 /**
  * @brief   Enables an endpoint.
+ * @details This function enables an endpoint, both IN and/or OUT directions
+ *          depending on the configuration structure.
+ * @note    This function must be invoked in response of a SET_CONFIGURATION
+ *          or SET_INTERFACE message.
  *
  * @param[in] usbp      pointer to the @p USBDriver object
+ * @param[in] ep        endpoint number
  * @param[in] epcp      the endpoint configuration
  *
  * @iclass
  */
-#define usbEnableEndpointI(usbp, epcp) usb_lld_enable_endpoint(usbp, epcp)
+#define usbEnableEndpointI(usbp, ep, epcp)                                  \
+  usb_lld_enable_endpoint(usbp, ep, epcp)
+
+/**
+ * @brief   Disables all the active endpoints.
+ * @details This function disables all the active endpoints except the
+ *          endpoint zero.
+ * @note    This function must be invoked in response of a SET_CONFIGURATION
+ *          message with configuration number zero.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object
+ *
+ * @iclass
+ */
+#define usbDisableEndpointsI(usbp) usb_lld_disable_endpoints(usbp)
 
 /**
  * @brief   Returns the number of bytes readable from the packet buffer.
@@ -309,7 +328,6 @@ extern "C" {
   void usbObjectInit(USBDriver *usbp);
   void usbStart(USBDriver *usbp, const USBConfig *config);
   void usbStop(USBDriver *usbp);
-  void usbEnableEndpoint(USBDriver *usbp, const USBEndpointConfig *epcp);
   void _usb_reset(USBDriver *usbp);
   void _usb_ep0in(USBDriver *usbp, usbep_t ep);
   void _usb_ep0out(USBDriver *usbp, usbep_t ep);

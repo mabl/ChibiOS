@@ -104,10 +104,6 @@ typedef struct {
    * @brief   OUT endpoint maximum packet size.
    */
   uint16_t                      uepc_out_maxsize;
-  /**
-   * @brief   Endpoint address.
-   */
-  usbep_t                       uepc_addr;
   /* End of the mandatory fields.*/
   /**
    * @brief   EPxR register initialization value.
@@ -258,8 +254,9 @@ extern "C" {
   void usb_lld_stop(USBDriver *usbp);
   void usb_lld_reset(USBDriver *usbp);
   void usb_lld_set_address(USBDriver *usbp, uint8_t addr);
-  void usb_lld_enable_endpoint(USBDriver *usbp,
+  void usb_lld_enable_endpoint(USBDriver *usbp, usbep_t ep,
                                const USBEndpointConfig *epcp);
+  void usb_lld_disable_endpoints(USBDriver *usbp);
   size_t usb_lld_get_readable(USBDriver *usbp, usbep_t ep);
   size_t usb_lld_read(USBDriver *usbp, usbep_t ep,
                       uint8_t *buf, size_t n);

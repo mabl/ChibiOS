@@ -325,24 +325,6 @@ void usbStop(USBDriver *usbp) {
 }
 
 /**
- * @brief   Enables an endpoint.
- *
- * @param[in] usbp      pointer to the @p USBDriver object
- * @param[in] epcp      the endpoint configuration
- *
- * @notapi
- */
-void usbEnableEndpoint(USBDriver *usbp, const USBEndpointConfig *epcp) {
-
-  chDbgAssert(usbp->usb_state == USB_READY,
-              "usbEnableEndpoint(), #1", "invalid state");
-
-  chSysLock();
-  usb_lld_enable_endpoint(usbp, epcp);
-  chSysUnlock();
-}
-
-/**
  * @brief   USB reset routine.
  *
  * @param[in] usbp      pointer to the @p USBDriver object

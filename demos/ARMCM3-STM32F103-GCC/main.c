@@ -238,7 +238,6 @@ static const USBEndpointConfig ep1config = {
   NULL,
   0x0040,
   0x0000,
-  DATA_REQUEST_EP,
   EPR_EP_TYPE_BULK | EPR_STAT_TX_NAK | EPR_STAT_RX_DIS,
   0x00C0,
   0x0000
@@ -252,7 +251,6 @@ static const USBEndpointConfig ep2config = {
   NULL,
   0x0010,
   0x0000,
-  INTERRUPT_REQUEST_EP,
   EPR_EP_TYPE_INTERRUPT | EPR_STAT_TX_NAK | EPR_STAT_RX_DIS,
   0x0100,
   0x0000
@@ -266,7 +264,6 @@ static const USBEndpointConfig ep3config = {
   sduDataAvailable,
   0x0000,
   0x0040,
-  DATA_AVAILABLE_EP,
   EPR_EP_TYPE_BULK | EPR_STAT_TX_DIS | EPR_STAT_RX_VALID,
   0x0000,
   0x0110
@@ -285,9 +282,9 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
   case USB_EVENT_CONFIGURED:
     /* Enables the endpoints specified into the configuration.*/
     chSysLock();
-    usbEnableEndpointI(usbp, &ep1config);
-    usbEnableEndpointI(usbp, &ep2config);
-    usbEnableEndpointI(usbp, &ep3config);
+    usbEnableEndpointI(usbp, DATA_REQUEST_EP, &ep1config);
+    usbEnableEndpointI(usbp, INTERRUPT_REQUEST_EP, &ep2config);
+    usbEnableEndpointI(usbp, DATA_AVAILABLE_EP, &ep3config);
     chSysUnlock();
     return;
   case USB_EVENT_SUSPEND:
@@ -352,7 +349,6 @@ static msg_t Thread2(void *arg) {
       size_t n = chIQReadTimeout(&sdup->iqueue, buffer,
                                  sizeof(buffer), TIME_IMMEDIATE);
       chOQWriteTimeout(&sdup->oqueue, buffer, n, TIME_IMMEDIATE);
-
     }
   }
 }

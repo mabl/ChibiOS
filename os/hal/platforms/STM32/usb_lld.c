@@ -50,7 +50,6 @@ const USBEndpointConfig usb_lld_ep0config = {
   _usb_ep0out,
   0x40,
   0x40,
-  0,
   EPR_EP_TYPE_CONTROL | EPR_STAT_TX_STALL | EPR_STAT_RX_VALID,
   0x40,
   0x80
@@ -229,7 +228,7 @@ void usb_lld_reset(USBDriver *usbp) {
   if (usbp->usb_config->uc_sof_cb != NULL)
     cntr |= CNTR_SOFM;
   STM32_USB->CNTR = cntr;
-  usb_lld_enable_endpoint(usbp, &usb_lld_ep0config);
+  usb_lld_enable_endpoint(usbp, 0, &usb_lld_ep0config);
 }
 
 /**
@@ -249,31 +248,33 @@ void usb_lld_set_address(USBDriver *usbp, uint8_t addr) {
  * @brief   Enables an endpoint.
  *
  * @param[in] usbp      pointer to the @p USBDriver object
+ * @param[in] ep        endpoint number
  * @param[in] epcp      the endpoint configuration
  *
  * @notapi
  */
-void usb_lld_enable_endpoint(USBDriver *usbp, const USBEndpointConfig *epcp) {
+void usb_lld_enable_endpoint(USBDriver *usbp, usbep_t ep,
+                             const USBEndpointConfig *epcp) {
   uint16_t nblocks;
   stm32_usb_descriptor_t *dp;
 
   /* EPxR register setup.*/
-  EPR_SET(epcp->uepc_addr, epcp->uepc_epr | epcp->uepc_addr);
-  EPR_TOGGLE(epcp->uepc_addr, epcp->uepc_epr);
+  EPR_SET(ep, epcp->uepc_epr | ep);
+  EPR_TOGGLE(ep, epcp->uepc_epr);
 
   /* Endpoint size and address initialization.*/
   if (epcp->uepc_out_maxsize > 62)
     nblocks = (((((epcp->uepc_out_maxsize - 1) | 0x1f) + 1) / 32) << 10) | 0x8000;
   else
     nblocks = ((((epcp->uepc_out_maxsize - 1) | 1) + 1) / 2) << 10;
-  dp = USB_GET_DESCRIPTOR(epcp->uepc_addr);
+  dp = USB_GET_DESCRIPTOR(ep);
   dp->TXCOUNT = 0;
   dp->RXCOUNT = nblocks;
   dp->TXADDR  = epcp->uepc_inaddr;
   dp->RXADDR  = epcp->uepc_outaddr;
 
   /* Logically enabling the endpoint in the USBDriver structure.*/
-  usbp->usb_epc[epcp->uepc_addr] = epcp;
+  usbp->usb_epc[ep] = epcp;
 }
 
 /**
