@@ -116,18 +116,12 @@ CH_IRQ_HANDLER(USB_LP_IRQHandler) {
     if (epr & EPR_CTR_TX) {
       /* IN endpoint, transmission.*/
       EPR_CLEAR_CTR_TX(ep);
-      if (ep != 0) {
-        asm("nop");
-      }
       if (usbp->usb_epc[ep]->uepc_in_cb)
         usbp->usb_epc[ep]->uepc_in_cb(usbp, ep);
     }
     if (epr & EPR_CTR_RX) {
       /* OUT endpoint, receive.*/
       EPR_CLEAR_CTR_RX(ep);
-      if (ep != 0) {
-        asm("nop");
-      }
       if (usbp->usb_epc[ep]->uepc_out_cb)
         usbp->usb_epc[ep]->uepc_out_cb(usbp, ep);
     }
