@@ -97,18 +97,17 @@ typedef struct {
    */
   usbepcallback_t               uepc_out_cb;
   /**
+   * @brief   IN endpoint maximum packet size.
+   */
+  uint16_t                      uepc_in_maxsize;
+  /**
+   * @brief   OUT endpoint maximum packet size.
+   */
+  uint16_t                      uepc_out_maxsize;
+  /**
    * @brief   Endpoint address.
    */
-  uint32_t                      uepc_addr;
-  /**
-   * @brief   Endpoint maximum packet size.
-   * @note    This size is allocated twice for:
-   *          - Isochronous endpoints.
-   *          - Double buffered bulk endpoint.
-   *          - Endpoints with both IN and OUT directions enabled.
-   *          .
-   */
-  size_t                        uepc_size;
+  usbep_t                       uepc_addr;
   /* End of the mandatory fields.*/
   /**
    * @brief   EPxR register initialization value.
@@ -259,10 +258,13 @@ extern "C" {
   void usb_lld_stop(USBDriver *usbp);
   void usb_lld_reset(USBDriver *usbp);
   void usb_lld_set_address(USBDriver *usbp, uint8_t addr);
-  void usb_lld_ep_open(USBDriver *usbp, const USBEndpointConfig *epcp);
+  void usb_lld_enable_endpoint(USBDriver *usbp,
+                               const USBEndpointConfig *epcp);
   size_t usb_lld_get_readable(USBDriver *usbp, usbep_t ep);
-  size_t usb_lld_read(USBDriver *usbp, usbep_t ep, uint8_t *buf, size_t n);
-  size_t usb_lld_write(USBDriver *usbp, usbep_t ep, const uint8_t *buf, size_t n);
+  size_t usb_lld_read(USBDriver *usbp, usbep_t ep,
+                      uint8_t *buf, size_t n);
+  size_t usb_lld_write(USBDriver *usbp, usbep_t ep,
+                       const uint8_t *buf, size_t n);
   usbepstatus_t usb_lld_get_status_in(USBDriver *usbp, usbep_t ep);
   usbepstatus_t usb_lld_get_status_out(USBDriver *usbp, usbep_t ep);
   void usb_lld_stall_in(USBDriver *usbp, usbep_t ep);

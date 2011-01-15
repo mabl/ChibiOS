@@ -29,6 +29,9 @@
 #define INTERRUPT_REQUEST_EP    2
 #define DATA_AVAILABLE_EP       3
 
+/*
+ * USB driver structure.
+ */
 static SerialUSBDriver SDU1;
 
 /*
@@ -233,8 +236,9 @@ static const USBDescriptor *get_descriptor(USBDriver *usbp,
 static const USBEndpointConfig ep1config = {
   sduDataRequest,
   NULL,
-  DATA_REQUEST_EP,
   0x0040,
+  0x0000,
+  DATA_REQUEST_EP,
   EPR_EP_TYPE_BULK | EPR_STAT_TX_NAK | EPR_STAT_RX_DIS,
   0x00C0,
   0x0000
@@ -246,8 +250,9 @@ static const USBEndpointConfig ep1config = {
 static const USBEndpointConfig ep2config = {
   sduInterruptRequest,
   NULL,
-  INTERRUPT_REQUEST_EP,
   0x0010,
+  0x0000,
+  INTERRUPT_REQUEST_EP,
   EPR_EP_TYPE_INTERRUPT | EPR_STAT_TX_NAK | EPR_STAT_RX_DIS,
   0x0100,
   0x0000
@@ -259,8 +264,9 @@ static const USBEndpointConfig ep2config = {
 static const USBEndpointConfig ep3config = {
   NULL,
   sduDataAvailable,
-  DATA_AVAILABLE_EP,
+  0x0000,
   0x0040,
+  DATA_AVAILABLE_EP,
   EPR_EP_TYPE_BULK | EPR_STAT_TX_DIS | EPR_STAT_RX_VALID,
   0x0000,
   0x0110
@@ -277,10 +283,12 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
   case USB_EVENT_ADDRESS:
     return;
   case USB_EVENT_CONFIGURED:
-    /* Opens the endpoints specified into the configuration.*/
-    usbEPOpenI(usbp, &ep1config);
-    usbEPOpenI(usbp, &ep2config);
-    usbEPOpenI(usbp, &ep3config);
+    /* Enables the endpoints specified into the configuration.*/
+    chSysLock();
+    usbEnableEndpointI(usbp, &ep1config);
+    usbEnableEndpointI(usbp, &ep2config);
+    usbEnableEndpointI(usbp, &ep3config);
+    chSysUnlock();
     return;
   case USB_EVENT_SUSPEND:
     return;

@@ -225,14 +225,14 @@ typedef const USBDescriptor * (*usbgetdescriptor_t)(USBDriver *usbp,
 #define usbGetFrameNumber(usbp) usb_lld_get_frame_number(usbp)
 
 /**
- * @brief   Activates an endpoint.
+ * @brief   Enables an endpoint.
  *
  * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] epcp      the endpoint configuration
  *
  * @iclass
  */
-#define usbEPOpenI(usbp, epcp) usb_lld_ep_open(usbp, epcp)
+#define usbEnableEndpointI(usbp, epcp) usb_lld_enable_endpoint(usbp, epcp)
 
 /**
  * @brief   Returns the number of bytes readable from the packet buffer.
@@ -309,7 +309,7 @@ extern "C" {
   void usbObjectInit(USBDriver *usbp);
   void usbStart(USBDriver *usbp, const USBConfig *config);
   void usbStop(USBDriver *usbp);
-  void usbEPOpen(USBDriver *usbp, const USBEndpointConfig *epcp);
+  void usbEnableEndpoint(USBDriver *usbp, const USBEndpointConfig *epcp);
   void _usb_reset(USBDriver *usbp);
   void _usb_ep0in(USBDriver *usbp, usbep_t ep);
   void _usb_ep0out(USBDriver *usbp, usbep_t ep);
