@@ -328,10 +328,31 @@ static msg_t Thread1(void *arg) {
 }
 
 /*
+ * USB CDC loopback thread.
+ */
+static WORKING_AREA(waThread2, 256);
+static msg_t Thread2(void *arg) {
+  SerialUSBDriver *sdup = arg;
+  EventListener elrx, eltx;
+
+  chEvtRegisterMask(&SDU1.ievent, &elrx, 1);
+  chEvtRegisterMask(&SDU1.oevent, &eltx, 2);
+  while (TRUE) {
+    chEvtWaitAny(ALL_EVENTS);
+    if (chOQIsEmptyI(&SDU1.oqueue)) {
+      uint8_t buffer[0x40];
+      size_t n = chIQReadTimeout(&sdup->iqueue, buffer,
+                                 sizeof(buffer), TIME_IMMEDIATE);
+      chOQWriteTimeout(&sdup->oqueue, buffer, n, TIME_IMMEDIATE);
+
+    }
+  }
+}
+
+/*
  * Application entry point.
  */
 int main(void) {
-   int i = 0;
 
   /*
    * System initializations.
@@ -361,15 +382,17 @@ int main(void) {
   chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO, Thread1, NULL);
 
   /*
+   * Creates the USB CDC loopback thread.
+   */
+  chThdCreateStatic(waThread2, sizeof(waThread2), NORMALPRIO, Thread2, &SDU1);
+
+  /*
    * Normal main() thread activity, in this demo it does nothing except
    * sleeping in a loop and check the button state.
    */
   while (TRUE) {
     if (palReadPad(IOPORT1, GPIOA_BUTTON))
       TestThread(&SD2);
-    chIOPutTimeout(&SDU1, '0' + i,  TIME_INFINITE);
-    chIOWriteTimeout(&SDU1, "Hello World!\r\n", 14, TIME_INFINITE);
-    i = (i + 1) % 10;
-    chThdSleepMilliseconds(4000);
+    chThdSleepMilliseconds(1000);
   }
 }

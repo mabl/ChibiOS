@@ -316,6 +316,7 @@ void sduDataRequest(USBDriver *usbp, usbep_t ep) {
     if (n > 0) {
       sdup->oqueue.q_wrptr = sdup->oqueue.q_buffer;
       chSemSetCounterI(&sdup->oqueue.q_sem, SERIAL_USB_BUFFERS_SIZE);
+      chEvtBroadcastI(&sdup->oevent);
     }
   }
   chSysUnlockFromIsr();
@@ -339,6 +340,7 @@ void sduDataAvailable(USBDriver *usbp, usbep_t ep) {
     if (n > 0) {
       sdup->iqueue.q_rdptr = sdup->iqueue.q_buffer;
       chSemSetCounterI(&sdup->iqueue.q_sem, n);
+      chEvtBroadcastI(&sdup->ievent);
     }
   }
   chSysUnlockFromIsr();
