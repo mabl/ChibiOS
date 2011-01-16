@@ -47,27 +47,27 @@ typedef struct {
   /*
    * @brief   Reserved space.
    */
-  volatile uint32_t   _r20[8];
+  volatile uint32_t     _r20[8];
   /*
    * @brief   Control Register.
    */
-  volatile uint32_t   CNTR;
+  volatile uint32_t     CNTR;
   /*
    * @brief   Interrupt Status Register.
    */
-  volatile uint32_t   ISTR;
+  volatile uint32_t     ISTR;
   /*
    * @brief   Frame Number Register.
    */
-  volatile uint32_t   FNR;
+  volatile uint32_t     FNR;
   /*
    * @brief   Device Address Register.
    */
-  volatile uint32_t   DADDR;
+  volatile uint32_t     DADDR;
   /*
    * @brief   Buffer Table Address.
    */
-  volatile uint32_t   BTABLE;
+  volatile uint32_t     BTABLE;
 } stm32_usb_t;
 
 /**
@@ -77,19 +77,19 @@ typedef struct {
   /**
    * @brief   TX buffer offset register.
    */
-  volatile uint32_t   TXADDR;
+  volatile uint32_t     TXADDR;
   /**
    * @brief   TX counter register.
    */
-  volatile uint32_t   TXCOUNT;
+  volatile uint32_t     TXCOUNT;
   /**
    * @brief   RX buffer offset register.
    */
-  volatile uint32_t   RXADDR;
+  volatile uint32_t     RXADDR;
   /**
    * @brief   RX counter register.
    */
-  volatile uint32_t   RXCOUNT;
+  volatile uint32_t     RXCOUNT;
 } stm32_usb_descriptor_t;
 
 /**
@@ -209,7 +209,7 @@ typedef struct {
                               (uint32_t)STM32_USB->BTABLE * 2 +             \
                               (uint32_t)(ep) *                              \
                               sizeof(stm32_usb_descriptor_t)))
- 
+
 /**
  * @brief   Converts from a PMA address to a physical address.
  */

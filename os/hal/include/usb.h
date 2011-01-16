@@ -103,7 +103,7 @@ typedef enum {
   USB_STOP     = 1,                     /**< Stopped.                       */
   USB_READY    = 2,                     /**< Ready, after bus reset.        */
   USB_SELECTED = 3,                     /**< Address assigned.              */
-  USB_ACTIVE = 3,                       /**< Active, configuration selected.*/
+  USB_ACTIVE   = 4,                     /**< Active, configuration selected.*/
 } usbstate_t;
 
 /**
@@ -225,41 +225,13 @@ typedef const USBDescriptor * (*usbgetdescriptor_t)(USBDriver *usbp,
 #define usbGetFrameNumber(usbp) usb_lld_get_frame_number(usbp)
 
 /**
- * @brief   Enables an endpoint.
- * @details This function enables an endpoint, both IN and/or OUT directions
- *          depending on the configuration structure.
- * @note    This function must be invoked in response of a SET_CONFIGURATION
- *          or SET_INTERFACE message.
- *
- * @param[in] usbp      pointer to the @p USBDriver object
- * @param[in] ep        endpoint number
- * @param[in] epcp      the endpoint configuration
- *
- * @iclass
- */
-#define usbEnableEndpointI(usbp, ep, epcp)                                  \
-  usb_lld_enable_endpoint(usbp, ep, epcp)
-
-/**
- * @brief   Disables all the active endpoints.
- * @details This function disables all the active endpoints except the
- *          endpoint zero.
- * @note    This function must be invoked in response of a SET_CONFIGURATION
- *          message with configuration number zero.
- *
- * @param[in] usbp      pointer to the @p USBDriver object
- *
- * @iclass
- */
-#define usbDisableEndpointsI(usbp) usb_lld_disable_endpoints(usbp)
-
-/**
- * @brief   Returns the number of bytes readable from the packet buffer.
+ * @brief   Returns the number of bytes readable from the receive packet
+ *          buffer.
  *
  * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] ep        endpoint number
  * @return              The number of bytes that are effectively available.
- * @retval 0            There is no data available to read.
+ * @retval 0            Data not yet available.
  *
  * @iclass
  */
@@ -276,11 +248,24 @@ typedef const USBDescriptor * (*usbgetdescriptor_t)(USBDriver *usbp,
  * @param[out] buf      buffer where to copy the endpoint data
  * @param[in] n         maximum number of bytes to copy
  * @return              The number of bytes that were effectively available.
- * @retval 0            There is no data available to read.
+ * @retval 0            Data not yet available.
  *
  * @iclass
  */
 #define usbReadI(usbp, ep, buf, n) usb_lld_read(usbp, ep, buf, n)
+
+/**
+ * @brief   Returns the number of bytes writeable to the transmit packet
+ *          buffer.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object
+ * @param[in] ep        endpoint number
+ * @return              The number of bytes that can be written.
+ * @retval 0            Endpoint not ready for transmission.
+ *
+ * @iclass
+ */
+#define usbGetWriteableI(usbp, ep) usb_lld_get_readable(usbp, ep)
 
 /**
  * @brief   Endpoint write.
@@ -308,6 +293,7 @@ typedef const USBDescriptor * (*usbgetdescriptor_t)(USBDriver *usbp,
  * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] buf       pointer to a buffer for the transaction data
  * @param[in] n         number of bytes to be transferred
+ * @param[in] endcb     transfer complete callback
  *
  * @api
  */
@@ -328,6 +314,8 @@ extern "C" {
   void usbObjectInit(USBDriver *usbp);
   void usbStart(USBDriver *usbp, const USBConfig *config);
   void usbStop(USBDriver *usbp);
+  void usbEnableEndpointI(USBDriver *usbp, usbep_t ep,
+                          const USBEndpointConfig *epcp);
   void _usb_reset(USBDriver *usbp);
   void _usb_ep0in(USBDriver *usbp, usbep_t ep);
   void _usb_ep0out(USBDriver *usbp, usbep_t ep);

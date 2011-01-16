@@ -36,6 +36,11 @@
 /* Driver constants.                                                         */
 /*===========================================================================*/
 
+/**
+ * @brief   Maximum endpoint address.
+ */
+#define USB_MAX_ENDPOINTS                   USB_ENDOPOINTS_NUMBER
+
 /*===========================================================================*/
 /* Driver pre-compile time settings.                                         */
 /*===========================================================================*/
@@ -167,7 +172,7 @@ struct USBDriver {
   /**
    * @brief   Active endpoints configurations.
    */
-  const USBEndpointConfig       *usb_epc[USB_ENDOPOINTS_NUMBER + 1];
+  const USBEndpointConfig       *usb_epc[USB_MAX_ENDPOINTS + 1];
   /**
    * @brief   Endpoint 0 state.
    */

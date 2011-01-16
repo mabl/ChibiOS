@@ -228,7 +228,6 @@ void usb_lld_reset(USBDriver *usbp) {
   if (usbp->usb_config->uc_sof_cb != NULL)
     cntr |= CNTR_SOFM;
   STM32_USB->CNTR = cntr;
-  usb_lld_enable_endpoint(usbp, 0, &usb_lld_ep0config);
 }
 
 /**
@@ -278,12 +277,30 @@ void usb_lld_enable_endpoint(USBDriver *usbp, usbep_t ep,
 }
 
 /**
- * @brief   Returns the number of bytes readable from the packet buffer.
+ * @brief   Disables all the active endpoints except the endpoint zero.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object
+ *
+ * @notapi
+ */
+void usb_lld_disable_endpoints(USBDriver *usbp) {
+  unsigned i;
+
+  for (i = 1; i <= USB_ENDOPOINTS_NUMBER; i++) {
+    EPR_TOGGLE(i, 0);
+    EPR_SET(i, 0);
+  }
+
+}
+
+/**
+ * @brief   Returns the number of bytes readable from the receive packet
+ *          buffer.
  *
  * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] ep        endpoint number
  * @return              The number of bytes that are effectively available.
- * @retval 0            There is no data available to read.
+ * @retval 0            Data not yet available.
  *
  * @notapi
  */
@@ -305,7 +322,7 @@ size_t usb_lld_get_readable(USBDriver *usbp, usbep_t ep) {
  * @param[out] buf      buffer where to copy the endpoint data
  * @param[in] n         maximum number of bytes to copy
  * @return              The number of bytes that were effectively available.
- * @retval 0            There is no data available to read.
+ * @retval 0            Data not yet available.
  *
  * @notapi
  */
@@ -330,6 +347,23 @@ size_t usb_lld_read(USBDriver *usbp, usbep_t ep, uint8_t *buf, size_t n) {
   }
   EPR_SET_STAT_RX(ep, EPR_STAT_RX_VALID);
   return n;
+}
+/**
+ * @brief   Returns the number of bytes writeable to the transmit packet
+ *          buffer.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object
+ * @param[in] ep        endpoint number
+ * @return              The number of bytes that can be written.
+ * @retval 0            Endpoint not ready for transmission.
+ *
+ * @iclass
+ */
+size_t usb_lld_get_writeable(USBDriver *usbp, usbep_t ep) {
+
+  if ((STM32_USB->EPR[ep] & EPR_STAT_TX_MASK) != EPR_STAT_TX_NAK)
+    return 0;
+  return (size_t)usbp->usb_epc[ep]->uepc_in_maxsize;
 }
 
 /**

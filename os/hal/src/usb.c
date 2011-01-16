@@ -325,6 +325,58 @@ void usbStop(USBDriver *usbp) {
 }
 
 /**
+ * @brief   Enables an endpoint.
+ * @details This function enables an endpoint, both IN and/or OUT directions
+ *          depending on the configuration structure.
+ * @note    This function must be invoked in response of a SET_CONFIGURATION
+ *          or SET_INTERFACE message.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object
+ * @param[in] ep        endpoint number
+ * @param[in] epcp      the endpoint configuration
+ *
+ * @iclass
+ */
+void usbEnableEndpointI(USBDriver *usbp, usbep_t ep,
+                        const USBEndpointConfig *epcp) {
+
+  chDbgAssert(usbp->usb_state == USB_ACTIVE,
+              "usbEnableEndpointI(), #1", "invalid state");
+  chDbgAssert(usbp->usb_epc[ep] != NULL,
+              "usbEnableEndpointI(), #2", "already enabled");
+
+  /* Logically enabling the endpoint in the USBDriver structure.*/
+  usbp->usb_epc[ep] = epcp;
+
+  /* Low level endpoint activation.*/
+  usb_lld_enable_endpoint(usbp, ep, epcp);
+}
+
+/**
+ * @brief   Disables all the active endpoints.
+ * @details This function disables all the active endpoints except the
+ *          endpoint zero.
+ * @note    This function must be invoked in response of a SET_CONFIGURATION
+ *          message with configuration number zero.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object
+ *
+ * @iclass
+ */
+void usbDisableEndpointsI(USBDriver *usbp) {
+  unsigned i;
+
+  chDbgAssert(usbp->usb_state == USB_SELECTED,
+              "usbDisableEndpointsI(), #1", "invalid state");
+
+  for (i = 1; i <= USB_MAX_ENDPOINTS; i++)
+    usbp->usb_epc[i] = NULL;
+
+  /* Low level endpoints deactivation.*/
+  usb_lld_disable_endpoints(usbp);
+}
+
+/**
  * @brief   USB reset routine.
  *
  * @param[in] usbp      pointer to the @p USBDriver object
@@ -332,7 +384,7 @@ void usbStop(USBDriver *usbp) {
  * @notapi
  */
 void _usb_reset(USBDriver *usbp) {
-  int32_t i;
+  unsigned i;
 
   usbp->usb_state         = USB_READY;
   usbp->usb_status        = 0;
@@ -340,7 +392,7 @@ void _usb_reset(USBDriver *usbp) {
   usbp->usb_configuration = 0;
 
   /* Invalidates all endpoints into the USBDriver structure.*/
-  for (i = 0; i < USB_ENDOPOINTS_NUMBER + 1; i++)
+  for (i = 0; i <= USB_MAX_ENDPOINTS; i++)
     usbp->usb_epc[i] = NULL;
 
   /* EP0 state machine initialization.*/
@@ -348,6 +400,10 @@ void _usb_reset(USBDriver *usbp) {
 
   /* Low level reset.*/
   usb_lld_reset(usbp);
+
+  /* Low level endpoint zero activation.*/
+  usbp->usb_epc[0] = &usb_lld_ep0config;
+  usb_lld_enable_endpoint(usbp, 0, &usb_lld_ep0config);
 }
 
 /**
