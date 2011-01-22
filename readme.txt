@@ -58,6 +58,11 @@
 *** Releases                                                              ***
 *****************************************************************************
 
+*** 2.0.11 ***
+- FIX: Fixed spurious character transmission in STM32 serial driver after
+  reset (bug 3163851).
+- FIX: Fixed error in STM32 ADC driver macro names (bug 3160306).
+
 *** 2.0.10 ***
 - FIX: Fixed missing lines from the STM32 PWM driver (bug 3154403).
 - FIX: Fixed error in chIOGetxxxxxEventSource() macros (bug 3153550).
