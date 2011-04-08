@@ -40,7 +40,9 @@
 /*
  * MCU type, supported types are defined in ./os/hal/platforms/hal_lld.h.
  */
+#ifndef STM32F10X_CL
 #define STM32F10X_CL
+#endif
 
 /*
  * IO pins assignments.
