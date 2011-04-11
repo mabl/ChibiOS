@@ -527,7 +527,9 @@ Revision 0.1  2006/01/25 15:37:46  phu
 #set      CPU_48MHZ_CLKP1_32MHZ_CLKP2_16MHZ   0x30201030L
 #set      CPU_56MHZ_CLKP2_14MHZ               0x38380E38L
 
-#set      CLOCK_SPEED     CPU_32MHZ_CLKP2_16MHZ  ; <<< set clock speeds
+//#set      CLOCK_SPEED     CPU_32MHZ_CLKP2_16MHZ  ; <<< set clock speeds
+#set      CLOCK_SPEED     CPU_56MHZ_CLKP2_14MHZ  ; <<< set clock speeds
+//#set      CLOCK_SPEED     CPU_48MHZ_CLKP2_16MHZ
 
 ; If not specified seperately, the peripheral clock CLKP1 is set to
 ; the same frequency as the CPU.
@@ -562,8 +564,8 @@ Revision 0.1  2006/01/25 15:37:46  phu
 #set      INTROM_EXTBUS   1        ; mask ROM or FLASH memory used
 #set      EXTROM_EXTBUS   2        ; full external bus (INROM not used)
 
-//#set      BUSMODE 		SINGLE_CHIP      ; <<< set bus mode (see mode pins)
-#set      BUSMODE 		INTROM_EXTBUS      ; <<< set bus mode (see mode pins)
+#set      BUSMODE 		SINGLE_CHIP      ; <<< set bus mode (see mode pins)
+//#set      BUSMODE 		INTROM_EXTBUS      ; <<< set bus mode (see mode pins)
 
 #set      MULTIPLEXED     0        ;
 #set      NON_MULTIPLEXED 1        ; only if supported by the device
@@ -577,9 +579,9 @@ Revision 0.1  2006/01/25 15:37:46  phu
 ; If BUSMODE is "SINGLE_CHIP", ignore remaining bus settings.
 
 ; Select the used Chip Select areas
-#set      CHIP_SELECT0       ON   ; <<< enable chip select area
+#set      CHIP_SELECT0       OFF   ; <<< enable chip select area
 #set      CHIP_SELECT1       OFF   ; <<< enable chip select area
-#set      CHIP_SELECT2       ON    ; <<< enable chip select area
+#set      CHIP_SELECT2       OFF   ; <<< enable chip select area
 #set      CHIP_SELECT3       OFF   ; <<< enable chip select area
 #set      CHIP_SELECT4       OFF   ; <<< enable chip select area
 #set      CHIP_SELECT5       OFF   ; <<< enable chip select area
@@ -612,11 +614,11 @@ Revision 0.1  2006/01/25 15:37:46  phu
 
 #set      LOW_BYTE_SIGNAL    OFF   ; <<< select low byte signal LBX
 #set      HIGH_BYTE_SIGNAL   OFF   ; <<< select high byte signal UBX
-#set      LOW_WRITE_STROBE   ON   ; <<< select write strobe signal WRLX/WRX
+#set      LOW_WRITE_STROBE   OFF   ; <<< select write strobe signal WRLX/WRX
 #set      HIGH_WRITE_STROBE  OFF  ; <<< select write strobe signal WRHX
-#set      READ_STROBE        ON   ; <<< select read strobe signal RDX
-#set      ADDRESS_STROBE     ON   ; <<< select address strobe signal ALE/ASX
-#set      ADDRESS_STROBE_LVL ON   ; <<< select address strobe function: OFF - active low; ON - active high
+#set      READ_STROBE        OFF   ; <<< select read strobe signal RDX
+#set      ADDRESS_STROBE     OFF   ; <<< select address strobe signal ALE/ASX
+#set      ADDRESS_STROBE_LVL OFF   ; <<< select address strobe function: OFF - active low; ON - active high
 
 
 #set      CS0_CONFIG  B'0010100000000000    ; <<< select Chip Select Area 0 configuration

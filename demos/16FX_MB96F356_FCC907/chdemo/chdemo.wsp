@@ -18,7 +18,5 @@ AutoLoad=1
 WSP=C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907\chdemo\
 
 [EditState]
-STATE-1=..\..\..\os\hal\platforms\mb96f3xx\serial_lld.c:444
-STATE-2=..\halconf.h:106
-Count=2
+Count=0
 

@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -18,16 +18,17 @@
 */
 
 /**
- * @file templates/adc_lld.c
- * @brief ADC Driver subsystem low level driver source template.
- * @addtogroup ADC_LLD
+ * @file    templates/adc_lld.c
+ * @brief   ADC Driver subsystem low level driver source template.
+ *
+ * @addtogroup ADC
  * @{
  */
 
 #include "ch.h"
 #include "hal.h"
 
-#if CH_HAL_USE_ADC || defined(__DOXYGEN__)
+#if HAL_USE_ADC || defined(__DOXYGEN__)
 
 /*===========================================================================*/
 /* Driver exported variables.                                                */
@@ -50,16 +51,20 @@
 /*===========================================================================*/
 
 /**
- * @brief Low level ADC driver initialization.
+ * @brief   Low level ADC driver initialization.
+ *
+ * @notapi
  */
 void adc_lld_init(void) {
 
 }
 
 /**
- * @brief Configures and activates the ADC peripheral.
+ * @brief   Configures and activates the ADC peripheral.
  *
- * @param[in] adcp pointer to the @p ADCDriver object
+ * @param[in] adcp      pointer to the @p ADCDriver object
+ *
+ * @notapi
  */
 void adc_lld_start(ADCDriver *adcp) {
 
@@ -70,32 +75,38 @@ void adc_lld_start(ADCDriver *adcp) {
 }
 
 /**
- * @brief Deactivates the ADC peripheral.
+ * @brief   Deactivates the ADC peripheral.
  *
- * @param[in] adcp pointer to the @p ADCDriver object
+ * @param[in] adcp      pointer to the @p ADCDriver object
+ *
+ * @notapi
  */
 void adc_lld_stop(ADCDriver *adcp) {
 
 }
 
 /**
- * @brief Starts an ADC conversion.
+ * @brief   Starts an ADC conversion.
  *
- * @param[in] adcp pointer to the @p ADCDriver object
+ * @param[in] adcp      pointer to the @p ADCDriver object
+ *
+ * @notapi
  */
 void adc_lld_start_conversion(ADCDriver *adcp) {
 
 }
 
 /**
- * @brief Stops an ongoing conversion.
+ * @brief   Stops an ongoing conversion.
  *
- * @param[in] adcp pointer to the @p ADCDriver object
+ * @param[in] adcp      pointer to the @p ADCDriver object
+ *
+ * @notapi
  */
 void adc_lld_stop_conversion(ADCDriver *adcp) {
 
 }
 
-#endif /* CH_HAL_USE_ADC */
+#endif /* HAL_USE_ADC */
 
 /** @} */

@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -28,10 +29,10 @@
 #ifndef _CHMTX_H_
 #define _CHMTX_H_
 
-#if CH_USE_MUTEXES
+#if CH_USE_MUTEXES || defined(__DOXYGEN__)
 
 /**
- * @brief Mutex structure.
+ * @brief   Mutex structure.
  */
 typedef struct Mutex {
   ThreadsQueue          m_queue;    /**< @brief Queue of the threads sleeping
@@ -78,6 +79,8 @@ extern "C" {
 /**
  * @brief   Returns @p TRUE if the mutex queue contains at least a waiting
  *          thread.
+ *
+ * @sclass
  */
 #define chMtxQueueNotEmptyS(mp) notempty(&(mp)->m_queue)
 

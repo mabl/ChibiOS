@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -36,8 +37,10 @@ VTList vtlist;
 /**
  * @brief   Virtual Timers initialization.
  * @note    Internal use only.
+ *
+ * @notapi
  */
-void vt_init(void) {
+void _vt_init(void) {
 
   vtlist.vt_next = vtlist.vt_prev = (void *)&vtlist;
   vtlist.vt_time = (systime_t)-1;
@@ -50,20 +53,24 @@ void vt_init(void) {
  *          the I-Locked state, see @ref system_states.
  *
  * @param[out] vtp      the @p VirtualTimer structure pointer
- * @param[in] time      the number of time ticks, the value @p TIME_INFINITE
- *                      is notallowed. The value @p TIME_IMMEDIATE is allowed
- *                      but interpreted as a normal time specification not as
- *                      an immediate timeout specification.
+ * @param[in] time      the number of ticks before the operation timeouts, the
+ *                      special values are handled as follow:
+ *                      - @a TIME_INFINITE is allowed but interpreted as a
+ *                        normal time specification.
+ *                      - @a TIME_IMMEDIATE this value is not allowed.
+ *                      .
  * @param[in] vtfunc    the timer callback function. After invoking the
  *                      callback the timer is disabled and the structure can
  *                      be disposed or reused.
  * @param[in] par       a parameter that will be passed to the callback
  *                      function
+ *
+ * @iclass
  */
 void chVTSetI(VirtualTimer *vtp, systime_t time, vtfunc_t vtfunc, void *par) {
   VirtualTimer *p;
 
-  chDbgCheck((vtp != NULL) && (vtfunc != NULL) && (time != TIME_INFINITE),
+  chDbgCheck((vtp != NULL) && (vtfunc != NULL) && (time != TIME_IMMEDIATE),
              "chVTSetI");
 
   vtp->vt_par = par;
@@ -86,6 +93,8 @@ void chVTSetI(VirtualTimer *vtp, systime_t time, vtfunc_t vtfunc, void *par) {
  * @note    The timer MUST be active when this function is invoked.
  *
  * @param[in] vtp       the @p VirtualTimer structure pointer
+ *
+ * @iclass
  */
 void chVTResetI(VirtualTimer *vtp) {
 
@@ -111,6 +120,8 @@ void chVTResetI(VirtualTimer *vtp) {
  * @param[in] end       the end of the time window (non inclusive)
  * @retval TRUE         current time within the specified time window.
  * @retval FALSE        current time not within the specified time window.
+ *
+ * @api
  */
 bool_t chTimeIsWithin(systime_t start, systime_t end) {
 

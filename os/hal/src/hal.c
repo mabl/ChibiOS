@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -18,8 +19,9 @@
 */
 
 /**
- * @file hal.c
- * @brief HAL subsystem code.
+ * @file    hal.c
+ * @brief   HAL subsystem code.
+ *
  * @addtogroup HAL
  * @{
  */
@@ -44,36 +46,62 @@
 /*===========================================================================*/
 
 /**
- * @brief HAL initialization.
+ * @brief   HAL initialization.
+ * @details This function invokes the low level initialization code then
+ *          initializes all the drivers enabled in the HAL. Finally the
+ *          board-specific initialization is performed by invoking
+ *          @p boardInit() (usually defined in @p board.c).
+ *
+ * @init
  */
 void halInit(void) {
 
   hal_lld_init();
 
-#if CH_HAL_USE_PAL
+#if HAL_USE_PAL || defined(__DOXYGEN__)
   palInit(&pal_default_config);
 #endif
-#if CH_HAL_USE_ADC
+#if HAL_USE_ADC || defined(__DOXYGEN__)
   adcInit();
 #endif
-#if CH_HAL_USE_CAN
+#if HAL_USE_CAN || defined(__DOXYGEN__)
   canInit();
 #endif
-#if CH_HAL_USE_MAC
+#if HAL_USE_GPT || defined(__DOXYGEN__)
+  gptInit();
+#endif
+#if HAL_USE_I2C || defined(__DOXYGEN__)
+  i2cInit();
+#endif
+#if HAL_USE_ICU || defined(__DOXYGEN__)
+  icuInit();
+#endif
+#if HAL_USE_MAC || defined(__DOXYGEN__)
   macInit();
 #endif
-#if CH_HAL_USE_PWM
+#if HAL_USE_PWM || defined(__DOXYGEN__)
   pwmInit();
 #endif
-#if CH_HAL_USE_SERIAL
+#if HAL_USE_SERIAL || defined(__DOXYGEN__)
   sdInit();
 #endif
-#if CH_HAL_USE_SPI
+#if HAL_USE_SPI || defined(__DOXYGEN__)
   spiInit();
 #endif
-#if CH_HAL_USE_MMC_SPI
+#if HAL_USE_UART || defined(__DOXYGEN__)
+  uartInit();
+#endif
+#if HAL_USE_USB || defined(__DOXYGEN__)
+  usbInit();
+#endif
+#if HAL_USE_MMC_SPI || defined(__DOXYGEN__)
   mmcInit();
 #endif
+#if HAL_USE_SERIAL_USB || defined(__DOXYGEN__)
+  sduInit();
+#endif
+  /* Board specific initialization.*/
+  boardInit();
 }
 
 /** @} */

@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -53,11 +54,13 @@
  * @brief I/O Queues test header file
  */
 
-#if CH_USE_QUEUES
+#if CH_USE_QUEUES || defined(__DOXYGEN__)
 
 #define TEST_QUEUES_SIZE 4
 
-static void notify(void) {}
+static void notify(GenericQueue *qp) {
+  (void)qp;
+}
 
 /*
  * Note, the static initializers are not really required because the
@@ -76,14 +79,16 @@ static OUTPUTQUEUE_DECL(oq, test.wa.T1, TEST_QUEUES_SIZE, notify);
  * consistent through the whole test.
  */
 
-static char *queues1_gettest(void) {
-
-  return "Queues, input queues";
-}
-
 static void queues1_setup(void) {
 
   chIQInit(&iq, wa[0], TEST_QUEUES_SIZE, notify);
+}
+
+static msg_t thread1(void *p) {
+
+  (void)p;
+  chIQGetTimeout(&iq, MS2ST(200));
+  return 0;
 }
 
 static void queues1_execute(void) {
@@ -91,18 +96,18 @@ static void queues1_execute(void) {
   size_t n;
 
   /* Initial empty state */
-  test_assert(1, chIQIsEmpty(&iq), "not empty");
+  test_assert(1, chIQIsEmptyI(&iq), "not empty");
 
   /* Queue filling */
   for (i = 0; i < TEST_QUEUES_SIZE; i++)
     chIQPutI(&iq, 'A' + i);
-  test_assert(2, chIQIsFull(&iq), "still has space");
+  test_assert(2, chIQIsFullI(&iq), "still has space");
   test_assert(3, chIQPutI(&iq, 0) == Q_FULL, "failed to report Q_FULL");
 
   /* Queue emptying */
   for (i = 0; i < TEST_QUEUES_SIZE; i++)
     test_emit_token(chIQGet(&iq));
-  test_assert(4, chIQIsEmpty(&iq), "still full");
+  test_assert(4, chIQIsEmptyI(&iq), "still full");
   test_assert_sequence(5, "ABCD");
 
   /* Queue filling again */
@@ -112,7 +117,7 @@ static void queues1_execute(void) {
   /* Reading the whole thing */
   n = chIQReadTimeout(&iq, wa[1], TEST_QUEUES_SIZE * 2, TIME_IMMEDIATE);
   test_assert(6, n == TEST_QUEUES_SIZE, "wrong returned size");
-  test_assert(7, chIQIsEmpty(&iq), "still full");
+  test_assert(7, chIQIsEmptyI(&iq), "still full");
 
   /* Queue filling again */
   for (i = 0; i < TEST_QUEUES_SIZE; i++)
@@ -123,19 +128,22 @@ static void queues1_execute(void) {
   test_assert(8, n == TEST_QUEUES_SIZE / 2, "wrong returned size");
   n = chIQReadTimeout(&iq, wa[1], TEST_QUEUES_SIZE / 2, TIME_IMMEDIATE);
   test_assert(9, n == TEST_QUEUES_SIZE / 2, "wrong returned size");
-  test_assert(10, chIQIsEmpty(&iq), "still full");
+  test_assert(10, chIQIsEmptyI(&iq), "still full");
 
   /* Testing reset */
   chIQPutI(&iq, 0);
   chIQResetI(&iq);
-  test_assert(11, chIQIsEmpty(&iq), "still full");
+  test_assert(11, chIQGetFullI(&iq) == 0, "still full");
+  threads[0] = chThdCreateStatic(wa[0], WA_SIZE, chThdGetPriority()+1, thread1, NULL);
+  test_assert(12, chIQGetFullI(&iq) == 0, "not empty");
+  test_wait_threads();
 
   /* Timeout */
-  test_assert(12, chIQGetTimeout(&iq, 10) == Q_TIMEOUT, "wrong timeout return");
+  test_assert(13, chIQGetTimeout(&iq, 10) == Q_TIMEOUT, "wrong timeout return");
 }
 
-const struct testcase testqueues1 = {
-  queues1_gettest,
+ROMCONST struct testcase testqueues1 = {
+  "Queues, input queues",
   queues1_setup,
   NULL,
   queues1_execute
@@ -149,14 +157,17 @@ const struct testcase testqueues1 = {
  * @p OutputQueue object including timeouts. The queue state must remain
  * consistent through the whole test.
  */
-static char *queues2_gettest(void) {
-
-  return "Queues, output queues";
-}
 
 static void queues2_setup(void) {
 
   chOQInit(&oq, wa[0], TEST_QUEUES_SIZE, notify);
+}
+
+static msg_t thread2(void *p) {
+
+  (void)p;
+  chOQPutTimeout(&oq, 0, MS2ST(200));
+  return 0;
 }
 
 static void queues2_execute(void) {
@@ -164,42 +175,45 @@ static void queues2_execute(void) {
   size_t n;
 
   /* Initial empty state */
-  test_assert(1, chOQIsEmpty(&oq), "not empty");
+  test_assert(1, chOQIsEmptyI(&oq), "not empty");
 
   /* Queue filling */
   for (i = 0; i < TEST_QUEUES_SIZE; i++)
     chOQPut(&oq, 'A' + i);
-  test_assert(2, chOQIsFull(&oq), "still has space");
+  test_assert(2, chOQIsFullI(&oq), "still has space");
 
   /* Queue emptying */
   for (i = 0; i < TEST_QUEUES_SIZE; i++)
     test_emit_token(chOQGetI(&oq));
-  test_assert(3, chOQIsEmpty(&oq), "still full");
+  test_assert(3, chOQIsEmptyI(&oq), "still full");
   test_assert_sequence(4, "ABCD");
   test_assert(5, chOQGetI(&oq) == Q_EMPTY, "failed to report Q_EMPTY");
 
   /* Writing the whole thing */
   n = chOQWriteTimeout(&oq, wa[1], TEST_QUEUES_SIZE * 2, TIME_IMMEDIATE);
   test_assert(6, n == TEST_QUEUES_SIZE, "wrong returned size");
-  test_assert(7, chOQIsFull(&oq), "not full");
+  test_assert(7, chOQIsFullI(&oq), "not full");
+  threads[0] = chThdCreateStatic(wa[0], WA_SIZE, chThdGetPriority()+1, thread2, NULL);
+  test_assert(8, chOQGetFullI(&oq) == TEST_QUEUES_SIZE, "not empty");
+  test_wait_threads();
 
   /* Testing reset */
   chOQResetI(&oq);
-  test_assert(8, chOQIsEmpty(&oq), "still full");
+  test_assert(9, chOQGetFullI(&oq) == 0, "still full");
 
   /* Partial writes */
   n = chOQWriteTimeout(&oq, wa[1], TEST_QUEUES_SIZE / 2, TIME_IMMEDIATE);
-  test_assert(9, n == TEST_QUEUES_SIZE / 2, "wrong returned size");
-  n = chOQWriteTimeout(&oq, wa[1], TEST_QUEUES_SIZE / 2, TIME_IMMEDIATE);
   test_assert(10, n == TEST_QUEUES_SIZE / 2, "wrong returned size");
-  test_assert(11, chOQIsFull(&oq), "not full");
+  n = chOQWriteTimeout(&oq, wa[1], TEST_QUEUES_SIZE / 2, TIME_IMMEDIATE);
+  test_assert(11, n == TEST_QUEUES_SIZE / 2, "wrong returned size");
+  test_assert(12, chOQIsFullI(&oq), "not full");
 
   /* Timeout */
-  test_assert(12, chOQPutTimeout(&oq, 0, 10) == Q_TIMEOUT, "wrong timeout return");
+  test_assert(13, chOQPutTimeout(&oq, 0, 10) == Q_TIMEOUT, "wrong timeout return");
 }
 
-const struct testcase testqueues2 = {
-  queues2_gettest,
+ROMCONST struct testcase testqueues2 = {
+  "Queues, output queues",
   queues2_setup,
   NULL,
   queues2_execute
@@ -209,8 +223,8 @@ const struct testcase testqueues2 = {
 /**
  * @brief   Test sequence for queues.
  */
-const struct testcase * const patternqueues[] = {
-#if CH_USE_QUEUES
+ROMCONST struct testcase * ROMCONST patternqueues[] = {
+#if CH_USE_QUEUES || defined(__DOXYGEN__)
   &testqueues1,
   &testqueues2,
 #endif

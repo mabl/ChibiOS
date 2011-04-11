@@ -24,11 +24,12 @@
     for full details of how and when the exception can be applied.
 */
 
-#include "global.h"
 #include "f2mc_16fxs.h"
 
 #include <ch.h>
+#include <hal.h>
 #include "appboard.h"
+#include "irq96f356.h"
 
 void pin_init(void);
 
@@ -37,7 +38,7 @@ void pin_init(void);
  * Hardware initialization goes here.
  * NOTE: Interrupts are still disabled.
  */
-void app_hwinit(void) 
+void boardInit(void)
 {
 int irq;
 
@@ -47,40 +48,6 @@ int irq;
 
 	DIRR = 0;		// reset delay irq req
 	
-//	irq = 12;   /* Delayed Interrupt            */
-//    ICR = (irq << 8) | CH_IRQ_PRIORITY;	// livello irq = come da richiesta
-
-
-
-	/* init reload timer 0 & 1 per treno impulsi stepper 
-	*/
-	TMRLR0 = uSEC_TO_RELTIM0(20000);
-	TMCSR0 = 0x181b;						// seleziona clk = clkp1 / 32
-
-	irq = 54;   /* RLT0                         */
-    ICR = (irq << 8) | 0x02;	// livello irq = 2
-
-	TMRLR1 = uSEC_TO_RELTIM1(20000);
-	TMCSR1 = 0x181b;						// seleziona clk = clkp1 / 32
-
-	irq = 55;   /* RLT1                         */
-    ICR = (irq << 8) | 0x02;  
-
-
-	/* init reload timer 2 & 3 per treno impulsi stepper 
-	*/
-	TMRLR2 = uSEC_TO_RELTIM2(10000);						
-	TMCSR2 = 0x041b;					// seleziona clk = clkp1 / 16
-
-	irq = 56;   /* RLT2                         */
-    ICR = (irq << 8) | 0x02;			// livello irq = 2
-
-	TMRLR3 = uSEC_TO_RELTIM3(10000);
-	TMCSR3 = 0x041b;					// seleziona clk = clkp1 / 16
-
-	irq = 57;   /* RLT3                         */
-    ICR = (irq << 8) | 0x02;  
-
 
 	/* init reload timer 6 come tick di sistema
 	*/
@@ -90,13 +57,21 @@ int irq;
 	irq = 58;   /* PPGRLT - RLT6                */
     ICR = (irq << 8) | CH_IRQ_PRIORITY;	// livello irq = come richiesto
 
+	/* init uart1 interrupt levels
+	*/
+	irq = 87;   /* LIN-UART 3 RX                */
+    ICR = (irq << 8) | CH_IRQ_PRIORITY;	// livello irq = come richiesto
+
+	irq = 88;   /* LIN-UART 4 RX                */
+    ICR = (irq << 8) | CH_IRQ_PRIORITY;	// livello irq = come richiesto
+
+
 }
 
 
 // Inizializza alla bell'emeglio i pinozzi
 void pin_init(void)
 {
-
 	// ****************  PORT 0  ***********************
 
 	// address/data bus 
@@ -146,15 +121,15 @@ void pin_init(void)
 		P01_2 -> AD10_SIN3  
 		P01_3 -> AD11_SOT3
 		P01_4 -> AD12_SCK3 
-		P01_5 -> AD13	
+		P01_5 -> AD13 (cpu_cs finto, fa da reset o lettura ram)	
 		P01_6 -> AD14 
 		P01_7 -> AD15 
 	*/    									
 	/* Data register  		(0000-0010)  */
     PDR01 = 0x02;		
 
-	/* Direction register  	(0001-1010)  */   
-	DDR01 = 0x1A;
+	/* Direction register  	(0011-1010)  */   
+	DDR01 = 0x3A;
 
 	/* Input enable register (1111-1111)  */
     PIER01 = 0xFF;		
@@ -189,14 +164,14 @@ void pin_init(void)
 		P02_6 -> 
 		P02_7 -> 
 	*/    									
-	/* Data register  		(0001-0100)  */
-    PDR02 = 0x14;		
+	/* Data register  		(0000-0100)  */
+    PDR02 = 0x04;		
 
-	/* Direction register  	(0011-0100)  */   
-	DDR02 = 0x34;
+	/* Direction register  	(0010-0100)  */   
+	DDR02 = 0x24;
 
-	/* Input enable register (0011-1111)  */
-    PIER02 = 0x3F;		
+	/* Input enable register (0010-1111)  */
+    PIER02 = 0x2F;		
 
 	/* Input level register (0000-0000)  */
     PILR02 = 0x00;		
@@ -295,8 +270,8 @@ void pin_init(void)
 	/* Data register  		(0011-1100)  */
     PDR04 = 0x3C;		
 
-	/* Direction register  	(0010-1000)  */   
-	DDR04 = 0x28;
+	/* Direction register  	(0011-1000)  */   
+	DDR04 = 0x38;
 
 	/* Input enable register (0011-1100)  */
     PIER04 = 0x3C;		
@@ -357,9 +332,9 @@ void pin_init(void)
 	// ****************  PORT 6  ***********************
 
 	/*
-		P06_0 -> /CPU_CS0
-		P06_1 -> BK_EN
-		P06_2 -> /CPU_CS1
+		P06_0 -> BK_EN
+		P06_1 -> /CPU_CS1
+		P06_2 -> LCD_ON
 		P06_3 -> TOUCH_X1
 		P06_4 -> TOUCH_X2
 		P06_5 -> TOUCH_Y1
@@ -367,14 +342,14 @@ void pin_init(void)
 		P06_7 -> BK_PWM
 	*/
 	
-	/* Data register  		(0000-0101)  */
-    PDR06 = 0x00;		
+	/* Data register  		(0000-0111)  */
+    PDR06 = 0x07;		
 
 	/* Direction register  	(1000-1111)  */   
 	DDR06 = 0x8F;
 
 	/* Input enable register (1000-0111)  */
-    PIER06 = 0xFF;		
+    PIER06 = 0x87;		
 
 	/* Input level register (0000-0000)  */
     PILR06 = 0x00;		
@@ -392,8 +367,7 @@ void pin_init(void)
 	PUCR06 = 0x00;
 
 	/* peripheral resource relocation */
-	PRRR12 = 0x05;			// CS0_R -> selcted at pin 62 + CS2_R -> selcted at pin 3
-
+	PRRR12 = 0x02;			// CS1_R -> selcted at pin p06_1
 }
 
 

@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -18,16 +18,17 @@
 */
 
 /**
- * @file templates/xxx_lld.c
- * @brief XXX Driver subsystem low level driver source template.
- * @addtogroup XXX_LLD
+ * @file    templates/xxx_lld.c
+ * @brief   XXX Driver subsystem low level driver source template.
+ *
+ * @addtogroup XXX
  * @{
  */
 
 #include "ch.h"
 #include "hal.h"
 
-#if CH_HAL_USE_XXX || defined(__DOXYGEN__)
+#if HAL_USE_XXX || defined(__DOXYGEN__)
 
 /*===========================================================================*/
 /* Driver exported variables.                                                */
@@ -50,16 +51,20 @@
 /*===========================================================================*/
 
 /**
- * @brief Low level XXX driver initialization.
+ * @brief   Low level XXX driver initialization.
+ *
+ * @notapi
  */
 void xxx_lld_init(void) {
 
 }
 
 /**
- * @brief Configures and activates the XXX peripheral.
+ * @brief   Configures and activates the XXX peripheral.
  *
- * @param[in] xxxp pointer to the @p XXXDriver object
+ * @param[in] xxxp      pointer to the @p XXXDriver object
+ *
+ * @notapi
  */
 void xxx_lld_start(XXXDriver *xxxp) {
 
@@ -70,14 +75,16 @@ void xxx_lld_start(XXXDriver *xxxp) {
 }
 
 /**
- * @brief Deactivates the XXX peripheral.
+ * @brief   Deactivates the XXX peripheral.
  *
- * @param[in] xxxp pointer to the @p XXXDriver object
+ * @param[in] xxxp      pointer to the @p XXXDriver object
+ *
+ * @notapi
  */
 void xxx_lld_stop(XXXDriver *xxxp) {
 
 }
 
-#endif /* CH_HAL_USE_XXX */
+#endif /* HAL_USE_XXX */
 
 /** @} */

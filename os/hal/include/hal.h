@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -18,8 +19,9 @@
 */
 
 /**
- * @file hal.h
- * @brief HAL subsystem header.
+ * @file    hal.h
+ * @brief   HAL subsystem header.
+ *
  * @addtogroup HAL
  * @{
  */
@@ -27,19 +29,25 @@
 #ifndef _HAL_H_
 #define _HAL_H_
 
-#include "halconf.h"
 #include "board.h"
+#include "halconf.h"
 
 #include "hal_lld.h"
 
 #include "pal.h"
 #include "adc.h"
 #include "can.h"
+#include "gpt.h"
+#include "i2c.h"
+#include "icu.h"
 #include "mac.h"
 #include "pwm.h"
 #include "serial.h"
 #include "spi.h"
+#include "uart.h"
+#include "usb.h"
 #include "mmc_spi.h"
+#include "serial_usb.h"
 
 /*===========================================================================*/
 /* External declarations.                                                    */

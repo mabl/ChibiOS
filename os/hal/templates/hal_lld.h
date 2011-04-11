@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -18,9 +18,10 @@
 */
 
 /**
- * @file templates/hal_lld.h
- * @brief HAL subsystem low level driver header template.
- * @addtogroup HAL_LLD
+ * @file    templates/hal_lld.h
+ * @brief   HAL subsystem low level driver header template.
+ *
+ * @addtogroup HAL
  * @{
  */
 
@@ -30,6 +31,11 @@
 /*===========================================================================*/
 /* Driver constants.                                                         */
 /*===========================================================================*/
+
+/**
+ * @brief   Platform name.
+ */
+#define PLATFORM_NAME   ""
 
 /*===========================================================================*/
 /* Driver pre-compile time settings.                                         */

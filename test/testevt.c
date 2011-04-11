@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -50,7 +51,7 @@
  * @brief Events test header file
  */
 
-#if CH_USE_EVENTS
+#if CH_USE_EVENTS || defined(__DOXYGEN__)
 
 #define ALLOWED_DELAY MS2ST(5)
 
@@ -75,20 +76,15 @@ static EVENTSOURCE_DECL(es2);
  * the associated event handlers are invoked in LSb-first order.
  */
 
-static char *evt1_gettest(void) {
-
-  return "Events, registration and dispatch";
-}
-
 static void evt1_setup(void) {
 
-  chEvtClear(ALL_EVENTS);
+  chEvtClearFlags(ALL_EVENTS);
 }
 
 static void h1(eventid_t id) {(void)id;test_emit_token('A');}
 static void h2(eventid_t id) {(void)id;test_emit_token('B');}
 static void h3(eventid_t id) {(void)id;test_emit_token('C');}
-static const evhandler_t evhndl[] = {h1, h2, h3};
+static ROMCONST evhandler_t evhndl[] = {h1, h2, h3};
 
 static void evt1_execute(void) {
   EventListener el1, el2;
@@ -99,11 +95,11 @@ static void evt1_execute(void) {
   chEvtInit(&es1);
   chEvtRegisterMask(&es1, &el1, 1);
   chEvtRegisterMask(&es1, &el2, 2);
-  test_assert(1, chEvtIsListening(&es1), "no listener");
+  test_assert(1, chEvtIsListeningI(&es1), "no listener");
   chEvtUnregister(&es1, &el1);
-  test_assert(2, chEvtIsListening(&es1), "no listener");
+  test_assert(2, chEvtIsListeningI(&es1), "no listener");
   chEvtUnregister(&es1, &el2);
-  test_assert(3, !chEvtIsListening(&es1), "stuck listener");
+  test_assert(3, !chEvtIsListeningI(&es1), "stuck listener");
 
   /*
    * Testing chEvtDispatch().
@@ -112,8 +108,8 @@ static void evt1_execute(void) {
   test_assert_sequence(4, "ABC");
 }
 
-const struct testcase testevt1 = {
-  evt1_gettest,
+ROMCONST struct testcase testevt1 = {
+  "Events, registration and dispatch",
   evt1_setup,
   NULL,
   evt1_execute
@@ -133,20 +129,15 @@ const struct testcase testevt1 = {
  * the expected time and that there are no stuck event flags.
  */
 
-static char *evt2_gettest(void) {
-
-  return "Events, wait and broadcast";
-}
-
 static void evt2_setup(void) {
 
-  chEvtClear(ALL_EVENTS);
+  chEvtClearFlags(ALL_EVENTS);
 }
 
 static msg_t thread1(void *p) {
 
   chThdSleepMilliseconds(50);
-  chEvtSignal((Thread *)p, 1);
+  chEvtSignalFlags((Thread *)p, 1);
   return 0;
 }
 
@@ -167,12 +158,12 @@ static void evt2_execute(void) {
   /*
    * Test on chEvtWaitOne() without wait.
    */
-  chEvtPend(5);
+  chEvtAddFlags(5);
   m = chEvtWaitOne(ALL_EVENTS);
   test_assert(1, m == 1, "single event error");
   m = chEvtWaitOne(ALL_EVENTS);
   test_assert(2, m == 4, "single event error");
-  m = chEvtClear(ALL_EVENTS);
+  m = chEvtClearFlags(ALL_EVENTS);
   test_assert(3, m == 0, "stuck event");
 
   /*
@@ -185,17 +176,17 @@ static void evt2_execute(void) {
   m = chEvtWaitOne(ALL_EVENTS);
   test_assert_time_window(4, target_time, target_time + ALLOWED_DELAY);
   test_assert(5, m == 1, "single event error");
-  m = chEvtClear(ALL_EVENTS);
+  m = chEvtClearFlags(ALL_EVENTS);
   test_assert(6, m == 0, "stuck event");
   test_wait_threads();
 
   /*
    * Test on chEvtWaitAny() without wait.
    */
-  chEvtPend(5);
+  chEvtAddFlags(5);
   m = chEvtWaitAny(ALL_EVENTS);
   test_assert(7, m == 5, "unexpected pending bit");
-  m = chEvtClear(ALL_EVENTS);
+  m = chEvtClearFlags(ALL_EVENTS);
   test_assert(8, m == 0, "stuck event");
 
   /*
@@ -208,7 +199,7 @@ static void evt2_execute(void) {
   m = chEvtWaitAny(ALL_EVENTS);
   test_assert_time_window(9, target_time, target_time + ALLOWED_DELAY);
   test_assert(10, m == 1, "single event error");
-  m = chEvtClear(ALL_EVENTS);
+  m = chEvtClearFlags(ALL_EVENTS);
   test_assert(11, m == 0, "stuck event");
   test_wait_threads();
 
@@ -225,23 +216,23 @@ static void evt2_execute(void) {
                                  thread2, "A");
   m = chEvtWaitAll(5);
   test_assert_time_window(12, target_time, target_time + ALLOWED_DELAY);
-  m = chEvtClear(ALL_EVENTS);
+  m = chEvtClearFlags(ALL_EVENTS);
   test_assert(13, m == 0, "stuck event");
   test_wait_threads();
   chEvtUnregister(&es1, &el1);
   chEvtUnregister(&es2, &el2);
-  test_assert(14, !chEvtIsListening(&es1), "stuck listener");
-  test_assert(15, !chEvtIsListening(&es2), "stuck listener");
+  test_assert(14, !chEvtIsListeningI(&es1), "stuck listener");
+  test_assert(15, !chEvtIsListeningI(&es2), "stuck listener");
 }
 
-const struct testcase testevt2 = {
-  evt2_gettest,
+ROMCONST struct testcase testevt2 = {
+  "Events, wait and broadcast",
   evt2_setup,
   NULL,
   evt2_execute
 };
 
-#if CH_USE_EVENTS_TIMEOUT
+#if CH_USE_EVENTS_TIMEOUT || defined(__DOXYGEN__)
 /**
  * @page test_events_003 Events timeout
  *
@@ -257,14 +248,9 @@ const struct testcase testevt2 = {
  * After each test phase the test verifies that there are no stuck event flags.
  */
 
-static char *evt3_gettest(void) {
-
-  return "Events, timeouts";
-}
-
 static void evt3_setup(void) {
 
-  chEvtClear(ALL_EVENTS);
+  chEvtClearFlags(ALL_EVENTS);
 }
 
 static void evt3_execute(void) {
@@ -287,8 +273,8 @@ static void evt3_execute(void) {
   test_assert(6, m == 0, "spurious event");
 }
 
-const struct testcase testevt3 = {
-  evt3_gettest,
+ROMCONST struct testcase testevt3 = {
+  "Events, timeouts",
   evt3_setup,
   NULL,
   evt3_execute
@@ -298,11 +284,11 @@ const struct testcase testevt3 = {
 /**
  * @brief   Test sequence for events.
  */
-const struct testcase * const patternevt[] = {
-#if CH_USE_EVENTS
+ROMCONST struct testcase * ROMCONST patternevt[] = {
+#if CH_USE_EVENTS || defined(__DOXYGEN__)
   &testevt1,
   &testevt2,
-#if CH_USE_EVENTS_TIMEOUT
+#if CH_USE_EVENTS_TIMEOUT || defined(__DOXYGEN__)
   &testevt3,
 #endif
 #endif

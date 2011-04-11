@@ -1,0 +1,6 @@
+-c -x c
+-O2
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\hardware_setup.c"
+-g
+-g3
+-o "$(CONFIGDIR)\$(FILELEAF).o"

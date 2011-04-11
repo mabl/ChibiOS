@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -18,16 +18,17 @@
 */
 
 /**
- * @file templates/xxx_lld.h
- * @brief XXX Driver subsystem low level driver header template.
- * @addtogroup XXX_LLD
+ * @file    templates/xxx_lld.h
+ * @brief   XXX Driver subsystem low level driver header template.
+ *
+ * @addtogroup XXX
  * @{
  */
 
 #ifndef _XXX_LLD_H_
 #define _XXX_LLD_H_
 
-#if CH_HAL_USE_XXX || defined(__DOXYGEN__)
+#if HAL_USE_XXX || defined(__DOXYGEN__)
 
 /*===========================================================================*/
 /* Driver constants.                                                         */
@@ -45,18 +46,24 @@
 /* Driver data structures and types.                                         */
 /*===========================================================================*/
 
+
 /**
- * @brief Driver configuration structure.
- * @note It could be empty on some architectures.
+ * @brief   Type of a structure representing an XXX driver.
+ */
+typedef struct XXXDriver XXXDriver;
+
+/**
+ * @brief   Driver configuration structure.
+ * @note    It could be empty on some architectures.
  */
 typedef struct {
 
 } XXXConfig;
 
 /**
- * @brief Structure representing an XXX driver.
+ * @brief   Structure representing an XXX driver.
  */
-typedef struct {
+struct XXXDriver {
   /**
    * @brief Driver state.
    */
@@ -66,7 +73,7 @@ typedef struct {
    */
   const XXXConfig           *xxx_config;
   /* End of the mandatory fields.*/
-} XXXDriver;
+};
 
 /*===========================================================================*/
 /* Driver macros.                                                            */
@@ -86,7 +93,7 @@ extern "C" {
 }
 #endif
 
-#endif /* CH_HAL_USE_XXX */
+#endif /* HAL_USE_XXX */
 
 #endif /* _XXX_LLD_H_ */
 

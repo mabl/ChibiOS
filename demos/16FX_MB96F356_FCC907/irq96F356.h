@@ -139,7 +139,7 @@ __interrupt void  irq_reload0 			(void);         //  54   /* RLT0               
 __interrupt void  irq_reload1			(void);         //  55   /* RLT1                         */
 __interrupt void  irq_reload2			(void);         //  56   /* RLT2                         */
 __interrupt void  irq_reload3			(void);         //  57   /* RLT3                         */
-__interrupt void  irq_reload6_ppgrlt	(void);         //  58   /* PPGRLT - RLT6                */
+extern __interrupt void  irq_reload6_ppgrlt	(void);         //  58   /* PPGRLT - RLT6                */
 __interrupt void  irq_icu0 				(void);         //  59   /* ICU0                         */
 __interrupt void  irq_icu1				(void);         //	60   /* ICU1                         */
 __interrupt void  irq_icu4				(void);         //  63   /* ICU4                         */

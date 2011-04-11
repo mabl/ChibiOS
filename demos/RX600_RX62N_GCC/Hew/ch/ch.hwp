@@ -1,0 +1,419 @@
+[HIMDBVersion]
+2.0
+[DATABASE_VERSION]
+"2.8" 
+[PROJECT_DETAILS]
+"ch" "C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\Hew\ch" "C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\Hew\ch\ch.hwp" "RX" "KPIT GNURX [ELF]" "C Application" "RX600" "RX62N" 
+[INFORMATION]
+"No project information available" 
+[TOOL_CHAIN]
+"KPIT GNURX [ELF] Toolchain" "v10.03" 
+[CONFIGURATIONS]
+"Debug" "C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\Hew\ch\Debug" 
+"Debug_RX600_Segger_J-Link" "C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\Hew\ch\Debug_RX600_Segger_J-Link" 
+"Release" "C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\Hew\ch\Release" 
+"SimDebug_RX600" "C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\Hew\ch\SimDebug_RX600" 
+[BUILD_PHASES]
+"GNU Assembler" 1 
+"GNU Compiler" 1 
+"GNU Library Generator" 1 
+"GNU Linker" 1 
+[TOOL_ENVIRONMENT]
+[EXTENSIONS]
+"Absolute file" "ABS" 
+"Archive File" "A" 
+"Assembly include file" "INC" 
+"Assembly list file" "LIS" 
+"Assembly source file" "S" 
+"Assembly source file" "SRC" 
+"Binary file" "BIN" 
+"C header file" "H" 
+"C list file" "LST" 
+"C source file" "C" 
+"C++ header file" "HPP" 
+"C++ list file" "LPP" 
+"C++ source file" "CC" 
+"C++ source file" "CP" 
+"C++ source file" "CPP" 
+"CPU information file" "CPU" 
+"Calling information file" "CAL" 
+"Debug information file" "DBG" 
+"Expanded assembly source file" "EXP" 
+"Hex file" "HEX" 
+"Library file" "LIB" 
+"Library information file" "LBP" 
+"Linkage map file" "MAP" 
+"Object file" "OBJ" 
+"Optimize map file" "bls" 
+"Preprocess Assembly file" "ASM" 
+"Preprocessed C source file" "P" 
+"Preprocessed C++ source file" "PP" 
+"Profile file" "PRO" 
+"Relocatable file" "REL" 
+"Rts information file" "RTS" 
+"S-Record file" "MOT" 
+"Stack information file" "SNI" 
+"TD include object file" "RTI" 
+[FILE_GROUPS]
+"Absolute file" "BIN" "NONE" "" 
+"Archive File" "BIN" "NONE" "" 
+"Assembly include file" "TEXT" "EDITOR" "" 
+"Assembly list file" "TEXT" "EDITOR" "" 
+"Assembly source file" "TEXT" "EDITOR" "" 
+"Binary file" "BIN" "NONE" "" 
+"C header file" "TEXT" "EDITOR" "" 
+"C list file" "TEXT" "EDITOR" "" 
+"C source file" "TEXT" "EDITOR" "" 
+"C++ header file" "TEXT" "EDITOR" "" 
+"C++ list file" "TEXT" "EDITOR" "" 
+"C++ source file" "TEXT" "EDITOR" "" 
+"CPU information file" "BIN" "NONE" "" 
+"Calling information file" "BIN" "NONE" "" 
+"Debug information file" "BIN" "NONE" "" 
+"Expanded assembly source file" "TEXT" "EDITOR" "" 
+"Hex file" "TEXT" "EDITOR" "" 
+"Library file" "BIN" "NONE" "" 
+"Library information file" "TEXT" "EDITOR" "" 
+"Linkage map file" "TEXT" "EDITOR" "" 
+"Object file" "BIN" "NONE" "" 
+"Optimize map file" "BIN" "NONE" "" 
+"Preprocess Assembly file" "TEXT" "EDITOR" "" 
+"Preprocessed C source file" "TEXT" "EDITOR" "" 
+"Preprocessed C++ source file" "TEXT" "EDITOR" "" 
+"Profile file" "BIN" "NONE" "" 
+"Relocatable file" "BIN" "NONE" "" 
+"Rts information file" "BIN" "NONE" "" 
+"S-Record file" "TEXT" "EDITOR" "" 
+"Stack information file" "BIN" "NONE" "" 
+"TD include object file" "BIN" "NONE" "" 
+[ASSOCIATED_APPLICATIONS]
+[TOOLCHAIN_PHASE]
+"GNU Assembler" 
+"GNU Compiler" 
+"GNU Library Generator" 
+"GNU Linker" 
+[UTILITY_PHASE]
+[CUSTOM_PHASES]
+[CUSTOM_PHASE_INPUT_GROUP]
+[CUSTOM_PHASE_OUTPUT_SYNTAX]
+[BUILD_ORDER]
+"GNU Library Generator" 1 
+"GNU Compiler" 1 
+"GNU Assembler" 1 
+"GNU Linker" 1 
+[BUILD_PHASE_DETAILS]
+"GNU Assembler" "Assembly source file" 1 
+"GNU Compiler" "C source file|C++ source file|Preprocess Assembly file" 1 
+"GNU Library Generator" "" 0 
+"GNU Linker" "Object file|Library file|Relocatable file" 0 
+[BUILD_FILE_ORDER_Assembly source file]
+"GNU Assembler" 1 
+[BUILD_FILE_ORDER_C source file]
+"GNU Compiler" 1 
+[BUILD_FILE_ORDER_C++ source file]
+"GNU Compiler" 1 
+[BUILD_FILE_ORDER_Preprocess Assembly file]
+"GNU Compiler" 1 
+[SCRAP]
+"Project Generator Setup File" "" 
+[MAPPINGS]
+"Assembly source file" "GNU Assembler" "GNU Compiler" 
+"Object file" "GNU Linker" "GNU Assembler" 
+"Object file" "GNU Linker" "GNU Compiler" 
+[PROJECT_FILES]
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\chconf.h" "User" "C header file" 2 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\halconf.h" "User" "C header file" 2 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\hardware_setup.c" "User" "C source file" 2 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\interrupt_handlers.c" "User" "C source file" 2 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\interrupt_handlers.h" "User" "C header file" 2 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\iodefine.h" "User" "C header file" 2 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\main.c" "User" "C source file" 2 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\typedefine.h" "User" "C header file" 2 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\vector_table.c" "User" "C source file" 2 
+"C:\rtos\fujitsu_dev\os\kernel\include\chbsem.h" "User" "ChibiOS|kernel|include" 2 
+"C:\rtos\fujitsu_dev\os\kernel\include\chcond.h" "User" "ChibiOS|kernel|include" 2 
+"C:\rtos\fujitsu_dev\os\kernel\include\chdebug.h" "User" "ChibiOS|kernel|include" 2 
+"C:\rtos\fujitsu_dev\os\kernel\include\chdynamic.h" "User" "ChibiOS|kernel|include" 2 
+"C:\rtos\fujitsu_dev\os\kernel\include\chevents.h" "User" "ChibiOS|kernel|include" 2 
+"C:\rtos\fujitsu_dev\os\kernel\include\chfiles.h" "User" "ChibiOS|kernel|include" 2 
+"C:\rtos\fujitsu_dev\os\kernel\include\chheap.h" "User" "ChibiOS|kernel|include" 2 
+"C:\rtos\fujitsu_dev\os\kernel\include\chinline.h" "User" "ChibiOS|kernel|include" 2 
+"C:\rtos\fujitsu_dev\os\kernel\include\chioch.h" "User" "ChibiOS|kernel|include" 2 
+"C:\rtos\fujitsu_dev\os\kernel\include\chlists.h" "User" "ChibiOS|kernel|include" 2 
+"C:\rtos\fujitsu_dev\os\kernel\include\chmboxes.h" "User" "ChibiOS|kernel|include" 2 
+"C:\rtos\fujitsu_dev\os\kernel\include\chmemcore.h" "User" "ChibiOS|kernel|include" 2 
+"C:\rtos\fujitsu_dev\os\kernel\include\chmempools.h" "User" "ChibiOS|kernel|include" 2 
+"C:\rtos\fujitsu_dev\os\kernel\include\chmsg.h" "User" "ChibiOS|kernel|include" 2 
+"C:\rtos\fujitsu_dev\os\kernel\include\chmtx.h" "User" "ChibiOS|kernel|include" 2 
+"C:\rtos\fujitsu_dev\os\kernel\include\chqueues.h" "User" "ChibiOS|kernel|include" 2 
+"C:\rtos\fujitsu_dev\os\kernel\include\chregistry.h" "User" "ChibiOS|kernel|include" 2 
+"C:\rtos\fujitsu_dev\os\kernel\include\chschd.h" "User" "ChibiOS|kernel|include" 2 
+"C:\rtos\fujitsu_dev\os\kernel\include\chsem.h" "User" "ChibiOS|kernel|include" 2 
+"C:\rtos\fujitsu_dev\os\kernel\include\chstreams.h" "User" "ChibiOS|kernel|include" 2 
+"C:\rtos\fujitsu_dev\os\kernel\include\chsys.h" "User" "ChibiOS|kernel|include" 2 
+"C:\rtos\fujitsu_dev\os\kernel\include\chthreads.h" "User" "ChibiOS|kernel|include" 2 
+"C:\rtos\fujitsu_dev\os\kernel\include\chvt.h" "User" "ChibiOS|kernel|include" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chcond.c" "User" "ChibiOS|kernel|src" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chdebug.c" "User" "ChibiOS|kernel|src" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chdynamic.c" "User" "ChibiOS|kernel|src" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chevents.c" "User" "ChibiOS|kernel|src" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chheap.c" "User" "ChibiOS|kernel|src" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chlists.c" "User" "ChibiOS|kernel|src" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmboxes.c" "User" "ChibiOS|kernel|src" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmemcore.c" "User" "ChibiOS|kernel|src" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmempools.c" "User" "ChibiOS|kernel|src" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmsg.c" "User" "ChibiOS|kernel|src" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmtx.c" "User" "ChibiOS|kernel|src" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chqueues.c" "User" "ChibiOS|kernel|src" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chregistry.c" "User" "ChibiOS|kernel|src" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chschd.c" "User" "ChibiOS|kernel|src" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chsem.c" "User" "ChibiOS|kernel|src" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chsys.c" "User" "ChibiOS|kernel|src" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chthreads.c" "User" "ChibiOS|kernel|src" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chvt.c" "User" "ChibiOS|kernel|src" 2 
+"C:\rtos\fujitsu_dev\os\ports\GCC\RX600\chcore.c" "User" "ChibiOS|ports|GCC|RX600" 2 
+"C:\rtos\fujitsu_dev\os\ports\GCC\RX600\chcore.h" "User" "C header file" 2 
+"C:\rtos\fujitsu_dev\os\ports\GCC\RX600\chtypes.h" "User" "ChibiOS|ports|GCC|RX600" 2 
+"C:\rtos\fujitsu_dev\os\ports\GCC\RX600\crt0.s" "User" "ChibiOS|ports|GCC|RX600" 2 
+[FOLDER]
+"Assembly source file" "Assembly source file" 
+"C header file" "C header file" 
+"C source file" "C source file" 
+"ChibiOS" "ChibiOS" 
+"ChibiOS|kernel" "" 
+"ChibiOS|kernel|include" "" 
+"ChibiOS|kernel|src" "" 
+"ChibiOS|ports" "" 
+"ChibiOS|ports|GCC" "" 
+"ChibiOS|ports|GCC|RX600" "" 
+"Preprocess Assembly file" "Preprocess Assembly file" 
+[GENERAL_DATA_PROJECT]
+"MAKEGEN_GENERATE_MAKEFILE_FOR" "0" 
+"MAKEGEN_MAKEFILE_FORMAT" "0" 
+"MAKEGEN_MAKEFILE_RELATIVITY" "1" 
+"MAKEGEN_SCAN_DEPENDENCIES_WHILST_BUILDING_MAKEFILE" "1" 
+"MAKEGEN_USE_STATIC_SUBCOMMAND_FILES" "0" 
+"USE_CUSTOM_LINKAGE_ORDER" "0" 
+[ON_DEMAND_COMPONENTS_LOADED]
+[SYNC_SESSION_NAMES]
+[SESSIONS]
+"DefaultSession" "C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\Hew\ch\DefaultSession.hsf" 0 
+"SessionRX600_Segger_J-Link" "C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\Hew\ch\SessionRX600_Segger_J-Link.hsf" 0 
+"SimSessionRX600" "C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\Hew\ch\SimSessionRX600.hsf" 0 
+[GENERAL_DATA_SESSION_DefaultSession]
+[GENERAL_DATA_SESSION_SessionRX600_Segger_J-Link]
+[GENERAL_DATA_SESSION_SimSessionRX600]
+[OPTIONS_Debug_GNU Assembler]
+"Assembly source file" "05cd6670d97dbc10" 5 
+"C:\rtos\fujitsu_dev\os\ports\GCC\RX600\crt0.s" "006f5880f97dbc10" 5 
+[OPTIONS_Debug_GNU Compiler]
+"C source file" "07b4322b639dbc10" 2 
+"C++ source file" "06210c1a7f9dbc10" 4 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\interrupt_handlers.c" "07b4322b639dbc10" 2 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\main.c" "07b4322b639dbc10" 2 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\vector_table.c" "07b4322b639dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chcond.c" "07b4322b639dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chdebug.c" "07b4322b639dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chdynamic.c" "07b4322b639dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chevents.c" "07b4322b639dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chheap.c" "07b4322b639dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chlists.c" "07b4322b639dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmboxes.c" "07b4322b639dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmemcore.c" "07b4322b639dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmempools.c" "07b4322b639dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmsg.c" "07b4322b639dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmtx.c" "07b4322b639dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chqueues.c" "07b4322b639dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chregistry.c" "07b4322b639dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chschd.c" "07b4322b639dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chsem.c" "07b4322b639dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chsys.c" "07b4322b639dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chthreads.c" "07b4322b639dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chvt.c" "07b4322b639dbc10" 2 
+"C:\rtos\fujitsu_dev\os\ports\GCC\RX600\chcore.c" "07b4322b639dbc10" 2 
+"Preprocess Assembly file" "07b4322b639dbc10" 3 
+[OPTIONS_Debug_GNU Library Generator]
+"Single Shot" "04f2135a139dbc10" 1 
+[OPTIONS_Debug_GNU Linker]
+"Single Shot" "0a72437c139dbc10" 6 
+[OPTIONS_Debug]
+"" 0 
+"[V|VERSION|2] [B|DOEXTF|1] [S|INCDIR|^"$(TCINSTALL)\rx-elf\lib\gcc\rx-elf\4.5-GNURX_v10.03^"|^"$(TCINSTALL)\rx-elf\rx-elf\lib^"] [B|RSARCH|1] [B|FIXUPLIBS|1] [S|ARCHIVE|libgcc.a*libm.a*libc.a*libnosys.a] [S|OUTFORM|DEFAULT] [B|MFILEGEN|1] [S|PLMFILE|^"$(CONFIGDIR)\$(PROJECTNAME).map^"] [S|OUTFILE|^"$(CONFIGDIR)\$(PROJECTNAME).x^"] [S|GROUPDET|.fvectors|0|0||1|0xFFFFFFA0|0|1|0|.fvectors|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.text|0|0||1|0xFFFC0000|0|0|0|.text|All-files|<<FEND>>|0|.text.*|All-files|<<FEND>>|0|P|All-files|<<FEND>>|1|etext|<<FEND>>|<<CEND>>|<<GEND>>|.rvectors|0|0||0||0|1|1|_rvectors_start|<<FEND>>|0|.rvectors|All-files|<<FEND>>|1|_rvectors_end|<<FEND>>|<<CEND>>|<<GEND>>|.init|0|0||0||0|0|0|.init|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.fini|0|0||0||0|0|0|.fini|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.got|0|0||0||0|0|0|.got|All-files|<<FEND>>|0|.got.plt|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.rodata|0|0||0||0|0|0|.rodata|All-files|<<FEND>>|0|.rodata.*|All-files|<<FEND>>|0|C_1|All-files|<<FEND>>|0|C_2|All-files|<<FEND>>|0|C|All-files|<<FEND>>|1|_erodata|<<FEND>>|<<CEND>>|<<GEND>>|.eh_frame_hdr|0|0||0||0|0|0|.eh_frame_hdr|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.eh_frame|0|0||0||0|0|0|.eh_frame|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.jcr|0|0||0||0|0|0|.jcr|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.tors|0|0||0||0|0|1|__CTOR_LIST__|<<FEND>>|1|___ctors|<<FEND>>|0|.ctors|All-files|<<FEND>>|1|___ctors_end|<<FEND>>|1|__CTOR_END__|<<FEND>>|1|__DTOR_LIST__|<<FEND>>|1|___dtors|<<FEND>>|0|.dtors|All-files|<<FEND>>|1|___dtors_end|<<FEND>>|1|__DTOR_END__|<<FEND>>|1|_mdata|<<FEND>>|<<CEND>>|<<GEND>>|.istack|0|0||1|0x00001808|0|0|1|_istack|<<FEND>>|<<CEND>>|<<GEND>>|.ustack|0|0||1|0x00001708|0|0|1|_ustack|<<FEND>>|<<CEND>>|<<GEND>>|.data|0|2|_mdata|1|0x00001001|0|0|1|_data|<<FEND>>|0|.data|All-files|<<FEND>>|0|.data.*|All-files|<<FEND>>|0|D|All-files|<<FEND>>|0|D_1|All-files|<<FEND>>|0|D_2|All-files|<<FEND>>|1|_edata|<<FEND>>|<<CEND>>|<<GEND>>|.gcc_exc|0|0||0||0|0|0|.gcc_exc|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.bss|0|0||0||0|0|1|_bss|<<FEND>>|0|.bss|All-files|<<FEND>>|0|.bss.*|All-files|<<FEND>>|0|COMMON|All-files|<<FEND>>|0|B|All-files|<<FEND>>|0|B_1|All-files|<<FEND>>|0|B_2|All-files|<<FEND>>|1|_ebss|<<FEND>>|1|_end|<<FEND>>|<<CEND>>|<<GEND>>|] [S|APPTXT|^"-e _PowerON_Reset^"] [S|CPUTYPE|RX600] [S|ENDIAN|LITTLE] [S|CPU|Other] [I|RMINTREGVAL|0] [I|RMMAXCONSTVAL|0] [I|RMMAXVARSVAL|0] [S|PROJECTTYPE|CAPPPROJECT] [B|DOOPTLIB|0] [B|DOPROJBUILT|0]
+" 6 
+"[V|VERSION|2] [S|INCDIR|^"$(TCINSTALL)\rx-elf\rx-elf\include^"|^"$(TCINSTALL)\rx-elf\lib\gcc\rx-elf\4.5-GNURX_v10.03\include^"] [S|DEFINES|DEBUG] [S|OUTPUT|OBJECT] [S|OBJPATH|^"$(CONFIGDIR)\$(FILELEAF).o^"] [B|DEBUG|1] [S|DEBUGFT|Native] [I|DEBUGLV|2] [S|ALIGN4|ALL] [B|OPTIMIZE|0] [I|OPTLV|2] [S|APPTXT|^"-Wa,-gdwarf2^"] [S|CPUTYPE|RX600] [S|ENDIAN|LITTLE] [S|CPU|Other] [I|RMINTREGVAL|0] [I|RMMAXCONSTVAL|0] [I|RMMAXVARSVAL|0] [S|PROJECTTYPE|CAPPPROJECT] [B|DOOPTLIB|0]
+" 3 
+"[V|VERSION|2] [S|INCDIR|^"$(TCINSTALL)\rx-elf\rx-elf\include^"|^"$(TCINSTALL)\rx-elf\lib\gcc\rx-elf\4.5-GNURX_v10.03\include^"] [S|DEFINES|DEBUG] [S|OUTPUT|OBJECT] [S|OBJPATH|^"$(CONFIGDIR)\$(FILELEAF).o^"] [B|DEBUG|1] [S|DEBUGFT|Native] [I|DEBUGLV|2] [S|ALIGN4|ALL] [B|OPTIMIZE|1] [I|OPTLV|1] [S|CPUTYPE|RX600] [S|ENDIAN|LITTLE] [S|CPU|Other] [I|RMINTREGVAL|0] [I|RMMAXCONSTVAL|0] [I|RMMAXVARSVAL|0] [S|PROJECTTYPE|CAPPPROJECT] [B|DOOPTLIB|0]
+" 4 
+"[V|VERSION|2] [S|INCDIR|^"$(TCINSTALL)\rx-elf\rx-elf\include^"|^"$(TCINSTALL)\rx-elf\lib\gcc\rx-elf\4.5-GNURX_v10.03\include^"|^"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC^"|^"C:\rtos\fujitsu_dev\os\ports\GCC\RX600^"|^"C:\rtos\fujitsu_dev\os\kernel\include^"] [S|DEFINES|DEBUG] [S|OUTPUT|OBJECT] [S|OBJPATH|^"$(CONFIGDIR)\$(FILELEAF).o^"] [B|DEBUG|1] [S|DEBUGFT|Native] [I|DEBUGLV|2] [S|ALIGN4|ALL] [B|OPTIMIZE|0] [I|OPTLV|2] [S|CPUTYPE|RX600] [S|ENDIAN|LITTLE] [S|CPU|Other] [I|RMINTREGVAL|0] [I|RMMAXCONSTVAL|0] [I|RMMAXVARSVAL|0] [S|PROJECTTYPE|CAPPPROJECT] [B|DOOPTLIB|0]
+" 2 
+"[V|VERSION|2] [S|MODE|BUILD/CHANGED] [B|CTYPE|1] [B|MATH|1] [B|STDIO|1] [B|STDLIB|1] [B|STRING|1] [B|DOPROJBUILT|0] [B|DOOPTLIB|0] [S|OUTPUTPATH|^"$(CONFIGDIR)\lib$(PROJECTNAME).a^"] [B|OPTIMIZE|1] [I|OPTTYPE|1] [S|CPUTYPE|RX600] [S|ENDIAN|LITTLE] [S|CPU|Other] [I|RMINTREGVAL|0] [I|RMMAXCONSTVAL|0] [I|RMMAXVARSVAL|0]
+" 1 
+"[V|VERSION|2] [S|OBJPATH|^"$(CONFIGDIR)\$(FILELEAF).o^"] [I|DEBUGLV|2] [B|LINCHLS|1] [B|LINCASS|1] [B|LINCSYM|1] [S|LFILE|^"$(CONFIGDIR)\$(FILELEAF).^"] [S|PROJECTTYPE|CAPPPROJECT] [S|INCDIR|^"$(PROJDIR)^"] [S|CPUTYPE|RX600] [S|ENDIAN|LITTLE] [S|CPU|RX62N] " 5 
+[EXCLUDED_FILES_Debug]
+[LINKAGE_ORDER_Debug]
+[GENERAL_DATA_CONFIGURATION_Debug]
+[OPTIONS_Debug_RX600_Segger_J-Link_GNU Assembler]
+"Assembly source file" "05cd6670d97dbc10" 3 
+"C:\rtos\fujitsu_dev\os\ports\GCC\RX600\crt0.s" "006f5880f97dbc10" 3 
+[OPTIONS_Debug_RX600_Segger_J-Link_GNU Compiler]
+"C source file" "05cd6670d97dbc10" 2 
+"C++ source file" "05cd6670d97dbc10" 2 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\interrupt_handlers.c" "0fe9717c139dbc10" 2 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\main.c" "00240f61e97dbc10" 2 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\vector_table.c" "00665846139dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chcond.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chdebug.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chdynamic.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chevents.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chheap.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chlists.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmboxes.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmemcore.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmempools.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmsg.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmtx.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chqueues.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chregistry.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chschd.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chsem.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chsys.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chthreads.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chvt.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\ports\GCC\RX600\chcore.c" "006f5880f97dbc10" 2 
+"Preprocess Assembly file" "05cd6670d97dbc10" 2 
+[OPTIONS_Debug_RX600_Segger_J-Link_GNU Library Generator]
+"Single Shot" "05cd6670d97dbc10" 1 
+[OPTIONS_Debug_RX600_Segger_J-Link_GNU Linker]
+"Single Shot" "0a72437c139dbc10" 4 
+[OPTIONS_Debug_RX600_Segger_J-Link]
+"" 0 
+"[V|VERSION|2] [S|OBJPATH|^"$(CONFIGDIR)\$(FILELEAF).o^"] [I|DEBUGLV|2] [B|LINCHLS|1] [B|LINCASS|1] [B|LINCSYM|1] [S|LFILE|^"$(CONFIGDIR)\$(FILELEAF).^"] [S|PROJECTTYPE|CAPPPROJECT] [S|INCDIR|^"$(PROJDIR)^"] [S|CPUTYPE|RX600] [S|ENDIAN|LITTLE] [S|CPU|RX62N] " 3 
+"[V|VERSION|2] [S|OUTFORM|BOTH] [B|MFILEGEN|1] [S|PLMFILE|^"$(CONFIGDIR)\$(PROJECTNAME).map^"] [S|APPTXT|^"-e _PowerON_Reset^"] [S|OUTFILE|^"$(CONFIGDIR)\$(PROJECTNAME).x^"] [B|RSARCH|1] [B|FIXUPLIBS|1] [B|SUBCOMMAND|0] [S|PROJECTTYPE|CAPPPROJECT] [S|ENDIAN|LITTLE] [S|CPUTYPE|RX600] [S|CPU|RX62N] [B|DOOPTLIB|0] [B|DOPROJBUILT|1] [S|ARCHIVE|libch.a*libgcc.a] [S|INCDIR|^"$(TCINSTALL)\rx-elf\lib\gcc\rx-elf\4.5-GNURX_v10.03^"|^"$(CONFIGDIR)^"] [S|GROUPDET|.fvectors|0|0||1|0xFFFFFFA0|0|1|0|.fvectors|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.text|0|0||1|0xFFFC0000|0|0|0|.text|All-files|<<FEND>>|0|.text.*|All-files|<<FEND>>|0|P|All-files|<<FEND>>|1|etext|<<FEND>>|<<CEND>>|<<GEND>>|.rvectors|0|0||0||0|1|1|_rvectors_start|<<FEND>>|0|.rvectors|All-files|<<FEND>>|1|_rvectors_end|<<FEND>>|<<CEND>>|<<GEND>>|.init|0|0||0||0|0|0|.init|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.fini|0|0||0||0|0|0|.fini|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.got|0|0||0||0|0|0|.got|All-files|<<FEND>>|0|.got.plt|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.rodata|0|0||0||0|0|0|.rodata|All-files|<<FEND>>|0|.rodata.*|All-files|<<FEND>>|0|C_1|All-files|<<FEND>>|0|C_2|All-files|<<FEND>>|0|C|All-files|<<FEND>>|1|_erodata|<<FEND>>|<<CEND>>|<<GEND>>|.eh_frame_hdr|0|0||0||0|0|0|.eh_frame_hdr|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.eh_frame|0|0||0||0|0|0|.eh_frame|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.jcr|0|0||0||0|0|0|.jcr|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.tors|0|0||0||0|0|1|__CTOR_LIST__|<<FEND>>|1|___ctors|<<FEND>>|0|.ctors|All-files|<<FEND>>|1|___ctors_end|<<FEND>>|1|__CTOR_END__|<<FEND>>|1|__DTOR_LIST__|<<FEND>>|1|___dtors|<<FEND>>|0|.dtors|All-files|<<FEND>>|1|___dtors_end|<<FEND>>|1|__DTOR_END__|<<FEND>>|1|_mdata|<<FEND>>|<<CEND>>|<<GEND>>|.istack|0|0||1|0x00001808|0|0|1|_istack|<<FEND>>|<<CEND>>|<<GEND>>|.ustack|0|0||1|0x00001708|0|0|1|_ustack|<<FEND>>|<<CEND>>|<<GEND>>|.data|0|2|_mdata|1|0x00001001|0|0|1|_data|<<FEND>>|0|.data|All-files|<<FEND>>|0|.data.*|All-files|<<FEND>>|0|D|All-files|<<FEND>>|0|D_1|All-files|<<FEND>>|0|D_2|All-files|<<FEND>>|1|_edata|<<FEND>>|<<CEND>>|<<GEND>>|.gcc_exc|0|0||0||0|0|0|.gcc_exc|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.bss|0|0||0||0|0|1|_bss|<<FEND>>|0|.bss|All-files|<<FEND>>|0|.bss.*|All-files|<<FEND>>|0|COMMON|All-files|<<FEND>>|0|B|All-files|<<FEND>>|0|B_1|All-files|<<FEND>>|0|B_2|All-files|<<FEND>>|1|_ebss|<<FEND>>|1|_end|<<FEND>>|<<CEND>>|<<GEND>>] " 4 
+"[V|VERSION|2] [S|OUTPUTPATH|^"$(CONFIGDIR)\lib$(PROJECTNAME).a^"] [B|OPTIMIZE|1] [I|OPTTYPE|1] [S|MODE|BUILD/CHANGED] [S|CPUTYPE|RX600] [S|ENDIAN|LITTLE] [S|CPU|RX62N] [B|DOPROJBUILT|1] [B|DOOPTLIB|0] [B|CTYPE|1] [B|MATH|1] [B|STDIO|1] [B|STDLIB|1] [B|STRING|1] " 1 
+"[V|VERSION|2] [S|OUTPUT|OBJECT] [S|OBJPATH|^"$(CONFIGDIR)\$(FILELEAF).o^"] [B|OPTIMIZE|0] [I|OPTLV|2] [B|DEBUG|1] [I|DEBUGLV|2] [S|DEBUGFT|Native] [S|DEFINES|DEBUG] [S|PROJECTTYPE|CAPPPROJECT] [S|CPUTYPE|RX600] [S|ENDIAN|LITTLE] [S|CPU|RX62N] [B|DOOPTLIB|0] [S|INCDIR|^"$(TCINSTALL)\rx-elf\rx-elf\include^"|^"$(TCINSTALL)\rx-elf\lib\gcc\rx-elf\4.5-GNURX_v10.03\include^"] " 2 
+[EXCLUDED_FILES_Debug_RX600_Segger_J-Link]
+[LINKAGE_ORDER_Debug_RX600_Segger_J-Link]
+[GENERAL_DATA_CONFIGURATION_Debug_RX600_Segger_J-Link]
+[OPTIONS_Release_GNU Assembler]
+"Assembly source file" "05cd6670d97dbc10" 3 
+"C:\rtos\fujitsu_dev\os\ports\GCC\RX600\crt0.s" "006f5880f97dbc10" 3 
+[OPTIONS_Release_GNU Compiler]
+"C source file" "05cd6670d97dbc10" 2 
+"C++ source file" "05cd6670d97dbc10" 2 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\interrupt_handlers.c" "0fe9717c139dbc10" 2 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\main.c" "00240f61e97dbc10" 2 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\vector_table.c" "00665846139dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chcond.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chdebug.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chdynamic.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chevents.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chheap.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chlists.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmboxes.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmemcore.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmempools.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmsg.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmtx.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chqueues.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chregistry.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chschd.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chsem.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chsys.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chthreads.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chvt.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\ports\GCC\RX600\chcore.c" "006f5880f97dbc10" 2 
+"Preprocess Assembly file" "05cd6670d97dbc10" 2 
+[OPTIONS_Release_GNU Library Generator]
+"Single Shot" "05cd6670d97dbc10" 1 
+[OPTIONS_Release_GNU Linker]
+"Single Shot" "0a72437c139dbc10" 4 
+[OPTIONS_Release]
+"" 0 
+"[V|VERSION|2] [S|OBJPATH|^"$(CONFIGDIR)\$(FILELEAF).o^"] [I|DEBUGLV|0] [B|LINCHLS|1] [B|LINCASS|1] [B|LINCSYM|1] [S|LFILE|^"$(CONFIGDIR)\$(FILELEAF).^"] [S|PROJECTTYPE|CAPPPROJECT] [S|INCDIR|^"$(PROJDIR)^"] [S|CPUTYPE|RX600] [S|ENDIAN|LITTLE] [S|CPU|RX62N] " 3 
+"[V|VERSION|2] [S|OUTFORM|BOTH] [B|MFILEGEN|1] [S|PLMFILE|^"$(CONFIGDIR)\$(PROJECTNAME).map^"] [S|APPTXT|^"-e _PowerON_Reset^"] [S|OUTFILE|^"$(CONFIGDIR)\$(PROJECTNAME).x^"] [B|RSARCH|1] [B|OPTMEM|1] [B|ODEBSYM|1] [B|FIXUPLIBS|1] [B|SUBCOMMAND|0] [S|PROJECTTYPE|CAPPPROJECT] [S|ENDIAN|LITTLE] [S|CPUTYPE|RX600] [S|CPU|RX62N] [B|DOOPTLIB|0] [B|DOPROJBUILT|1] [S|ARCHIVE|libch.a*libgcc.a] [S|INCDIR|^"$(TCINSTALL)\rx-elf\lib\gcc\rx-elf\4.5-GNURX_v10.03^"|^"$(CONFIGDIR)^"] [S|GROUPDET|.fvectors|0|0||1|0xFFFFFFA0|0|1|0|.fvectors|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.text|0|0||1|0xFFFC0000|0|0|0|.text|All-files|<<FEND>>|0|.text.*|All-files|<<FEND>>|0|P|All-files|<<FEND>>|1|etext|<<FEND>>|<<CEND>>|<<GEND>>|.rvectors|0|0||0||0|1|1|_rvectors_start|<<FEND>>|0|.rvectors|All-files|<<FEND>>|1|_rvectors_end|<<FEND>>|<<CEND>>|<<GEND>>|.init|0|0||0||0|0|0|.init|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.fini|0|0||0||0|0|0|.fini|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.got|0|0||0||0|0|0|.got|All-files|<<FEND>>|0|.got.plt|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.rodata|0|0||0||0|0|0|.rodata|All-files|<<FEND>>|0|.rodata.*|All-files|<<FEND>>|0|C_1|All-files|<<FEND>>|0|C_2|All-files|<<FEND>>|0|C|All-files|<<FEND>>|1|_erodata|<<FEND>>|<<CEND>>|<<GEND>>|.eh_frame_hdr|0|0||0||0|0|0|.eh_frame_hdr|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.eh_frame|0|0||0||0|0|0|.eh_frame|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.jcr|0|0||0||0|0|0|.jcr|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.tors|0|0||0||0|0|1|__CTOR_LIST__|<<FEND>>|1|___ctors|<<FEND>>|0|.ctors|All-files|<<FEND>>|1|___ctors_end|<<FEND>>|1|__CTOR_END__|<<FEND>>|1|__DTOR_LIST__|<<FEND>>|1|___dtors|<<FEND>>|0|.dtors|All-files|<<FEND>>|1|___dtors_end|<<FEND>>|1|__DTOR_END__|<<FEND>>|1|_mdata|<<FEND>>|<<CEND>>|<<GEND>>|.istack|0|0||1|0x00001808|0|0|1|_istack|<<FEND>>|<<CEND>>|<<GEND>>|.ustack|0|0||1|0x00001708|0|0|1|_ustack|<<FEND>>|<<CEND>>|<<GEND>>|.data|0|2|_mdata|1|0x00001001|0|0|1|_data|<<FEND>>|0|.data|All-files|<<FEND>>|0|.data.*|All-files|<<FEND>>|0|D|All-files|<<FEND>>|0|D_1|All-files|<<FEND>>|0|D_2|All-files|<<FEND>>|1|_edata|<<FEND>>|<<CEND>>|<<GEND>>|.gcc_exc|0|0||0||0|0|0|.gcc_exc|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.bss|0|0||0||0|0|1|_bss|<<FEND>>|0|.bss|All-files|<<FEND>>|0|.bss.*|All-files|<<FEND>>|0|COMMON|All-files|<<FEND>>|0|B|All-files|<<FEND>>|0|B_1|All-files|<<FEND>>|0|B_2|All-files|<<FEND>>|1|_ebss|<<FEND>>|1|_end|<<FEND>>|<<CEND>>|<<GEND>>] " 4 
+"[V|VERSION|2] [S|OUTPUTPATH|^"$(CONFIGDIR)\lib$(PROJECTNAME).a^"] [B|OPTIMIZE|1] [I|OPTTYPE|1] [S|MODE|BUILD/CHANGED] [S|CPUTYPE|RX600] [S|ENDIAN|LITTLE] [S|CPU|RX62N] [B|DOPROJBUILT|1] [B|DOOPTLIB|0] [B|CTYPE|1] [B|MATH|1] [B|STDIO|1] [B|STDLIB|1] [B|STRING|1] " 1 
+"[V|VERSION|2] [S|OUTPUT|OBJECT] [S|OBJPATH|^"$(CONFIGDIR)\$(FILELEAF).o^"] [B|OPTIMIZE|1] [I|OPTLV|2] [B|DEBUG|0] [I|DEBUGLV|2] [S|DEBUGFT|Native] [S|DEFINES|RELEASE] [S|PROJECTTYPE|CAPPPROJECT] [S|CPUTYPE|RX600] [S|ENDIAN|LITTLE] [S|CPU|RX62N] [B|DOOPTLIB|0] [S|INCDIR|^"$(TCINSTALL)\rx-elf\rx-elf\include^"|^"$(TCINSTALL)\rx-elf\lib\gcc\rx-elf\4.5-GNURX_v10.03\include^"] " 2 
+[EXCLUDED_FILES_Release]
+[LINKAGE_ORDER_Release]
+[GENERAL_DATA_CONFIGURATION_Release]
+[OPTIONS_SimDebug_RX600_GNU Assembler]
+"Assembly source file" "05cd6670d97dbc10" 3 
+"C:\rtos\fujitsu_dev\os\ports\GCC\RX600\crt0.s" "006f5880f97dbc10" 3 
+[OPTIONS_SimDebug_RX600_GNU Compiler]
+"C source file" "05cd6670d97dbc10" 2 
+"C++ source file" "05cd6670d97dbc10" 2 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\interrupt_handlers.c" "0fe9717c139dbc10" 2 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\main.c" "00240f61e97dbc10" 2 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\vector_table.c" "00665846139dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chcond.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chdebug.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chdynamic.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chevents.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chheap.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chlists.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmboxes.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmemcore.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmempools.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmsg.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmtx.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chqueues.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chregistry.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chschd.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chsem.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chsys.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chthreads.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\kernel\src\chvt.c" "0f939caae97dbc10" 2 
+"C:\rtos\fujitsu_dev\os\ports\GCC\RX600\chcore.c" "006f5880f97dbc10" 2 
+"Preprocess Assembly file" "05cd6670d97dbc10" 2 
+[OPTIONS_SimDebug_RX600_GNU Library Generator]
+"Single Shot" "05cd6670d97dbc10" 1 
+[OPTIONS_SimDebug_RX600_GNU Linker]
+"Single Shot" "0a72437c139dbc10" 4 
+[OPTIONS_SimDebug_RX600]
+"" 0 
+"[V|VERSION|2] [S|OBJPATH|^"$(CONFIGDIR)\$(FILELEAF).o^"] [I|DEBUGLV|2] [B|LINCHLS|1] [B|LINCASS|1] [B|LINCSYM|1] [S|LFILE|^"$(CONFIGDIR)\$(FILELEAF).^"] [S|PROJECTTYPE|CAPPPROJECT] [S|INCDIR|^"$(PROJDIR)^"] [S|CPUTYPE|RX600] [S|ENDIAN|LITTLE] [S|CPU|RX62N] " 3 
+"[V|VERSION|2] [S|OUTFORM|BOTH] [B|MFILEGEN|1] [S|PLMFILE|^"$(CONFIGDIR)\$(PROJECTNAME).map^"] [S|APPTXT|^"-e _PowerON_Reset^"] [S|OUTFILE|^"$(CONFIGDIR)\$(PROJECTNAME).x^"] [B|RSARCH|1] [B|FIXUPLIBS|1] [B|SUBCOMMAND|0] [S|PROJECTTYPE|CAPPPROJECT] [S|ENDIAN|LITTLE] [S|CPUTYPE|RX600] [S|CPU|RX62N] [B|DOOPTLIB|0] [B|DOPROJBUILT|1] [S|ARCHIVE|libch.a*libgcc.a] [S|INCDIR|^"$(TCINSTALL)\rx-elf\lib\gcc\rx-elf\4.5-GNURX_v10.03^"|^"$(CONFIGDIR)^"] [S|GROUPDET|.fvectors|0|0||1|0xFFFFFFA0|0|1|0|.fvectors|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.text|0|0||1|0xFFFC0000|0|0|0|.text|All-files|<<FEND>>|0|.text.*|All-files|<<FEND>>|0|P|All-files|<<FEND>>|1|etext|<<FEND>>|<<CEND>>|<<GEND>>|.rvectors|0|0||0||0|1|1|_rvectors_start|<<FEND>>|0|.rvectors|All-files|<<FEND>>|1|_rvectors_end|<<FEND>>|<<CEND>>|<<GEND>>|.init|0|0||0||0|0|0|.init|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.fini|0|0||0||0|0|0|.fini|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.got|0|0||0||0|0|0|.got|All-files|<<FEND>>|0|.got.plt|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.rodata|0|0||0||0|0|0|.rodata|All-files|<<FEND>>|0|.rodata.*|All-files|<<FEND>>|0|C_1|All-files|<<FEND>>|0|C_2|All-files|<<FEND>>|0|C|All-files|<<FEND>>|1|_erodata|<<FEND>>|<<CEND>>|<<GEND>>|.eh_frame_hdr|0|0||0||0|0|0|.eh_frame_hdr|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.eh_frame|0|0||0||0|0|0|.eh_frame|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.jcr|0|0||0||0|0|0|.jcr|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.tors|0|0||0||0|0|1|__CTOR_LIST__|<<FEND>>|1|___ctors|<<FEND>>|0|.ctors|All-files|<<FEND>>|1|___ctors_end|<<FEND>>|1|__CTOR_END__|<<FEND>>|1|__DTOR_LIST__|<<FEND>>|1|___dtors|<<FEND>>|0|.dtors|All-files|<<FEND>>|1|___dtors_end|<<FEND>>|1|__DTOR_END__|<<FEND>>|1|_mdata|<<FEND>>|<<CEND>>|<<GEND>>|.istack|0|0||1|0x00001808|0|0|1|_istack|<<FEND>>|<<CEND>>|<<GEND>>|.ustack|0|0||1|0x00001708|0|0|1|_ustack|<<FEND>>|<<CEND>>|<<GEND>>|.data|0|2|_mdata|1|0x00001001|0|0|1|_data|<<FEND>>|0|.data|All-files|<<FEND>>|0|.data.*|All-files|<<FEND>>|0|D|All-files|<<FEND>>|0|D_1|All-files|<<FEND>>|0|D_2|All-files|<<FEND>>|1|_edata|<<FEND>>|<<CEND>>|<<GEND>>|.gcc_exc|0|0||0||0|0|0|.gcc_exc|All-files|<<FEND>>|<<CEND>>|<<GEND>>|.bss|0|0||0||0|0|1|_bss|<<FEND>>|0|.bss|All-files|<<FEND>>|0|.bss.*|All-files|<<FEND>>|0|COMMON|All-files|<<FEND>>|0|B|All-files|<<FEND>>|0|B_1|All-files|<<FEND>>|0|B_2|All-files|<<FEND>>|1|_ebss|<<FEND>>|1|_end|<<FEND>>|<<CEND>>|<<GEND>>] " 4 
+"[V|VERSION|2] [S|OUTPUTPATH|^"$(CONFIGDIR)\lib$(PROJECTNAME).a^"] [B|OPTIMIZE|1] [I|OPTTYPE|1] [S|MODE|BUILD/CHANGED] [S|CPUTYPE|RX600] [S|ENDIAN|LITTLE] [S|CPU|RX62N] [B|DOPROJBUILT|1] [B|DOOPTLIB|0] [B|CTYPE|1] [B|MATH|1] [B|STDIO|1] [B|STDLIB|1] [B|STRING|1] " 1 
+"[V|VERSION|2] [S|OUTPUT|OBJECT] [S|OBJPATH|^"$(CONFIGDIR)\$(FILELEAF).o^"] [B|OPTIMIZE|0] [I|OPTLV|2] [B|DEBUG|1] [I|DEBUGLV|2] [S|DEBUGFT|Native] [S|DEFINES|DEBUG] [S|PROJECTTYPE|CAPPPROJECT] [S|CPUTYPE|RX600] [S|ENDIAN|LITTLE] [S|CPU|RX62N] [B|DOOPTLIB|0] [S|INCDIR|^"$(TCINSTALL)\rx-elf\rx-elf\include^"|^"$(TCINSTALL)\rx-elf\lib\gcc\rx-elf\4.5-GNURX_v10.03\include^"] " 2 
+[EXCLUDED_FILES_SimDebug_RX600]
+[LINKAGE_ORDER_SimDebug_RX600]
+[GENERAL_DATA_CONFIGURATION_SimDebug_RX600]
+[GENERAL_DATA_CONFIGURATION_SESSION_Debug_DefaultSession]
+[SESSION_DATA_CONFIGURATION_SESSION_Debug_DefaultSession]
+"MEMORY_MAPPING_OPTIONS" "" 
+[GENERAL_DATA_CONFIGURATION_SESSION_Debug_SessionRX600_Segger_J-Link]
+[SESSION_DATA_CONFIGURATION_SESSION_Debug_SessionRX600_Segger_J-Link]
+"MEMORY_MAPPING_OPTIONS" "Unknown Options" 
+[GENERAL_DATA_CONFIGURATION_SESSION_Debug_SimSessionRX600]
+[SESSION_DATA_CONFIGURATION_SESSION_Debug_SimSessionRX600]
+"MEMORY_MAPPING_OPTIONS" "[V|VERSION|1] [S|CPUTYPE|^"H8RX62N (H8RX600)^"] [S|MAP|^"0x00000000,0x0001FFFF,RAM,32,0101,2 0x00080000,0x000FFFFF,I/O,32,0101,2 0x00100000,0x00107FFF,ROM,32,0101,2 0x007F8000,0x007F9FFF,RAM,32,0101,2 0x007FC000,0x007FC4FF,I/O,32,0101,2 0x007FFC00,0x007FFFFF,I/O,32,0101,2 0x00E00000,0x00FFFFFF,ROM,32,0101,2 0xFEFFE000,0xFEFFFFFF,ROM,32,0101,2 0xFF7FC000,0xFF7FFFFF,ROM,32,0101,2 0xFFE00000,0xFFFFFFFF,ROM,32,0101,2^"] [S|RESOURCE|^"0x00000000,0x0001FFFF,R/W 0x00080000,0x000FFFFF,R/W 0x007FC000,0x007FC4FF,R/W 0x007FFC00,0x007FFFFF,R/W 0xFFFF8000,0xFFFFFFFF,R/W ^"] [B|SIMIOF|0] [I|SIMIOADR|0x0] [I|BUS_MODE|0]" 
+[GENERAL_DATA_CONFIGURATION_SESSION_Debug_RX600_Segger_J-Link_DefaultSession]
+[SESSION_DATA_CONFIGURATION_SESSION_Debug_RX600_Segger_J-Link_DefaultSession]
+"MEMORY_MAPPING_OPTIONS" "" 
+[GENERAL_DATA_CONFIGURATION_SESSION_Debug_RX600_Segger_J-Link_SessionRX600_Segger_J-Link]
+[SESSION_DATA_CONFIGURATION_SESSION_Debug_RX600_Segger_J-Link_SessionRX600_Segger_J-Link]
+"MEMORY_MAPPING_OPTIONS" "Unknown Options" 
+[GENERAL_DATA_CONFIGURATION_SESSION_Debug_RX600_Segger_J-Link_SimSessionRX600]
+[SESSION_DATA_CONFIGURATION_SESSION_Debug_RX600_Segger_J-Link_SimSessionRX600]
+"MEMORY_MAPPING_OPTIONS" "[V|VERSION|1] [S|CPUTYPE|^"H8RX62N (H8RX600)^"] [S|MAP|^"0x00000000,0x0001FFFF,RAM,32,0101,2 0x00080000,0x000FFFFF,I/O,32,0101,2 0x00100000,0x00107FFF,ROM,32,0101,2 0x007F8000,0x007F9FFF,RAM,32,0101,2 0x007FC000,0x007FC4FF,I/O,32,0101,2 0x007FFC00,0x007FFFFF,I/O,32,0101,2 0x00E00000,0x00FFFFFF,ROM,32,0101,2 0xFEFFE000,0xFEFFFFFF,ROM,32,0101,2 0xFF7FC000,0xFF7FFFFF,ROM,32,0101,2 0xFFE00000,0xFFFFFFFF,ROM,32,0101,2^"] [S|RESOURCE|^"0x00000000,0x0001FFFF,R/W 0x00080000,0x000FFFFF,R/W 0x007FC000,0x007FC4FF,R/W 0x007FFC00,0x007FFFFF,R/W 0xFFFF8000,0xFFFFFFFF,R/W ^"] [B|SIMIOF|0] [I|SIMIOADR|0x0] [I|BUS_MODE|0]" 
+[GENERAL_DATA_CONFIGURATION_SESSION_Release_DefaultSession]
+[SESSION_DATA_CONFIGURATION_SESSION_Release_DefaultSession]
+"MEMORY_MAPPING_OPTIONS" "" 
+[GENERAL_DATA_CONFIGURATION_SESSION_Release_SessionRX600_Segger_J-Link]
+[SESSION_DATA_CONFIGURATION_SESSION_Release_SessionRX600_Segger_J-Link]
+"MEMORY_MAPPING_OPTIONS" "Unknown Options" 
+[GENERAL_DATA_CONFIGURATION_SESSION_Release_SimSessionRX600]
+[SESSION_DATA_CONFIGURATION_SESSION_Release_SimSessionRX600]
+"MEMORY_MAPPING_OPTIONS" "[V|VERSION|1] [S|CPUTYPE|^"H8RX62N (H8RX600)^"] [S|MAP|^"0x00000000,0x0001FFFF,RAM,32,0101,2 0x00080000,0x000FFFFF,I/O,32,0101,2 0x00100000,0x00107FFF,ROM,32,0101,2 0x007F8000,0x007F9FFF,RAM,32,0101,2 0x007FC000,0x007FC4FF,I/O,32,0101,2 0x007FFC00,0x007FFFFF,I/O,32,0101,2 0x00E00000,0x00FFFFFF,ROM,32,0101,2 0xFEFFE000,0xFEFFFFFF,ROM,32,0101,2 0xFF7FC000,0xFF7FFFFF,ROM,32,0101,2 0xFFE00000,0xFFFFFFFF,ROM,32,0101,2^"] [S|RESOURCE|^"0x00000000,0x0001FFFF,R/W 0x00080000,0x000FFFFF,R/W 0x007FC000,0x007FC4FF,R/W 0x007FFC00,0x007FFFFF,R/W 0xFFFF8000,0xFFFFFFFF,R/W ^"] [B|SIMIOF|0] [I|SIMIOADR|0x0] [I|BUS_MODE|0]" 
+[GENERAL_DATA_CONFIGURATION_SESSION_SimDebug_RX600_DefaultSession]
+[SESSION_DATA_CONFIGURATION_SESSION_SimDebug_RX600_DefaultSession]
+"MEMORY_MAPPING_OPTIONS" "" 
+[GENERAL_DATA_CONFIGURATION_SESSION_SimDebug_RX600_SessionRX600_Segger_J-Link]
+[SESSION_DATA_CONFIGURATION_SESSION_SimDebug_RX600_SessionRX600_Segger_J-Link]
+"MEMORY_MAPPING_OPTIONS" "Unknown Options" 
+[GENERAL_DATA_CONFIGURATION_SESSION_SimDebug_RX600_SimSessionRX600]
+[SESSION_DATA_CONFIGURATION_SESSION_SimDebug_RX600_SimSessionRX600]
+"MEMORY_MAPPING_OPTIONS" "[V|VERSION|1] [S|CPUTYPE|^"H8RX62N (H8RX600)^"] [S|MAP|^"0x00000000,0x0001FFFF,RAM,32,0101,2 0x00080000,0x000FFFFF,I/O,32,0101,2 0x00100000,0x00107FFF,ROM,32,0101,2 0x007F8000,0x007F9FFF,RAM,32,0101,2 0x007FC000,0x007FC4FF,I/O,32,0101,2 0x007FFC00,0x007FFFFF,I/O,32,0101,2 0x00E00000,0x00FFFFFF,ROM,32,0101,2 0xFEFFE000,0xFEFFFFFF,ROM,32,0101,2 0xFF7FC000,0xFF7FFFFF,ROM,32,0101,2 0xFFE00000,0xFFFFFFFF,ROM,32,0101,2^"] [S|RESOURCE|^"0x00000000,0x0001FFFF,R/W 0x00080000,0x000FFFFF,R/W 0x007FC000,0x007FC4FF,R/W 0x007FFC00,0x007FFFFF,R/W 0xFFFF8000,0xFFFFFFFF,R/W ^"] [B|SIMIOF|0] [I|SIMIOADR|0x0] [I|BUS_MODE|0]" 
+[EXT_DEBUGGER_INFO]
+0 "" "" "" "" 
+[END]

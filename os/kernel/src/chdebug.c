@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -27,12 +28,15 @@
  *          - Parameters check.
  *          - Kernel assertions.
  *          .
+ * @pre     In order to use the debug APIs the @p CH_DBG_ENABLE_TRACE,
+ *          @p CH_DBG_ENABLE_ASSERTS, @p CH_DBG_ENABLE_CHECKS options must
+ *          be enabled in @p chconf.h.
  * @{
  */
 
 #include "ch.h"
 
-#if CH_DBG_ENABLE_TRACE
+#if CH_DBG_ENABLE_TRACE || defined(__DOXYGEN__)
 /**
  * @brief   Public trace buffer.
  */
@@ -40,8 +44,9 @@ TraceBuffer trace_buffer;
 
 /**
  * @brief   Trace circular buffer subsystem initialization.
+ * @note    Internal use only.
  */
-void trace_init(void) {
+void _trace_init(void) {
 
   trace_buffer.tb_size = TRACE_BUFFER_SIZE;
   trace_buffer.tb_ptr = &trace_buffer.tb_buffer[0];
@@ -51,6 +56,8 @@ void trace_init(void) {
  * @brief   Inserts in the circular debug trace buffer a context switch record.
  *
  * @param[in] otp       the thread being switched out
+ *
+ * @notapi
  */
 void chDbgTrace(Thread *otp) {
 
@@ -63,7 +70,8 @@ void chDbgTrace(Thread *otp) {
 }
 #endif /* CH_DBG_ENABLE_TRACE */
 
-#if CH_DBG_ENABLE_ASSERTS || CH_DBG_ENABLE_CHECKS || CH_DBG_ENABLE_STACK_CHECK
+#if CH_DBG_ENABLE_ASSERTS || CH_DBG_ENABLE_CHECKS ||                        \
+    CH_DBG_ENABLE_STACK_CHECK || defined(__DOXYGEN__)
 /**
  * @brief   Pointer to the panic message.
  * @details This pointer is meant to be accessed through the debugger, it is

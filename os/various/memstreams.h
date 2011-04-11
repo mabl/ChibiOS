@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -32,7 +33,7 @@
  * @brief   @p RamStream specific data.
  */
 #define _memory_stream_data                                                 \
-  _base_sequental_stream_data                                               \
+  _base_sequential_stream_data                                              \
   /* Pointer to the stream buffer.*/                                        \
   uint8_t               *buffer;                                            \
   /* Size of the stream.*/                                                  \
@@ -46,7 +47,7 @@
  * @brief   @p MemStream virtual methods table.
  */
 struct MemStreamVMT {
-  _base_sequental_stream_methods
+  _base_sequential_stream_methods
 };
 
 /**

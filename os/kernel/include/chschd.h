@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -48,16 +49,18 @@
  * @note    Not all functions accept @p TIME_IMMEDIATE as timeout parameter,
  *          see the specific function documentation.
  */
-#define TIME_IMMEDIATE  ((systime_t)-1)
+#define TIME_IMMEDIATE  ((systime_t)0)
 
 /**
  * @brief   Infinite time specification for all the syscalls with a timeout
  *          specification.
  */
-#define TIME_INFINITE   ((systime_t)0)
+#define TIME_INFINITE   ((systime_t)-1)
 
 /**
  * @brief   Returns the priority of the first thread on the given ready list.
+ *
+ * @notapi
  */
 #define firstprio(rlp)  ((rlp)->p_next->p_prio)
 
@@ -111,6 +114,8 @@ register Thread *currp asm(CH_CURRP_REGISTER_CACHE);
  * @brief   Current thread pointer change macro.
  * @note    This macro is not meant to be used in the application code but
  *          only from within the kernel.
+ *
+ * @notapi
  */
 #if !defined(PORT_OPTIMIZED_SETCURRP) || defined(__DOXYGEN__)
 #define setcurrp(tp) (currp = (tp))
@@ -122,7 +127,7 @@ register Thread *currp asm(CH_CURRP_REGISTER_CACHE);
 #ifdef __cplusplus
 extern "C" {
 #endif
-  void scheduler_init(void);
+  void _scheduler_init(void);
 #if !defined(PORT_OPTIMIZED_READYI)
   Thread *chSchReadyI(Thread *tp);
 #endif
@@ -152,6 +157,8 @@ extern "C" {
  * @brief   Determines if the current thread must reschedule.
  * @details This function returns @p TRUE if there is a ready thread with
  *          higher priority.
+ *
+ * @iclass
  */
 #if !defined(PORT_OPTIMIZED_ISRESCHREQUIREDI) || defined(__DOXYGEN__)
 #define chSchIsRescRequiredI() (firstprio(&rlist.r_queue) > currp->p_prio)
@@ -161,6 +168,8 @@ extern "C" {
  * @brief   Determines if yielding is possible.
  * @details This function returns @p TRUE if there is a ready thread with
  *          equal or higher priority.
+ *
+ * @sclass
  */
 #if !defined(PORT_OPTIMIZED_CANYIELDS) || defined(__DOXYGEN__)
 #define chSchCanYieldS() (firstprio(&rlist.r_queue) >= currp->p_prio)
@@ -170,6 +179,8 @@ extern "C" {
  * @brief   Yields the time slot.
  * @details Yields the CPU control to the next thread in the ready list with
  *          equal or higher priority, if any.
+ *
+ * @sclass
  */
 #if !defined(PORT_OPTIMIZED_DOYIELDS) || defined(__DOXYGEN__)
 #define chSchDoYieldS() {                                                   \

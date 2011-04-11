@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -41,7 +42,7 @@
 /**
  * @brief   BaseSequentialStream specific methods.
  */
-#define _base_sequental_stream_methods                                      \
+#define _base_sequential_stream_methods                                     \
   /* Stream write buffer method.*/                                          \
   size_t (*write)(void *instance, const uint8_t *bp, size_t n);             \
   /* Stream read buffer method.*/                                           \
@@ -52,13 +53,13 @@
  * @note    It is empty because @p BaseSequentialStream is only an interface
  *          without implementation.
  */
-#define _base_sequental_stream_data
+#define _base_sequential_stream_data
 
 /**
  * @brief   @p BaseSequentialStream virtual methods table.
  */
 struct BaseSequentialStreamVMT {
-  _base_sequental_stream_methods
+  _base_sequential_stream_methods
 };
 
 /**
@@ -69,7 +70,7 @@ struct BaseSequentialStreamVMT {
 typedef struct {
   /** @brief Virtual Methods Table.*/
   const struct BaseSequentialStreamVMT *vmt;
-  _base_sequental_stream_data
+  _base_sequential_stream_data
 } BaseSequentialStream;
 
 /**
@@ -83,6 +84,8 @@ typedef struct {
  *                      be less than the specified number of bytes if the
  *                      stream reaches a physical end of file and cannot be
  *                      extended.
+ *
+ * @api
  */
 #define chSequentialStreamWrite(ip, bp, n) ((ip)->vmt->write(ip, bp, n))
 
@@ -96,6 +99,8 @@ typedef struct {
  * @return              The number of bytes transferred. The return value can
  *                      be less than the specified number of bytes if the
  *                      stream reaches the end of the available data.
+ *
+ * @api
  */
 #define chSequentialStreamRead(ip, bp, n) ((ip)->vmt->read(ip, bp, n))
 

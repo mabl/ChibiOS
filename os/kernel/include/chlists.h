@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -35,23 +36,31 @@ typedef struct Thread Thread;
 
 /**
  * @brief   Threads queue initialization.
+ *
+ * @notapi
  */
 #define queue_init(tqp) ((tqp)->p_next = (tqp)->p_prev = (Thread *)(tqp));
 
 /**
  * @brief   Threads list initialization.
+ *
+ * @notapi
  */
 #define list_init(tlp) ((tlp)->p_next = (Thread *)(tlp))
 
 /**
  * @brief   Evaluates to @p TRUE if the specified threads queue or list is
  * empty.
+ *
+ * @notapi
  */
 #define isempty(p)      ((p)->p_next == (Thread *)(p))
 
 /**
  * @brief   Evaluates to @p TRUE if the specified threads queue or list is
  *          not empty.
+ *
+ * @notapi
  */
 #define notempty(p)     ((p)->p_next != (Thread *)(p))
 

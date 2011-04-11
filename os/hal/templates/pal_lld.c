@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -18,16 +18,17 @@
 */
 
 /**
- * @file templates/pal_lld.c
- * @brief PAL subsystem low level driver template.
- * @addtogroup PAL_LLD
+ * @file    templates/pal_lld.c
+ * @brief   PAL subsystem low level driver template.
+ *
+ * @addtogroup PAL
  * @{
  */
 
 #include "ch.h"
 #include "hal.h"
 
-#if CH_HAL_USE_PAL || defined(__DOXYGEN__)
+#if HAL_USE_PAL || defined(__DOXYGEN__)
 
 /*===========================================================================*/
 /* Driver exported variables.                                                */
@@ -49,6 +50,6 @@
 /* Driver exported functions.                                                */
 /*===========================================================================*/
 
-#endif /* CH_HAL_USE_PAL */
+#endif /* HAL_USE_PAL */
 
 /** @} */

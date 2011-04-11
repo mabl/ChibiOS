@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -43,21 +44,23 @@
  *          possible approach is to allocate memory (from a memory pool as
  *          example) from the posting side and free it on the fetching side.
  *          Another approach is to set a "done" flag into the structure pointed
- *          by the message.<br>
- *          In order to use the mailboxes APIs the @p CH_USE_MAILBOXES option
+ *          by the message.
+ * @pre     In order to use the mailboxes APIs the @p CH_USE_MAILBOXES option
  *          must be enabled in @p chconf.h.
  * @{
  */
 
 #include "ch.h"
 
-#if CH_USE_MAILBOXES
+#if CH_USE_MAILBOXES || defined(__DOXYGEN__)
 /**
  * @brief   Initializes a Mailbox object.
  *
  * @param[out] mbp      the pointer to the Mailbox structure to be initialized
  * @param[in] buf       the circular messages buffer
  * @param[in] n         the buffer size as number of @p msg_t
+ *
+ * @init
  */
 void chMBInit(Mailbox *mbp, msg_t *buf, cnt_t n) {
 
@@ -75,6 +78,8 @@ void chMBInit(Mailbox *mbp, msg_t *buf, cnt_t n) {
  *          the queued messages are lost.
  *
  * @param[in] mbp       the pointer to an initialized Mailbox object
+ *
+ * @api
  */
 void chMBReset(Mailbox *mbp) {
 
@@ -101,9 +106,11 @@ void chMBReset(Mailbox *mbp) {
  *                      - @a TIME_INFINITE no timeout.
  *                      .
  * @return              The operation status.
- * @retval RDY_OK       if the message was correctly posted.
- * @retval RDY_RESET    if the mailbox was reset while waiting.
- * @retval RDY_TIMEOUT  if the operation timed out.
+ * @retval RDY_OK       if a message has been correctly posted.
+ * @retval RDY_RESET    if the mailbox has been reset while waiting.
+ * @retval RDY_TIMEOUT  if the operation has timed out.
+ *
+ * @api
  */
 msg_t chMBPost(Mailbox *mbp, msg_t msg, systime_t time) {
   msg_t rdymsg;
@@ -127,9 +134,11 @@ msg_t chMBPost(Mailbox *mbp, msg_t msg, systime_t time) {
  *                      - @a TIME_INFINITE no timeout.
  *                      .
  * @return              The operation status.
- * @retval RDY_OK       if the message was correctly posted.
- * @retval RDY_RESET    if the mailbox was reset while waiting.
- * @retval RDY_TIMEOUT  if the operation timed out.
+ * @retval RDY_OK       if a message has been correctly posted.
+ * @retval RDY_RESET    if the mailbox has been reset while waiting.
+ * @retval RDY_TIMEOUT  if the operation has timed out.
+ *
+ * @sclass
  */
 msg_t chMBPostS(Mailbox *mbp, msg_t msg, systime_t time) {
   msg_t rdymsg;
@@ -148,6 +157,34 @@ msg_t chMBPostS(Mailbox *mbp, msg_t msg, systime_t time) {
 }
 
 /**
+ * @brief   Posts a message into a mailbox.
+ * @details This variant is non-blocking, the function returns a timeout
+ *          condition if the queue is full.
+ *
+ * @param[in] mbp       the pointer to an initialized Mailbox object
+ * @param[in] msg       the message to be posted on the mailbox
+ * @return              The operation status.
+ * @retval RDY_OK       if a message has been correctly posted.
+ * @retval RDY_TIMEOUT  if the mailbox is full and the message cannot be
+ *                      posted.
+ *
+ * @iclass
+ */
+msg_t chMBPostI(Mailbox *mbp, msg_t msg) {
+
+  chDbgCheck(mbp != NULL, "chMBPostI");
+
+  if (chSemGetCounterI(&mbp->mb_emptysem) <= 0)
+    return RDY_TIMEOUT;
+  chSemFastWaitI(&mbp->mb_emptysem);
+  *mbp->mb_wrptr++ = msg;
+  if (mbp->mb_wrptr >= mbp->mb_top)
+    mbp->mb_wrptr = mbp->mb_buffer;
+  chSemSignalI(&mbp->mb_fullsem);
+  return RDY_OK;
+}
+
+/**
  * @brief   Posts an high priority message into a mailbox.
  * @details The invoking thread waits until a empty slot in the mailbox becomes
  *          available or the specified time runs out.
@@ -160,9 +197,11 @@ msg_t chMBPostS(Mailbox *mbp, msg_t msg, systime_t time) {
  *                      - @a TIME_INFINITE no timeout.
  *                      .
  * @return              The operation status.
- * @retval RDY_OK       if the message was correctly posted.
- * @retval RDY_RESET    if the mailbox was reset while waiting.
- * @retval RDY_TIMEOUT  if the operation timed out.
+ * @retval RDY_OK       if a message has been correctly posted.
+ * @retval RDY_RESET    if the mailbox has been reset while waiting.
+ * @retval RDY_TIMEOUT  if the operation has timed out.
+ *
+ * @api
  */
 msg_t chMBPostAhead(Mailbox *mbp, msg_t msg, systime_t time) {
   msg_t rdymsg;
@@ -186,9 +225,11 @@ msg_t chMBPostAhead(Mailbox *mbp, msg_t msg, systime_t time) {
  *                      - @a TIME_INFINITE no timeout.
  *                      .
  * @return              The operation status.
- * @retval RDY_OK       if the message was correctly posted.
- * @retval RDY_RESET    if the mailbox was reset while waiting.
- * @retval RDY_TIMEOUT  if the operation timed out.
+ * @retval RDY_OK       if a message has been correctly posted.
+ * @retval RDY_RESET    if the mailbox has been reset while waiting.
+ * @retval RDY_TIMEOUT  if the operation has timed out.
+ *
+ * @sclass
  */
 msg_t chMBPostAheadS(Mailbox *mbp, msg_t msg, systime_t time) {
   msg_t rdymsg;
@@ -207,6 +248,34 @@ msg_t chMBPostAheadS(Mailbox *mbp, msg_t msg, systime_t time) {
 }
 
 /**
+ * @brief   Posts an high priority message into a mailbox.
+ * @details This variant is non-blocking, the function returns a timeout
+ *          condition if the queue is full.
+ *
+ * @param[in] mbp       the pointer to an initialized Mailbox object
+ * @param[in] msg       the message to be posted on the mailbox
+ * @return              The operation status.
+ * @retval RDY_OK       if a message has been correctly posted.
+ * @retval RDY_TIMEOUT  if the mailbox is full and the message cannot be
+ *                      posted.
+ *
+ * @iclass
+ */
+msg_t chMBPostAheadI(Mailbox *mbp, msg_t msg) {
+
+  chDbgCheck(mbp != NULL, "chMBPostAheadI");
+
+  if (chSemGetCounterI(&mbp->mb_emptysem) <= 0)
+    return RDY_TIMEOUT;
+  chSemFastWaitI(&mbp->mb_emptysem);
+  if (--mbp->mb_rdptr < mbp->mb_buffer)
+    mbp->mb_rdptr = mbp->mb_top - 1;
+  *mbp->mb_rdptr = msg;
+  chSemSignalI(&mbp->mb_fullsem);
+  return RDY_OK;
+}
+
+/**
  * @brief   Retrieves a message from a mailbox.
  * @details The invoking thread waits until a message is posted in the mailbox
  *          or the specified time runs out.
@@ -219,9 +288,11 @@ msg_t chMBPostAheadS(Mailbox *mbp, msg_t msg, systime_t time) {
  *                      - @a TIME_INFINITE no timeout.
  *                      .
  * @return              The operation status.
- * @retval RDY_OK       if a message was correctly fetched.
- * @retval RDY_RESET    if the mailbox was reset while waiting.
- * @retval RDY_TIMEOUT  if the operation timed out.
+ * @retval RDY_OK       if a message has been correctly fetched.
+ * @retval RDY_RESET    if the mailbox has been reset while waiting.
+ * @retval RDY_TIMEOUT  if the operation has timed out.
+ *
+ * @api
  */
 msg_t chMBFetch(Mailbox *mbp, msg_t *msgp, systime_t time) {
   msg_t rdymsg;
@@ -245,9 +316,11 @@ msg_t chMBFetch(Mailbox *mbp, msg_t *msgp, systime_t time) {
  *                      - @a TIME_INFINITE no timeout.
  *                      .
  * @return              The operation status.
- * @retval RDY_OK       if a message was correctly fetched.
- * @retval RDY_RESET    if the mailbox was reset while waiting.
- * @retval RDY_TIMEOUT  if the operation timed out.
+ * @retval RDY_OK       if a message has been correctly fetched.
+ * @retval RDY_RESET    if the mailbox has been reset while waiting.
+ * @retval RDY_TIMEOUT  if the operation has timed out.
+ *
+ * @sclass
  */
 msg_t chMBFetchS(Mailbox *mbp, msg_t *msgp, systime_t time) {
   msg_t rdymsg;
@@ -263,6 +336,33 @@ msg_t chMBFetchS(Mailbox *mbp, msg_t *msgp, systime_t time) {
     chSchRescheduleS();
   }
   return rdymsg;
+}
+
+/**
+ * @brief   Retrieves a message from a mailbox.
+ * @details This variant is non-blocking, the function returns a timeout
+ *          condition if the queue is full.
+ *
+ * @param[in] mbp       the pointer to an initialized Mailbox object
+ * @param[out] msgp     pointer to a message variable for the received message
+ * @return              The operation status.
+ * @retval RDY_OK       if a message has been correctly fetched.
+ * @retval RDY_TIMEOUT  if the mailbox is empty and a message cannot be
+ *                      fetched.
+ *
+ * @iclass
+ */
+msg_t chMBFetchI(Mailbox *mbp, msg_t *msgp) {
+
+  chDbgCheck((mbp != NULL) && (msgp != NULL), "chMBFetchI");
+
+  if (chSemGetCounterI(&mbp->mb_fullsem) <= 0)
+    return RDY_TIMEOUT;
+  *msgp = *mbp->mb_rdptr++;
+  if (mbp->mb_rdptr >= mbp->mb_top)
+    mbp->mb_rdptr = mbp->mb_buffer;
+  chSemSignalI(&mbp->mb_emptysem);
+  return RDY_OK;
 }
 #endif /* CH_USE_MAILBOXES */
 

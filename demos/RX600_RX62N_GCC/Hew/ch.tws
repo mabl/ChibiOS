@@ -1,0 +1,39 @@
+[HIMDBVersion]
+2.0
+[DATABASE_VERSION]
+"1.2" 
+[CURRENT_PROJECT]
+"ch" 
+[GENERAL_DATA]
+[BREAKPOINTS]
+[OPEN_WORKSPACE_FILES]
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\chconf.h" 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\interrupt_handlers.c" 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\main.c" 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\vector_table.c" 
+"C:\rtos\fujitsu_dev\os\kernel\include\chinline.h" 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmemcore.c" 
+"C:\rtos\fujitsu_dev\os\kernel\src\chschd.c" 
+"C:\rtos\fujitsu_dev\os\kernel\src\chsys.c" 
+"C:\rtos\fujitsu_dev\os\kernel\src\chthreads.c" 
+"C:\rtos\fujitsu_dev\os\kernel\src\chvt.c" 
+"C:\rtos\fujitsu_dev\os\ports\GCC\RX600\chcore.c" 
+"C:\rtos\fujitsu_dev\os\ports\GCC\RX600\chcore.h" 
+"C:\rtos\fujitsu_dev\os\ports\GCC\RX600\crt0.s" 
+[WORKSPACE_FILE_STATES]
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\chconf.h" 0 0 544 152 0 4 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\interrupt_handlers.c" 0 0 522 222 0 10 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\main.c" 0 0 618 204 0 0 
+"C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\vector_table.c" 0 0 522 222 0 9 
+"C:\rtos\fujitsu_dev\os\kernel\include\chinline.h" 0 0 112 27 0 12 
+"C:\rtos\fujitsu_dev\os\kernel\src\chmemcore.c" 0 0 522 222 0 5 
+"C:\rtos\fujitsu_dev\os\kernel\src\chschd.c" 0 0 522 222 0 8 
+"C:\rtos\fujitsu_dev\os\kernel\src\chsys.c" -4 -23 813 393 1 7 
+"C:\rtos\fujitsu_dev\os\kernel\src\chthreads.c" 0 0 618 245 0 1 
+"C:\rtos\fujitsu_dev\os\kernel\src\chvt.c" 0 0 522 222 0 6 
+"C:\rtos\fujitsu_dev\os\ports\GCC\RX600\chcore.c" 0 0 669 460 0 2 
+"C:\rtos\fujitsu_dev\os\ports\GCC\RX600\chcore.h" 0 0 399 222 0 11 
+"C:\rtos\fujitsu_dev\os\ports\GCC\RX600\crt0.s" 0 0 544 152 0 3 
+[LOADED_PROJECTS]
+"ch" 
+[END]

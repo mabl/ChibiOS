@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -18,8 +18,9 @@
 */
 
 /**
- * @file xxx.h
- * @brief XXX Driver macros and structures.
+ * @file    xxx.h
+ * @brief   XXX Driver macros and structures.
+ *
  * @addtogroup XXX
  * @{
  */
@@ -27,7 +28,7 @@
 #ifndef _XXX_H_
 #define _XXX_H_
 
-#if CH_HAL_USE_XXX || defined(__DOXYGEN__)
+#if HAL_USE_XXX || defined(__DOXYGEN__)
 
 /*===========================================================================*/
 /* Driver constants.                                                         */
@@ -46,12 +47,12 @@
 /*===========================================================================*/
 
 /**
- * @brief Driver state machine possible states.
+ * @brief   Driver state machine possible states.
  */
 typedef enum {
-  XXX_UNINIT = 0,                           /**< @brief Not initialized.    */
-  XXX_STOP = 1,                             /**< @brief Stopped.            */
-  XXX_READY = 2,                            /**< @brief Ready.              */
+  XXX_UNINIT = 0,                   /**< Not initialized.                   */
+  XXX_STOP = 1,                     /**< Stopped.                           */
+  XXX_READY = 2,                    /**< Ready.                             */
 } xxxstate_t;
 
 #include "xxx_lld.h"
@@ -75,7 +76,7 @@ extern "C" {
 }
 #endif
 
-#endif /* CH_HAL_USE_XXX */
+#endif /* HAL_USE_XXX */
 
 #endif /* _XXX_H_ */
 

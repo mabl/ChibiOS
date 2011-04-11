@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -28,7 +29,7 @@
 #ifndef _CHHEAP_H_
 #define _CHHEAP_H_
 
-#if CH_USE_HEAP
+#if CH_USE_HEAP || defined(__DOXYGEN__)
 
 /*
  * Module dependencies check.
@@ -74,7 +75,7 @@ struct memory_heap {
 #ifdef __cplusplus
 extern "C" {
 #endif
-  void heap_init(void);
+  void _heap_init(void);
   void chHeapInit(MemoryHeap *heapp, void *buf, size_t size);
   void *chHeapAlloc(MemoryHeap *heapp, size_t size);
   void chHeapFree(void *p);

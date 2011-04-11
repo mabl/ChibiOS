@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2009 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -27,6 +28,7 @@
 /**
  * @file ports/FCC907/f2mc_16x/chtypes.h
  * @brief F2MC_16FX architecture port system types.
+ *
  * @addtogroup F2MC_16FX
  * @{
  */
@@ -39,13 +41,12 @@
 #define __need_ptrdiff_t
 #include <stddef.h>
 
-#if !defined(_STDINT_H) && !defined(__STDINT_H_)
-#include <stdint.h>
-#endif
-
+ #include <stdint.h>
+ 
 typedef int16_t         bool_t;         /**< Fast boolean type. */
 typedef uint8_t         tmode_t;        /**< Thread flags. */
 typedef uint8_t         tstate_t;       /**< Thread state. */
+typedef uint8_t         trefs_t;        /**< Thread references counter.     */
 typedef uint16_t        tprio_t;        /**< Thread priority. */
 typedef int16_t         msg_t;          /**< Inter-thread message. */
 typedef int16_t         eventid_t;      /**< Event Id. */
@@ -53,11 +54,37 @@ typedef uint16_t        eventmask_t;    /**< Events mask. */
 typedef uint16_t        systime_t;      /**< System time. */
 typedef int16_t         cnt_t;          /**< Resources counter. */
 
-#define INLINE
-//#define INLINE_FX16
+ 
+/**
+ * @brief   Inline function modifier.
+ */
+#define INLINE  
+
+/**
+ * @brief   ROM constant modifier.
+ * @note    It is set to use the "const" keyword in this port.
+ */
+#define ROMCONST const
+
+/**
+ * @brief   Packed structure modifier (within).
+ * @note    It uses the "packed" GCC attribute.
+ */
 #define PACK_STRUCT_STRUCT __attribute__((packed))
+
+/**
+ * @brief   Packed structure modifier (before).
+ * @note    Empty in this port.
+ */
 #define PACK_STRUCT_BEGIN
+
+/**
+ * @brief   Packed structure modifier (after).
+ * @note    Empty in this port.
+ */
 #define PACK_STRUCT_END
+
+
 
 #endif /* _CHTYPES_H_ */
 

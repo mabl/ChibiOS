@@ -47,8 +47,8 @@
 /**
  * @brief Enables the PAL subsystem.
  */
-#if !defined(CH_HAL_USE_PAL) || defined(__DOXYGEN__)
-#define CH_HAL_USE_PAL                  FALSE
+#if !defined(HAL_USE_PAL) || defined(__DOXYGEN__)
+#define HAL_USE_PAL                  FALSE
 #endif
 
 /*===========================================================================*/
@@ -58,8 +58,8 @@
 /**
  * @brief Enables the ADC subsystem.
  */
-#if !defined(CH_HAL_USE_ADC) || defined(__DOXYGEN__)
-#define CH_HAL_USE_ADC                  FALSE
+#if !defined(HAL_USE_ADC) || defined(__DOXYGEN__)
+#define HAL_USE_ADC                  FALSE
 #endif
 
 /*===========================================================================*/
@@ -69,8 +69,8 @@
 /**
  * @brief Enables the CAN subsystem.
  */
-#if !defined(CH_HAL_USE_CAN) || defined(__DOXYGEN__)
-#define CH_HAL_USE_CAN                  FALSE
+#if !defined(HAL_USE_CAN) || defined(__DOXYGEN__)
+#define HAL_USE_CAN                  FALSE
 #endif
 
 /*===========================================================================*/
@@ -80,8 +80,8 @@
 /**
  * @brief Enables the MAC subsystem.
  */
-#if !defined(CH_HAL_USE_MAC) || defined(__DOXYGEN__)
-#define CH_HAL_USE_MAC                  FALSE
+#if !defined(HAL_USE_MAC) || defined(__DOXYGEN__)
+#define HAL_USE_MAC                  FALSE
 #endif
 
 /*===========================================================================*/
@@ -91,8 +91,8 @@
 /**
  * @brief Enables the PWM subsystem.
  */
-#if !defined(CH_HAL_USE_PWM) || defined(__DOXYGEN__)
-#define CH_HAL_USE_PWM                  FALSE
+#if !defined(HAL_USE_PWM) || defined(__DOXYGEN__)
+#define HAL_USE_PWM                  FALSE
 #endif
 
 /*===========================================================================*/
@@ -102,9 +102,15 @@
 /**
  * @brief Enables the SERIAL subsystem.
  */
-#if !defined(CH_HAL_USE_SERIAL) || defined(__DOXYGEN__)
-#define CH_HAL_USE_SERIAL               FALSE
+#if !defined(HAL_USE_SERIAL) || defined(__DOXYGEN__)
+#define HAL_USE_SERIAL               TRUE
+#else
 #endif
+
+#define SERIAL_BUFFERS_SIZE             128
+#define DEFAULT_USART_BITRATE           38400
+#define USE_MB96F3xx_USART3             TRUE
+
 
 /*===========================================================================*/
 /* LCD driver related settings.                                              */
@@ -113,8 +119,8 @@
 /**
  * @brief Enables the LCD subsystem.
  */
-#if !defined(CH_HAL_USE_LCD) || defined(__DOXYGEN__)
-#define CH_HAL_USE_LCD               TRUE
+#if !defined(HAL_USE_LCD) || defined(__DOXYGEN__)
+#define HAL_USE_LCD               FALSE
 #endif
 
 /*
@@ -133,8 +139,8 @@
 /**
  * @brief Enables the SPI subsystem.
  */
-#if !defined(CH_HAL_USE_SPI) || defined(__DOXYGEN__)
-#define CH_HAL_USE_SPI                  FALSE
+#if !defined(HAL_USE_SPI) || defined(__DOXYGEN__)
+#define HAL_USE_SPI                  FALSE
 #endif
 
 /*
@@ -149,8 +155,8 @@
 /**
  * @brief Enables the MMC_SPI subsystem.
  */
-#if !defined(CH_HAL_USE_MMC_SPI) || defined(__DOXYGEN__)
-#define CH_HAL_USE_MMC_SPI              FALSE
+#if !defined(HAL_USE_MMC_SPI) || defined(__DOXYGEN__)
+#define HAL_USE_MMC_SPI              FALSE
 #endif
 
 /*
@@ -160,6 +166,9 @@
 /*#define MMC_NICE_WAITING                TRUE*/
 /*#define MMC_POLLING_INTERVAL            10*/
 /*#define MMC_POLLING_DELAY               10*/
+#else
+
+#warning halconf
 
 #endif /* _HALCONF_H_ */
 

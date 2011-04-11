@@ -1,3 +1,4 @@
----- _serial_driver_data Matches (2 in 2 files) ----
-Serial.h (c:\rtos\fujitsu_dev\os\hal\include):  _serial_driver_data
-Serial_lld.h (c:\rtos\fujitsu_dev\os\hal\platforms\mb96f3xx):#define _serial_driver_data                                                 \
+---- PORT_OPTIMIZED_READYI Matches (3 in 2 files) ----
+Chschd.c (c:\rtos\fujitsu_dev\os\kernel\src):#if !defined(PORT_OPTIMIZED_READYI) || defined(__DOXYGEN__)
+Chschd.c (c:\rtos\fujitsu_dev\os\kernel\src):#endif /* !defined(PORT_OPTIMIZED_READYI) */
+Chschd.h (c:\rtos\fujitsu_dev\os\kernel\include):#if !defined(PORT_OPTIMIZED_READYI)

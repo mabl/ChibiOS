@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -31,28 +32,28 @@
  *          By enabling the @p CH_USE_MALLOC_HEAP option the heap manager
  *          will use the runtime-provided @p malloc() and @p free() as
  *          backend for the heap APIs instead of the system provided
- *          allocator.<br>
- *          In order to use the heap APIs the @p CH_USE_HEAP option must
+ *          allocator.
+ * @pre     In order to use the heap APIs the @p CH_USE_HEAP option must
  *          be enabled in @p chconf.h.
  * @{
  */
 
 #include "ch.h"
 
-#if CH_USE_HEAP
+#if CH_USE_HEAP || defined(__DOXYGEN__)
+
+#if !CH_USE_MALLOC_HEAP || defined(__DOXYGEN__)
 
 /*
  * Defaults on the best synchronization mechanism available.
  */
-#if CH_USE_MUTEXES
+#if CH_USE_MUTEXES || defined(__DOXYGEN__)
 #define H_LOCK(h)       chMtxLock(&(h)->h_mtx)
 #define H_UNLOCK(h)     chMtxUnlock()
 #else
 #define H_LOCK(h)       chSemWait(&(h)->h_sem)
 #define H_UNLOCK(h)     chSemSignal(&(h)->h_sem)
 #endif
-
-#if !CH_USE_MALLOC_HEAP
 
 /**
  * @brief   Default heap descriptor.
@@ -61,13 +62,14 @@ static MemoryHeap default_heap;
 
 /**
  * @brief   Initializes the default heap.
- * @note    Internal use only.
+ *
+ * @notapi
  */
-void heap_init(void) {
+void _heap_init(void) {
   default_heap.h_provider = chCoreAlloc;
   default_heap.h_free.h.u.next = (union heap_header *)NULL;
   default_heap.h_free.h.size = 0;
-#if CH_USE_MUTEXES
+#if CH_USE_MUTEXES || defined(__DOXYGEN__)
   chMtxInit(&default_heap.h_mtx);
 #else
   chSemInit(&default_heap.h_sem, 1);
@@ -76,12 +78,14 @@ void heap_init(void) {
 
 /**
  * @brief   Initializes a memory heap from a static memory area.
- * @note    Both the heap buffer base and the heap size must be aligned to
- *          the @p align_t type size.
+ * @pre     Both the heap buffer base and the heap size must be aligned to
+ *          the @p stkalign_t type size.
  *
  * @param[out] heapp    pointer to the memory heap descriptor to be initialized
  * @param[in] buf       heap buffer base
  * @param[in] size      heap size
+ *
+ * @init
  */
 void chHeapInit(MemoryHeap *heapp, void *buf, size_t size) {
   union heap_header *hp;
@@ -93,7 +97,7 @@ void chHeapInit(MemoryHeap *heapp, void *buf, size_t size) {
   heapp->h_free.h.size = 0;
   hp->h.u.next = NULL;
   hp->h.size = size - sizeof(union heap_header);
-#if CH_USE_MUTEXES
+#if CH_USE_MUTEXES || defined(__DOXYGEN__)
   chMtxInit(&heapp->h_mtx);
 #else
   chSemInit(&heapp->h_sem, 1);
@@ -104,7 +108,7 @@ void chHeapInit(MemoryHeap *heapp, void *buf, size_t size) {
  * @brief   Allocates a block of memory from the heap by using the first-fit
  *          algorithm.
  * @details The allocated block is guaranteed to be properly aligned for a
- *          pointer data type (@p align_t).
+ *          pointer data type (@p stkalign_t).
  *
  * @param[in] heapp     pointer to a heap descriptor or @p NULL in order to
  *                      access the default heap.
@@ -113,6 +117,8 @@ void chHeapInit(MemoryHeap *heapp, void *buf, size_t size) {
  *                      size for alignment and fragmentation reasons.
  * @return              A pointer to the allocated block.
  * @retval NULL         if the block cannot be allocated.
+ *
+ * @api
  */
 void *chHeapAlloc(MemoryHeap *heapp, size_t size) {
   union heap_header *qp, *hp, *fp;
@@ -120,7 +126,7 @@ void *chHeapAlloc(MemoryHeap *heapp, size_t size) {
   if (heapp == NULL)
     heapp = &default_heap;
 
-  size = MEM_ALIGN_SIZE(size);
+  size = MEM_ALIGN_NEXT(size);
   qp = &heapp->h_free;
   H_LOCK(heapp);
 
@@ -173,6 +179,8 @@ void *chHeapAlloc(MemoryHeap *heapp, size_t size) {
  * @brief   Frees a previously allocated memory block.
  *
  * @param[in] p         pointer to the memory block to be freed
+ *
+ * @api
  */
 void chHeapFree(void *p) {
   union heap_header *qp, *hp;
@@ -227,6 +235,8 @@ void chHeapFree(void *p) {
  * @param[in] sizep     pointer to a variable that will receive the total
  *                      fragmented free space
  * @return              The number of fragments in the heap.
+ *
+ * @api
  */
 size_t chHeapStatus(MemoryHeap *heapp, size_t *sizep) {
   union heap_header *qp;
@@ -253,7 +263,7 @@ size_t chHeapStatus(MemoryHeap *heapp, size_t *sizep) {
 
 #if CH_USE_MUTEXES
 #define H_LOCK()        chMtxLock(&hmtx)
-#define H_UNLOCK()      chMtxUnock()
+#define H_UNLOCK()      chMtxUnlock()
 static Mutex            hmtx;
 #elif CH_USE_SEMAPHORES
 #define H_LOCK()        chSemWait(&hsem)

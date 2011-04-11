@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -28,7 +29,7 @@
 #ifndef _CHREGISTRY_H_
 #define _CHREGISTRY_H_
 
-#if CH_USE_REGISTRY
+#if CH_USE_REGISTRY || defined(__DOXYGEN__)
 
 /**
  * @brief   Removes a thread from the registry list.

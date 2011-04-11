@@ -1,0 +1,8 @@
+-T "C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\Hew\ch\Debug\ch_Debug_auto.gsi"
+-T "C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\Hew\ch\Debug\ch_input.tmp" 
+-L "c:\hew\tools\kpit cummins\gnurx-elf\v10.03\rx-elf\lib\gcc\rx-elf\4.5-GNURX_v10.03"
+-L "c:\hew\tools\kpit cummins\gnurx-elf\v10.03\rx-elf\rx-elf\lib"
+-Map "C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\Hew\ch\Debug\ch.map"
+-( -l "nosys" -l "c" -l "m" -l "gcc" -)
+-o "C:\rtos\fujitsu_dev\demos\RX600_RX62N_GCC\Hew\ch\Debug\ch.x"
+-e _PowerON_Reset

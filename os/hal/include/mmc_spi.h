@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -18,8 +19,9 @@
 */
 
 /**
- * @file mmc_spi.h
- * @brief MMC over SPI driver header.
+ * @file    spi.h
+ * @brief   MMC over SPI driver header.
+ *
  * @addtogroup MMC_SPI
  * @{
  */
@@ -27,39 +29,39 @@
 #ifndef _MMC_SPI_H_
 #define _MMC_SPI_H_
 
-#if CH_HAL_USE_MMC_SPI || defined(__DOXYGEN__)
+#if HAL_USE_MMC_SPI || defined(__DOXYGEN__)
 
 /*===========================================================================*/
 /* Driver constants.                                                         */
 /*===========================================================================*/
 
-#define MMC_CMD0_RETRY          10
-#define MMC_CMD1_RETRY          100
-#define MMC_WAIT_DATA           10000
+#define MMC_CMD0_RETRY              10
+#define MMC_CMD1_RETRY              100
+#define MMC_WAIT_DATA               10000
 
-#define MMC_CMDGOIDLE           0
-#define MMC_CMDINIT             1
-#define MMC_CMDREADCSD          9
-#define MMC_CMDSTOP             12
-#define MMC_CMDSETBLOCKLEN      16
-#define MMC_CMDREAD             17
-#define MMC_CMDREADMULTIPLE     18
-#define MMC_CMDWRITE            24
-#define MMC_CMDWRITEMULTIPLE    25
+#define MMC_CMDGOIDLE               0
+#define MMC_CMDINIT                 1
+#define MMC_CMDREADCSD              9
+#define MMC_CMDSTOP                 12
+#define MMC_CMDSETBLOCKLEN          16
+#define MMC_CMDREAD                 17
+#define MMC_CMDREADMULTIPLE         18
+#define MMC_CMDWRITE                24
+#define MMC_CMDWRITEMULTIPLE        25
 
 /*===========================================================================*/
 /* Driver pre-compile time settings.                                         */
 /*===========================================================================*/
 
 /**
- * @brief Block size for MMC transfers.
+ * @brief   Block size for MMC transfers.
  */
 #if !defined(MMC_SECTOR_SIZE) || defined(__DOXYGEN__)
-#define MMC_SECTOR_SIZE         512
+#define MMC_SECTOR_SIZE             512
 #endif
 
 /**
- * @brief Delays insertions.
+ * @brief   Delays insertions.
  * @details If enabled this options inserts delays into the MMC waiting
  *          routines releasing some extra CPU time for the threads with
  *          lower priority, this may slow down the driver a bit however.
@@ -67,30 +69,30 @@
  *          use a DMA channel and heavily loads the CPU.
  */
 #if !defined(MMC_NICE_WAITING) || defined(__DOXYGEN__)
-#define MMC_NICE_WAITING        TRUE
+#define MMC_NICE_WAITING            TRUE
 #endif
 
 /**
- * @brief Number of positive insertion queries before generating the
- *        insertion event.
+ * @brief   Number of positive insertion queries before generating the
+ *          insertion event.
  */
 #if !defined(MMC_POLLING_INTERVAL) || defined(__DOXYGEN__)
-#define MMC_POLLING_INTERVAL    10
+#define MMC_POLLING_INTERVAL        10
 #endif
 
 /**
- * @brief Interval, in milliseconds, between insertion queries.
+ * @brief   Interval, in milliseconds, between insertion queries.
  */
 #if !defined(MMC_POLLING_DELAY) || defined(__DOXYGEN__)
-#define MMC_POLLING_DELAY       10
+#define MMC_POLLING_DELAY           10
 #endif
 
 /*===========================================================================*/
 /* Derived constants and error checks.                                       */
 /*===========================================================================*/
 
-#if !CH_HAL_USE_SPI || !CH_USE_EVENTS
-#error "MMC_SPI driver requires CH_HAL_USE_SPI and CH_USE_EVENTS"
+#if !HAL_USE_SPI || !CH_USE_EVENTS
+#error "MMC_SPI driver requires HAL_USE_SPI and CH_USE_EVENTS"
 #endif
 
 /*===========================================================================*/
@@ -98,80 +100,81 @@
 /*===========================================================================*/
 
 /**
- * @brief Driver state machine possible states.
+ * @brief   Driver state machine possible states.
  */
 typedef enum {
-  MMC_UNINIT = 0,                           /**< @brief Not initialized.    */
-  MMC_STOP = 1,                             /**< @brief Stopped.            */
-  MMC_WAIT = 2,                             /**< @brief Waiting card.       */
-  MMC_INSERTED = 3,                         /**< @brief Card inserted.      */
-  MMC_READY = 4,                            /**< @brief Card ready.         */
-  MMC_READING = 5,                          /**< @brief Reading.            */
-  MMC_WRITING = 6                           /**< @brief Writing.            */
+  MMC_UNINIT = 0,                           /**< Not initialized.           */
+  MMC_STOP = 1,                             /**< Stopped.                   */
+  MMC_WAIT = 2,                             /**< Waiting card.              */
+  MMC_INSERTED = 3,                         /**< Card inserted.             */
+  MMC_READY = 4,                            /**< Card ready.                */
+  MMC_READING = 5,                          /**< Reading.                   */
+  MMC_WRITING = 6                           /**< Writing.                   */
 } mmcstate_t;
 
 /**
- * @brief Function used to query some hardware status bits.
+ * @brief   Function used to query some hardware status bits.
  *
- * @return The status.
+ * @return              The status.
  */
 typedef bool_t (*mmcquery_t)(void);
 
 /**
- * @brief Driver configuration structure.
+ * @brief   Driver configuration structure.
+ * @note    Not required in the current implementation.
  */
 typedef struct {
-
+  uint8_t               dummy;
 } MMCConfig;
 
 /**
- * @brief Structure representing a MMC driver.
+ * @brief   Structure representing a MMC driver.
  */
 typedef struct {
   /**
    * @brief Driver state.
    */
-  mmcstate_t            mmc_state;
+  mmcstate_t            state;
   /**
    * @brief Current configuration data.
    */
-  const MMCConfig       *mmc_config;
+  const MMCConfig       *config;
   /**
    * @brief SPI driver associated to this MMC driver.
    */
-  SPIDriver             *mmc_spip;
+  SPIDriver             *spip;
   /**
    * @brief SPI low speed configuration used during initialization.
    */
-  const SPIConfig       *mmc_lscfg;
+  const SPIConfig       *lscfg;
   /**
    * @brief SPI high speed configuration used during transfers.
    */
-  const SPIConfig       *mmc_hscfg;
+  const SPIConfig       *hscfg;
   /**
    * @brief Write protect status query function.
    */
-  mmcquery_t            mmc_is_protected;
+  mmcquery_t            is_protected;
   /**
    * @brief Insertion status query function.
    */
-  mmcquery_t            mmc_is_inserted;
+  mmcquery_t            is_inserted;
   /**
    * @brief Card insertion event source.
    */
-  EventSource           mmc_inserted_event;
+  EventSource           inserted_event;
   /**
    * @brief Card removal event source.
    */
-  EventSource           mmc_removed_event;
+  EventSource           removed_event;
   /**
    * @brief MMC insertion polling timer.
    */
-  VirtualTimer          mmc_vt;
+  VirtualTimer          vt;
   /**
    * @brief Insertion counter.
    */
-  uint_fast8_t          mmc_cnt;
+  uint_fast8_t          cnt;
 } MMCDriver;
 
 /*===========================================================================*/
@@ -179,14 +182,26 @@ typedef struct {
 /*===========================================================================*/
 
 /**
- * @brief Returns the driver state.
+ * @brief   Returns the driver state.
+ *
+ * @param[in] mmcp      pointer to the @p MMCDriver object
+ * @return              The driver state.
+ *
+ * @api
  */
-#define mmcGetDriverState(mmcp) ((mmcp)->mmc_state)
+#define mmcGetDriverState(mmcp) ((mmcp)->state)
 
 /**
- * @brief Returns the write protect status.
+ * @brief   Returns the write protect status.
+ *
+ * @param[in] mmcp      pointer to the @p MMCDriver object
+ * @return              The card state.
+ * @retval FALSE        card not inserted.
+ * @retval TRUE         card inserted.
+ *
+ * @api
  */
-#define mmcIsWriteProtected(mmcp) ((mmcp)->mmc_is_protected())
+#define mmcIsWriteProtected(mmcp) ((mmcp)->is_protected())
 
 /*===========================================================================*/
 /* External declarations.                                                    */
@@ -213,7 +228,7 @@ extern "C" {
 }
 #endif
 
-#endif /* CH_HAL_USE_MMC_SPI */
+#endif /* HAL_USE_MMC_SPI */
 
 #endif /* _MMC_SPI_H_ */
 

@@ -1,0 +1,89 @@
+$CPUSERIES-907
+$Prj-Debug
+$0
+-g
+-K SCHAR
+-w 1
+-INF LIST
+-I "C:\rtos\fujitsu_dev\os\hal\include"
+-I "C:\rtos\fujitsu_dev\os\kernel\include"
+-I "C:\rtos\fujitsu_dev\os\hal\platforms\MB96F3xx"
+-I "C:\rtos\fujitsu_dev\os\ports\FCC907\F2MC_16FX"
+-I "C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907"
+-I "C:\rtos\fujitsu_dev\boards\DEMO_338FX_GEN"
+-I "C:\rtos\fujitsu_dev\test"
+-O 1
+-model MEDIUM
+-B
+-Xdof
+-INF STACK
+-K NOEOPT
+-K NOLIB
+-K NOUNROLL
+$other
+$time
+1302361306
+$end
+$1
+-linf ON
+-lsrc ON
+-lsec ON
+-lcros OFF
+-linc ON
+-lexp OBJ
+-pl 60
+-pw 100
+-tab 8
+-w 2
+-g
+-Xdof
+$other
+$time
+1302271213
+$end
+$2
+-g
+-AL 2
+-ra _INRAM01=0x000180/0x00037F
+-ra _INRAM02=0x001240/0x007FFF
+-ra _INRAM03=0x018000/0x018FFF
+-ro _INROM01=0xF80000/0xFFFFFF
+-sc CONST/Const/WORD=0xFF8000
+-check_rora
+-check_locate
+-rg 0
+-m
+-pl 60
+-pw 132
+-Xals
+-Xalr
+-na
+-w 1
+-Xdof
+$other
+$time
+1302380981
+$end
+$3
+-dt s,d,r,a
+-pl 60
+-pw 132
+-g
+-Xdof
+$other
+$time
+1302365572
+$end
+$4
+-Xdof
+$other
+$time
+1302271213
+$end
+$5
+$other
+$time
+1302271213
+$end
+$Prjend
+$CPUSERIESEND

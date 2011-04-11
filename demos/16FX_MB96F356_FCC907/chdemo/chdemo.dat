@@ -11,17 +11,19 @@ $0
 -I "C:\rtos\fujitsu_dev\os\kernel\include"
 -I "C:\rtos\fujitsu_dev\os\ports\FCC907\F2MC_16FX"
 -I "C:\rtos\fujitsu_dev\demos\16FX_MB96F356_FCC907"
--O 1
+-I "C:\rtos\fujitsu_dev\test"
+-O 4
+-K SPEED
 -model MEDIUM
 -B
 -Xdof
 -INF STACK
--K NOEOPT
--K NOLIB
--K NOUNROLL
+-K EOPT
+-K LIB
+-K UNROLL
 $other
 $time
-1264457473
+1302552801
 $end
 $1
 -linf ON
@@ -61,7 +63,7 @@ $2
 -Xdof
 $other
 $time
-1263932418
+1302469794
 $end
 $3
 -dt s,d,r,a
@@ -71,7 +73,7 @@ $3
 -Xdof
 $other
 $time
-1263744374
+1302469794
 $end
 $4
 -Xdof

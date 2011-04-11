@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -47,18 +48,18 @@
  *          .
  *          Semaphores can be used as guards for mutual exclusion zones
  *          (note that mutexes are recommended for this kind of use) but
- *          also have other uses, queues guards and counters as example.<br>
+ *          also have other uses, queues guards and counters for example.<br>
  *          Semaphores usually use a FIFO queuing strategy but it is possible
  *          to make them order threads by priority by enabling
- *          @p CH_USE_SEMAPHORES_PRIORITY in @p chconf.h.<br>
- *          In order to use the Semaphores APIs the @p CH_USE_SEMAPHORES
+ *          @p CH_USE_SEMAPHORES_PRIORITY in @p chconf.h.
+ * @pre     In order to use the semaphore APIs the @p CH_USE_SEMAPHORES
  *          option must be enabled in @p chconf.h.
  * @{
  */
 
 #include "ch.h"
 
-#if CH_USE_SEMAPHORES
+#if CH_USE_SEMAPHORES || defined(__DOXYGEN__)
 
 #if CH_USE_SEMAPHORES_PRIORITY
 #define sem_insert(tp, qp) prio_insert(tp, qp)
@@ -72,6 +73,8 @@
  * @param[out] sp       pointer to a @p Semaphore structure
  * @param[in] n         initial value of the semaphore counter. Must be
  *                      non-negative.
+ *
+ * @init
  */
 void chSemInit(Semaphore *sp, cnt_t n) {
 
@@ -83,6 +86,9 @@ void chSemInit(Semaphore *sp, cnt_t n) {
 
 /**
  * @brief   Performs a reset operation on the semaphore.
+ * @post    After invoking this function all the threads waiting on the
+ *          semaphore, if any, are released and the semaphore counter is set
+ *          to the specified, non negative, value.
  * @note    The released threads can recognize they were waked up by a reset
  *          rather than a signal because the @p chSemWait() will return
  *          @p RDY_RESET instead of @p RDY_OK.
@@ -90,6 +96,8 @@ void chSemInit(Semaphore *sp, cnt_t n) {
  * @param[in] sp        pointer to a @p Semaphore structure
  * @param[in] n         the new value of the semaphore counter. The value must
  *                      be non-negative.
+ *
+ * @api
  */
 void chSemReset(Semaphore *sp, cnt_t n) {
 
@@ -101,23 +109,36 @@ void chSemReset(Semaphore *sp, cnt_t n) {
 
 /**
  * @brief   Performs a reset operation on the semaphore.
+ * @post    After invoking this function all the threads waiting on the
+ *          semaphore, if any, are released and the semaphore counter is set
+ *          to the specified, non negative, value.
+ * @post    This function does not reschedule so a call to a rescheduling
+ *          function must be performed before unlocking the kernel. Note that
+ *          interrupt handlers always reschedule on exit so an explicit
+ *          reschedule must not be performed in ISRs.
  * @note    The released threads can recognize they were waked up by a reset
  *          rather than a signal because the @p chSemWait() will return
  *          @p RDY_RESET instead of @p RDY_OK.
- * @note    This function does not reschedule.
  *
  * @param[in] sp        pointer to a @p Semaphore structure
  * @param[in] n         the new value of the semaphore counter. The value must
  *                      be non-negative.
+ *
+ * @iclass
  */
 void chSemResetI(Semaphore *sp, cnt_t n) {
   cnt_t cnt;
 
   chDbgCheck((sp != NULL) && (n >= 0), "chSemResetI");
 
+  chDbgAssert(((sp->s_cnt >= 0) && isempty(&sp->s_queue)) ||
+              ((sp->s_cnt < 0) && notempty(&sp->s_queue)),
+              "chSemResetI(), #1",
+              "inconsistent semaphore");
+
   cnt = sp->s_cnt;
   sp->s_cnt = n;
-  while (cnt++ < 0)
+  while (++cnt <= 0)
     chSchReadyI(lifo_remove(&sp->s_queue))->p_u.rdymsg = RDY_RESET;
 }
 
@@ -125,8 +146,13 @@ void chSemResetI(Semaphore *sp, cnt_t n) {
  * @brief   Performs a wait operation on a semaphore.
  *
  * @param[in] sp        pointer to a @p Semaphore structure
- * @retval RDY_OK       if the semaphore was signaled or not taken.
- * @retval RDY_RESET    if the semaphore was reset using @p chSemReset().
+ * @return              A message specifying how the invoking thread has been
+ *                      released from the semaphore.
+ * @retval RDY_OK       if the thread has not stopped on the semaphore or the
+ *                      semaphore has been signaled.
+ * @retval RDY_RESET    if the semaphore has been reset using @p chSemReset().
+ *
+ * @api
  */
 msg_t chSemWait(Semaphore *sp) {
   msg_t msg;
@@ -141,12 +167,22 @@ msg_t chSemWait(Semaphore *sp) {
  * @brief   Performs a wait operation on a semaphore.
  *
  * @param[in] sp        pointer to a @p Semaphore structure
- * @retval RDY_OK       if the semaphore was signaled or not taken.
- * @retval RDY_RESET    if the semaphore was reset using @p chSemReset().
+ * @return              A message specifying how the invoking thread has been
+ *                      released from the semaphore.
+ * @retval RDY_OK       if the thread has not stopped on the semaphore or the
+ *                      semaphore has been signaled.
+ * @retval RDY_RESET    if the semaphore has been reset using @p chSemReset().
+ *
+ * @sclass
  */
 msg_t chSemWaitS(Semaphore *sp) {
 
   chDbgCheck(sp != NULL, "chSemWaitS");
+
+  chDbgAssert(((sp->s_cnt >= 0) && isempty(&sp->s_queue)) ||
+              ((sp->s_cnt < 0) && notempty(&sp->s_queue)),
+              "chSemWaitS(), #1",
+              "inconsistent semaphore");
 
   if (--sp->s_cnt < 0) {
     currp->p_u.wtobjp = sp;
@@ -166,10 +202,15 @@ msg_t chSemWaitS(Semaphore *sp) {
  *                      - @a TIME_IMMEDIATE immediate timeout.
  *                      - @a TIME_INFINITE no timeout.
  *                      .
- * @retval RDY_OK       if the semaphore was signaled or not taken.
- * @retval RDY_RESET    if the semaphore was reset using @p chSemReset().
- * @retval RDY_TIMEOUT  if the semaphore was not signaled or reset within the
- *                      specified timeout.
+ * @return              A message specifying how the invoking thread has been
+ *                      released from the semaphore.
+ * @retval RDY_OK       if the thread has not stopped on the semaphore or the
+ *                      semaphore has been signaled.
+ * @retval RDY_RESET    if the semaphore has been reset using @p chSemReset().
+ * @retval RDY_TIMEOUT  if the semaphore has not been signaled or reset within
+ *                      the specified timeout.
+ *
+ * @api
  */
 msg_t chSemWaitTimeout(Semaphore *sp, systime_t time) {
   msg_t msg;
@@ -189,14 +230,24 @@ msg_t chSemWaitTimeout(Semaphore *sp, systime_t time) {
  *                      - @a TIME_IMMEDIATE immediate timeout.
  *                      - @a TIME_INFINITE no timeout.
  *                      .
- * @retval RDY_OK       if the semaphore was signaled or not taken.
- * @retval RDY_RESET    if the semaphore was reset using @p chSemReset().
- * @retval RDY_TIMEOUT  if the semaphore was not signaled or reset within the
- *                      specified timeout.
+ * @return              A message specifying how the invoking thread has been
+ *                      released from the semaphore.
+ * @retval RDY_OK       if the thread has not stopped on the semaphore or the
+ *                      semaphore has been signaled.
+ * @retval RDY_RESET    if the semaphore has been reset using @p chSemReset().
+ * @retval RDY_TIMEOUT  if the semaphore has not been signaled or reset within
+ *                      the specified timeout.
+ *
+ * @sclass
  */
 msg_t chSemWaitTimeoutS(Semaphore *sp, systime_t time) {
 
   chDbgCheck(sp != NULL, "chSemWaitTimeoutS");
+
+  chDbgAssert(((sp->s_cnt >= 0) && isempty(&sp->s_queue)) ||
+              ((sp->s_cnt < 0) && notempty(&sp->s_queue)),
+              "chSemWaitTimeoutS(), #1",
+              "inconsistent semaphore");
 
   if (--sp->s_cnt < 0) {
     if (TIME_IMMEDIATE == time) {
@@ -214,28 +265,45 @@ msg_t chSemWaitTimeoutS(Semaphore *sp, systime_t time) {
  * @brief   Performs a signal operation on a semaphore.
  *
  * @param[in] sp        pointer to a @p Semaphore structure
+ *
+ * @api
  */
 void chSemSignal(Semaphore *sp) {
 
   chDbgCheck(sp != NULL, "chSemSignal");
 
+  chDbgAssert(((sp->s_cnt >= 0) && isempty(&sp->s_queue)) ||
+              ((sp->s_cnt < 0) && notempty(&sp->s_queue)),
+              "chSemSignal(), #1",
+              "inconsistent semaphore");
+
   chSysLock();
-  if (sp->s_cnt++ < 0)
+  if (++sp->s_cnt <= 0)
     chSchWakeupS(fifo_remove(&sp->s_queue), RDY_OK);
   chSysUnlock();
 }
 
 /**
  * @brief   Performs a signal operation on a semaphore.
- * @note    This function does not reschedule.
+ * @post    This function does not reschedule so a call to a rescheduling
+ *          function must be performed before unlocking the kernel. Note that
+ *          interrupt handlers always reschedule on exit so an explicit
+ *          reschedule must not be performed in ISRs.
  *
  * @param[in] sp    pointer to a @p Semaphore structure
+ *
+ * @iclass
  */
 void chSemSignalI(Semaphore *sp) {
 
   chDbgCheck(sp != NULL, "chSemSignalI");
 
-  if (sp->s_cnt++ < 0) {
+  chDbgAssert(((sp->s_cnt >= 0) && isempty(&sp->s_queue)) ||
+              ((sp->s_cnt < 0) && notempty(&sp->s_queue)),
+              "chSemSignalI(), #1",
+              "inconsistent semaphore");
+
+  if (++sp->s_cnt <= 0) {
     /* note, it is done this way in order to allow a tail call on
              chSchReadyI().*/
     Thread *tp = fifo_remove(&sp->s_queue);
@@ -244,24 +312,71 @@ void chSemSignalI(Semaphore *sp) {
   }
 }
 
+/**
+ * @brief   Sets the semaphore counter to the specified value.
+ * @post    After invoking this function all the threads waiting on the
+ *          semaphore, if any, are released and the semaphore counter is set
+ *          to the specified, non negative, value.
+ * @post    This function does not reschedule so a call to a rescheduling
+ *          function must be performed before unlocking the kernel. Note that
+ *          interrupt handlers always reschedule on exit so an explicit
+ *          reschedule must not be performed in ISRs.
+ *
+ * @param[in] sp        pointer to a @p Semaphore structure
+ * @param[in] n         the new value of the semaphore counter. The value must
+ *                      be non-negative.
+ *
+ * @iclass
+ */
+void chSemSetCounterI(Semaphore *sp, cnt_t n) {
+  cnt_t cnt;
+
+  chDbgCheck((sp != NULL) && (n >= 0), "chSemSetCounterI");
+
+  chDbgAssert(((sp->s_cnt >= 0) && isempty(&sp->s_queue)) ||
+              ((sp->s_cnt < 0) && notempty(&sp->s_queue)),
+              "chSemSetCounterI(), #1",
+              "inconsistent semaphore");
+
+  cnt = sp->s_cnt;
+  sp->s_cnt = n;
+  while (++cnt <= 0)
+    chSchReadyI(lifo_remove(&sp->s_queue))->p_u.rdymsg = RDY_OK;
+}
+
 #if CH_USE_SEMSW
 /**
  * @brief   Performs atomic signal and wait operations on two semaphores.
- * @note    The function is available only if the @p CH_USE_SEMSW
- *          option is enabled in @p chconf.h.
+ * @pre     The configuration option @p CH_USE_SEMSW must be enabled in order
+ *          to use this function.
  *
  * @param[in] sps       pointer to a @p Semaphore structure to be signaled
  * @param[in] spw       pointer to a @p Semaphore structure to be wait on
- * @retval RDY_OK       if the semaphore was signaled or not taken.
- * @retval RDY_RESET    if the semaphore was reset using @p chSemReset().
+ * @return              A message specifying how the invoking thread has been
+ *                      released from the semaphore.
+ * @retval RDY_OK       if the thread has not stopped on the semaphore or the
+ *                      semaphore has been signaled.
+ * @retval RDY_RESET    if the semaphore has been reset using @p chSemReset().
+ *
+ * @api
  */
 msg_t chSemSignalWait(Semaphore *sps, Semaphore *spw) {
   msg_t msg;
 
   chDbgCheck((sps != NULL) && (spw != NULL), "chSemSignalWait");
 
+  chDbgAssert(((sps->s_cnt >= 0) && isempty(&sps->s_queue)) ||
+              ((sps->s_cnt < 0) && notempty(&sps->s_queue)),
+              "chSemSignalWait(), #1",
+              "inconsistent semaphore");
+
+  chDbgAssert(((spw->s_cnt >= 0) && isempty(&spw->s_queue)) ||
+              ((spw->s_cnt < 0) && notempty(&spw->s_queue)),
+              "chSemSignalWait(), #2",
+              "inconsistent semaphore");
+
   chSysLock();
-  if (sps->s_cnt++ < 0)
+  if (++sps->s_cnt <= 0)
     chSchReadyI(fifo_remove(&sps->s_queue))->p_u.rdymsg = RDY_OK;
   if (--spw->s_cnt < 0) {
     Thread *ctp = currp;

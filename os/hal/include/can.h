@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -18,8 +19,9 @@
 */
 
 /**
- * @file can.h
- * @brief CAN Driver macros and structures.
+ * @file    can.h
+ * @brief   CAN Driver macros and structures.
+ *
  * @addtogroup CAN
  * @{
  */
@@ -27,30 +29,30 @@
 #ifndef _CAN_H_
 #define _CAN_H_
 
-#if CH_HAL_USE_CAN || defined(__DOXYGEN__)
+#if HAL_USE_CAN || defined(__DOXYGEN__)
 
 /*===========================================================================*/
 /* Driver constants.                                                         */
 /*===========================================================================*/
 
 /**
- * @brief Errors rate warning.
+ * @brief   Errors rate warning.
  */
 #define CAN_LIMIT_WARNING           1
 /**
- * @brief Errors rate error.
+ * @brief   Errors rate error.
  */
 #define CAN_LIMIT_ERROR             2
 /**
- * @brief Bus off condition reached.
+ * @brief   Bus off condition reached.
  */
 #define CAN_BUS_OFF_ERROR           4
 /**
- * @brief Framing error of some kind on the CAN bus.
+ * @brief   Framing error of some kind on the CAN bus.
  */
 #define CAN_FRAMING_ERROR           8
 /**
- * @brief Overflow in receive queue.
+ * @brief   Overflow in receive queue.
  */
 #define CAN_OVERFLOW_ERROR          16
 
@@ -59,9 +61,11 @@
 /*===========================================================================*/
 
 /**
- * @brief Sleep mode related APIs inclusion switch.
+ * @brief   Sleep mode related APIs inclusion switch.
  */
+#if !defined(CAN_USE_SLEEP_MODE) || defined(__DOXYGEN__)
 #define CAN_USE_SLEEP_MODE          TRUE
+#endif
 
 /*===========================================================================*/
 /* Derived constants and error checks.                                       */
@@ -76,14 +80,14 @@
 /*===========================================================================*/
 
 /**
- * @brief Driver state machine possible states.
+ * @brief   Driver state machine possible states.
  */
 typedef enum {
-  CAN_UNINIT = 0,                           /**< @brief Not initialized.    */
-  CAN_STOP = 1,                             /**< @brief Stopped.            */
-  CAN_STARTING = 2,                         /**< @brief Starting.           */
-  CAN_READY = 3,                            /**< @brief Ready.              */
-  CAN_SLEEP = 4                             /**< @brief Sleep state.        */
+  CAN_UNINIT = 0,                           /**< Not initialized.           */
+  CAN_STOP = 1,                             /**< Stopped.                   */
+  CAN_STARTING = 2,                         /**< Starting.                  */
+  CAN_READY = 3,                            /**< Ready.                     */
+  CAN_SLEEP = 4                             /**< Sleep state.               */
 } canstate_t;
 
 #include "can_lld.h"
@@ -93,12 +97,14 @@ typedef enum {
 /*===========================================================================*/
 
 /**
- * @brief Adds some flags to the CAN status mask.
+ * @brief   Adds some flags to the CAN status mask.
  *
  * @param[in] canp      pointer to the @p CANDriver object
  * @param[in] mask      flags to be added to the status mask
+ *
+ * @iclass
  */
-#define canAddFlagsI(canp, mask) ((canp)->cd_status |= (mask))
+#define canAddFlagsI(canp, mask) ((canp)->status |= (mask))
 
 /*===========================================================================*/
 /* External declarations.                                                    */
@@ -122,7 +128,7 @@ extern "C" {
 }
 #endif
 
-#endif /* CH_HAL_USE_CAN */
+#endif /* HAL_USE_CAN */
 
 #endif /* _CAN_H_ */
 

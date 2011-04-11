@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -20,6 +21,6 @@
 #ifndef _TESTQUEUES_H_
 #define _TESTQUEUES_H_
 
-extern const struct testcase *patternqueues[];
+extern ROMCONST struct testcase * ROMCONST patternqueues[];
 
 #endif /* _TESTQUEUES_H_ */

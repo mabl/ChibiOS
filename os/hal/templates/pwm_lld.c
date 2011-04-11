@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -18,14 +18,17 @@
 */
 
 /**
- * @file templates/pwm_lld.c
- * @brief PWM Driver subsystem low level driver source template.
- * @addtogroup PWM_LLD
+ * @file    templates/pwm_lld.c
+ * @brief   PWM Driver subsystem low level driver source template.
+ *
+ * @addtogroup PWM
  * @{
  */
 
 #include "ch.h"
 #include "hal.h"
+
+#if HAL_USE_PWM || defined(__DOXYGEN__)
 
 /*===========================================================================*/
 /* Driver exported variables.                                                */
@@ -48,16 +51,20 @@
 /*===========================================================================*/
 
 /**
- * @brief Low level PWM driver initialization.
+ * @brief   Low level PWM driver initialization.
+ *
+ * @notapi
  */
 void pwm_lld_init(void) {
 
 }
 
 /**
- * @brief Configures and activates the PWM peripheral.
+ * @brief   Configures and activates the PWM peripheral.
  *
- * @param[in] pwmp pointer to the @p PWMDriver object
+ * @param[in] pwmp      pointer to the @p PWMDriver object
+ *
+ * @notapi
  */
 void pwm_lld_start(PWMDriver *pwmp) {
 
@@ -68,23 +75,26 @@ void pwm_lld_start(PWMDriver *pwmp) {
 }
 
 /**
- * @brief Deactivates the PWM peripheral.
+ * @brief   Deactivates the PWM peripheral.
  *
- * @param[in] pwmp pointer to the @p PWMDriver object
+ * @param[in] pwmp      pointer to the @p PWMDriver object
+ *
+ * @notapi
  */
 void pwm_lld_stop(PWMDriver *pwmp) {
 
 }
 
 /**
- * @brief Determines whatever the PWM channel is already enabled.
+ * @brief   Determines whatever the PWM channel is already enabled.
  *
  * @param[in] pwmp      pointer to the @p PWMDriver object
  * @param[in] channel   PWM channel identifier
+ * @return              The PWM channel status.
+ * @retval FALSE        the channel is not enabled.
+ * @retval TRUE         the channel is enabled.
  *
- * @return The PWM channel status.
- * @retval FALSE the channel is not enabled.
- * @retval TRUE the channel is enabled.
+ * @notapi
  */
 bool_t pwm_lld_is_enabled(PWMDriver *pwmp, pwmchannel_t channel) {
 
@@ -92,25 +102,13 @@ bool_t pwm_lld_is_enabled(PWMDriver *pwmp, pwmchannel_t channel) {
 }
 
 /**
- * @brief Enables a callback mode for the specified PWM channel.
- * @details The callback mode must be set before starting a PWM channel.
+ * @brief   Enables a PWM channel.
  *
- * @param[in] pwmp      pointer to the @p PWMDriver object
- * @param[in] channel   PWM channel identifier
- * @param[in] edge      output edge mode
- * @param[in] callback  the callback function
- */
-void pwm_lld_set_callback(PWMDriver *pwmp, pwmchannel_t channel,
-                          pwmedge_t edge, pwmcallback_t callback) {
-
-}
-
-/**
- * @brief Enables a PWM channel.
- *
- * @param[in] pwmp      pointer to the @p PWMDriver object
- * @param[in] channel   PWM channel identifier
+ * @param[in] pwmp      pointer to a @p PWMDriver object
+ * @param[in] channel   PWM channel identifier (0...PWM_CHANNELS-1)
  * @param[in] width     PWM pulse width as clock pulses number
+ *
+ * @notapi
  */
 void pwm_lld_enable_channel(PWMDriver *pwmp,
                             pwmchannel_t channel,
@@ -119,15 +117,17 @@ void pwm_lld_enable_channel(PWMDriver *pwmp,
 }
 
 /**
- * @brief Disables a PWM channel.
+ * @brief   Disables a PWM channel.
  * @details The channel is disabled and its output line returned to the
  *          idle state.
  *
- * @param[in] pwmp      pointer to the @p PWMDriver object
- * @param[in] channel   PWM channel identifier
+ * @param[in] pwmp      pointer to a @p PWMDriver object
+ * @param[in] channel   PWM channel identifier (0...PWM_CHANNELS-1)
  */
 void pwm_lld_disable_channel(PWMDriver *pwmp, pwmchannel_t channel) {
 
 }
+
+#endif /* HAL_USE_PWM */
 
 /** @} */

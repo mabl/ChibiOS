@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -41,9 +42,10 @@ ReadyList rlist;
 
 /**
  * @brief   Scheduler initialization.
- * @note    Internally invoked by the @p chSysInit(), not an API.
+ *
+ * @notapi
  */
-void scheduler_init(void) {
+void _scheduler_init(void) {
 
   queue_init(&rlist.r_queue);
   rlist.r_prio = NOPRIO;
@@ -57,20 +59,27 @@ void scheduler_init(void) {
 
 /**
  * @brief   Inserts a thread in the Ready List.
- * @note    The function does not reschedule, the @p chSchRescheduleS() should
- *          be called soon after.
+ * @pre     The thread must not be already inserted in any list through its
+ *          @p p_next and @p p_prev or list corruption would occur.
+ * @post    This function does not reschedule so a call to a rescheduling
+ *          function must be performed before unlocking the kernel. Note that
+ *          interrupt handlers always reschedule on exit so an explicit
+ *          reschedule must not be performed in ISRs.
  *
- * @param[in] tp        the Thread to be made ready
- * @return              The Thread pointer.
+ * @param[in] tp        the thread to be made ready
+ * @return              The thread pointer.
+ *
+ * @iclass
  */
 #if !defined(PORT_OPTIMIZED_READYI) || defined(__DOXYGEN__)
-#if CH_OPTIMIZE_SPEED
-/* NOTE: it is inlined in this module only.*/
-INLINE Thread *chSchReadyI(Thread *tp) {
-#else
 Thread *chSchReadyI(Thread *tp) {
-#endif
   Thread *cp;
+
+  /* Integrity check.*/
+  chDbgAssert((tp->p_state != THD_STATE_READY) &&
+              (tp->p_state != THD_STATE_FINAL),
+              "chSchReadyI(), #1",
+              "invalid state");
 
   tp->p_state = THD_STATE_READY;
   cp = (Thread *)&rlist.r_queue;
@@ -78,7 +87,8 @@ Thread *chSchReadyI(Thread *tp) {
     cp = cp->p_next;
   } while (cp->p_prio >= tp->p_prio);
   /* Insertion on p_prev.*/
-  tp->p_prev = (tp->p_next = cp)->p_prev;
+  tp->p_next = cp;
+  tp->p_prev = cp->p_prev;
   tp->p_prev->p_next = cp->p_prev = tp;
   return tp;
 }
@@ -86,10 +96,12 @@ Thread *chSchReadyI(Thread *tp) {
 
 /**
  * @brief   Puts the current thread to sleep into the specified state.
- * @details The thread goes into a sleeping state. The @ref thread_states are
- *          described into @p threads.h.
+ * @details The thread goes into a sleeping state. The possible
+ *          @ref thread_states are defined into @p threads.h.
  *
  * @param[in] newstate  the new thread state
+ *
+ * @sclass
  */
 #if !defined(PORT_OPTIMIZED_GOSLEEPS) || defined(__DOXYGEN__)
 void chSchGoSleepS(tstate_t newstate) {
@@ -113,8 +125,12 @@ void chSchGoSleepS(tstate_t newstate) {
 static void wakeup(void *p) {
   Thread *tp = (Thread *)p;
 
-#if CH_USE_SEMAPHORES || (CH_USE_CONDVARS && CH_USE_CONDVARS_TIMEOUT)
   switch (tp->p_state) {
+  case THD_STATE_READY:
+    /* Handling the special case where the thread has been made ready by
+       another thread with higher priority.*/
+    return;
+#if CH_USE_SEMAPHORES || (CH_USE_CONDVARS && CH_USE_CONDVARS_TIMEOUT)
 #if CH_USE_SEMAPHORES
   case THD_STATE_WTSEM:
     chSemFastSignalI((Semaphore *)tp->p_u.wtobjp);
@@ -125,9 +141,8 @@ static void wakeup(void *p) {
 #endif
     /* States requiring dequeuing.*/
     dequeue(tp);
-  }
 #endif
-  /* Done this way in order to allow a tail call.*/
+  }
   tp->p_u.rdymsg = RDY_TIMEOUT;
   chSchReadyI(tp);
 }
@@ -137,8 +152,8 @@ static void wakeup(void *p) {
  *          timeout specification.
  * @details The thread goes into a sleeping state, if it is not awakened
  *          explicitly within the specified timeout then it is forcibly
- *          awakened with a @p RDY_TIMEOUT low level message. The @ref
- *          thread_states are described into @p threads.h.
+ *          awakened with a @p RDY_TIMEOUT low level message. The possible
+ *          @ref thread_states are defined into @p threads.h.
  *
  * @param[in] newstate  the new thread state
  * @param[in] time      the number of ticks before the operation timeouts, the
@@ -146,12 +161,12 @@ static void wakeup(void *p) {
  *                      - @a TIME_INFINITE the thread enters an infinite sleep
  *                        state, this is equivalent to invoking
  *                        @p chSchGoSleepS() but, of course, less efficient.
- *                      - @a TIME_IMMEDIATE this value is accepted but
- *                        interpreted as a normal time specification not as an
- *                        immediate timeout specification.
+ *                      - @a TIME_IMMEDIATE this value is not allowed.
  *                      .
  * @return              The wakeup message.
  * @retval RDY_TIMEOUT if a timeout occurs.
+ *
+ * @sclass
  */
 msg_t chSchGoSleepTimeoutS(tstate_t newstate, systime_t time) {
 
@@ -174,6 +189,8 @@ msg_t chSchGoSleepTimeoutS(tstate_t newstate, systime_t time) {
  * @details The thread is inserted into the ready list or immediately made
  *          running depending on its relative priority compared to the current
  *          thread.
+ * @pre     The thread must not be already inserted in any list through its
+ *          @p p_next and @p p_prev or list corruption would occur.
  * @note    It is equivalent to a @p chSchReadyI() followed by a
  *          @p chSchRescheduleS() but much more efficient.
  * @note    The function assumes that the current thread has the highest
@@ -181,6 +198,8 @@ msg_t chSchGoSleepTimeoutS(tstate_t newstate, systime_t time) {
  *
  * @param[in] ntp       the Thread to be made ready
  * @param[in] msg       message to the awakened thread
+ *
+ * @sclass
  */
 #if !defined(PORT_OPTIMIZED_WAKEUPS) || defined(__DOXYGEN__)
 void chSchWakeupS(Thread *ntp, msg_t msg) {
@@ -209,6 +228,8 @@ void chSchWakeupS(Thread *ntp, msg_t msg) {
  * @brief   Switches to the first thread on the runnable queue.
  * @note    It is intended to be called if @p chSchRescRequiredI() evaluates
  *          to @p TRUE.
+ *
+ * @iclass
  */
 #if !defined(PORT_OPTIMIZED_DORESCHEDULEI) || defined(__DOXYGEN__)
 void chSchDoRescheduleI(void) {
@@ -231,6 +252,8 @@ void chSchDoRescheduleI(void) {
  * @brief   Performs a reschedule if a higher priority thread is runnable.
  * @details If a thread with a higher priority than the current thread is in
  *          the ready list then make the higher priority thread running.
+ *
+ * @iclass
  */
 #if !defined(PORT_OPTIMIZED_RESCHEDULES) || defined(__DOXYGEN__)
 void chSchRescheduleS(void) {
@@ -249,6 +272,8 @@ void chSchRescheduleS(void) {
  *
  * @retval TRUE         if there is a thread that should go in running state.
  * @retval FALSE        if a reschedule is not required.
+ *
+ * @iclass
  */
 #if !defined(PORT_OPTIMIZED_ISRESCHREQUIREDEXI) || defined(__DOXYGEN__)
 bool_t chSchIsRescRequiredExI(void) {

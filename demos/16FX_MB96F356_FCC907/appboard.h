@@ -69,6 +69,9 @@
 #define uSEC_TO_RELTIM3(usec) ((usec/RESOLUTION_RELOAD_TIMER_3)-1)
 #define uSEC_TO_RELTIM6(usec) ((usec/RESOLUTION_RELOAD_TIMER_6)-1)
 
+#define	PinLED_LIFE		PDR04_P4
+
+
 //--------------------------------------------------------//
 // Definizione dei tipi
 //--------------------------------------------------------//

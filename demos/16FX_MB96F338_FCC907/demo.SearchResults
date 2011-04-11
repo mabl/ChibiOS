@@ -1,0 +1,16 @@
+---- Chcore Matches (15 in 7 files) ----
+Ch.h (c:\rtos\fujitsu_dev\os\kernel\include):#include "chcore.h"
+Chcore.c (c:\rtos\fujitsu_dev\os\ports\fcc907\f2mc_16fx): * @file ports/MSP430/chcore.c
+Chcore.h (c:\rtos\fujitsu_dev\os\ports\fcc907\f2mc_16fx): * @file ports/F2MC_16FX/chcore.h
+Chcore.h (c:\rtos\fujitsu_dev\os\ports\fcc907\f2mc_16fx):#ifndef _CHCORE_H_
+Chcore.h (c:\rtos\fujitsu_dev\os\ports\fcc907\f2mc_16fx):#define _CHCORE_H_
+Chcore.h (c:\rtos\fujitsu_dev\os\ports\fcc907\f2mc_16fx):#endif /* _CHCORE_H_ */
+Chheap.c (c:\rtos\fujitsu_dev\os\kernel\src):  default_heap.h_provider = chCoreAlloc;
+Chmemcore.c (c:\rtos\fujitsu_dev\os\kernel\src):void *chCoreAlloc(size_t size) {
+Chmemcore.c (c:\rtos\fujitsu_dev\os\kernel\src):  p = chCoreAllocI(size);
+Chmemcore.c (c:\rtos\fujitsu_dev\os\kernel\src):void *chCoreAllocI(size_t size) {
+Chmemcore.c (c:\rtos\fujitsu_dev\os\kernel\src):size_t chCoreStatus(void) {
+Chmemcore.h (c:\rtos\fujitsu_dev\os\kernel\include):  void *chCoreAlloc(size_t size);
+Chmemcore.h (c:\rtos\fujitsu_dev\os\kernel\include):  void *chCoreAllocI(size_t size);
+Chmemcore.h (c:\rtos\fujitsu_dev\os\kernel\include):  size_t chCoreStatus(void);
+Testheap.c (c:\rtos\fujitsu_dev\test):  (void)chCoreStatus();

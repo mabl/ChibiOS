@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -36,13 +37,15 @@ static INLINE void prio_insert(Thread *tp, ThreadsQueue *tqp) {
   do {
     cp = cp->p_next;
   } while ((cp != (Thread *)tqp) && (cp->p_prio >= tp->p_prio));
-  tp->p_prev = (tp->p_next = cp)->p_prev;
+  tp->p_next = cp;
+  tp->p_prev = cp->p_prev;
   tp->p_prev->p_next = cp->p_prev = tp;
 }
 
 static INLINE void queue_insert(Thread *tp, ThreadsQueue *tqp) {
 
-  tp->p_prev = (tp->p_next = (Thread *)tqp)->p_prev;
+  tp->p_next = (Thread *)tqp;
+  tp->p_prev = tqp->p_prev;
   tp->p_prev->p_next = tqp->p_prev = tp;
 }
 

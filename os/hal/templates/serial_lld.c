@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -18,16 +18,17 @@
 */
 
 /**
- * @file templates/serial_lld.c
- * @brief Serial Driver subsystem low level driver source template.
- * @addtogroup SERIAL_LLD
+ * @file    templates/serial_lld.c
+ * @brief   Serial Driver subsystem low level driver source template.
+ *
+ * @addtogroup SERIAL
  * @{
  */
 
 #include "ch.h"
 #include "hal.h"
 
-#if CH_HAL_USE_SERIAL || defined(__DOXYGEN__)
+#if HAL_USE_SERIAL || defined(__DOXYGEN__)
 
 /*===========================================================================*/
 /* Driver exported variables.                                                */
@@ -37,7 +38,9 @@
 /* Driver local variables.                                                   */
 /*===========================================================================*/
 
-/** @brief Driver default configuration.*/
+/**
+ * @brief   Driver default configuration.
+ */
 static const SerialConfig default_config = {
 };
 
@@ -54,35 +57,44 @@ static const SerialConfig default_config = {
 /*===========================================================================*/
 
 /**
- * Low level serial driver initialization.
+ * @brief   Low level serial driver initialization.
+ *
+ * @notapi
  */
 void sd_lld_init(void) {
 
 }
 
 /**
- * @brief Low level serial driver configuration and (re)start.
+ * @brief   Low level serial driver configuration and (re)start.
  *
- * @param[in] sdp pointer to a @p SerialDriver object
+ * @param[in] sdp       pointer to a @p SerialDriver object
+ * @param[in] config    the architecture-dependent serial driver configuration.
+ *                      If this parameter is set to @p NULL then a default
+ *                      configuration is used.
+ *
+ * @notapi
  */
-void sd_lld_start(SerialDriver *sdp) {
+void sd_lld_start(SerialDriver *sdp, const SerialConfig *config) {
 
-  if (sdp->config == NULL)
-    sdp->config = &default_config;
+  if (config == NULL)
+    config = &default_config;
 
 }
 
 /**
- * @brief Low level serial driver stop.
+ * @brief   Low level serial driver stop.
  * @details De-initializes the USART, stops the associated clock, resets the
  *          interrupt vector.
  *
- * @param[in] sdp pointer to a @p SerialDriver object
+ * @param[in] sdp       pointer to a @p SerialDriver object
+ *
+ * @notapi
  */
 void sd_lld_stop(SerialDriver *sdp) {
 
 }
 
-#endif /* CH_HAL_USE_SERIAL */
+#endif /* HAL_USE_SERIAL */
 
 /** @} */

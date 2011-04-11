@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -28,7 +29,7 @@
 #ifndef _CHMEMPOOLS_H_
 #define _CHMEMPOOLS_H_
 
-#if CH_USE_MEMPOOLS
+#if CH_USE_MEMPOOLS || defined(__DOXYGEN__)
 
 /**
  * @brief   Memory pool free object header.
@@ -59,7 +60,7 @@ typedef struct {
  * @param[in] provider  memory provider function for the memory pool
  */
 #define _MEMORYPOOL_DATA(name, size, provider)                              \
-  {NULL, MEM_ALIGN_SIZE(size), provider}
+  {NULL, MEM_ALIGN_NEXT(size), provider}
 
 /**
  * @brief Static memory pool initializer in hungry mode.

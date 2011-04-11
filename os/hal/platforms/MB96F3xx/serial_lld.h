@@ -27,7 +27,7 @@
 #ifndef _SERIAL_LLD_H_
 #define _SERIAL_LLD_H_
 
-#if CH_HAL_USE_SERIAL || defined(__DOXYGEN__)
+#if HAL_USE_SERIAL || defined(__DOXYGEN__)
 
 /*===========================================================================*/
 /* Driver constants.                                                         */
@@ -66,8 +66,8 @@
 #endif
 
 /**
- * @brief USART0 driver enable switch.
- * @details If set to @p TRUE the support for USART0 is included.
+ * @brief USART1 driver enable switch.
+ * @details If set to @p TRUE the support for USART1 is included.
  * @note The default is @p TRUE.
  */
 #if !defined(USE_MB96F3xx_USART1) || defined(__DOXYGEN__)
@@ -75,17 +75,17 @@
 #endif
 
 /**
- * @brief USART0 driver enable switch.
- * @details If set to @p TRUE the support for USART0 is included.
+ * @brief USART2 driver enable switch.
+ * @details If set to @p TRUE the support for USART2 is included.
  * @note The default is @p TRUE.
  */
 #if !defined(USE_MB96F3xx_USART2) || defined(__DOXYGEN__)
-#define USE_MB96F3xx_USART2           TRUE
+#define USE_MB96F3xx_USART2           FALSE
 #endif
 
 /**
- * @brief USART0 driver enable switch.
- * @details If set to @p TRUE the support for USART0 is included.
+ * @brief USART3 driver enable switch.
+ * @details If set to @p TRUE the support for USART3 is included.
  * @note The default is @p TRUE.
  */
 #if !defined(USE_MB96F3xx_USART3) || defined(__DOXYGEN__)
@@ -93,8 +93,8 @@
 #endif
 
 /**
- * @brief USART0 driver enable switch.
- * @details If set to @p TRUE the support for USART0 is included.
+ * @brief USART4 driver enable switch.
+ * @details If set to @p TRUE the support for USART4 is included.
  * @note The default is @p TRUE.
  */
 #if !defined(USE_MB96F3xx_USART4) || defined(__DOXYGEN__)
@@ -102,8 +102,8 @@
 #endif
 
 /**
- * @brief USART0 driver enable switch.
- * @details If set to @p TRUE the support for USART0 is included.
+ * @brief USART5 driver enable switch.
+ * @details If set to @p TRUE the support for USART5 is included.
  * @note The default is @p TRUE.
  */
 #if !defined(USE_MB96F3xx_USART5) || defined(__DOXYGEN__)
@@ -111,8 +111,8 @@
 #endif
 
 /**
- * @brief USART0 driver enable switch.
- * @details If set to @p TRUE the support for USART0 is included.
+ * @brief USART6 driver enable switch.
+ * @details If set to @p TRUE the support for USART6 is included.
  * @note The default is @p TRUE.
  */
 #if !defined(USE_MB96F3xx_USART6) || defined(__DOXYGEN__)
@@ -120,8 +120,8 @@
 #endif
 
 /**
- * @brief USART0 driver enable switch.
- * @details If set to @p TRUE the support for USART0 is included.
+ * @brief USART7 driver enable switch.
+ * @details If set to @p TRUE the support for USART7 is included.
  * @note The default is @p TRUE.
  */
 #if !defined(USE_MB96F3xx_USART7) || defined(__DOXYGEN__)
@@ -129,14 +129,22 @@
 #endif
 
 /**
- * @brief USART0 driver enable switch.
- * @details If set to @p TRUE the support for USART0 is included.
+ * @brief USART8 driver enable switch.
+ * @details If set to @p TRUE the support for USART8 is included.
  * @note The default is @p TRUE.
  */
 #if !defined(USE_MB96F3xx_USART8) || defined(__DOXYGEN__)
 #define USE_MB96F3xx_USART8           FALSE
 #endif
 
+/**
+ * @brief USART9 driver enable switch.
+ * @details If set to @p TRUE the support for USART9 is included.
+ * @note The default is @p TRUE.
+ */
+#if !defined(USE_MB96F3xx_USART9) || defined(__DOXYGEN__)
+#define USE_MB96F3xx_USART9           FALSE
+#endif
 
 /*===========================================================================*/
 /* Derived constants and error checks.                                       */
@@ -326,23 +334,17 @@ struct	_uart_lin_reg{
   _base_asynchronous_channel_data                                           \
   /* Driver state.*/                                                        \
   sdstate_t                 state;                                          \
-  /* Current configuration data.*/                                          \
-  const SerialConfig        *config;                                        \
   /* Input queue.*/                                                         \
   InputQueue                iqueue;                                         \
   /* Output queue.*/                                                        \
   OutputQueue               oqueue;                                         \
-  /* Status Change @p EventSource.*/                                        \
-  EventSource               sevent;                                        \
-  /* I/O driver status flags.*/                                             \
-  sdflags_t                 flags;                                          \
   /* Input circular buffer.*/                                               \
   uint8_t                   ib[SERIAL_BUFFERS_SIZE];                        \
   /* Output circular buffer.*/                                              \
   uint8_t                   ob[SERIAL_BUFFERS_SIZE];                        \
   /* End of the mandatory fields.*/                                         \
   /* Memory mapped USART register entry point	*/                          \
-  struct _uart_lin_reg *reg;                                              \
+  struct _uart_lin_reg *reg;                                              
 
 
 /**
@@ -371,9 +373,6 @@ typedef struct {
 #define	USART7_Base	((struct _uart_lin_reg*)&_smr7)
 #define	USART8_Base	((struct _uart_lin_reg*)&_smr8)
 #define	USART9_Base	((struct _uart_lin_reg*)&_smr9)
-
-
-#define NOTIFY_USART_X(name, param) void name(void)	{	notifyUSARTx(param); }
 
 
 /*===========================================================================*/
@@ -408,12 +407,15 @@ extern SerialDriver SD7;
 #if USE_MB96F3xx_USART8
 extern SerialDriver SD8;
 #endif
+#if USE_MB96F3xx_USART9
+extern SerialDriver SD9;
+#endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
   void sd_lld_init(void);
-  void sd_lld_start(SerialDriver *sdp);
+  void sd_lld_start(SerialDriver *sdp, const SerialConfig *config);
   void sd_lld_stop(SerialDriver *sdp);
 #ifdef __cplusplus
 }

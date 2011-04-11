@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -27,16 +28,6 @@
 
 #ifndef _CHTHREADS_H_
 #define _CHTHREADS_H_
-
-/*
- * Module dependencies check.
- */
-#if CH_USE_DYNAMIC && !CH_USE_WAITEXIT
-#error "CH_USE_DYNAMIC requires CH_USE_WAITEXIT"
-#endif
-#if CH_USE_DYNAMIC && !CH_USE_HEAP && !CH_USE_MEMPOOLS
-#error "CH_USE_DYNAMIC requires CH_USE_HEAP and/or CH_USE_MEMPOOLS"
-#endif
 
 /**
  * @extends ThreadsQueue
@@ -160,8 +151,10 @@ struct Thread {
    */
   void                  *p_mpool;
 #endif
+#if defined(THREAD_EXT_FIELDS)
   /* Extra fields defined in chconf.h.*/
   THREAD_EXT_FIELDS
+#endif
 };
 
 /** @brief Thread state: Ready to run, waiting on the ready list.*/
@@ -184,12 +177,14 @@ struct Thread {
 #define THD_STATE_WTOREVT       8
 /** @brief Thread state: Waiting in @p chEvtWaitAllTimeout().*/
 #define THD_STATE_WTANDEVT      9
-/** @brief Thread state: Waiting in @p chMsgSend().*/
-#define THD_STATE_SNDMSG        10
+/** @brief Thread state: Waiting in @p chMsgSend() (queued).*/
+#define THD_STATE_SNDMSGQ       10
+/** @brief Thread state: Waiting in @p chMsgSend() (not queued).*/
+#define THD_STATE_SNDMSG        11
 /** @brief Thread state: Waiting in @p chMsgWait().*/
-#define THD_STATE_WTMSG         11
+#define THD_STATE_WTMSG         12
 /** @brief Thread state: After termination.*/
-#define THD_STATE_FINAL         12
+#define THD_STATE_FINAL         13
 
 /*
  * Various flags into the thread p_flags field.
@@ -209,19 +204,14 @@ typedef msg_t (*tfunc_t)(void *);
 #ifdef __cplusplus
 extern "C" {
 #endif
-  Thread *init_thread(Thread *tp, tprio_t prio);
-  Thread *chThdInit(void *wsp, size_t size,
-                    tprio_t prio, tfunc_t pf, void *arg);
+  Thread *_thread_init(Thread *tp, tprio_t prio);
+#if CH_DBG_FILL_THREADS
+  void _thread_memfill(uint8_t *startp, uint8_t *endp, uint8_t v);
+#endif
+  Thread *chThdCreateI(void *wsp, size_t size,
+                       tprio_t prio, tfunc_t pf, void *arg);
   Thread *chThdCreateStatic(void *wsp, size_t size,
                             tprio_t prio, tfunc_t pf, void *arg);
-#if CH_USE_DYNAMIC && CH_USE_WAITEXIT && CH_USE_HEAP
-  Thread *chThdCreateFromHeap(MemoryHeap *heapp, size_t size,
-                              tprio_t prio, tfunc_t pf, void *arg);
-#endif
-#if CH_USE_DYNAMIC && CH_USE_WAITEXIT && CH_USE_MEMPOOLS
-  Thread *chThdCreateFromMemoryPool(MemoryPool *mp, tprio_t prio,
-                                    tfunc_t pf, void *arg);
-#endif
   tprio_t chThdSetPriority(tprio_t newprio);
   Thread *chThdResume(Thread *tp);
   void chThdTerminate(Thread *tp);
@@ -229,10 +219,6 @@ extern "C" {
   void chThdSleepUntil(systime_t time);
   void chThdYield(void);
   void chThdExit(msg_t msg);
-#if CH_USE_DYNAMIC
-  Thread *chThdAddRef(Thread *tp);
-  void chThdRelease(Thread *tp);
-#endif
 #if CH_USE_WAITEXIT
   msg_t chThdWait(Thread *tp);
 #endif
@@ -242,25 +228,44 @@ extern "C" {
 
 /**
  * @brief   Returns a pointer to the current @p Thread.
+ *
+ * @api
  */
 #define chThdSelf() currp
 
 /**
  * @brief   Returns the current thread priority.
+ *
+ * @api
  */
 #define chThdGetPriority() (currp->p_prio)
 
 /**
+ * @brief   Returns the number of ticks consumed by the specified thread.
+ * @note    This function is only available when the
+ *          @p CH_DBG_THREADS_PROFILING configuration option is enabled.
+ *
+ * @param[in] tp        pointer to the thread
+ *
+ * @api
+ */
+#define chThdGetTicks(tp) ((tp)->p_time)
+
+/**
  * @brief   Returns the pointer to the @p Thread local storage area, if any.
+ *
+ * @api
  */
 #define chThdLS() (void *)(currp + 1)
 
 /**
  * @brief   Verifies if the specified thread is in the @p THD_STATE_FINAL state.
  *
- * @param[in] tp        the pointer to the thread
+ * @param[in] tp        pointer to the thread
  * @retval TRUE         thread terminated.
  * @retval FALSE        thread not terminated.
+ *
+ * @api
  */
 #define chThdTerminated(tp) ((tp)->p_state == THD_STATE_FINAL)
 
@@ -269,13 +274,17 @@ extern "C" {
  *
  * @retval TRUE         termination request pended.
  * @retval FALSE        termination request not pended.
+ *
+ * @api
  */
 #define chThdShouldTerminate() (currp->p_flags & THD_TERMINATE)
 
 /**
  * @brief   Resumes a thread created with @p chThdInit().
  *
- * @param[in] tp        the pointer to the thread
+ * @param[in] tp        pointer to the thread
+ *
+ * @iclass
  */
 #define chThdResumeI(tp) chSchReadyI(tp)
 
@@ -286,10 +295,10 @@ extern "C" {
  *                      handled as follow:
  *                      - @a TIME_INFINITE the thread enters an infinite sleep
  *                        state.
- *                      - @a TIME_IMMEDIATE this value is accepted but
- *                        interpreted as a normal time specification not as
- *                        an immediate timeout specification.
+ *                      - @a TIME_IMMEDIATE this value is not allowed.
  *                      .
+ *
+ * @sclass
  */
 #define chThdSleepS(time) chSchGoSleepTimeoutS(THD_STATE_SLEEPING, time)
 
@@ -299,7 +308,9 @@ extern "C" {
  *          system clock.
  * @note    The maximum specified value is implementation dependent.
  *
- * @param[in] sec       the time in seconds
+ * @param[in] sec       time in seconds
+ *
+ * @api
  */
 #define chThdSleepSeconds(sec) chThdSleep(S2ST(sec))
 
@@ -310,7 +321,9 @@ extern "C" {
  *          system clock.
  * @note    The maximum specified value is implementation dependent.
  *
- * @param[in] msec      the time in milliseconds
+ * @param[in] msec      time in milliseconds
+ *
+ * @api
  */
 #define chThdSleepMilliseconds(msec) chThdSleep(MS2ST(msec))
 
@@ -321,7 +334,9 @@ extern "C" {
  *          system clock.
  * @note    The maximum specified value is implementation dependent.
  *
- * @param[in] usec      the time in microseconds
+ * @param[in] usec      time in microseconds
+ *
+ * @api
  */
 #define chThdSleepMicroseconds(usec) chThdSleep(US2ST(usec))
 

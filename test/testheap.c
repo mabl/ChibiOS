@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -47,7 +48,7 @@
  * @brief Heap header file
  */
 
-#if CH_USE_HEAP
+#if CH_USE_HEAP || defined(__DOXYGEN__)
 
 #define SIZE 16
 
@@ -63,11 +64,6 @@ static MemoryHeap test_heap;
  * The test expects to find the heap back to the initial status after each
  * sequence.
  */
-
-static char *heap1_gettest(void) {
-
-  return "Heap, allocation and fragmentation test";
-}
 
 static void heap1_setup(void) {
 
@@ -147,8 +143,8 @@ static void heap1_execute(void) {
   test_assert(12, n == sz, "size changed");
 }
 
-const struct testcase testheap1 = {
-  heap1_gettest,
+ROMCONST struct testcase testheap1 = {
+  "Heap, allocation and fragmentation test",
   heap1_setup,
   NULL,
   heap1_execute
@@ -159,8 +155,8 @@ const struct testcase testheap1 = {
 /**
  * @brief   Test sequence for heap.
  */
-const struct testcase * const patternheap[] = {
-#if CH_USE_HEAP
+ROMCONST struct testcase * ROMCONST patternheap[] = {
+#if CH_USE_HEAP || defined(__DOXYGEN__)
   &testheap1,
 #endif
   NULL

@@ -8,12 +8,10 @@
   - Interrupt vector definition
 -----------------------------------------------------------------------------*/
 
-#include "global.h"
-#include "appboard.h"
-
 #include <ch.h>
 #include <hal.h>
 
+#include "appboard.h"
 #include "irq96f356.h"
 
 extern void sw_reset(void);
@@ -417,34 +415,34 @@ __interrupt void  irq_ppg19				(void)
 }
 
 
-/* emigrato */
-//__interrupt void  irq_reload0 			(void)
-//{
-//	ErrorLevel = 54;   /* RLT0                         */
-//	sw_reset();
-//}
 
-/* emigrato */
-//__interrupt void  irq_reload1			(void)
-//{
-//	ErrorLevel = 55;   /* RLT1                         */
-//	sw_reset();
-//}
+__interrupt void  irq_reload0 			(void)
+{
+	ErrorLevel = 54;   /* RLT0                         */
+	sw_reset();
+}
 
-/* emigrato */
-//__interrupt void  irq_reload2			(void)
-//{
-//	ErrorLevel = 56;   /* RLT2                         */
-//	sw_reset();
-//}
 
-//__interrupt void  irq_reload3			(void)
-//{
-//	ErrorLevel = 57;   /* RLT3                         */
-//	sw_reset();
-//}
+__interrupt void  irq_reload1			(void)
+{
+	ErrorLevel = 55;   /* RLT1                         */
+	sw_reset();
+}
 
-/* emigrato */
+
+__interrupt void  irq_reload2			(void)
+{
+	ErrorLevel = 56;   /* RLT2                         */
+	sw_reset();
+}
+
+__interrupt void  irq_reload3			(void)
+{
+	ErrorLevel = 57;   /* RLT3                         */
+	sw_reset();
+}
+
+
 //__interrupt void  irq_reload6_ppgrlt	(void)
 //{
 //	ErrorLevel = 58;   /* PPGRLT - RLT6                */
@@ -546,6 +544,8 @@ __interrupt void  irq_adc				(void)
 	ErrorLevel = 84;   /* ADC                          */
 	sw_reset();
 }
+#if USE_MB96F3xx_USART2 || defined(__DOXYGEN__)
+#else
 
 __interrupt void  irq_uart2_rx			(void)
 {
@@ -558,7 +558,10 @@ __interrupt void  irq_uart2_tx			(void)
 	ErrorLevel = 86;   /* LIN-UART 2 TX                */
 	sw_reset();
 }
+#endif
 
+#if USE_MB96F3xx_USART3 || defined(__DOXYGEN__)
+#else
 __interrupt void  irq_uart3_rx			(void)
 {
 	ErrorLevel = 87;   /* LIN-UART 3 RX                */
@@ -570,6 +573,10 @@ __interrupt void  irq_uart3_tx			(void)
 	ErrorLevel = 88;   /* LIN-UART 3 TX                */
 	sw_reset();
 }
+#endif
+
+#if USE_MB96F3xx_USART7 || defined(__DOXYGEN__)
+#else
 
 __interrupt void  irq_uart7_rx			(void)
 {
@@ -582,7 +589,10 @@ __interrupt void  irq_uart7_tx			(void)
 	ErrorLevel = 90;   /* LIN-UART 7 TX                */
 	sw_reset();
 }
+#endif
 
+#if USE_MB96F3xx_USART8 || defined(__DOXYGEN__)
+#else
 __interrupt void  irq_uart8_rx			(void)
 {
 	ErrorLevel = 91;   /* LIN-UART 8 RX                */
@@ -594,6 +604,7 @@ __interrupt void  irq_uart8_tx			(void)
 	ErrorLevel = 92;   /* LIN-UART 8 TX                */
 	sw_reset();
 }
+#endif
 
 __interrupt void  irq_flash				(void)
 {

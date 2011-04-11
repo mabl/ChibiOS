@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -28,7 +29,7 @@
 #ifndef _CHEVENTS_H_
 #define _CHEVENTS_H_
 
-#if CH_USE_EVENTS
+#if CH_USE_EVENTS || defined(__DOXYGEN__)
 
 typedef struct EventListener EventListener;
 
@@ -56,6 +57,11 @@ typedef struct EventSource {
 } EventSource;
 
 /**
+ * @brief   Event Handler callback function.
+ */
+typedef void (*evhandler_t)(eventid_t);
+
+/**
  * @brief   Data part of a static event source initializer.
  * @details This macro should be used when statically initializing an event
  *          source that is part of a bigger structure.
@@ -73,10 +79,10 @@ typedef struct EventSource {
 #define EVENTSOURCE_DECL(name) EventSource name = _EVENTSOURCE_DATA(name)
 
 /** All events allowed mask.*/
-#define ALL_EVENTS -1
+#define ALL_EVENTS      ((eventmask_t)-1)
 
 /** Returns the event mask from the event identifier.*/
-#define EVENT_MASK(eid) (1 << (eid))
+#define EVENT_MASK(eid) ((eventmask_t)(1 << (eid)))
 
 /**
  * @brief   Registers an Event Listener on an Event Source.
@@ -90,31 +96,57 @@ typedef struct EventSource {
  *                      function.
  *                      The value must range between zero and the size, in bit,
  *                      of the @p eventid_t type minus one.
+ *
+ * @api
  */
-#define chEvtRegister(esp, elp, eid) chEvtRegisterMask(esp, elp, EVENT_MASK(eid))
+#define chEvtRegister(esp, elp, eid) \
+  chEvtRegisterMask(esp, elp, EVENT_MASK(eid))
 
 /**
  * @brief   Initializes an Event Source.
- * @note    Can be used with interrupts disabled or enabled.
+ * @note    This function can be invoked before the kernel is initialized
+ *          because it just prepares a @p EventSource structure.
  *
  * @param[in] esp       pointer to the @p EventSource structure
+ *
+ * @init
  */
 #define chEvtInit(esp) \
-        ((esp)->es_next = (EventListener *)(void *)(esp))
+  ((esp)->es_next = (EventListener *)(void *)(esp))
 
 /**
  * @brief   Verifies if there is at least one @p EventListener registered.
- * @note    Can be called with interrupts disabled or enabled.
  *
  * @param[in] esp       pointer to the @p EventSource structure
+ *
+ * @iclass
  */
-#define chEvtIsListening(esp) \
-                ((void *)(esp) != (void *)(esp)->es_next)
+#define chEvtIsListeningI(esp) \
+  ((void *)(esp) != (void *)(esp)->es_next)
 
 /**
- * @brief   Event Handler callback function.
+ * @brief   Signals all the Event Listeners registered on the specified Event
+ *          Source.
+ *
+ * @param[in] esp       pointer to the @p EventSource structure
+ *
+ * @api
  */
-typedef void (*evhandler_t)(eventid_t);
+#define chEvtBroadcast(esp) chEvtBroadcastFlags(esp, 0)
+
+/**
+ * @brief   Signals all the Event Listeners registered on the specified Event
+ *          Source.
+ * @post    This function does not reschedule so a call to a rescheduling
+ *          function must be performed before unlocking the kernel. Note that
+ *          interrupt handlers always reschedule on exit so an explicit
+ *          reschedule must not be performed in ISRs.
+ *
+ * @param[in] esp       pointer to the @p EventSource structure
+ *
+ * @iclass
+ */
+#define chEvtBroadcastI(esp) chEvtBroadcastFlagsI(esp, 0)
 
 #ifdef __cplusplus
 extern "C" {
@@ -123,12 +155,12 @@ extern "C" {
                          EventListener *elp,
                          eventmask_t mask);
   void chEvtUnregister(EventSource *esp, EventListener *elp);
-  eventmask_t chEvtClear(eventmask_t mask);
-  eventmask_t chEvtPend(eventmask_t mask);
-  void chEvtSignal(Thread *tp, eventmask_t mask);
-  void chEvtSignalI(Thread *tp, eventmask_t mask);
-  void chEvtBroadcast(EventSource *esp);
-  void chEvtBroadcastI(EventSource *esp);
+  eventmask_t chEvtClearFlags(eventmask_t mask);
+  eventmask_t chEvtAddFlags(eventmask_t mask);
+  void chEvtSignalFlags(Thread *tp, eventmask_t mask);
+  void chEvtSignalFlagsI(Thread *tp, eventmask_t mask);
+  void chEvtBroadcastFlags(EventSource *esp, eventmask_t mask);
+  void chEvtBroadcastFlagsI(EventSource *esp, eventmask_t mask);
   void chEvtDispatch(const evhandler_t *handlers, eventmask_t mask);
 #if CH_OPTIMIZE_SPEED || !CH_USE_EVENTS_TIMEOUT
   eventmask_t chEvtWaitOne(eventmask_t mask);

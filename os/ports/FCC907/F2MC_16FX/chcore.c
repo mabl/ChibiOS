@@ -47,7 +47,8 @@
 /** @cond never */
 
 /** @endcond */
-void port_switch(Thread *otp, Thread *ntp) 
+//#pragma inline port_switch
+void port_switch(Thread *ntp, Thread *otp) 
 {
 #pragma asm
   	intp	_port_switch_swi_handler	;context save
@@ -58,18 +59,34 @@ __nosavereg __interrupt void port_switch_swi_handler(void)
 {
 #pragma asm
 				    ;save into the system stack task the current context
+		PUSHW 	(RW2, RW3, RW4, RW5, RW6, RW7)
+		MOVW    A, SP				; plz record the current bottom stack
+		MOVW	RW0,A				; RW0 => sp
+		MOVW	RW1,@RW0+(6+12+12)	; RW1 => otp (note: only for medium model)
+		MOVW	@RW1+6,A			; @(RW1+8) => otp->p_ctx
+
+	  // Then swap to new task 
+		MOVW	RW1,@RW0+(4+12+12)	; RW1 => ntp (note: only for medium model)
+		MOVW	A,@RW1+6			; RW1+8 => ntp->p_ctx
+		MOVW	SP,A				; setup new stack 
+		POPW 	(RW2, RW3, RW4, RW5, RW6, RW7)
+		RETI						; restore context
+
+/*
+				    ;save into the system stack task the current context
 		PUSHW 	(RW0, RW1, RW2, RW3, RW4, RW5, RW6, RW7)
 		MOVW    A, SP				; plz record the current bottom stack
 		MOVW	RW0,A				; RW0 => sp
-		MOVW	RW1,@RW0+(4+16+12)	; RW1 => otp (note: only for medium model)
-		MOVW	@RW1+8,A			; @(RW1+8) => otp->p_ctx
+		MOVW	RW1,@RW0+(6+16+12)	; RW1 => otp (note: only for medium model)
+		MOVW	@RW1+6,A			; @(RW1+8) => otp->p_ctx
 
 	  // Then swap to new task 
-		MOVW	RW1,@RW0+(6+16+12)	; RW1 => ntp (note: only for medium model)
-		MOVW	A,@RW1+8			; RW1+8 => ntp->p_ctx
+		MOVW	RW1,@RW0+(4+16+12)	; RW1 => ntp (note: only for medium model)
+		MOVW	A,@RW1+6			; RW1+8 => ntp->p_ctx
 		MOVW	SP,A				; setup new stack 
 		POPW 	(RW0, RW1, RW2, RW3, RW4, RW5, RW6, RW7)
 		RETI						; restore context
+*/
 
 #pragma endasm
 

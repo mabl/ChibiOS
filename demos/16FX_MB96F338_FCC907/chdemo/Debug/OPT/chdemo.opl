@@ -1,0 +1,74 @@
+-g
+-AL 2
+-ra _INRAM01=0x000180/0x00037F
+-ra _INRAM02=0x001240/0x007FFF
+-ra _INRAM03=0x018000/0x018FFF
+-ro _INROM01=0xF80000/0xFFFFFF
+-sc CONST/Const/WORD=0xFF8000
+-check_rora
+-check_locate
+-rg 0
+-m "C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\LST\chdemo.mp1"
+-pl 60
+-pw 132
+-alin "C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\LST"
+-alout "C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\LST"
+-Xals
+-Xalr
+-na
+-w 1
+-Xset_rora
+-cwno
+-a
+-cpu MB96F338USA
+-o "C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\ABS\chdemo.abs"
+
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\START.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\appboard.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\main.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\chcond.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\chdebug.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\chevents.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\chheap.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\chlists.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\chmboxes.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\chmemcore.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\chmempools.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\chmsg.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\chmtx.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\chqueues.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\chschd.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\chsem.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\chsys.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\chthreads.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\chvt.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\adc.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\can.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\hal.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\mac.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\mmc_spi.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\pal.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\pwm.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\serial.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\spi.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\hal_lld.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\serial_lld.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\chcore.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\board.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\irq96F338.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\mb96338us.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\test.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\testbmk.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\testdyn.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\testevt.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\testheap.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\testmbox.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\testmsg.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\testmtx.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\testpools.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\testqueues.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\testsem.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\testthd.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\chdynamic.obj"
+"C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907\chdemo\Debug\OBJ\chregistry.obj"
+

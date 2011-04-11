@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -28,7 +29,7 @@
 #ifndef _CHMBOXES_H_
 #define _CHMBOXES_H_
 
-#if CH_USE_MAILBOXES
+#if CH_USE_MAILBOXES || defined(__DOXYGEN__)
 
 /*
  * Module dependencies check.
@@ -37,6 +38,9 @@
 #error "CH_USE_MAILBOXES requires CH_USE_SEMAPHORES"
 #endif
 
+/**
+ * @brief   Structure representing a mailbox object.
+ */
 typedef struct {
   msg_t                 *mb_buffer;     /**< @brief Pointer to the mailbox
                                                     buffer.                 */
@@ -57,10 +61,13 @@ extern "C" {
   void chMBReset(Mailbox *mbp);
   msg_t chMBPost(Mailbox *mbp, msg_t msg, systime_t timeout);
   msg_t chMBPostS(Mailbox *mbp, msg_t msg, systime_t timeout);
+  msg_t chMBPostI(Mailbox *mbp, msg_t msg);
   msg_t chMBPostAhead(Mailbox *mbp, msg_t msg, systime_t timeout);
   msg_t chMBPostAheadS(Mailbox *mbp, msg_t msg, systime_t timeout);
+  msg_t chMBPostAheadI(Mailbox *mbp, msg_t msg);
   msg_t chMBFetch(Mailbox *mbp, msg_t *msgp, systime_t timeout);
   msg_t chMBFetchS(Mailbox *mbp, msg_t *msgp, systime_t timeout);
+  msg_t chMBFetchI(Mailbox *mbp, msg_t *msgp);
 #ifdef __cplusplus
 }
 #endif
@@ -69,12 +76,14 @@ extern "C" {
  * @brief   Returns the mailbox buffer size.
  *
  * @param[in] mbp       the pointer to an initialized Mailbox object
+ *
+ * @iclass
  */
-#define chMBSize(mbp)                                                   \
+#define chMBSizeI(mbp)                                                      \
         ((mbp)->mb_top - (mbp)->mb_buffer)
 
 /**
- * @brief   Returns the free space into the mailbox.
+ * @brief   Returns the number of free message slots into a mailbox.
  * @note    Can be invoked in any system state but if invoked out of a locked
  *          state then the returned value may change after reading.
  * @note    The returned value can be less than zero when there are waiting
@@ -82,11 +91,13 @@ extern "C" {
  *
  * @param[in] mbp       the pointer to an initialized Mailbox object
  * @return              The number of empty message slots.
+ *
+ * @iclass
  */
-#define chMBGetEmpty(mbp) chSemGetCounterI(&(mbp)->mb_emptysem)
+#define chMBGetFreeCountI(mbp) chSemGetCounterI(&(mbp)->mb_emptysem)
 
 /**
- * @brief   Returns the number of messages into the mailbox.
+ * @brief   Returns the number of used message slots into a mailbox.
  * @note    Can be invoked in any system state but if invoked out of a locked
  *          state then the returned value may change after reading.
  * @note    The returned value can be less than zero when there are waiting
@@ -94,17 +105,21 @@ extern "C" {
  *
  * @param[in] mbp       the pointer to an initialized Mailbox object
  * @return              The number of queued messages.
+ *
+ * @iclass
  */
-#define chMBGetFull(mbp) chSemGetCounterI(&(mbp)->mb_fullsem)
+#define chMBGetUsedCountI(mbp) chSemGetCounterI(&(mbp)->mb_fullsem)
 
 /**
  * @brief   Returns the next message in the queue without removing it.
- * @note    A message must be waiting in the queue for this function to work or
- *          it would return garbage. The correct way to use this macro is to
- *          use @p chMBGetFull() and then use this macro, all within a lock
- *          state.
+ * @pre     A message must be waiting in the queue for this function to work
+ *          or it would return garbage. The correct way to use this macro is
+ *          to use @p chMBGetFullCountI() and then use this macro, all within
+ *          a lock state.
+ *
+ * @iclass
  */
-#define chMBPeek(mbp) (*(mbp)->mb_rdptr)
+#define chMBPeekI(mbp) (*(mbp)->mb_rdptr)
 
 /**
  * @brief   Data part of a static mailbox initializer.

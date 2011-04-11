@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -18,8 +19,8 @@
 */
 
 /**
- * @file mac.h
- * @brief MAC Driver macros and structures.
+ * @file    mac.h
+ * @brief   MAC Driver macros and structures.
  * @addtogroup MAC
  * @{
  */
@@ -27,7 +28,7 @@
 #ifndef _MAC_H_
 #define _MAC_H_
 
-#if CH_HAL_USE_MAC || defined(__DOXYGEN__)
+#if HAL_USE_MAC || defined(__DOXYGEN__)
 
 /*===========================================================================*/
 /* Driver constants.                                                         */
@@ -56,37 +57,44 @@
 /*===========================================================================*/
 
 /**
- * @brief Returns the received frames event source.
+ * @brief   Returns the received frames event source.
  *
- * @param[in] macp pointer to the @p MACDriver object
- * @return The pointer to the @p EventSource structure.
+ * @param[in] macp      pointer to the @p MACDriver object
+ * @return              The pointer to the @p EventSource structure.
+ *
+ * @api
  */
 #if CH_USE_EVENTS || defined(__DOXYGEN__)
-#define macGetReceiveEventSource(macp)  (&(macp)->md_rdevent)
+#define macGetReceiveEventSource(macp)  (&(macp)->rdevent)
 #endif
 
 /**
- * @brief Writes to a transmit descriptor's stream.
+ * @brief   Writes to a transmit descriptor's stream.
  *
- * @param[in] tdp pointer to a @p MACTransmitDescriptor structure
- * @param[in] buf pointer to the buffer containing the data to be written
- * @param[in] size number of bytes to be written
- * @return The number of bytes written into the descriptor's stream, this
- *         value can be less than the amount specified in the parameter
- *         @p size if the maximum frame size is reached.
+ * @param[in] tdp       pointer to a @p MACTransmitDescriptor structure
+ * @param[in] buf       pointer to the buffer containing the data to be written
+ * @param[in] size      number of bytes to be written
+ * @return              The number of bytes written into the descriptor's
+ *                      stream, this value can be less than the amount
+ *                      specified in the parameter @p size if the maximum frame
+ *                      size is reached.
+ *
+ * @api
  */
 #define macWriteTransmitDescriptor(tdp, buf, size)                          \
     mac_lld_write_transmit_descriptor(tdp, buf, size)
 
 /**
- * @brief Reads from a receive descriptor's stream.
+ * @brief   Reads from a receive descriptor's stream.
  *
- * @param[in] rdp pointer to a @p MACReceiveDescriptor structure
- * @param[in] buf pointer to the buffer that will receive the read data
- * @param[in] size number of bytes to be read
- * @return The number of bytes read from the descriptor's stream, this
- *         value can be less than the amount specified in the parameter
- *         @p size if there are no more bytes to read.
+ * @param[in] rdp   pointer to a @p MACReceiveDescriptor structure
+ * @param[in] buf   pointer to the buffer that will receive the read data
+ * @param[in] size  number of bytes to be read
+ * @return          The number of bytes read from the descriptor's stream, this
+ *                  value can be less than the amount specified in the
+ *                  parameter @p size if there are no more bytes to read.
+ *
+ * @api
  */
 #define macReadReceiveDescriptor(rdp, buf, size)                            \
     mac_lld_read_receive_descriptor(rdp, buf, size)
@@ -114,7 +122,7 @@ extern "C" {
 }
 #endif
 
-#endif /* CH_HAL_USE_MAC */
+#endif /* HAL_USE_MAC */
 
 #endif /* _MAC_H_ */
 

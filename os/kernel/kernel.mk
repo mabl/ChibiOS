@@ -6,6 +6,8 @@ KERNSRC = ${CHIBIOS}/os/kernel/src/chsys.c \
           ${CHIBIOS}/os/kernel/src/chvt.c \
           ${CHIBIOS}/os/kernel/src/chschd.c \
           ${CHIBIOS}/os/kernel/src/chthreads.c \
+          ${CHIBIOS}/os/kernel/src/chdynamic.c \
+          ${CHIBIOS}/os/kernel/src/chregistry.c \
           ${CHIBIOS}/os/kernel/src/chsem.c \
           ${CHIBIOS}/os/kernel/src/chmtx.c \
           ${CHIBIOS}/os/kernel/src/chcond.c \

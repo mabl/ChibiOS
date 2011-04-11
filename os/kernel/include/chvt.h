@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -95,6 +96,8 @@ extern VTList vtlist;
 
 /**
  * @brief   Virtual timers ticker.
+ *
+ * @iclass
  */
 #define chVTDoTickI() {                                                 \
   vtlist.vt_systime++;                                                  \
@@ -118,7 +121,7 @@ extern VTList vtlist;
 #ifdef __cplusplus
 extern "C" {
 #endif
-  void vt_init(void);
+  void _vt_init(void);
   void chVTSetI(VirtualTimer *vtp, systime_t time, vtfunc_t vtfunc, void *par);
   void chVTResetI(VirtualTimer *vtp);
   bool_t chTimeIsWithin(systime_t start, systime_t end);
@@ -128,6 +131,8 @@ extern "C" {
 
 /**
  * @brief   Returns TRUE if the speciified timer is armed.
+ *
+ * @iclass
  */
 #define chVTIsArmedI(vtp) ((vtp)->vt_func != NULL)
 
@@ -139,6 +144,8 @@ extern "C" {
  * @note    This function is designed to work with the @p chThdSleepUntil().
  *
  * @return              The system time in ticks.r
+ *
+ * @api
  */
 #define chTimeNow() (vtlist.vt_systime)
 

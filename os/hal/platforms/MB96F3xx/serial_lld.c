@@ -27,7 +27,7 @@
 #include <ch.h>
 #include <hal.h>
 
-#if CH_HAL_USE_SERIAL || defined(__DOXYGEN__)
+#if HAL_USE_SERIAL || defined(__DOXYGEN__)
 
 /*===========================================================================*/
 /* Driver exported variables.                                                */
@@ -42,32 +42,36 @@ SerialDriver SD0;
 SerialDriver SD1;
 #endif
 #if USE_MB96F3xx_USART2 || defined(__DOXYGEN__)
-/** @brief USART1 serial driver identifier.*/
+/** @brief USART2 serial driver identifier.*/
 SerialDriver SD2;
 #endif
 #if USE_MB96F3xx_USART3 || defined(__DOXYGEN__)
-/** @brief USART1 serial driver identifier.*/
+/** @brief USART3 serial driver identifier.*/
 SerialDriver SD3;
 #endif
 #if USE_MB96F3xx_USART4 || defined(__DOXYGEN__)
-/** @brief USART1 serial driver identifier.*/
+/** @brief USART4 serial driver identifier.*/
 SerialDriver SD4;
 #endif
 #if USE_MB96F3xx_USART5 || defined(__DOXYGEN__)
-/** @brief USART1 serial driver identifier.*/
+/** @brief USART5 serial driver identifier.*/
 SerialDriver SD5;
 #endif
 #if USE_MB96F3xx_USART6 || defined(__DOXYGEN__)
-/** @brief USART1 serial driver identifier.*/
+/** @brief USART6 serial driver identifier.*/
 SerialDriver SD6;
 #endif
 #if USE_MB96F3xx_USART7 || defined(__DOXYGEN__)
-/** @brief USART1 serial driver identifier.*/
+/** @brief USART7 serial driver identifier.*/
 SerialDriver SD7;
 #endif
 #if USE_MB96F3xx_USART8 || defined(__DOXYGEN__)
-/** @brief USART1 serial driver identifier.*/
+/** @brief USART8 serial driver identifier.*/
 SerialDriver SD8;
+#endif
+#if USE_MB96F3xx_USART9 || defined(__DOXYGEN__)
+/** @brief USART9 serial driver identifier.*/
+SerialDriver SD9;
 #endif
 
 
@@ -92,13 +96,13 @@ static const SerialConfig default_config = {
  * @param[in] pUartReg pointer to an UART I/O block
  * @param[in] config the architecture-dependent serial driver configuration
  */
-static void usart_init(SerialDriver *sdp) {
+static void usart_init(SerialDriver *sdp, const SerialConfig *config) {
 
 	struct _uart_lin_reg *pReg = sdp->reg;
 	uint32_t baudr;
 
 	/* remove reset bit */
-	pReg->SMR.byte = sdp->config->smr;
+	pReg->SMR.byte = config->smr;
 
 	/* clear pending bits */
 	pReg->SCR.bit._RXE = 0;
@@ -109,12 +113,12 @@ static void usart_init(SerialDriver *sdp) {
 	pReg->SSR.bit._TIE = 0;
 
 	/* Baudrate setting based on CLKP1 domain clock speed */
-	baudr = CLKP1_FREQ / sdp->config->speed;
+	baudr = CLKP1_FREQ / config->speed;
     baudr -= 1;
     pReg->BGR.word = baudr;
 
 	/*  */
-	pReg->SCR.byte = sdp->config->scr;
+	pReg->SCR.byte = config->scr;
 
 	pReg->SCR.bit._CRE = 1;	// clear error
 	pReg->SMR.bit._UPCL = 0;	// software reset uart
@@ -164,7 +168,7 @@ static void set_error(struct _uart_lin_reg *pReg, SerialDriver *sdp) {
     sts |= SD_FRAMING_ERROR;
 
   chSysLockFromIsr();
-  sdAddFlagsI(sdp, sts);
+  chIOAddFlagsI(sdp, sts);
   chSysUnlockFromIsr();
 }
 
@@ -182,9 +186,7 @@ static void USARTx_IrqRx(SerialDriver *sdp) {
 	else
 	{
 		chSysLockFromIsr();
-		if (chIQPutI(&sdp->iqueue, pReg->DATA) < Q_OK)
-			sdAddFlagsI(sdp, SD_OVERRUN_ERROR);
-		chEvtBroadcastI(&sdp->ievent);
+	    sdIncomingDataI(sdp, (uint8_t)sdp->reg->DATA);
 		chSysUnlockFromIsr();
 	}
 }
@@ -195,66 +197,125 @@ static void USARTx_IrqTx(SerialDriver *sdp) {
 	msg_t b;
 
 	chSysLockFromIsr();
-	b = sdRequestDataI(sdp);
-	chSysUnlockFromIsr();
-	if (b < Q_OK)
-		sdp->reg->SSR.bit._TIE = 0;
-	else
+    b = chOQGetI(&sdp->oqueue);
+    if (b < Q_OK) 
+    {
+      chIOAddFlagsI(sdp, IO_OUTPUT_EMPTY);
+	  sdp->reg->SSR.bit._TIE = 0;
+
+    }
+    else
 		sdp->reg->DATA = b;
+	
+  /* Physical transmission end.
+  if (sr & USART_SR_TC) {
+    chSysLockFromIsr();
+    chIOAddFlagsI(sdp, IO_TRANSMISSION_END);
+    chSysUnlockFromIsr();
+    u->CR1 = cr1 & ~USART_CR1_TCIE;
+    u->SR &= ~USART_SR_TC;
+  }
+*/
+
+	chSysUnlockFromIsr();
 }
 
 
-
+/*
 #pragma inline notifyUSARTx
 static void notifyUSARTx(SerialDriver *sdp) {
 	struct _uart_lin_reg *pReg = sdp->reg;
 
 	if (!pReg->SSR.bit._TIE) {
-		chSysLockFromIsr();
-		pReg->DATA = (uint8_t)sdRequestDataI(sdp);
-		chSysUnlockFromIsr();
-		pReg->SSR.bit._TIE = 1;
+//		chSysLockFromIsr();
+//		pReg->DATA = (uint8_t)sdRequestDataI(sdp);
+//		chSysUnlockFromIsr();
+		pReg->SSR.bit._TIE = 1;		// enable tx bit
 	}
 }
 
+*/
+
+
 #if USE_MB96F3xx_USART0 || defined(__DOXYGEN__)
-NOTIFY_USART_X(notifyUSART0, &SD0);
+static void onotify0(GenericQueue *qp) {
+
+  (void)qp;
+  if( !SSR0_TIE ) SSR0_TIE = 1;
+}
 #endif
 
 #if USE_MB96F3xx_USART1 || defined(__DOXYGEN__)
-NOTIFY_USART_X(notifyUSART1, &SD1);
+
+static void onotify1(GenericQueue *qp) {
+  (void)qp;
+  if( !SSR1_TIE ) SSR1_TIE = 1;
+}
+
 #endif
 
 #if USE_MB96F3xx_USART2 || defined(__DOXYGEN__)
-NOTIFY_USART_X(notifyUSART2, &SD2);
+static void onotify2(GenericQueue *qp) {
+
+  (void)qp;
+  if( !SSR2_TIE ) SSR2_TIE = 1;
+}
 #endif
 
 #if USE_MB96F3xx_USART3 || defined(__DOXYGEN__)
-NOTIFY_USART_X(notifyUSART3, &SD3);
+static void onotify3(GenericQueue *qp) {
+
+  (void)qp;
+  if( !SSR3_TIE ) SSR3_TIE = 1;
+}
 #endif
 
 #if USE_MB96F3xx_USART4 || defined(__DOXYGEN__)
-NOTIFY_USART_X(notifyUSART4, &SD4);
+static void onotify4(GenericQueue *qp) {
+
+  (void)qp;
+  if( !SSR4_TIE ) SSR4_TIE = 1;
+}
 #endif
 
 #if USE_MB96F3xx_USART5 || defined(__DOXYGEN__)
-NOTIFY_USART_X(notifyUSART5, &SD5);
+static void onotify5(GenericQueue *qp) {
+
+  (void)qp;
+  if( !SSR5_TIE ) SSR5_TIE = 1;
+}
 #endif
 
 #if USE_MB96F3xx_USART6 || defined(__DOXYGEN__)
-NOTIFY_USART_X(notifyUSART6, &SD6);
+static void onotify6(GenericQueue *qp) {
+
+  (void)qp;
+  if( !SSR6_TIE ) SSR6_TIE = 1;
+}
 #endif
 
 #if USE_MB96F3xx_USART7 || defined(__DOXYGEN__)
-NOTIFY_USART_X(notifyUSART7, &SD7);
+static void onotify7(GenericQueue *qp) {
+
+  (void)qp;
+  if( !SSR7_TIE ) SSR7_TIE = 1;
+}
 #endif
 
 #if USE_MB96F3xx_USART8 || defined(__DOXYGEN__)
-NOTIFY_USART_X(notifyUSART8, &SD8);
+static void onotify8(GenericQueue *qp) {
+
+  (void)qp;
+  if( !SSR8_TIE ) SSR8_TIE = 1;
+}
 #endif
 
 #if USE_MB96F3xx_USART9 || defined(__DOXYGEN__)
-NOTIFY_USART_X(notifyUSART9, &SD9);
+static void onotify9(GenericQueue *qp) {
+
+  (void)qp;
+  if( !SSR9_TIE ) SSR9_TIE = 1;
+}
 #endif
 
 
@@ -394,9 +455,9 @@ CH_IRQ_HANDLER(USART8_IrqTx) {
 #endif	/* USE_MB96F3xx_USART0 */
 
 #if USE_MB96F3xx_USART9 || defined(__DOXYGEN__)
-CH_IRQ_HANDLER(USART0_IrqRx) {
+CH_IRQ_HANDLER(USART9_IrqRx) {
   CH_IRQ_PROLOGUE();
-  USARTx_IrqRx(&SD0);
+  USARTx_IrqRx(&SD9);
   CH_IRQ_EPILOGUE();
 }
 
@@ -431,8 +492,8 @@ void sd_lld_init(void) {
 #endif
 #endif
 
-#if USE_MB96F3xx_USART1
-  sdObjectInit(&SD1, (qnotify_t) NULL, notifyUSART1);
+#if USE_MB96F3xx_USART1 
+  sdObjectInit(&SD1, (qnotify_t) NULL, onotify1);
 
   /* I/O pins for USART1.*/
 #if defined (__CPU_MB96330_SERIES)  || defined (__CPU_MB96340_SERIES)
@@ -458,7 +519,7 @@ void sd_lld_init(void) {
 #endif
 
 #if USE_MB96F3xx_USART3
-  sdObjectInit(&SD3, (qnotify_t) NULL, notifyUSART3);
+  sdObjectInit(&SD3, (qnotify_t) NULL, onotify3);
 
   /* I/O pins for USART3.*/
 #if defined (__CPU_MB96330_SERIES) || defined (__CPU_MB96340_SERIES) || defined (__CPU_MB96350_SERIES)
@@ -540,10 +601,10 @@ void sd_lld_init(void) {
  *                   If this parameter is set to @p NULL then a default
  *                   configuration is used.
  */
-void sd_lld_start(SerialDriver *sdp) {
+void sd_lld_start(SerialDriver *sdp, const SerialConfig *config) {
 
-  if (sdp->config == NULL)
-    sdp->config = &default_config;
+  if (config == NULL)
+    config = &default_config;
 
 if (
 #if USE_MB96F3xx_USART0
@@ -577,7 +638,7 @@ if (
    (&SD9 == sdp) ||
 #endif
   (0) ) {
-    usart_init(sdp);
+    usart_init(sdp, config);
     return;
   }
 }

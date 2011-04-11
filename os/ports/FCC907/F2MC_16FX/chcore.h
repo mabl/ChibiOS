@@ -121,8 +121,8 @@ struct extctx {
  * This structure represents the inner stack frame during a context switching.
  */
 struct intctx {
-  reg16fx_acc_t      rw0;
-  reg16fx_acc_t      rw1;
+//  reg16fx_acc_t      rw0;
+//  reg16fx_acc_t      rw1;
   reg16fx_acc_t      rw2;
   reg16fx_acc_t      rw3;
   reg16fx_acc_t      rw4;
@@ -176,8 +176,6 @@ struct context {
   tp->p_ctx.sp->ps.ilm = 0x07;		   							\
   tp->p_ctx.sp->ps.rp = 0;		   								\
   tp->p_ctx.sp->ps.ccr = 0x60;	 \
-  tp->p_ctx.sp->rw0 = 0x0000;	 \
-  tp->p_ctx.sp->rw1 = 0x1111;	 \
   tp->p_ctx.sp->rw2 = 0x2222;	 \
   tp->p_ctx.sp->rw3 = 0x3333;	 \
   tp->p_ctx.sp->rw4 = 0x4444;	 \
@@ -185,6 +183,9 @@ struct context {
   tp->p_ctx.sp->rw6 = 0x6666;	 \
   tp->p_ctx.sp->rw7 = 0x7777;	 \
 }// ILM = 0x07 => all irq on, RP=0 => always bank 0, CCR=0x60 (supv stack + irq en); 
+
+//  tp->p_ctx.sp->rw0 = 0x0000;	 \
+//  tp->p_ctx.sp->rw1 = 0x1111;	 \
 
 /**
  * The default idle thread implementation requires no extra stack space in
@@ -301,6 +302,7 @@ struct context {
  */
 #define port_enable() __EI()
 
+
 /**
  * This port function is implemented as inlined code for performance reasons.
  * @note The port code does not define a low power mode, this macro has to be
@@ -320,7 +322,8 @@ struct context {
 #ifdef __cplusplus
 extern "C" {
 #endif
-  void port_switch(Thread *otp, Thread *ntp);
+//  void port_switch(Thread *otp, Thread *ntp);
+
 
   void port_halt(void);
   void threadstart(port_tfunc_t pf, void *args);

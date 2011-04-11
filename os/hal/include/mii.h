@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2007 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -18,13 +19,15 @@
 */
 
 /*
- * Parts of this file are borrowed by the Linux include file linux/mii.h:
+ * Parts of this file have been borrowed from the Linux include file
+ * linux/mii.h:
  * Copyright (C) 1996, 1999, 2001 David S. Miller (davem@redhat.com)
  */
 
 /*-*
- * @file mii.h
- * @brief MII Driver macros and structures.
+ * @file    mii.h
+ * @brief   MII Driver macros and structures.
+ *
  * @addtogroup MII
  * @{
  */
@@ -182,7 +185,6 @@
 #define MII_AM79C875_ID   0x00225540
 #define MII_KS8721_ID     0x00221610
 
-
 #endif /* _MII_H_ */
 
-/*-* @} */
+/** @} */

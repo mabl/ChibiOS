@@ -1,0 +1,20 @@
+-g
+-K SCHAR
+-w 1
+-INF LIST
+-I "C:\rtos\fujitsu_dev\os\hal\include"
+-I "C:\rtos\fujitsu_dev\os\kernel\include"
+-I "C:\rtos\fujitsu_dev\os\hal\platforms\MB96F3xx"
+-I "C:\rtos\fujitsu_dev\os\ports\FCC907\F2MC_16FX"
+-I "C:\rtos\fujitsu_dev\demos\16FX_MB96F338_FCC907"
+-I "C:\rtos\fujitsu_dev\boards\DEMO_338FX_GEN"
+-I "C:\rtos\fujitsu_dev\test"
+-O 1
+-model MEDIUM
+-B
+-K NOEOPT
+-K NOLIB
+-K NOUNROLL
+-c
+-cwno
+-cpu MB96F338USA
