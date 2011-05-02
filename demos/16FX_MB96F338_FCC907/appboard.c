@@ -54,13 +54,13 @@ int irq;
 	TMCSR0 = 0x181b;						// seleziona clk = clkp1 / 32
 
 	irq = 56;   /* RLT0                         */
-    ICR = (irq << 8) | 0x02;	// livello irq = 2
+//    ICR = (irq << 8) | 0x02;	// livello irq = 2
 
 	TMRLR1 = uSEC_TO_RELTIM1(20000);
 	TMCSR1 = 0x181b;						// seleziona clk = clkp1 / 32
 
 	irq = 57;   /* RLT1                         */
-    ICR = (irq << 8) | 0x02;  
+//    ICR = (irq << 8) | 0x02;  
 
 
 	/* init reload timer 2 & 3 per treno impulsi stepper 
@@ -69,13 +69,13 @@ int irq;
 	TMCSR2 = 0x041b;					// seleziona clk = clkp1 / 16
 
 	irq = 58;   /* RLT2                         */
-    ICR = (irq << 8) | 0x02;			// livello irq = 2
+//    ICR = (irq << 8) | 0x02;			// livello irq = 2
 
 	TMRLR3 = uSEC_TO_RELTIM3(10000);
 	TMCSR3 = 0x041b;					// seleziona clk = clkp1 / 16
 
 	irq = 59;   /* RLT3                         */
-    ICR = (irq << 8) | 0x02;  
+//    ICR = (irq << 8) | 0x02;  
 
 
 	/* init reload timer 6 come tick di sistema
@@ -89,10 +89,10 @@ int irq;
 	/* init uart1 interrupt levels
 	*/
 	irq = 96;   /* UART1_RX                */
-    ICR = (irq << 8) | CH_IRQ_PRIORITY;	// livello irq = come richiesto
+//    ICR = (irq << 8) | CH_IRQ_PRIORITY;	// livello irq = come richiesto
 
 	irq = 97;   /* UART1_TX                */
-    ICR = (irq << 8) | CH_IRQ_PRIORITY;	// livello irq = come richiesto
+//    ICR = (irq << 8) | CH_IRQ_PRIORITY;	// livello irq = come richiesto
 
 
 /*
@@ -128,10 +128,10 @@ void pin_init(void)
 		P07 -> AD7  
 	*/    									
 	/* Data register  		(0000-0000)  */
-    PDR00 = 0x00;		
+    PDR00 = 0xFF;		
 
-	/* Direction register  	(0000-0000)  */   
-	DDR00 = 0x00;
+	/* Direction register  	(1111-1111)  */   
+	DDR00 = 0xFF;
 
 	/* Input enable register (1111-1111)  */
     PIER00 = 0xFF;		
@@ -150,9 +150,46 @@ void pin_init(void)
 
 	/* Pull-up register 	(0000-0000)  */
 	PUCR00 = 0x00;		
-    					
-	EBAE0 = 0xFF;			// abilita l'uso di P00-P07 come AD00-AD07
+ 
+//EBAE0 = 0xFF;			// abilita l'uso di P00-P07 come AD00-AD07
 
+	// ****************  PORT 9  ***********************
+	// gpio 
+	/*
+		P00	-> AD0	
+		P01 -> AD1	
+		P02 -> AD2  
+		P03 -> AD3 	
+		P04 -> AD4  
+		P05 -> AD5 	
+		P06 -> AD6  
+		P07 -> AD7  
+	*/    									
+	/* Data register  		(0000-0000)  */
+    PDR09 = 0xFF;		
+
+	/* Direction register  	(1111-1111)  */   
+	DDR09 = 0xFF;
+
+	/* Input enable register (1111-1111)  */
+    PIER09 = 0xFF;		
+
+	/* Input level register (0000-0000)  */
+    PILR09 = 0x00;		
+
+	/* Extended Input level register (1111-1111) tutti in pin a livello TTL */
+    EPILR09 = 0xFF;		
+
+	/* Output drive register (0000-0000)  -> tutti in normal drive */
+    PODR09 = 0x00;
+
+	/* High drive register  (0000-0000)  -> tutti in no-high drive */
+//    PHDR00 = 0x00;		
+
+	/* Pull-up register 	(0000-0000)  */
+	PUCR09 = 0x00;		
+ 
+	return;
 
 	// ****************  PORT 1  ***********************
 

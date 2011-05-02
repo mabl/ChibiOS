@@ -35,18 +35,19 @@
 #define CRYSTAL_FREQ    4000000.0           // quarzo da 4M
 #define CRYSTAL_SUBFRQ  32768.0             // quarzo subclock da 32768Hz
 
-#define SYSTEM_FREQ    	56000000.0          // frequenza di sistema con PLL=6x
-#define CLKP1_FREQ    	56000000.0          // frequenza periferal clock CLKP1
-#define CLKP2_FREQ    	14000000.0          // frequenza periferal clock CLKP2 -> usato per CAN & soundgen
+#define SYSTEM_FREQ    	48000000.0          // frequenza di sistema con PLL=6x
+#define CLKP1_FREQ    	16000000.0          // frequenza periferal clock CLKP1
+#define CLKP2_FREQ    	16000000.0          // frequenza periferal clock CLKP2 -> usato per CAN & soundgen
 
 
 /*
  * Pin definitions for the board.
  */
 
-#define	PinLED_LIFE		PDR00_P0
-#define	PinLED_SLOW_PLC PDR00_P1
-#define	PinLED_FAST_PLC PDR00_P2
+#define	PinLED_LIFE		PDR09_P3
+#define	PinLED_SLOW_PLC PDR09_P1
+#define	PinLED_FAST_PLC PDR09_P2
+#define	PinLED_WDOG 	PDR09_P7
 
 
 /*

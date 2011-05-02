@@ -30,7 +30,6 @@
 
 #include "appboard.h"
 
-
 /*
  * Red LEDs blinker thread, times are in milliseconds.
  */
@@ -50,6 +49,8 @@ long totCicliSlow;
 long totCicliFast;
 
 int delayval;
+
+int plcSlowRun;
 
 
 static msg_t ThreadSlowPLC(void *arg);
@@ -85,29 +86,32 @@ uint8_t c;
    * Activates the serial driver 1 using the driver default configuration.
    */
    
-    sdStart(&SD1, NULL);
+//    sdStart(&SD1, NULL);
 
   /*
    * Creates the plc thread.
    */
+
+//   TestThread(&SD1);
+   
     chThdCreateStatic(waThreadSlowPLC, sizeof(waThreadSlowPLC), NORMALPRIO+4, ThreadSlowPLC, NULL);
     chThdCreateStatic(waThreadFastPLC, sizeof(waThreadFastPLC), NORMALPRIO+10, ThreadFastPLC, NULL);
     chThdCreateStatic(waThreadWatchDog, sizeof(waThreadWatchDog), HIGHPRIO, ThreadWatchdog, NULL);
 
-
-   TestThread(&SD1);
-   
   /*
    * Normal main() thread activity, in this demo it does nothing except
    * sleeping in a loop.
    */
 	while (TRUE) 
 	{
-        PinLED_LIFE = 1;
+//        PinLED_LIFE = 1;
 
+		PDR00++;
+		
 		chThdSleepMilliseconds(250);
 
-        PinLED_LIFE = 0;
+		PDR00++;
+//        PinLED_LIFE = 0;
 
 		chThdSleepMilliseconds(500);
 	}
@@ -116,16 +120,52 @@ uint8_t c;
   return 0;
 }
 
+static msg_t ThreadDigInp(void *arg) 
+{
+int exit = 0;
+int blinkDelay = 0;
+
+}
+
 
 static msg_t ThreadSlowPLC(void *arg) 
 {
 int exit = 0;
+int blinkDelay = 0;
 
 	while( !exit ) 
 	{
-    	chThdSleepMilliseconds(50);
 
-		totCicliSlow++;
+		if( plcSlowRun == 0x5544 )
+		{
+	
+			blinkDelay++;
+
+			if( blinkDelay >= 10 )
+			{
+				blinkDelay = 0;
+				PinLED_SLOW_PLC = !PinLED_SLOW_PLC;
+			}
+
+	    	chThdSleepMilliseconds(50);
+
+			totCicliSlow++;
+
+			while( totCicliSlow == 200 )
+			{
+				blinkDelay++;
+
+				if( blinkDelay >= 10000 )
+				{
+					blinkDelay = 0;
+					PinLED_SLOW_PLC = !PinLED_SLOW_PLC;
+				}
+			}
+		}
+		else
+		{
+	    	chThdSleepMilliseconds(1000);
+		}
 	}
 	
 	return 0;
@@ -135,12 +175,33 @@ int exit = 0;
 
 static msg_t ThreadFastPLC(void *arg) 
 {
+int blinkDelay = 0;
 
 	while( TRUE ) 
 	{
+		blinkDelay++;
+
+		if( blinkDelay >= 10 )
+		{
+			blinkDelay = 0;
+			PinLED_FAST_PLC = !PinLED_FAST_PLC;
+		}
+		
     	chThdSleepMilliseconds(10);
 
 		totCicliFast++;
+
+		while( totCicliFast == 600 )
+		{
+			blinkDelay++;
+
+			if( blinkDelay >= 10000 )
+			{
+				blinkDelay = 0;
+				PinLED_FAST_PLC = !PinLED_FAST_PLC;
+			}
+		}
+		
 	}
   	return 0;
 }
@@ -150,11 +211,70 @@ static msg_t ThreadWatchdog(void *arg)
 {
 long WatchTheDog;
 
+long precCicliSlow;
+long precCicliFast;
+
+int statoCheck = 0;
+int delayWdt;
+
+	precCicliSlow = totCicliSlow;
+	precCicliFast = totCicliFast;
+
 	for(;;)
 	{
+
+
+		switch( statoCheck )
+		{
+			case	0:
+				if( (precCicliSlow == totCicliSlow) ||
+					(precCicliFast == totCicliFast) )
+				{
+					statoCheck++;
+				}
+				else
+				{
+					precCicliSlow = totCicliSlow;
+					precCicliFast = totCicliFast;
+				}
+				break;
+
+			case	1:
+				if( (precCicliSlow == totCicliSlow) ||
+					(precCicliFast == totCicliFast) )
+				{
+					statoCheck++;
+					delayWdt = 0;
+				}
+				else
+				{
+					precCicliSlow = totCicliSlow;
+					precCicliFast = totCicliFast;
+					statoCheck = 0;
+				}
+				break;
+
+			case	2:
+
+				delayWdt++;
+				
+				if( delayWdt >= 20 )
+				{
+					totCicliSlow = 1;
+					totCicliFast = 1;
+
+					precCicliSlow = totCicliSlow;
+					precCicliFast = totCicliFast;
+
+					statoCheck = 0;
+				}
+				break;
+		}
+
 		/**** Trigger the watchdog every 200 msec ****/
 		//    WDTC_WTE = 0;
 
+		PinLED_WDOG = !PinLED_WDOG;
 		WatchTheDog++;
 
 		chThdSleepMilliseconds(200);
