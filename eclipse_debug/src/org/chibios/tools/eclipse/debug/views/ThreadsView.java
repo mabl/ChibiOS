@@ -85,7 +85,6 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
    * it.
    */
   public void createPartControl(Composite parent) {
-    
     viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
     Table table = viewer.getTable();
     table.setFont(SWTResourceManager.getFont("Courier New", 8, SWT.NORMAL));
@@ -138,12 +137,10 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
 
   @Override
   public void dispose() {
-
     DebugPlugin.getDefault().removeDebugEventListener(this);
   }
 
   private LinkedHashMap<String, HashMap<String, String>> readThreads() {
-
     if (debugger != null) {
       LinkedHashMap<String, HashMap<String, String>> lhm;
 
@@ -224,7 +221,6 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
    */
   @Override
   public void handleDebugEvents(DebugEvent[] events) {
-
     for (DebugEvent event : events) {
       switch (event.getKind()) {
       case DebugEvent.CREATE:
