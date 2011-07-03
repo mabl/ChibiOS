@@ -49,7 +49,6 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
    */
   public static final String ID = "org.chibios.tools.eclipse.debug.views.ThreadsView";
 
-
   protected final static String[] threadStates = {
     "READY",
     "CURRENT",
@@ -142,10 +141,11 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
   }
 
   private LinkedHashMap<String, HashMap<String, String>> readThreads() {
-    LinkedHashMap<String, HashMap<String, String>> lhm;
-    
-    lhm = new LinkedHashMap<String, HashMap<String, String>>(10);
+
     if (debugger != null) {
+      LinkedHashMap<String, HashMap<String, String>> lhm;
+      
+      lhm = new LinkedHashMap<String, HashMap<String, String>>(10);
       // Scanning Registry linked list
       try {
         // rlist structure address and first thread in the registry.
@@ -206,13 +206,15 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
           // Next thread in the registry, probably sanity checks should be
           // improved.
           newer = debugger.evaluateExpression("(uint32_t)((Thread *)" + newer + ")->p_newer");
-          if (newer.compareTo("0x0") == 0)
-            return lhm;
+          if (newer.compareTo("0") == 0)
+            break;
         }
+        return lhm;
       } catch (DebugProxyException e) {
+        return null;
       }
     }
-    return lhm;
+    return null;
   }
 
   /**
@@ -222,16 +224,13 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
 
     for (DebugEvent event : events) {
       switch (event.getKind()) {
-      case DebugEvent.SUSPEND:
+      case DebugEvent.CREATE:
         Object source = event.getSource();
         if (source instanceof CDebugTarget) {
           try {
             debugger = new DebugProxy((CDebugTarget)source);
           } catch (DebugProxyException e) {}
         }
-        break;
-      case DebugEvent.TERMINATE:
-        debugger = null;
         break;
       }
     }
@@ -277,6 +276,9 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
     action1 = new Action() {
       public void run() {
         LinkedHashMap<String, HashMap<String, String>> lhm = readThreads();
+        
+        if (lhm == null)
+          return;
 
         if (lhm.size() == 0) {
           showMessage("ChibiOS/RT kernel not yet inizialized, impossible to scan the registry.");
