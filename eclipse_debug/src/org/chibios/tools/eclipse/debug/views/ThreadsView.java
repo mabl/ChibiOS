@@ -8,6 +8,7 @@ import java.util.Set;
 import org.chibios.tools.eclipse.debug.utils.DebugProxy;
 import org.chibios.tools.eclipse.debug.utils.DebugProxyException;
 import org.chibios.tools.eclipse.debug.utils.HexUtils;
+
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.*;
 import org.eclipse.jface.viewers.*;
@@ -38,7 +39,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
  * different labels and icons, if needed. Alternatively, a single label provider
  * can be shared between views in order to ensure that objects of the same type
  * are presented in the same way everywhere.
- * <p>
+ * </p>
  */
 
 public class ThreadsView extends ViewPart implements IDebugEventSetListener {
