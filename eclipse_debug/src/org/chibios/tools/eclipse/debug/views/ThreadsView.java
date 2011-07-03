@@ -1,6 +1,5 @@
 package org.chibios.tools.eclipse.debug.views;
 
-import java.awt.RenderingHints.Key;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
@@ -95,6 +94,10 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
     tblclmnAddress.setWidth(72);
     tblclmnAddress.setText("Address");
     
+    TableColumn tblclmnStack = new TableColumn(table, SWT.CENTER);
+    tblclmnStack.setWidth(72);
+    tblclmnStack.setText("Stack");
+    
     TableColumn tblclmnName = new TableColumn(table, SWT.LEFT);
     tblclmnName.setWidth(144);
     tblclmnName.setText("Name");
@@ -161,6 +164,18 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
           
           // Fetch of the various fields in the Thread structure. Some fields
           // are optional so are placed within try-catch. 
+          try {
+            n = HexUtils.parseInt(debugger.evaluateExpression("(uint32_t)((Thread *)" + newer + ")->p_ctx.r13"));
+            map.put("stack", Integer.toString(n));
+          } catch (DebugProxyException e) {
+            try {
+              n = HexUtils.parseInt(debugger.evaluateExpression("(uint32_t)((Thread *)" + newer + ")->p_ctx.sp"));
+              map.put("stack", Integer.toString(n));
+            } catch (DebugProxyException ex) {
+              map.put("stack", "-");
+            }
+          }
+
           n = HexUtils.parseInt(debugger.evaluateExpression("(uint32_t)((Thread *)" + newer + ")->p_state"));
           if ((n >= 0) && (n < threadStates.length))
             map.put("state", threadStates[n]);
@@ -269,13 +284,14 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
 
         Table table = viewer.getTable();
         table.removeAll();
-        
+
         Set<Entry<String, HashMap<String, String>>> set = lhm.entrySet();
         for (Entry<String, HashMap<String, String>> entry : set) {
           HashMap<String, String> map = entry.getValue();
           TableItem tableItem = new TableItem(table, SWT.NONE);
           tableItem.setText(new String[] {
             HexUtils.dword2HexString(HexUtils.parseInt(entry.getKey())),
+            HexUtils.dword2HexString(HexUtils.parseInt(map.get("stack"))),
             "",
             map.get("state"),
             map.get("prio"),

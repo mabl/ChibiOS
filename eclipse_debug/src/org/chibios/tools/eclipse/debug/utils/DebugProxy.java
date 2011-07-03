@@ -1,6 +1,5 @@
 package org.chibios.tools.eclipse.debug.utils;
 
-import org.eclipse.cdt.debug.core.cdi.ICDISession;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 import org.eclipse.cdt.debug.internal.core.model.CDebugTarget;
 import org.eclipse.cdt.debug.mi.core.MIException;
