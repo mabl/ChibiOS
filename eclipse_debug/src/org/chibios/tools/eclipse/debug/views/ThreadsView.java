@@ -70,14 +70,14 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
   private TableViewer viewer;
   private Action action1;
   private Action doubleClickAction;
-    
+
   private DebugProxy debugger;
 
   /**
    * The constructor.
    */
   public ThreadsView() {
-    
+
   }
 
   /**
@@ -85,23 +85,24 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
    * it.
    */
   public void createPartControl(Composite parent) {
+    
     viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
     Table table = viewer.getTable();
     table.setFont(SWTResourceManager.getFont("Courier New", 8, SWT.NORMAL));
     table.setHeaderVisible(true);
-    
+
     TableColumn tblclmnAddress = new TableColumn(table, SWT.CENTER);
     tblclmnAddress.setWidth(72);
     tblclmnAddress.setText("Address");
-    
+
     TableColumn tblclmnStack = new TableColumn(table, SWT.CENTER);
     tblclmnStack.setWidth(72);
     tblclmnStack.setText("Stack");
-    
+
     TableColumn tblclmnName = new TableColumn(table, SWT.LEFT);
     tblclmnName.setWidth(144);
     tblclmnName.setText("Name");
-    
+
     TableColumn tblclmnState = new TableColumn(table, SWT.RIGHT);
     tblclmnState.setWidth(72);
     tblclmnState.setText("State");
@@ -109,11 +110,11 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
     TableColumn tblclmnPriority = new TableColumn(table, SWT.RIGHT);
     tblclmnPriority.setWidth(40);
     tblclmnPriority.setText("Prio");
-    
+
     TableColumn tblclmnRefs = new TableColumn(table, SWT.RIGHT);
     tblclmnRefs.setWidth(40);
     tblclmnRefs.setText("Refs");
-    
+
     TableColumn tblclmnTime = new TableColumn(table, SWT.RIGHT);
     tblclmnTime.setWidth(64);
     tblclmnTime.setText("Time");
@@ -129,13 +130,14 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
     contributeToActionBars();
 
     DebugPlugin.getDefault().addDebugEventListener(this);
-    
+
     try {
       debugger = new DebugProxy();
     } catch (DebugProxyException e) {}
   }
 
-  @Override public void dispose() {
+  @Override
+  public void dispose() {
 
     DebugPlugin.getDefault().removeDebugEventListener(this);
   }
@@ -144,25 +146,25 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
 
     if (debugger != null) {
       LinkedHashMap<String, HashMap<String, String>> lhm;
-      
+
       lhm = new LinkedHashMap<String, HashMap<String, String>>(10);
       // Scanning Registry linked list
       try {
         // rlist structure address and first thread in the registry.
         String rlist = debugger.evaluateExpression("(uint32_t)&rlist");
         String newer = debugger.evaluateExpression("(uint32_t)rlist.r_newer");
-        
+
         // This can happen if the kernel is not initialized yet.
         if (newer.compareTo("0") == 0)
           return lhm;
-        
+
         // Scanning registry.
         while (newer.compareTo(rlist) != 0) {
           int n;
 
           // Hash of threads fields.
           HashMap<String, String> map = new HashMap<String, String>(16);
-          
+
           // Fetch of the various fields in the Thread structure. Some fields
           // are optional so are placed within try-catch. 
           try {
@@ -185,7 +187,7 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
 
           n = HexUtils.parseInt(debugger.evaluateExpression("(uint32_t)((Thread *)" + newer + ")->p_prio"));
           map.put("prio", Integer.toString(n));
-          
+
           try {
             n = HexUtils.parseInt(debugger.evaluateExpression("(uint32_t)((Thread *)" + newer + ")->p_refs"));
             map.put("refs", Integer.toString(n));
@@ -199,7 +201,7 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
           } catch (DebugProxyException e) {
             map.put("time", "-");
           }
-          
+
           // Inserting the new thread map into the threads list.
           lhm.put(newer, map);
 
@@ -220,7 +222,8 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
   /**
    * @brief Handling events from the debugger.
    */
-  @Override public void handleDebugEvents(DebugEvent[] events) {
+  @Override
+  public void handleDebugEvents(DebugEvent[] events) {
 
     for (DebugEvent event : events) {
       switch (event.getKind()) {
@@ -260,7 +263,7 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
     manager.add(new Separator());
     manager.add(action1);
   }
-   
+
   private void fillContextMenu(IMenuManager manager) {
     manager.add(action1);
     manager.add(action1);
@@ -276,7 +279,7 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
     action1 = new Action() {
       public void run() {
         LinkedHashMap<String, HashMap<String, String>> lhm = readThreads();
-        
+
         if (lhm == null)
           return;
 
