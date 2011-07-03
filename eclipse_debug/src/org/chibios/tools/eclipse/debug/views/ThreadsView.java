@@ -6,9 +6,9 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.chibios.tools.debug.utils.DebugProxy;
-import org.chibios.tools.debug.utils.DebugProxyException;
-import org.chibios.tools.debug.utils.HexUtils;
+import org.chibios.tools.eclipse.debug.utils.DebugProxy;
+import org.chibios.tools.eclipse.debug.utils.DebugProxyException;
+import org.chibios.tools.eclipse.debug.utils.HexUtils;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.*;
 import org.eclipse.jface.viewers.*;
@@ -25,6 +25,7 @@ import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.cdt.debug.internal.core.model.CDebugTarget;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 /**
  * This sample class demonstrates how to plug-in a new workbench view. The view
@@ -48,6 +49,25 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
    */
   public static final String ID = "org.chibios.tools.eclipse.debug.views.ThreadsView";
 
+
+  protected final static String[] threadStates = {
+    "READY",
+    "CURRENT",
+    "SUSPENDED",
+    "WTSEM",
+    "WTMTX",
+    "WTCOND",
+    "SLEEPING",
+    "WTEXIT",
+    "WTOREVT",
+    "WTANDEVT",
+    "SNDMSGQ",
+    "SNDMSG",
+    "WTMSG",
+    "WTQUEUE",
+    "FINAL"
+  };
+
   private TableViewer viewer;
   private Action action1;
   private Action doubleClickAction;
@@ -68,19 +88,32 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
   public void createPartControl(Composite parent) {
     viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
     Table table = viewer.getTable();
+    table.setFont(SWTResourceManager.getFont("Courier New", 8, SWT.NORMAL));
     table.setHeaderVisible(true);
     
-    TableColumn tblclmnNewColumn = new TableColumn(table, SWT.NONE);
-    tblclmnNewColumn.setWidth(100);
-    tblclmnNewColumn.setText("Address");
+    TableColumn tblclmnAddress = new TableColumn(table, SWT.CENTER);
+    tblclmnAddress.setWidth(72);
+    tblclmnAddress.setText("Address");
     
-    TableColumn tblclmnName = new TableColumn(table, SWT.NONE);
-    tblclmnName.setWidth(100);
+    TableColumn tblclmnName = new TableColumn(table, SWT.LEFT);
+    tblclmnName.setWidth(144);
     tblclmnName.setText("Name");
     
-    TableColumn tblclmnPriority = new TableColumn(table, SWT.NONE);
-    tblclmnPriority.setWidth(48);
-    tblclmnPriority.setText("Priority");
+    TableColumn tblclmnState = new TableColumn(table, SWT.RIGHT);
+    tblclmnState.setWidth(72);
+    tblclmnState.setText("State");
+
+    TableColumn tblclmnPriority = new TableColumn(table, SWT.RIGHT);
+    tblclmnPriority.setWidth(40);
+    tblclmnPriority.setText("Prio");
+    
+    TableColumn tblclmnRefs = new TableColumn(table, SWT.RIGHT);
+    tblclmnRefs.setWidth(40);
+    tblclmnRefs.setText("Refs");
+    
+    TableColumn tblclmnTime = new TableColumn(table, SWT.RIGHT);
+    tblclmnTime.setWidth(64);
+    tblclmnTime.setText("Time");
 
     // Create the help context id for the viewer's control
     PlatformUI.getWorkbench()
@@ -112,30 +145,51 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
       // Scanning Registry linked list
       try {
         // rlist structure address and first thread in the registry.
-        String rlist = debugger.evaluateExpression("&rlist");
-        String newer = debugger.evaluateExpression("rlist.r_newer");
+        String rlist = debugger.evaluateExpression("(uint32_t)&rlist");
+        String newer = debugger.evaluateExpression("(uint32_t)rlist.r_newer");
         
         // This can happen if the kernel is not initialized yet.
-        if (newer.compareTo("0x0") == 0)
+        if (newer.compareTo("0") == 0)
           return lhm;
         
         // Scanning registry.
         while (newer.compareTo(rlist) != 0) {
+          int n;
+
           // Hash of threads fields.
           HashMap<String, String> map = new HashMap<String, String>(16);
           
-          // Fetch of the various fields in the Thread structure.
-          int prio = HexUtils.parseInt(debugger.evaluateExpression("((Thread *)" + newer + ")->p_prio"));
+          // Fetch of the various fields in the Thread structure. Some fields
+          // are optional so are placed within try-catch. 
+          n = HexUtils.parseInt(debugger.evaluateExpression("(uint32_t)((Thread *)" + newer + ")->p_state"));
+          if ((n >= 0) && (n < threadStates.length))
+            map.put("state", threadStates[n]);
+          else
+            map.put("state", "unknown");
+
+          n = HexUtils.parseInt(debugger.evaluateExpression("(uint32_t)((Thread *)" + newer + ")->p_prio"));
+          map.put("prio", Integer.toString(n));
           
-          // Populating map of the thread fields.
-          map.put("prio", Integer.toString(prio));
+          try {
+            n = HexUtils.parseInt(debugger.evaluateExpression("(uint32_t)((Thread *)" + newer + ")->p_refs"));
+            map.put("refs", Integer.toString(n));
+          } catch (DebugProxyException e) {
+            map.put("refs", "-");
+          }
+
+          try {
+            n = HexUtils.parseInt(debugger.evaluateExpression("(uint32_t)((Thread *)" + newer + ")->p_time"));
+            map.put("time", Integer.toString(n));
+          } catch (DebugProxyException e) {
+            map.put("time", "-");
+          }
           
           // Inserting the new thread map into the threads list.
           lhm.put(newer, map);
 
           // Next thread in the registry, probably sanity checks should be
           // improved.
-          newer = debugger.evaluateExpression("((Thread *)" + newer + ")->p_newer");
+          newer = debugger.evaluateExpression("(uint32_t)((Thread *)" + newer + ")->p_newer");
           if (newer.compareTo("0x0") == 0)
             return lhm;
         }
@@ -208,6 +262,11 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
       public void run() {
         LinkedHashMap<String, HashMap<String, String>> lhm = readThreads();
 
+        if (lhm.size() == 0) {
+          showMessage("ChibiOS/RT kernel not yet inizialized, impossible to scan the registry.");
+          return;
+        }
+
         Table table = viewer.getTable();
         table.removeAll();
         
@@ -218,17 +277,12 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
           tableItem.setText(new String[] {
             HexUtils.dword2HexString(HexUtils.parseInt(entry.getKey())),
             "",
-            map.get("prio")
+            map.get("state"),
+            map.get("prio"),
+            map.get("refs"),
+            map.get("time")
           });          
         }
-
-/*        try {
-          s = debugger.evaluateExpression("rlist");
-        } catch (DebugProxyException e) {
-          showMessage(e.toString());
-          return;
-        }
-        showMessage(s);*/
       }
     };
     action1.setText("Action 1");
