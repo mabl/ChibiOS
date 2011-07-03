@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ChibiOS-RT_Debug_Support
+Bundle-SymbolicName: org.chibios.tools.eclipse.debug; singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: chibios_rt_debug_support.Activator
+Bundle-Vendor: CHIBIOS
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.cdt.debug.mi.core,
+ org.eclipse.debug.ui,
+ org.eclipse.cdt.debug.core
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
