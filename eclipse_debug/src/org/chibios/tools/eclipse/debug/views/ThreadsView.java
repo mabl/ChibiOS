@@ -1,18 +1,22 @@
 package org.chibios.tools.eclipse.debug.views;
 
+import java.awt.RenderingHints.Key;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map.Entry;
+import java.util.Set;
 
+import org.chibios.tools.debug.utils.DebugProxy;
+import org.chibios.tools.debug.utils.DebugProxyException;
+import org.chibios.tools.debug.utils.HexUtils;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.*;
 import org.eclipse.jface.viewers.*;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.*;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -20,21 +24,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IDebugEventSetListener;
-import org.eclipse.debug.core.model.IDebugTarget;
-import org.eclipse.debug.ui.DebugUITools;
-import org.eclipse.cdt.debug.core.cdi.ICDISession;
-import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 import org.eclipse.cdt.debug.internal.core.model.CDebugTarget;
-import org.eclipse.cdt.debug.mi.core.cdi.model.Target;
-import org.eclipse.cdt.debug.mi.core.command.CommandFactory;
-import org.eclipse.cdt.debug.mi.core.command.MIDataEvaluateExpression;
-import org.eclipse.cdt.debug.mi.core.command.MIDataReadMemory;
-import org.eclipse.cdt.debug.mi.core.output.MIDataEvaluateExpressionInfo;
-import org.eclipse.cdt.debug.mi.core.output.MIDataReadMemoryInfo;
-import org.eclipse.cdt.debug.mi.core.MIFormat;
-import org.eclipse.cdt.debug.mi.core.MISession;
-import org.eclipse.cdt.debug.mi.core.MIException;
-import org.eclipse.cdt.debug.mi.core.output.MIMemory;
 
 /**
  * This sample class demonstrates how to plug-in a new workbench view. The view
@@ -62,7 +52,7 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
   private Action action1;
   private Action doubleClickAction;
     
-  private MISession miSession;
+  private DebugProxy debugger;
 
   /**
    * The constructor.
@@ -91,9 +81,6 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
     TableColumn tblclmnPriority = new TableColumn(table, SWT.NONE);
     tblclmnPriority.setWidth(48);
     tblclmnPriority.setText("Priority");
-    
-    TableItem tableItem = new TableItem(table, SWT.NONE);
-    tableItem.setText(new String[] {"One", "Two", "Three"});
 
     // Create the help context id for the viewer's control
     PlatformUI.getWorkbench()
@@ -106,6 +93,10 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
     contributeToActionBars();
 
     DebugPlugin.getDefault().addDebugEventListener(this);
+    
+    try {
+      debugger = new DebugProxy();
+    } catch (DebugProxyException e) {}
   }
 
   @Override public void dispose() {
@@ -113,59 +104,45 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
     DebugPlugin.getDefault().removeDebugEventListener(this);
   }
 
-/*  private void getDebugger() {
-    IDebugTarget[] debug_targets = DebugPlugin.getDefault().getLaunchManager().getDebugTargets();
-    for (IDebugTarget target:debug_targets) {
-      if(target instanceof CDebugTarget) {
-        CDebugTarget debug_target = (CDebugTarget)target;
-        ICDISession cdi_session = debug_target.getCDISession();
-        ICDITarget[] targets = cdi_session.getTargets();
-        miSession = null;
-        ICDITarget cdi_target = null;
-        for (int i = 0; i < targets.length; i++) {
-          if (targets[i] instanceof Target) {
-            cdi_target = targets[i];
-            break;
-          }
-        }
-        if (cdi_target != null) {
-          miSession = ((Target)cdi_target).getMISession();
-        }
-      }
-      if(miSession != null)
-        return;
-    }
-  }
-
-  private Object[] getThreads() {
+  private LinkedHashMap<String, HashMap<String, String>> readThreads() {
+    LinkedHashMap<String, HashMap<String, String>> lhm;
     
-    return null;
-  }*/
-
-  private String evaluateExpression(CommandFactory factory, String expression) {
-    
-    MIDataEvaluateExpression expr = factory.createMIDataEvaluateExpression(expression);
-    try {
-      miSession.postCommand(expr);
-      MIDataEvaluateExpressionInfo info = expr.getMIDataEvaluateExpressionInfo();
-      if (info != null)
-        return info.getExpression();
-    } catch (MIException e) {
-      return null;
-    }
-    return null;
-  }
-
-  private void readThreads() {
-    LinkedHashMap lhm = new LinkedHashMap<String, HashMap>(10);
-    
-    if (miSession != null) {
-      CommandFactory factory = miSession.getCommandFactory();
+    lhm = new LinkedHashMap<String, HashMap<String, String>>(10);
+    if (debugger != null) {
       // Scanning Registry linked list
-      String rlist = evaluateExpression(factory, "&rlist");
-      String newer = evaluateExpression(factory, "rlist.r_newer");
+      try {
+        // rlist structure address and first thread in the registry.
+        String rlist = debugger.evaluateExpression("&rlist");
+        String newer = debugger.evaluateExpression("rlist.r_newer");
+        
+        // This can happen if the kernel is not initialized yet.
+        if (newer.compareTo("0x0") == 0)
+          return lhm;
+        
+        // Scanning registry.
+        while (newer.compareTo(rlist) != 0) {
+          // Hash of threads fields.
+          HashMap<String, String> map = new HashMap<String, String>(16);
+          
+          // Fetch of the various fields in the Thread structure.
+          int prio = HexUtils.parseInt(debugger.evaluateExpression("((Thread *)" + newer + ")->p_prio"));
+          
+          // Populating map of the thread fields.
+          map.put("prio", Integer.toString(prio));
+          
+          // Inserting the new thread map into the threads list.
+          lhm.put(newer, map);
 
+          // Next thread in the registry, probably sanity checks should be
+          // improved.
+          newer = debugger.evaluateExpression("((Thread *)" + newer + ")->p_newer");
+          if (newer.compareTo("0x0") == 0)
+            return lhm;
+        }
+      } catch (DebugProxyException e) {
+      }
     }
+    return lhm;
   }
 
   /**
@@ -178,24 +155,13 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
       case DebugEvent.SUSPEND:
         Object source = event.getSource();
         if (source instanceof CDebugTarget) {
-          CDebugTarget debug_target = (CDebugTarget)source;
-          ICDISession cdi_session = debug_target.getCDISession();
-          ICDITarget[] targets = cdi_session.getTargets();
-          miSession = null;
-          ICDITarget cdi_target = null;
-          for (int i = 0; i < targets.length; i++) {
-            if (targets[i] instanceof Target) {
-              cdi_target = targets[i];
-              break;
-            }
-          }
-          if (cdi_target != null) {
-            miSession = ((Target)cdi_target).getMISession();
-          }
+          try {
+            debugger = new DebugProxy((CDebugTarget)source);
+          } catch (DebugProxyException e) {}
         }
         break;
       case DebugEvent.TERMINATE:
-        miSession = null;
+        debugger = null;
         break;
       }
     }
@@ -240,13 +206,29 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
   private void makeActions() {
     action1 = new Action() {
       public void run() {
-//        readThreads();
-        CommandFactory factory = miSession.getCommandFactory();
-        String s = evaluateExpression(factory, "rlist");
-        if (s == null)
-          showMessage("error");
-        else
-          showMessage(s);
+        LinkedHashMap<String, HashMap<String, String>> lhm = readThreads();
+
+        Table table = viewer.getTable();
+        table.removeAll();
+        
+        Set<Entry<String, HashMap<String, String>>> set = lhm.entrySet();
+        for (Entry<String, HashMap<String, String>> entry : set) {
+          HashMap<String, String> map = entry.getValue();
+          TableItem tableItem = new TableItem(table, SWT.NONE);
+          tableItem.setText(new String[] {
+            HexUtils.dword2HexString(HexUtils.parseInt(entry.getKey())),
+            "",
+            map.get("prio")
+          });          
+        }
+
+/*        try {
+          s = debugger.evaluateExpression("rlist");
+        } catch (DebugProxyException e) {
+          showMessage(e.toString());
+          return;
+        }
+        showMessage(s);*/
       }
     };
     action1.setText("Action 1");

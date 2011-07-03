@@ -9,13 +9,15 @@ import org.eclipse.cdt.debug.mi.core.cdi.model.Target;
 import org.eclipse.cdt.debug.mi.core.command.CommandFactory;
 import org.eclipse.cdt.debug.mi.core.command.MIDataEvaluateExpression;
 import org.eclipse.cdt.debug.mi.core.output.MIDataEvaluateExpressionInfo;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.model.IDebugTarget;
 
 public class DebugProxy {
 
   private CommandFactory cmd_factory;
   private MISession mi_session;
 
-  void DebugSessionProxy(CDebugTarget target) throws DebugProxyException {
+  private void getSession(CDebugTarget target) throws DebugProxyException {
     
     ICDITarget[] targets = target.getCDISession().getTargets();
     ICDITarget cdi_target = null;
@@ -31,6 +33,22 @@ public class DebugProxy {
     cmd_factory = mi_session.getCommandFactory();
   }
 
+  public DebugProxy() throws DebugProxyException {
+    
+    IDebugTarget[] targets = DebugPlugin.getDefault().getLaunchManager().getDebugTargets();
+    for (IDebugTarget target:targets) {
+      if(target instanceof CDebugTarget) {
+        getSession((CDebugTarget)target);
+        return;
+      }
+    }
+  }
+
+  public DebugProxy(CDebugTarget target) throws DebugProxyException {
+    
+    getSession(target);
+  }
+
   public String evaluateExpression(String expression) throws DebugProxyException {
     
     MIDataEvaluateExpression expr = cmd_factory.createMIDataEvaluateExpression(expression);
@@ -43,4 +61,5 @@ public class DebugProxy {
     throw new DebugProxyException("error evaluating the expression: '" +
                                   expression + "'");
   }
+  
 }
