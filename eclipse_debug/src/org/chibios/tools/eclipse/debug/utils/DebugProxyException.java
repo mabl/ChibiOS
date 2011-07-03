@@ -1,4 +1,4 @@
-package org.chibios.tools.debug.utils;
+package org.chibios.tools.eclipse.debug.utils;
 
 public class DebugProxyException extends Exception {
 

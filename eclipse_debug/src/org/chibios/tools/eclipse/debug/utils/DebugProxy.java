@@ -1,4 +1,4 @@
-package org.chibios.tools.debug.utils;
+package org.chibios.tools.eclipse.debug.utils;
 
 import org.eclipse.cdt.debug.core.cdi.ICDISession;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
