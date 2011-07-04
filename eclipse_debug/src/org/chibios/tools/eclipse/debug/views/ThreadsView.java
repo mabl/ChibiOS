@@ -218,7 +218,7 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
           tableItem.setText(new String[] {
             HexUtils.dword2HexString(HexUtils.parseInt(entry.getKey())),
             HexUtils.dword2HexString(HexUtils.parseInt(map.get("stack"))),
-            "",
+            map.get("name"),
             map.get("state_s"),
             HexUtils.byte2HexString(HexUtils.parseInt(map.get("flags"))),
             map.get("prio"),

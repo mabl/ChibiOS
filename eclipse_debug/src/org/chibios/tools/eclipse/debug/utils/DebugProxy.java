@@ -174,6 +174,8 @@ public class DebugProxy {
         }
       }
 
+      map.put("name", "-");
+
       n = HexUtils.parseInt(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_state"));
       map.put("state", Integer.toString(n));
       if ((n >= 0) && (n < threadStates.length)) {
