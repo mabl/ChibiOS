@@ -14,6 +14,7 @@ import org.eclipse.cdt.debug.mi.core.output.MIDataEvaluateExpressionInfo;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.model.IDebugTarget;
 
+@SuppressWarnings("restriction")
 public class DebugProxy {
 
   private CommandFactory cmd_factory;

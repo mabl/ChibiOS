@@ -43,6 +43,7 @@ import org.eclipse.wb.swt.ResourceManager;
  * </p>
  */
 
+@SuppressWarnings("restriction")
 public class ThreadsView extends ViewPart implements IDebugEventSetListener {
 
   /**
