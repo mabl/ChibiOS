@@ -87,7 +87,7 @@ public class HexUtils {
   static public int parseInt(String s) {
     
     if (s.toLowerCase().startsWith("0x"))
-      return Integer.parseInt(s.substring(2), 16);
-    return Integer.parseInt(s);
+      return (int)Long.parseLong(s.substring(2), 16);
+    return (int)Long.parseLong(s);
   }
 }

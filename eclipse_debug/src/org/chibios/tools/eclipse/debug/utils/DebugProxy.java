@@ -146,7 +146,7 @@ public class DebugProxy {
       // TODO: Sanity check on the pointer value (alignment, range).
 
       // End of the linked list condition.
-      if (current.compareTo(rlist) != 0)
+      if (current.compareTo(rlist) == 0)
         break;
 
       // The previous thread in the list is fetched as a sanity check.

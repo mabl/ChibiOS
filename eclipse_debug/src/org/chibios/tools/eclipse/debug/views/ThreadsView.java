@@ -204,7 +204,7 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
           if (lhm == null)
             return;
         } catch (DebugProxyException e) {
-          showMessage("Error:" + e.toString() + ".");
+          showMessage("Error: " + e.getMessage() + ".");
           return;
         }
 
