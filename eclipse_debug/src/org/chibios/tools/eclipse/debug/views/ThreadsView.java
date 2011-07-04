@@ -26,6 +26,7 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.cdt.debug.internal.core.model.CDebugTarget;
 import org.eclipse.wb.swt.SWTResourceManager;
+import org.eclipse.wb.swt.ResourceManager;
 
 /**
  * This sample class demonstrates how to plug-in a new workbench view. The view
@@ -49,26 +50,8 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
    */
   public static final String ID = "org.chibios.tools.eclipse.debug.views.ThreadsView";
 
-  protected final static String[] threadStates = {
-    "READY",
-    "CURRENT",
-    "SUSPENDED",
-    "WTSEM",
-    "WTMTX",
-    "WTCOND",
-    "SLEEPING",
-    "WTEXIT",
-    "WTOREVT",
-    "WTANDEVT",
-    "SNDMSGQ",
-    "SNDMSG",
-    "WTMSG",
-    "WTQUEUE",
-    "FINAL"
-  };
-
   private TableViewer viewer;
-  private Action action1;
+  private Action refreshAction;
   private Action doubleClickAction;
 
   private DebugProxy debugger;
@@ -106,6 +89,10 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
     tblclmnState.setWidth(72);
     tblclmnState.setText("State");
 
+    TableColumn tblclmnFlags = new TableColumn(table, SWT.RIGHT);
+    tblclmnFlags.setWidth(40);
+    tblclmnFlags.setText("Flgs");
+
     TableColumn tblclmnPriority = new TableColumn(table, SWT.RIGHT);
     tblclmnPriority.setWidth(40);
     tblclmnPriority.setText("Prio");
@@ -117,6 +104,10 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
     TableColumn tblclmnTime = new TableColumn(table, SWT.RIGHT);
     tblclmnTime.setWidth(64);
     tblclmnTime.setText("Time");
+
+    TableColumn tblclmnShared = new TableColumn(table, SWT.CENTER);
+    tblclmnShared.setWidth(72);
+    tblclmnShared.setText("Obj/Msg");
 
     // Create the help context id for the viewer's control
     PlatformUI.getWorkbench()
@@ -138,82 +129,6 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
   @Override
   public void dispose() {
     DebugPlugin.getDefault().removeDebugEventListener(this);
-  }
-
-  private LinkedHashMap<String, HashMap<String, String>> readThreads() {
-    if (debugger != null) {
-      LinkedHashMap<String, HashMap<String, String>> lhm;
-
-      lhm = new LinkedHashMap<String, HashMap<String, String>>(10);
-      // Scanning Registry linked list
-      try {
-        // rlist structure address and first thread in the registry.
-        String rlist = debugger.evaluateExpression("(uint32_t)&rlist");
-        String newer = debugger.evaluateExpression("(uint32_t)rlist.r_newer");
-
-        // This can happen if the kernel is not initialized yet.
-        if (newer.compareTo("0") == 0)
-          return lhm;
-
-        // Scanning registry.
-        while (newer.compareTo(rlist) != 0) {
-          int n;
-
-          // Hash of threads fields.
-          HashMap<String, String> map = new HashMap<String, String>(16);
-
-          // Fetch of the various fields in the Thread structure. Some fields
-          // are optional so are placed within try-catch. 
-          try {
-            n = HexUtils.parseInt(debugger.evaluateExpression("(uint32_t)((Thread *)" + newer + ")->p_ctx.r13"));
-            map.put("stack", Integer.toString(n));
-          } catch (DebugProxyException e) {
-            try {
-              n = HexUtils.parseInt(debugger.evaluateExpression("(uint32_t)((Thread *)" + newer + ")->p_ctx.sp"));
-              map.put("stack", Integer.toString(n));
-            } catch (DebugProxyException ex) {
-              map.put("stack", "-");
-            }
-          }
-
-          n = HexUtils.parseInt(debugger.evaluateExpression("(uint32_t)((Thread *)" + newer + ")->p_state"));
-          if ((n >= 0) && (n < threadStates.length))
-            map.put("state", threadStates[n]);
-          else
-            map.put("state", "unknown");
-
-          n = HexUtils.parseInt(debugger.evaluateExpression("(uint32_t)((Thread *)" + newer + ")->p_prio"));
-          map.put("prio", Integer.toString(n));
-
-          try {
-            n = HexUtils.parseInt(debugger.evaluateExpression("(uint32_t)((Thread *)" + newer + ")->p_refs"));
-            map.put("refs", Integer.toString(n));
-          } catch (DebugProxyException e) {
-            map.put("refs", "-");
-          }
-
-          try {
-            n = HexUtils.parseInt(debugger.evaluateExpression("(uint32_t)((Thread *)" + newer + ")->p_time"));
-            map.put("time", Integer.toString(n));
-          } catch (DebugProxyException e) {
-            map.put("time", "-");
-          }
-
-          // Inserting the new thread map into the threads list.
-          lhm.put(newer, map);
-
-          // Next thread in the registry, probably sanity checks should be
-          // improved.
-          newer = debugger.evaluateExpression("(uint32_t)((Thread *)" + newer + ")->p_newer");
-          if (newer.compareTo("0") == 0)
-            break;
-        }
-        return lhm;
-      } catch (DebugProxyException e) {
-        return null;
-      }
-    }
-    return null;
   }
 
   /**
@@ -255,32 +170,41 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
   }
 
   private void fillLocalPullDown(IMenuManager manager) {
-    manager.add(action1);
+    manager.add(refreshAction);
     manager.add(new Separator());
-    manager.add(action1);
+    manager.add(refreshAction);
   }
 
   private void fillContextMenu(IMenuManager manager) {
-    manager.add(action1);
-    manager.add(action1);
+    manager.add(refreshAction);
+    manager.add(refreshAction);
     // Other plug-ins can contribute there actions here
     manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
   }
 
   private void fillLocalToolBar(IToolBarManager manager) {
-    manager.add(action1);
+    manager.add(refreshAction);
   }
 
   private void makeActions() {
-    action1 = new Action() {
+    
+    // Threads table refresh action.
+    refreshAction = new Action() {
       public void run() {
-        LinkedHashMap<String, HashMap<String, String>> lhm = readThreads();
+        LinkedHashMap<String, HashMap<String, String>> lhm;
 
-        if (lhm == null)
+        // If the debugger is not yet present then do nothing.
+        if (debugger == null)
           return;
 
-        if (lhm.size() == 0) {
-          showMessage("ChibiOS/RT kernel not yet inizialized, impossible to scan the registry.");
+        // Reading the list of threads, null can be returned if the debugger
+        // does not respond.
+        try {
+          lhm = debugger.readThreads();
+          if (lhm == null)
+            return;
+        } catch (DebugProxyException e) {
+          showMessage("Error:" + e.toString() + ".");
           return;
         }
 
@@ -295,19 +219,20 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
             HexUtils.dword2HexString(HexUtils.parseInt(entry.getKey())),
             HexUtils.dword2HexString(HexUtils.parseInt(map.get("stack"))),
             "",
-            map.get("state"),
+            map.get("state_s"),
+            HexUtils.byte2HexString(HexUtils.parseInt(map.get("flags"))),
             map.get("prio"),
             map.get("refs"),
-            map.get("time")
+            map.get("time"),
+            HexUtils.dword2HexString(HexUtils.parseInt(map.get("u")))
           });          
         }
       }
     };
-    action1.setText("Action 1");
-    action1.setToolTipText("Action 1 tooltip");
-    action1.setImageDescriptor(PlatformUI.getWorkbench()
-                                         .getSharedImages()
-                                         .getImageDescriptor(ISharedImages.IMG_ELCL_SYNCED));
+    refreshAction.setDisabledImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.cdt.ui", "/icons/dlcl16/refresh_nav.gif"));
+    refreshAction.setText("Refresh");
+    refreshAction.setToolTipText("Refresh threads list");
+    refreshAction.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.cdt.ui", "/icons/elcl16/refresh_nav.gif"));
 
     doubleClickAction = new Action() {
       public void run() {
