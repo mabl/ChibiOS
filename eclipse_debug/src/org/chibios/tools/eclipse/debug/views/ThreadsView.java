@@ -231,9 +231,9 @@ public class ThreadsView extends ViewPart implements IDebugEventSetListener {
       }
     };
     refreshAction.setDisabledImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.cdt.ui", "/icons/dlcl16/refresh_nav.gif"));
+    refreshAction.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.cdt.ui", "/icons/elcl16/refresh_nav.gif"));
     refreshAction.setText("Refresh");
     refreshAction.setToolTipText("Refresh threads list");
-    refreshAction.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.cdt.ui", "/icons/elcl16/refresh_nav.gif"));
 
     doubleClickAction = new Action() {
       public void run() {
