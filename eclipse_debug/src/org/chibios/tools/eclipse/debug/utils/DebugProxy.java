@@ -142,20 +142,20 @@ public class DebugProxy {
       // This can happen if the kernel is not initialized yet or if the
       // registry is corrupted.
       if (current.compareTo("0") == 0)
-        throw new DebugProxyException("ChibiOS/RT registry sanity check failed, NULL pointer");
+        throw new DebugProxyException("ChibiOS/RT registry integrity check failed, NULL pointer");
 
-      // TODO: Sanity check on the pointer value (alignment, range).
+      // TODO: integrity check on the pointer value (alignment, range).
+
+      // The previous thread in the list is fetched as a integrity check.
+      String older = evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_older");
+      if (older.compareTo("0") == 0)
+        throw new DebugProxyException("ChibiOS/RT registry integrity check failed, NULL pointer");
+      if (previous.compareTo(older) != 0)
+        throw new DebugProxyException("ChibiOS/RT registry integrity check failed, double linked list violation");
 
       // End of the linked list condition.
       if (current.compareTo(rlist) == 0)
         break;
-
-      // The previous thread in the list is fetched as a sanity check.
-      String older = evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_older");
-      if (older.compareTo("0") == 0)
-        throw new DebugProxyException("ChibiOS/RT registry sanity check failed, NULL pointer");
-      if (previous.compareTo(older) != 0)
-        throw new DebugProxyException("ChibiOS/RT registry sanity check failed, double linked list violation");
 
       // Hash of threads fields.
       HashMap<String, String> map = new HashMap<String, String>(16);
@@ -211,6 +211,87 @@ public class DebugProxy {
       } catch (DebugProxyException e) {
         map.put("u", "-");
       }
+
+      // Inserting the new thread map into the threads list.
+      lhm.put(current, map);
+
+      previous = current;
+    }
+    return lhm;
+  }
+
+  /**
+   * @brief   Return the list of timers.
+   * @details The timers list is fetched from memory by scanning the
+   *          @p vlist structure.
+   *
+   * @return  A @p LinkedHashMap object whose keys are the timers addresses
+   *          as decimal strings, the value is an @p HashMap of the timers
+   *          fields:
+   *          - delta
+   *          - func
+   *          - par
+   *          .
+   * @retval null                   If the debugger encountered an error.
+   *
+   * @throws DebugProxyException    If the debugger is active but the structure
+   *                                @p vlist is not found, not initialized or
+   *                                corrupted.
+   */
+  public LinkedHashMap<String, HashMap<String, String>> readTimers()
+      throws DebugProxyException {
+
+    // Delta list structure address.
+    String vlist;
+    try {
+      vlist = evaluateExpression("(uint32_t)&vlist");
+    } catch (DebugProxyException e) {
+      throw new DebugProxyException("ChibiOS/RT not found on target");
+    } catch (Exception e) {
+      return null;
+    }
+
+    // Scanning delta list.
+    LinkedHashMap<String, HashMap<String, String>> lhm =
+        new LinkedHashMap<String, HashMap<String, String>>(10);
+    String current = vlist;
+    String previous = vlist;
+    while (true) {
+      
+      // Fetching next timer in the delta list (vt_next link).
+      current = evaluateExpression("(uint32_t)((VirtualTimer *)" + current + ")->vt_next");
+
+      // This can happen if the kernel is not initialized yet or if the
+      // delta list is corrupted.
+      if (current.compareTo("0") == 0)
+        throw new DebugProxyException("ChibiOS/RT delta list integrity check failed, NULL pointer");
+
+      // TODO: integrity check on the pointer value (alignment, range).
+
+      // The previous timer in the delta list is fetched as a integrity check.
+      String prev = evaluateExpression("(uint32_t)((VirtualTimer *)" + current + ")->vt_prev");
+      if (prev.compareTo("0") == 0)
+        throw new DebugProxyException("ChibiOS/RT delta list integrity check failed, NULL pointer");
+      if (previous.compareTo(prev) != 0)
+        throw new DebugProxyException("ChibiOS/RT delta list integrity check failed, double linked list violation");
+
+      // End of the linked list condition.
+      if (current.compareTo(vlist) == 0)
+        break;
+
+      // Hash of threads fields.
+      HashMap<String, String> map = new HashMap<String, String>(16);
+
+      // Fetch of the various fields in the Thread structure. Some fields
+      // are optional so are placed within try-catch.
+      int n = HexUtils.parseInt(evaluateExpression("(uint32_t)((VirtualTimer *)" + current + ")->vt_time"));
+      map.put("delta", Integer.toString(n));
+
+      n = HexUtils.parseInt(evaluateExpression("(uint32_t)((VirtualTimer *)" + current + ")->vt_func"));
+      map.put("func", Integer.toString(n));
+
+      n = HexUtils.parseInt(evaluateExpression("(uint32_t)((VirtualTimer *)" + current + ")->vt_par"));
+      map.put("par", Integer.toString(n));
 
       // Inserting the new thread map into the threads list.
       lhm.put(current, map);

@@ -1,5 +1,14 @@
 package org.chibios.tools.eclipse.debug.views;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import org.chibios.tools.eclipse.debug.utils.DebugProxy;
+import org.chibios.tools.eclipse.debug.utils.DebugProxyException;
+import org.chibios.tools.eclipse.debug.utils.HexUtils;
+
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.*;
 import org.eclipse.jface.viewers.*;
@@ -10,6 +19,12 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
+
+import org.eclipse.debug.core.DebugEvent;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.IDebugEventSetListener;
+import org.eclipse.cdt.debug.internal.core.model.CDebugTarget;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.wb.swt.ResourceManager;
 
@@ -28,7 +43,8 @@ import org.eclipse.wb.swt.ResourceManager;
  * <p>
  */
 
-public class TimersView extends ViewPart {
+@SuppressWarnings("restriction")
+public class TimersView extends ViewPart implements IDebugEventSetListener {
 
   /**
    * The ID of the view as specified by the extension.
@@ -38,6 +54,8 @@ public class TimersView extends ViewPart {
   private TableViewer viewer;
   private Action refreshAction;
   private Action doubleClickAction;
+
+  private DebugProxy debugger;
 
   /**
    * The constructor.
@@ -71,6 +89,10 @@ public class TimersView extends ViewPart {
     tblclmnCallback.setWidth(72);
     tblclmnCallback.setText("Callback");
 
+    TableColumn tblclmnParameter = new TableColumn(table, SWT.CENTER);
+    tblclmnParameter.setWidth(72);
+    tblclmnParameter.setText("Param");
+
     // Create the help context id for the viewer's control
     PlatformUI.getWorkbench().getHelpSystem()
         .setHelp(viewer.getControl(), "org.chibios.tools.eclipse.debug.viewer");
@@ -78,6 +100,31 @@ public class TimersView extends ViewPart {
     hookContextMenu();
     hookDoubleClickAction();
     contributeToActionBars();
+
+    DebugPlugin.getDefault().addDebugEventListener(this);
+
+    try {
+      debugger = new DebugProxy();
+    } catch (DebugProxyException e) {}
+  }
+
+  /**
+   * @brief Handling events from the debugger.
+   */
+  @Override
+  public void handleDebugEvents(DebugEvent[] events) {
+    for (DebugEvent event : events) {
+      switch (event.getKind()) {
+      case DebugEvent.CREATE:
+        Object source = event.getSource();
+        if (source instanceof CDebugTarget) {
+          try {
+            debugger = new DebugProxy((CDebugTarget)source);
+          } catch (DebugProxyException e) {}
+        }
+        break;
+      }
+    }
   }
 
   private void hookContextMenu() {
@@ -121,7 +168,40 @@ public class TimersView extends ViewPart {
     // Timers table refresh action.
     refreshAction = new Action() {
       public void run() {
-        showMessage("Action 1 executed");
+        LinkedHashMap<String, HashMap<String, String>> lhm;
+
+        // If the debugger is not yet present then do nothing.
+        if (debugger == null)
+          return;
+
+        // Reading the list of threads, null can be returned if the debugger
+        // does not respond.
+        try {
+          lhm = debugger.readTimers();
+          if (lhm == null)
+            return;
+        } catch (DebugProxyException e) {
+          showMessage("Error: " + e.getMessage() + ".");
+          return;
+        }
+
+        Table table = viewer.getTable();
+        table.removeAll();
+
+        Set<Entry<String, HashMap<String, String>>> set = lhm.entrySet();
+        long time = 0;
+        for (Entry<String, HashMap<String, String>> entry : set) {
+          HashMap<String, String> map = entry.getValue();
+          time = time + HexUtils.parseInt(map.get("delta"));
+          TableItem tableItem = new TableItem(table, SWT.NONE);
+          tableItem.setText(new String[] {
+            HexUtils.dword2HexString(HexUtils.parseInt(entry.getKey())),
+            Long.toString(time),
+            HexUtils.dword2HexString(HexUtils.parseInt(map.get("delta"))),
+            HexUtils.byte2HexString(HexUtils.parseInt(map.get("func"))),
+            HexUtils.dword2HexString(HexUtils.parseInt(map.get("par")))
+          });          
+        }
       }
     };
     refreshAction.setDisabledImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.cdt.ui", "/icons/dlcl16/refresh_nav.gif"));
