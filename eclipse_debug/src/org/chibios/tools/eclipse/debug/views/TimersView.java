@@ -197,8 +197,8 @@ public class TimersView extends ViewPart implements IDebugEventSetListener {
           tableItem.setText(new String[] {
             HexUtils.dword2HexString(HexUtils.parseInt(entry.getKey())),
             Long.toString(time),
-            HexUtils.dword2HexString(HexUtils.parseInt(map.get("delta"))),
-            HexUtils.byte2HexString(HexUtils.parseInt(map.get("func"))),
+            "+" + HexUtils.parseInt(map.get("delta")),
+            HexUtils.dword2HexString(HexUtils.parseInt(map.get("func"))),
             HexUtils.dword2HexString(HexUtils.parseInt(map.get("par")))
           });          
         }

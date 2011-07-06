@@ -223,7 +223,7 @@ public class DebugProxy {
   /**
    * @brief   Return the list of timers.
    * @details The timers list is fetched from memory by scanning the
-   *          @p vlist structure.
+   *          @p vtlist structure.
    *
    * @return  A @p LinkedHashMap object whose keys are the timers addresses
    *          as decimal strings, the value is an @p HashMap of the timers
@@ -235,16 +235,16 @@ public class DebugProxy {
    * @retval null                   If the debugger encountered an error.
    *
    * @throws DebugProxyException    If the debugger is active but the structure
-   *                                @p vlist is not found, not initialized or
+   *                                @p vtlist is not found, not initialized or
    *                                corrupted.
    */
   public LinkedHashMap<String, HashMap<String, String>> readTimers()
       throws DebugProxyException {
 
     // Delta list structure address.
-    String vlist;
+    String vtlist;
     try {
-      vlist = evaluateExpression("(uint32_t)&vlist");
+      vtlist = evaluateExpression("(uint32_t)&vtlist");
     } catch (DebugProxyException e) {
       throw new DebugProxyException("ChibiOS/RT not found on target");
     } catch (Exception e) {
@@ -254,8 +254,8 @@ public class DebugProxy {
     // Scanning delta list.
     LinkedHashMap<String, HashMap<String, String>> lhm =
         new LinkedHashMap<String, HashMap<String, String>>(10);
-    String current = vlist;
-    String previous = vlist;
+    String current = vtlist;
+    String previous = vtlist;
     while (true) {
       
       // Fetching next timer in the delta list (vt_next link).
@@ -276,7 +276,7 @@ public class DebugProxy {
         throw new DebugProxyException("ChibiOS/RT delta list integrity check failed, double linked list violation");
 
       // End of the linked list condition.
-      if (current.compareTo(vlist) == 0)
+      if (current.compareTo(vtlist) == 0)
         break;
 
       // Hash of threads fields.
