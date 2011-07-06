@@ -40,7 +40,6 @@ public class DebugProxy {
 
   private void getSession(CDebugTarget target)
       throws DebugProxyException {
-    
     ICDITarget[] targets = target.getCDISession().getTargets();
     ICDITarget cdi_target = null;
     for (int i = 0; i < targets.length; i++) {
@@ -57,7 +56,6 @@ public class DebugProxy {
 
   public DebugProxy()
       throws DebugProxyException {
-    
     IDebugTarget[] targets = DebugPlugin.getDefault().getLaunchManager().getDebugTargets();
     for (IDebugTarget target:targets) {
       if(target instanceof CDebugTarget) {
@@ -69,13 +67,13 @@ public class DebugProxy {
 
   public DebugProxy(CDebugTarget target)
       throws DebugProxyException {
-    
     getSession(target);
   }
 
   public String evaluateExpression(String expression)
       throws DebugProxyException {
-    
+    if (mi_session.getMIInferior().isRunning())
+      return null;
     MIDataEvaluateExpression expr = cmd_factory.createMIDataEvaluateExpression(expression);
     try {
       mi_session.postCommand(expr);
@@ -105,18 +103,20 @@ public class DebugProxy {
    *          - u
    *          .
    *          Missing fields are set to "-".
-   * @retval null                   If the debugger encountered an error.
+   * @retval null                   If the debugger encountered an error or
+   *                                the target is running.
    *
    * @throws DebugProxyException    If the debugger is active but the registry
    *                                is not found, not initialized or corrupted.
    */
   public LinkedHashMap<String, HashMap<String, String>> readThreads()
       throws DebugProxyException {
-
     // rlist structure address.
     String rlist;
     try {
       rlist = evaluateExpression("(uint32_t)&rlist");
+      if (rlist == null)
+        return null;
     } catch (DebugProxyException e) {
       throw new DebugProxyException("ChibiOS/RT not found on target");
     } catch (Exception e) {
@@ -232,7 +232,8 @@ public class DebugProxy {
    *          - func
    *          - par
    *          .
-   * @retval null                   If the debugger encountered an error.
+   * @retval null                   If the debugger encountered an error or
+   *                                the target is running.
    *
    * @throws DebugProxyException    If the debugger is active but the structure
    *                                @p vtlist is not found, not initialized or
@@ -240,11 +241,12 @@ public class DebugProxy {
    */
   public LinkedHashMap<String, HashMap<String, String>> readTimers()
       throws DebugProxyException {
-
     // Delta list structure address.
     String vtlist;
     try {
       vtlist = evaluateExpression("(uint32_t)&vtlist");
+      if (vtlist == null)
+        return null;
     } catch (DebugProxyException e) {
       throw new DebugProxyException("ChibiOS/RT not found on target");
     } catch (Exception e) {
