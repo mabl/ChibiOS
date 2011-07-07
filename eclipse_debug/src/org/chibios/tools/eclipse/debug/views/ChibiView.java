@@ -1,20 +1,33 @@
 package org.chibios.tools.eclipse.debug.views;
 
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.PlatformUI;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import org.chibios.tools.eclipse.debug.utils.DebugProxy;
+import org.chibios.tools.eclipse.debug.utils.DebugProxyException;
+import org.chibios.tools.eclipse.debug.utils.HexUtils;
+
 import org.eclipse.ui.part.*;
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.ui.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
+
+import org.eclipse.debug.core.DebugEvent;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.IDebugEventSetListener;
+import org.eclipse.cdt.debug.internal.core.model.CDebugTarget;
 import org.eclipse.wb.swt.SWTResourceManager;
+import org.eclipse.wb.swt.ResourceManager;
 
 /**
  * This sample class demonstrates how to plug-in a new workbench view. The view
@@ -31,7 +44,8 @@ import org.eclipse.wb.swt.SWTResourceManager;
  * <p>
  */
 
-public class ChibiView extends ViewPart {
+@SuppressWarnings("restriction")
+public class ChibiView extends ViewPart implements IDebugEventSetListener {
 
   /**
    * The ID of the view as specified by the extension.
@@ -39,11 +53,15 @@ public class ChibiView extends ViewPart {
   public static final String ID = "org.chibios.tools.eclipse.debug.views.ChibiView";
 
   private CTabFolder tabFolder;
+  private CTabItem tbtmGlobal;
+  private CTabItem tbtmThreads;
+  private CTabItem tbtmTimers;
 
-  private Action action1;
-  private Action action2;
+  private Action refreshAction;
   private Table threadsTable;
   private Table timersTable;
+
+  private DebugProxy debugger;
 
   /**
    * The constructor.
@@ -62,10 +80,10 @@ public class ChibiView extends ViewPart {
     tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(
         SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
 
-    CTabItem tbtmGlobal = new CTabItem(tabFolder, SWT.NONE);
+    tbtmGlobal = new CTabItem(tabFolder, SWT.NONE);
     tbtmGlobal.setText("Global");
 
-    CTabItem tbtmThreads = new CTabItem(tabFolder, SWT.NONE);
+    tbtmThreads = new CTabItem(tabFolder, SWT.NONE);
     tbtmThreads.setText("Threads");
 
     threadsTable = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
@@ -109,7 +127,7 @@ public class ChibiView extends ViewPart {
     tblclmnThreadShared.setWidth(72);
     tblclmnThreadShared.setText("Obj/Msg");
 
-    CTabItem tbtmTimers = new CTabItem(tabFolder, SWT.NONE);
+    tbtmTimers = new CTabItem(tabFolder, SWT.NONE);
     tbtmTimers.setText("Timers");
 
     timersTable = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
@@ -139,8 +157,32 @@ public class ChibiView extends ViewPart {
 
     makeActions();
     hookContextMenu();
-    hookDoubleClickAction();
     contributeToActionBars();
+
+    DebugPlugin.getDefault().addDebugEventListener(this);
+
+    try {
+      debugger = new DebugProxy();
+    } catch (DebugProxyException e) {}
+  }
+
+  /**
+   * @brief Handling events from the debugger.
+   */
+  @Override
+  public void handleDebugEvents(DebugEvent[] events) {
+    for (DebugEvent event : events) {
+      switch (event.getKind()) {
+      case DebugEvent.CREATE:
+        Object source = event.getSource();
+        if (source instanceof CDebugTarget) {
+          try {
+            debugger = new DebugProxy((CDebugTarget)source);
+          } catch (DebugProxyException e) {}
+        }
+        break;
+      }
+    }
   }
 
   private void hookContextMenu() {
@@ -160,53 +202,116 @@ public class ChibiView extends ViewPart {
   }
 
   private void fillLocalPullDown(IMenuManager manager) {
-    manager.add(action1);
+    manager.add(refreshAction);
     manager.add(new Separator());
-    manager.add(action2);
+    manager.add(refreshAction);
   }
 
   private void fillContextMenu(IMenuManager manager) {
-    manager.add(action1);
-    manager.add(action2);
+    manager.add(refreshAction);
     // Other plug-ins can contribute there actions here
     manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
   }
 
   private void fillLocalToolBar(IToolBarManager manager) {
-    manager.add(action1);
-    manager.add(action2);
+    manager.add(refreshAction);
   }
 
+  private void fillThreadsTable() {
+    LinkedHashMap<String, HashMap<String, String>> lhm;
+
+    // If the debugger is not yet present then do nothing.
+    if (debugger == null)
+      return;
+
+    // Reading the list of threads, null can be returned if the debugger
+    // does not respond.
+    try {
+      lhm = debugger.readThreads();
+      if (lhm == null)
+        return;
+    } catch (DebugProxyException e) {
+      showMessage("Error: " + e.getMessage() + ".");
+      return;
+    }
+
+    threadsTable.removeAll();
+
+    Set<Entry<String, HashMap<String, String>>> set = lhm.entrySet();
+    for (Entry<String, HashMap<String, String>> entry : set) {
+      HashMap<String, String> map = entry.getValue();
+      TableItem tableItem = new TableItem(threadsTable, SWT.NONE);
+      tableItem.setText(new String[] {
+        HexUtils.dword2HexString(HexUtils.parseInt(entry.getKey())),
+        HexUtils.dword2HexString(HexUtils.parseInt(map.get("stack"))),
+        map.get("name"),
+        map.get("state_s"),
+        HexUtils.byte2HexString(HexUtils.parseInt(map.get("flags"))),
+        map.get("prio"),
+        map.get("refs"),
+        map.get("time"),
+        HexUtils.dword2HexString(HexUtils.parseInt(map.get("u")))
+      });
+    }
+  }
+
+  private void fillTimersTable() {
+    LinkedHashMap<String, HashMap<String, String>> lhm;
+
+    // If the debugger is not yet present then do nothing.
+    if (debugger == null)
+      return;
+
+    // Reading the list of threads, null can be returned if the debugger
+    // does not respond.
+    try {
+      lhm = debugger.readTimers();
+      if (lhm == null)
+        return;
+    } catch (DebugProxyException e) {
+      showMessage("Error: " + e.getMessage() + ".");
+      return;
+    }
+
+    timersTable.removeAll();
+
+    Set<Entry<String, HashMap<String, String>>> set = lhm.entrySet();
+    long time = 0;
+    for (Entry<String, HashMap<String, String>> entry : set) {
+      HashMap<String, String> map = entry.getValue();
+      time = time + HexUtils.parseInt(map.get("delta"));
+      TableItem tableItem = new TableItem(timersTable, SWT.NONE);
+      tableItem.setText(new String[] {
+        HexUtils.dword2HexString(HexUtils.parseInt(entry.getKey())),
+        Long.toString(time),
+        "+" + HexUtils.parseInt(map.get("delta")),
+        HexUtils.dword2HexString(HexUtils.parseInt(map.get("func"))),
+        HexUtils.dword2HexString(HexUtils.parseInt(map.get("par")))
+      });          
+    }
+  }
+  
   private void makeActions() {
-    action1 = new Action() {
+    
+    // Refresh action.
+    refreshAction = new Action() {
       public void run() {
-        showMessage("Action 1 executed");
+        CTabItem tabitem = tabFolder.getSelection();
+        if (tabitem == null)
+          return;
+        if (tabitem == tbtmGlobal) {
+          
+        }
+        else if (tabitem == tbtmThreads)
+          fillThreadsTable();
+        else if (tabitem == tbtmTimers)
+          fillTimersTable();
       }
     };
-    action1.setText("Action 1");
-    action1.setToolTipText("Action 1 tooltip");
-    action1.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
-        .getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
-
-    action2 = new Action() {
-      public void run() {
-        showMessage("Action 2 executed");
-      }
-    };
-    action2.setText("Action 2");
-    action2.setToolTipText("Action 2 tooltip");
-    action2.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
-        .getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
-/*    doubleClickAction = new Action() {
-      public void run() {
-        ISelection selection = viewer.getSelection();
-        Object obj = ((IStructuredSelection) selection).getFirstElement();
-        showMessage("Double-click detected on " + obj.toString());
-      }
-    };*/
-  }
-
-  private void hookDoubleClickAction() {
+    refreshAction.setDisabledImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.cdt.ui", "/icons/dlcl16/refresh_nav.gif"));
+    refreshAction.setImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.cdt.ui", "/icons/elcl16/refresh_nav.gif"));
+    refreshAction.setText("Refresh");
+    refreshAction.setToolTipText("Refresh timers list");
   }
 
   private void showMessage(String message) {
