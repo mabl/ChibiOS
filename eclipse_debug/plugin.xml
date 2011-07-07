@@ -22,6 +22,13 @@
             id="org.chibios.tools.eclipse.debug.views.TimersView"
             name="ChibiOS/RT Timers View">
       </view>
+      <view
+            category="org.chibios.tools.eclipse.debug"
+            class="org.chibios.tools.eclipse.debug.views.ChibiView"
+            icon="icons/sample.gif"
+            id="org.chibios.tools.eclipse.debug.views.ChibiView"
+            name="ChibiOS/RT Views">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
@@ -43,9 +50,21 @@
                relative="org.eclipse.ui.views.TaskList">
          </view>
       </perspectiveExtension>
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <view
+               id="org.chibios.tools.eclipse.debug.views.ChibiView"
+               ratio="0.5"
+               relationship="right"
+               relative="org.eclipse.ui.views.TaskList">
+         </view>
+      </perspectiveExtension>
    </extension>
    <extension
          point="org.eclipse.help.contexts">
+      <contexts
+            file="contexts.xml">
+      </contexts>
       <contexts
             file="contexts.xml">
       </contexts>
