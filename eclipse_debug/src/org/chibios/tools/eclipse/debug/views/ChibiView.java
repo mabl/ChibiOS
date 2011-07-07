@@ -17,7 +17,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -75,10 +74,9 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
    */
   public void createPartControl(Composite parent) {
 
-    tabFolder = new CTabFolder(parent, SWT.BORDER);
+    tabFolder = new CTabFolder(parent, SWT.BORDER | SWT.FLAT | SWT.BOTTOM);
     tabFolder.setSimple(false);
-    tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(
-        SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
+    tabFolder.setSelectionBackground(SWTResourceManager.getColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
 
     tbtmGlobal = new CTabItem(tabFolder, SWT.NONE);
     tbtmGlobal.setText("Global");
@@ -86,7 +84,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     tbtmThreads = new CTabItem(tabFolder, SWT.NONE);
     tbtmThreads.setText("Threads");
 
-    threadsTable = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
+    threadsTable = new Table(tabFolder, SWT.FULL_SELECTION);
     tbtmThreads.setControl(threadsTable);
     threadsTable.setFont(SWTResourceManager.getFont("Courier New", 8, SWT.NORMAL));
     threadsTable.setHeaderVisible(true);
@@ -130,7 +128,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     tbtmTimers = new CTabItem(tabFolder, SWT.NONE);
     tbtmTimers.setText("Timers");
 
-    timersTable = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
+    timersTable = new Table(tabFolder, SWT.FULL_SELECTION);
     tbtmTimers.setControl(timersTable);
     timersTable.setFont(SWTResourceManager.getFont("Courier New", 8, SWT.NORMAL));
     timersTable.setHeaderVisible(true);
