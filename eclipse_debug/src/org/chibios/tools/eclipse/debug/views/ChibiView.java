@@ -1,15 +1,19 @@
 package org.chibios.tools.eclipse.debug.views;
 
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.*;
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.ui.*;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 /**
@@ -69,6 +73,42 @@ public class ChibiView extends ViewPart {
     threadsTable.setFont(SWTResourceManager.getFont("Courier New", 8, SWT.NORMAL));
     threadsTable.setHeaderVisible(true);
 
+    TableColumn tblclmnThreadAddress = new TableColumn(threadsTable, SWT.CENTER);
+    tblclmnThreadAddress.setWidth(72);
+    tblclmnThreadAddress.setText("Address");
+
+    TableColumn tblclmnThreadStack = new TableColumn(threadsTable, SWT.CENTER);
+    tblclmnThreadStack.setWidth(72);
+    tblclmnThreadStack.setText("Stack");
+
+    TableColumn tblclmnThreadName = new TableColumn(threadsTable, SWT.LEFT);
+    tblclmnThreadName.setWidth(144);
+    tblclmnThreadName.setText("Name");
+
+    TableColumn tblclmnThreadState = new TableColumn(threadsTable, SWT.RIGHT);
+    tblclmnThreadState.setWidth(72);
+    tblclmnThreadState.setText("State");
+
+    TableColumn tblclmnThreadFlags = new TableColumn(threadsTable, SWT.RIGHT);
+    tblclmnThreadFlags.setWidth(40);
+    tblclmnThreadFlags.setText("Flgs");
+
+    TableColumn tblclmnThreadPriority = new TableColumn(threadsTable, SWT.RIGHT);
+    tblclmnThreadPriority.setWidth(40);
+    tblclmnThreadPriority.setText("Prio");
+
+    TableColumn tblclmnThreadRefs = new TableColumn(threadsTable, SWT.RIGHT);
+    tblclmnThreadRefs.setWidth(40);
+    tblclmnThreadRefs.setText("Refs");
+
+    TableColumn tblclmnThreadTime = new TableColumn(threadsTable, SWT.RIGHT);
+    tblclmnThreadTime.setWidth(64);
+    tblclmnThreadTime.setText("Time");
+
+    TableColumn tblclmnThreadShared = new TableColumn(threadsTable, SWT.CENTER);
+    tblclmnThreadShared.setWidth(72);
+    tblclmnThreadShared.setText("Obj/Msg");
+
     CTabItem tbtmTimers = new CTabItem(tabFolder, SWT.NONE);
     tbtmTimers.setText("Timers");
 
@@ -76,6 +116,26 @@ public class ChibiView extends ViewPart {
     tbtmTimers.setControl(timersTable);
     timersTable.setFont(SWTResourceManager.getFont("Courier New", 8, SWT.NORMAL));
     timersTable.setHeaderVisible(true);
+
+    TableColumn tblclmnTimerAddress = new TableColumn(timersTable, SWT.CENTER);
+    tblclmnTimerAddress.setWidth(72);
+    tblclmnTimerAddress.setText("Address");
+
+    TableColumn tblclmnTimerTime = new TableColumn(timersTable, SWT.RIGHT);
+    tblclmnTimerTime.setWidth(72);
+    tblclmnTimerTime.setText("Time");
+
+    TableColumn tblclmnTimerDelta = new TableColumn(timersTable, SWT.RIGHT);
+    tblclmnTimerDelta.setWidth(72);
+    tblclmnTimerDelta.setText("Delta");
+
+    TableColumn tblclmnTimerCallback = new TableColumn(timersTable, SWT.CENTER);
+    tblclmnTimerCallback.setWidth(72);
+    tblclmnTimerCallback.setText("Callback");
+
+    TableColumn tblclmnTimerParameter = new TableColumn(timersTable, SWT.CENTER);
+    tblclmnTimerParameter.setWidth(72);
+    tblclmnTimerParameter.setText("Param");
 
     makeActions();
     hookContextMenu();
