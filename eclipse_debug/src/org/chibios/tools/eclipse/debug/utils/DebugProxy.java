@@ -6,11 +6,15 @@ import java.util.LinkedHashMap;
 import org.eclipse.cdt.debug.core.cdi.model.ICDITarget;
 import org.eclipse.cdt.debug.internal.core.model.CDebugTarget;
 import org.eclipse.cdt.debug.mi.core.MIException;
+import org.eclipse.cdt.debug.mi.core.MIFormat;
 import org.eclipse.cdt.debug.mi.core.MISession;
 import org.eclipse.cdt.debug.mi.core.cdi.model.Target;
 import org.eclipse.cdt.debug.mi.core.command.CommandFactory;
 import org.eclipse.cdt.debug.mi.core.command.MIDataEvaluateExpression;
+import org.eclipse.cdt.debug.mi.core.command.MIDataReadMemory;
 import org.eclipse.cdt.debug.mi.core.output.MIDataEvaluateExpressionInfo;
+import org.eclipse.cdt.debug.mi.core.output.MIDataReadMemoryInfo;
+import org.eclipse.cdt.debug.mi.core.output.MIMemory;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.model.IDebugTarget;
 
@@ -85,6 +89,34 @@ public class DebugProxy {
                                   expression + "'");
   }
 
+  public String readCString(long address, int max)
+      throws DebugProxyException {
+    if (mi_session.getMIInferior().isRunning())
+      return null;
+    MIDataReadMemory mem = cmd_factory.createMIDataReadMemory(0,
+                                                              Long.toString(address),
+                                                              MIFormat.HEXADECIMAL,
+                                                              1,
+                                                              1,
+                                                              max,
+                                                              '.');
+    StringBuffer sb = new StringBuffer(16);
+    try {
+      mi_session.postCommand(mem);
+       MIDataReadMemoryInfo info = mem.getMIDataReadMemoryInfo();
+       if (info != null) {
+          String s = info.getMemories()[0].getAscii();
+          int i = s.indexOf('.');
+          if (i >= 0)
+            return s.substring(0, s.indexOf('.'));
+          else
+            return s;
+       }
+    } catch (MIException e) {}
+    throw new DebugProxyException("error reading memory at " +
+        address);
+  }
+
   /**
    * @brief   Return the list of threads.
    * @details The threads list is fetched from memory by scanning the
@@ -94,6 +126,7 @@ public class DebugProxy {
    *          as decimal strings, the value is an @p HashMap of the thread
    *          fields:
    *          - stack
+   *          - name
    *          - state
    *          - state_s
    *          - flags
@@ -175,7 +208,15 @@ public class DebugProxy {
         }
       }
 
-      map.put("name", "-");
+      try {
+        n = HexUtils.parseInt(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_name"));
+        if (n == 0)
+          map.put("name", "<no name>");
+        else
+          map.put("name", readCString(n, 16));
+      } catch (DebugProxyException e) {
+        map.put("name", "-");
+      }
 
       n = HexUtils.parseInt(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_state"));
       map.put("state", Integer.toString(n));
