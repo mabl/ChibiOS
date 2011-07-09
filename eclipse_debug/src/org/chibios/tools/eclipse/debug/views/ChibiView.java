@@ -55,12 +55,14 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
   private CTabItem tbtmGlobal;
   private CTabItem tbtmThreads;
   private CTabItem tbtmTimers;
+  private CTabItem tbtmTraceBuffer;
 
   private Action refreshAction;
   private Table threadsTable;
   private Table timersTable;
 
   private DebugProxy debugger;
+  private Table tbTable;
 
   /**
    * The constructor.
@@ -153,12 +155,56 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     TableColumn tblclmnTimerParameter = new TableColumn(timersTable, SWT.CENTER);
     tblclmnTimerParameter.setWidth(72);
     tblclmnTimerParameter.setText("Param");
+    
+    tbtmTraceBuffer = new CTabItem(tabFolder, SWT.NONE);
+    tbtmTraceBuffer.setText("TraceBuffer");
+    
+    tbTable = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
+    tbTable.setFont(SWTResourceManager.getFont("Courier New", 8, SWT.NORMAL));
+    tbtmTraceBuffer.setControl(tbTable);
+    tbTable.setHeaderVisible(true);
 
-    tabFolder.setSelection(tbtmGlobal);
+    TableColumn tblclmnTraceBufferHidden = new TableColumn(tbTable, SWT.RIGHT);
+    tblclmnTraceBufferHidden.setWidth(0);
+    tblclmnTraceBufferHidden.setText("");
+
+    TableColumn tblclmnTraceBufferIndex = new TableColumn(tbTable, SWT.RIGHT);
+    tblclmnTraceBufferIndex.setWidth(48);
+    tblclmnTraceBufferIndex.setText("Event");
+
+    TableColumn tblclmnTraceBufferTime = new TableColumn(tbTable, SWT.RIGHT);
+    tblclmnTraceBufferTime.setWidth(64);
+    tblclmnTraceBufferTime.setText("Time");
+
+    TableColumn tblclmnTraceBufferPrevAddress = new TableColumn(tbTable, SWT.CENTER);
+    tblclmnTraceBufferPrevAddress.setWidth(72);
+    tblclmnTraceBufferPrevAddress.setText("Previous");
+
+    TableColumn tblclmnTraceBufferPrevName = new TableColumn(tbTable, SWT.LEFT);
+    tblclmnTraceBufferPrevName.setWidth(144);
+    tblclmnTraceBufferPrevName.setText("Previous Name");
+
+    TableColumn tblclmnTraceBufferState = new TableColumn(tbTable, SWT.RIGHT);
+    tblclmnTraceBufferState.setWidth(72);
+    tblclmnTraceBufferState.setText("State");
+
+    TableColumn tblclmnTraceBufferShared = new TableColumn(tbTable, SWT.CENTER);
+    tblclmnTraceBufferShared.setWidth(72);
+    tblclmnTraceBufferShared.setText("Obj/Msg");
+
+    TableColumn tblclmnTraceBufferCurrentAddress = new TableColumn(tbTable, SWT.CENTER);
+    tblclmnTraceBufferCurrentAddress.setWidth(72);
+    tblclmnTraceBufferCurrentAddress.setText("Current");
+
+    TableColumn tblclmnTraceBufferCurrentName = new TableColumn(tbTable, SWT.LEFT);
+    tblclmnTraceBufferCurrentName.setWidth(144);
+    tblclmnTraceBufferCurrentName.setText("Current Name");
 
     makeActions();
     hookContextMenu();
     contributeToActionBars();
+
+    tabFolder.setSelection(tbtmGlobal);
 
     DebugPlugin.getDefault().addDebugEventListener(this);
 
@@ -291,7 +337,51 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
       });          
     }
   }
-  
+
+  private void fillTraceBufferTable() {
+    LinkedHashMap<String, HashMap<String, String>> lhm;
+
+    // If the debugger is not yet present then do nothing.
+    if (debugger == null)
+      return;
+
+    // Reading the list of threads, null can be returned if the debugger
+    // does not respond.
+    try {
+      lhm = debugger.readTraceBuffer();
+      if (lhm == null)
+        return;
+    } catch (DebugProxyException e) {
+      showMessage("Error: " + e.getMessage() + ".");
+      return;
+    }
+
+    tbTable.removeAll();
+
+    Set<Entry<String, HashMap<String, String>>> set = lhm.entrySet();
+    String prev = "";
+    String prevname = "";
+    for (Entry<String, HashMap<String, String>> entry : set) {
+      HashMap<String, String> map = entry.getValue();
+      TableItem tableItem = new TableItem(tbTable, SWT.NONE);
+      String current = HexUtils.dword2HexString(HexUtils.parseInt(map.get("tp")));
+      String currentname = "name";
+      tableItem.setText(new String[] {
+        "",
+        entry.getKey(),
+        map.get("time"),
+        prev,
+        prevname,
+        map.get("state_s"),
+        HexUtils.dword2HexString(HexUtils.parseInt(map.get("wtobjp"))),
+        current,
+        currentname
+      });
+      prev = current;
+      prevname = currentname;
+    }
+  }
+
   private void makeActions() {
     
     // Refresh action.
@@ -300,13 +390,14 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
         CTabItem tabitem = tabFolder.getSelection();
         if (tabitem == null)
           return;
-        if (tabitem == tbtmGlobal) {
-          
-        }
+        if (tabitem == tbtmGlobal)
+          ;
         else if (tabitem == tbtmThreads)
           fillThreadsTable();
         else if (tabitem == tbtmTimers)
           fillTimersTable();
+        else if (tabitem == tbtmTraceBuffer)
+          fillTraceBufferTable();
       }
     };
     refreshAction.setDisabledImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.cdt.ui", "/icons/dlcl16/refresh_nav.gif"));

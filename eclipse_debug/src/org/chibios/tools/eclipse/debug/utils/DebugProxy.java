@@ -14,7 +14,6 @@ import org.eclipse.cdt.debug.mi.core.command.MIDataEvaluateExpression;
 import org.eclipse.cdt.debug.mi.core.command.MIDataReadMemory;
 import org.eclipse.cdt.debug.mi.core.output.MIDataEvaluateExpressionInfo;
 import org.eclipse.cdt.debug.mi.core.output.MIDataReadMemoryInfo;
-import org.eclipse.cdt.debug.mi.core.output.MIMemory;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.model.IDebugTarget;
 
@@ -100,7 +99,6 @@ public class DebugProxy {
                                                               1,
                                                               max,
                                                               '.');
-    StringBuffer sb = new StringBuffer(16);
     try {
       mi_session.postCommand(mem);
        MIDataReadMemoryInfo info = mem.getMIDataReadMemoryInfo();
@@ -322,7 +320,7 @@ public class DebugProxy {
       if (current.compareTo(vtlist) == 0)
         break;
 
-      // Hash of threads fields.
+      // Hash of timers fields.
       HashMap<String, String> map = new HashMap<String, String>(16);
 
       // Fetch of the various fields in the Thread structure. Some fields
@@ -340,6 +338,86 @@ public class DebugProxy {
       lhm.put(current, map);
 
       previous = current;
+    }
+    return lhm;
+  }
+
+  /**
+   * @brief   Return the list of trace buffer entries.
+   * @details The trace buffer is fetched from memory by scanning the
+   *          @p ch_dbg_trace_buffer array.
+   *
+   * @return  A @p LinkedHashMap object whose keys are the timers addresses
+   *          as decimal strings, the value is an @p HashMap of the timers
+   *          fields:
+   *          - time
+   *          - tp
+   *          - wtobjp
+   *          - state
+   *          - state_s
+   *          .
+   * @retval null                   If the debugger encountered an error or
+   *                                the target is running.
+   *
+   * @throws DebugProxyException    If the debugger is active but the structure
+   *                                @p ch_dbg_trace_buffer is not found, not
+   *                                initialized or corrupted.
+   */
+  public LinkedHashMap<String, HashMap<String, String>> readTraceBuffer()
+      throws DebugProxyException {
+    
+    // Trace buffer size.
+    String s;
+    try {
+      s = evaluateExpression("(uint32_t)ch_dbg_trace_buffer.tb_size");
+      if (s == null)
+        return null;
+    } catch (DebugProxyException e) {
+      throw new DebugProxyException("trace buffer not found on target");
+    } catch (Exception e) {
+      return null;
+    }
+
+    int tbsize = HexUtils.parseInt(s);
+    int tbrecsize = HexUtils.parseInt(evaluateExpression("(uint32_t)sizeof (ch_swc_event_t)"));
+    int tbstart = HexUtils.parseInt(evaluateExpression("(uint32_t)ch_dbg_trace_buffer.tb_buffer"));
+    int tbend = HexUtils.parseInt(evaluateExpression("(uint32_t)&ch_dbg_trace_buffer.tb_buffer[" + tbsize + "]"));
+    int tbptr = HexUtils.parseInt(evaluateExpression("(uint32_t)ch_dbg_trace_buffer.tb_ptr"));
+
+    // Scanning the trace buffer from the oldest event to the newest.
+    LinkedHashMap<String, HashMap<String, String>> lhm =
+        new LinkedHashMap<String, HashMap<String, String>>(10);
+    int n = tbsize;
+    int i = -tbsize + 1;
+    while (n >= 0) {
+      // Hash of timers fields.
+      HashMap<String, String> map = new HashMap<String, String>(16);
+
+      String time = evaluateExpression("(uint32_t)(((ch_swc_event_t *)" + tbptr + ")->se_time)");
+      map.put("time", time);
+
+      String tp = evaluateExpression("(uint32_t)(((ch_swc_event_t *)" + tbptr + ")->se_tp)");
+      map.put("tp", tp);
+
+      String wtobjp = evaluateExpression("(uint32_t)(((ch_swc_event_t *)" + tbptr + ")->se_wtobjp)");
+      map.put("wtobjp", wtobjp);
+
+      int state = HexUtils.parseInt(evaluateExpression("(uint32_t)(((ch_swc_event_t *)" + tbptr + ")->se_state)"));
+      map.put("state", Integer.toString(state));
+      if ((state >= 0) && (state < threadStates.length))
+        map.put("state_s", threadStates[state]);
+      else
+        map.put("state_s", "unknown");
+
+      // Inserting the new event map into the events list.
+      if (tp.compareTo("0") != 0)
+        lhm.put(Integer.toString(i), map);
+
+      tbptr += tbrecsize;
+      if (tbptr >= tbend)
+        tbptr = tbstart;
+      n--;
+      i++;
     }
     return lhm;
   }
