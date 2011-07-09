@@ -75,8 +75,9 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
   public void createPartControl(Composite parent) {
 
     tabFolder = new CTabFolder(parent, SWT.BORDER | SWT.FLAT | SWT.BOTTOM);
+    tabFolder.setSelectionBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
+    tabFolder.setSelectionForeground(SWTResourceManager.getColor(0, 0, 0));
     tabFolder.setSimple(false);
-    tabFolder.setSelectionBackground(SWTResourceManager.getColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
 
     tbtmGlobal = new CTabItem(tabFolder, SWT.NONE);
     tbtmGlobal.setText("Global");
@@ -152,6 +153,8 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     TableColumn tblclmnTimerParameter = new TableColumn(timersTable, SWT.CENTER);
     tblclmnTimerParameter.setWidth(72);
     tblclmnTimerParameter.setText("Param");
+
+    tabFolder.setSelection(tbtmGlobal);
 
     makeActions();
     hookContextMenu();
