@@ -386,7 +386,7 @@ public class DebugProxy {
 
     // Scanning the trace buffer from the oldest event to the newest.
     LinkedHashMap<String, HashMap<String, String>> lhm =
-        new LinkedHashMap<String, HashMap<String, String>>(10);
+        new LinkedHashMap<String, HashMap<String, String>>(64);
     int n = tbsize;
     int i = -tbsize + 1;
     while (n >= 0) {

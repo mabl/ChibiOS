@@ -339,11 +339,20 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
   }
 
   private void fillTraceBufferTable() {
-    LinkedHashMap<String, HashMap<String, String>> lhm;
+    LinkedHashMap<String, HashMap<String, String>> lhm, lhmthreads;
 
     // If the debugger is not yet present then do nothing.
     if (debugger == null)
       return;
+
+    // Read active threads for retrieving names.
+    try {
+      lhmthreads = debugger.readThreads();
+      if (lhmthreads == null)
+        return;
+    } catch (DebugProxyException e) {
+      lhmthreads = new LinkedHashMap<String, HashMap<String, String>>(0);
+    }
 
     // Reading the list of threads, null can be returned if the debugger
     // does not respond.
@@ -364,8 +373,17 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     for (Entry<String, HashMap<String, String>> entry : set) {
       HashMap<String, String> map = entry.getValue();
       TableItem tableItem = new TableItem(tbTable, SWT.NONE);
-      String current = HexUtils.dword2HexString(HexUtils.parseInt(map.get("tp")));
-      String currentname = "name";
+      
+      // Searches the current thread into the threads map.
+      String currentaddr = map.get("tp");
+      HashMap<String, String> thread = lhmthreads.get(currentaddr);
+      String currentname;
+      if (thread != null)
+        currentname = thread.get("name");
+      else
+        currentname = "";
+
+      String current = HexUtils.dword2HexString(HexUtils.parseInt(currentaddr));
       tableItem.setText(new String[] {
         "",
         entry.getKey(),
