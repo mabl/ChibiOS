@@ -481,7 +481,9 @@ public class DebugProxy {
         map.put("dbg_panic_msg", "<NULL>");
       else
         map.put("dbg_panic_msg", readCString(addr, 32));
-    } catch (DebugProxyException e) {}
+    } catch (DebugProxyException e) {
+      map.put("dbg_panic_msg", "<not enabled>");
+    }
 
     return map;
   }
