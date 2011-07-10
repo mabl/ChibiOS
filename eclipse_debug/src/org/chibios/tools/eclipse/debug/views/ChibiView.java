@@ -95,11 +95,11 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     tblclmnGlobalHidden.setText("");
 
     TableColumn tblclmnGlobalVariableName = new TableColumn(globalTable, SWT.LEFT);
-    tblclmnGlobalVariableName.setWidth(100);
+    tblclmnGlobalVariableName.setWidth(150);
     tblclmnGlobalVariableName.setText("Variable");
 
     TableColumn tblclmnGlobalVariableValue = new TableColumn(globalTable, SWT.LEFT);
-    tblclmnGlobalVariableValue.setWidth(200);
+    tblclmnGlobalVariableValue.setWidth(300);
     tblclmnGlobalVariableValue.setText("Value");
 
     tbtmThreads = new CTabItem(tabFolder, SWT.NONE);
