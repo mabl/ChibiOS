@@ -84,10 +84,11 @@ public class HexUtils {
          + hexChars[w & 15];
   }
   
-  static public int parseInt(String s) {
+  static public long parseNumber(String s) {
     
     if (s.toLowerCase().startsWith("0x"))
-      return (int)Long.parseLong(s.substring(2), 16);
-    return (int)Long.parseLong(s);
+      return Long.parseLong(s.substring(2), 16);
+    return Long.parseLong(s);
   }
 }
+

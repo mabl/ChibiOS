@@ -63,6 +63,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
 
   private DebugProxy debugger;
   private Table tbTable;
+  private Table globalTable;
 
   /**
    * The constructor.
@@ -83,6 +84,23 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
 
     tbtmGlobal = new CTabItem(tabFolder, SWT.NONE);
     tbtmGlobal.setText("Global");
+    
+    globalTable = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
+    globalTable.setFont(SWTResourceManager.getFont("Courier New", 8, SWT.NORMAL));
+    tbtmGlobal.setControl(globalTable);
+    globalTable.setHeaderVisible(true);
+
+    TableColumn tblclmnGlobalHidden = new TableColumn(globalTable, SWT.RIGHT);
+    tblclmnGlobalHidden.setWidth(0);
+    tblclmnGlobalHidden.setText("");
+
+    TableColumn tblclmnGlobalVariableName = new TableColumn(globalTable, SWT.LEFT);
+    tblclmnGlobalVariableName.setWidth(100);
+    tblclmnGlobalVariableName.setText("Variable");
+
+    TableColumn tblclmnGlobalVariableValue = new TableColumn(globalTable, SWT.LEFT);
+    tblclmnGlobalVariableValue.setWidth(200);
+    tblclmnGlobalVariableValue.setText("Value");
 
     tbtmThreads = new CTabItem(tabFolder, SWT.NONE);
     tbtmThreads.setText("Threads");
@@ -264,6 +282,37 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     manager.add(refreshAction);
   }
 
+  private void fillGlobalTable() {
+    LinkedHashMap<String, String> lhm;
+
+    // If the debugger is not yet present then do nothing.
+    if (debugger == null)
+      return;
+
+    // Reading the list of global variables, null can be returned if the debugger
+    // does not respond.
+    try {
+      lhm = debugger.readGlobalVariables();
+      if (lhm == null)
+        return;
+    } catch (DebugProxyException e) {
+      showMessage("Error: " + e.getMessage() + ".");
+      return;
+    }
+
+    globalTable.removeAll();
+    
+    Set<Entry<String, String>> set = lhm.entrySet();
+    for (Entry<String, String> entry : set) {
+      TableItem tableItem = new TableItem(globalTable, SWT.NONE);
+      tableItem.setText(new String[] {
+        "",
+        entry.getKey(),
+        entry.getValue()
+      });
+    }
+  }
+
   private void fillThreadsTable() {
     LinkedHashMap<String, HashMap<String, String>> lhm;
 
@@ -289,15 +338,15 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
       HashMap<String, String> map = entry.getValue();
       TableItem tableItem = new TableItem(threadsTable, SWT.NONE);
       tableItem.setText(new String[] {
-        HexUtils.dword2HexString(HexUtils.parseInt(entry.getKey())),
-        HexUtils.dword2HexString(HexUtils.parseInt(map.get("stack"))),
+        HexUtils.dword2HexString((int)HexUtils.parseNumber(entry.getKey())),
+        HexUtils.dword2HexString((int)HexUtils.parseNumber(map.get("stack"))),
         map.get("name"),
         map.get("state_s"),
-        HexUtils.byte2HexString(HexUtils.parseInt(map.get("flags"))),
+        HexUtils.byte2HexString((int)HexUtils.parseNumber(map.get("flags"))),
         map.get("prio"),
         map.get("refs"),
         map.get("time"),
-        HexUtils.dword2HexString(HexUtils.parseInt(map.get("u")))
+        HexUtils.dword2HexString((int)HexUtils.parseNumber(map.get("u")))
       });
     }
   }
@@ -326,14 +375,14 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     long time = 0;
     for (Entry<String, HashMap<String, String>> entry : set) {
       HashMap<String, String> map = entry.getValue();
-      time = time + HexUtils.parseInt(map.get("delta"));
+      time = time + HexUtils.parseNumber(map.get("delta"));
       TableItem tableItem = new TableItem(timersTable, SWT.NONE);
       tableItem.setText(new String[] {
-        HexUtils.dword2HexString(HexUtils.parseInt(entry.getKey())),
+        HexUtils.dword2HexString((int)HexUtils.parseNumber(entry.getKey())),
         Long.toString(time),
-        "+" + HexUtils.parseInt(map.get("delta")),
-        HexUtils.dword2HexString(HexUtils.parseInt(map.get("func"))),
-        HexUtils.dword2HexString(HexUtils.parseInt(map.get("par")))
+        "+" + HexUtils.parseNumber(map.get("delta")),
+        HexUtils.dword2HexString((int)HexUtils.parseNumber(map.get("func"))),
+        HexUtils.dword2HexString((int)HexUtils.parseNumber(map.get("par")))
       });          
     }
   }
@@ -383,7 +432,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
       else
         currentname = "";
 
-      String current = HexUtils.dword2HexString(HexUtils.parseInt(currentaddr));
+      String current = HexUtils.dword2HexString((int)HexUtils.parseNumber(currentaddr));
       tableItem.setText(new String[] {
         "",
         entry.getKey(),
@@ -391,7 +440,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
         prev,
         prevname,
         map.get("state_s"),
-        HexUtils.dword2HexString(HexUtils.parseInt(map.get("wtobjp"))),
+        HexUtils.dword2HexString((int)HexUtils.parseNumber(map.get("wtobjp"))),
         current,
         currentname
       });
@@ -409,7 +458,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
         if (tabitem == null)
           return;
         if (tabitem == tbtmGlobal)
-          ;
+          fillGlobalTable();
         else if (tabitem == tbtmThreads)
           fillThreadsTable();
         else if (tabitem == tbtmTimers)

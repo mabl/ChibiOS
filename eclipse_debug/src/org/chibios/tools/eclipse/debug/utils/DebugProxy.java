@@ -193,21 +193,21 @@ public class DebugProxy {
 
       // Fetch of the various fields in the Thread structure. Some fields
       // are optional so are placed within try-catch.
-      int n;
+      long n;
       try {
-        n = HexUtils.parseInt(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_ctx.r13"));
-        map.put("stack", Integer.toString(n));
+        n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_ctx.r13"));
+        map.put("stack", Long.toString(n));
       } catch (DebugProxyException e) {
         try {
-          n = HexUtils.parseInt(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_ctx.sp"));
-          map.put("stack", Integer.toString(n));
+          n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_ctx.sp"));
+          map.put("stack", Long.toString(n));
         } catch (DebugProxyException ex) {
           map.put("stack", "-");
         }
       }
 
       try {
-        n = HexUtils.parseInt(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_name"));
+        n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_name"));
         if (n == 0)
           map.put("name", "<no name>");
         else
@@ -216,37 +216,37 @@ public class DebugProxy {
         map.put("name", "-");
       }
 
-      n = HexUtils.parseInt(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_state"));
-      map.put("state", Integer.toString(n));
+      n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_state"));
+      map.put("state", Long.toString(n));
       if ((n >= 0) && (n < threadStates.length)) {
-        map.put("state_s", threadStates[n]);
+        map.put("state_s", threadStates[(int)n]);
       }
       else
         map.put("state_s", "unknown");
 
-      n = HexUtils.parseInt(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_flags"));
-      map.put("flags", Integer.toString(n));
+      n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_flags"));
+      map.put("flags", Long.toString(n));
 
-      n = HexUtils.parseInt(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_prio"));
-      map.put("prio", Integer.toString(n));
+      n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_prio"));
+      map.put("prio", Long.toString(n));
 
       try {
-        n = HexUtils.parseInt(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_refs"));
-        map.put("refs", Integer.toString(n));
+        n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_refs"));
+        map.put("refs", Long.toString(n));
       } catch (DebugProxyException e) {
         map.put("refs", "-");
       }
 
       try {
-        n = HexUtils.parseInt(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_time"));
-        map.put("time", Integer.toString(n));
+        n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_time"));
+        map.put("time", Long.toString(n));
       } catch (DebugProxyException e) {
         map.put("time", "-");
       }
 
       try {
-        n = HexUtils.parseInt(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_u.wtobjp"));
-        map.put("u", Integer.toString(n));
+        n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_u.wtobjp"));
+        map.put("u", Long.toString(n));
       } catch (DebugProxyException e) {
         map.put("u", "-");
       }
@@ -325,14 +325,14 @@ public class DebugProxy {
 
       // Fetch of the various fields in the Thread structure. Some fields
       // are optional so are placed within try-catch.
-      int n = HexUtils.parseInt(evaluateExpression("(uint32_t)((VirtualTimer *)" + current + ")->vt_time"));
-      map.put("delta", Integer.toString(n));
+      long n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((VirtualTimer *)" + current + ")->vt_time"));
+      map.put("delta", Long.toString(n));
 
-      n = HexUtils.parseInt(evaluateExpression("(uint32_t)((VirtualTimer *)" + current + ")->vt_func"));
-      map.put("func", Integer.toString(n));
+      n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((VirtualTimer *)" + current + ")->vt_func"));
+      map.put("func", Long.toString(n));
 
-      n = HexUtils.parseInt(evaluateExpression("(uint32_t)((VirtualTimer *)" + current + ")->vt_par"));
-      map.put("par", Integer.toString(n));
+      n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((VirtualTimer *)" + current + ")->vt_par"));
+      map.put("par", Long.toString(n));
 
       // Inserting the new thread map into the threads list.
       lhm.put(current, map);
@@ -345,7 +345,7 @@ public class DebugProxy {
   /**
    * @brief   Return the list of trace buffer entries.
    * @details The trace buffer is fetched from memory by scanning the
-   *          @p ch_dbg_trace_buffer array.
+   *          @p dbg_trace_buffer array.
    *
    * @return  A @p LinkedHashMap object whose keys are the timers addresses
    *          as decimal strings, the value is an @p HashMap of the timers
@@ -360,7 +360,7 @@ public class DebugProxy {
    *                                the target is running.
    *
    * @throws DebugProxyException    If the debugger is active but the structure
-   *                                @p ch_dbg_trace_buffer is not found, not
+   *                                @p dbg_trace_buffer is not found, not
    *                                initialized or corrupted.
    */
   public LinkedHashMap<String, HashMap<String, String>> readTraceBuffer()
@@ -369,7 +369,7 @@ public class DebugProxy {
     // Trace buffer size.
     String s;
     try {
-      s = evaluateExpression("(uint32_t)ch_dbg_trace_buffer.tb_size");
+      s = evaluateExpression("(uint32_t)dbg_trace_buffer.tb_size");
       if (s == null)
         return null;
     } catch (DebugProxyException e) {
@@ -378,11 +378,11 @@ public class DebugProxy {
       return null;
     }
 
-    int tbsize = HexUtils.parseInt(s);
-    int tbrecsize = HexUtils.parseInt(evaluateExpression("(uint32_t)sizeof (ch_swc_event_t)"));
-    int tbstart = HexUtils.parseInt(evaluateExpression("(uint32_t)ch_dbg_trace_buffer.tb_buffer"));
-    int tbend = HexUtils.parseInt(evaluateExpression("(uint32_t)&ch_dbg_trace_buffer.tb_buffer[" + tbsize + "]"));
-    int tbptr = HexUtils.parseInt(evaluateExpression("(uint32_t)ch_dbg_trace_buffer.tb_ptr"));
+    int tbsize = (int)HexUtils.parseNumber(s);
+    int tbrecsize = (int)HexUtils.parseNumber(evaluateExpression("(uint32_t)sizeof (ch_swc_event_t)"));
+    long tbstart = HexUtils.parseNumber(evaluateExpression("(uint32_t)dbg_trace_buffer.tb_buffer"));
+    long tbend = HexUtils.parseNumber(evaluateExpression("(uint32_t)&dbg_trace_buffer.tb_buffer[" + tbsize + "]"));
+    long tbptr = HexUtils.parseNumber(evaluateExpression("(uint32_t)dbg_trace_buffer.tb_ptr"));
 
     // Scanning the trace buffer from the oldest event to the newest.
     LinkedHashMap<String, HashMap<String, String>> lhm =
@@ -402,10 +402,10 @@ public class DebugProxy {
       String wtobjp = evaluateExpression("(uint32_t)(((ch_swc_event_t *)" + tbptr + ")->se_wtobjp)");
       map.put("wtobjp", wtobjp);
 
-      int state = HexUtils.parseInt(evaluateExpression("(uint32_t)(((ch_swc_event_t *)" + tbptr + ")->se_state)"));
-      map.put("state", Integer.toString(state));
+      long state = HexUtils.parseNumber(evaluateExpression("(uint32_t)(((ch_swc_event_t *)" + tbptr + ")->se_state)"));
+      map.put("state", Long.toString(state));
       if ((state >= 0) && (state < threadStates.length))
-        map.put("state_s", threadStates[state]);
+        map.put("state_s", threadStates[(int)state]);
       else
         map.put("state_s", "unknown");
 
@@ -420,5 +420,69 @@ public class DebugProxy {
       i++;
     }
     return lhm;
+  }
+  
+  /**
+   * @brief   Return the list of the system global variables.
+   *
+   * @return  A @p LinkedHashMap object whose keys are the variable names and
+   *          the values are the variable values.
+   *
+   * @retval null                   If the debugger encountered an error or
+   *                                the target is running.
+   *
+   * @throws DebugProxyException    If the debugger is active but the structure
+   *                                @p dbg_trace_buffer is not found, not
+   *                                initialized or corrupted.
+   */
+  public LinkedHashMap<String, String> readGlobalVariables()
+      throws DebugProxyException {
+
+    LinkedHashMap<String, String> map = new LinkedHashMap<String, String>(16);
+    
+    try {
+      String vt_systime = evaluateExpression("(uint32_t)vtlist.vt_systime");
+      if (vt_systime == null)
+        return null;
+      map.put("vt_systime", vt_systime);
+    } catch (DebugProxyException e) {
+      throw new DebugProxyException("ChibiOS/RT not found on target");
+    } catch (Exception e) {
+      return null;
+    }
+
+    try {
+      long r_current = HexUtils.parseNumber(evaluateExpression("(uint32_t)rlist.r_current"));
+      if (r_current != 0) {
+        String name;
+        try {
+          long n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((Thread *)" + r_current + ")->p_name"));
+          if (n == 0)
+            name = "<no name>";
+          else
+            name = readCString(n, 16);
+        } catch (DebugProxyException e) {
+          name = "-";
+        }
+        map.put("r_current", HexUtils.dword2HexString((int)r_current) + " \"" + name + "\"");
+      }
+      else
+        map.put("r_current", "0");
+    } catch (DebugProxyException e) {}
+
+    try {
+      String r_preempt = evaluateExpression("(uint32_t)rlist.r_preempt");
+      map.put("r_preempt", r_preempt);
+    } catch (DebugProxyException e) {}
+
+    try {
+      Long addr = HexUtils.parseNumber(evaluateExpression("(uint32_t)dbg_panic_msg"));
+      if (addr == 0)
+        map.put("dbg_panic_msg", "<NULL>");
+      else
+        map.put("dbg_panic_msg", readCString(addr, 32));
+    } catch (DebugProxyException e) {}
+
+    return map;
   }
 }
