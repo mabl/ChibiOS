@@ -9,7 +9,10 @@ import org.chibios.tools.eclipse.debug.utils.DebugProxy;
 import org.chibios.tools.eclipse.debug.utils.DebugProxyException;
 import org.chibios.tools.eclipse.debug.utils.HexUtils;
 
+import org.eclipse.ui.internal.IWorkbenchThemeConstants;
 import org.eclipse.ui.part.*;
+import org.eclipse.ui.themes.ITheme;
+import org.eclipse.ui.themes.IThemeManager;
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.*;
@@ -27,6 +30,10 @@ import org.eclipse.debug.core.IDebugEventSetListener;
 import org.eclipse.cdt.debug.internal.core.model.CDebugTarget;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.wb.swt.ResourceManager;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 
 /**
  * This sample class demonstrates how to plug-in a new workbench view. The view
@@ -65,10 +72,45 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
   private Table tbTable;
   private Table globalTable;
 
+  private ITheme theme;
+
+  private FocusAdapter focus = new FocusAdapter() {
+    @Override
+    public void focusLost(FocusEvent e) {
+      setInactive();
+    }
+    @Override
+    public void focusGained(FocusEvent e) {
+      setActive();
+    }
+  };
+
   /**
    * The constructor.
    */
   public ChibiView() {
+    
+    theme = PlatformUI.getWorkbench().getThemeManager().getCurrentTheme();
+  }
+
+  private void setActive() {
+    tabFolder.setSelectionBackground(
+        new org.eclipse.swt.graphics.Color[] {
+            theme.getColorRegistry().get(IWorkbenchThemeConstants.ACTIVE_TAB_BG_START),
+            theme.getColorRegistry().get(IWorkbenchThemeConstants.ACTIVE_TAB_BG_END)
+        },
+        new int[] {100},
+        true);
+  }
+
+  private void setInactive() {
+    tabFolder.setSelectionBackground(
+        new org.eclipse.swt.graphics.Color[] {
+            theme.getColorRegistry().get(IWorkbenchThemeConstants.INACTIVE_TAB_BG_START),
+            theme.getColorRegistry().get(IWorkbenchThemeConstants.INACTIVE_TAB_BG_END)
+        },
+        new int[] {theme.getInt(IWorkbenchThemeConstants.ACTIVE_TAB_PERCENT)},
+        true);
   }
 
   /**
@@ -78,14 +120,26 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
   public void createPartControl(Composite parent) {
 
     tabFolder = new CTabFolder(parent, SWT.BORDER | SWT.FLAT | SWT.BOTTOM);
-    tabFolder.setSelectionBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-    tabFolder.setSelectionForeground(SWTResourceManager.getColor(0, 0, 0));
+    tabFolder.addSelectionListener(new SelectionAdapter() {
+      @Override
+      public void widgetSelected(SelectionEvent e) {
+        setActive();
+      }
+    });
+    tabFolder.addFocusListener(new FocusAdapter() {
+      @Override
+      public void focusGained(FocusEvent e) {
+        tabFolder.getSelection().getControl().setFocus();
+      }
+    });
+    setInactive();
     tabFolder.setSimple(false);
 
     tbtmGlobal = new CTabItem(tabFolder, SWT.NONE);
     tbtmGlobal.setText("Global");
     
     globalTable = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
+    globalTable.addFocusListener(focus);
     globalTable.setFont(SWTResourceManager.getFont("Courier New", 8, SWT.NORMAL));
     tbtmGlobal.setControl(globalTable);
     globalTable.setHeaderVisible(true);
@@ -106,6 +160,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     tbtmThreads.setText("Threads");
 
     threadsTable = new Table(tabFolder, SWT.FULL_SELECTION);
+    threadsTable.addFocusListener(focus);
     tbtmThreads.setControl(threadsTable);
     threadsTable.setFont(SWTResourceManager.getFont("Courier New", 8, SWT.NORMAL));
     threadsTable.setHeaderVisible(true);
@@ -150,6 +205,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     tbtmTimers.setText("Timers");
 
     timersTable = new Table(tabFolder, SWT.FULL_SELECTION);
+    timersTable.addFocusListener(focus);
     tbtmTimers.setControl(timersTable);
     timersTable.setFont(SWTResourceManager.getFont("Courier New", 8, SWT.NORMAL));
     timersTable.setHeaderVisible(true);
@@ -178,6 +234,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     tbtmTraceBuffer.setText("TraceBuffer");
     
     tbTable = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
+    tbTable.addFocusListener(focus);
     tbTable.setFont(SWTResourceManager.getFont("Courier New", 8, SWT.NORMAL));
     tbtmTraceBuffer.setControl(tbTable);
     tbTable.setHeaderVisible(true);
