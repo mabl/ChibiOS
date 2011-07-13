@@ -101,6 +101,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
         },
         new int[] {100},
         true);
+    tabFolder.setSelectionForeground(theme.getColorRegistry().get(IWorkbenchThemeConstants.ACTIVE_TAB_TEXT_COLOR));
   }
 
   private void setInactive() {
@@ -111,6 +112,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
         },
         new int[] {theme.getInt(IWorkbenchThemeConstants.ACTIVE_TAB_PERCENT)},
         true);
+    tabFolder.setSelectionForeground(theme.getColorRegistry().get(IWorkbenchThemeConstants.INACTIVE_TAB_TEXT_COLOR));
   }
 
   /**
@@ -119,11 +121,14 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
    */
   public void createPartControl(Composite parent) {
 
-    tabFolder = new CTabFolder(parent, SWT.BORDER | SWT.FLAT | SWT.BOTTOM);
+    tabFolder = new CTabFolder(parent, SWT.BORDER | SWT.BOTTOM);
+    tabFolder.setFont(theme.getFontRegistry().get(IWorkbenchThemeConstants.TAB_TEXT_FONT));
+    tabFolder.setBackground(theme.getColorRegistry().get(IWorkbenchThemeConstants.INACTIVE_TAB_BG_END));
     tabFolder.addSelectionListener(new SelectionAdapter() {
       @Override
       public void widgetSelected(SelectionEvent e) {
         setActive();
+        tabFolder.getSelection().getControl().setFocus();
       }
     });
     tabFolder.addFocusListener(new FocusAdapter() {
@@ -138,7 +143,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     tbtmGlobal = new CTabItem(tabFolder, SWT.NONE);
     tbtmGlobal.setText("Global");
     
-    globalTable = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
+    globalTable = new Table(tabFolder, SWT.FULL_SELECTION);
     globalTable.addFocusListener(focus);
     globalTable.setFont(SWTResourceManager.getFont("Courier New", 8, SWT.NORMAL));
     tbtmGlobal.setControl(globalTable);
@@ -233,7 +238,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     tbtmTraceBuffer = new CTabItem(tabFolder, SWT.NONE);
     tbtmTraceBuffer.setText("TraceBuffer");
     
-    tbTable = new Table(tabFolder, SWT.BORDER | SWT.FULL_SELECTION);
+    tbTable = new Table(tabFolder, SWT.FULL_SELECTION);
     tbTable.addFocusListener(focus);
     tbTable.setFont(SWTResourceManager.getFont("Courier New", 8, SWT.NORMAL));
     tbtmTraceBuffer.setControl(tbTable);
