@@ -124,6 +124,7 @@ public class DebugProxy {
    *          as decimal strings, the value is an @p HashMap of the thread
    *          fields:
    *          - stack
+   *          - stklimit
    *          - name
    *          - state
    *          - state_s
@@ -194,6 +195,14 @@ public class DebugProxy {
       // Fetch of the various fields in the Thread structure. Some fields
       // are optional so are placed within try-catch.
       long n;
+
+      try {
+        n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_stklimit"));
+        map.put("stklimit", Long.toString(n));
+      } catch (DebugProxyException e) {
+        map.put("stklimit", "-");
+      }
+
       try {
         n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_ctx.r13"));
         map.put("stack", Long.toString(n));

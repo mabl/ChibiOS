@@ -174,6 +174,10 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     tblclmnThreadAddress.setWidth(72);
     tblclmnThreadAddress.setText("Address");
 
+    TableColumn tblclmnThreadLimit = new TableColumn(threadsTable, SWT.CENTER);
+    tblclmnThreadLimit.setWidth(72);
+    tblclmnThreadLimit.setText("StkLimit");
+
     TableColumn tblclmnThreadStack = new TableColumn(threadsTable, SWT.CENTER);
     tblclmnThreadStack.setWidth(72);
     tblclmnThreadStack.setText("Stack");
@@ -202,7 +206,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     tblclmnThreadTime.setWidth(64);
     tblclmnThreadTime.setText("Time");
 
-    TableColumn tblclmnThreadShared = new TableColumn(threadsTable, SWT.CENTER);
+    TableColumn tblclmnThreadShared = new TableColumn(threadsTable, SWT.LEFT);
     tblclmnThreadShared.setWidth(72);
     tblclmnThreadShared.setText("Obj/Msg");
 
@@ -231,10 +235,10 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     tblclmnTimerCallback.setWidth(72);
     tblclmnTimerCallback.setText("Callback");
 
-    TableColumn tblclmnTimerParameter = new TableColumn(timersTable, SWT.CENTER);
+    TableColumn tblclmnTimerParameter = new TableColumn(timersTable, SWT.LEFT);
     tblclmnTimerParameter.setWidth(72);
     tblclmnTimerParameter.setText("Param");
-    
+
     tbtmTraceBuffer = new CTabItem(tabFolder, SWT.NONE);
     tbtmTraceBuffer.setText("TraceBuffer");
     
@@ -401,6 +405,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
       TableItem tableItem = new TableItem(threadsTable, SWT.NONE);
       tableItem.setText(new String[] {
         HexUtils.dword2HexString((int)HexUtils.parseNumber(entry.getKey())),
+        HexUtils.dword2HexString((int)HexUtils.parseNumber(map.get("stklimit"))),
         HexUtils.dword2HexString((int)HexUtils.parseNumber(map.get("stack"))),
         map.get("name"),
         map.get("state_s"),
