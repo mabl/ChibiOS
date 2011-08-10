@@ -88,6 +88,32 @@ public class DebugProxy {
                                   expression + "'");
   }
 
+  public long scanStack(long base, long end, long pattern)
+      throws DebugProxyException {
+    if (mi_session.getMIInferior().isRunning())
+      return -1;
+    MIDataReadMemory mem = cmd_factory.createMIDataReadMemory(0,
+                                                              Long.toString(base),
+                                                              MIFormat.HEXADECIMAL,
+                                                              4,
+                                                              1,
+                                                              (int)(end - base),
+                                                              '.');
+    try {
+      mi_session.postCommand(mem);
+       MIDataReadMemoryInfo info = mem.getMIDataReadMemoryInfo();
+       if (info != null) {
+         long[] data = info.getMemories()[0].getData();
+         int i = 0;
+         while ((i < data.length) && (data[i] == pattern))
+        	 i++;
+         return i * 4;
+       }
+    } catch (MIException e) {}
+    throw new DebugProxyException("error reading memory at " +
+        base);
+  }
+
   public String readCString(long address, int max)
       throws DebugProxyException {
     if (mi_session.getMIInferior().isRunning())
@@ -194,27 +220,41 @@ public class DebugProxy {
 
       // Fetch of the various fields in the Thread structure. Some fields
       // are optional so are placed within try-catch.
-      long n;
-
+      long stklimit;
       try {
-        n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_stklimit"));
-        map.put("stklimit", Long.toString(n));
+    	stklimit = HexUtils.parseNumber(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_stklimit"));
+        map.put("stklimit", Long.toString(stklimit));
       } catch (DebugProxyException e) {
         map.put("stklimit", "-");
+        stklimit = -1;
       }
 
+      long stack;
       try {
-        n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_ctx.r13"));
-        map.put("stack", Long.toString(n));
+        stack = HexUtils.parseNumber(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_ctx.r13"));
+        map.put("stack", Long.toString(stack));
       } catch (DebugProxyException e) {
         try {
-          n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_ctx.sp"));
-          map.put("stack", Long.toString(n));
+          stack = HexUtils.parseNumber(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_ctx.sp"));
+          map.put("stack", Long.toString(stack));
         } catch (DebugProxyException ex) {
           map.put("stack", "-");
+          stack = -1;
         }
       }
 
+      if ((stklimit < 0) || (stack < 0))
+      	map.put("stkunused", "-");
+      else {
+        if ((stack < 0) || (stack < stklimit))
+      	  map.put("stkunused", "overflow");
+        else {
+          long stkunused = scanStack(stklimit, stack, 0x55555555);
+          map.put("stkunused", Long.toString(stkunused));
+        }
+      }
+
+      long n;
       try {
         n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_name"));
         if (n == 0)

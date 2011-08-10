@@ -182,6 +182,10 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     tblclmnThreadStack.setWidth(72);
     tblclmnThreadStack.setText("Stack");
 
+    TableColumn tblclmnThreadUsed = new TableColumn(threadsTable, SWT.RIGHT);
+    tblclmnThreadUsed.setWidth(72);
+    tblclmnThreadUsed.setText("StkUnused");
+
     TableColumn tblclmnThreadName = new TableColumn(threadsTable, SWT.LEFT);
     tblclmnThreadName.setWidth(144);
     tblclmnThreadName.setText("Name");
@@ -407,6 +411,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
         HexUtils.dword2HexString((int)HexUtils.parseNumber(entry.getKey())),
         HexUtils.dword2HexString((int)HexUtils.parseNumber(map.get("stklimit"))),
         HexUtils.dword2HexString((int)HexUtils.parseNumber(map.get("stack"))),
+        map.get("stkunused"),
         map.get("name"),
         map.get("state_s"),
         HexUtils.byte2HexString((int)HexUtils.parseNumber(map.get("flags"))),
