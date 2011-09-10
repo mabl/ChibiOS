@@ -12,7 +12,6 @@ import org.chibios.tools.eclipse.debug.utils.HexUtils;
 import org.eclipse.ui.internal.IWorkbenchThemeConstants;
 import org.eclipse.ui.part.*;
 import org.eclipse.ui.themes.ITheme;
-import org.eclipse.ui.themes.IThemeManager;
 import org.eclipse.jface.action.*;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.*;
@@ -170,15 +169,15 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     threadsTable.setFont(SWTResourceManager.getFont("Courier New", 8, SWT.NORMAL));
     threadsTable.setHeaderVisible(true);
 
-    TableColumn tblclmnThreadAddress = new TableColumn(threadsTable, SWT.CENTER);
+    TableColumn tblclmnThreadAddress = new TableColumn(threadsTable, SWT.RIGHT);
     tblclmnThreadAddress.setWidth(72);
     tblclmnThreadAddress.setText("Address");
 
-    TableColumn tblclmnThreadLimit = new TableColumn(threadsTable, SWT.CENTER);
+    TableColumn tblclmnThreadLimit = new TableColumn(threadsTable, SWT.RIGHT);
     tblclmnThreadLimit.setWidth(72);
     tblclmnThreadLimit.setText("StkLimit");
 
-    TableColumn tblclmnThreadStack = new TableColumn(threadsTable, SWT.CENTER);
+    TableColumn tblclmnThreadStack = new TableColumn(threadsTable, SWT.RIGHT);
     tblclmnThreadStack.setWidth(72);
     tblclmnThreadStack.setText("Stack");
 
@@ -223,7 +222,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     timersTable.setFont(SWTResourceManager.getFont("Courier New", 8, SWT.NORMAL));
     timersTable.setHeaderVisible(true);
 
-    TableColumn tblclmnTimerAddress = new TableColumn(timersTable, SWT.CENTER);
+    TableColumn tblclmnTimerAddress = new TableColumn(timersTable, SWT.RIGHT);
     tblclmnTimerAddress.setWidth(72);
     tblclmnTimerAddress.setText("Address");
 
@@ -235,7 +234,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     tblclmnTimerDelta.setWidth(72);
     tblclmnTimerDelta.setText("Delta");
 
-    TableColumn tblclmnTimerCallback = new TableColumn(timersTable, SWT.CENTER);
+    TableColumn tblclmnTimerCallback = new TableColumn(timersTable, SWT.RIGHT);
     tblclmnTimerCallback.setWidth(72);
     tblclmnTimerCallback.setText("Callback");
 
@@ -264,7 +263,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     tblclmnTraceBufferTime.setWidth(64);
     tblclmnTraceBufferTime.setText("Time");
 
-    TableColumn tblclmnTraceBufferPrevAddress = new TableColumn(tbTable, SWT.CENTER);
+    TableColumn tblclmnTraceBufferPrevAddress = new TableColumn(tbTable, SWT.RIGHT);
     tblclmnTraceBufferPrevAddress.setWidth(72);
     tblclmnTraceBufferPrevAddress.setText("Previous");
 
@@ -276,11 +275,11 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     tblclmnTraceBufferState.setWidth(72);
     tblclmnTraceBufferState.setText("State");
 
-    TableColumn tblclmnTraceBufferShared = new TableColumn(tbTable, SWT.CENTER);
+    TableColumn tblclmnTraceBufferShared = new TableColumn(tbTable, SWT.RIGHT);
     tblclmnTraceBufferShared.setWidth(72);
     tblclmnTraceBufferShared.setText("Obj/Msg");
 
-    TableColumn tblclmnTraceBufferCurrentAddress = new TableColumn(tbTable, SWT.CENTER);
+    TableColumn tblclmnTraceBufferCurrentAddress = new TableColumn(tbTable, SWT.RIGHT);
     tblclmnTraceBufferCurrentAddress.setWidth(72);
     tblclmnTraceBufferCurrentAddress.setText("Current");
 
@@ -383,6 +382,13 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     }
   }
 
+  private String makeHex(String s) {
+    try {
+      s = HexUtils.dword2HexString((int)HexUtils.parseNumber(s));
+    } catch (Exception e) {}
+    return s;
+  }
+
   private void fillThreadsTable() {
     LinkedHashMap<String, HashMap<String, String>> lhm;
 
@@ -408,9 +414,9 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
       HashMap<String, String> map = entry.getValue();
       TableItem tableItem = new TableItem(threadsTable, SWT.NONE);
       tableItem.setText(new String[] {
-        HexUtils.dword2HexString((int)HexUtils.parseNumber(entry.getKey())),
-        HexUtils.dword2HexString((int)HexUtils.parseNumber(map.get("stklimit"))),
-        HexUtils.dword2HexString((int)HexUtils.parseNumber(map.get("stack"))),
+        makeHex(entry.getKey()),
+        makeHex(map.get("stklimit")),
+        makeHex(map.get("stack")),
         map.get("stkunused"),
         map.get("name"),
         map.get("state_s"),
@@ -418,7 +424,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
         map.get("prio"),
         map.get("refs"),
         map.get("time"),
-        HexUtils.dword2HexString((int)HexUtils.parseNumber(map.get("u")))
+        makeHex(map.get("wtobjp"))
       });
     }
   }
@@ -450,11 +456,11 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
       time = time + HexUtils.parseNumber(map.get("delta"));
       TableItem tableItem = new TableItem(timersTable, SWT.NONE);
       tableItem.setText(new String[] {
-        HexUtils.dword2HexString((int)HexUtils.parseNumber(entry.getKey())),
+        makeHex(entry.getKey()),
         Long.toString(time),
         "+" + HexUtils.parseNumber(map.get("delta")),
-        HexUtils.dword2HexString((int)HexUtils.parseNumber(map.get("func"))),
-        HexUtils.dword2HexString((int)HexUtils.parseNumber(map.get("par")))
+        makeHex(map.get("func")),
+        makeHex(map.get("par"))
       });          
     }
   }
@@ -504,7 +510,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
       else
         currentname = "";
 
-      String current = HexUtils.dword2HexString((int)HexUtils.parseNumber(currentaddr));
+      String current = makeHex(currentaddr);
       tableItem.setText(new String[] {
         "",
         entry.getKey(),
@@ -512,7 +518,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
         prev,
         prevname,
         map.get("state_s"),
-        HexUtils.dword2HexString((int)HexUtils.parseNumber(map.get("wtobjp"))),
+        makeHex(map.get("wtobjp")),
         current,
         currentname
       });

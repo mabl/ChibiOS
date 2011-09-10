@@ -34,7 +34,7 @@ public class DebugProxy {
     "WTEXIT",
     "WTOREVT",
     "WTANDEVT",
-    "SNDMSGQ",
+/*    "SNDMSGQ",*/
     "SNDMSG",
     "WTMSG",
     "WTQUEUE",
@@ -158,7 +158,7 @@ public class DebugProxy {
    *          - prio
    *          - refs
    *          - time
-   *          - u
+   *          - wtobjp
    *          .
    *          Missing fields are set to "-".
    * @retval null                   If the debugger encountered an error or
@@ -295,9 +295,9 @@ public class DebugProxy {
 
       try {
         n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((Thread *)" + current + ")->p_u.wtobjp"));
-        map.put("u", Long.toString(n));
+        map.put("wtobjp", Long.toString(n));
       } catch (DebugProxyException e) {
-        map.put("u", "-");
+        map.put("wtobjp", "-");
       }
 
       // Inserting the new thread map into the threads list.
