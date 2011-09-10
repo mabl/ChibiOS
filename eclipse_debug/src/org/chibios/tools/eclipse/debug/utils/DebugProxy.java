@@ -438,7 +438,7 @@ public class DebugProxy {
         new LinkedHashMap<String, HashMap<String, String>>(64);
     int n = tbsize;
     int i = -tbsize + 1;
-    while (n >= 0) {
+    while (n > 0) {
       // Hash of timers fields.
       HashMap<String, String> map = new HashMap<String, String>(16);
 
@@ -532,6 +532,26 @@ public class DebugProxy {
         map.put("dbg_panic_msg", readCString(addr, 32));
     } catch (DebugProxyException e) {
       map.put("dbg_panic_msg", "<not enabled>");
+    }
+
+    try {
+      Long isr_cnt = HexUtils.parseNumber(evaluateExpression("(uint32_t)dbg_isr_cnt"));
+      if (isr_cnt == 0)
+        map.put("dbg_isr_cnt", "not within ISR");
+      else
+        map.put("dbg_isr_cnt", "within ISR");
+    } catch (DebugProxyException e) {
+      map.put("dbg_isr_cnt", "<not enabled>");
+    }
+
+    try {
+      Long lock_cnt = HexUtils.parseNumber(evaluateExpression("(uint32_t)dbg_lock_cnt"));
+      if (lock_cnt == 0)
+        map.put("dbg_lock_cnt", "not within lock");
+      else
+        map.put("dbg_lock_cnt", "within lock");
+    } catch (DebugProxyException e) {
+      map.put("dbg_lock_cnt", "<not enabled>");
     }
 
     return map;

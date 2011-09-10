@@ -338,8 +338,8 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
 
   private void fillLocalPullDown(IMenuManager manager) {
     manager.add(refreshAction);
-    manager.add(new Separator());
-    manager.add(refreshAction);
+/*    manager.add(new Separator());
+    manager.add(refreshAction);*/
   }
 
   private void fillContextMenu(IMenuManager manager) {
