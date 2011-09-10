@@ -34,7 +34,7 @@ public class DebugProxy {
     "WTEXIT",
     "WTOREVT",
     "WTANDEVT",
-/*    "SNDMSGQ",*/
+    "SNDMSGQ",
     "SNDMSG",
     "WTMSG",
     "WTQUEUE",
