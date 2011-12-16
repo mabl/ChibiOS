@@ -5,7 +5,18 @@
 
 # Compiler options here.
 ifeq ($(USE_OPT),)
-  USE_OPT = -O2 -ggdb -fomit-frame-pointer -mhard-float
+#-fno-inline
+#    Don't pay attention to the inline keyword. Normally this option is used to keep the compiler from expanding any functions inline. Note that if you are not optimizing, no functions can be expanded inline. 
+#-finline-functions
+#	Integrate all simple functions into their callers. The compiler heuristically decides which functions are simple enough to be worth integrating in this way.
+#	If all calls to a given function are integrated, and the function is declared static, then the function is normally not output as assembler code in its own right.
+#	Enabled at level '-O3'.
+
+  USE_OPT = -O0 -ggdb -fomit-frame-pointer # -mhard-float #-falign-functions=16
+  #USE_OPT = -O1 -ggdb -fomit-frame-pointer -falign-functions=16 -fno-inline
+  #USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16 -fno-strict-aliasing
+  #USE_OPT = -O3 -ggdb -fomit-frame-pointer -falign-functions=16
+  #USE_OPT = -Os -ggdb -fomit-frame-pointer -falign-functions=16
 endif
 
 # C specific options here (added to USE_OPT).
@@ -30,7 +41,7 @@ endif
 
 # Enable this if you want to see the full log while compiling.
 ifeq ($(USE_VERBOSE_COMPILE),)
-  USE_VERBOSE_COMPILE = no
+  USE_VERBOSE_COMPILE = yes
 endif
 
 #
@@ -57,17 +68,17 @@ endif
 # Define project name here
 PROJECT = ch
 
-# Imported source files and paths
-CHIBIOS = ../..
-include $(CHIBIOS)/boards/ST_STM32F4_DISCOVERY/board.mk
+# Imported source files
+CHIBIOS = ../../..
+include $(CHIBIOS)/boards/NONSTANDARD_STM32F4_BARTHESS1/board.mk
 include $(CHIBIOS)/os/hal/platforms/STM32F4xx/platform.mk
 include $(CHIBIOS)/os/hal/hal.mk
 include $(CHIBIOS)/os/ports/GCC/ARMCMx/STM32F4xx/port.mk
 include $(CHIBIOS)/os/kernel/kernel.mk
-include $(CHIBIOS)/test/test.mk
+#include $(CHIBIOS)/test/test.mk
 
 # Define linker script file here
-LDSCRIPT= $(PORTLD)/STM32F407xG_CCM.ld
+LDSCRIPT= $(PORTLD)/STM32F407xG.ld
 
 # C sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
@@ -79,7 +90,7 @@ CSRC = $(PORTSRC) \
        $(BOARDSRC) \
        $(CHIBIOS)/os/various/evtimer.c \
        $(CHIBIOS)/os/various/syscalls.c \
-       main.c
+       main.c \
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
@@ -129,7 +140,8 @@ CPPC = $(TRGT)g++
 # Enable loading with g++ only if you need C++ runtime support.
 # NOTE: You can use C++ even without C++ support if you are careful. C++
 #       runtime support makes code size explode.
-LD   = $(TRGT)gcc
+
+LD   = $(TRGT)gcc 
 #LD   = $(TRGT)g++
 CP   = $(TRGT)objcopy
 AS   = $(TRGT)gcc -x assembler-with-cpp
@@ -138,13 +150,13 @@ HEX  = $(CP) -O ihex
 BIN  = $(CP) -O binary
 
 # ARM-specific options here
-AOPT =
+AOPT = 
 
 # THUMB-specific options here
 TOPT = -mthumb -DTHUMB
 
 # Define C warning options here
-CWARN = -Wall -Wextra -Wstrict-prototypes
+CWARN = -Wall -Wextra -Wstrict-prototypes 
 
 # Define C++ warning options here
 CPPWARN = -Wall -Wextra
@@ -190,7 +202,7 @@ UADEFS =
 UINCDIR =
 
 # List the user directory to look for the libraries here
-ULIBDIR =
+ULIBDIR = 
 
 # List all user libraries here
 ULIBS =

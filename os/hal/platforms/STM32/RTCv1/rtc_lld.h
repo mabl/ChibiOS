@@ -77,6 +77,11 @@ typedef struct RTCAlarm RTCAlarm;
 typedef struct RTCCallbackConfig RTCCallbackConfig;
 
 /**
+ * @brief   Type of a structure representing an RTC wakeup period.
+ */
+typedef struct RTCWakeup RTCWakeup;
+
+/**
  * @brief   Type of an RTC alarm.
  * @details Meaningful on platforms with more than 1 alarm comparator.
  */
@@ -142,9 +147,37 @@ struct RTCDriver{
   rtccb_t           rtc_cb;
 };
 
+/**
+ * @brief   Structure representing an RTC periodic wakeup period.
+ * @note    On this platform it is pointless.
+ */
+struct RTCWakeup {
+};
+
 /*===========================================================================*/
 /* Driver macros.                                                            */
 /*===========================================================================*/
+/**
+ * @brief     Gets time of periodic wakeup.
+ *
+ * @note      On this platform function is pointless.
+ *            There is no possibilities to change period on this platform.
+ *            It always equal to 1 second.
+ *
+ * @notapi
+ */
+#define rtc_lld_set_periodic_wakeup(rtcp, wakeupspec){(void)wakeupspec;}
+
+/**
+ * @brief     Gets time of periodic wakeup.
+ *
+ * @note      On this platform function is pointless.
+ *            There is no possibilities to change period on this platform.
+ *            It always equal to 1 second.
+ *
+ * @notapi
+ */
+#define rtc_lld_get_periodic_wakeup(rtcp, wakeupspec){(void)wakeupspec;}
 
 /*===========================================================================*/
 /* External declarations.                                                    */
@@ -166,7 +199,7 @@ extern "C" {
   void rtc_lld_get_alarm(RTCDriver *rtcp,
                          rtcalarm_t alarm,
                          RTCAlarm *alarmspec);
-  void rtc_lld_set_callback(RTCDriver *rtcp, rtccb_t callback);
+  void rtc_lld_set_callback(RTCDriver *rtcp, RTCCallbackConfig *cb_cfg);
 #ifdef __cplusplus
 }
 #endif
