@@ -253,8 +253,9 @@ void rtc_lld_get_alarm(RTCDriver *rtcp,
  * @notapi
  */
 void rtc_lld_set_periodic_wakeup(RTCDriver *rtcp, RTCWakeup *wakeupspec){
-  chDbgCheck((wakeupspec->wakeup != 0x30000),
-              "rtc_lld_set_periodic_wakeup, forbidden combination");
+  chDbgCheck((rtcp != NULL) && (wakeupspec != NULL) && \
+             (wakeupspec->wakeup != 0x30000),
+             "rtc_lld_set_periodic_wakeup, forbidden combination");
 
   rtcp->id_rtc->CR &= ~RTC_CR_WUTE;
   while(!(rtcp->id_rtc->ISR & RTC_ISR_WUTWF))
@@ -275,6 +276,9 @@ void rtc_lld_set_periodic_wakeup(RTCDriver *rtcp, RTCWakeup *wakeupspec){
  * @notapi
  */
 void rtc_lld_get_periodic_wakeup(RTCDriver *rtcp, RTCWakeup *wakeupspec){
+  chDbgCheck((rtcp != NULL) && (wakeupspec != NULL),
+             "rtc_lld_get_periodic_wakeup");
+
   wakeupspec->wakeup  = 0;
   wakeupspec->wakeup |= rtcp->id_rtc->WUTR;
   wakeupspec->wakeup |= (((uint32_t)rtcp->id_rtc->CR) & 0x7) << 16;

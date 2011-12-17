@@ -102,17 +102,6 @@ typedef struct RTCCallbackConfig RTCCallbackConfig;
 typedef uint32_t rtcalarm_t;
 
 /**
- * @brief   Type of an RTC event.
- */
-typedef enum {
-  RTC_EVENT_WAKEUP = 0,           /** Triggered every wakeup event.          */
-  RTC_EVENT_ALARM_A = 1,          /** Triggered on alarm A.                  */
-  RTC_EVENT_ALARM_B = 2,          /** Triggered on alarm B.                  */
-  RTC_EVENT_TAMPER = 3,           /** Triggered on Tamper event.             */
-  RTC_EVENT_TIMESTAMP = 4,        /** Triggered on TimeStamp event.          */
-} rtcevent_t;
-
-/**
  * @brief   Structure representing an RTC time stamp.
  */
 struct RTCTime {

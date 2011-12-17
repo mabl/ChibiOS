@@ -74,7 +74,7 @@ static void my_cb(RTCDriver *rtcp, rtcevent_t event) {
     palTogglePad(GPIOC, GPIOC_LED);
     break;
   case RTC_EVENT_SECOND:
-    //palTogglePad(GPIOC, GPIOC_LED);
+    /* palTogglePad(GPIOC, GPIOC_LED); */
     break;
   case RTC_EVENT_ALARM:
     palTogglePad(GPIOC, GPIOC_LED);
