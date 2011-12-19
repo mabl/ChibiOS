@@ -97,10 +97,11 @@ int main(void) {
    */
   extStart(&EXTD1, &extcfg);
 
-  /*
-   * Normal main() thread activity, in this demo it enables and disables the
-   * button EXT channel using 5 seconds intervals.
-   */
+#if STM32_PVD_ENABLE
+  rccEnablePWRInterface(FALSE);
+  PWR->CR |= PWR_CR_PVDE | (STM32_PLS & STM32_PLS_MASK);
+#endif /* STM32_PVD_ENABLE */
+
   while (TRUE) {
     chThdSleepMilliseconds(500);
   }
