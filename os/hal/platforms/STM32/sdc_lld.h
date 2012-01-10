@@ -35,6 +35,16 @@
 /* Driver constants.                                                         */
 /*===========================================================================*/
 
+/**
+ * @brief Value to clear all interrupts flag at once.
+ */
+#define STM32_SDIO_ICR_ALL_FLAGS (SDIO_ICR_CCRCFAILC | SDIO_ICR_DCRCFAILC | \
+                  SDIO_ICR_CTIMEOUTC | SDIO_ICR_DTIMEOUTC | \
+                  SDIO_ICR_TXUNDERRC | SDIO_ICR_RXOVERRC | \
+                  SDIO_ICR_CMDRENDC | SDIO_ICR_CMDSENTC | \
+                  SDIO_ICR_DATAENDC | SDIO_ICR_STBITERRC | \
+                  SDIO_ICR_DBCKENDC | SDIO_ICR_SDIOITC | \
+                  SDIO_ICR_CEATAENDC)
 
 /*===========================================================================*/
 /* Driver pre-compile time settings.                                         */
