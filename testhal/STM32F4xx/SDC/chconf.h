@@ -32,6 +32,8 @@
 #ifndef _CHCONF_H_
 #define _CHCONF_H_
 
+#define CORTEX_USE_FPU    FALSE
+
 /*===========================================================================*/
 /**
  * @name Kernel parameters and options

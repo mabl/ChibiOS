@@ -502,13 +502,6 @@
 #define rccResetI2C3() rccResetAPB1(RCC_APB1RSTR_I2C3RST)
 /** @} */
 
-
-
-
-
-
-
-
 /**
  * @name    SDIO peripheral specific RCC operations
  * @{
@@ -541,11 +534,6 @@
  */
 #define rccResetSDIO() rccResetAPB2(RCC_APB2RSTR_SDIORST)
 /** @} */
-
-
-
-
-
 
 /**
  * @name    SPI peripherals specific RCC operations

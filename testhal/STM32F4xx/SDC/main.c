@@ -108,6 +108,7 @@ int main(void) {
    * Normal main() thread activity.
    */
   while (TRUE) {
+    palTogglePad(GPIOB, GPIOB_LED_R);
     chThdSleepMilliseconds(500);
   }
 }

@@ -82,10 +82,10 @@ static bool_t sdc_lld_read_multiple(SDCDriver *sdcp, uint32_t startblk,
     return TRUE;
 
   /* Prepares the DMA channel for reading.*/
-  dmaStreamSetMemory0(STM32_DMA2_STREAM4, buf);
-  dmaStreamSetTransactionSize(STM32_DMA2_STREAM4,
+  dmaStreamSetMemory0(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM), buf);
+  dmaStreamSetTransactionSize(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM),
                               (n * SDC_BLOCK_SIZE) / sizeof (uint32_t));
-  dmaStreamSetMode(STM32_DMA2_STREAM4,
+  dmaStreamSetMode(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM),
                    STM32_DMA_CR_PL(STM32_SDC_SDIO_DMA_PRIORITY) |
                    STM32_DMA_CR_DIR_P2M | STM32_DMA_CR_PSIZE_WORD |
                    STM32_DMA_CR_MSIZE_WORD | STM32_DMA_CR_MINC);
@@ -102,7 +102,7 @@ static bool_t sdc_lld_read_multiple(SDCDriver *sdcp, uint32_t startblk,
                 SDIO_DCTRL_DTEN;
 
   /* DMA channel activation.*/
-  dmaStreamEnable(STM32_DMA2_STREAM4);
+  dmaStreamEnable(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM));
 
   /* Read multiple blocks command.*/
   if ((sdcp->cardmode & SDC_MODE_HIGH_CAPACITY) == 0)
@@ -125,14 +125,14 @@ static bool_t sdc_lld_read_multiple(SDCDriver *sdcp, uint32_t startblk,
     chSysUnlock();
     goto error;
   }
-  dmaStreamDisable(STM32_DMA2_STREAM4);
+  dmaStreamDisable(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM));
   SDIO->ICR   = 0xFFFFFFFF;
   SDIO->DCTRL = 0;
   chSysUnlock();
 
   return sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_STOP_TRANSMISSION, 0, resp);
 error:
-  dmaStreamDisable(STM32_DMA2_STREAM4);
+  dmaStreamDisable(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM));
   SDIO->ICR   = 0xFFFFFFFF;
   SDIO->MASK  = 0;
   SDIO->DCTRL = 0;
@@ -162,10 +162,10 @@ static bool_t sdc_lld_read_single(SDCDriver *sdcp, uint32_t startblk,
     return TRUE;
 
   /* Prepares the DMA channel for reading.*/
-  dmaStreamSetMemory0(STM32_DMA2_STREAM4, buf);
-  dmaStreamSetTransactionSize(STM32_DMA2_STREAM4,
+  dmaStreamSetMemory0(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM), buf);
+  dmaStreamSetTransactionSize(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM),
                               SDC_BLOCK_SIZE / sizeof (uint32_t));
-  dmaStreamSetMode(STM32_DMA2_STREAM4,
+  dmaStreamSetMode(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM),
                    STM32_DMA_CR_PL(STM32_SDC_SDIO_DMA_PRIORITY) |
                    STM32_DMA_CR_DIR_P2M | STM32_DMA_CR_PSIZE_WORD |
                    STM32_DMA_CR_MSIZE_WORD | STM32_DMA_CR_MINC);
@@ -182,7 +182,7 @@ static bool_t sdc_lld_read_single(SDCDriver *sdcp, uint32_t startblk,
                 SDIO_DCTRL_DTEN;
 
   /* DMA channel activation.*/
-  dmaStreamEnable(STM32_DMA2_STREAM4);
+  dmaStreamEnable(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM));
 
   /* Read single block command.*/
   if ((sdcp->cardmode & SDC_MODE_HIGH_CAPACITY) == 0)
@@ -205,14 +205,14 @@ static bool_t sdc_lld_read_single(SDCDriver *sdcp, uint32_t startblk,
     chSysUnlock();
     goto error;
   }
-  dmaStreamDisable(STM32_DMA2_STREAM4);
+  dmaStreamDisable(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM));
   SDIO->ICR   = 0xFFFFFFFF;
   SDIO->DCTRL = 0;
   chSysUnlock();
 
   return FALSE;
 error:
-  dmaStreamDisable(STM32_DMA2_STREAM4);
+  dmaStreamDisable(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM));
   SDIO->ICR   = 0xFFFFFFFF;
   SDIO->MASK  = 0;
   SDIO->DCTRL = 0;
@@ -243,10 +243,10 @@ static bool_t sdc_lld_write_multiple(SDCDriver *sdcp, uint32_t startblk,
     return TRUE;
 
   /* Prepares the DMA channel for writing.*/
-  dmaStreamSetMemory0(STM32_DMA2_STREAM4, buf);
-  dmaStreamSetTransactionSize(STM32_DMA2_STREAM4,
+  dmaStreamSetMemory0(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM), buf);
+  dmaStreamSetTransactionSize(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM),
                               (n * SDC_BLOCK_SIZE) / sizeof (uint32_t));
-  dmaStreamSetMode(STM32_DMA2_STREAM4,
+  dmaStreamSetMode(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM),
                    STM32_DMA_CR_PL(STM32_SDC_SDIO_DMA_PRIORITY) |
                    STM32_DMA_CR_DIR_M2P | STM32_DMA_CR_PSIZE_WORD |
                    STM32_DMA_CR_MSIZE_WORD | STM32_DMA_CR_MINC);
@@ -271,7 +271,7 @@ static bool_t sdc_lld_write_multiple(SDCDriver *sdcp, uint32_t startblk,
                 SDIO_DCTRL_DTEN;
 
   /* DMA channel activation.*/
-  dmaStreamEnable(STM32_DMA2_STREAM4);
+  dmaStreamEnable(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM));
 
   /* Note the mask is checked before going to sleep because the interrupt
      may have occurred before reaching the critical zone.*/
@@ -288,14 +288,14 @@ static bool_t sdc_lld_write_multiple(SDCDriver *sdcp, uint32_t startblk,
     chSysUnlock();
     goto error;
   }
-  dmaStreamDisable(STM32_DMA2_STREAM4);
+  dmaStreamDisable(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM));
   SDIO->ICR   = 0xFFFFFFFF;
   SDIO->DCTRL = 0;
   chSysUnlock();
 
   return sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_STOP_TRANSMISSION, 0, resp);
 error:
-  dmaStreamDisable(STM32_DMA2_STREAM4);
+  dmaStreamDisable(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM));
   SDIO->ICR   = 0xFFFFFFFF;
   SDIO->MASK  = 0;
   SDIO->DCTRL = 0;
@@ -326,10 +326,10 @@ static bool_t sdc_lld_write_single(SDCDriver *sdcp, uint32_t startblk,
     return TRUE;
 
   /* Prepares the DMA channel for writing.*/
-  dmaStreamSetMemory0(STM32_DMA2_STREAM4, buf);
-  dmaStreamSetTransactionSize(STM32_DMA2_STREAM4,
+  dmaStreamSetMemory0(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM), buf);
+  dmaStreamSetTransactionSize(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM),
                               SDC_BLOCK_SIZE / sizeof (uint32_t));
-  dmaStreamSetMode(STM32_DMA2_STREAM4,
+  dmaStreamSetMode(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM),
                    STM32_DMA_CR_PL(STM32_SDC_SDIO_DMA_PRIORITY) |
                    STM32_DMA_CR_DIR_M2P | STM32_DMA_CR_PSIZE_WORD |
                    STM32_DMA_CR_MSIZE_WORD | STM32_DMA_CR_MINC);
@@ -354,7 +354,7 @@ static bool_t sdc_lld_write_single(SDCDriver *sdcp, uint32_t startblk,
                 SDIO_DCTRL_DTEN;
 
   /* DMA channel activation.*/
-  dmaStreamEnable(STM32_DMA2_STREAM4);
+  dmaStreamEnable(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM));
 
   /* Note the mask is checked before going to sleep because the interrupt
      may have occurred before reaching the critical zone.*/
@@ -371,18 +371,32 @@ static bool_t sdc_lld_write_single(SDCDriver *sdcp, uint32_t startblk,
     chSysUnlock();
     goto error;
   }
-  dmaStreamDisable(STM32_DMA2_STREAM4);
+  dmaStreamDisable(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM));
   SDIO->ICR   = 0xFFFFFFFF;
   SDIO->DCTRL = 0;
   chSysUnlock();
 
   return FALSE;
 error:
-  dmaStreamDisable(STM32_DMA2_STREAM4);
+  dmaStreamDisable(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM));
   SDIO->ICR   = 0xFFFFFFFF;
   SDIO->MASK  = 0;
   SDIO->DCTRL = 0;
   return TRUE;
+}
+
+static void sdio_serve_interrupt(SDCDriver *sdcp) {
+
+  chSysLockFromIsr();
+  if (sdcp->thread != NULL) {
+    chSchReadyI(sdcp->thread);
+    sdcp->thread = NULL;
+  }
+  chSysUnlockFromIsr();
+
+  /* Disables the source but the status flags are not reset because the
+     read/write functions need to check them.*/
+  SDIO->MASK = 0;
 }
 
 /*===========================================================================*/
@@ -398,16 +412,7 @@ CH_IRQ_HANDLER(SDIO_IRQHandler) {
 
   CH_IRQ_PROLOGUE();
 
-  chSysLockFromIsr();
-  if (SDCD1.thread != NULL) {
-    chSchReadyI(SDCD1.thread);
-    SDCD1.thread = NULL;
-  }
-  chSysUnlockFromIsr();
-
-  /* Disables the source but the status flags are not reset because the
-     read/write functions need to check them.*/
-  SDIO->MASK = 0;
+  sdio_serve_interrupt(&SDCD1);
 
   CH_IRQ_EPILOGUE();
 }
@@ -439,8 +444,14 @@ void sdc_lld_start(SDCDriver *sdcp) {
 
   if (sdcp->state == SDC_STOP) {
     /* Note, the DMA must be enabled before the IRQs.*/
-    dmaStreamAllocate(STM32_DMA2_STREAM4, 0, NULL, NULL);
-    dmaStreamSetPeripheral(STM32_DMA2_STREAM4, &SDIO->FIFO);
+    bool_t b;
+    b = dmaStreamAllocate(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM),
+                          STM32_SDC_SDIO_IRQ_PRIORITY,
+                          NULL,
+                          NULL);
+    chDbgAssert(!b, "i2c_lld_start(), #3", "stream already allocated");
+    dmaStreamSetPeripheral(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM),
+                           &SDIO->FIFO);
     nvicEnableVector(SDIO_IRQn,
                      CORTEX_PRIORITY_MASK(STM32_SDC_SDIO_IRQ_PRIORITY));
     rccEnableSDIO(FALSE);
@@ -469,7 +480,7 @@ void sdc_lld_stop(SDCDriver *sdcp) {
 
     /* Clock deactivation.*/
     nvicDisableVector(SDIO_IRQn);
-    dmaStreamRelease(STM32_DMA2_STREAM4);
+    dmaStreamRelease(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM));
     rccDisableSDIO(FALSE);
   }
 }

@@ -181,7 +181,7 @@
 /*
  * SPI driver system settings.
  */
-#define STM32_SPI_USE_SPI1                  FLASE
+#define STM32_SPI_USE_SPI1                  FALSE
 #define STM32_SPI_USE_SPI2                  FLASE
 #define STM32_SPI_USE_SPI3                  FLASE
 #define STM32_SPI_SPI1_RX_DMA_STREAM        STM32_DMA_STREAM_ID(2, 0)
@@ -244,6 +244,7 @@
  * SDC driver system settings.
  */
 #define STM32_SDC_DATATIMEOUT               0x000FFFFF
-#define STM32_SDC_SDIO_DMA_PRIORITY         3
+#define STM32_SDC_SDIO_DMA_STREAM           STM32_DMA_STREAM_ID(2, 3)
+#define STM32_SDC_SDIO_DMA_PRIORITY         0
 #define STM32_SDC_SDIO_IRQ_PRIORITY         9
-
+#define STM32_SDC_UNALIGNED_SUPPORT         TRUE
