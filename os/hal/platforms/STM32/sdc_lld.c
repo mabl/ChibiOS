@@ -476,7 +476,7 @@ void sdc_lld_start(SDCDriver *sdcp) {
                   STM32_DMA_CR_PL(STM32_SDC_SDIO_DMA_PRIORITY) |
                   STM32_DMA_CR_PSIZE_WORD | STM32_DMA_CR_MSIZE_WORD |
                   STM32_DMA_CR_MINC;
-  #if (defined(STM32F4XX) || defined(STM32F4XX))
+  #if (defined(STM32F4XX) || defined(STM32F2XX))
 //    sdcp->dmamode |= STM32_DMA_CR_PFCTRL | STM32_DMA_CR_PBURST_INCR4 | STM32_DMA_CR_MBURST_INCR4;
     sdcp->dmamode |= STM32_DMA_CR_PFCTRL;
   #endif
@@ -488,7 +488,7 @@ void sdc_lld_start(SDCDriver *sdcp) {
                           NULL, NULL);
     chDbgAssert(!b, "i2c_lld_start(), #3", "stream already allocated");
     dmaStreamSetPeripheral(sdcp->dma, &SDIO->FIFO);
-//    #if (defined(STM32F4XX) || defined(STM32F4XX))
+//    #if (defined(STM32F4XX) || defined(STM32F2XX))
 //      dmaStreamSetFIFO(sdcp->dma, STM32_DMA_FCR_DMDIS | STM32_DMA_FCR_FTH_FULL);
 //    #endif
     nvicEnableVector(SDIO_IRQn,
