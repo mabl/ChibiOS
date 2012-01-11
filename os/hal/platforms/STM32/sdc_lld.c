@@ -34,6 +34,14 @@
 #if HAL_USE_SDC || defined(__DOXYGEN__)
 
 /*===========================================================================*/
+/* Driver local definitions.                                                 */
+/*===========================================================================*/
+
+#define SDC_SDIO_DMA_CHANNEL                                                  \
+  STM32_DMA_GETCHANNEL(STM32_SDC_SDIO_DMA_STREAM,                             \
+                       STM32_SDC_SDIO_DMA_CHN)
+
+/*===========================================================================*/
 /* Driver exported variables.                                                */
 /*===========================================================================*/
 
@@ -76,28 +84,24 @@ static union {
 static bool_t sdc_lld_read_multiple(SDCDriver *sdcp, uint32_t startblk,
                                     uint8_t *buf, uint32_t n) {
   uint32_t resp[1];
-  uint32_t dmamode = 0;
 
   /* Checks for errors and waits for the card to be ready for reading.*/
   if (_sdc_wait_for_transfer_state(sdcp))
     return TRUE;
 
   /* Prepares the DMA channel for reading.*/
-  dmaStreamSetMemory0(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM), buf);
-  dmaStreamSetTransactionSize(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM),
+  dmaStreamSetMemory0(sdcp->dma, buf);
+  dmaStreamSetTransactionSize(sdcp->dma,
                               (n * SDC_BLOCK_SIZE) / sizeof (uint32_t));
+  dmaStreamSetMode(sdcp->dma, sdcp->dmamode | STM32_DMA_CR_DIR_P2M);
 
-  dmamode = STM32_DMA_CR_PL(STM32_SDC_SDIO_DMA_PRIORITY) |
-            STM32_DMA_CR_DIR_P2M | STM32_DMA_CR_PSIZE_WORD |
-            STM32_DMA_CR_MSIZE_WORD | STM32_DMA_CR_MINC;
-  #if (defined(STM32F4XX) || defined(STM32F4XX))
-    dmamode |= STM32_DMA_CR_PFCTRL | STM32_DMA_CR_PBURST_INCR4 |
-               STM32_DMA_CR_MBURST_INCR4;
-  #endif
-  dmaStreamSetMode(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM), dmamode);
-
-  /* DMA channel activation.*/
-  dmaStreamEnable(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM));
+  /* Setting up data transfer.
+     Options: Card to Controller, Block mode, DMA mode, 512 bytes blocks.*/
+  SDIO->ICR   = STM32_SDIO_ICR_ALL_FLAGS;
+  SDIO->MASK  = SDIO_MASK_DCRCFAILIE | SDIO_MASK_DTIMEOUTIE |
+                SDIO_MASK_DATAENDIE | SDIO_MASK_STBITERRIE |
+                SDIO_MASK_RXOVERRIE;
+  SDIO->DLEN  = n * SDC_BLOCK_SIZE;
 
   /* Send read multiple blocks command to card.*/
   if ((sdcp->cardmode & SDC_MODE_HIGH_CAPACITY) == 0)
@@ -107,13 +111,8 @@ static bool_t sdc_lld_read_multiple(SDCDriver *sdcp, uint32_t startblk,
       SDC_R1_ERROR(resp[0]))
     goto error;
 
-  /* Setting up data transfer.
-     Options: Card to Controller, Block mode, DMA mode, 512 bytes blocks.*/
-  SDIO->ICR   = STM32_SDIO_ICR_ALL_FLAGS;
-  SDIO->MASK  = SDIO_MASK_DCRCFAILIE | SDIO_MASK_DTIMEOUTIE |
-                SDIO_MASK_DATAENDIE | SDIO_MASK_STBITERRIE |
-                SDIO_MASK_RXOVERRIE;
-  SDIO->DLEN  = n * SDC_BLOCK_SIZE;
+  /* DMA channel activation.*/
+  dmaStreamEnable(sdcp->dma);
 
   /* Transaction starts just after DTEN bit setting.*/
   SDIO->DCTRL = SDIO_DCTRL_DTDIR |
@@ -134,19 +133,37 @@ static bool_t sdc_lld_read_multiple(SDCDriver *sdcp, uint32_t startblk,
     chSysUnlock();
     goto error;
   }
-  dmaStreamDisable(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM));
+  dmaStreamDisable(sdcp->dma);
   SDIO->ICR   = STM32_SDIO_ICR_ALL_FLAGS;
   SDIO->DCTRL = 0;
   chSysUnlock();
 
   return sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_STOP_TRANSMISSION, 0, resp);
 error:
-  dmaStreamDisable(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM));
+  dmaStreamDisable(sdcp->dma);
   SDIO->ICR   = STM32_SDIO_ICR_ALL_FLAGS;
   SDIO->MASK  = 0;
   SDIO->DCTRL = 0;
   return TRUE;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /**
  * @brief   Reads one block.
@@ -439,6 +456,10 @@ void sdc_lld_init(void) {
 
   sdcObjectInit(&SDCD1);
   SDCD1.thread = NULL;
+#if CH_DBG_ENABLE_ASSERTS
+  SDCD1.sdio   = SDIO;
+#endif
+  SDCD1.dma    = STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM);
 }
 
 /**
@@ -451,20 +472,30 @@ void sdc_lld_init(void) {
  */
 void sdc_lld_start(SDCDriver *sdcp) {
 
+  sdcp->dmamode = STM32_DMA_CR_CHSEL(SDC_SDIO_DMA_CHANNEL) |
+                  STM32_DMA_CR_PL(STM32_SDC_SDIO_DMA_PRIORITY) |
+                  STM32_DMA_CR_PSIZE_WORD | STM32_DMA_CR_MSIZE_WORD |
+                  STM32_DMA_CR_MINC;
+  #if (defined(STM32F4XX) || defined(STM32F4XX))
+//    sdcp->dmamode |= STM32_DMA_CR_PFCTRL | STM32_DMA_CR_PBURST_INCR4 | STM32_DMA_CR_MBURST_INCR4;
+    sdcp->dmamode |= STM32_DMA_CR_PFCTRL;
+  #endif
+
   if (sdcp->state == SDC_STOP) {
     /* Note, the DMA must be enabled before the IRQs.*/
     bool_t b;
-    b = dmaStreamAllocate(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM),
-                          STM32_SDC_SDIO_IRQ_PRIORITY,
-                          NULL,
-                          NULL);
+    b = dmaStreamAllocate(sdcp->dma, STM32_SDC_SDIO_IRQ_PRIORITY,
+                          NULL, NULL);
     chDbgAssert(!b, "i2c_lld_start(), #3", "stream already allocated");
-    dmaStreamSetPeripheral(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM),
-                           &SDIO->FIFO);
+    dmaStreamSetPeripheral(sdcp->dma, &SDIO->FIFO);
+//    #if (defined(STM32F4XX) || defined(STM32F4XX))
+//      dmaStreamSetFIFO(sdcp->dma, STM32_DMA_FCR_DMDIS | STM32_DMA_FCR_FTH_FULL);
+//    #endif
     nvicEnableVector(SDIO_IRQn,
                      CORTEX_PRIORITY_MASK(STM32_SDC_SDIO_IRQ_PRIORITY));
     rccEnableSDIO(FALSE);
   }
+
   /* Configuration, card clock is initially stopped.*/
   SDIO->POWER  = 0;
   SDIO->CLKCR  = 0;
@@ -489,7 +520,7 @@ void sdc_lld_stop(SDCDriver *sdcp) {
 
     /* Clock deactivation.*/
     nvicDisableVector(SDIO_IRQn);
-    dmaStreamRelease(STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM));
+    dmaStreamRelease(sdcp->dma);
     rccDisableSDIO(FALSE);
   }
 }
@@ -558,6 +589,7 @@ void sdc_lld_set_bus_mode(SDCDriver *sdcp, sdcbusmode_t mode) {
     break;
   case SDC_MODE_8BIT:
     SDIO->CLKCR = clk | SDIO_CLKCR_WIDBUS_1;
+    break;
   }
 }
 

@@ -98,12 +98,15 @@
 /*
  * SDIO clock divider.
  */
-#if STM32_HCLK > 48000000
-#define STM32_SDIO_DIV_HS                   0x01
-#define STM32_SDIO_DIV_LS                   0xB2
+#if (defined(STM32F4XX) || defined(STM32F4XX))
+  #define STM32_SDIO_DIV_HS                   0x00//0xB2//0x00
+  #define STM32_SDIO_DIV_LS                   0xB2//0x78
+#elif STM32_HCLK > 48000000
+  #define STM32_SDIO_DIV_HS                   0x01
+  #define STM32_SDIO_DIV_LS                   0xB2
 #else
-#define STM32_SDIO_DIV_HS                   0x00
-#define STM32_SDIO_DIV_LS                   0x76
+  #define STM32_SDIO_DIV_HS                   0x00
+  #define STM32_SDIO_DIV_LS                   0x76
 #endif
 
 /*===========================================================================*/
@@ -170,6 +173,20 @@ struct SDCDriver {
    * @brief Thread waiting for I/O completion IRQ.
    */
   Thread                    *thread;
+  /**
+   * @brief     DMA mode bit mask.
+   */
+  uint32_t                  dmamode;
+  /**
+   * @brief     Transmit DMA channel.
+   */
+  const stm32_dma_stream_t  *dma;
+  /**
+   * @brief     Pointer to the I2Cx registers block.
+   */
+#if CH_DBG_ENABLE_ASSERTS
+  SDIO_TypeDef              *sdio;
+#endif
 };
 
 /*===========================================================================*/

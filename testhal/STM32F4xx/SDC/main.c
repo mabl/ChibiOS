@@ -45,12 +45,16 @@ int main(void) {
   halInit();
   chSysInit();
 
+  uint32_t i = 0;
+  for (i=0; i < SDC_BLOCK_SIZE * 4; i++){
+    blkbuf[i] = 0x55;
+  }
+
   /*
    * Initializes the SDIO drivers.
    */
   sdcStart(&SDCD1, &sdccfg);
   if (!sdcConnect(&SDCD1)) {
-    int i;
 
     /* Single aligned read.*/
 //    if (sdcRead(&SDCD1, 0, blkbuf, 1))
