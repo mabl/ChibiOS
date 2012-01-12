@@ -18,8 +18,16 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <string.h>
 #include "ch.h"
 #include "hal.h"
+
+
+#define SDC_READONLY_TEST   TRUE
+
+#define SDC_BURST_SIZE      4
+static uint8_t blkbuf1[SDC_BLOCK_SIZE * SDC_BURST_SIZE + 1];
+static uint8_t blkbuf2[SDC_BLOCK_SIZE * SDC_BURST_SIZE + 1];
 
 /*
  * SDIO configuration.
@@ -27,8 +35,6 @@
 static const SDCConfig sdccfg = {
   0
 };
-
-static uint8_t blkbuf[SDC_BLOCK_SIZE * 128 + 1];
 
 /*
  * Application entry point.
@@ -46,9 +52,11 @@ int main(void) {
   chSysInit();
 
   uint32_t i = 0;
-  for (i=0; i < SDC_BLOCK_SIZE * 4; i++){
-    blkbuf[i] = 0x55;
-  }
+  for (i=0; i < SDC_BLOCK_SIZE * SDC_BURST_SIZE; i++)
+    blkbuf1[i] = 0x55;
+  for (i=0; i < SDC_BLOCK_SIZE * SDC_BURST_SIZE; i++)
+    blkbuf2[i] = 0x55;
+
 
   /*
    * Initializes the SDIO drivers.
@@ -57,52 +65,39 @@ int main(void) {
   if (!sdcConnect(&SDCD1)) {
 
     /* Single aligned read.*/
-//    if (sdcRead(&SDCD1, 0, blkbuf, 1))
-//      chSysHalt();
 
-//    /* Single unaligned read.*/
-//    if (sdcRead(&SDCD1, 0, blkbuf + 1, 1))
-//      chSysHalt();
-//
+    /* Single unaligned read.*/
+
     /* Multiple aligned read.*/
-    if (sdcRead(&SDCD1, 0, blkbuf, 4))
+    if (sdcRead(&SDCD1, 0, blkbuf1, SDC_BURST_SIZE))
       chSysHalt();
-//
-//    /* Multiple unaligned read.*/
-//    if (sdcRead(&SDCD1, 0, blkbuf + 1, 4))
-//      chSysHalt();
-//
-//    /* Repeated multiple aligned reads.*/
-//    for (i = 0; i < 1000; i++) {
-//      if (sdcRead(&SDCD1, 0, blkbuf, 4))
-//        chSysHalt();
-//    }
-//
-//    /* Repeated multiple unaligned reads.*/
-//    for (i = 0; i < 1000; i++) {
-//      if (sdcRead(&SDCD1, 0, blkbuf + 1, 4))
-//        chSysHalt();
-//    }
-//
-//    /* Repeated multiple aligned writes.*/
-//    for (i = 0; i < 100; i++) {
-//      if (sdcRead(&SDCD1, 0x10000, blkbuf, 4))
-//        chSysHalt();
-//      if (sdcWrite(&SDCD1, 0x10000, blkbuf, 4))
-//        chSysHalt();
-//      if (sdcWrite(&SDCD1, 0x10000, blkbuf, 4))
-//        chSysHalt();
-//    }
-//
-//    /* Repeated multiple unaligned writes.*/
-//    for (i = 0; i < 100; i++) {
-//      if (sdcRead(&SDCD1, 0x10000, blkbuf + 1, 4))
-//        chSysHalt();
-//      if (sdcWrite(&SDCD1, 0x10000, blkbuf + 1, 4))
-//        chSysHalt();
-//      if (sdcWrite(&SDCD1, 0x10000, blkbuf + 1, 4))
-//        chSysHalt();
-//    }
+
+    /* Multiple unaligned read.*/
+
+    /* Repeated multiple aligned reads.*/
+
+    /* Repeated multiple unaligned reads.*/
+
+    #if !SDC_READONLY_TEST
+
+    for (i=0; i < SDC_BLOCK_SIZE * SDC_BURST_SIZE; i++)
+      blkbuf2[i] = 0x55;
+
+    for (i=0; i < 1000; i++){
+      if (sdcWrite(&SDCD1, i, blkbuf2, SDC_BURST_SIZE))
+        chSysHalt();
+    }
+    for (i=0; i < 1000; i++){
+      if (sdcRead(&SDCD1, i, blkbuf1, SDC_BURST_SIZE))
+        chSysHalt();
+      if (memcmp(blkbuf1, blkbuf2, SDC_BURST_SIZE) != 0)
+        chSysHalt();
+    }
+
+    /* Repeated multiple aligned writes.*/
+
+    /* Repeated multiple unaligned writes.*/
+    #endif /* !SDC_READONLY_TEST */
 
     if (sdcDisconnect(&SDCD1))
       chSysHalt();

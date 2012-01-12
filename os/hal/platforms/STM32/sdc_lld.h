@@ -38,13 +38,13 @@
 /**
  * @brief Value to clear all interrupts flag at once.
  */
-#define STM32_SDIO_ICR_ALL_FLAGS (SDIO_ICR_CCRCFAILC | SDIO_ICR_DCRCFAILC | \
-                  SDIO_ICR_CTIMEOUTC | SDIO_ICR_DTIMEOUTC | \
-                  SDIO_ICR_TXUNDERRC | SDIO_ICR_RXOVERRC | \
-                  SDIO_ICR_CMDRENDC | SDIO_ICR_CMDSENTC | \
-                  SDIO_ICR_DATAENDC | SDIO_ICR_STBITERRC | \
-                  SDIO_ICR_DBCKENDC | SDIO_ICR_SDIOITC | \
-                  SDIO_ICR_CEATAENDC)
+#define STM32_SDIO_ICR_ALL_FLAGS (SDIO_ICR_CCRCFAILC | SDIO_ICR_DCRCFAILC |   \
+                                  SDIO_ICR_CTIMEOUTC | SDIO_ICR_DTIMEOUTC |   \
+                                  SDIO_ICR_TXUNDERRC | SDIO_ICR_RXOVERRC |    \
+                                  SDIO_ICR_CMDRENDC  | SDIO_ICR_CMDSENTC |    \
+                                  SDIO_ICR_DATAENDC  | SDIO_ICR_STBITERRC |   \
+                                  SDIO_ICR_DBCKENDC  | SDIO_ICR_SDIOITC |     \
+                                  SDIO_ICR_CEATAENDC)
 
 /*===========================================================================*/
 /* Driver pre-compile time settings.                                         */
@@ -98,15 +98,15 @@
 /*
  * SDIO clock divider.
  */
-#if (defined(STM32F4XX) || defined(STM32F4XX))
-  #define STM32_SDIO_DIV_HS                   0x00//0xB2//0x00
-  #define STM32_SDIO_DIV_LS                   0xB2//0x78
+#if (defined(STM32F4XX) || defined(STM32F2XX))
+  #define STM32_SDIO_DIV_HS                   0
+  #define STM32_SDIO_DIV_LS                   120
 #elif STM32_HCLK > 48000000
-  #define STM32_SDIO_DIV_HS                   0x01
-  #define STM32_SDIO_DIV_LS                   0xB2
+  #define STM32_SDIO_DIV_HS                   1
+  #define STM32_SDIO_DIV_LS                   178
 #else
-  #define STM32_SDIO_DIV_HS                   0x00
-  #define STM32_SDIO_DIV_LS                   0x76
+  #define STM32_SDIO_DIV_HS                   0
+  #define STM32_SDIO_DIV_LS                   118
 #endif
 
 /*===========================================================================*/

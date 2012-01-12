@@ -65,10 +65,10 @@ bool_t _sdc_wait_for_transfer_state(SDCDriver *sdcp) {
     if (sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_SEND_STATUS,
                                    sdcp->rca, resp) ||
         SDC_R1_ERROR(resp[0]))
-      return TRUE;
+      return SDC_FAILED;
     switch (SDC_R1_STS(resp[0])) {
     case SDC_STS_TRAN:
-      return FALSE;
+      return SDC_SUCCESS;
     case SDC_STS_DATA:
     case SDC_STS_RCV:
     case SDC_STS_PRG:
@@ -79,7 +79,7 @@ bool_t _sdc_wait_for_transfer_state(SDCDriver *sdcp) {
     default:
       /* The card should have been initialized so any other state is not
          valid and is reported as an error.*/
-      return TRUE;
+      return SDC_FAILED;
     }
   }
 }
@@ -285,11 +285,11 @@ bool_t sdcConnect(SDCDriver *sdcp) {
   }
 
   sdcp->state = SDC_ACTIVE;
-  return FALSE;
+  return SDC_SUCCESS;
 failed:
   sdc_lld_stop_clk(sdcp);
   sdcp->state = SDC_READY;
-  return TRUE;
+  return SDC_FAILED;
 }
 
 /**
@@ -312,20 +312,20 @@ bool_t sdcDisconnect(SDCDriver *sdcp) {
               "sdcDisconnect(), #1", "invalid state");
   if (sdcp->state == SDC_READY) {
     chSysUnlock();
-    return FALSE;
+    return SDC_SUCCESS;
   }
   sdcp->state = SDC_DISCONNECTING;
   chSysUnlock();
 
   /* Waits for eventual pending operations completion.*/
   if (_sdc_wait_for_transfer_state(sdcp))
-    return TRUE;
+    return SDC_FAILED;
 
   /* Card clock stopped.*/
   sdc_lld_stop_clk(sdcp);
 
   sdcp->state = SDC_READY;
-  return FALSE;
+  return SDC_SUCCESS;
 }
 
 /**
@@ -346,7 +346,7 @@ bool_t sdcDisconnect(SDCDriver *sdcp) {
  */
 bool_t sdcRead(SDCDriver *sdcp, uint32_t startblk,
                uint8_t *buf, uint32_t n) {
-  bool_t err;
+  bool_t status;
 
   chDbgCheck((sdcp != NULL) && (buf != NULL) && (n > 0), "sdcRead");
 
@@ -355,9 +355,9 @@ bool_t sdcRead(SDCDriver *sdcp, uint32_t startblk,
   sdcp->state = SDC_READING;
   chSysUnlock();
 
-  err = sdc_lld_read(sdcp, startblk, buf, n);
+  status = sdc_lld_read(sdcp, startblk, buf, n);
   sdcp->state = SDC_ACTIVE;
-  return err;
+  return status;
 }
 
 /**
@@ -378,7 +378,7 @@ bool_t sdcRead(SDCDriver *sdcp, uint32_t startblk,
  */
 bool_t sdcWrite(SDCDriver *sdcp, uint32_t startblk,
                 const uint8_t *buf, uint32_t n) {
-  bool_t err;
+  bool_t status;
 
   chDbgCheck((sdcp != NULL) && (buf != NULL) && (n > 0), "sdcWrite");
 
@@ -387,9 +387,9 @@ bool_t sdcWrite(SDCDriver *sdcp, uint32_t startblk,
   sdcp->state = SDC_WRITING;
   chSysUnlock();
 
-  err = sdc_lld_write(sdcp, startblk, buf, n);
+  status = sdc_lld_write(sdcp, startblk, buf, n);
   sdcp->state = SDC_ACTIVE;
-  return err;
+  return status;
 }
 
 #endif /* HAL_USE_SDC */
