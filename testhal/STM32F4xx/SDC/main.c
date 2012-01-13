@@ -23,11 +23,66 @@
 #include "hal.h"
 
 
-#define SDC_READONLY_TEST   TRUE
+#define SDC_READONLY_TEST   FALSE
 
-#define SDC_BURST_SIZE      4
-static uint8_t blkbuf1[SDC_BLOCK_SIZE * SDC_BURST_SIZE + 1];
-static uint8_t blkbuf2[SDC_BLOCK_SIZE * SDC_BURST_SIZE + 1];
+#define SDC_BURST_SIZE      8
+static uint8_t outbuf[SDC_BLOCK_SIZE * SDC_BURST_SIZE + 1];
+static uint8_t  inbuf[SDC_BLOCK_SIZE * SDC_BURST_SIZE + 1];
+
+
+/**
+ * @brief   Clone of UNIX badblocks program.
+ *
+ * @param[in] start       first block to check
+ * @param[in] end         last block to check
+ * @param[in] blockatonce number of blocks to check at once
+ * @param[in] pattern     check pattern
+ *
+ * @return              The operation status.
+ * @retval FALSE        operation succeeded, the requested blocks have been
+ *                      read.
+ * @retval TRUE         operation failed, the state of the buffer is uncertain.
+ */
+bool_t badblocks(uint32_t start, uint32_t end, uint32_t blockatonce, uint8_t pattern){
+  uint32_t position = 0;
+  uint32_t i = 0;
+
+  chDbgCheck(blockatonce <= SDC_BURST_SIZE, "badblocks");
+
+  /* fill control buffer */
+  for (i=0; i < SDC_BLOCK_SIZE * blockatonce; i++)
+    outbuf[i] = pattern;
+
+  /* fill SD card with pattern. */
+  position = start;
+  while (position < end){
+    if (sdcWrite(&SDCD1, position, outbuf, blockatonce))
+      goto ERROR;
+    position += blockatonce;
+  }
+
+  /* read and compare. */
+  position = start;
+  while (position < end){
+    if (sdcRead(&SDCD1, position, inbuf, blockatonce))
+      goto ERROR;
+    if (memcmp(inbuf, outbuf, blockatonce * SDC_BLOCK_SIZE) != 0)
+      goto ERROR;
+    position += blockatonce;
+  }
+  return SDC_SUCCESS;
+
+ERROR:
+  return SDC_FAILED;
+}
+
+void clearbuffers(void){
+  uint32_t i = 0;
+  for (i=0; i < SDC_BLOCK_SIZE * SDC_BURST_SIZE; i++)
+    outbuf[i] = 0x55;
+  for (i=0; i < SDC_BLOCK_SIZE * SDC_BURST_SIZE; i++)
+    inbuf[i] = 0x55;
+}
 
 /*
  * SDIO configuration.
@@ -40,6 +95,10 @@ static const SDCConfig sdccfg = {
  * Application entry point.
  */
 int main(void) {
+  uint32_t i = 0;
+  uint32_t sdcSize = 0;
+  uint32_t csizemult = 0;
+  uint32_t readbllen = 0;
 
   /*
    * System initializations.
@@ -51,53 +110,46 @@ int main(void) {
   halInit();
   chSysInit();
 
-  uint32_t i = 0;
-  for (i=0; i < SDC_BLOCK_SIZE * SDC_BURST_SIZE; i++)
-    blkbuf1[i] = 0x55;
-  for (i=0; i < SDC_BLOCK_SIZE * SDC_BURST_SIZE; i++)
-    blkbuf2[i] = 0x55;
-
-
   /*
    * Initializes the SDIO drivers.
    */
   sdcStart(&SDCD1, &sdccfg);
+  /*http://en.wikipedia.org/wiki/Secure_Digital#Storage_capacity_calculations*/
+  sdcSize = sdcParseCsd(&SDCD1, SDC_CSD_C_SIZE);
+  csizemult = sdcParseCsd(&SDCD1, SDC_CSD_C_SIZE_MULT);
+  readbllen = sdcParseCsd(&SDCD1, SDC_CSD_READ_BL_LEN);
+
   if (!sdcConnect(&SDCD1)) {
 
     /* Single aligned read.*/
 
     /* Single unaligned read.*/
 
-    /* Multiple aligned read.*/
-    if (sdcRead(&SDCD1, 0, blkbuf1, SDC_BURST_SIZE))
+    /* Multiple aligned read from one place.*/
+    clearbuffers();
+    if (sdcRead(&SDCD1, 0, inbuf, SDC_BURST_SIZE))
       chSysHalt();
-
+    for (i=0; i<1000; i++){
+      if (sdcRead(&SDCD1, 0, outbuf, SDC_BURST_SIZE))
+        chSysHalt();
+      if (memcmp(inbuf, outbuf, SDC_BURST_SIZE * SDC_BLOCK_SIZE) != 0)
+        chSysHalt();
+    }
     /* Multiple unaligned read.*/
 
     /* Repeated multiple aligned reads.*/
 
     /* Repeated multiple unaligned reads.*/
 
-    #if !SDC_READONLY_TEST
 
-    for (i=0; i < SDC_BLOCK_SIZE * SDC_BURST_SIZE; i++)
-      blkbuf2[i] = 0x55;
+#if !SDC_READONLY_TEST
+    clearbuffers();
+    if (sdcWrite(&SDCD1, 0x10000, outbuf, SDC_BURST_SIZE))
+      chSysHalt();
 
-    for (i=0; i < 1000; i++){
-      if (sdcWrite(&SDCD1, i, blkbuf2, SDC_BURST_SIZE))
-        chSysHalt();
-    }
-    for (i=0; i < 1000; i++){
-      if (sdcRead(&SDCD1, i, blkbuf1, SDC_BURST_SIZE))
-        chSysHalt();
-      if (memcmp(blkbuf1, blkbuf2, SDC_BURST_SIZE) != 0)
-        chSysHalt();
-    }
-
-    /* Repeated multiple aligned writes.*/
-
-    /* Repeated multiple unaligned writes.*/
-    #endif /* !SDC_READONLY_TEST */
+//      if(badblocks(0x10000, 0x11000, SDC_BURST_SIZE, 0xAA))
+//        chSysHalt();
+#endif /* !SDC_READONLY_TEST */
 
     if (sdcDisconnect(&SDCD1))
       chSysHalt();

@@ -48,6 +48,35 @@
 /*===========================================================================*/
 
 /**
+ * @brief   Get slice with data from uint32_t[4] array.
+ *
+ * @notapi
+ */
+uint32_t _sdc_get_slice(uint32_t *data, int8_t end, int8_t start) {
+  uint32_t word = 0;
+  uint32_t mask = 0;
+
+  chDbgCheck(((start >=0) && (end >=0) && (end >= start)), "_sdc_get_slice");
+
+  while ((start - word) > 31)
+    word++;
+
+  if (end - word < 31){
+    /* value lays in one word */
+    mask = (1 << (end - start + 1)) - 1;
+    return (data[word] >> (start - 32 * word)) & mask;
+  }
+  else{
+    /* value lays in different words. */
+    uint32_t lsb, msb;
+    lsb = (data[word] >> (start - 32 * word));
+    mask = (1 << (end + 1)) - 1;
+    msb = (data[word+1] & mask) << (32 * word - start);
+    return (msb | lsb);
+  }
+}
+
+/**
  * @brief   Wait for the card to complete pending operations.
  *
  * @param[in] sdcp      pointer to the @p SDCDriver object
@@ -390,6 +419,76 @@ bool_t sdcWrite(SDCDriver *sdcp, uint32_t startblk,
   status = sdc_lld_write(sdcp, startblk, buf, n);
   sdcp->state = SDC_ACTIVE;
   return status;
+}
+
+/**
+ * @brief   Get specified field from CSD data.
+ *
+ * @api
+ */
+uint32_t sdcParseCsd(SDCDriver *sdcp, sdccsdfields_t field) {
+
+  switch (field){
+  case SDC_CSD_CRC:
+    return 0;
+  case SDC_CSD_FILE_FORMAT:
+    return 0;
+  case SDC_CSD_TMP_WRITE_PROTECT:
+    return 0;
+  case SDC_CSD_PERM_WRITE_PROTECT:
+    return 0;
+  case SDC_CSD_COPY:
+    return 0;
+  case SDC_CSD_FILE_FORMAT_GRP:
+    return 0;
+  case SDC_CSD_WRITE_BL_PARTIAL:
+    return 0;
+  case SDC_CSD_WRITE_BL_LEN:
+    return 0;
+  case SDC_CSD_R2W_FACTOR:
+    return 0;
+  case SDC_CSD_WP_GRP_ENABLE:
+    return 0;
+  case SDC_CSD_WP_GRP_SIZE:
+    return 0;
+  case SDC_CSD_ERASE_SECTOR_SIZE:
+    return 0;
+  case SDC_CSD_ERASE_BLK_EN:
+    return 0;
+  case SDC_CSD_C_SIZE_MULT:
+    return _sdc_get_slice(sdcp->csd, 49, 47);
+  case SDC_CSD_VDD_W_CURR_MAX:
+    return 0;
+  case SDC_CSD_VDD_W_CURR_MIN:
+    return 0;
+  case SDC_CSD_VDD_R_CURR_MAX:
+    return 0;
+  case SDC_CSD_VDD_R_CURR_MIX:
+    return 0;
+  case SDC_CSD_C_SIZE:
+    return _sdc_get_slice(sdcp->csd, 73, 62);
+  case SDC_CSD_DSR_IMP:
+    return 0;
+  case SDC_CSD_READ_BLK_MISALIGN:
+    return 0;
+  case SDC_CSD_WRITE_BLK_MISALIGN:
+    return 0;
+  case SDC_CSD_READ_BL_PARTIAL:
+    return 0;
+  case SDC_CSD_READ_BL_LEN:
+    return _sdc_get_slice(sdcp->csd, 83, 80);
+  case SDC_CSD_CCC:
+    return 0;
+  case SDC_CSD_TRANS_SPEED:
+    return 0;
+  case SDC_CSD_NSAC:
+    return 0;
+  case SDC_CSD_TAAC:
+    return 0;
+  case SDC_CSD_STRUCTURE:
+    return 0;
+  }
+  return 0;
 }
 
 #endif /* HAL_USE_SDC */

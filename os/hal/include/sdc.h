@@ -152,6 +152,41 @@ typedef enum {
   SDC_WRITING = 7,                  /**< Write operation in progress.       */
 } sdcstate_t;
 
+/**
+ * @brief   SCD register fields names.
+ */
+typedef enum {
+  SDC_CSD_CRC = 0,
+  SDC_CSD_FILE_FORMAT = 1,
+  SDC_CSD_TMP_WRITE_PROTECT = 2,
+  SDC_CSD_PERM_WRITE_PROTECT = 3,
+  SDC_CSD_COPY = 4,
+  SDC_CSD_FILE_FORMAT_GRP = 5,
+  SDC_CSD_WRITE_BL_PARTIAL = 6,
+  SDC_CSD_WRITE_BL_LEN = 7,
+  SDC_CSD_R2W_FACTOR = 8,
+  SDC_CSD_WP_GRP_ENABLE = 9,
+  SDC_CSD_WP_GRP_SIZE = 10,
+  SDC_CSD_ERASE_SECTOR_SIZE = 11,
+  SDC_CSD_ERASE_BLK_EN = 12,
+  SDC_CSD_C_SIZE_MULT = 13,
+  SDC_CSD_VDD_W_CURR_MAX = 14,
+  SDC_CSD_VDD_W_CURR_MIN = 15,
+  SDC_CSD_VDD_R_CURR_MAX = 16,
+  SDC_CSD_VDD_R_CURR_MIX = 17,
+  SDC_CSD_C_SIZE = 18,
+  SDC_CSD_DSR_IMP = 19,
+  SDC_CSD_READ_BLK_MISALIGN = 20,
+  SDC_CSD_WRITE_BLK_MISALIGN = 21,
+  SDC_CSD_READ_BL_PARTIAL = 22,
+  SDC_CSD_READ_BL_LEN = 23,
+  SDC_CSD_CCC = 24,
+  SDC_CSD_TRANS_SPEED = 25,
+  SDC_CSD_NSAC = 26,
+  SDC_CSD_TAAC = 27,
+  SDC_CSD_STRUCTURE = 28,
+} sdccsdfields_t;
+
 #include "sdc_lld.h"
 
 /*===========================================================================*/
@@ -243,6 +278,7 @@ extern "C" {
   void sdcStart(SDCDriver *sdcp, const SDCConfig *config);
   void sdcStop(SDCDriver *sdcp);
   bool_t sdcConnect(SDCDriver *sdcp);
+  uint32_t sdcParseCsd(SDCDriver *sdcp, sdccsdfields_t field);
   bool_t sdcDisconnect(SDCDriver *sdcp);
   bool_t sdcRead(SDCDriver *sdcp, uint32_t startblk,
                  uint8_t *buffer, uint32_t n);

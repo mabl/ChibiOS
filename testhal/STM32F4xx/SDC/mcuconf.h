@@ -243,8 +243,8 @@
 /*
  * SDC driver system settings.
  */
-#define STM32_SDC_DATATIMEOUT               0x000FFFFF
+#define STM32_SDC_DATATIMEOUT               0x00FFFFFF
 #define STM32_SDC_SDIO_DMA_STREAM           STM32_DMA_STREAM_ID(2, 3)
-#define STM32_SDC_SDIO_DMA_PRIORITY         0
+#define STM32_SDC_SDIO_DMA_PRIORITY         3
 #define STM32_SDC_SDIO_IRQ_PRIORITY         9
 #define STM32_SDC_UNALIGNED_SUPPORT         TRUE
