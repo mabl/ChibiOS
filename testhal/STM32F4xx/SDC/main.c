@@ -23,7 +23,7 @@
 #include "hal.h"
 
 
-#define SDC_READONLY_TEST   FALSE
+#define SDC_DATA_DESTRUCTIVE_TEST   FALSE
 
 #define SDC_BURST_SIZE      8
 static uint8_t outbuf[SDC_BLOCK_SIZE * SDC_BURST_SIZE + 1];
@@ -142,7 +142,7 @@ int main(void) {
     /* Repeated multiple unaligned reads.*/
 
 
-#if !SDC_READONLY_TEST
+#if SDC_DATA_DESTRUCTIVE_TEST
     clearbuffers();
     if (sdcWrite(&SDCD1, 0x10000, outbuf, SDC_BURST_SIZE))
       chSysHalt();

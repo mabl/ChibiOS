@@ -26,18 +26,29 @@
 
 #define BUFFER_SIZE   256 /* bytes*/
 
-static uint8_t rxbuf[BUFFER_SIZE];
-static uint8_t referencebuf[BUFFER_SIZE];
-static uint8_t txbuf[BUFFER_SIZE];
+static uint8_t rxbuf1[BUFFER_SIZE];
+static uint8_t referencebuf1[BUFFER_SIZE];
+static uint8_t txbuf1[BUFFER_SIZE];
+static BinarySemaphore uart1_tx_sem;
+static BinarySemaphore uart1_rx_sem;
+
+static uint8_t rxbuf2[BUFFER_SIZE];
+static uint8_t referencebuf2[BUFFER_SIZE];
+static uint8_t txbuf2[BUFFER_SIZE];
+static BinarySemaphore uart2_tx_sem;
+static BinarySemaphore uart2_rx_sem;
+
 
 /*
- * This callback is invoked when a transmission buffer has been completely
- * read by the driver.
+ * This callback is invoked when a transmission has physically completed.
  */
 static void txend1(UARTDriver *uartp) {
 
   (void)uartp;
-
+  chSysLockFromIsr();
+  dmaStreamClearInterrupt(uartp->dmatx);
+  chBSemSignalI(&uart1_tx_sem);
+  chSysUnlockFromIsr();
 }
 
 /*
@@ -46,14 +57,29 @@ static void txend1(UARTDriver *uartp) {
 static void txend2(UARTDriver *uartp) {
 
   (void)uartp;
-
+  chSysLockFromIsr();
+  dmaStreamClearInterrupt(uartp->dmatx);
+  chBSemSignalI(&uart2_tx_sem);
+  chSysUnlockFromIsr();
 }
 
 /*
  * This callback is invoked on a receive error, the errors mask is passed
  * as parameter.
  */
-static void rxerr(UARTDriver *uartp, uartflags_t e) {
+static void rxerr1(UARTDriver *uartp, uartflags_t e) {
+
+  (void)uartp;
+  (void)e;
+
+  chSysHalt();
+}
+
+/*
+ * This callback is invoked on a receive error, the errors mask is passed
+ * as parameter.
+ */
+static void rxerr2(UARTDriver *uartp, uartflags_t e) {
 
   (void)uartp;
   (void)e;
@@ -64,72 +90,167 @@ static void rxerr(UARTDriver *uartp, uartflags_t e) {
 /*
  * This callback is invoked when a receive buffer has been completely written.
  */
-static void rxend(UARTDriver *uartp) {
+static void rxend1(UARTDriver *uartp) {
 
   (void)uartp;
+  chSysLockFromIsr();
+  dmaStreamClearInterrupt(uartp->dmarx);
+  chBSemSignalI(&uart1_rx_sem);
+  chSysUnlockFromIsr();
+}
+
+/*
+ * This callback is invoked when a receive buffer has been completely written.
+ */
+static void rxend2(UARTDriver *uartp) {
+
+  (void)uartp;
+  chSysLockFromIsr();
+  dmaStreamClearInterrupt(uartp->dmarx);
+  chBSemSignalI(&uart2_rx_sem);
+  chSysUnlockFromIsr();
 }
 
 /*
  * UART driver configuration structure.
  */
 static UARTConfig uart_cfg_1 = {
-  txend1,
-  txend2,
-  rxend,
   NULL,
-  rxerr,
+  txend1,
+  rxend1,
+  NULL,
+  rxerr1,
   115200,
   0,
-  USART_CR2_LINEN,
+  0,
   0
 };
 
+/*
+ * UART driver configuration structure.
+ */
+static UARTConfig uart_cfg_2 = {
+  NULL,
+  txend2,
+  rxend2,
+  NULL,
+  rxerr2,
+  115200,
+  0,
+  0,
+  0
+};
 
-
-
-static WORKING_AREA(StormUartThreadWA, 1024);
-static msg_t storm_uart1(void *arg) {
-  chRegSetThreadName("uart1");
+static WORKING_AREA(StormUartRx1ThreadWA, 1024);
+static msg_t storm_rx_uart1(void *arg) {
+  chRegSetThreadName("uart2_rx");
   (void)arg;
-
-  if (!sdcConnect(&SDCD1)) {
-    clearbuffers();
-    if (sdcRead(&SDCD1, 0, inbuf, SDC_BURST_SIZE))
-      chSysHalt();
 
     /* infinite read and compare with previously read data */
     while (TRUE){
-      if (sdcRead(&SDCD1, 0, outbuf, SDC_BURST_SIZE))
-        chSysHalt();
-      if (memcmp(inbuf, outbuf, SDC_BURST_SIZE * SDC_BLOCK_SIZE) != 0)
-        chSysHalt();
+      chBSemWait(&uart1_rx_sem);
+      chSysLock();
+      uartStartReceiveI(&UARTD2, BUFFER_SIZE, rxbuf2);
+      chSysUnlock();
     }
-  }
+  return 0;
+}
+
+static WORKING_AREA(StormUartRx2ThreadWA, 1024);
+static msg_t storm_rx_uart2(void *arg) {
+  chRegSetThreadName("uart2_rx");
+  (void)arg;
+
+    /* infinite read and compare with previously read data */
+    while (TRUE){
+      chBSemWait(&uart2_rx_sem);
+      chSysLock();
+      uartStartReceiveI(&UARTD2, BUFFER_SIZE, rxbuf2);
+      chSysUnlock();
+    }
   return 0;
 }
 
 
+static WORKING_AREA(StormUart1ThreadWA, 256);
+static msg_t storm_uart1(void *arg) {
+  chRegSetThreadName("uart1");
+  (void)arg;
+  msg_t status = RDY_OK;
+
+    /* infinite read and compare with previously read data */
+    while (TRUE){
+      status = chBSemWaitTimeout(&uart1_tx_sem, MS2ST(200));
+      if (status != RDY_OK)
+        chSysHalt();
+      uartStartSend(&UARTD1, BUFFER_SIZE, txbuf1);
+    }
+  return 0;
+}
+
+static WORKING_AREA(StormUart2ThreadWA, 256);
+static msg_t storm_uart2(void *arg) {
+  chRegSetThreadName("uart1");
+  (void)arg;
+  msg_t status = RDY_OK;
+
+    /* infinite read and compare with previously read data */
+    while (TRUE){
+      status = chBSemWaitTimeout(&uart2_tx_sem, MS2ST(200));
+      if (status != RDY_OK)
+        chSysHalt();
+      uartStartSend(&UARTD2, BUFFER_SIZE, txbuf2);
+    }
+  return 0;
+}
+
 void storm_uart_init(void){
   uint32_t i = 0;
-  uint32_t n = 0;
 
-  uartStart(&UARTD2, &uart_cfg_1);
+  chBSemInit(&uart1_tx_sem,  TRUE);
+  chBSemInit(&uart2_tx_sem,  TRUE);
 
-  while (i < EEPROM_BURST_SIZE){
-    txbuf[0] = 0;
-    txbuf[1] = i;
-    for (n=0; n<EEPROM_BLOCK_SIZE; n++)
-      txbuf[n+2] = i;
-    i2cMasterTransmit(&I2CD2, addr, txbuf, (EEPROM_BLOCK_SIZE + 2), rxbuf, 0);
-    chThdSleepMilliseconds(5);
+  chBSemInit(&uart1_rx_sem,  TRUE);
+  chBSemInit(&uart2_rx_sem,  TRUE);
+
+  uartStart(&UARTD1, &uart_cfg_1);
+  uartStart(&UARTD2, &uart_cfg_2);
+
+  /* fill tx buffers with pattern */
+  while (i < BUFFER_SIZE){
+    txbuf1[i] = i;
+    txbuf2[i] = i;
+    referencebuf1[i] = 0x55;
+    referencebuf2[i] = 0x55;
     i++;
   }
 
-  chThdCreateStatic(StormUartThreadWA,
-          sizeof(StormUartThreadWA),
-          NORMALPRIO,
-          storm_uart,
-          NULL);
+  chThdCreateStatic(StormUart1ThreadWA,
+                    sizeof(StormUart1ThreadWA),
+                    NORMALPRIO,
+                    storm_uart1,
+                    NULL);
+
+  chThdCreateStatic(StormUart2ThreadWA,
+                    sizeof(StormUart2ThreadWA),
+                    NORMALPRIO,
+                    storm_uart2,
+                    NULL);
+
+  chThdCreateStatic(StormUartRx1ThreadWA,
+                    sizeof(StormUartRx1ThreadWA),
+                    NORMALPRIO,
+                    storm_rx_uart1,
+                    NULL);
+
+  chThdCreateStatic(StormUartRx2ThreadWA,
+                    sizeof(StormUartRx2ThreadWA),
+                    NORMALPRIO,
+                    storm_rx_uart2,
+                    NULL);
+
+  uartStartReceive(&UARTD1, BUFFER_SIZE, rxbuf1);
+  uartStartReceive(&UARTD2, BUFFER_SIZE, rxbuf2);
 }
 
 

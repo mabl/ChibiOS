@@ -23,6 +23,8 @@
 #include "hal.h"
 #include "storm_sdc.h"
 #include "storm_i2c.h"
+#include "storm_uart.h"
+#include "storm_adc.h"
 
 /*
  * Application entry point.
@@ -31,9 +33,11 @@ int main(void) {
   halInit();
   chSysInit();
 
-//  storm_sdc_init();
-//  storm_i2c_init();
+  storm_sdc_init();
+  storm_i2c_init();
   storm_uart_init();
+  chThdSleepMilliseconds(10);
+  storm_adc_init();
 
   /*
    * Normal main() thread activity.

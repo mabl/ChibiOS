@@ -283,7 +283,7 @@ error:
  *
  * @notapi
  */
-static void sdio_serve_event_interrupt(SDCDriver *sdcp) {
+static void sdc_serve_event_interrupt(SDCDriver *sdcp) {
 
   chSysLockFromIsr();
   if (sdcp->thread != NULL) {
@@ -302,9 +302,29 @@ static void sdio_serve_event_interrupt(SDCDriver *sdcp) {
  *
  * @notapi
  */
-static void sdio_serve_error_interrupt(SDCDriver *sdcp) {
+static void sdc_serve_error_interrupt(SDCDriver *sdcp) {
 
   (void)sdcp;
+}
+
+/**
+ * @brief   SDC DMA common service routine.
+ *
+ * @param[in] sdcp      pointer to the @p UARTDriver object
+ * @param[in] flags     pre-shifted content of the ISR register
+ */
+static void sdc_lld_serve_dma_irq(UARTDriver *sdcp, uint32_t flags) {
+
+  (void) sdcp;
+
+  /* DMA errors handling.*/
+#if defined(STM32_SDC_DMA_ERROR_HOOK)
+  if ((flags & (STM32_DMA_ISR_TEIF | STM32_DMA_ISR_DMEIF)) != 0) {
+    STM32_SDC_DMA_ERROR_HOOK();
+  }
+#else
+  (void)flags;
+#endif
 }
 
 /*===========================================================================*/
@@ -320,7 +340,7 @@ CH_IRQ_HANDLER(SDIO_IRQHandler) {
 
   CH_IRQ_PROLOGUE();
 
-  sdio_serve_event_interrupt(&SDCD1);
+  sdc_serve_event_interrupt(&SDCD1);
 
   CH_IRQ_EPILOGUE();
 }
@@ -359,20 +379,21 @@ void sdc_lld_start(SDCDriver *sdcp) {
                   STM32_DMA_CR_PSIZE_WORD | STM32_DMA_CR_MSIZE_WORD |
                   STM32_DMA_CR_MINC;
   #if (defined(STM32F4XX) || defined(STM32F2XX))
-    sdcp->dmamode |= STM32_DMA_CR_PFCTRL | STM32_DMA_CR_PBURST_INCR4 | STM32_DMA_CR_MBURST_INCR4;
-//    sdcp->dmamode |= STM32_DMA_CR_PFCTRL;
+//    sdcp->dmamode |= STM32_DMA_CR_PFCTRL | STM32_DMA_CR_PBURST_INCR4 | STM32_DMA_CR_MBURST_INCR4;
+    sdcp->dmamode |= STM32_DMA_CR_PFCTRL;
   #endif
 
   if (sdcp->state == SDC_STOP) {
     /* Note, the DMA must be enabled before the IRQs.*/
     bool_t b;
     b = dmaStreamAllocate(sdcp->dma, STM32_SDC_SDIO_IRQ_PRIORITY,
-                          NULL, NULL);
+                         (stm32_dmaisr_t)sdc_lld_serve_dma_irq,
+                         (void *)sdcp);
     chDbgAssert(!b, "i2c_lld_start(), #3", "stream already allocated");
     dmaStreamSetPeripheral(sdcp->dma, &SDIO->FIFO);
-    #if (defined(STM32F4XX) || defined(STM32F2XX))
-      dmaStreamSetFIFO(sdcp->dma, STM32_DMA_FCR_DMDIS | STM32_DMA_FCR_FTH_FULL);
-    #endif
+//    #if (defined(STM32F4XX) || defined(STM32F2XX))
+//      dmaStreamSetFIFO(sdcp->dma, STM32_DMA_FCR_DMDIS | STM32_DMA_FCR_FTH_FULL);
+//    #endif
     nvicEnableVector(SDIO_IRQn,
                      CORTEX_PRIORITY_MASK(STM32_SDC_SDIO_IRQ_PRIORITY));
     rccEnableSDIO(FALSE);

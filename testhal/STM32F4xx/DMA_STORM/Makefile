@@ -86,7 +86,7 @@ CSRC = $(PORTSRC) \
        storm_sdc.c \
        storm_i2c.c \
        storm_uart.c \
-       #storm_adc.c 
+       storm_adc.c 
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
