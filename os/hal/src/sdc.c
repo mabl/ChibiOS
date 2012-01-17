@@ -58,20 +58,27 @@ uint32_t sdc_get_slice(uint32_t *data, int8_t end, int8_t start) {
 
   chDbgCheck(((start >=0) && (end >=0) && (end >= start)), "sdc_get_slice");
 
-  while ((start - word) > 31)
+  while ((start - 32 * word) > 31){
     word++;
+    data++;
+  }
 
-  if (end - word < 31){
-    /* value lays in one word */
-    mask = (1 << (end - start + 1)) - 1;
-    return (data[word] >> (start - 32 * word)) & mask;
+  end   -= 32 * word;
+  start -= 32 * word;
+
+  if (end < 31){
+    /* Value lays in one word.*/
+    mask = (1 << (end + 1)) - 1;
+    return (*data >> start) & mask;
   }
   else{
-    /* value lays in separate words. */
+    /* Value spread on separate words.*/
     uint32_t lsb, msb;
-    lsb = (data[word] >> (start - 32 * word));
-    mask = (1 << (end + 1)) - 1;
-    msb = (data[word+1] & mask) << (32 * word - start);
+    lsb = *data >> start;
+    data++;
+    mask = (1 << (end - 32 + 1)) - 1;
+    msb = *data & mask;
+    msb = msb << start;
     return (msb | lsb);
   }
 }
@@ -142,6 +149,7 @@ void sdcObjectInit(SDCDriver *sdcp) {
 
   sdcp->state  = SDC_STOP;
   sdcp->config = NULL;
+  sdcp->capacity = 0;
 }
 
 /**
@@ -316,8 +324,27 @@ bool_t sdcConnect(SDCDriver *sdcp) {
     break;
   }
 
+  /* Determine capacity and related parameters.*/
+  switch (sdcp->cardmode & SDC_MODE_CARDTYPE_MASK) {
+  uint32_t c_size = 0;
+  case SDC_MODE_CARDTYPE_SDV11:
+    sdcp->capacity = (1 + sdc_get_slice(sdcp->csd, SDC_V11_CSD_C_SIZE_SLICE)) <<
+                (2 + sdc_get_slice(sdcp->csd, SDC_V11_CSD_C_SIZE_MULT_SLICE)) <<
+                (sdc_get_slice(sdcp->csd, SDC_V11_CSD_READ_BL_LEN_SLICE));
+    break;
+  case SDC_MODE_CARDTYPE_SDV20:
+    c_size = sdc_get_slice(sdcp->csd, SDC_V20_CSD_C_SIZE_SLICE);
+    sdcp->capacity = 1024 * (1 + c_size);
+    break;
+  }
+  if (sdcp->capacity == 0)
+    goto failed;
+
+  /* Initialization complete.*/
   sdcp->state = SDC_ACTIVE;
   return SDC_SUCCESS;
+
+  /* Initialization failed.*/
 failed:
   sdc_lld_stop_clk(sdcp);
   sdcp->state = SDC_READY;
@@ -380,7 +407,8 @@ bool_t sdcRead(SDCDriver *sdcp, uint32_t startblk,
                uint8_t *buf, uint32_t n) {
   bool_t status;
 
-  chDbgCheck((sdcp != NULL) && (buf != NULL) && (n > 0), "sdcRead");
+  chDbgCheck((sdcp != NULL) && (buf != NULL) && (n > 0) &&
+             ((startblk + n) <= sdcp->capacity), "sdcRead");
 
   chSysLock();
   chDbgAssert(sdcp->state == SDC_ACTIVE, "sdcRead(), #1", "invalid state");
@@ -412,7 +440,8 @@ bool_t sdcWrite(SDCDriver *sdcp, uint32_t startblk,
                 const uint8_t *buf, uint32_t n) {
   bool_t status;
 
-  chDbgCheck((sdcp != NULL) && (buf != NULL) && (n > 0), "sdcWrite");
+  chDbgCheck((sdcp != NULL) && (buf != NULL) && (n > 0) &&
+             ((startblk + n) <= sdcp->capacity), "sdcWrite");
 
   chSysLock();
   chDbgAssert(sdcp->state == SDC_ACTIVE, "sdcWrite(), #1", "invalid state");

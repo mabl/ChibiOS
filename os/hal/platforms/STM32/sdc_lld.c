@@ -28,19 +28,12 @@
 
 /*
  TODO: Write normal interrupt handlers.
- TODO: Evaluate ability to replace memcpy() by its DMA buddy.
  TODO: Evaluate CRC error handling - some retry counts.
  TODO: Evaluate special F4x-F2x DMA features (works at first look).
  TODO: Try preerase blocks before writing (ACMD23).
- TODO: In unaligned mode only first transaction do unaligned, later transaction do aligned.
- TODO: Check if (block_address + data_size) align in card boundary.
- TODO: Evaluate need of DMA interrupts handler.
+ TODO: Evaluate needs of DMA interrupts handler.
+ TODO: Errors handling.
  */
-
-/*
-FIXME:  Seting DMA transaction size when transaction controlled by SDIO is
-        pointless on F4x (may be other) platform.
-*/
 
 #include <string.h>
 
@@ -52,6 +45,8 @@ FIXME:  Seting DMA transaction size when transaction controlled by SDIO is
 /*===========================================================================*/
 /* Driver local definitions.                                                 */
 /*===========================================================================*/
+
+#define SDC_SDIO_DMA_USE_FIFO   FALSE
 
 #define SDC_SDIO_DMA_CHANNEL                                                  \
   STM32_DMA_GETCHANNEL(STM32_SDC_SDIO_DMA_STREAM,                             \
@@ -67,16 +62,6 @@ SDCDriver SDCD1;
 /*===========================================================================*/
 /* Driver local variables.                                                   */
 /*===========================================================================*/
-
-#if STM32_SDC_UNALIGNED_SUPPORT
-/**
- * @brief   Buffer for temporary storage during unaligned transfers.
- */
-static union {
-  uint32_t  alignment;
-  uint8_t   buf[SDC_BLOCK_SIZE];
-} u;
-#endif
 
 /*===========================================================================*/
 /* Driver local functions.                                                   */
@@ -98,7 +83,7 @@ static union {
  *
  * @notapi
  */
-static bool_t sdc_lld_read_multiple(SDCDriver *sdcp, uint32_t startblk,
+static bool_t sdc_lld_read_align(SDCDriver *sdcp, uint32_t startblk,
                                     uint8_t *buf, uint32_t n) {
   uint32_t resp[1];
 
@@ -196,7 +181,7 @@ error:
  *
  * @notapi
  */
-static bool_t sdc_lld_write_multiple(SDCDriver *sdcp, uint32_t startblk,
+static bool_t sdc_lld_write_align(SDCDriver *sdcp, uint32_t startblk,
                               const uint8_t *buf, uint32_t n) {
   uint32_t resp[1];
 
@@ -305,6 +290,7 @@ static void sdc_serve_event_interrupt(SDCDriver *sdcp) {
 static void sdc_serve_error_interrupt(SDCDriver *sdcp) {
 
   (void)sdcp;
+  chSysHalt();
 }
 
 /**
@@ -313,7 +299,7 @@ static void sdc_serve_error_interrupt(SDCDriver *sdcp) {
  * @param[in] sdcp      pointer to the @p UARTDriver object
  * @param[in] flags     pre-shifted content of the ISR register
  */
-static void sdc_lld_serve_dma_irq(SDCDriver *sdcp, uint32_t flags) {
+static void sdc_lld_serve_dma_interrupt(SDCDriver *sdcp, uint32_t flags) {
 
   (void) sdcp;
 
@@ -381,8 +367,10 @@ void sdc_lld_start(SDCDriver *sdcp) {
                   STM32_DMA_CR_PL(STM32_SDC_SDIO_DMA_PRIORITY) |
                   STM32_DMA_CR_PSIZE_WORD | STM32_DMA_CR_MSIZE_WORD |
                   STM32_DMA_CR_MINC;
-  #if (defined(STM32F4XX) || defined(STM32F2XX))
-//    sdcp->dmamode |= STM32_DMA_CR_PFCTRL | STM32_DMA_CR_PBURST_INCR4 | STM32_DMA_CR_MBURST_INCR4;
+  #if (SDC_SDIO_DMA_USE_FIFO && (defined(STM32F4XX) || defined(STM32F2XX)))
+    sdcp->dmamode |= STM32_DMA_CR_PFCTRL |                                    \
+                     STM32_DMA_CR_PBURST_INCR4 | STM32_DMA_CR_MBURST_INCR4;
+  #else
     sdcp->dmamode |= STM32_DMA_CR_PFCTRL;
   #endif
 
@@ -390,13 +378,13 @@ void sdc_lld_start(SDCDriver *sdcp) {
     /* Note, the DMA must be enabled before the IRQs.*/
     bool_t b;
     b = dmaStreamAllocate(sdcp->dma, STM32_SDC_SDIO_IRQ_PRIORITY,
-                         (stm32_dmaisr_t)sdc_lld_serve_dma_irq,
+                         (stm32_dmaisr_t)sdc_lld_serve_dma_interrupt,
                          (void *)sdcp);
     chDbgAssert(!b, "i2c_lld_start(), #3", "stream already allocated");
     dmaStreamSetPeripheral(sdcp->dma, &SDIO->FIFO);
-//    #if (defined(STM32F4XX) || defined(STM32F2XX))
-//      dmaStreamSetFIFO(sdcp->dma, STM32_DMA_FCR_DMDIS | STM32_DMA_FCR_FTH_FULL);
-//    #endif
+    #if (SDC_SDIO_DMA_USE_FIFO && (defined(STM32F4XX) || defined(STM32F2XX)))
+      dmaStreamSetFIFO(sdcp->dma, STM32_DMA_FCR_DMDIS | STM32_DMA_FCR_FTH_FULL);
+    #endif
     nvicEnableVector(SDIO_IRQn,
                      CORTEX_PRIORITY_MASK(STM32_SDC_SDIO_IRQ_PRIORITY));
     rccEnableSDIO(FALSE);
@@ -406,7 +394,7 @@ void sdc_lld_start(SDCDriver *sdcp) {
   SDIO->POWER  = 0;
   SDIO->CLKCR  = 0;
   SDIO->DCTRL  = 0;
-  SDIO->DTIMER = STM32_SDC_DATATIMEOUT;
+  SDIO->DTIMER = 0;
 }
 
 /**
@@ -613,10 +601,10 @@ bool_t sdc_lld_send_cmd_long_crc(SDCDriver *sdcp, uint8_t cmd, uint32_t arg,
   SDIO->ICR = SDIO_ICR_CMDRENDC | SDIO_ICR_CTIMEOUTC | SDIO_ICR_CCRCFAILC;
   if ((sta & (SDIO_STA_CTIMEOUT | SDIO_STA_CCRCFAIL)) != 0)
     return SDC_FAILED;
-  *resp++ = SDIO->RESP1;
-  *resp++ = SDIO->RESP2;
+  *resp++ = SDIO->RESP4;
   *resp++ = SDIO->RESP3;
-  *resp   = SDIO->RESP4;
+  *resp++ = SDIO->RESP2;
+  *resp   = SDIO->RESP1;
   return SDC_SUCCESS;
 }
 
@@ -638,22 +626,11 @@ bool_t sdc_lld_send_cmd_long_crc(SDCDriver *sdcp, uint8_t cmd, uint32_t arg,
 bool_t sdc_lld_read(SDCDriver *sdcp, uint32_t startblk,
                     uint8_t *buf, uint32_t n) {
 
-  chDbgCheck((n < (0x1000000 / SDC_BLOCK_SIZE)), "sdc_lld_read");
+  chDbgCheck((n < (0x1000000 / SDC_BLOCK_SIZE)), "max transaction size");
 
-#if STM32_SDC_UNALIGNED_SUPPORT
-  if (((unsigned)buf & 3) != 0) {
-    uint32_t i;
-    for (i = 0; i < n; i++) {
-      if (sdc_lld_read_multiple(sdcp, startblk, u.buf, 1))
-        return SDC_FAILED;
-      memcpy(buf, u.buf, SDC_BLOCK_SIZE);
-      buf += SDC_BLOCK_SIZE;
-      startblk++;
-    }
-    return SDC_SUCCESS;
-  }
-#endif
-  return sdc_lld_read_multiple(sdcp, startblk, buf, n);
+  SDIO->DTIMER = STM32_SDC_READ_TIMEOUT;
+
+  return sdc_lld_read_align(sdcp, startblk, buf, n);
 }
 
 /**
@@ -674,22 +651,11 @@ bool_t sdc_lld_read(SDCDriver *sdcp, uint32_t startblk,
 bool_t sdc_lld_write(SDCDriver *sdcp, uint32_t startblk,
                      const uint8_t *buf, uint32_t n) {
 
-  chDbgCheck((n < (0x1000000 / SDC_BLOCK_SIZE)), "sdc_lld_write");
+  chDbgCheck((n < (0x1000000 / SDC_BLOCK_SIZE)), "max transaction size");
 
-  #if STM32_SDC_UNALIGNED_SUPPORT
-  if (((unsigned)buf & 3) != 0) {
-    uint32_t i;
-    for (i = 0; i < n; i++) {
-      memcpy(u.buf, buf, SDC_BLOCK_SIZE);
-      buf += SDC_BLOCK_SIZE;
-      if (sdc_lld_write_multiple(sdcp, startblk, u.buf, 1))
-        return SDC_FAILED;
-      startblk++;
-    }
-    return SDC_SUCCESS;
-  }
-#endif
-  return sdc_lld_write_multiple(sdcp, startblk, buf, n);
+  SDIO->DTIMER = STM32_SDC_WRITE_TIMEOUT;
+
+  return sdc_lld_write_align(sdcp, startblk, buf, n);
 }
 
 #endif /* HAL_USE_SDC */

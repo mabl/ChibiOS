@@ -62,13 +62,6 @@
  * @{
  */
 /**
- * @brief   SDIO data timeout in SDIO clock cycles.
- */
-#if !defined(STM32_SDC_DATATIMEOUT) || defined(__DOXYGEN__)
-#define STM32_SDC_DATATIMEOUT               0x000FFFFF
-#endif
-
-/**
  * @brief   SDIO DMA priority (0..3|lowest..highest).
  */
 #if !defined(STM32_SDC_SDIO_DMA_PRIORITY) || defined(__DOXYGEN__)
@@ -82,12 +75,6 @@
 #define STM32_SDC_SDIO_IRQ_PRIORITY         9
 #endif
 
-/**
- * @brief   SDIO support for unaligned transfers.
- */
-#if !defined(STM32_SDC_UNALIGNED_SUPPORT) || defined(__DOXYGEN__)
-#define STM32_SDC_UNALIGNED_SUPPORT         TRUE
-#endif
 /** @} */
 
 /*===========================================================================*/
@@ -115,6 +102,23 @@
   #define STM32_SDIO_DIV_HS                   0
   #define STM32_SDIO_DIV_LS                   118
 #endif
+
+/**
+ * @brief   SDIO data timeouts in SDIO clock cycles.
+ */
+#if (defined(STM32F4XX) || defined(STM32F2XX))
+  #define STM32_SDC_WRITE_TIMEOUT \
+    (((48000000 / (STM32_SDIO_DIV_HS + 2)) / 1000) * SDC_WRITE_TIMEOUT_MS)
+  #define STM32_SDC_READ_TIMEOUT \
+    (((48000000 / (STM32_SDIO_DIV_HS + 2)) / 1000) * SDC_READ_TIMEOUT_MS)
+#else
+  #define STM32_SDC_WRITE_TIMEOUT  \
+    (((STM32_HCLK /((STM32_SDIO_DIV_HS + 2)) / 1000) * SDC_WRITE_TIMEOUT_MS)
+  #define STM32_SDC_READ_TIMEOUT  \
+    (((STM32_HCLK /((STM32_SDIO_DIV_HS + 2)) / 1000) * SDC_READ_TIMEOUT_MS)
+#endif
+
+
 
 /*===========================================================================*/
 /* Driver data structures and types.                                         */
@@ -175,6 +179,10 @@ struct SDCDriver {
    * @brief Card RCA.
    */
   uint32_t                  rca;
+  /**
+   * @brief Total number of blocks in card.
+   */
+  uint32_t                  capacity;
   /* End of the mandatory fields.*/
   /**
    * @brief Thread waiting for I/O completion IRQ.

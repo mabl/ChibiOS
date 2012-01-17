@@ -96,9 +96,6 @@ static const SDCConfig sdccfg = {
  */
 int main(void) {
   uint32_t i = 0;
-  uint32_t sdcSize = 0;
-  uint32_t csizemult = 0;
-  uint32_t readbllen = 0;
 
   /*
    * System initializations.
@@ -115,15 +112,10 @@ int main(void) {
    */
   sdcStart(&SDCD1, &sdccfg);
   /*http://en.wikipedia.org/wiki/Secure_Digital#Storage_capacity_calculations*/
-  sdcSize   = sdc_csd_c_size(&SDCD1);
-  csizemult = sdc_csd_c_size_mult(&SDCD1);
-  readbllen = sdc_csd_read_bl_len(&SDCD1);
 
   if (!sdcConnect(&SDCD1)) {
 
     /* Single aligned read.*/
-
-    /* Single unaligned read.*/
 
     /* Multiple aligned read from one place.*/
     clearbuffers();
@@ -135,7 +127,6 @@ int main(void) {
       if (memcmp(inbuf, outbuf, SDC_BURST_SIZE * SDC_BLOCK_SIZE) != 0)
         chSysHalt();
     }
-    /* Multiple unaligned read.*/
 
     /* Repeated multiple aligned reads.*/
 
@@ -149,7 +140,7 @@ int main(void) {
 
 //      if(badblocks(0x10000, 0x11000, SDC_BURST_SIZE, 0xAA))
 //        chSysHalt();
-#endif /* !SDC_READONLY_TEST */
+#endif /* !SDC_DATA_DESTRUCTIVE_TEST */
 
     if (sdcDisconnect(&SDCD1))
       chSysHalt();

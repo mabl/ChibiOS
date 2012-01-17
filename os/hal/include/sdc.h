@@ -94,6 +94,12 @@
 #define SDC_SUCCESS                     FALSE
 #define SDC_FAILED                      TRUE
 
+/**
+ * @brief   Timeouts in milliseconds.
+ */
+#define SDC_WRITE_TIMEOUT_MS            250
+#define SDC_READ_TIMEOUT_MS             5
+
 /*===========================================================================*/
 /* Driver pre-compile time settings.                                         */
 /*===========================================================================*/
@@ -231,37 +237,62 @@ typedef enum {
 #define sdcIsWriteProtected(sdcp) (sdc_lld_is_write_protected(sdcp))
 
 /**
- * @brief  Macros returning values from CSD register.
+ * @brief  Slice position of values in CSD register.
  */
-#define sdc_csd_crc(sdcp)                (sdc_get_slice((sdcp)->csd,  0,  0))
-#define sdc_csd_file_format(sdcp)        (sdc_get_slice((sdcp)->csd,  0,  0))
-#define sdc_csd_tmp_write_protect(sdcp)  (sdc_get_slice((sdcp)->csd,  0,  0))
-#define sdc_csd_perm_write_protect(sdcp) (sdc_get_slice((sdcp)->csd,  0,  0))
-#define sdc_csd_copy(sdcp)               (sdc_get_slice((sdcp)->csd,  0,  0))
-#define sdc_csd_file_format_grp(sdcp)    (sdc_get_slice((sdcp)->csd,  0,  0))
-#define sdc_csd_write_bl_partial(sdcp)   (sdc_get_slice((sdcp)->csd,  0,  0))
-#define sdc_csd_write_bl_len(sdcp)       (sdc_get_slice((sdcp)->csd,  0,  0))
-#define sdc_csd_r2w_factor(sdcp)         (sdc_get_slice((sdcp)->csd,  0,  0))
-#define sdc_csd_wp_grp_enable(sdcp)      (sdc_get_slice((sdcp)->csd,  0,  0))
-#define sdc_csd_wp_grp_size(sdcp)        (sdc_get_slice((sdcp)->csd,  0,  0))
-#define sdc_csd_erase_sector_size(sdcp)  (sdc_get_slice((sdcp)->csd,  0,  0))
-#define sdc_csd_erase_blk_en(sdcp)       (sdc_get_slice((sdcp)->csd,  0,  0))
-#define sdc_csd_c_size_mult(sdcp)        (sdc_get_slice((sdcp)->csd, 49, 47))
-#define sdc_csd_vdd_w_curr_max(sdcp)     (sdc_get_slice((sdcp)->csd,  0,  0))
-#define sdc_csd_vdd_w_curr_min(sdcp)     (sdc_get_slice((sdcp)->csd,  0,  0))
-#define sdc_csd_vdd_r_curr_max(sdcp)     (sdc_get_slice((sdcp)->csd,  0,  0))
-#define sdc_csd_vdd_r_curr_mix(sdcp)     (sdc_get_slice((sdcp)->csd,  0,  0))
-#define sdc_csd_c_size(sdcp)             (sdc_get_slice((sdcp)->csd, 73, 62))
-#define sdc_csd_dsr_imp(sdcp)            (sdc_get_slice((sdcp)->csd,  0,  0))
-#define sdc_csd_read_blk_misalign(sdcp)  (sdc_get_slice((sdcp)->csd,  0,  0))
-#define sdc_csd_write_blk_misalign(sdcp) (sdc_get_slice((sdcp)->csd,  0,  0))
-#define sdc_csd_read_bl_partial(sdcp)    (sdc_get_slice((sdcp)->csd,  0,  0))
-#define sdc_csd_read_bl_len(sdcp)        (sdc_get_slice((sdcp)->csd, 83, 80))
-#define sdc_csd_ccc(sdcp)                (sdc_get_slice((sdcp)->csd,  0,  0))
-#define sdc_csd_trans_speed(sdcp)        (sdc_get_slice((sdcp)->csd,  0,  0))
-#define sdc_csd_nsac(sdcp)               (sdc_get_slice((sdcp)->csd,  0,  0))
-#define sdc_csd_taac(sdcp)               (sdc_get_slice((sdcp)->csd,  0,  0))
-#define sdc_csd_structure(sdcp)          (sdc_get_slice((sdcp)->csd,  0,  0))
+#define SDC_V20_CSD_CRC_SLICE                 7,1
+#define SDC_V20_CSD_FILE_FORMAT_SLICE         11,10
+#define SDC_V20_CSD_TMP_WRITE_PROTECT_SLICE   12,12
+#define SDC_V20_CSD_PERM_WRITE_PROTECT_SLICE  13,13
+#define SDC_V20_CSD_COPY_SLICE                14,14
+#define SDC_V20_CSD_FILE_FORMAT_GRP_SLICE     15,15
+#define SDC_V20_CSD_WRITE_BL_PARTIAL_SLICE    21,21
+#define SDC_V20_CSD_WRITE_BL_LEN_SLICE        25,12
+#define SDC_V20_CSD_R2W_FACTOR_SLICE          28,26
+#define SDC_V20_CSD_WP_GRP_ENABLE_SLICE       31,31
+#define SDC_V20_CSD_WP_GRP_SIZE_SLICE         38,32
+#define SDC_V20_CSD_ERASE_SECTOR_SIZE_SLICE   45,39
+#define SDC_V20_CSD_ERASE_BLK_EN_SLICE        46,46
+#define SDC_V20_CSD_C_SIZE_SLICE              69,48
+#define SDC_V20_CSD_DSR_IMP_SLICE             76,76
+#define SDC_V20_CSD_READ_BLK_MISALIGN_SLICE   77,77
+#define SDC_V20_CSD_WRITE_BLK_MISALIGN_SLICE  78,78
+#define SDC_V20_CSD_READ_BL_PARTIAL_SLICE     79,79
+#define SDC_V20_CSD_READ_BL_LEN_SLICE         83,80
+#define SDC_V20_CSD_CCC_SLICE                 95,84
+#define SDC_V20_CSD_TRANS_SPEED_SLICE         103,96
+#define SDC_V20_CSD_NSAC_SLICE                111,104
+#define SDC_V20_CSD_TAAC_SLICE                119,112
+#define SDC_V20_CSD_STRUCTURE_SLICE           127,126
+
+#define SDC_V11_CSD_CRC_SLICE                 SDC_V20_CSD_CRC_SLICE
+#define SDC_V11_CSD_FILE_FORMAT_SLICE         SDC_V20_CSD_FILE_FORMAT_SLICE
+#define SDC_V11_CSD_TMP_WRITE_PROTECT_SLICE   SDC_V20_CSD_TMP_WRITE_PROTECT_SLICE
+#define SDC_V11_CSD_PERM_WRITE_PROTECT_SLICE  SDC_V20_CSD_PERM_WRITE_PROTECT_SLICE
+#define SDC_V11_CSD_COPY_SLICE                SDC_V20_CSD_COPY_SLICE
+#define SDC_V11_CSD_FILE_FORMAT_GRP_SLICE     SDC_V20_CSD_FILE_FORMAT_GRP_SLICE
+#define SDC_V11_CSD_WRITE_BL_PARTIAL_SLICE    SDC_V20_CSD_WRITE_BL_PARTIAL_SLICE
+#define SDC_V11_CSD_WRITE_BL_LEN_SLICE        SDC_V20_CSD_WRITE_BL_LEN_SLICE
+#define SDC_V11_CSD_R2W_FACTOR_SLICE          SDC_V20_CSD_R2W_FACTOR_SLICE
+#define SDC_V11_CSD_WP_GRP_ENABLE_SLICE       SDC_V20_CSD_WP_GRP_ENABLE_SLICE
+#define SDC_V11_CSD_WP_GRP_SIZE_SLICE         SDC_V20_CSD_WP_GRP_SIZE_SLICE
+#define SDC_V11_CSD_ERASE_SECTOR_SIZE_SLICE   SDC_V20_CSD_ERASE_SECTOR_SIZE_SLICE
+#define SDC_V11_CSD_ERASE_BLK_EN_SLICE        SDC_V20_CSD_ERASE_BLK_EN_SLICE
+#define SDC_V11_CSD_C_SIZE_MULT_SLICE         49,47
+#define SDC_V11_CSD_VDD_W_CURR_MAX_SLICE      52,50
+#define SDC_V11_CSD_VDD_W_CURR_MIN_SLICE      55,53
+#define SDC_V11_CSD_VDD_R_CURR_MAX_SLICE      58,56
+#define SDC_V11_CSD_VDD_R_CURR_MIX_SLICE      61,59
+#define SDC_V11_CSD_C_SIZE_SLICE              73,62
+#define SDC_V11_CSD_DSR_IMP_SLICE             SDC_V20_CSD_DSR_IMP_SLICE
+#define SDC_V11_CSD_READ_BLK_MISALIGN_SLICE   SDC_V20_CSD_READ_BLK_MISALIGN_SLICE
+#define SDC_V11_CSD_WRITE_BLK_MISALIGN_SLICE  SDC_V20_CSD_WRITE_BLK_MISALIGN_SLICE
+#define SDC_V11_CSD_READ_BL_PARTIAL_SLICE     SDC_V20_CSD_READ_BL_PARTIAL_SLICE
+#define SDC_V11_CSD_READ_BL_LEN_SLICE         83, 80
+#define SDC_V11_CSD_CCC_SLICE                 SDC_V20_CSD_CCC_SLICE
+#define SDC_V11_CSD_TRANS_SPEED_SLICE         SDC_V11_CSD_TRANS_SPEED_SLICE
+#define SDC_V11_CSD_NSAC_SLICE                SDC_V11_CSD_NSAC_SLICE
+#define SDC_V11_CSD_TAAC_SLICE                SDC_V11_CSD_TAAC_SLICE
+#define SDC_V11_CSD_STRUCTURE_SLICE           SDC_V11_CSD_STRUCTURE_SLICE
 /** @} */
 
 /*===========================================================================*/
