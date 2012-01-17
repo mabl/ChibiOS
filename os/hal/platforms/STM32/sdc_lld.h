@@ -46,6 +46,13 @@
                                   SDIO_ICR_DBCKENDC  | SDIO_ICR_SDIOITC |     \
                                   SDIO_ICR_CEATAENDC)
 
+/**
+ * @brief Mask of error glags in STA register.
+ */
+#define STM32_SDIO_STA_ERROR_MASK (SDIO_STA_CCRCFAIL | SDIO_STA_DCRCFAIL |    \
+                                   SDIO_STA_CTIMEOUT | SDIO_STA_DTIMEOUT |    \
+                                   SDIO_STA_TXUNDERR | SDIO_STA_RXOVERR)
+
 /*===========================================================================*/
 /* Driver pre-compile time settings.                                         */
 /*===========================================================================*/

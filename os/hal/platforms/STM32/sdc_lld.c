@@ -33,8 +33,8 @@
  TODO: Evaluate special F4x-F2x DMA features (works at first look).
  TODO: Try preerase blocks before writing (ACMD23).
  TODO: In unaligned mode only first transaction do unaligned, later transaction do aligned.
- TODO: Check check is (block_address + data_size) align in card boundary.
- TODO: Evaluate are there need DMA interrupts handler.
+ TODO: Check if (block_address + data_size) align in card boundary.
+ TODO: Evaluate need of DMA interrupts handler.
  */
 
 /*
@@ -313,7 +313,7 @@ static void sdc_serve_error_interrupt(SDCDriver *sdcp) {
  * @param[in] sdcp      pointer to the @p UARTDriver object
  * @param[in] flags     pre-shifted content of the ISR register
  */
-static void sdc_lld_serve_dma_irq(UARTDriver *sdcp, uint32_t flags) {
+static void sdc_lld_serve_dma_irq(SDCDriver *sdcp, uint32_t flags) {
 
   (void) sdcp;
 
@@ -340,7 +340,10 @@ CH_IRQ_HANDLER(SDIO_IRQHandler) {
 
   CH_IRQ_PROLOGUE();
 
-  sdc_serve_event_interrupt(&SDCD1);
+  if (SDIO->STA & STM32_SDIO_STA_ERROR_MASK)
+    sdc_serve_error_interrupt(&SDCD1);
+  else
+    sdc_serve_event_interrupt(&SDCD1);
 
   CH_IRQ_EPILOGUE();
 }

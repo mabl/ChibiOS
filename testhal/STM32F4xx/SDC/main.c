@@ -115,9 +115,9 @@ int main(void) {
    */
   sdcStart(&SDCD1, &sdccfg);
   /*http://en.wikipedia.org/wiki/Secure_Digital#Storage_capacity_calculations*/
-  sdcSize = sdcParseCsd(&SDCD1, SDC_CSD_C_SIZE);
-  csizemult = sdcParseCsd(&SDCD1, SDC_CSD_C_SIZE_MULT);
-  readbllen = sdcParseCsd(&SDCD1, SDC_CSD_READ_BL_LEN);
+  sdcSize   = sdc_csd_c_size(&SDCD1);
+  csizemult = sdc_csd_c_size_mult(&SDCD1);
+  readbllen = sdc_csd_read_bl_len(&SDCD1);
 
   if (!sdcConnect(&SDCD1)) {
 
