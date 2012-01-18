@@ -68,7 +68,7 @@ uint32_t sdc_get_slice(uint32_t *data, int8_t end, int8_t start) {
 
   if (end < 31){
     /* Value lays in one word.*/
-    mask = (1 << (end + 1)) - 1;
+    mask = (1 << (end - start + 1)) - 1;
     return (*data >> start) & mask;
   }
   else{
@@ -78,7 +78,7 @@ uint32_t sdc_get_slice(uint32_t *data, int8_t end, int8_t start) {
     data++;
     mask = (1 << (end - 32 + 1)) - 1;
     msb = *data & mask;
-    msb = msb << start;
+    msb = msb << (32 - start);
     return (msb | lsb);
   }
 }
@@ -324,17 +324,20 @@ bool_t sdcConnect(SDCDriver *sdcp) {
     break;
   }
 
-  /* Determine capacity and related parameters.*/
-  switch (sdcp->cardmode & SDC_MODE_CARDTYPE_MASK) {
-  uint32_t c_size = 0;
-  case SDC_MODE_CARDTYPE_SDV11:
-    sdcp->capacity = (1 + sdc_get_slice(sdcp->csd, SDC_V11_CSD_C_SIZE_SLICE)) <<
-                (2 + sdc_get_slice(sdcp->csd, SDC_V11_CSD_C_SIZE_MULT_SLICE)) <<
-                (sdc_get_slice(sdcp->csd, SDC_V11_CSD_READ_BL_LEN_SLICE));
+  /* Determine capacity.*/
+  switch (sdcp->csd[3] >> 30) {
+  uint32_t a, b, c;
+  case 0:
+    /* CSD version 1.0 */
+    a = sdc_get_slice(sdcp->csd, SDC_CSD_10_C_SIZE_SLICE);
+    b = sdc_get_slice(sdcp->csd, SDC_CSD_10_C_SIZE_MULT_SLICE);
+    c = sdc_get_slice(sdcp->csd, SDC_CSD_10_READ_BL_LEN_SLICE);
+    sdcp->capacity = ((a + 1) << (b + 2) << c) / 512;
     break;
-  case SDC_MODE_CARDTYPE_SDV20:
-    c_size = sdc_get_slice(sdcp->csd, SDC_V20_CSD_C_SIZE_SLICE);
-    sdcp->capacity = 1024 * (1 + c_size);
+  case 1:
+    /* CSD version 2.0 */
+    a = sdc_get_slice(sdcp->csd, SDC_CSD_20_C_SIZE_SLICE);
+    sdcp->capacity = 1024 * (a + 1);
     break;
   }
   if (sdcp->capacity == 0)

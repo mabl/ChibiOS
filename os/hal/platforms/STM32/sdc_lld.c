@@ -27,6 +27,7 @@
  */
 
 /*
+ TODO: Test program to determine erase block size.
  TODO: Write normal interrupt handlers.
  TODO: Evaluate CRC error handling - some retry counts.
  TODO: Evaluate special F4x-F2x DMA features (works at first look).
@@ -601,6 +602,7 @@ bool_t sdc_lld_send_cmd_long_crc(SDCDriver *sdcp, uint8_t cmd, uint32_t arg,
   SDIO->ICR = SDIO_ICR_CMDRENDC | SDIO_ICR_CTIMEOUTC | SDIO_ICR_CCRCFAILC;
   if ((sta & (SDIO_STA_CTIMEOUT | SDIO_STA_CCRCFAIL)) != 0)
     return SDC_FAILED;
+  /* save bytes in reverse order because MSB in response comes first */
   *resp++ = SDIO->RESP4;
   *resp++ = SDIO->RESP3;
   *resp++ = SDIO->RESP2;
