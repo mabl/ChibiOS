@@ -145,7 +145,9 @@ int main(void) {
     if (sdcDisconnect(&SDCD1))
       chSysHalt();
   }
-
+  else{
+    chSysHalt();
+  }
   /*
    * Normal main() thread activity.
    */
