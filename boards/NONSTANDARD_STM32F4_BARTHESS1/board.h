@@ -181,7 +181,7 @@
 /* default 0x00000000 */
 #define VAL_GPIOA_OTYPER        0x00000000
 /* default 0x00000000 */
-#define VAL_GPIOA_OSPEEDR       0xAAAAAAAA
+#define VAL_GPIOA_OSPEEDR       0x00000000 /* 0xAAAAAAAA */
 /* 0x64000000 */
 #define VAL_GPIOA_PUPDR        (PIN_PUDR_FLOATING(GPIOA_USART2_CTS) |         \
                                 PIN_PUDR_FLOATING(GPIOA_USART2_RTS) |         \
@@ -255,7 +255,7 @@
                                 PIN_OTYPE_OPENDRAIN(GPIOB_I2C2_SCL) |         \
                                 PIN_OTYPE_OPENDRAIN(GPIOB_I2C2_SDA))
 /* 0x000000C0 */
-#define VAL_GPIOB_OSPEEDR       0xAAAAAAEA
+#define VAL_GPIOB_OSPEEDR       0x000000C0//0xAAAAAAEA
 /* 0x00000100 */
 #define VAL_GPIOB_PUPDR        (PIN_PUDR_PULLDOWN(GPIOB_RECEIVER_PPM) |       \
                                 PIN_PUDR_PULLUP(1) |                          \
@@ -443,19 +443,19 @@
 #define VAL_GPIOE_PUPDR        (PIN_PUDR_PULLDOWN(GPIOE_GPS_PPS) |            \
                                 PIN_PUDR_PULLUP(GPIOE_XBEE_SLEEP) |           \
                                 PIN_PUDR_PULLUP(GPIOE_XBEE_RESET) |           \
-                                PIN_PUDR_FLOATING(GPIOE_SDIO_DETECT) |        \
+                                PIN_PUDR_PULLUP(GPIOE_SDIO_DETECT) |        \
                                 PIN_PUDR_FLOATING(GPIOE_USB_DISCOVERY) |      \
                                 PIN_PUDR_FLOATING(GPIOE_GPS_PWR_EN) |         \
-                                PIN_PUDR_FLOATING(GPIOE_BMP085_EOC) |         \
-                                PIN_PUDR_FLOATING(GPIOE_MAG_INT) |            \
-                                PIN_PUDR_FLOATING(GPIOE_MMA8451_INT1) |       \
+                                PIN_PUDR_PULLDOWN(GPIOE_BMP085_EOC) |         \
+                                PIN_PUDR_PULLDOWN(GPIOE_MAG_INT) |            \
+                                PIN_PUDR_PULLDOWN(GPIOE_MMA8451_INT1) |       \
                                 PIN_PUDR_PULLDOWN(GPIOE_PWM5) |               \
-                                PIN_PUDR_FLOATING(GPIOE_ITG3200_INT) |        \
+                                PIN_PUDR_PULLDOWN(GPIOE_ITG3200_INT) |        \
                                 PIN_PUDR_PULLDOWN(GPIOE_PWM6) |               \
                                 PIN_PUDR_PULLUP(GPIOE_TACHOMETER) |           \
                                 PIN_PUDR_PULLDOWN(GPIOE_PWM7) |               \
                                 PIN_PUDR_PULLDOWN(GPIOE_PWM8) |               \
-                                PIN_PUDR_FLOATING(GPIOE_MMA8451_INT2))
+                                PIN_PUDR_PULLDOWN(GPIOE_MMA8451_INT2))
 /* 0x00000000 */
 #define VAL_GPIOE_ODR           0x30
 /* 0x00000000 */
