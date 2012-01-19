@@ -27,8 +27,6 @@
  */
 
 /*
- TODO: Errors handling:
-   - do not halt system, just save flags in driver and return SDC_FAILED
  TODO: Try preerase blocks before writing (ACMD23).
  */
 
@@ -355,7 +353,7 @@ bool_t sdc_lld_send_cmd_short(SDCDriver *sdcp, uint8_t cmd, uint32_t arg,
                                SDIO_STA_CCRCFAIL)) == 0)
     ;
   SDIO->ICR = SDIO_ICR_CMDRENDC | SDIO_ICR_CTIMEOUTC | SDIO_ICR_CCRCFAILC;
-  if ((sta & (STM32_SDIO_STA_ERROR_MASK)) != 0){
+  if ((sta & (SDIO_STA_CTIMEOUT)) != 0){
     sdc_lld_handle_errors(sdcp);
     return SDC_FAILED;
   }
@@ -389,7 +387,7 @@ bool_t sdc_lld_send_cmd_short_crc(SDCDriver *sdcp, uint8_t cmd, uint32_t arg,
                                SDIO_STA_CCRCFAIL)) == 0)
     ;
   SDIO->ICR = SDIO_ICR_CMDRENDC | SDIO_ICR_CTIMEOUTC | SDIO_ICR_CCRCFAILC;
-  if ((sta & (STM32_SDIO_STA_ERROR_MASK)) != 0){
+  if ((sta & (SDIO_STA_CTIMEOUT | SDIO_STA_CCRCFAIL)) != 0){
     sdc_lld_handle_errors(sdcp);
     return SDC_FAILED;
   }
