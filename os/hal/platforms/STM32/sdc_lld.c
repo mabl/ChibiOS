@@ -30,7 +30,6 @@
  TODO: Errors handling:
    - do not halt system, just save flags in driver and return SDC_FAILED
  TODO: Try preerase blocks before writing (ACMD23).
- TODO: Evaluate needs of DMA interrupts handler.
  */
 
 #include <string.h>
@@ -66,33 +65,45 @@ SDCDriver SDCD1;
 /*===========================================================================*/
 
 /**
- * @brief   SDIO normal IRQ handler.
+ * @brief   Gets SDC errors.
+ *
+ * @param[in] sdcp      pointer to the @p UARTDriver object
  *
  * @notapi
  */
-static void sdc_serve_event_interrupt(SDCDriver *sdcp) {
+static void sdc_lld_handle_errors(SDCDriver *sdcp) {
+  uint32_t errors = SDC_NO_ERROR;
 
-  chSysLockFromIsr();
-  if (sdcp->thread != NULL) {
-    chSchReadyI(sdcp->thread);
-    sdcp->thread = NULL;
+  if (SDIO->STA & SDIO_STA_CCRCFAIL){
+    SDIO->ICR |= SDIO_ICR_CCRCFAILC;
+    errors |= SDC_CMD_CRC_ERROR;
   }
-  chSysUnlockFromIsr();
+  if (SDIO->STA & SDIO_STA_DCRCFAIL){
+    SDIO->ICR |= SDIO_ICR_DCRCFAILC;
+    errors |= SDC_DATA_CRC_ERROR;
+  }
+  if (SDIO->STA & SDIO_STA_CTIMEOUT){
+    SDIO->ICR |= SDIO_ICR_CTIMEOUTC;
+    errors |= SDC_COMMAND_TIMEOUT;
+  }
+  if (SDIO->STA & SDIO_STA_DTIMEOUT){
+    SDIO->ICR |= SDIO_ICR_CTIMEOUTC;
+    errors |= SDC_DATA_TIMEOUT;
+  }
+  if (SDIO->STA & SDIO_STA_TXUNDERR){
+    SDIO->ICR |= SDIO_ICR_TXUNDERRC;
+    errors |= SDC_TX_UNDERRUN;
+  }
+  if (SDIO->STA & SDIO_STA_RXOVERR){
+    SDIO->ICR |= SDIO_ICR_RXOVERRC;
+    errors |= SDC_RX_OVERRUN;
+  }
+  if (SDIO->STA & SDIO_STA_STBITERR){
+    SDIO->ICR |= SDIO_ICR_STBITERRC;
+    errors |= SDC_STARTBIT_ERROR;
+  }
 
-  /* Disables the source but the status flags are not reset because the
-     read/write functions needs to check them.*/
-  SDIO->MASK = 0;
-}
-
-/**
- * @brief   SDIO error IRQ handler.
- *
- * @notapi
- */
-static void sdc_serve_error_interrupt(SDCDriver *sdcp) {
-
-  (void)sdcp;
-  chSysHalt();
+  sdcp->errors |= errors;
 }
 
 /**
@@ -103,9 +114,10 @@ static void sdc_serve_error_interrupt(SDCDriver *sdcp) {
  */
 static void sdc_lld_serve_dma_interrupt(SDCDriver *sdcp, uint32_t flags) {
 
-  (void) sdcp;
+  chSysLockFromIsr();
+  sdcp->errors |= SDC_DMA_ERROR;
+  chSysUnlockFromIsr();
 
-  /* DMA errors handling.*/
 #if defined(STM32_SDC_DMA_ERROR_HOOK)
   if ((flags & (STM32_DMA_ISR_TEIF | STM32_DMA_ISR_DMEIF)) != 0) {
     STM32_SDC_DMA_ERROR_HOOK();
@@ -121,6 +133,8 @@ static void sdc_lld_serve_dma_interrupt(SDCDriver *sdcp, uint32_t flags) {
 
 /**
  * @brief   SDIO IRQ handler.
+ * @details It just wakes transaction thread. All error handling performs
+ *          in that thread.
  *
  * @isr
  */
@@ -128,10 +142,16 @@ CH_IRQ_HANDLER(SDIO_IRQHandler) {
 
   CH_IRQ_PROLOGUE();
 
-  if (SDIO->STA & STM32_SDIO_STA_ERROR_MASK)
-    sdc_serve_error_interrupt(&SDCD1);
-  else
-    sdc_serve_event_interrupt(&SDCD1);
+  chSysLockFromIsr();
+  if (SDCD1.thread != NULL) {
+    chSchReadyI(SDCD1.thread);
+    SDCD1.thread = NULL;
+  }
+  chSysUnlockFromIsr();
+
+  /* Disables the source but the status flags are not reset because the
+     read/write functions needs to check them.*/
+  SDIO->MASK = 0;
 
   CH_IRQ_EPILOGUE();
 }
@@ -335,8 +355,10 @@ bool_t sdc_lld_send_cmd_short(SDCDriver *sdcp, uint8_t cmd, uint32_t arg,
                                SDIO_STA_CCRCFAIL)) == 0)
     ;
   SDIO->ICR = SDIO_ICR_CMDRENDC | SDIO_ICR_CTIMEOUTC | SDIO_ICR_CCRCFAILC;
-  if ((sta & (SDIO_STA_CTIMEOUT)) != 0)
+  if ((sta & (STM32_SDIO_STA_ERROR_MASK)) != 0){
+    sdc_lld_handle_errors(sdcp);
     return SDC_FAILED;
+  }
   *resp = SDIO->RESP1;
   return SDC_SUCCESS;
 }
@@ -367,8 +389,10 @@ bool_t sdc_lld_send_cmd_short_crc(SDCDriver *sdcp, uint8_t cmd, uint32_t arg,
                                SDIO_STA_CCRCFAIL)) == 0)
     ;
   SDIO->ICR = SDIO_ICR_CMDRENDC | SDIO_ICR_CTIMEOUTC | SDIO_ICR_CCRCFAILC;
-  if ((sta & (SDIO_STA_CTIMEOUT | SDIO_STA_CCRCFAIL)) != 0)
+  if ((sta & (STM32_SDIO_STA_ERROR_MASK)) != 0){
+    sdc_lld_handle_errors(sdcp);
     return SDC_FAILED;
+  }
   *resp = SDIO->RESP1;
   return SDC_SUCCESS;
 }
@@ -401,8 +425,10 @@ bool_t sdc_lld_send_cmd_long_crc(SDCDriver *sdcp, uint8_t cmd, uint32_t arg,
                                SDIO_STA_CCRCFAIL)) == 0)
     ;
   SDIO->ICR = SDIO_ICR_CMDRENDC | SDIO_ICR_CTIMEOUTC | SDIO_ICR_CCRCFAILC;
-  if ((sta & (SDIO_STA_CTIMEOUT | SDIO_STA_CCRCFAIL)) != 0)
+  if ((sta & (STM32_SDIO_STA_ERROR_MASK)) != 0){
+    sdc_lld_handle_errors(sdcp);
     return SDC_FAILED;
+  }
   /* save bytes in reverse order because MSB in response comes first */
   *resp++ = SDIO->RESP4;
   *resp++ = SDIO->RESP3;
@@ -507,6 +533,7 @@ bool_t sdc_lld_read(SDCDriver *sdcp, uint32_t startblk,
 error:
   dmaStreamClearInterrupt(sdcp->dma);
   dmaStreamDisable(sdcp->dma);
+  sdc_lld_handle_errors(sdcp);
   SDIO->ICR   = STM32_SDIO_ICR_ALL_FLAGS;
   SDIO->MASK  = 0;
   SDIO->DCTRL = 0;
@@ -608,6 +635,7 @@ bool_t sdc_lld_write(SDCDriver *sdcp, uint32_t startblk,
 error:
   dmaStreamClearInterrupt(sdcp->dma);
   dmaStreamDisable(sdcp->dma);
+  sdc_lld_handle_errors(sdcp);
   SDIO->ICR   = STM32_SDIO_ICR_ALL_FLAGS;
   SDIO->MASK  = 0;
   SDIO->DCTRL = 0;

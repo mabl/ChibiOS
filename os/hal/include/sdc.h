@@ -94,6 +94,21 @@
 #define SDC_SUCCESS                     FALSE
 #define SDC_FAILED                      TRUE
 
+/**
+ * @name    SDC bus error conditions
+ * @{
+ */
+#define SDC_NO_ERROR          0           /**< @brief No error.              */
+#define SDC_CMD_CRC_ERROR     1           /**< @brief Command CRC error.     */
+#define SDC_DATA_CRC_ERROR    2           /**< @brief Data CRC error.        */
+#define SDC_DATA_TIMEOUT      4           /**< @brief Hardware write timeout.*/
+#define SDC_COMMAND_TIMEOUT   8           /**< @brief Hardware read timeout. */
+#define SDC_TX_UNDERRUN       16          /**< @brief TX buffer underrun.    */
+#define SDC_RX_OVERRUN        32          /**< @brief RX buffer overrun.     */
+#define SDC_STARTBIT_ERROR    64          /**< @brief Start bit not detected.*/
+#define SDC_DMA_ERROR         128         /**< @brief RX buffer overrun.     */
+#define SDC_UNHANDLED_ERROR   0xFFFFFFFF
+
 /*===========================================================================*/
 /* Driver pre-compile time settings.                                         */
 /*===========================================================================*/

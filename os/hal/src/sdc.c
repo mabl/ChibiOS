@@ -148,6 +148,7 @@ void sdcInit(void) {
 void sdcObjectInit(SDCDriver *sdcp) {
 
   sdcp->state  = SDC_STOP;
+  sdcp->errors = SDC_NO_ERROR;
   sdcp->config = NULL;
   sdcp->capacity = 0;
 }

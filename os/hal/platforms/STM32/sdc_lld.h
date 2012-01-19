@@ -47,7 +47,7 @@
                                   SDIO_ICR_CEATAENDC)
 
 /**
- * @brief Mask of error glags in STA register.
+ * @brief Mask of error flags in STA register.
  */
 #define STM32_SDIO_STA_ERROR_MASK (SDIO_STA_CCRCFAIL | SDIO_STA_DCRCFAIL |    \
                                    SDIO_STA_CTIMEOUT | SDIO_STA_DTIMEOUT |    \
@@ -167,6 +167,10 @@ struct SDCDriver {
    * @brief Various flags regarding the mounted card.
    */
   sdcmode_t                 cardmode;
+  /**
+   * @brief Errors flags.
+   */
+  uint32_t                  errors;
   /**
    * @brief Card CID.
    */
