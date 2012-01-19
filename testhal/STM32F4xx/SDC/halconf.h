@@ -286,6 +286,20 @@
 #define SDC_NICE_WAITING            TRUE
 #endif
 
+/**
+ * @brief   Write timeout in milliseconds.
+ */
+#if !defined(SDC_WRITE_TIMEOUT_MS) || defined(__DOXYGEN__)
+#define SDC_WRITE_TIMEOUT_MS            250
+#endif
+
+/**
+ * @brief   Write timeout in milliseconds.
+ */
+#if !defined(SDC_READ_TIMEOUT_MS) || defined(__DOXYGEN__)
+#define SDC_READ_TIMEOUT_MS             5
+#endif
+
 /*===========================================================================*/
 /* SERIAL driver related settings.                                           */
 /*===========================================================================*/

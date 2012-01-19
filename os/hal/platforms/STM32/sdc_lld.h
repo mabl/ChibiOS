@@ -197,7 +197,7 @@ struct SDCDriver {
    */
   const stm32_dma_stream_t  *dma;
   /**
-   * @brief     Pointer to the I2Cx registers block.
+   * @brief     Pointer to the SDIO registers block.
    */
 #if CH_DBG_ENABLE_ASSERTS
   SDIO_TypeDef              *sdio;

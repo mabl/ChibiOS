@@ -94,12 +94,6 @@
 #define SDC_SUCCESS                     FALSE
 #define SDC_FAILED                      TRUE
 
-/**
- * @brief   Timeouts in milliseconds.
- */
-#define SDC_WRITE_TIMEOUT_MS            250
-#define SDC_READ_TIMEOUT_MS             5
-
 /*===========================================================================*/
 /* Driver pre-compile time settings.                                         */
 /*===========================================================================*/
@@ -133,6 +127,20 @@
  */
 #if !defined(SDC_NICE_WAITING) || defined(__DOXYGEN__)
 #define SDC_NICE_WAITING                TRUE
+#endif
+
+/**
+ * @brief   Write timeout in milliseconds.
+ */
+#if !defined(SDC_WRITE_TIMEOUT_MS) || defined(__DOXYGEN__)
+#define SDC_WRITE_TIMEOUT_MS            250
+#endif
+
+/**
+ * @brief   Write timeout in milliseconds.
+ */
+#if !defined(SDC_READ_TIMEOUT_MS) || defined(__DOXYGEN__)
+#define SDC_READ_TIMEOUT_MS             5
 #endif
 /** @} */
 
