@@ -526,7 +526,10 @@ bool_t sdc_lld_read(SDCDriver *sdcp, uint32_t startblk,
   SDIO->DCTRL = 0;
   chSysUnlock();
 
-  return sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_STOP_TRANSMISSION, 0, resp);
+  if (n > 1)
+    return sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_STOP_TRANSMISSION, 0, resp);
+  else
+    return SDC_SUCCESS;
 
 error:
   dmaStreamClearInterrupt(sdcp->dma);
