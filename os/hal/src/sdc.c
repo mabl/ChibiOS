@@ -87,10 +87,10 @@ uint32_t sdc_get_slice(uint32_t *data, int8_t end, int8_t start) {
  * @brief   Wait for the card to complete pending operations.
  *
  * @param[in] sdcp      pointer to the @p SDCDriver object
+ *
  * @return              The operation status.
- * @retval FALSE        the card is now in transfer state.
- * @retval TRUE         an error occurred while waiting or the card is in an
- *                      unexpected state.
+ * @retval SDC_SUCCESS  operation succeeded.
+ * @retval SDC_FAILED   operation failed.
  *
  * @notapi
  */
@@ -202,10 +202,10 @@ void sdcStop(SDCDriver *sdcp) {
  *          to perform read and write operations.
  *
  * @param[in] sdcp      pointer to the @p SDCDriver object
+ *
  * @return              The operation status.
- * @retval FALSE        operation succeeded, the driver is now
- *                      in the @p SDC_ACTIVE state.
- * @retval TRUE         operation failed.
+ * @retval SDC_SUCCESS  operation succeeded.
+ * @retval SDC_FAILED   operation failed.
  *
  * @api
  */
@@ -360,10 +360,10 @@ failed:
  * @brief   Brings the driver in a state safe for card removal.
  *
  * @param[in] sdcp      pointer to the @p SDCDriver object
+ *
  * @return              The operation status.
- * @retval FALSE        the operation succeeded and the driver is now
- *                      in the @p SDC_READY state.
- * @retval TRUE         the operation failed.
+ * @retval SDC_SUCCESS  operation succeeded.
+ * @retval SDC_FAILED   operation failed.
  *
  * @api
  */
@@ -401,10 +401,10 @@ bool_t sdcDisconnect(SDCDriver *sdcp) {
  * @param[in] startblk  first block to read
  * @param[out] buf      pointer to the read buffer
  * @param[in] n         number of blocks to read
+ *
  * @return              The operation status.
- * @retval FALSE        operation succeeded, the requested blocks have been
- *                      read.
- * @retval TRUE         operation failed, the state of the buffer is uncertain.
+ * @retval SDC_SUCCESS  operation succeeded.
+ * @retval SDC_FAILED   operation failed.
  *
  * @api
  */
@@ -434,10 +434,10 @@ bool_t sdcRead(SDCDriver *sdcp, uint32_t startblk,
  * @param[in] startblk  first block to write
  * @param[out] buf      pointer to the write buffer
  * @param[in] n         number of blocks to write
+ *
  * @return              The operation status.
- * @retval FALSE        operation succeeded, the requested blocks have been
- *                      written.
- * @retval TRUE         operation failed.
+ * @retval SDC_SUCCESS  operation succeeded.
+ * @retval SDC_FAILED   operation failed.
  *
  * @api
  */

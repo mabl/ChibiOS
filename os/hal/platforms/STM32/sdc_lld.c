@@ -41,7 +41,7 @@
 /* Driver local definitions.                                                 */
 /*===========================================================================*/
 
-#define SDC_SDIO_DMA_USE_FIFO   FALSE
+#define SDC_SDIO_DMA_USE_FIFO   TRUE
 
 #define SDC_SDIO_DMA_CHANNEL                                                  \
   STM32_DMA_GETCHANNEL(STM32_SDC_SDIO_DMA_STREAM,                             \
@@ -63,9 +63,110 @@ SDCDriver SDCD1;
 /*===========================================================================*/
 
 /**
+ * @brief   Prepares card to handle data transaction.
+ *
+ * @param[in] sdcp      pointer to the @p SDCDriver object
+ * @param[in] startblk  first block to read
+ * @param[in] n         number of blocks to read
+ * @param[in] resp      pointer to the response buffer
+ * @param[in] read      if TRUE than prepare to read transaction
+ *
+ * @return              The operation status.
+ * @retval SDC_SUCCESS  operation succeeded, the requested blocks have been
+ *                      read.
+ * @retval SDC_FAILED   operation failed, the state of the buffer is uncertain.
+ *
+ * @notapi
+ */
+static bool_t sdc_lld_prepare_transaction(
+    SDCDriver *sdcp, uint32_t startblk, uint32_t n,
+    uint32_t *resp, bool_t read){
+
+  /* Driver handles data in 512 bytes blocks (just like HC cards). But if we
+     have not HC card than we must convert address from blocks to bytes.*/
+  if (!(sdcp->cardmode & SDC_MODE_HIGH_CAPACITY))
+    startblk *= SDC_BLOCK_SIZE;
+
+  if (read){
+    if (n > 1){
+      /* Send read multiple blocks command to card.*/
+      if (sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_READ_MULTIPLE_BLOCK,
+                                     startblk, resp) || SDC_R1_ERROR(resp[0]))
+        return SDC_FAILED;
+    }
+    else{
+      /* Send read single block command.*/
+      if (sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_READ_SINGLE_BLOCK,
+                                     startblk, resp) || SDC_R1_ERROR(resp[0]))
+        return SDC_FAILED;
+    }
+  }
+  else{
+    if (n > 1){
+      /* Write multiple blocks command.*/
+      if (sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_WRITE_MULTIPLE_BLOCK,
+                                     startblk, resp) || SDC_R1_ERROR(resp[0]))
+        return SDC_FAILED;
+    }
+    else{
+      /* Write single block command.*/
+      if (sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_WRITE_BLOCK,
+                                     startblk, resp) || SDC_R1_ERROR(resp[0]))
+        return SDC_FAILED;
+    }
+  }
+  return SDC_SUCCESS;
+}
+
+/**
+ * @brief   Starts data transaction.
+ * @note    There is no
+ * @param[in] sdcp      pointer to the @p SDCDriver object
+ * @param[in] read      if TRUE than prepare to read transaction
+ *
+ * @return              The operation status.
+ * @retval SDC_SUCCESS  operation succeeded.
+ * @retval SDC_FAILED   operation failed.
+ */
+static bool_t sdc_lld_start_data_transaction(SDCDriver *sdcp, bool_t read){
+
+  /* Transaction starts just after DTEN bit setting.*/
+  if (read)
+    SDIO->DCTRL = SDIO_DCTRL_DTDIR | SDIO_DCTRL_DBLOCKSIZE_3 |
+                  SDIO_DCTRL_DBLOCKSIZE_0 | SDIO_DCTRL_DMAEN | SDIO_DCTRL_DTEN;
+  else
+    SDIO->DCTRL = SDIO_DCTRL_DBLOCKSIZE_3 | SDIO_DCTRL_DBLOCKSIZE_0 |
+                  SDIO_DCTRL_DMAEN | SDIO_DCTRL_DTEN;
+
+  /* Note the mask is checked before going to sleep because the interrupt
+     may have occurred before reaching the critical zone.*/
+  chSysLock();
+  if (SDIO->MASK != 0) {
+    chDbgAssert(sdcp->thread == NULL,
+                "sdc_lld_start_data_transaction(), #1", "not NULL");
+    sdcp->thread = chThdSelf();
+    chSchGoSleepS(THD_STATE_SUSPENDED);
+    chDbgAssert(sdcp->thread == NULL,
+                "sdc_lld_start_data_transaction(), #2", "not NULL");
+  }
+  if ((SDIO->STA & SDIO_STA_DATAEND) == 0) {
+    chSysUnlock();
+    return SDC_FAILED;
+  }
+
+  /* Wait until SDIO disables DMA to be sure that all data transferred.*/
+  while (sdcp->dma->stream->CR & STM32_DMA_CR_EN)
+    ;
+  SDIO->ICR = STM32_SDIO_ICR_ALL_FLAGS;
+  SDIO->DCTRL = 0;
+  chSysUnlock();
+  return SDC_SUCCESS;
+}
+
+/**
  * @brief   Gets SDC errors.
  *
- * @param[in] sdcp      pointer to the @p UARTDriver object
+ * @param[in] sdcp      pointer to the @p SDCDriver object
  *
  * @notapi
  */
@@ -105,24 +206,62 @@ static void sdc_lld_handle_errors(SDCDriver *sdcp) {
 }
 
 /**
- * @brief   SDIO DMA common service routine.
+ * @brief   Performs clean transaction stopping in case of errors.
  *
- * @param[in] sdcp      pointer to the @p UARTDriver object
+ * @param[in] sdcp      pointer to the @p SDCDriver object
+ *
+ * @notapi
+ */
+static void sdc_lld_error_cleanup(SDCDriver *sdcp){
+  dmaStreamClearInterrupt(sdcp->dma);
+  dmaStreamDisable(sdcp->dma);
+  SDIO->ICR   = STM32_SDIO_ICR_ALL_FLAGS;
+  SDIO->MASK  = 0;
+  SDIO->DCTRL = 0;
+  sdc_lld_handle_errors(sdcp);
+}
+
+/**
+ * @brief   Handles DMA interrupts.
+ *
+ * @param[in] sdcp      pointer to the @p SDCDriver object
  * @param[in] flags     pre-shifted content of the ISR register
+ *
+ * @isr
  */
 static void sdc_lld_serve_dma_interrupt(SDCDriver *sdcp, uint32_t flags) {
 
-  chSysLockFromIsr();
-  sdcp->errors |= SDC_DMA_ERROR;
-  chSysUnlockFromIsr();
+  dmaStreamClearInterrupt(sdcp->dma);
 
-#if defined(STM32_SDC_DMA_ERROR_HOOK)
-  if ((flags & (STM32_DMA_ISR_TEIF | STM32_DMA_ISR_DMEIF)) != 0) {
-    STM32_SDC_DMA_ERROR_HOOK();
+  if (flags & (STM32_DMA_ISR_TEIF | STM32_DMA_ISR_DMEIF)) {
+    chSysLockFromIsr();
+    sdcp->errors |= SDC_DMA_ERROR;
+    chSysUnlockFromIsr();
+    #if defined(STM32_SDC_DMA_ERROR_HOOK)
+      STM32_SDC_DMA_ERROR_HOOK();
+    #else
+      (void)flags;
+    #endif
   }
-#else
-  (void)flags;
-#endif
+
+  if (flags & STM32_DMA_ISR_TCIF){
+    chSysLockFromIsr();
+    if (SDCD1.thread != NULL) {
+      chSchReadyI(SDCD1.thread);
+      SDCD1.thread = NULL;
+    }
+    /* Disables the source but the status flags are not reset because the
+       read/write functions needs to check them.*/
+    SDIO->MASK = 0;
+
+    /* Wait until interrupt flag to be cleared.*/
+    while (((DMA2->LISR) >> (sdcp->dma->ishift)) & STM32_DMA_ISR_TCIF)
+      dmaStreamClearInterrupt(sdcp->dma);
+
+    chSysUnlockFromIsr();
+  }
+  else
+    chSysHalt(); /* unhandled interrupt happens*/
 }
 
 /*===========================================================================*/
@@ -131,8 +270,8 @@ static void sdc_lld_serve_dma_interrupt(SDCDriver *sdcp, uint32_t flags) {
 
 /**
  * @brief   SDIO IRQ handler.
- * @details It just wakes transaction thread. All error handling performs
- *          in that thread.
+ * @details It just wakes transaction thread. All error  handling performs in
+ *          that thread.
  *
  * @isr
  */
@@ -140,17 +279,19 @@ CH_IRQ_HANDLER(SDIO_IRQHandler) {
 
   CH_IRQ_PROLOGUE();
 
-  chSysLockFromIsr();
-  if (SDCD1.thread != NULL) {
-    chSchReadyI(SDCD1.thread);
-    SDCD1.thread = NULL;
+  if (SDIO->STA & STM32_SDIO_STA_ERROR_MASK){
+    chSysLockFromIsr()
+
+    /* Disables the source but the status flags are not reset because the
+       read/write functions needs to check them.*/
+    SDIO->MASK = 0;
+
+    if (SDCD1.thread != NULL) {
+      chSchReadyI(SDCD1.thread);
+      SDCD1.thread = NULL;    }
+
+    chSysUnlockFromIsr();
   }
-  chSysUnlockFromIsr();
-
-  /* Disables the source but the status flags are not reset because the
-     read/write functions needs to check them.*/
-  SDIO->MASK = 0;
-
   CH_IRQ_EPILOGUE();
 }
 
@@ -185,11 +326,16 @@ void sdc_lld_start(SDCDriver *sdcp) {
 
   sdcp->dmamode = STM32_DMA_CR_CHSEL(SDC_SDIO_DMA_CHANNEL) |
                   STM32_DMA_CR_PL(STM32_SDC_SDIO_DMA_PRIORITY) |
-                  STM32_DMA_CR_PSIZE_WORD | STM32_DMA_CR_MSIZE_WORD |
+                  STM32_DMA_CR_PSIZE_WORD |
+                  STM32_DMA_CR_MSIZE_WORD |
+                  STM32_DMA_CR_DMEIE |
+                  STM32_DMA_CR_TEIE |
+                  STM32_DMA_CR_TCIE |
                   STM32_DMA_CR_MINC;
   #if (SDC_SDIO_DMA_USE_FIFO && (defined(STM32F4XX) || defined(STM32F2XX)))
-    sdcp->dmamode |= STM32_DMA_CR_PFCTRL |                                    \
-                     STM32_DMA_CR_PBURST_INCR4 | STM32_DMA_CR_MBURST_INCR4;
+    sdcp->dmamode |= STM32_DMA_CR_PFCTRL |
+                     STM32_DMA_CR_PBURST_INCR4 |
+                     STM32_DMA_CR_MBURST_INCR4;
   #else
     sdcp->dmamode |= STM32_DMA_CR_PFCTRL;
   #endif
@@ -336,9 +482,8 @@ void sdc_lld_send_cmd_none(SDCDriver *sdcp, uint8_t cmd, uint32_t arg) {
  * @param[out] resp     pointer to the response buffer (one word)
  *
  * @return              The operation status.
- * @retval FALSE        the operation succeeded.
- * @retval TRUE         the operation failed because timeout, CRC check or
- *                      other errors.
+ * @retval SDC_SUCCESS  operation succeeded.
+ * @retval SDC_FAILED   operation failed.
  *
  * @notapi
  */
@@ -370,9 +515,8 @@ bool_t sdc_lld_send_cmd_short(SDCDriver *sdcp, uint8_t cmd, uint32_t arg,
  * @param[out] resp     pointer to the response buffer (one word)
  *
  * @return              The operation status.
- * @retval FALSE        the operation succeeded.
- * @retval TRUE         the operation failed because timeout, CRC check or
- *                      other errors.
+ * @retval SDC_SUCCESS  operation succeeded.
+ * @retval SDC_FAILED   operation failed.
  *
  * @notapi
  */
@@ -404,9 +548,8 @@ bool_t sdc_lld_send_cmd_short_crc(SDCDriver *sdcp, uint8_t cmd, uint32_t arg,
  * @param[out] resp     pointer to the response buffer (four words)
  *
  * @return              The operation status.
- * @retval FALSE        the operation succeeded.
- * @retval TRUE         the operation failed because timeout, CRC check or
- *                      other errors.
+ * @retval SDC_SUCCESS  operation succeeded.
+ * @retval SDC_FAILED   operation failed.
  *
  * @notapi
  */
@@ -444,9 +587,8 @@ bool_t sdc_lld_send_cmd_long_crc(SDCDriver *sdcp, uint8_t cmd, uint32_t arg,
  * @param[in] n         number of blocks to read
  *
  * @return              The operation status.
- * @retval FALSE        operation succeeded, the requested blocks have been
- *                      read.
- * @retval TRUE         operation failed, the state of the buffer is uncertain.
+ * @retval SDC_SUCCESS  operation succeeded.
+ * @retval SDC_FAILED   operation failed.
  *
  * @notapi
  */
@@ -462,82 +604,38 @@ bool_t sdc_lld_read(SDCDriver *sdcp, uint32_t startblk,
   if (_sdc_wait_for_transfer_state(sdcp))
     return SDC_FAILED;
 
-  /* Prepares the DMA channel for reading.*/
+  /* Prepares the DMA channel for writing. Setting transaction size is
+     pointless because it handled by SDIO cell.*/
   dmaStreamSetMemory0(sdcp->dma, buf);
-  dmaStreamSetTransactionSize(sdcp->dma,
-                              (n * SDC_BLOCK_SIZE) / sizeof (uint32_t));
   dmaStreamSetMode(sdcp->dma, sdcp->dmamode | STM32_DMA_CR_DIR_P2M);
+  dmaStreamEnable(sdcp->dma);
 
   /* Setting up data transfer.
      Options: Card to Controller, Block mode, DMA mode, 512 bytes blocks.*/
   SDIO->ICR   = STM32_SDIO_ICR_ALL_FLAGS;
   SDIO->MASK  = SDIO_MASK_DCRCFAILIE |
                 SDIO_MASK_DTIMEOUTIE |
-                SDIO_MASK_DATAENDIE  |
                 SDIO_MASK_STBITERRIE |
-                SDIO_MASK_RXOVERRIE;
+                SDIO_MASK_RXOVERRIE;/* | SDIO_MASK_DATAENDIE; */
   SDIO->DLEN  = n * SDC_BLOCK_SIZE;
 
-  if (n > 1){
-    /* Send read multiple blocks command to card.*/
-    if ((sdcp->cardmode & SDC_MODE_HIGH_CAPACITY) == 0)
-      startblk *= SDC_BLOCK_SIZE;
-    if (sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_READ_MULTIPLE_BLOCK,
-                                   startblk, resp) ||
-        SDC_R1_ERROR(resp[0]))
-      goto error;
-  }
-  else{
-    /* Read single block command.*/
-    if ((sdcp->cardmode & SDC_MODE_HIGH_CAPACITY) == 0)
-      startblk *= SDC_BLOCK_SIZE;
-    if (sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_READ_SINGLE_BLOCK,
-                                   startblk, resp) ||
-        SDC_R1_ERROR(resp[0]))
-      goto error;
-  }
-
-  /* DMA channel activation.*/
-  dmaStreamEnable(sdcp->dma);
-
-  /* Transaction starts just after DTEN bit setting.*/
-  SDIO->DCTRL = SDIO_DCTRL_DTDIR |
-                SDIO_DCTRL_DBLOCKSIZE_3 | SDIO_DCTRL_DBLOCKSIZE_0 |
-                SDIO_DCTRL_DMAEN |
-                SDIO_DCTRL_DTEN;
-
-  chSysLock();
-  if (SDIO->MASK != 0) {
-    chDbgAssert(sdcp->thread == NULL,
-                "sdc_lld_read_multiple(), #1", "not NULL");
-    sdcp->thread = chThdSelf();
-    chSchGoSleepS(THD_STATE_SUSPENDED);
-    chDbgAssert(sdcp->thread == NULL,
-                "sdc_lld_read_multiple(), #2", "not NULL");
-  }
-  if ((SDIO->STA & SDIO_STA_DATAEND) == 0) {
-    chSysUnlock();
+  /* Talk to card what we want from it.*/
+  if (sdc_lld_prepare_transaction(sdcp, startblk, n, resp, TRUE) == SDC_FAILED)
     goto error;
-  }
 
-  dmaStreamClearInterrupt(sdcp->dma);
-  dmaStreamDisable(sdcp->dma);
-  SDIO->ICR   = STM32_SDIO_ICR_ALL_FLAGS;
-  SDIO->DCTRL = 0;
-  chSysUnlock();
+  /* Start transaction.*/
+  if (sdc_lld_start_data_transaction(sdcp, TRUE) == SDC_FAILED)
+    goto error;
 
+  /* Finalize transaction.*/
   if (n > 1)
     return sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_STOP_TRANSMISSION, 0, resp);
   else
     return SDC_SUCCESS;
 
 error:
-  dmaStreamClearInterrupt(sdcp->dma);
-  dmaStreamDisable(sdcp->dma);
-  sdc_lld_handle_errors(sdcp);
-  SDIO->ICR   = STM32_SDIO_ICR_ALL_FLAGS;
-  SDIO->MASK  = 0;
-  SDIO->DCTRL = 0;
+  sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_STOP_TRANSMISSION, 0, resp);
+  sdc_lld_error_cleanup(sdcp);
   return SDC_FAILED;
 }
 
@@ -550,9 +648,8 @@ error:
  * @param[in] n         number of blocks to write
  *
  * @return              The operation status.
- * @retval FALSE        operation succeeded, the requested blocks have been
- *                      written.
- * @retval TRUE         operation failed.
+ * @retval SDC_SUCCESS  operation succeeded.
+ * @retval SDC_FAILED   operation failed.
  *
  * @notapi
  */
@@ -568,81 +665,36 @@ bool_t sdc_lld_write(SDCDriver *sdcp, uint32_t startblk,
   if (_sdc_wait_for_transfer_state(sdcp))
     return SDC_FAILED;
 
-  /* Prepares the DMA channel for writing.*/
+  /* Prepares the DMA channel for writing. Setting transaction size is
+     pointless because it handled by SDIO cell.*/
   dmaStreamSetMemory0(sdcp->dma, buf);
-  dmaStreamSetTransactionSize(sdcp->dma,
-                              (n * SDC_BLOCK_SIZE) / sizeof (uint32_t));
   dmaStreamSetMode(sdcp->dma, sdcp->dmamode | STM32_DMA_CR_DIR_M2P);
+  dmaStreamEnable(sdcp->dma);
 
   /* Setting up data transfer.*/
   SDIO->ICR   = STM32_SDIO_ICR_ALL_FLAGS;
   SDIO->MASK  = SDIO_MASK_DCRCFAILIE |
                 SDIO_MASK_DTIMEOUTIE |
-                SDIO_MASK_DATAENDIE  |
                 SDIO_MASK_STBITERRIE |
-                SDIO_MASK_TXUNDERRIE;
+                SDIO_MASK_TXUNDERRIE; /* | SDIO_MASK_DATAENDIE; */
   SDIO->DLEN  = n * SDC_BLOCK_SIZE;
 
-  if (n > 1){
-    /* Write multiple blocks command.*/
-    if ((sdcp->cardmode & SDC_MODE_HIGH_CAPACITY) == 0)
-      startblk *= SDC_BLOCK_SIZE;
-    if (sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_WRITE_MULTIPLE_BLOCK,
-                                   startblk, resp) ||
-        SDC_R1_ERROR(resp[0]))
-      return SDC_FAILED;
-  }
-  else{
-    /* Write single block command.*/
-    if ((sdcp->cardmode & SDC_MODE_HIGH_CAPACITY) == 0)
-      startblk *= SDC_BLOCK_SIZE;
-    if (sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_WRITE_BLOCK,
-                                   startblk, resp) ||
-        SDC_R1_ERROR(resp[0]))
-      return SDC_FAILED;
-  }
-
-  /* Transaction starts just after DTEN bit setting.*/
-  chSysLock();
-  SDIO->DCTRL = SDIO_DCTRL_DBLOCKSIZE_3 | SDIO_DCTRL_DBLOCKSIZE_0 |
-                SDIO_DCTRL_DMAEN |
-                SDIO_DCTRL_DTEN;
-  dmaStreamEnable(sdcp->dma);
-  chSysUnlock();
-
-  /* Note the mask is checked before going to sleep because the interrupt
-     may have occurred before reaching the critical zone.*/
-  chSysLock();
-  if (SDIO->MASK != 0) {
-    chDbgAssert(sdcp->thread == NULL,
-                "sdc_lld_write_multiple(), #1", "not NULL");
-    sdcp->thread = chThdSelf();
-    chSchGoSleepS(THD_STATE_SUSPENDED);
-    chDbgAssert(sdcp->thread == NULL,
-                "sdc_lld_write_multiple(), #2", "not NULL");
-  }
-  if ((SDIO->STA & SDIO_STA_DATAEND) == 0) {
-    chSysUnlock();
+  /* Talk to card what we want from it.*/
+  if (sdc_lld_prepare_transaction(sdcp, startblk, n, resp, FALSE) == SDC_FAILED)
     goto error;
-  }
-  dmaStreamClearInterrupt(sdcp->dma);
-  dmaStreamDisable(sdcp->dma);
-  SDIO->ICR   = STM32_SDIO_ICR_ALL_FLAGS;
-  SDIO->DCTRL = 0;
-  chSysUnlock();
 
+  /* Start transaction.*/
+  if (sdc_lld_start_data_transaction(sdcp, FALSE) == SDC_FAILED)
+    goto error;
+
+  /* Finalize transaction.*/
   if (n > 1)
     return sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_STOP_TRANSMISSION, 0, resp);
   else
     return SDC_SUCCESS;
 
 error:
-  dmaStreamClearInterrupt(sdcp->dma);
-  dmaStreamDisable(sdcp->dma);
-  sdc_lld_handle_errors(sdcp);
-  SDIO->ICR   = STM32_SDIO_ICR_ALL_FLAGS;
-  SDIO->MASK  = 0;
-  SDIO->DCTRL = 0;
+  sdc_lld_error_cleanup(sdcp);
   return SDC_FAILED;
 }
 
