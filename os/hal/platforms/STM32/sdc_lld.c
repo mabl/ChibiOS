@@ -332,12 +332,12 @@ void sdc_lld_start(SDCDriver *sdcp) {
                   STM32_DMA_CR_TEIE |
                   STM32_DMA_CR_TCIE |
                   STM32_DMA_CR_MINC;
-  #if (SDC_SDIO_DMA_USE_FIFO && (defined(STM32F4XX) || defined(STM32F2XX)))
-    sdcp->dmamode |= STM32_DMA_CR_PFCTRL |
-                     STM32_DMA_CR_PBURST_INCR4 |
-                     STM32_DMA_CR_MBURST_INCR4;
-  #else
+
+  #if (defined(STM32F4XX) || defined(STM32F2XX))
     sdcp->dmamode |= STM32_DMA_CR_PFCTRL;
+    #if SDC_SDIO_DMA_USE_FIFO
+      sdcp->dmamode |= STM32_DMA_CR_PBURST_INCR4 | STM32_DMA_CR_MBURST_INCR4;
+    #endif
   #endif
 
   if (sdcp->state == SDC_STOP) {
@@ -604,9 +604,10 @@ bool_t sdc_lld_read(SDCDriver *sdcp, uint32_t startblk,
   if (_sdc_wait_for_transfer_state(sdcp))
     return SDC_FAILED;
 
-  /* Prepares the DMA channel for writing. Setting transaction size is
-     pointless because it handled by SDIO cell.*/
+  /* Prepares the DMA channel for writing.*/
   dmaStreamSetMemory0(sdcp->dma, buf);
+  dmaStreamSetTransactionSize(sdcp->dma,
+                              (n * SDC_BLOCK_SIZE) / sizeof (uint32_t));
   dmaStreamSetMode(sdcp->dma, sdcp->dmamode | STM32_DMA_CR_DIR_P2M);
   dmaStreamEnable(sdcp->dma);
 
@@ -665,9 +666,10 @@ bool_t sdc_lld_write(SDCDriver *sdcp, uint32_t startblk,
   if (_sdc_wait_for_transfer_state(sdcp))
     return SDC_FAILED;
 
-  /* Prepares the DMA channel for writing. Setting transaction size is
-     pointless because it handled by SDIO cell.*/
+  /* Prepares the DMA channel for writing.*/
   dmaStreamSetMemory0(sdcp->dma, buf);
+  dmaStreamSetTransactionSize(sdcp->dma,
+                              (n * SDC_BLOCK_SIZE) / sizeof (uint32_t));
   dmaStreamSetMode(sdcp->dma, sdcp->dmamode | STM32_DMA_CR_DIR_M2P);
   dmaStreamEnable(sdcp->dma);
 
