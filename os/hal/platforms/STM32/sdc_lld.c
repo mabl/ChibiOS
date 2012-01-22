@@ -63,13 +63,12 @@ SDCDriver SDCD1;
 /*===========================================================================*/
 
 /**
- * @brief   Prepares card to handle data transaction.
+ * @brief   Prepares card to handle read transaction.
  *
  * @param[in] sdcp      pointer to the @p SDCDriver object
  * @param[in] startblk  first block to read
  * @param[in] n         number of blocks to read
  * @param[in] resp      pointer to the response buffer
- * @param[in] read      if TRUE than prepare to read transaction
  *
  * @return              The operation status.
  * @retval SDC_SUCCESS  operation succeeded, the requested blocks have been
@@ -78,65 +77,82 @@ SDCDriver SDCD1;
  *
  * @notapi
  */
-static bool_t sdc_lld_prepare_transaction(
-    SDCDriver *sdcp, uint32_t startblk, uint32_t n,
-    uint32_t *resp, bool_t read){
+static bool_t sdc_lld_prepare_read(SDCDriver *sdcp, uint32_t startblk,
+                                   uint32_t n, uint32_t *resp){
 
   /* Driver handles data in 512 bytes blocks (just like HC cards). But if we
      have not HC card than we must convert address from blocks to bytes.*/
   if (!(sdcp->cardmode & SDC_MODE_HIGH_CAPACITY))
     startblk *= SDC_BLOCK_SIZE;
 
-  if (read){
-    if (n > 1){
-      /* Send read multiple blocks command to card.*/
-      if (sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_READ_MULTIPLE_BLOCK,
-                                     startblk, resp) || SDC_R1_ERROR(resp[0]))
-        return SDC_FAILED;
-    }
-    else{
-      /* Send read single block command.*/
-      if (sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_READ_SINGLE_BLOCK,
-                                     startblk, resp) || SDC_R1_ERROR(resp[0]))
-        return SDC_FAILED;
-    }
+  if (n > 1){
+    /* Send read multiple blocks command to card.*/
+    if (sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_READ_MULTIPLE_BLOCK,
+                                   startblk, resp) || SDC_R1_ERROR(resp[0]))
+      return SDC_FAILED;
   }
   else{
-    if (n > 1){
-      /* Write multiple blocks command.*/
-      if (sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_WRITE_MULTIPLE_BLOCK,
-                                     startblk, resp) || SDC_R1_ERROR(resp[0]))
-        return SDC_FAILED;
-    }
-    else{
-      /* Write single block command.*/
-      if (sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_WRITE_BLOCK,
-                                     startblk, resp) || SDC_R1_ERROR(resp[0]))
-        return SDC_FAILED;
-    }
+    /* Send read single block command.*/
+    if (sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_READ_SINGLE_BLOCK,
+                                   startblk, resp) || SDC_R1_ERROR(resp[0]))
+      return SDC_FAILED;
   }
+
   return SDC_SUCCESS;
 }
 
 /**
- * @brief   Starts data transaction.
- * @note    There is no
+ * @brief   Prepares card to handle write transaction.
+ *
  * @param[in] sdcp      pointer to the @p SDCDriver object
- * @param[in] read      if TRUE than prepare to read transaction
+ * @param[in] startblk  first block to read
+ * @param[in] n         number of blocks to read
+ * @param[in] resp      pointer to the response buffer
+ *
+ * @return              The operation status.
+ * @retval SDC_SUCCESS  operation succeeded, the requested blocks have been
+ *                      read.
+ * @retval SDC_FAILED   operation failed, the state of the buffer is uncertain.
+ *
+ * @notapi
+ */
+static bool_t sdc_lld_prepare_write(SDCDriver *sdcp, uint32_t startblk,
+                                    uint32_t n, uint32_t *resp){
+
+  /* Driver handles data in 512 bytes blocks (just like HC cards). But if we
+     have not HC card than we must convert address from blocks to bytes.*/
+  if (!(sdcp->cardmode & SDC_MODE_HIGH_CAPACITY))
+    startblk *= SDC_BLOCK_SIZE;
+
+  if (n > 1){
+    /* Write multiple blocks command.*/
+    if (sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_WRITE_MULTIPLE_BLOCK,
+                                   startblk, resp) || SDC_R1_ERROR(resp[0]))
+      return SDC_FAILED;
+  }
+  else{
+    /* Write single block command.*/
+    if (sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_WRITE_BLOCK,
+                                   startblk, resp) || SDC_R1_ERROR(resp[0]))
+      return SDC_FAILED;
+  }
+
+  return SDC_SUCCESS;
+}
+
+/**
+ * @brief   Wait end of data transaction and performs finalizations.
+ *
+ * @param[in] sdcp      pointer to the @p SDCDriver object
+ * @param[in] n         number of blocks to read
+ * @param[in] resp      pointer to the response buffer
  *
  * @return              The operation status.
  * @retval SDC_SUCCESS  operation succeeded.
  * @retval SDC_FAILED   operation failed.
  */
-static bool_t sdc_lld_start_data_transaction(SDCDriver *sdcp, bool_t read){
-
-  /* Transaction starts just after DTEN bit setting.*/
-  if (read)
-    SDIO->DCTRL = SDIO_DCTRL_DTDIR | SDIO_DCTRL_DBLOCKSIZE_3 |
-                  SDIO_DCTRL_DBLOCKSIZE_0 | SDIO_DCTRL_DMAEN | SDIO_DCTRL_DTEN;
-  else
-    SDIO->DCTRL = SDIO_DCTRL_DBLOCKSIZE_3 | SDIO_DCTRL_DBLOCKSIZE_0 |
-                  SDIO_DCTRL_DMAEN | SDIO_DCTRL_DTEN;
+static bool_t sdc_lld_wait_transaction_end(SDCDriver *sdcp, uint32_t n,
+                                           uint32_t *resp){
 
   /* Note the mask is checked before going to sleep because the interrupt
      may have occurred before reaching the critical zone.*/
@@ -154,13 +170,18 @@ static bool_t sdc_lld_start_data_transaction(SDCDriver *sdcp, bool_t read){
     return SDC_FAILED;
   }
 
-  /* Wait until SDIO disables DMA to be sure that all data transferred.*/
+  /* Wait until DMA channel enabled to be sure that all data transferred.*/
   while (sdcp->dma->stream->CR & STM32_DMA_CR_EN)
     ;
   SDIO->ICR = STM32_SDIO_ICR_ALL_FLAGS;
   SDIO->DCTRL = 0;
   chSysUnlock();
-  return SDC_SUCCESS;
+
+  /* Finalize transaction.*/
+  if (n > 1)
+    return sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_STOP_TRANSMISSION, 0, resp);
+  else
+    return SDC_SUCCESS;
 }
 
 /**
@@ -170,7 +191,7 @@ static bool_t sdc_lld_start_data_transaction(SDCDriver *sdcp, bool_t read){
  *
  * @notapi
  */
-static void sdc_lld_handle_errors(SDCDriver *sdcp) {
+static void sdc_lld_collect_errors(SDCDriver *sdcp) {
   uint32_t errors = SDC_NO_ERROR;
 
   if (SDIO->STA & SDIO_STA_CCRCFAIL){
@@ -209,16 +230,20 @@ static void sdc_lld_handle_errors(SDCDriver *sdcp) {
  * @brief   Performs clean transaction stopping in case of errors.
  *
  * @param[in] sdcp      pointer to the @p SDCDriver object
+ * @param[in] n         number of blocks to read
+ * @param[in] resp      pointer to the response buffer
  *
  * @notapi
  */
-static void sdc_lld_error_cleanup(SDCDriver *sdcp){
+static void sdc_lld_error_cleanup(SDCDriver *sdcp, uint32_t n, uint32_t *resp){
   dmaStreamClearInterrupt(sdcp->dma);
   dmaStreamDisable(sdcp->dma);
   SDIO->ICR   = STM32_SDIO_ICR_ALL_FLAGS;
   SDIO->MASK  = 0;
   SDIO->DCTRL = 0;
-  sdc_lld_handle_errors(sdcp);
+  sdc_lld_collect_errors(sdcp);
+  if (n > 1)
+    sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_STOP_TRANSMISSION, 0, resp);
 }
 
 /**
@@ -499,7 +524,7 @@ bool_t sdc_lld_send_cmd_short(SDCDriver *sdcp, uint8_t cmd, uint32_t arg,
     ;
   SDIO->ICR = SDIO_ICR_CMDRENDC | SDIO_ICR_CTIMEOUTC | SDIO_ICR_CCRCFAILC;
   if ((sta & (SDIO_STA_CTIMEOUT)) != 0){
-    sdc_lld_handle_errors(sdcp);
+    sdc_lld_collect_errors(sdcp);
     return SDC_FAILED;
   }
   *resp = SDIO->RESP1;
@@ -532,7 +557,7 @@ bool_t sdc_lld_send_cmd_short_crc(SDCDriver *sdcp, uint8_t cmd, uint32_t arg,
     ;
   SDIO->ICR = SDIO_ICR_CMDRENDC | SDIO_ICR_CTIMEOUTC | SDIO_ICR_CCRCFAILC;
   if ((sta & (SDIO_STA_CTIMEOUT | SDIO_STA_CCRCFAIL)) != 0){
-    sdc_lld_handle_errors(sdcp);
+    sdc_lld_collect_errors(sdcp);
     return SDC_FAILED;
   }
   *resp = SDIO->RESP1;
@@ -567,7 +592,7 @@ bool_t sdc_lld_send_cmd_long_crc(SDCDriver *sdcp, uint8_t cmd, uint32_t arg,
     ;
   SDIO->ICR = SDIO_ICR_CMDRENDC | SDIO_ICR_CTIMEOUTC | SDIO_ICR_CCRCFAILC;
   if ((sta & (STM32_SDIO_STA_ERROR_MASK)) != 0){
-    sdc_lld_handle_errors(sdcp);
+    sdc_lld_collect_errors(sdcp);
     return SDC_FAILED;
   }
   /* save bytes in reverse order because MSB in response comes first */
@@ -621,22 +646,20 @@ bool_t sdc_lld_read(SDCDriver *sdcp, uint32_t startblk,
   SDIO->DLEN  = n * SDC_BLOCK_SIZE;
 
   /* Talk to card what we want from it.*/
-  if (sdc_lld_prepare_transaction(sdcp, startblk, n, resp, TRUE) == SDC_FAILED)
+  if (sdc_lld_prepare_read(sdcp, startblk, n, resp) == SDC_FAILED)
     goto error;
 
-  /* Start transaction.*/
-  if (sdc_lld_start_data_transaction(sdcp, TRUE) == SDC_FAILED)
+  /* Transaction starts just after DTEN bit setting.*/
+  SDIO->DCTRL = SDIO_DCTRL_DTDIR |
+                SDIO_DCTRL_DBLOCKSIZE_3 |
+                SDIO_DCTRL_DBLOCKSIZE_0 |
+                SDIO_DCTRL_DMAEN |
+                SDIO_DCTRL_DTEN;
+  if (sdc_lld_wait_transaction_end(sdcp, n, resp) == SDC_FAILED)
     goto error;
-
-  /* Finalize transaction.*/
-  if (n > 1)
-    return sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_STOP_TRANSMISSION, 0, resp);
-  else
-    return SDC_SUCCESS;
 
 error:
-  sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_STOP_TRANSMISSION, 0, resp);
-  sdc_lld_error_cleanup(sdcp);
+  sdc_lld_error_cleanup(sdcp, n, resp);
   return SDC_FAILED;
 }
 
@@ -682,21 +705,19 @@ bool_t sdc_lld_write(SDCDriver *sdcp, uint32_t startblk,
   SDIO->DLEN  = n * SDC_BLOCK_SIZE;
 
   /* Talk to card what we want from it.*/
-  if (sdc_lld_prepare_transaction(sdcp, startblk, n, resp, FALSE) == SDC_FAILED)
+  if (sdc_lld_prepare_write(sdcp, startblk, n, resp) == SDC_FAILED)
     goto error;
 
-  /* Start transaction.*/
-  if (sdc_lld_start_data_transaction(sdcp, FALSE) == SDC_FAILED)
+  /* Transaction starts just after DTEN bit setting.*/
+  SDIO->DCTRL = SDIO_DCTRL_DBLOCKSIZE_3 |
+                SDIO_DCTRL_DBLOCKSIZE_0 |
+                SDIO_DCTRL_DMAEN |
+                SDIO_DCTRL_DTEN;
+  if (sdc_lld_wait_transaction_end(sdcp, n, resp) == SDC_FAILED)
     goto error;
-
-  /* Finalize transaction.*/
-  if (n > 1)
-    return sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_STOP_TRANSMISSION, 0, resp);
-  else
-    return SDC_SUCCESS;
 
 error:
-  sdc_lld_error_cleanup(sdcp);
+  sdc_lld_error_cleanup(sdcp, n, resp);
   return SDC_FAILED;
 }
 
