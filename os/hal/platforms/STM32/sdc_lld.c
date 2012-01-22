@@ -58,6 +58,16 @@ SDCDriver SDCD1;
 /* Driver local variables.                                                   */
 /*===========================================================================*/
 
+#if STM32_SDC_UNALIGNED_SUPPORT
+/**
+ * @brief   Buffer for temporary storage during unaligned transfers.
+ */
+static union {
+  uint32_t  alignment;
+  uint8_t   buf[SDC_BLOCK_SIZE];
+} u;
+#endif
+
 /*===========================================================================*/
 /* Driver local functions.                                                   */
 /*===========================================================================*/
@@ -617,8 +627,8 @@ bool_t sdc_lld_send_cmd_long_crc(SDCDriver *sdcp, uint8_t cmd, uint32_t arg,
  *
  * @notapi
  */
-bool_t sdc_lld_read(SDCDriver *sdcp, uint32_t startblk,
-                    uint8_t *buf, uint32_t n) {
+bool_t sdc_lld_read_aligned(SDCDriver *sdcp, uint32_t startblk,
+                            uint8_t *buf, uint32_t n) {
   uint32_t resp[1];
 
   chDbgCheck((n < (0x1000000 / SDC_BLOCK_SIZE)), "max transaction size");
@@ -677,8 +687,8 @@ error:
  *
  * @notapi
  */
-bool_t sdc_lld_write(SDCDriver *sdcp, uint32_t startblk,
-                     const uint8_t *buf, uint32_t n) {
+bool_t sdc_lld_write_aligned(SDCDriver *sdcp, uint32_t startblk,
+                             const uint8_t *buf, uint32_t n) {
   uint32_t resp[1];
 
   chDbgCheck((n < (0x1000000 / SDC_BLOCK_SIZE)), "max transaction size");
@@ -719,6 +729,72 @@ bool_t sdc_lld_write(SDCDriver *sdcp, uint32_t startblk,
 error:
   sdc_lld_error_cleanup(sdcp, n, resp);
   return SDC_FAILED;
+}
+
+/**
+ * @brief   Reads one or more blocks.
+ *
+ * @param[in] sdcp      pointer to the @p SDCDriver object
+ * @param[in] startblk  first block to read
+ * @param[out] buf      pointer to the read buffer
+ * @param[in] n         number of blocks to read
+ * @return              The operation status.
+ * @retval FALSE        operation succeeded, the requested blocks have been
+ *                      read.
+ * @retval TRUE         operation failed, the state of the buffer is uncertain.
+ *
+ * @notapi
+ */
+bool_t sdc_lld_read(SDCDriver *sdcp, uint32_t startblk,
+                    uint8_t *buf, uint32_t n) {
+
+#if STM32_SDC_UNALIGNED_SUPPORT
+  if (((unsigned)buf & 3) != 0) {
+    uint32_t i;
+    for (i = 0; i < n; i++) {
+      if (sdc_lld_read_aligned(sdcp, startblk, u.buf, 1))
+        return TRUE;
+      memcpy(buf, u.buf, SDC_BLOCK_SIZE);
+      buf += SDC_BLOCK_SIZE;
+      startblk++;
+    }
+    return FALSE;
+  }
+#endif
+  return sdc_lld_read_aligned(sdcp, startblk, buf, n);
+}
+
+/**
+ * @brief   Writes one or more blocks.
+ *
+ * @param[in] sdcp      pointer to the @p SDCDriver object
+ * @param[in] startblk  first block to write
+ * @param[out] buf      pointer to the write buffer
+ * @param[in] n         number of blocks to write
+ * @return              The operation status.
+ * @retval FALSE        operation succeeded, the requested blocks have been
+ *                      written.
+ * @retval TRUE         operation failed.
+ *
+ * @notapi
+ */
+bool_t sdc_lld_write(SDCDriver *sdcp, uint32_t startblk,
+                     const uint8_t *buf, uint32_t n) {
+
+  #if STM32_SDC_UNALIGNED_SUPPORT
+  if (((unsigned)buf & 3) != 0) {
+    uint32_t i;
+    for (i = 0; i < n; i++) {
+      memcpy(u.buf, buf, SDC_BLOCK_SIZE);
+      buf += SDC_BLOCK_SIZE;
+      if (sdc_lld_write_aligned(sdcp, startblk, u.buf, 1))
+        return TRUE;
+      startblk++;
+    }
+    return FALSE;
+  }
+#endif
+  return sdc_lld_write_aligned(sdcp, startblk, buf, n);
 }
 
 #endif /* HAL_USE_SDC */
