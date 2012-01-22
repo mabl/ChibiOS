@@ -738,10 +738,10 @@ error:
  * @param[in] startblk  first block to read
  * @param[out] buf      pointer to the read buffer
  * @param[in] n         number of blocks to read
+ *
  * @return              The operation status.
- * @retval FALSE        operation succeeded, the requested blocks have been
- *                      read.
- * @retval TRUE         operation failed, the state of the buffer is uncertain.
+ * @retval SDC_SUCCESS  operation succeeded.
+ * @retval SDC_FAILED   operation failed.
  *
  * @notapi
  */
@@ -753,12 +753,12 @@ bool_t sdc_lld_read(SDCDriver *sdcp, uint32_t startblk,
     uint32_t i;
     for (i = 0; i < n; i++) {
       if (sdc_lld_read_aligned(sdcp, startblk, u.buf, 1))
-        return TRUE;
+        return SDC_FAILED;
       memcpy(buf, u.buf, SDC_BLOCK_SIZE);
       buf += SDC_BLOCK_SIZE;
       startblk++;
     }
-    return FALSE;
+    return SDC_SUCCESS;
   }
 #endif
   return sdc_lld_read_aligned(sdcp, startblk, buf, n);
@@ -771,10 +771,10 @@ bool_t sdc_lld_read(SDCDriver *sdcp, uint32_t startblk,
  * @param[in] startblk  first block to write
  * @param[out] buf      pointer to the write buffer
  * @param[in] n         number of blocks to write
+ *
  * @return              The operation status.
- * @retval FALSE        operation succeeded, the requested blocks have been
- *                      written.
- * @retval TRUE         operation failed.
+ * @retval SDC_SUCCESS  operation succeeded.
+ * @retval SDC_FAILED   operation failed.
  *
  * @notapi
  */
@@ -788,10 +788,10 @@ bool_t sdc_lld_write(SDCDriver *sdcp, uint32_t startblk,
       memcpy(u.buf, buf, SDC_BLOCK_SIZE);
       buf += SDC_BLOCK_SIZE;
       if (sdc_lld_write_aligned(sdcp, startblk, u.buf, 1))
-        return TRUE;
+        return SDC_FAILED;
       startblk++;
     }
-    return FALSE;
+    return SDC_SUCCESS;
   }
 #endif
   return sdc_lld_write_aligned(sdcp, startblk, buf, n);
