@@ -667,6 +667,8 @@ bool_t sdc_lld_read_aligned(SDCDriver *sdcp, uint32_t startblk,
                 SDIO_DCTRL_DTEN;
   if (sdc_lld_wait_transaction_end(sdcp, n, resp) == SDC_FAILED)
     goto error;
+  else
+    return SDC_SUCCESS;
 
 error:
   sdc_lld_error_cleanup(sdcp, n, resp);
@@ -725,6 +727,8 @@ bool_t sdc_lld_write_aligned(SDCDriver *sdcp, uint32_t startblk,
                 SDIO_DCTRL_DTEN;
   if (sdc_lld_wait_transaction_end(sdcp, n, resp) == SDC_FAILED)
     goto error;
+  else
+    return SDC_SUCCESS;
 
 error:
   sdc_lld_error_cleanup(sdcp, n, resp);
