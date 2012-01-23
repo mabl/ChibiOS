@@ -183,9 +183,17 @@ static bool_t sdc_lld_wait_transaction_end(SDCDriver *sdcp, uint32_t n,
   /* Wait until DMA channel enabled to be sure that all data transferred.*/
   while (sdcp->dma->stream->CR & STM32_DMA_CR_EN)
     ;
+
+  /* DMA event flags must be manually cleared.*/
+  dmaStreamClearInterrupt(sdcp->dma);
+
   SDIO->ICR = STM32_SDIO_ICR_ALL_FLAGS;
   SDIO->DCTRL = 0;
   chSysUnlock();
+
+  /* Wait until interrupt flags to be cleared.*/
+  while (((DMA2->LISR) >> (sdcp->dma->ishift)) & STM32_DMA_ISR_TCIF)
+    dmaStreamClearInterrupt(sdcp->dma);
 
   /* Finalize transaction.*/
   if (n > 1)
@@ -256,49 +264,6 @@ static void sdc_lld_error_cleanup(SDCDriver *sdcp, uint32_t n, uint32_t *resp){
     sdc_lld_send_cmd_short_crc(sdcp, SDC_CMD_STOP_TRANSMISSION, 0, resp);
 }
 
-/**
- * @brief   Handles DMA interrupts.
- *
- * @param[in] sdcp      pointer to the @p SDCDriver object
- * @param[in] flags     pre-shifted content of the ISR register
- *
- * @isr
- */
-static void sdc_lld_serve_dma_interrupt(SDCDriver *sdcp, uint32_t flags) {
-
-  dmaStreamClearInterrupt(sdcp->dma);
-
-  if (flags & (STM32_DMA_ISR_TEIF | STM32_DMA_ISR_DMEIF)) {
-    chSysLockFromIsr();
-    sdcp->errors |= SDC_DMA_ERROR;
-    chSysUnlockFromIsr();
-    #if defined(STM32_SDC_DMA_ERROR_HOOK)
-      STM32_SDC_DMA_ERROR_HOOK();
-    #else
-      (void)flags;
-    #endif
-  }
-
-  if (flags & STM32_DMA_ISR_TCIF){
-    chSysLockFromIsr();
-    if (SDCD1.thread != NULL) {
-      chSchReadyI(SDCD1.thread);
-      SDCD1.thread = NULL;
-    }
-    /* Disables the source but the status flags are not reset because the
-       read/write functions needs to check them.*/
-    SDIO->MASK = 0;
-
-    /* Wait until interrupt flag to be cleared.*/
-    while (((DMA2->LISR) >> (sdcp->dma->ishift)) & STM32_DMA_ISR_TCIF)
-      dmaStreamClearInterrupt(sdcp->dma);
-
-    chSysUnlockFromIsr();
-  }
-  else
-    chSysHalt(); /* unhandled interrupt happens*/
-}
-
 /*===========================================================================*/
 /* Driver interrupt handlers.                                                */
 /*===========================================================================*/
@@ -314,19 +279,18 @@ CH_IRQ_HANDLER(SDIO_IRQHandler) {
 
   CH_IRQ_PROLOGUE();
 
-  if (SDIO->STA & STM32_SDIO_STA_ERROR_MASK){
     chSysLockFromIsr()
 
-    /* Disables the source but the status flags are not reset because the
-       read/write functions needs to check them.*/
-    SDIO->MASK = 0;
+  /* Disables the source but the status flags are not reset because the
+     read/write functions needs to check them.*/
+  SDIO->MASK = 0;
 
-    if (SDCD1.thread != NULL) {
-      chSchReadyI(SDCD1.thread);
-      SDCD1.thread = NULL;    }
+  if (SDCD1.thread != NULL) {
+    chSchReadyI(SDCD1.thread);
+    SDCD1.thread = NULL;  }
 
-    chSysUnlockFromIsr();
-  }
+  chSysUnlockFromIsr();
+
   CH_IRQ_EPILOGUE();
 }
 
@@ -363,9 +327,6 @@ void sdc_lld_start(SDCDriver *sdcp) {
                   STM32_DMA_CR_PL(STM32_SDC_SDIO_DMA_PRIORITY) |
                   STM32_DMA_CR_PSIZE_WORD |
                   STM32_DMA_CR_MSIZE_WORD |
-                  STM32_DMA_CR_DMEIE |
-                  STM32_DMA_CR_TEIE |
-                  STM32_DMA_CR_TCIE |
                   STM32_DMA_CR_MINC;
 
   #if (defined(STM32F4XX) || defined(STM32F2XX))
@@ -378,9 +339,7 @@ void sdc_lld_start(SDCDriver *sdcp) {
   if (sdcp->state == SDC_STOP) {
     /* Note, the DMA must be enabled before the IRQs.*/
     bool_t b;
-    b = dmaStreamAllocate(sdcp->dma, STM32_SDC_SDIO_IRQ_PRIORITY,
-                         (stm32_dmaisr_t)sdc_lld_serve_dma_interrupt,
-                         (void *)sdcp);
+    b = dmaStreamAllocate(sdcp->dma, STM32_SDC_SDIO_IRQ_PRIORITY, NULL, NULL);
     chDbgAssert(!b, "i2c_lld_start(), #3", "stream already allocated");
     dmaStreamSetPeripheral(sdcp->dma, &SDIO->FIFO);
     #if (SDC_SDIO_DMA_USE_FIFO && (defined(STM32F4XX) || defined(STM32F2XX)))
@@ -652,7 +611,8 @@ bool_t sdc_lld_read_aligned(SDCDriver *sdcp, uint32_t startblk,
   SDIO->MASK  = SDIO_MASK_DCRCFAILIE |
                 SDIO_MASK_DTIMEOUTIE |
                 SDIO_MASK_STBITERRIE |
-                SDIO_MASK_RXOVERRIE;/* | SDIO_MASK_DATAENDIE; */
+                SDIO_MASK_RXOVERRIE |
+                SDIO_MASK_DATAENDIE;
   SDIO->DLEN  = n * SDC_BLOCK_SIZE;
 
   /* Talk to card what we want from it.*/
@@ -713,7 +673,8 @@ bool_t sdc_lld_write_aligned(SDCDriver *sdcp, uint32_t startblk,
   SDIO->MASK  = SDIO_MASK_DCRCFAILIE |
                 SDIO_MASK_DTIMEOUTIE |
                 SDIO_MASK_STBITERRIE |
-                SDIO_MASK_TXUNDERRIE; /* | SDIO_MASK_DATAENDIE; */
+                SDIO_MASK_TXUNDERRIE |
+                SDIO_MASK_DATAENDIE;
   SDIO->DLEN  = n * SDC_BLOCK_SIZE;
 
   /* Talk to card what we want from it.*/
