@@ -412,8 +412,12 @@ bool_t sdcRead(SDCDriver *sdcp, uint32_t startblk,
                uint8_t *buf, uint32_t n) {
   bool_t status;
 
-  chDbgCheck((sdcp != NULL) && (buf != NULL) && (n > 0) &&
-             ((startblk + n) <= sdcp->capacity), "sdcRead");
+  chDbgCheck((sdcp != NULL) && (buf != NULL) && (n > 0), "sdcRead");
+
+  if ((startblk + n) > sdcp->capacity){
+    sdcp->errors |= SDC_OVERFLOW_ERROR;
+    return SDC_FAILED;
+  }
 
   chSysLock();
   chDbgAssert(sdcp->state == SDC_ACTIVE, "sdcRead(), #1", "invalid state");
@@ -445,8 +449,12 @@ bool_t sdcWrite(SDCDriver *sdcp, uint32_t startblk,
                 const uint8_t *buf, uint32_t n) {
   bool_t status;
 
-  chDbgCheck((sdcp != NULL) && (buf != NULL) && (n > 0) &&
-             ((startblk + n) <= sdcp->capacity), "sdcWrite");
+  chDbgCheck((sdcp != NULL) && (buf != NULL) && (n > 0), "sdcWrite");
+
+  if ((startblk + n) > sdcp->capacity){
+    sdcp->errors |= SDC_OVERFLOW_ERROR;
+    return SDC_FAILED;
+  }
 
   chSysLock();
   chDbgAssert(sdcp->state == SDC_ACTIVE, "sdcWrite(), #1", "invalid state");

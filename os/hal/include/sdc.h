@@ -106,7 +106,7 @@
 #define SDC_TX_UNDERRUN       16          /**< @brief TX buffer underrun.    */
 #define SDC_RX_OVERRUN        32          /**< @brief RX buffer overrun.     */
 #define SDC_STARTBIT_ERROR    64          /**< @brief Start bit not detected.*/
-#define SDC_DMA_ERROR         128         /**< @brief RX buffer overrun.     */
+#define SDC_OVERFLOW_ERROR    128         /**< @brief Card overflow error.   */
 #define SDC_UNHANDLED_ERROR   0xFFFFFFFF
 
 /*===========================================================================*/
