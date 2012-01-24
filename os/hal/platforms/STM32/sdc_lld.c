@@ -81,9 +81,8 @@ static union {
  * @param[in] resp      pointer to the response buffer
  *
  * @return              The operation status.
- * @retval SDC_SUCCESS  operation succeeded, the requested blocks have been
- *                      read.
- * @retval SDC_FAILED   operation failed, the state of the buffer is uncertain.
+ * @retval SDC_SUCCESS  operation succeeded.
+ * @retval SDC_FAILED   operation failed.
  *
  * @notapi
  */
@@ -116,13 +115,12 @@ static bool_t sdc_lld_prepare_read(SDCDriver *sdcp, uint32_t startblk,
  *
  * @param[in] sdcp      pointer to the @p SDCDriver object
  * @param[in] startblk  first block to read
- * @param[in] n         number of blocks to read
+ * @param[in] n         number of blocks to write
  * @param[in] resp      pointer to the response buffer
  *
  * @return              The operation status.
- * @retval SDC_SUCCESS  operation succeeded, the requested blocks have been
- *                      read.
- * @retval SDC_FAILED   operation failed, the state of the buffer is uncertain.
+ * @retval SDC_SUCCESS  operation succeeded.
+ * @retval SDC_FAILED   operation failed.
  *
  * @notapi
  */
@@ -154,7 +152,7 @@ static bool_t sdc_lld_prepare_write(SDCDriver *sdcp, uint32_t startblk,
  * @brief   Wait end of data transaction and performs finalizations.
  *
  * @param[in] sdcp      pointer to the @p SDCDriver object
- * @param[in] n         number of blocks to read
+ * @param[in] n         number of blocks in transaction
  * @param[in] resp      pointer to the response buffer
  *
  * @return              The operation status.
@@ -248,7 +246,7 @@ static void sdc_lld_collect_errors(SDCDriver *sdcp) {
  * @brief   Performs clean transaction stopping in case of errors.
  *
  * @param[in] sdcp      pointer to the @p SDCDriver object
- * @param[in] n         number of blocks to read
+ * @param[in] n         number of blocks in transaction
  * @param[in] resp      pointer to the response buffer
  *
  * @notapi

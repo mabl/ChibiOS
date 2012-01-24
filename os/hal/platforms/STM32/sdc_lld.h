@@ -202,6 +202,7 @@ struct SDCDriver {
   const stm32_dma_stream_t  *dma;
   /**
    * @brief     Pointer to the SDIO registers block.
+   * @note      Used only for dubugging purpose.
    */
 #if CH_DBG_ENABLE_ASSERTS
   SDIO_TypeDef              *sdio;
