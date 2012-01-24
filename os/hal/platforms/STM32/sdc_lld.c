@@ -277,7 +277,7 @@ CH_IRQ_HANDLER(SDIO_IRQHandler) {
 
   CH_IRQ_PROLOGUE();
 
-    chSysLockFromIsr()
+  chSysLockFromIsr()
 
   /* Disables the source but the status flags are not reset because the
      read/write functions needs to check them.*/
@@ -305,17 +305,16 @@ void sdc_lld_init(void) {
 
   sdcObjectInit(&SDCD1);
   SDCD1.thread = NULL;
+  SDCD1.dma    = STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM);
 #if CH_DBG_ENABLE_ASSERTS
   SDCD1.sdio   = SDIO;
 #endif
-  SDCD1.dma    = STM32_DMA_STREAM(STM32_SDC_SDIO_DMA_STREAM);
 }
 
 /**
  * @brief   Configures and activates the SDC peripheral.
  *
- * @param[in] sdcp      pointer to the @p SDCDriver object, must be @p NULL,
- *                      this driver does not require any configuration
+ * @param[in] sdcp      pointer to the @p SDCDriver object
  *
  * @notapi
  */
@@ -603,8 +602,7 @@ bool_t sdc_lld_read_aligned(SDCDriver *sdcp, uint32_t startblk,
   dmaStreamSetMode(sdcp->dma, sdcp->dmamode | STM32_DMA_CR_DIR_P2M);
   dmaStreamEnable(sdcp->dma);
 
-  /* Setting up data transfer.
-     Options: Card to Controller, Block mode, DMA mode, 512 bytes blocks.*/
+  /* Setting up data transfer.*/
   SDIO->ICR   = STM32_SDIO_ICR_ALL_FLAGS;
   SDIO->MASK  = SDIO_MASK_DCRCFAILIE |
                 SDIO_MASK_DTIMEOUTIE |
