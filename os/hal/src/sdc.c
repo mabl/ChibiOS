@@ -52,7 +52,7 @@
  *
  * @notapi
  */
-uint32_t sdc_get_slice(uint32_t *data, int8_t end, int8_t start) {
+static uint32_t _sdc_get_slice(uint32_t *data, int8_t end, int8_t start) {
   uint32_t word = 0;
   uint32_t mask = 0;
 
@@ -331,14 +331,14 @@ bool_t sdcConnect(SDCDriver *sdcp) {
   uint8_t  b, c;
   case 0:
     /* CSD version 1.0 */
-    a = sdc_get_slice(sdcp->csd, SDC_CSD_10_C_SIZE_SLICE);
-    b = sdc_get_slice(sdcp->csd, SDC_CSD_10_C_SIZE_MULT_SLICE);
-    c = sdc_get_slice(sdcp->csd, SDC_CSD_10_READ_BL_LEN_SLICE);
+    a = _sdc_get_slice(sdcp->csd, SDC_CSD_10_C_SIZE_SLICE);
+    b = _sdc_get_slice(sdcp->csd, SDC_CSD_10_C_SIZE_MULT_SLICE);
+    c = _sdc_get_slice(sdcp->csd, SDC_CSD_10_READ_BL_LEN_SLICE);
     sdcp->capacity = ((a + 1) << (b + 2) << c) / 512;
     break;
   case 1:
     /* CSD version 2.0 */
-    a = sdc_get_slice(sdcp->csd, SDC_CSD_20_C_SIZE_SLICE);
+    a = _sdc_get_slice(sdcp->csd, SDC_CSD_20_C_SIZE_SLICE);
     sdcp->capacity = 1024 * (a + 1);
     break;
   }

@@ -338,7 +338,6 @@ extern "C" {
   bool_t sdcWrite(SDCDriver *sdcp, uint32_t startblk,
                   const uint8_t *buffer, uint32_t n);
   bool_t _sdc_wait_for_transfer_state(SDCDriver *sdcp);
-  uint32_t sdc_get_slice(uint32_t *data, int8_t end, int8_t start);
 #ifdef __cplusplus
 }
 #endif
