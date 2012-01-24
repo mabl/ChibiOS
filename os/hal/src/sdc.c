@@ -414,7 +414,7 @@ bool_t sdcRead(SDCDriver *sdcp, uint32_t startblk,
 
   chDbgCheck((sdcp != NULL) && (buf != NULL) && (n > 0), "sdcRead");
 
-  if ((startblk + n) > sdcp->capacity){
+  if ((startblk + n - 1) > sdcp->capacity){
     sdcp->errors |= SDC_OVERFLOW_ERROR;
     return SDC_FAILED;
   }
@@ -451,7 +451,7 @@ bool_t sdcWrite(SDCDriver *sdcp, uint32_t startblk,
 
   chDbgCheck((sdcp != NULL) && (buf != NULL) && (n > 0), "sdcWrite");
 
-  if ((startblk + n) > sdcp->capacity){
+  if ((startblk + n - 1) > sdcp->capacity){
     sdcp->errors |= SDC_OVERFLOW_ERROR;
     return SDC_FAILED;
   }
