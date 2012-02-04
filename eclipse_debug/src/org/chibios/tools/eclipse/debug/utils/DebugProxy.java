@@ -92,26 +92,29 @@ public class DebugProxy {
       throws DebugProxyException {
     if (mi_session.getMIInferior().isRunning())
       return -1;
-    MIDataReadMemory mem = cmd_factory.createMIDataReadMemory(0,
-                                                              Long.toString(base),
-                                                              MIFormat.HEXADECIMAL,
-                                                              4,
-                                                              1,
-                                                              (int)(end - base),
-                                                              '.');
-    try {
-      mi_session.postCommand(mem);
-       MIDataReadMemoryInfo info = mem.getMIDataReadMemoryInfo();
-       if (info != null) {
-         long[] data = info.getMemories()[0].getData();
-         int i = 0;
-         while ((i < data.length) && (data[i] == pattern))
-        	 i++;
-         return i * 4;
-       }
-    } catch (MIException e) {}
-    throw new DebugProxyException("error reading memory at " +
-        base);
+    if (end > base) {
+      MIDataReadMemory mem = cmd_factory.createMIDataReadMemory(0,
+          Long.toString(base),
+          MIFormat.HEXADECIMAL,
+          4,
+          1,
+          (int)(end - base),
+          '.');
+      try {
+        mi_session.postCommand(mem);
+         MIDataReadMemoryInfo info = mem.getMIDataReadMemoryInfo();
+         if (info != null) {
+           long[] data = info.getMemories()[0].getData();
+           int i = 0;
+           while ((i < data.length) && (data[i] == pattern))
+               i++;
+           return i * 4;
+         }
+      } catch (MIException e) {}
+      throw new DebugProxyException("error reading memory at " +
+          base);
+    }
+    return 0;
   }
 
   public String readCString(long address, int max)
