@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -186,7 +186,7 @@ void spi_lld_start(SPIDriver *spip) {
       LPC_SYSCON->SSPCLKDIV = LPC13xx_SPI_SSP0CLKDIV;
       LPC_SYSCON->SYSAHBCLKCTRL |= (1 << 11);
       LPC_SYSCON->PRESETCTRL |= 1;
-      NVICEnableVector(SSP_IRQn,
+      nvicEnableVector(SSP_IRQn,
                        CORTEX_PRIORITY_MASK(LPC13xx_SPI_SSP0_IRQ_PRIORITY));
     }
 #endif
@@ -217,7 +217,7 @@ void spi_lld_stop(SPIDriver *spip) {
       LPC_SYSCON->PRESETCTRL &= ~1;
       LPC_SYSCON->SYSAHBCLKCTRL &= ~(1 << 11);
       LPC_SYSCON->SSPCLKDIV = 0;
-      NVICDisableVector(SSP_IRQn);
+      nvicDisableVector(SSP_IRQn);
     }
 #endif
   }

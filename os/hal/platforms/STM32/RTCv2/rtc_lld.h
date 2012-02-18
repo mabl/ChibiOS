@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -17,6 +17,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*
+   Concepts and parts of this file have been contributed by Uladzimir Pylinsky
+   aka barthess.
+ */
 
 /**
  * @file    STM32/RTCv2/rtc_lld.h
@@ -36,11 +40,13 @@
 /*===========================================================================*/
 
 /**
- * @brief   This RTC implementation supports callbacks.
+ * @brief   This RTC implementation doesn't support callbacks.
  */
-#if !defined(RTC_SUPPORTS_CALLBACKS) || defined(__DOXYGEN__)
 #define RTC_SUPPORTS_CALLBACKS      FALSE
-#endif
+
+/*===========================================================================*/
+/* Driver constants.                                                         */
+/*===========================================================================*/
 
 /**
  * @brief   Two alarm comparators available on STM32F4x.
@@ -67,8 +73,9 @@
 #error "RTC not present in the selected device"
 #endif
 
-#if !(STM32_RTC == STM32_RTC_LSE) && !(STM32_RTC == STM32_RTC_LSI) &&       \
-    !(STM32_RTC == STM32_RTC_HSE)
+#if !(STM32_RTCSEL == STM32_RTCSEL_LSE) &&                                  \
+    !(STM32_RTCSEL == STM32_RTCSEL_LSI) &&                                  \
+    !(STM32_RTCSEL == STM32_RTCSEL_HSEDIV)
 #error "invalid source selected for RTC clock"
 #endif
 
@@ -100,6 +107,17 @@ typedef struct RTCCallbackConfig RTCCallbackConfig;
  * @details Meaningful on platforms with more than 1 alarm comparator.
  */
 typedef uint32_t rtcalarm_t;
+
+/**
+ * @brief   Type of an RTC event.
+ */
+typedef enum {
+  RTC_EVENT_WAKEUP = 0,           /** Triggered every wakeup event.          */
+  RTC_EVENT_ALARM_A = 1,          /** Triggered on alarm A.                  */
+  RTC_EVENT_ALARM_B = 2,          /** Triggered on alarm B.                  */
+  RTC_EVENT_TAMPER = 3,           /** Triggered on Tamper event.             */
+  RTC_EVENT_TIMESTAMP = 4,        /** Triggered on TimeStamp event.          */
+} rtcevent_t;
 
 /**
  * @brief   Structure representing an RTC time stamp.

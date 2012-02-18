@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -321,7 +321,7 @@
 #define VAL_GPIOE_MODER             (PIN_MODE_INPUT(GPIOE_INT1) |           \
                                      PIN_MODE_INPUT(GPIOE_INT2) |           \
                                      PIN_MODE_INPUT(2) |                    \
-                                     PIN_MODE_INPUT(GPIOE_CS_SPI) |         \
+                                     PIN_MODE_OUTPUT(GPIOE_CS_SPI) |        \
                                      PIN_MODE_INPUT(4) |                    \
                                      PIN_MODE_INPUT(5) |                    \
                                      PIN_MODE_INPUT(6) |                    \
@@ -336,7 +336,7 @@
                                      PIN_MODE_INPUT(15))
 #define VAL_GPIOE_OTYPER            0x00000000
 #define VAL_GPIOE_OSPEEDR           0xFFFFFFFF
-#define VAL_GPIOE_PUPDR             (PIN_PUDR_FLOATING(GPIOE_INT1) |       \
+#define VAL_GPIOE_PUPDR             (PIN_PUDR_FLOATING(GPIOE_INT1) |        \
                                      PIN_PUDR_FLOATING(GPIOE_INT2) |        \
                                      PIN_PUDR_PULLUP(2) |                   \
                                      PIN_PUDR_FLOATING(GPIOE_CS_SPI) |      \

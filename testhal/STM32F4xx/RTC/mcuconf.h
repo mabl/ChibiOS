@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -36,9 +36,6 @@
  * HAL driver system settings.
  */
 #define STM32_NO_INIT                       FALSE
-#define STM32_VOS                           STM32_VOS_HIGH
-#define STM32_PLS                           STM32_PLS_LEV0
-#define STM32_PVD_ENABLE                    TRUE
 #define STM32_HSI_ENABLED                   TRUE
 #define STM32_LSI_ENABLED                   FALSE
 #define STM32_HSE_ENABLED                   TRUE
@@ -59,16 +56,17 @@
 #define STM32_MCO1PRE                       STM32_MCO1PRE_DIV1
 #define STM32_MCO2SEL                       STM32_MCO2SEL_SYSCLK
 #define STM32_MCO2PRE                       STM32_MCO2PRE_DIV5
-#define STM32_I2SSRC                        STM32_I2CSRC_CKIN
+#define STM32_I2SSRC                        STM32_I2SSRC_CKIN
 #define STM32_PLLI2SN_VALUE                 192
 #define STM32_PLLI2SR_VALUE                 5
-#define STM32_RTC                           STM32_RTC_LSE
-
+#define STM32_VOS                           STM32_VOS_HIGH
+#define STM32_PVD_ENABLE                    FALSE
+#define STM32_PLS                           STM32_PLS_LEV0
 
 /*
  * ADC driver system settings.
  */
-#define STM32_ADC_ADCPRE                    ADC_CCR_ADCPRE_DIV2
+#define STM32_ADC_ADCPRE                    ADC_CCR_ADCPRE_DIV4
 #define STM32_ADC_USE_ADC1                  FALSE
 #define STM32_ADC_USE_ADC2                  FALSE
 #define STM32_ADC_USE_ADC3                  FALSE
@@ -100,12 +98,12 @@
 #define STM32_EXT_EXTI5_9_IRQ_PRIORITY      6
 #define STM32_EXT_EXTI10_15_IRQ_PRIORITY    6
 #define STM32_EXT_EXTI16_IRQ_PRIORITY       6
-#define STM32_EXT_EXTI17_IRQ_PRIORITY       15 // RTC alarm
+#define STM32_EXT_EXTI17_IRQ_PRIORITY       15
 #define STM32_EXT_EXTI18_IRQ_PRIORITY       6
 #define STM32_EXT_EXTI19_IRQ_PRIORITY       6
 #define STM32_EXT_EXTI20_IRQ_PRIORITY       6
-#define STM32_EXT_EXTI21_IRQ_PRIORITY       15 // RTC tamper-timestamp
-#define STM32_EXT_EXTI22_IRQ_PRIORITY       15 // RTC wakeup
+#define STM32_EXT_EXTI21_IRQ_PRIORITY       15
+#define STM32_EXT_EXTI22_IRQ_PRIORITY       15
 
 /*
  * GPT driver system settings.
@@ -116,13 +114,6 @@
 #define STM32_GPT_USE_TIM4                  FALSE
 #define STM32_GPT_USE_TIM5                  FALSE
 #define STM32_GPT_USE_TIM8                  FALSE
-#define STM32_GPT_USE_TIM9                  FALSE
-#define STM32_GPT_USE_TIM10                 FALSE
-#define STM32_GPT_USE_TIM11                 FALSE
-#define STM32_GPT_USE_TIM12                 FALSE
-#define STM32_GPT_USE_TIM12                 FALSE
-#define STM32_GPT_USE_TIM14                 FALSE
-
 #define STM32_GPT_TIM1_IRQ_PRIORITY         7
 #define STM32_GPT_TIM2_IRQ_PRIORITY         7
 #define STM32_GPT_TIM3_IRQ_PRIORITY         7
@@ -218,7 +209,6 @@
 #define STM32_UART_USART2_DMA_PRIORITY      0
 #define STM32_UART_USART3_DMA_PRIORITY      0
 #define STM32_UART_DMA_ERROR_HOOK(uartp)    chSysHalt()
-
 
 /*
  * I2C driver system settings.

@@ -5,7 +5,7 @@
 
 # Compiler options here.
 ifeq ($(USE_OPT),)
-  USE_OPT = -O2 -ggdb -fomit-frame-pointer -mhard-float
+  USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16 -mhard-float -mfpu=fpv4-sp-d16 -fsingle-precision-constant
 endif
 
 # C specific options here (added to USE_OPT).
@@ -67,7 +67,8 @@ include $(CHIBIOS)/os/kernel/kernel.mk
 include $(CHIBIOS)/test/test.mk
 
 # Define linker script file here
-LDSCRIPT= $(PORTLD)/STM32F407xG_CCM.ld
+LDSCRIPT= $(PORTLD)/STM32F407xG.ld
+#LDSCRIPT= $(PORTLD)/STM32F407xG_CCM.ld
 
 # C sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
@@ -77,8 +78,8 @@ CSRC = $(PORTSRC) \
        $(HALSRC) \
        $(PLATFORMSRC) \
        $(BOARDSRC) \
-       $(CHIBIOS)/os/various/evtimer.c \
-       $(CHIBIOS)/os/various/syscalls.c \
+       $(CHIBIOS)/os/various/lis302dl.c \
+       $(CHIBIOS)/os/various/chprintf.c \
        main.c
 
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global

@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -299,6 +299,8 @@ typedef void (*stm32_dmaisr_t)(void *p, uint32_t flags);
 
 /**
  * @brief   DMA stream disable.
+ * @details The function disables the specified stream and then clears any
+ *          pending interrupt.
  * @note    This function can be invoked in both ISR or thread context.
  * @pre     The stream must have been allocated using @p dmaStreamAllocate().
  * @post    After use the stream can be released using @p dmaStreamRelease().
@@ -309,6 +311,7 @@ typedef void (*stm32_dmaisr_t)(void *p, uint32_t flags);
  */
 #define dmaStreamDisable(dmastp) {                                          \
   (dmastp)->channel->CCR &= ~STM32_DMA_CR_EN;                               \
+  dmaStreamClearInterrupt(dmastp);                                          \
 }
 
 /**
@@ -361,8 +364,11 @@ typedef void (*stm32_dmaisr_t)(void *p, uint32_t flags);
  * @param[in] dmastp    pointer to a stm32_dma_stream_t structure
  */
 #define dmaWaitCompletion(dmastp)                                           \
-  while (((dmastp)->channel->CNDTR > 0) &&                                  \
-         ((dmastp)->channel->CCR & STM32_DMA_CR_EN))
+  while ((dmastp)->channel->CNDTR > 0)                                      \
+    ;                                                                       \
+  dmaStreamDisable(dmastp);                                                 \
+}
+
 /** @} */
 
 /*===========================================================================*/

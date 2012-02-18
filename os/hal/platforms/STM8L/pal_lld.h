@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -218,16 +218,16 @@ typedef GPIO_TypeDef *ioportid_t;
  * @brief   Pads group mode setup.
  * @details This function programs a pads group belonging to the same port
  *          with the specified mode.
- * @note    Programming an unknown or unsupported mode is silently ignored.
  *
  * @param[in] port      port identifier
  * @param[in] mask      group mask
+ * @param[in] offset    group bit offset within the port
  * @param[in] mode      group mode
  *
  * @notapi
  */
-#define pal_lld_setgroupmode(port, mask, mode)                              \
-  _pal_lld_setgroupmode(port, mask, mode)
+#define pal_lld_setgroupmode(port, mask, offset, mode)                      \
+  _pal_lld_setgroupmode(port, mask << offset, mode)
 
 extern ROMCONST PALConfig pal_default_config;
 

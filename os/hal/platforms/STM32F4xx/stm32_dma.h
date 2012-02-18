@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -54,7 +54,7 @@
  *                      nibble
  * @return              Returns the channel associated to the stream.
  */
-#define STM32_DMA_GETCHANNEL(id, c) ((c) >> (((id) & 7) * 4))
+#define STM32_DMA_GETCHANNEL(id, c) (((c) >> (((id) & 7) * 4)) & 7)
 
 /**
  * @brief   Returns an unique numeric identifier for a DMA stream.
@@ -352,6 +352,8 @@ typedef void (*stm32_dmaisr_t)(void *p, uint32_t flags);
 
 /**
  * @brief   DMA stream disable.
+ * @details The function disables the specified stream, waits for the disable
+ *          operation to complete and then clears any pending interrupt.
  * @note    This function can be invoked in both ISR or thread context.
  * @pre     The stream must have been allocated using @p dmaStreamAllocate().
  * @post    After use the stream can be released using @p dmaStreamRelease().
@@ -362,6 +364,9 @@ typedef void (*stm32_dmaisr_t)(void *p, uint32_t flags);
  */
 #define dmaStreamDisable(dmastp) {                                          \
   (dmastp)->stream->CR &= ~STM32_DMA_CR_EN;                                 \
+  while (((dmastp)->stream->CR & STM32_DMA_CR_EN) != 0)                     \
+    ;                                                                       \
+  dmaStreamClearInterrupt(dmastp);                                          \
 }
 
 /**
@@ -413,9 +418,11 @@ typedef void (*stm32_dmaisr_t)(void *p, uint32_t flags);
  *
  * @param[in] dmastp    pointer to a stm32_dma_stream_t structure
  */
-#define dmaWaitCompletion(dmastp)                                           \
-  while (((dmastp)->stream->CNDTR > 0) &&                                   \
-         ((dmastp)->stream->CCR & STM32_DMA_CR_EN))
+#define dmaWaitCompletion(dmastp) {                                         \
+  while ((dmastp)->stream->NDTR > 0)                                        \
+    ;                                                                       \
+  dmaStreamDisable(dmastp);                                                 \
+}
 /** @} */
 
 /*===========================================================================*/

@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -17,6 +17,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*
+   Concepts and parts of this file have been contributed by Uladzimir Pylinsky
+   aka barthess.
+ */
 
 #include <stdlib.h>
 
@@ -32,8 +36,9 @@
 /*
  * Red LEDs blinker thread, times are in milliseconds.
  */
-static WORKING_AREA(BlinkWA, 128);
+static WORKING_AREA(BlinkWA, 64);
 static msg_t Blink(void *arg) {
+  chRegSetThreadName("Blink");
   (void)arg;
   while (TRUE) {
     palClearPad(IOPORT3, GPIOC_LED);
@@ -47,12 +52,12 @@ static msg_t Blink(void *arg) {
 /*
  * Accelerometer thread
  */
-static WORKING_AREA(PollAccelThreadWA, 128);
+static WORKING_AREA(PollAccelThreadWA, 256);
 static msg_t PollAccelThread(void *arg) {
   chRegSetThreadName("PollAccel");
   (void)arg;
   while (TRUE) {
-//    chThdSleepMilliseconds(rand() & 31);
+    /*chThdSleepMilliseconds(rand() & 31);*/
     chThdSleepMilliseconds(32);
     request_acceleration_data();
   }
@@ -61,12 +66,12 @@ static msg_t PollAccelThread(void *arg) {
 
 
 /* Temperature polling thread */
-static WORKING_AREA(PollTmp75ThreadWA, 128);
+static WORKING_AREA(PollTmp75ThreadWA, 256);
 static msg_t PollTmp75Thread(void *arg) {
   chRegSetThreadName("PollTmp75");
   (void)arg;
   while (TRUE) {
-//    chThdSleepMilliseconds(rand() & 31);
+    /*chThdSleepMilliseconds(rand() & 31);*/
     chThdSleepMilliseconds(15);
     /* Call reading function */
     request_temperature();
@@ -76,7 +81,7 @@ static msg_t PollTmp75Thread(void *arg) {
 
 
 /* Temperature polling thread */
-static WORKING_AREA(PollFakeThreadWA, 128);
+static WORKING_AREA(PollFakeThreadWA, 256);
 static msg_t PollFakeThread(void *arg) {
   chRegSetThreadName("PollFake");
   (void)arg;

@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -130,7 +130,7 @@ int main(void) {
    * Setting up analog inputs used by the demo.
    */
   palSetGroupMode(GPIOC, PAL_PORT_BIT(0) | PAL_PORT_BIT(1),
-                  PAL_MODE_INPUT_ANALOG);
+                  0, PAL_MODE_INPUT_ANALOG);
 
   /*
    * Creates the blinker thread.

@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -17,6 +17,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*
+   Concepts and parts of this file have been contributed by Uladzimir Pylinsky
+   aka barthess.
+ */
 
 /**
  * @file    STM32/RTCv2/rtc_lld.c
@@ -30,24 +34,6 @@
 #include "hal.h"
 
 #if HAL_USE_RTC || defined(__DOXYGEN__)
-
-/*===========================================================================*/
-/* Notes.                                                                    */
-/*===========================================================================*/
-/*
-This structure is used to hold the values representing a calendar time.
-It contains the following members, with the meanings as shown.
-
-int tm_sec      // seconds after minute [0-61] (61 allows for 2 leap-seconds)
-int tm_min      // minutes after hour [0-59] 
-int tm_hour     // hours after midnight [0-23] 
-int tm_mday     // day of the month [1-31] 
-int tm_mon      // month of year [0-11] 
-int tm_year     // current year-1900 
-int tm_wday     // days since Sunday [0-6] 
-int tm_yday     // days since January 1st [0-365] 
-int tm_isdst    // daylight savings indicator (1 = yes, 0 = no, -1 = unknown)
-*/
 
 /*===========================================================================*/
 /* Driver exported variables.                                                */
@@ -123,7 +109,7 @@ void rtc_lld_init(void){
   preload |= ((RTC_CLK / (PREDIV_A + 1)) - 1) & 0x7FFF;
 
   /* Selects clock source (previously enabled and stabilized).*/
-  RCC->BDCR = (RCC->BDCR & ~RCC_BDCR_RTCSEL) | STM32_RTC;
+  RCC->BDCR = (RCC->BDCR & ~RCC_BDCR_RTCSEL) | STM32_RTCSEL;
 
   /* RTC enabled regardless its previous status.*/
   RCC->BDCR |= RCC_BDCR_RTCEN;
@@ -253,9 +239,8 @@ void rtc_lld_get_alarm(RTCDriver *rtcp,
  * @notapi
  */
 void rtc_lld_set_periodic_wakeup(RTCDriver *rtcp, RTCWakeup *wakeupspec){
-  chDbgCheck((rtcp != NULL) && (wakeupspec != NULL) && \
-             (wakeupspec->wakeup != 0x30000),
-             "rtc_lld_set_periodic_wakeup, forbidden combination");
+  chDbgCheck((wakeupspec->wakeup != 0x30000),
+              "rtc_lld_set_periodic_wakeup, forbidden combination");
 
   rtcp->id_rtc->CR &= ~RTC_CR_WUTE;
   while(!(rtcp->id_rtc->ISR & RTC_ISR_WUTWF))
@@ -276,9 +261,6 @@ void rtc_lld_set_periodic_wakeup(RTCDriver *rtcp, RTCWakeup *wakeupspec){
  * @notapi
  */
 void rtc_lld_get_periodic_wakeup(RTCDriver *rtcp, RTCWakeup *wakeupspec){
-  chDbgCheck((rtcp != NULL) && (wakeupspec != NULL),
-             "rtc_lld_get_periodic_wakeup");
-
   wakeupspec->wakeup  = 0;
   wakeupspec->wakeup |= rtcp->id_rtc->WUTR;
   wakeupspec->wakeup |= (((uint32_t)rtcp->id_rtc->CR) & 0x7) << 16;

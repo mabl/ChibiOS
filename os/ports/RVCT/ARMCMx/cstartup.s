@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -75,6 +75,14 @@ Reset_Handler   PROC
                 msr     CONTROL, r0
                 isb
                 bl      __early_init
+
+                IF      {CPU} = "Cortex-M4.fp"
+                LDR     R0, =0xE000ED88           ; Enable CP10,CP11
+                LDR     R1, [R0]
+                ORR     R1, R1, #(0xF << 20)
+                STR     R1, [R0]
+                ENDIF
+
                 ldr     r0, =__main
                 bx      r0
                 ENDP

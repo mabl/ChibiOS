@@ -31,7 +31,7 @@ endif
 
 # Enable this if you want to see the full log while compiling.
 ifeq ($(USE_VERBOSE_COMPILE),)
-  USE_VERBOSE_COMPILE = yes
+  USE_VERBOSE_COMPILE = no
 endif
 
 #
@@ -82,9 +82,10 @@ CSRC = $(PORTSRC) \
        $(CHIBIOS)/os/various/syscalls.c \
        main.c \
        i2c_pns.c \
-  	   lis3.c \
   	   tmp75.c \
-  	   fake.c
+  	   fake.c \
+  	   lis3.c
+  	   
 
 	   
        

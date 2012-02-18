@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -19,18 +19,19 @@
 */
 
 /**
- * @file    GCC/ARMCMx/nvic.h
+ * @file    common/ARMCMx/nvic.h
  * @brief   Cortex-Mx NVIC support macros and structures.
  *
- * @addtogroup ARMCMx_NVIC
+ * @addtogroup COMMON_ARMCMx_NVIC
  * @{
  */
 
 #ifndef _NVIC_H_
 #define _NVIC_H_
 
-/*
- * System vector constants for @p NVICSetSystemHandlerPriority().
+/**
+ * @name System vector numbers
+ * @{
  */
 #define HANDLER_MEM_MANAGE      0       /**< MEM MANAGE vector id.          */
 #define HANDLER_BUS_FAULT       1       /**< BUS FAULT vector id.           */
@@ -44,6 +45,7 @@
 #define HANDLER_RESERVED_9      9
 #define HANDLER_PENDSV          10      /**< PENDSV vector id.              */
 #define HANDLER_SYSTICK         11      /**< SYS TCK vector id.             */
+/** @} */
 
 typedef volatile uint8_t IOREG8;        /**< 8 bits I/O register type.      */
 typedef volatile uint32_t IOREG32;      /**< 32 bits I/O register type.     */
@@ -51,7 +53,7 @@ typedef volatile uint32_t IOREG32;      /**< 32 bits I/O register type.     */
 /**
  * @brief NVIC ITCR register.
  */
-#define NVIC_ITCR               (*((IOREG32 *)0xE000E004))
+#define NVIC_ITCR               (*((IOREG32 *)0xE000E004U))
 
 /**
  * @brief Structure representing the SYSTICK I/O space.
@@ -66,30 +68,30 @@ typedef struct {
 /**
  * @brief SYSTICK peripheral base address.
  */
-#define STBase                  ((CMx_ST *)0xE000E010)
+#define STBase                  ((CMx_ST *)0xE000E010U)
 #define ST_CSR                  (STBase->CSR)
 #define ST_RVR                  (STBase->RVR)
 #define ST_CVR                  (STBase->CVR)
 #define ST_CBVR                 (STBase->CBVR)
 
-#define CSR_ENABLE_MASK         (0x1 << 0)
-#define ENABLE_OFF_BITS         (0 << 0)
-#define ENABLE_ON_BITS          (1 << 0)
-#define CSR_TICKINT_MASK        (0x1 << 1)
-#define   TICKINT_DISABLED_BITS (0 << 1)
-#define   TICKINT_ENABLED_BITS  (1 << 1)
-#define CSR_CLKSOURCE_MASK      (0x1 << 2)
-#define   CLKSOURCE_EXT_BITS    (0 << 2)
-#define   CLKSOURCE_CORE_BITS   (1 << 2)
-#define CSR_COUNTFLAG_MASK      (0x1 << 16)
+#define CSR_ENABLE_MASK         (0x1U << 0)
+#define ENABLE_OFF_BITS         (0U << 0)
+#define ENABLE_ON_BITS          (1U << 0)
+#define CSR_TICKINT_MASK        (0x1U << 1)
+#define   TICKINT_DISABLED_BITS (0U << 1)
+#define   TICKINT_ENABLED_BITS  (1U << 1)
+#define CSR_CLKSOURCE_MASK      (0x1U << 2)
+#define   CLKSOURCE_EXT_BITS    (0U << 2)
+#define   CLKSOURCE_CORE_BITS   (1U << 2)
+#define CSR_COUNTFLAG_MASK      (0x1U << 16)
 
-#define RVR_RELOAD_MASK         (0xFFFFFF << 0)
+#define RVR_RELOAD_MASK         (0xFFFFFFU << 0)
 
-#define CVR_CURRENT_MASK        (0xFFFFFF << 0)
+#define CVR_CURRENT_MASK        (0xFFFFFFU << 0)
 
-#define CBVR_TENMS_MASK         (0xFFFFFF << 0)
-#define CBVR_SKEW_MASK          (0x1 << 30)
-#define CBVR_NOREF_MASK         (0x1 << 31)
+#define CBVR_TENMS_MASK         (0xFFFFFFU << 0)
+#define CBVR_SKEW_MASK          (0x1U << 30)
+#define CBVR_NOREF_MASK         (0x1U << 31)
 
 /**
  * @brief Structure representing the NVIC I/O space.
@@ -113,7 +115,7 @@ typedef struct {
 /**
  * @brief NVIC peripheral base address.
  */
-#define NVICBase                ((CMx_NVIC *)0xE000E100)
+#define NVICBase                ((CMx_NVIC *)0xE000E100U)
 #define NVIC_ISER(n)            (NVICBase->ISER[n])
 #define NVIC_ICER(n)            (NVICBase->ICER[n])
 #define NVIC_ISPR(n)            (NVICBase->ISPR[n])
@@ -152,7 +154,7 @@ typedef struct {
 /**
  * @brief SCB peripheral base address.
  */
-#define SCBBase                 ((CMx_SCB *)0xE000ED00)
+#define SCBBase                 ((CMx_SCB *)0xE000ED00U)
 #define SCB_CPUID               (SCBBase->CPUID)
 #define SCB_ICSR                (SCBBase->ICSR)
 #define SCB_VTOR                (SCBBase->VTOR)
@@ -174,21 +176,24 @@ typedef struct {
 #define SCB_SAR(n)              (SCBBase->SAR[n])
 #define SCB_CPACR               (SCBBase->CPACR)
 
-#define ICSR_VECTACTIVE_MASK    (0x1FF << 0)
-#define ICSR_RETTOBASE          (0x1 << 11)
-#define ICSR_VECTPENDING_MASK   (0x1FF << 12)
-#define ICSR_ISRPENDING         (0x1 << 22)
-#define ICSR_ISRPREEMPT         (0x1 << 23)
-#define ICSR_PENDSTCLR          (0x1 << 25)
-#define ICSR_PENDSTSET          (0x1 << 26)
-#define ICSR_PENDSVCLR          (0x1 << 27)
-#define ICSR_PENDSVSET          (0x1 << 28)
+#define ICSR_VECTACTIVE_MASK    (0x1FFU << 0)
+#define ICSR_RETTOBASE          (0x1U << 11)
+#define ICSR_VECTPENDING_MASK   (0x1FFU << 12)
+#define ICSR_ISRPENDING         (0x1U << 22)
+#define ICSR_ISRPREEMPT         (0x1U << 23)
+#define ICSR_PENDSTCLR          (0x1U << 25)
+#define ICSR_PENDSTSET          (0x1U << 26)
+#define ICSR_PENDSVCLR          (0x1U << 27)
+#define ICSR_PENDSVSET          (0x1U << 28)
 #define ICSR_NMIPENDSET         (0x1U << 31)
 
-#define AIRCR_VECTKEY           0x05FA0000
-#define AIRCR_PRIGROUP_MASK     (0x7 << 8)
-#define AIRCR_PRIGROUP(n)       ((n) << 8)
+#define AIRCR_VECTKEY           0x05FA0000U
+#define AIRCR_PRIGROUP_MASK     (0x7U << 8)
+#define AIRCR_PRIGROUP(n)       ((n##U) << 8)
 
+/**
+ * @brief Structure representing the FPU I/O space.
+ */
 typedef struct {
   IOREG32       unused1[1];
   IOREG32       FPCCR;
@@ -201,7 +206,7 @@ typedef struct {
 /**
  * @brief FPU peripheral base address.
  */
-#define FPUBase                 ((CMx_FPU *)0xE000EF30L)
+#define FPUBase                 ((CMx_FPU *)0xE000EF30U)
 #define SCB_FPCCR               (FPUBase->FPCCR)
 #define SCB_FPCAR               (FPUBase->FPCAR)
 #define SCB_FPDSCR              (FPUBase->FPDSCR)
@@ -221,14 +226,64 @@ typedef struct {
 #define FPDSCR_AHP              (0x1U << 26)
 #define FPDSCR_DN               (0x1U << 25)
 #define FPDSCR_FZ               (0x1U << 24)
-#define FPDSCR_RMODE(n)         ((n) << 22)
+#define FPDSCR_RMODE(n)         ((n##U) << 22)
+
+/**
+ * @brief Structure representing the SCS I/O space.
+ */
+typedef struct {
+  IOREG32       DHCSR;
+  IOREG32       DCRSR;
+  IOREG32       DCRDR;
+  IOREG32       DEMCR;
+} CMx_SCS;
+
+/**
+ * @brief SCS peripheral base address.
+ */
+#define SCSBase                 ((CMx_SCS *)0xE000EDF0U)
+#define SCS_DHCSR               (SCSBase->DHCSR)
+#define SCS_DCRSR               (SCSBase->DCRSR)
+#define SCS_DCRDR               (SCSBase->DCRDR)
+#define SCS_DEMCR               (SCSBase->DEMCR)
+
+#define SCS_DEMCR_TRCENA        (0x1U << 24)
+
+/**
+ * @brief Structure representing the DWT I/O space.
+ */
+typedef struct {
+  IOREG32       CTRL;
+  IOREG32       CYCCNT;
+  IOREG32       CPICNT;
+  IOREG32       EXCCNT;
+  IOREG32       SLEEPCNT;
+  IOREG32       LSUCNT;
+  IOREG32       FOLDCNT;
+  IOREG32       PCSR;
+} CMx_DWT;
+
+/**
+ * @brief DWT peripheral base address.
+ */
+#define DWTBase                 ((CMx_DWT *)0xE0001000U)
+#define DWT_CTRL                (DWTBase->CTRL)
+#define DWT_CYCCNT              (DWTBase->CYCCNT)
+#define DWT_CPICNT              (DWTBase->CPICNT)
+#define DWT_EXCCNT              (DWTBase->EXCCNT)
+#define DWT_SLEEPCNT            (DWTBase->SLEEPCNT)
+#define DWT_LSUCNT              (DWTBase->LSUCNT)
+#define DWT_FOLDCNT             (DWTBase->FOLDCNT)
+#define DWT_PCSR                (DWTBase->PCSR)
+
+#define DWT_CTRL_CYCCNTENA      (0x1U << 0)
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-  void NVICEnableVector(uint32_t n, uint32_t prio);
-  void NVICDisableVector(uint32_t n);
-  void NVICSetSystemHandlerPriority(uint32_t handler, uint32_t prio);
+  void nvicEnableVector(uint32_t n, uint32_t prio);
+  void nvicDisableVector(uint32_t n);
+  void nvicSetSystemHandlerPriority(uint32_t handler, uint32_t prio);
 #ifdef __cplusplus
 }
 #endif

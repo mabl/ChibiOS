@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -17,6 +17,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*
+   Concepts and parts of this file have been contributed by Uladzimir Pylinsky
+   aka barthess.
+ */
 
 /**
  * @file    rtc.c
@@ -75,7 +79,9 @@ void rtcSetTime(RTCDriver *rtcp, const RTCTime *timespec) {
 
   chDbgCheck((rtcp != NULL) && (timespec != NULL), "rtcSetTime");
 
-  rtc_lld_set_time(rtcp, timespec);
+  chSysLock();
+  rtcSetTimeI(rtcp, timespec);
+  chSysUnlock();
 }
 
 /**
@@ -90,7 +96,9 @@ void rtcGetTime(RTCDriver *rtcp, RTCTime *timespec) {
 
   chDbgCheck((rtcp != NULL) && (timespec != NULL), "rtcGetTime");
 
-  rtc_lld_get_time(rtcp, timespec);
+  chSysLock();
+  rtcGetTimeI(rtcp, timespec);
+  chSysUnlock();
 }
 
 #if (RTC_ALARMS > 0) || defined(__DOXYGEN__)
@@ -109,7 +117,9 @@ void rtcSetAlarm(RTCDriver *rtcp,
 
   chDbgCheck((rtcp != NULL) && (alarm < RTC_ALARMS), "rtcSetAlarm");
 
-  rtc_lld_set_alarm(rtcp, alarm, alarmspec);
+  chSysLock();
+  rtcSetAlarmI(rtcp, alarm, alarmspec);
+  chSysUnlock();
 }
 
 /**
@@ -117,8 +127,8 @@ void rtcSetAlarm(RTCDriver *rtcp,
  * @note    If an alarm has not been set then the returned alarm specification
  *          is not meaningful.
  *
- * @param[in] rtcp       pointer to RTC driver structure
- * @param[in] alarm      alarm identifier
+ * @param[in] rtcp      pointer to RTC driver structure
+ * @param[in] alarm     alarm identifier
  * @param[out] alarmspec pointer to a @p RTCAlarm structure
  *
  * @api
@@ -130,25 +140,30 @@ void rtcGetAlarm(RTCDriver *rtcp,
   chDbgCheck((rtcp != NULL) && (alarm < RTC_ALARMS) && (alarmspec != NULL),
              "rtcGetAlarm");
 
-  rtc_lld_get_alarm(rtcp, alarm, alarmspec);
+  chSysLock();
+  rtcGetAlarmI(rtcp, alarm, alarmspec);
+  chSysUnlock();
 }
 #endif /* RTC_ALARMS > 0 */
-
 
 #if RTC_SUPPORTS_CALLBACKS || defined(__DOXYGEN__)
 /**
  * @brief   Enables or disables RTC callbacks.
+ * @details This function enables or disables the callback, use a @p NULL
+ *          pointer in order to disable it.
  *
  * @param[in] rtcp      pointer to RTC driver structure
- * @param[in] cb_cfg    callback configuration struct
+ * @param[in] callback  callback function pointer or @p NULL
  *
  * @api
  */
-void rtcSetCallback(RTCDriver *rtcp, RTCCallbackConfig *cb_cfg) {
+void rtcSetCallback(RTCDriver *rtcp, rtccb_t callback) {
 
-  chDbgCheck(((rtcp != NULL) && (cb_cfg != NULL)), "rtcSetCallback");
+  chDbgCheck((rtcp != NULL), "rtcSetCallback");
 
-  rtc_lld_set_callback(rtcp, cb_cfg);
+  chSysLock();
+  rtcSetCallbackI(rtcp, callback);
+  chSysUnlock();
 }
 #endif /* RTC_SUPPORTS_CALLBACKS */
 

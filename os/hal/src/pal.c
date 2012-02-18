@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -119,7 +119,7 @@ void palSetBusMode(IOBus *bus, iomode_t mode) {
   chDbgCheck((bus != NULL) &&
              (bus->offset < PAL_IOPORTS_WIDTH), "palSetBusMode");
 
-  palSetGroupMode(bus->portid, bus->mask, mode);
+  palSetGroupMode(bus->portid, bus->mask, bus->offset, mode);
 }
 
 #endif /* HAL_USE_PAL */

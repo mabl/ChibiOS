@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -34,6 +34,7 @@ typedef int32_t         bool_t;         /**< Fast boolean type.             */
 typedef uint8_t         tmode_t;        /**< Thread flags.                  */
 typedef uint8_t         tstate_t;       /**< Thread state.                  */
 typedef uint8_t         trefs_t;        /**< Thread references counter.     */
+typedef uint8_t         tslices_t;      /**< Thread time slices counter.    */
 typedef uint32_t        tprio_t;        /**< Thread priority.               */
 typedef int32_t         msg_t;          /**< Inter-thread message.          */
 typedef int32_t         eventid_t;      /**< Event Id.                      */

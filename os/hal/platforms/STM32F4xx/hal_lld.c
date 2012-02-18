@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -29,8 +29,6 @@
 #include "ch.h"
 #include "hal.h"
 
-#define AIRCR_VECTKEY           0x05FA0000
-
 /*===========================================================================*/
 /* Driver exported variables.                                                */
 /*===========================================================================*/
@@ -42,6 +40,41 @@
 /*===========================================================================*/
 /* Driver local functions.                                                   */
 /*===========================================================================*/
+
+/**
+ * @brief   Initializes the backup domain.
+ */
+static void hal_lld_backup_domain_init(void) {
+
+  /* Backup domain access enabled and left open.*/
+  PWR->CR |= PWR_CR_DBP;
+
+  /* Reset BKP domain if different clock source selected.*/
+  if ((RCC->BDCR & STM32_RTCSEL_MASK) != STM32_RTCSEL) {
+    /* Backup domain reset.*/
+    RCC->BDCR = RCC_BDCR_BDRST;
+    RCC->BDCR = 0;
+  }
+
+  /* If enabled then the LSE is started.*/
+#if STM32_LSE_ENABLED
+  RCC->BDCR |= RCC_BDCR_LSEON;
+  while ((RCC->BDCR & RCC_BDCR_LSERDY) == 0)
+    ;                                     /* Waits until LSE is stable.   */
+#endif
+
+#if STM32_RTCSEL != STM32_RTCSEL_NOCLOCK
+  /* If the backup domain hasn't been initialized yet then proceed with
+     initialization.*/
+  if ((RCC->BDCR & RCC_BDCR_RTCEN) == 0) {
+    /* Selects clock source.*/
+    RCC->BDCR |= STM32_RTCSEL;
+
+    /* RTC clock enabled.*/
+    RCC->BDCR |= RCC_BDCR_RTCEN;
+  }
+#endif /* STM32_RTCSEL != STM32_RTCSEL_NOCLOCK */
+}
 
 /*===========================================================================*/
 /* Driver interrupt handlers.                                                */
@@ -73,15 +106,24 @@ void hal_lld_init(void) {
                   SysTick_CTRL_ENABLE_Msk |
                   SysTick_CTRL_TICKINT_Msk;
 
-#if STM32_PVD_ENABLE
-  /* Power voltage detector initialization */
-  PWR->CR |= PWR_CR_PVDE;
-  PWR->CR |= STM32_PLS & STM32_PLS_MASK;
-#endif /* STM32_PVD_ENABLE */
+  /* DWT cycle counter enable.*/
+  SCS_DEMCR |= SCS_DEMCR_TRCENA;
+  DWT_CTRL  |= DWT_CTRL_CYCCNTENA;
+
+  /* PWR clock enabled.*/
+  rccEnablePWRInterface(FALSE);
+
+  /* Initializes the backup domain.*/
+  hal_lld_backup_domain_init();
 
 #if defined(STM32_DMA_REQUIRED)
   dmaInit();
 #endif
+
+  /* Programmable voltage detector enable.*/
+#if STM32_PVD_ENABLE
+  PWR->CR |= PWR_CR_PVDE | (STM32_PLS & STM32_PLS_MASK);
+#endif /* STM32_PVD_ENABLE */
 }
 
 /**
@@ -96,6 +138,11 @@ void stm32_clock_init(void) {
 #if !STM32_NO_INIT
   /* PWR clock enable.*/
   RCC->APB1ENR = RCC_APB1ENR_PWREN;
+
+  /* PWR initialization.*/
+  PWR->CR = STM32_VOS;
+  while ((PWR->CSR & PWR_CSR_VOSRDY) == 0)
+    ;                           /* Waits until power regulator is stable.   */
 
   /* Initial clocks setup and wait for HSI stabilization, the MSI clock is
      always enabled because it is the fallback clock when PLL the fails.*/

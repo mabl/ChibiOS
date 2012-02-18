@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -26,7 +26,10 @@ static VirtualTimer vt1, vt2;
 static void restart(void *p) {
 
   (void)p;
+
+  chSysLockFromIsr();
   uartStartSendI(&UARTD2, 14, "Hello World!\r\n");
+  chSysUnlockFromIsr();
 }
 
 static void ledoff(void *p) {
@@ -125,7 +128,7 @@ int main(void) {
   chSysInit();
 
   /*
-   * Activates the UART driver 2, PA2 and PA3 are routed to USART2.
+   * Activates the UART driver 2, PA2(TX) and PA3(RX) are routed to USART2.
    */
   uartStart(&UARTD2, &uart_cfg_1);
   palSetPadMode(GPIOA, 2, PAL_MODE_ALTERNATE(7));

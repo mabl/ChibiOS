@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -84,13 +84,14 @@ void boardInit(void) {
   /*
    * buttons setup.
    */
-  palSetGroupMode(IOPORT1, PIOA_B1_MASK | PIOA_B2_MASK, PAL_MODE_INPUT);
+  palSetGroupMode(IOPORT1, PIOA_B1_MASK | PIOA_B2_MASK, 0, PAL_MODE_INPUT);
 
   /*
    * MMC/SD slot setup.
    */
   palSetGroupMode(IOPORT1,
                   PIOA_MMC_WP_MASK | PIOA_MMC_CP_MASK,
+                  0,
                   PAL_MODE_INPUT);
 
   /*

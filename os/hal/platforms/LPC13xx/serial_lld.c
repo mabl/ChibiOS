@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -265,7 +265,7 @@ void sd_lld_start(SerialDriver *sdp, const SerialConfig *config) {
     if (&SD1 == sdp) {
       LPC_SYSCON->SYSAHBCLKCTRL |= (1 << 12);
       LPC_SYSCON->UARTCLKDIV = LPC13xx_SERIAL_UART0CLKDIV;
-      NVICEnableVector(UART_IRQn,
+      nvicEnableVector(UART_IRQn,
                        CORTEX_PRIORITY_MASK(LPC13xx_SERIAL_UART0_IRQ_PRIORITY));
     }
 #endif
@@ -290,7 +290,7 @@ void sd_lld_stop(SerialDriver *sdp) {
     if (&SD1 == sdp) {
       LPC_SYSCON->UARTCLKDIV = 0;
       LPC_SYSCON->SYSAHBCLKCTRL &= ~(1 << 12);
-      NVICDisableVector(UART_IRQn);
+      nvicDisableVector(UART_IRQn);
       return;
     }
 #endif

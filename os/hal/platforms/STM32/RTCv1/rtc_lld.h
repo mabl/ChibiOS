@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -17,6 +17,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*
+   Concepts and parts of this file have been contributed by Uladzimir Pylinsky
+   aka barthess.
+ */
 
 /**
  * @file    STM32/RTCv1/rtc_lld.h
@@ -49,6 +53,16 @@
 /* Driver pre-compile time settings.                                         */
 /*===========================================================================*/
 
+/**
+ * @name    Configuration options
+ * @{
+ */
+/*
+ * RTC driver system settings.
+ */
+#define STM32_RTC_IRQ_PRIORITY      15
+/** @} */
+
 /*===========================================================================*/
 /* Derived constants and error checks.                                       */
 /*===========================================================================*/
@@ -57,9 +71,8 @@
 #error "RTC not present in the selected device"
 #endif
 
-#if !(STM32_RTC == STM32_RTC_LSE) && !(STM32_RTC == STM32_RTC_LSI) &&       \
-    !(STM32_RTC == STM32_RTC_HSE)
-#error "invalid source selected for RTC clock"
+#if STM32_RTCCLK == 0
+#error "RTC clock not enabled"
 #endif
 
 /*===========================================================================*/
@@ -75,11 +88,6 @@ typedef struct RTCAlarm RTCAlarm;
  * @brief   Type of a structure representing an RTC callbacks config.
  */
 typedef struct RTCCallbackConfig RTCCallbackConfig;
-
-/**
- * @brief   Type of a structure representing an RTC wakeup period.
- */
-typedef struct RTCWakeup RTCWakeup;
 
 /**
  * @brief   Type of an RTC alarm.
@@ -105,12 +113,10 @@ typedef void (*rtccb_t)(RTCDriver *rtcp, rtcevent_t event);
  * @brief   Structure representing an RTC callbacks config.
  */
 struct RTCCallbackConfig{
-#if RTC_SUPPORTS_CALLBACKS
   /**
    * @brief Generic RTC callback pointer.
    */
-  rtccb_t           rtc_cb;
-#endif /* RTC_SUPPORTS_CALLBACKS */
+  rtccb_t           callback;
 };
 
 /**
@@ -134,7 +140,7 @@ struct RTCAlarm {
   /**
    * @brief Seconds since UNIX epoch.
    */
-  uint32_t tv_sec;
+  uint32_t          tv_sec;
 };
 
 /**
@@ -144,40 +150,12 @@ struct RTCDriver{
   /**
    * @brief Callback pointer.
    */
-  rtccb_t           rtc_cb;
-};
-
-/**
- * @brief   Structure representing an RTC periodic wakeup period.
- * @note    On this platform it is pointless.
- */
-struct RTCWakeup {
+  rtccb_t           callback;
 };
 
 /*===========================================================================*/
 /* Driver macros.                                                            */
 /*===========================================================================*/
-/**
- * @brief     Gets time of periodic wakeup.
- *
- * @note      On this platform function is pointless.
- *            There is no possibilities to change period on this platform.
- *            It always equal to 1 second.
- *
- * @notapi
- */
-#define rtc_lld_set_periodic_wakeup(rtcp, wakeupspec){(void)wakeupspec;}
-
-/**
- * @brief     Gets time of periodic wakeup.
- *
- * @note      On this platform function is pointless.
- *            There is no possibilities to change period on this platform.
- *            It always equal to 1 second.
- *
- * @notapi
- */
-#define rtc_lld_get_periodic_wakeup(rtcp, wakeupspec){(void)wakeupspec;}
 
 /*===========================================================================*/
 /* External declarations.                                                    */
@@ -199,7 +177,7 @@ extern "C" {
   void rtc_lld_get_alarm(RTCDriver *rtcp,
                          rtcalarm_t alarm,
                          RTCAlarm *alarmspec);
-  void rtc_lld_set_callback(RTCDriver *rtcp, RTCCallbackConfig *cb_cfg);
+  void rtc_lld_set_callback(RTCDriver *rtcp, rtccb_t callback);
 #ifdef __cplusplus
 }
 #endif

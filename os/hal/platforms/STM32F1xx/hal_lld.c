@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -29,8 +29,6 @@
 #include "ch.h"
 #include "hal.h"
 
-#define AIRCR_VECTKEY           0x05FA0000
-
 /*===========================================================================*/
 /* Driver exported variables.                                                */
 /*===========================================================================*/
@@ -42,6 +40,43 @@
 /*===========================================================================*/
 /* Driver local functions.                                                   */
 /*===========================================================================*/
+
+/**
+ * @brief   Initializes the backup domain.
+ * @note    WARNING! Changing clock source impossible without resetting
+ *          of the whole BKP domain.
+ */
+static void hal_lld_backup_domain_init(void) {
+
+  /* Backup domain access enabled and left open.*/
+  PWR->CR |= PWR_CR_DBP;
+
+  /* Reset BKP domain if different clock source selected.*/
+  if ((RCC->BDCR & STM32_RTCSEL_MASK) != STM32_RTCSEL){
+    /* Backup domain reset.*/
+    RCC->BDCR = RCC_BDCR_BDRST;
+    RCC->BDCR = 0;
+  }
+
+  /* If enabled then the LSE is started.*/
+#if STM32_LSE_ENABLED
+  RCC->BDCR |= RCC_BDCR_LSEON;
+  while ((RCC->BDCR & RCC_BDCR_LSERDY) == 0)
+    ;                                     /* Waits until LSE is stable.   */
+#endif
+
+#if STM32_RTCSEL != STM32_RTCSEL_NOCLOCK
+  /* If the backup domain hasn't been initialized yet then proceed with
+     initialization.*/
+  if ((RCC->BDCR & RCC_BDCR_RTCEN) == 0) {
+    /* Selects clock source.*/
+    RCC->BDCR |= STM32_RTCSEL;
+
+    /* RTC clock enabled.*/
+    RCC->BDCR |= RCC_BDCR_RTCEN;
+  }
+#endif /* STM32_RTCSEL != STM32_RTCSEL_NOCLOCK */
+}
 
 /*===========================================================================*/
 /* Driver interrupt handlers.                                                */
@@ -69,9 +104,25 @@ void hal_lld_init(void) {
                   SysTick_CTRL_ENABLE_Msk |
                   SysTick_CTRL_TICKINT_Msk;
 
+  /* DWT cycle counter enable.*/
+  SCS_DEMCR |= SCS_DEMCR_TRCENA;
+  DWT_CTRL  |= DWT_CTRL_CYCCNTENA;
+
+  /* PWR and BD clocks enabled.*/
+  rccEnablePWRInterface(FALSE);
+  rccEnableBKPInterface(FALSE);
+
+  /* Initializes the backup domain.*/
+  hal_lld_backup_domain_init();
+
 #if defined(STM32_DMA_REQUIRED)
   dmaInit();
 #endif
+
+  /* Programmable voltage detector enable.*/
+#if STM32_PVD_ENABLE
+  PWR->CR |= PWR_CR_PVDE | (STM32_PLS & STM32_PLS_MASK);
+#endif /* STM32_PVD_ENABLE */
 }
 
 /**
@@ -86,10 +137,11 @@ void hal_lld_init(void) {
     defined(STM32F10X_HD) || defined(STM32F10X_XL) ||                       \
     defined(__DOXYGEN__)
 /*
- * Clocks initialization for the LD, MD and HD sub-families.
+ * Clocks initialization for all sub-families except CL.
  */
 void stm32_clock_init(void) {
 
+#if !STM32_NO_INIT
   /* HSI setup, it enforces the reset situation in order to handle possible
      problems with JTAG probes and re-initializations.*/
   RCC->CR |= RCC_CR_HSION;                  /* Make sure HSI is ON.         */
@@ -98,46 +150,52 @@ void stm32_clock_init(void) {
   RCC->CR &= RCC_CR_HSITRIM | RCC_CR_HSION; /* CR Reset value.              */
   RCC->CFGR = 0;                            /* CFGR reset value.            */
   while ((RCC->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_HSI)
-    ;                                       /* Wait until HSI is the source.*/
+    ;                                       /* Waits until HSI is selected. */
 
-  /* HSE setup, it is only performed if the HSE clock is selected as source
-     of the system clock (directly or through the PLL).*/
-#if (STM32_SW == STM32_SW_HSE) ||                                           \
-    ((STM32_SW == STM32_SW_PLL) && (STM32_PLLSRC == STM32_PLLSRC_HSE))
+#if STM32_HSE_ENABLED
+  /* HSE activation.*/
   RCC->CR |= RCC_CR_HSEON;
   while (!(RCC->CR & RCC_CR_HSERDY))
-    ;                           /* Waits until HSE is stable.               */
+    ;                                       /* Waits until HSE is stable.   */
 #endif
 
-  /* PLL setup, it is only performed if the PLL is the selected source of
-     the system clock else it is left disabled.*/
-#if STM32_SW == STM32_SW_PLL
+#if STM32_LSI_ENABLED
+  /* LSI activation.*/
+  RCC->CSR |= RCC_CSR_LSION;
+  while ((RCC->CSR & RCC_CSR_LSIRDY) == 0)
+    ;                                       /* Waits until LSI is stable.   */
+#endif
+
+#if STM32_ACTIVATE_PLL
+  /* PLL activation.*/
   RCC->CFGR |= STM32_PLLMUL | STM32_PLLXTPRE | STM32_PLLSRC;
   RCC->CR   |= RCC_CR_PLLON;
   while (!(RCC->CR & RCC_CR_PLLRDY))
-    ;                           /* Waits until PLL is stable.               */
+    ;                                       /* Waits until PLL is stable.   */
 #endif
 
   /* Clock settings.*/
 #if STM32_HAS_USB
-  RCC->CFGR = STM32_MCO    | STM32_USBPRE | STM32_PLLMUL | STM32_PLLXTPRE |
+  RCC->CFGR = STM32_MCOSEL | STM32_USBPRE | STM32_PLLMUL | STM32_PLLXTPRE |
               STM32_PLLSRC | STM32_ADCPRE | STM32_PPRE2  | STM32_PPRE1    |
               STM32_HPRE;
 #else
-  RCC->CFGR = STM32_MCO    |                STM32_PLLMUL | STM32_PLLXTPRE |
+  RCC->CFGR = STM32_MCOSEL |                STM32_PLLMUL | STM32_PLLXTPRE |
               STM32_PLLSRC | STM32_ADCPRE | STM32_PPRE2  | STM32_PPRE1    |
               STM32_HPRE;
 #endif
 
   /* Flash setup and final clock selection.   */
-  FLASH->ACR = STM32_FLASHBITS; /* Flash wait states depending on clock.    */
+  FLASH->ACR = STM32_FLASHBITS;
 
   /* Switching to the configured clock source if it is different from HSI.*/
 #if (STM32_SW != STM32_SW_HSI)
-  RCC->CFGR |= STM32_SW;        /* Switches on the selected clock source.   */
+  /* Switches clock source.*/
+  RCC->CFGR |= STM32_SW;
   while ((RCC->CFGR & RCC_CFGR_SWS) != (STM32_SW << 2))
-    ;
+    ;                                       /* Waits selection complete.    */
 #endif
+#endif /* !STM32_NO_INIT */
 }
 
 #elif defined(STM32F10X_CL)
@@ -146,6 +204,7 @@ void stm32_clock_init(void) {
  */
 void stm32_clock_init(void) {
 
+#if !STM32_NO_INIT
   /* HSI setup.*/
   RCC->CR |= RCC_CR_HSION;                  /* Make sure HSI is ON.         */
   while (!(RCC->CR & RCC_CR_HSIRDY))
@@ -155,16 +214,18 @@ void stm32_clock_init(void) {
   while ((RCC->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_HSI)
     ;                                       /* Wait until HSI is the source.*/
 
-  /* HSE setup, it is only performed if the current configuration uses
-     it somehow.*/
-#if STM32_ACTIVATE_PLL2 ||                                                  \
-    STM32_ACTIVATE_PLL3 ||                                                  \
-    (STM32_SW == STM32_SW_HSE) ||                                           \
-    ((STM32_PREDIV1SRC == STM32_PREDIV1SRC_HSE) &&                          \
-     (STM32_PLLSRC == STM32_PLLSRC_PREDIV1))
+#if STM32_HSE_ENABLED
+  /* HSE activation.*/
   RCC->CR |= RCC_CR_HSEON;
   while (!(RCC->CR & RCC_CR_HSERDY))
-    ;                           /* Waits until HSE is stable.               */
+    ;                                       /* Waits until HSE is stable.   */
+#endif
+
+#if STM32_LSI_ENABLED
+  /* LSI activation.*/
+  RCC->CSR |= RCC_CSR_LSION;
+  while ((RCC->CSR & RCC_CSR_LSIRDY) == 0)
+    ;                                       /* Waits until LSI is stable.   */
 #endif
 
   /* Settings of various dividers and multipliers in CFGR2.*/
@@ -175,14 +236,14 @@ void stm32_clock_init(void) {
 #if STM32_ACTIVATE_PLL2
   RCC->CR |= RCC_CR_PLL2ON;
   while (!(RCC->CR & RCC_CR_PLL2RDY))
-    ;                           /* Waits until PLL2 is stable.              */
+    ;                                        /* Waits until PLL2 is stable. */
 #endif
 
   /* PLL3 setup, if activated.*/
 #if STM32_ACTIVATE_PLL3
   RCC->CR |= RCC_CR_PLL3ON;
   while (!(RCC->CR & RCC_CR_PLL3RDY))
-    ;                           /* Waits until PLL3 is stable.              */
+    ;                                        /* Waits until PLL3 is stable. */
 #endif
 
   /* PLL1 setup, if activated.*/
@@ -195,7 +256,7 @@ void stm32_clock_init(void) {
 
   /* Clock settings.*/
 #if STM32_HAS_OTG1
-  RCC->CFGR = STM32_MCO    | STM32_OTGFSPRE | STM32_PLLMUL | STM32_PLLSRC |
+  RCC->CFGR = STM32_MCOSEL | STM32_OTGFSPRE | STM32_PLLMUL | STM32_PLLSRC |
               STM32_ADCPRE | STM32_PPRE2    | STM32_PPRE1  | STM32_HPRE;
 #else
   RCC->CFGR = STM32_MCO    |                  STM32_PLLMUL | STM32_PLLSRC |
@@ -211,6 +272,7 @@ void stm32_clock_init(void) {
   while ((RCC->CFGR & RCC_CFGR_SWS) != (STM32_SW << 2))
     ;
 #endif
+#endif /* !STM32_NO_INIT */
 }
 #else
 void stm32_clock_init(void) {}

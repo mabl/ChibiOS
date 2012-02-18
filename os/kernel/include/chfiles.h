@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -40,9 +40,14 @@
 #define _CHFILES_H_
 
 /**
+ * @brief   No error return code.
+ */
+#define FILE_OK         0
+
+/**
  * @brief   Error code from the file stream methods.
  */
-#define FILE_ERROR 0xFFFFFFFFUL
+#define FILE_ERROR      0xFFFFFFFFUL
 
 /**
  * @brief   File offset type.
@@ -63,7 +68,7 @@ typedef uint32_t fileoffset_t;
   /* File get current position method.*/                                    \
   fileoffset_t (*getposition)(void *instance);                              \
   /* File seek method.*/                                                    \
-  fileoffset_t (*lseek)(void *instance, fileoffset_t offset);
+  uint32_t (*lseek)(void *instance, fileoffset_t offset);
 
 /**
  * @brief   @p BaseFileStream specific data.
@@ -78,7 +83,7 @@ typedef uint32_t fileoffset_t;
  *
  * @brief   @p BaseFileStream virtual methods table.
  */
-struct BaseFilelStreamVMT {
+struct BaseFileStreamVMT {
   _base_file_stream_methods
 };
 
@@ -90,7 +95,7 @@ struct BaseFilelStreamVMT {
  */
 typedef struct {
   /** @brief Virtual Methods Table.*/
-  const struct FileStreamVMT *vmt;
+  const struct BaseFileStreamVMT *vmt;
   _base_file_stream_data
 } BaseFileStream;
 
@@ -103,6 +108,9 @@ typedef struct {
  * @details The function closes a file stream.
  *
  * @param[in] ip        pointer to a @p BaseFileStream or derived class
+ * @return              The operation status.
+ * @retval FILE_OK      no error.
+ * @retval FILE_ERROR   operation failed.
  *
  * @api
  */
@@ -112,38 +120,44 @@ typedef struct {
  * @brief   Returns an implementation dependent error code.
  *
  * @param[in] ip        pointer to a @p BaseFileStream or derived class
+ * @return              Implementation dependent error code.
  *
  * @api
  */
-#define chFileStreamGetError ((ip)->vmt->geterror(ip))
+#define chFileStreamGetError(ip) ((ip)->vmt->geterror(ip))
 
 /**
  * @brief   Returns the current file size.
  *
  * @param[in] ip        pointer to a @p BaseFileStream or derived class
+ * @return              The file size.
  *
  * @api
  */
-#define chFileStreamGetSize ((ip)->vmt->getposition(ip))
+#define chFileStreamGetSize(ip) ((ip)->vmt->getposition(ip))
 
 /**
  * @brief   Returns the current file pointer position.
  *
  * @param[in] ip        pointer to a @p BaseFileStream or derived class
+ * @return              The current position inside the file.
  *
  * @api
  */
-#define chFileStreamGetPosition ((ip)->vmt->getposition(ip))
+#define chFileStreamGetPosition(ip) ((ip)->vmt->getposition(ip))
 
 /**
  * @brief   Moves the file current pointer to an absolute position.
  *
  * @param[in] ip        pointer to a @p BaseFileStream or derived class
  * @param[in] offset    new absolute position
+ * @return              The operation status.
+ * @retval FILE_OK      no error.
+ * @retval FILE_ERROR   operation failed.
  *
  * @api
  */
-#define chFileStreamSeek ((ip)->vmt->lseek(ip, offset))
+#define chFileStreamSeek(ip, offset) ((ip)->vmt->lseek(ip, offset))
 /** @} */
 
 #endif /* _CHFILES_H_ */

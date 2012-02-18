@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -47,6 +47,7 @@ static const ADCConversionGroup adcgrpcfg = {
   FALSE,
   ADC_GRP1_NUM_CHANNELS,
   adccb,
+  NULL,
   /* HW dependent part.*/
   0,
   ADC_CR2_TSVREFE,
@@ -205,7 +206,7 @@ int main(void) {
    * The pin PC0 on the port GPIOC is programmed as analog input.
    */
   adcStart(&ADCD1, NULL);
-  palSetGroupMode(GPIOC, PAL_PORT_BIT(0), PAL_MODE_INPUT_ANALOG);
+  palSetGroupMode(GPIOC, PAL_PORT_BIT(0), 0, PAL_MODE_INPUT_ANALOG);
 
   /*
    * Initializes the PWM driver 1, re-routes the TIM3 outputs, programs the
@@ -216,6 +217,7 @@ int main(void) {
   pwmStart(&PWMD3, &pwmcfg);
   AFIO->MAPR |= AFIO_MAPR_TIM3_REMAP_0 | AFIO_MAPR_TIM3_REMAP_1;
   palSetGroupMode(GPIOC, PAL_PORT_BIT(GPIOC_LED3) | PAL_PORT_BIT(GPIOC_LED4),
+                  0,
                   PAL_MODE_STM32_ALTERNATE_PUSHPULL);
 
   /*

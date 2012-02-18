@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -278,9 +278,7 @@ void test_start_timer(unsigned ms) {
 
   systime_t duration = MS2ST(ms);
   test_timer_done = FALSE;
-  chSysLock();
-  chVTSetI(&vt, duration, tmr, NULL);
-  chSysUnlock();
+  chVTSet(&vt, duration, tmr, NULL);
 }
 
 /*

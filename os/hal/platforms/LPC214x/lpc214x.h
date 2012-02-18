@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -277,7 +277,7 @@ typedef struct {
     IOREG32     UART_FCR;
   };
   IOREG32       UART_LCR;
-  IOREG32       UART_MCR;   // UART1 only
+  IOREG32       UART_MCR;
   IOREG32       UART_LSR;
   IOREG32       unused18;
   IOREG32       UART_SCR;

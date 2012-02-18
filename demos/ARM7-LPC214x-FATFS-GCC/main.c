@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -275,7 +275,7 @@ int main(void) {
   chEvtRegister(&evt.et_es, &el0, 0);   /* Registers on the timer event source. */
   chEvtRegister(&MMCD1.inserted_event, &el1, 1);
   chEvtRegister(&MMCD1.removed_event, &el2, 2);
-  while (TRUE)// chThdSleepMilliseconds(50);
+  while (TRUE)
     chEvtDispatch(evhndl, chEvtWaitOne(ALL_EVENTS));
   return 0;
 }

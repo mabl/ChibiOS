@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -31,13 +31,13 @@ This structure is used to hold the values representing a calendar time.
 It contains the following members, with the meanings as shown.
 
 int tm_sec       seconds after minute [0-61] (61 allows for 2 leap-seconds)
-int tm_min       minutes after hour [0-59]
-int tm_hour      hours after midnight [0-23]
-int tm_mday      day of the month [1-31]
-int tm_mon       month of year [0-11]
-int tm_year      current year-1900
-int tm_wday      days since Sunday [0-6]
-int tm_yday      days since January 1st [0-365]
+int tm_min       minutes after hour [0-59] 
+int tm_hour      hours after midnight [0-23] 
+int tm_mday      day of the month [1-31] 
+int tm_mon       month of year [0-11] 
+int tm_year      current year-1900 
+int tm_wday      days since Sunday [0-6] 
+int tm_yday      days since January 1st [0-365] 
 int tm_isdst     daylight savings indicator (1 = yes, 0 = no, -1 = unknown)
 */
 
@@ -181,12 +181,10 @@ int main(void){
 
   extStart(&EXTD1, &extcfg);
 
-  palTogglePad(GPIOB, GPIOB_LED_R);
-
   /* tune wakeup callback */
   wakeupspec.wakeup = ((uint32_t)4) << 16; /* select 1 Hz clock source */
   wakeupspec.wakeup |= 3; /* set counter value to 3. Period will be 3+1 seconds. */
-  rtc_lld_set_periodic_wakeup(&RTCD1, &wakeupspec);
+  rtcSetWakeup(&RTCD1, &wakeupspec);
 
   /* enable wakeup callback */
   cb_cfg.cb_cfg = WAKEUP_CB_FLAG;

@@ -1,5 +1,6 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -34,6 +35,13 @@
 #include "mcuconf.h"
 
 /**
+ * @brief   Enables the TM subsystem.
+ */
+#if !defined(HAL_USE_TM) || defined(__DOXYGEN__)
+#define HAL_USE_TM                  TRUE
+#endif
+
+/**
  * @brief   Enables the PAL subsystem.
  */
 #if !defined(HAL_USE_PAL) || defined(__DOXYGEN__)
@@ -65,7 +73,7 @@
  * @brief   Enables the GPT subsystem.
  */
 #if !defined(HAL_USE_GPT) || defined(__DOXYGEN__)
-#define HAL_USE_GPT                 TRUE
+#define HAL_USE_GPT                 FALSE
 #endif
 
 /**
@@ -188,14 +196,6 @@
 /*===========================================================================*/
 
 /**
- * @brief   Enables synchronous APIs.
- * @note    Disabling this option saves both code and data space.
- */
-#if !defined(I2C_USE_WAIT) || defined(__DOXYGEN__)
-#define I2C_USE_WAIT                TRUE
-#endif
-
-/**
  * @brief   Enables the mutual exclusion APIs on the I2C bus.
  */
 #if !defined(I2C_USE_MUTUAL_EXCLUSION) || defined(__DOXYGEN__)
@@ -303,7 +303,7 @@
  *          default configuration.
  */
 #if !defined(SERIAL_DEFAULT_BITRATE) || defined(__DOXYGEN__)
-#define SERIAL_DEFAULT_BITRATE      57600
+#define SERIAL_DEFAULT_BITRATE      38400
 #endif
 
 /**
@@ -314,7 +314,7 @@
  *          buffers.
  */
 #if !defined(SERIAL_BUFFERS_SIZE) || defined(__DOXYGEN__)
-#define SERIAL_BUFFERS_SIZE         256
+#define SERIAL_BUFFERS_SIZE         16
 #endif
 
 /*===========================================================================*/

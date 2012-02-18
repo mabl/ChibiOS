@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -138,7 +138,7 @@ CH_IRQ_HANDLER(TIM1_UP_IRQHandler) {
 
   CH_IRQ_PROLOGUE();
 
-  TIM1->SR = ~TIM_SR_UIF;
+  STM32_TIM1->SR = ~TIM_SR_UIF;
   PWMD1.config->callback(&PWMD1);
 
   CH_IRQ_EPILOGUE();
@@ -157,8 +157,9 @@ CH_IRQ_HANDLER(TIM1_CC_IRQHandler) {
 
   CH_IRQ_PROLOGUE();
 
-  sr = TIM1->SR & TIM1->DIER;
-  TIM1->SR = ~(TIM_SR_CC1IF | TIM_SR_CC2IF | TIM_SR_CC3IF | TIM_SR_CC4IF);
+  sr = STM32_TIM1->SR & STM32_TIM1->DIER;
+  STM32_TIM1->SR = ~(TIM_SR_CC1IF | TIM_SR_CC2IF |
+                     TIM_SR_CC3IF | TIM_SR_CC4IF);
   if ((sr & TIM_SR_CC1IF) != 0)
     PWMD1.config->channels[0].callback(&PWMD1);
   if ((sr & TIM_SR_CC2IF) != 0)
@@ -249,14 +250,14 @@ CH_IRQ_HANDLER(TIM8_UP_IRQHandler) {
 
   CH_IRQ_PROLOGUE();
 
-  TIM8->SR = ~TIM_SR_UIF;
-  PWMD1.config->callback(&PWMD8);
+  STM32_TIM8->SR = ~TIM_SR_UIF;
+  PWMD8.config->callback(&PWMD8);
 
   CH_IRQ_EPILOGUE();
 }
 
 /**
- * @brief   TIM1 compare interrupt handler.
+ * @brief   TIM8 compare interrupt handler.
  * @note    It is assumed that the various sources are only activated if the
  *          associated callback pointer is not equal to @p NULL in order to not
  *          perform an extra check in a potentially critical interrupt handler.
@@ -268,8 +269,8 @@ CH_IRQ_HANDLER(TIM8_CC_IRQHandler) {
 
   CH_IRQ_PROLOGUE();
 
-  sr = TIM8->SR & TIM8->DIER;
-  TIM8->SR = ~(TIM_SR_CC1IF | TIM_SR_CC2IF | TIM_SR_CC3IF | TIM_SR_CC4IF);
+  sr = STM32_TIM8->SR & STM32_TIM8->DIER;
+  STM32_TIM8->SR = ~(TIM_SR_CC1IF | TIM_SR_CC2IF | TIM_SR_CC3IF | TIM_SR_CC4IF);
   if ((sr & TIM_SR_CC1IF) != 0)
     PWMD8.config->channels[0].callback(&PWMD8);
   if ((sr & TIM_SR_CC2IF) != 0)
@@ -350,9 +351,9 @@ void pwm_lld_start(PWMDriver *pwmp) {
     if (&PWMD1 == pwmp) {
       rccEnableTIM1(FALSE);
       rccResetTIM1();
-      NVICEnableVector(TIM1_UP_IRQn,
+      nvicEnableVector(TIM1_UP_IRQn,
                        CORTEX_PRIORITY_MASK(STM32_PWM_TIM1_IRQ_PRIORITY));
-      NVICEnableVector(TIM1_CC_IRQn,
+      nvicEnableVector(TIM1_CC_IRQn,
                        CORTEX_PRIORITY_MASK(STM32_PWM_TIM1_IRQ_PRIORITY));
       pwmp->clock = STM32_TIMCLK2;
     }
@@ -361,7 +362,7 @@ void pwm_lld_start(PWMDriver *pwmp) {
     if (&PWMD2 == pwmp) {
       rccEnableTIM2(FALSE);
       rccResetTIM2();
-      NVICEnableVector(TIM2_IRQn,
+      nvicEnableVector(TIM2_IRQn,
                        CORTEX_PRIORITY_MASK(STM32_PWM_TIM2_IRQ_PRIORITY));
       pwmp->clock = STM32_TIMCLK1;
     }
@@ -370,7 +371,7 @@ void pwm_lld_start(PWMDriver *pwmp) {
     if (&PWMD3 == pwmp) {
       rccEnableTIM3(FALSE);
       rccResetTIM3();
-      NVICEnableVector(TIM3_IRQn,
+      nvicEnableVector(TIM3_IRQn,
                        CORTEX_PRIORITY_MASK(STM32_PWM_TIM3_IRQ_PRIORITY));
       pwmp->clock = STM32_TIMCLK1;
     }
@@ -379,7 +380,7 @@ void pwm_lld_start(PWMDriver *pwmp) {
     if (&PWMD4 == pwmp) {
       rccEnableTIM4(FALSE);
       rccResetTIM4();
-      NVICEnableVector(TIM4_IRQn,
+      nvicEnableVector(TIM4_IRQn,
                        CORTEX_PRIORITY_MASK(STM32_PWM_TIM4_IRQ_PRIORITY));
       pwmp->clock = STM32_TIMCLK1;
     }
@@ -389,7 +390,7 @@ void pwm_lld_start(PWMDriver *pwmp) {
     if (&PWMD5 == pwmp) {
       rccEnableTIM5(FALSE);
       rccResetTIM5();
-      NVICEnableVector(TIM5_IRQn,
+      nvicEnableVector(TIM5_IRQn,
                        CORTEX_PRIORITY_MASK(STM32_PWM_TIM5_IRQ_PRIORITY));
       pwmp->clock = STM32_TIMCLK1;
     }
@@ -398,9 +399,9 @@ void pwm_lld_start(PWMDriver *pwmp) {
     if (&PWMD8 == pwmp) {
       rccEnableTIM8(FALSE);
       rccResetTIM8();
-      NVICEnableVector(TIM8_UP_IRQn,
+      nvicEnableVector(TIM8_UP_IRQn,
                        CORTEX_PRIORITY_MASK(STM32_PWM_TIM8_IRQ_PRIORITY));
-      NVICEnableVector(TIM8_CC_IRQn,
+      nvicEnableVector(TIM8_CC_IRQn,
                        CORTEX_PRIORITY_MASK(STM32_PWM_TIM8_IRQ_PRIORITY));
       pwmp->clock = STM32_TIMCLK2;
     }
@@ -544,39 +545,39 @@ void pwm_lld_stop(PWMDriver *pwmp) {
 
 #if STM32_PWM_USE_TIM1
     if (&PWMD1 == pwmp) {
-      NVICDisableVector(TIM1_UP_IRQn);
-      NVICDisableVector(TIM1_CC_IRQn);
+      nvicDisableVector(TIM1_UP_IRQn);
+      nvicDisableVector(TIM1_CC_IRQn);
       rccDisableTIM1(FALSE);
     }
 #endif
 #if STM32_PWM_USE_TIM2
     if (&PWMD2 == pwmp) {
-      NVICDisableVector(TIM2_IRQn);
+      nvicDisableVector(TIM2_IRQn);
       rccDisableTIM2(FALSE);
     }
 #endif
 #if STM32_PWM_USE_TIM3
     if (&PWMD3 == pwmp) {
-      NVICDisableVector(TIM3_IRQn);
+      nvicDisableVector(TIM3_IRQn);
       rccDisableTIM3(FALSE);
     }
 #endif
 #if STM32_PWM_USE_TIM4
     if (&PWMD4 == pwmp) {
-      NVICDisableVector(TIM4_IRQn);
+      nvicDisableVector(TIM4_IRQn);
       rccDisableTIM4(FALSE);
     }
 #endif
 #if STM32_PWM_USE_TIM5
     if (&PWMD5 == pwmp) {
-      NVICDisableVector(TIM5_IRQn);
+      nvicDisableVector(TIM5_IRQn);
       rccDisableTIM5(FALSE);
     }
 #endif
 #if STM32_PWM_USE_TIM8
     if (&PWMD8 == pwmp) {
-      NVICDisableVector(TIM8_UP_IRQn);
-      NVICDisableVector(TIM8_CC_IRQn);
+      nvicDisableVector(TIM8_UP_IRQn);
+      nvicDisableVector(TIM8_CC_IRQn);
       rccDisableTIM8(FALSE);
     }
 #endif

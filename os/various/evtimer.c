@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -32,8 +32,10 @@
 static void tmrcb(void *p) {
   EvTimer *etp = p;
 
+  chSysLockFromIsr();
   chEvtBroadcastI(&etp->et_es);
   chVTSetI(&etp->et_vt, etp->et_interval, tmrcb, etp);
+  chSysUnlockFromIsr();
 }
 
 /**
@@ -60,12 +62,7 @@ void evtStart(EvTimer *etp) {
  */
 void evtStop(EvTimer *etp) {
 
-  chSysLock();
-
-  if (chVTIsArmedI(&etp->et_vt))
-    chVTResetI(&etp->et_vt);
-
-  chSysUnlock();
+  chVTReset(&etp->et_vt);
 }
 
 /** @} */

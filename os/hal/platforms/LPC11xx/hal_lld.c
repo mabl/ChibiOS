@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -62,7 +62,7 @@
 void hal_lld_init(void) {
 
   /* SysTick initialization using the system clock.*/
-  NVICSetSystemHandlerPriority(HANDLER_SYSTICK, CORTEX_PRIORITY_SYSTICK);
+  nvicSetSystemHandlerPriority(HANDLER_SYSTICK, CORTEX_PRIORITY_SYSTICK);
   SysTick->LOAD = LPC11xx_SYSCLK / CH_FREQUENCY - 1;
   SysTick->VAL = 0;
   SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk |

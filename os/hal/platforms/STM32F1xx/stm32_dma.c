@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -446,12 +446,11 @@ bool_t dmaStreamAllocate(const stm32_dma_stream_t *dmastp,
 
   /* Putting the stream in a safe state.*/
   dmaStreamDisable(dmastp);
-  dmaStreamClearInterrupt(dmastp);
   dmastp->channel->CCR = STM32_DMA_CCR_RESET_VALUE;
 
   /* Enables the associated IRQ vector if a callback is defined.*/
   if (func != NULL)
-    NVICEnableVector(dmastp->vector, CORTEX_PRIORITY_MASK(priority));
+    nvicEnableVector(dmastp->vector, CORTEX_PRIORITY_MASK(priority));
 
   return FALSE;
 }
@@ -478,7 +477,7 @@ void dmaStreamRelease(const stm32_dma_stream_t *dmastp) {
               "dmaRelease(), #1", "not allocated");
 
   /* Disables the associated IRQ vector.*/
-  NVICDisableVector(dmastp->vector);
+  nvicDisableVector(dmastp->vector);
 
   /* Marks the stream as not allocated.*/
   dma_streams_mask &= ~(1 << dmastp->selfindex);

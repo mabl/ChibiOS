@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -83,19 +83,31 @@ void ChkIntSources(void) {
 
 #if HAL_USE_SERIAL
   if (sd_lld_interrupt_pending()) {
+    dbg_check_lock();
     if (chSchIsPreemptionRequired())
       chSchDoReschedule();
+    dbg_check_unlock();
     return;
   }
 #endif
 
-  // Interrupt Timer simulation (10ms interval).
+  /* Interrupt Timer simulation (10ms interval).*/
   QueryPerformanceCounter(&n);
   if (n.QuadPart > nextcnt.QuadPart) {
     nextcnt.QuadPart += slice.QuadPart;
+
+    CH_IRQ_PROLOGUE();
+
+    chSysLockFromIsr();
     chSysTimerHandlerI();
+    chSysUnlockFromIsr();
+
+    CH_IRQ_EPILOGUE();
+
+    dbg_check_lock();
     if (chSchIsPreemptionRequired())
       chSchDoReschedule();
+    dbg_check_unlock();
   }
 }
 

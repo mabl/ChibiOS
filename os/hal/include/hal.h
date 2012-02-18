@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -34,6 +34,7 @@
 
 #include "hal_lld.h"
 
+#include "tm.h"
 #include "pal.h"
 #include "adc.h"
 #include "can.h"
@@ -43,6 +44,7 @@
 #include "icu.h"
 #include "mac.h"
 #include "pwm.h"
+#include "rtc.h"
 #include "serial.h"
 #include "sdc.h"
 #include "spi.h"
@@ -50,7 +52,100 @@
 #include "usb.h"
 #include "mmc_spi.h"
 #include "serial_usb.h"
-#include "rtc.h"
+
+/*===========================================================================*/
+/* Driver constants.                                                         */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Driver pre-compile time settings.                                         */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Derived constants and error checks.                                       */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Driver data structures and types.                                         */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Driver macros.                                                            */
+/*===========================================================================*/
+
+#if HAL_IMPLEMENTS_COUNTERS || defined(__DOXYGEN__)
+/**
+ * @name    Time conversion utilities for the realtime counter
+ * @{
+ */
+/**
+ * @brief   Seconds to realtime ticks.
+ * @details Converts from seconds to realtime ticks number.
+ * @note    The result is rounded upward to the next tick boundary.
+ *
+ * @param[in] sec       number of seconds
+ * @return              The number of ticks.
+ *
+ * @api
+ */
+#define S2RTT(sec) (halGetCounterFrequency() * (sec))
+
+/**
+ * @brief   Milliseconds to realtime ticks.
+ * @details Converts from milliseconds to realtime ticks number.
+ * @note    The result is rounded upward to the next tick boundary.
+ *
+ * @param[in] msec      number of milliseconds
+ * @return              The number of ticks.
+ *
+ * @api
+ */
+#define MS2RTT(msec) (((halGetCounterFrequency() + 999UL) / 1000UL) * (msec))
+
+/**
+ * @brief   Microseconds to realtime ticks.
+ * @details Converts from microseconds to realtime ticks number.
+ * @note    The result is rounded upward to the next tick boundary.
+ *
+ * @param[in] usec      number of microseconds
+ * @return              The number of ticks.
+ *
+ * @api
+ */
+#define US2RTT(usec) (((halGetCounterFrequency() + 999999UL) / 1000000UL) * \
+                      (usec))
+/** @} */
+
+/**
+ * @name    Macro Functions
+ * @{
+ */
+/**
+ * @brief   Returns the current value of the system free running counter.
+ * @note    This is an optional service that could not be implemented in
+ *          all HAL implementations.
+ * @note    This function can be called from any context.
+ *
+ * @return              The value of the system free running counter of
+ *                      type halrtcnt_t.
+ *
+ * @special
+ */
+#define halGetCounterValue() hal_lld_get_counter_value()
+
+/**
+ * @brief   Realtime counter frequency.
+ * @note    This is an optional service that could not be implemented in
+ *          all HAL implementations.
+ * @note    This function can be called from any context.
+ *
+ * @return              The realtime counter frequency of type halclock_t.
+ *
+ * @special
+ */
+#define halGetCounterFrequency() hal_lld_get_counter_frequency()
+/** @} */
+#endif /* HAL_IMPLEMENTS_COUNTERS */
 
 /*===========================================================================*/
 /* External declarations.                                                    */
@@ -60,6 +155,10 @@
 extern "C" {
 #endif
   void halInit(void);
+#if HAL_IMPLEMENTS_COUNTERS
+  bool_t halIsCounterWithin(halrtcnt_t start, halrtcnt_t end);
+  void halPolledDelay(halrtcnt_t ticks);
+#endif /* HAL_IMPLEMENTS_COUNTERS */
 #ifdef __cplusplus
 }
 #endif

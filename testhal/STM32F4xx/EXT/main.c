@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -100,10 +100,8 @@ int main(void) {
    * button EXT channel using 5 seconds intervals.
    */
   while (TRUE) {
-    EXTI->SWIER = 64;
     chThdSleepMilliseconds(5000);
     extChannelDisable(&EXTD1, 0);
-    EXTI->SWIER = 64;
     chThdSleepMilliseconds(5000);
     extChannelEnable(&EXTD1, 0);
   }

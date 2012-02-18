@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -89,6 +89,7 @@ bool_t sdc_lld_is_write_protected(SDCDriver *sdcp) {
 static void tmrfunc(void *p) {
   SDCDriver *sdcp = p;
 
+  chSysLockFromIsr();
   if (cnt > 0) {
     if (sdcIsCardInserted(sdcp)) {
       if (--cnt == 0) {
@@ -105,6 +106,7 @@ static void tmrfunc(void *p) {
     }
   }
   chVTSetI(&tmr, MS2ST(SDC_POLLING_DELAY), tmrfunc, sdcp);
+  chSysUnlockFromIsr();
 }
 
 /**

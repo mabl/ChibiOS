@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -441,7 +441,7 @@ void sdc_lld_start(SDCDriver *sdcp) {
     /* Note, the DMA must be enabled before the IRQs.*/
     dmaStreamAllocate(STM32_DMA2_STREAM4, 0, NULL, NULL);
     dmaStreamSetPeripheral(STM32_DMA2_STREAM4, &SDIO->FIFO);
-    NVICEnableVector(SDIO_IRQn,
+    nvicEnableVector(SDIO_IRQn,
                      CORTEX_PRIORITY_MASK(STM32_SDC_SDIO_IRQ_PRIORITY));
     rccEnableSDIO(FALSE);
   }
@@ -468,7 +468,7 @@ void sdc_lld_stop(SDCDriver *sdcp) {
     SDIO->DTIMER = 0;
 
     /* Clock deactivation.*/
-    NVICDisableVector(SDIO_IRQn);
+    nvicDisableVector(SDIO_IRQn);
     dmaStreamRelease(STM32_DMA2_STREAM4);
     rccDisableSDIO(FALSE);
   }
@@ -708,7 +708,7 @@ bool_t sdc_lld_read(SDCDriver *sdcp, uint32_t startblk,
 bool_t sdc_lld_write(SDCDriver *sdcp, uint32_t startblk,
                      const uint8_t *buf, uint32_t n) {
 
-  #if STM32_SDC_UNALIGNED_SUPPORT
+#if STM32_SDC_UNALIGNED_SUPPORT
   if (((unsigned)buf & 3) != 0) {
     uint32_t i;
     for (i = 0; i < n; i++) {

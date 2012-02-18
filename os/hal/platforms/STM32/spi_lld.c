@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -106,11 +106,9 @@ static void spi_lld_serve_rx_interrupt(SPIDriver *spip, uint32_t flags) {
   (void)flags;
 #endif
 
-  /* Stop everything. The status of the TX DMA is cleared here because its
-     handler is only invoked in case of error.*/
+  /* Stop everything.*/
   dmaStreamDisable(spip->dmatx);
   dmaStreamDisable(spip->dmarx);
-  dmaStreamClearInterrupt(spip->dmatx);
 
   /* Portable SPI ISR code defined in the high level driver, note, it is
      a macro.*/
@@ -128,7 +126,7 @@ static void spi_lld_serve_tx_interrupt(SPIDriver *spip, uint32_t flags) {
   /* DMA errors handling.*/
 #if defined(STM32_SPI_DMA_ERROR_HOOK)
   (void)spip;
-  if ((flags & STM32_DMA_ISR_TEIF) != 0) {
+  if ((flags & (STM32_DMA_ISR_TEIF | STM32_DMA_ISR_DMEIF)) != 0) {
     STM32_SPI_DMA_ERROR_HOOK(spip);
   }
 #else

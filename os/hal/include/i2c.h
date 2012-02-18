@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -17,6 +17,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*
+   Concepts and parts of this file have been contributed by Uladzimir Pylinsky
+   aka barthess.
+ */
 
 /**
  * @file    i2c.h
@@ -35,10 +39,6 @@
 /* Driver constants.                                                         */
 /*===========================================================================*/
 
-/*===========================================================================*/
-/* Driver constants.                                                         */
-/*===========================================================================*/
-
 /**
  * @name    I2C bus error conditions
  * @{
@@ -51,7 +51,7 @@
 #define I2CD_OVERRUN                0x08   /**< @brief Overrun/Underrun.    */
 #define I2CD_PEC_ERROR              0x10   /**< @brief PEC Error in
                                                 reception.                  */
-#define I2CD_TIMEOUT                0x20   /**< @brief Timeout Error.       */
+#define I2CD_TIMEOUT                0x20   /**< @brief Hardware timeout.    */
 #define I2CD_SMB_ALERT              0x40   /**< @brief SMBus Alert.         */
 /** @} */
 
@@ -85,90 +85,31 @@ typedef enum {
   I2C_UNINIT = 0,                           /**< Not initialized.           */
   I2C_STOP = 1,                             /**< Stopped.                   */
   I2C_READY = 2,                            /**< Ready.                     */
-  I2C_ACTIVE_TRANSMIT = 3,                  /**< Transmitting.              */
-  I2C_ACTIVE_RECEIVE = 4,                   /**< Receiving.                 */
+  I2C_ACTIVE_TX = 3,                        /**< Transmitting.              */
+  I2C_ACTIVE_RX = 4,                        /**< Receiving.                 */
+  I2C_LOCKED = 5                            /**> Bus or driver locked.      */
 } i2cstate_t;
 
 #include "i2c_lld.h"
-
 
 /*===========================================================================*/
 /* Driver macros.                                                            */
 /*===========================================================================*/
 
 /**
- * @brief   Waits for operation completion.
- * @details This function waits for the driver to complete the current
- *          operation.
- * @pre     An operation must be running while the function is invoked.
- * @note    No more than one thread can wait on a I2C driver using
- *          this function.
- *
- * @param[in] i2cp      pointer to the @p I2CDriver object
- *
- * @notapi
+ * @brief   Wrap i2cMasterTransmitTimeout function with TIME_INFINITE timeout.
+ * @api
  */
-#define _i2c_wait_s(i2cp, timeout, rdymsg) {                                \
-  chDbgAssert((i2cp)->id_thread == NULL,                                    \
-              "_i2c_wait(), #1", "already waiting");                        \
-  chSysLock();                                                              \
-  (i2cp)->id_thread = chThdSelf();                                          \
-  rdymsg = chSchGoSleepTimeoutS(THD_STATE_SUSPENDED, timeout);              \
-  chSysUnlock();                                                            \
-}
+#define i2cMasterTransmit(i2cp, addr, txbuf, txbytes, rxbuf, rxbytes)       \
+  (i2cMasterTransmitTimeout(i2cp, addr, txbuf, txbytes, rxbuf, rxbytes,     \
+                           TIME_INFINITE))
 
 /**
- * @brief   Wakes up the waiting thread.
- *
- * @param[in] i2cp      pointer to the @p I2CDriver object
- *
- * @notapi
+ * @brief   Wrap i2cMasterReceiveTimeout function with TIME_INFINITE timeout.
+ * @api
  */
-#define _i2c_wakeup_isr(i2cp) {                                             \
-  if ((i2cp)->id_thread != NULL) {                                          \
-    Thread *tp = (i2cp)->id_thread;                                         \
-    (i2cp)->id_thread = NULL;                                               \
-    chSysLockFromIsr();                                                     \
-    chSchReadyI(tp);                                                        \
-    chSysUnlockFromIsr();                                                   \
-  }                                                                         \
-}
-
-/**
- * @brief   Common ISR code.
- * @details This code handles the portable part of the ISR code:
- *          - Waiting thread wakeup.
- *          - Driver state transitions.
- *
- * @note    This macro is meant to be used in the low level drivers
- *          implementation only.
- *
- * @param[in] i2cp      pointer to the @p I2CDriver object
- *
- * @notapi
- */
-#define _i2c_isr_code(i2cp, i2cscfg) {                                      \
-  (i2cp)->id_state = I2C_READY;                                             \
-  _i2c_wakeup_isr(i2cp);                                                    \
-}
-
-/**
- * @brief   Error ISR code.
- * @details This code handles the portable part of the ISR code:
- *          - Waiting thread wakeup.
- *          - Driver state transitions.
- *
- * @note    This macro is meant to be used in the low level drivers
- *          implementation only.
- *
- * @param[in] i2cp      pointer to the @p I2CDriver object
- *
- * @notapi
- */
-#define _i2c_isr_err_code(i2cp, i2cscfg) {                                  \
-  (i2cp)->id_state = I2C_READY;                                             \
-  _i2c_wakeup_isr(i2cp);                                                    \
-}
+#define i2cMasterReceive(i2cp, addr, rxbuf, rxbytes)                        \
+  (i2cMasterReceiveTimeout(i2cp, addr, rxbuf, rxbytes, TIME_INFINITE))
 
 /*===========================================================================*/
 /* External declarations.                                                    */
@@ -181,16 +122,16 @@ extern "C" {
   void i2cObjectInit(I2CDriver *i2cp);
   void i2cStart(I2CDriver *i2cp, const I2CConfig *config);
   void i2cStop(I2CDriver *i2cp);
-  msg_t i2cMasterTransmit(I2CDriver *i2cp,
-                         uint8_t slave_addr,
-                         uint8_t *txbuf, size_t txbytes,
-                         uint8_t *rxbuf, size_t rxbytes,
-                         i2cflags_t *errors, systime_t timeout);
-  msg_t i2cMasterReceive(I2CDriver *i2cp,
-                         uint8_t slave_addr,
-                         uint8_t *rxbuf, size_t rxbytes,
-                         i2cflags_t *errors, systime_t timeout);
-
+  i2cflags_t i2cGetErrors(I2CDriver *i2cp);
+  msg_t i2cMasterTransmitTimeout(I2CDriver *i2cp,
+                                 i2caddr_t addr,
+                                 const uint8_t *txbuf, size_t txbytes,
+                                 uint8_t *rxbuf, size_t rxbytes,
+                                 systime_t timeout);
+  msg_t i2cMasterReceiveTimeout(I2CDriver *i2cp,
+                                i2caddr_t addr,
+                                uint8_t *rxbuf, size_t rxbytes,
+                                systime_t timeout);
 #if I2C_USE_MUTUAL_EXCLUSION
   void i2cAcquireBus(I2CDriver *i2cp);
   void i2cReleaseBus(I2CDriver *i2cp);

@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -29,8 +29,6 @@
 #include "ch.h"
 #include "hal.h"
 
-#define AIRCR_VECTKEY           0x05FA0000
-
 /*===========================================================================*/
 /* Driver exported variables.                                                */
 /*===========================================================================*/
@@ -42,6 +40,41 @@
 /*===========================================================================*/
 /* Driver local functions.                                                   */
 /*===========================================================================*/
+
+/**
+ * @brief   Initializes the backup domain.
+ */
+static void hal_lld_backup_domain_init(void) {
+
+  /* Backup domain access enabled and left open.*/
+  PWR->CR |= PWR_CR_DBP;
+
+  /* Reset BKP domain if different clock source selected.*/
+  if ((RCC->CSR & STM32_RTCSEL_MASK) != STM32_RTCSEL){
+    /* Backup domain reset.*/
+    RCC->CSR |= RCC_CSR_RTCRST;
+    RCC->CSR &= ~RCC_CSR_RTCRST;
+  }
+
+  /* If enabled then the LSE is started.*/
+#if STM32_LSE_ENABLED
+  RCC->CSR |= RCC_CSR_LSEON;
+  while ((RCC->CSR & RCC_CSR_LSERDY) == 0)
+    ;                                     /* Waits until LSE is stable.   */
+#endif
+
+#if STM32_RTCSEL != STM32_RTCSEL_NOCLOCK
+  /* If the backup domain hasn't been initialized yet then proceed with
+     initialization.*/
+  if ((RCC->CSR & RCC_CSR_RTCEN) == 0) {
+    /* Selects clock source.*/
+    RCC->CSR |= STM32_RTCSEL;
+
+    /* RTC clock enabled.*/
+    RCC->CSR |= RCC_CSR_RTCEN;
+  }
+#endif /* STM32_RTCSEL != STM32_RTCSEL_NOCLOCK */
+}
 
 /*===========================================================================*/
 /* Driver interrupt handlers.                                                */
@@ -70,9 +103,24 @@ void hal_lld_init(void) {
                   SysTick_CTRL_ENABLE_Msk |
                   SysTick_CTRL_TICKINT_Msk;
 
+  /* DWT cycle counter enable.*/
+  SCS_DEMCR |= SCS_DEMCR_TRCENA;
+  DWT_CTRL  |= DWT_CTRL_CYCCNTENA;
+
+  /* PWR clock enabled.*/
+  rccEnablePWRInterface(FALSE);
+
+  /* Initializes the backup domain.*/
+  hal_lld_backup_domain_init();
+
 #if defined(STM32_DMA_REQUIRED)
   dmaInit();
 #endif
+
+  /* Programmable voltage detector enable.*/
+#if STM32_PVD_ENABLE
+  PWR->CR |= PWR_CR_PVDE | (STM32_PLS & STM32_PLS_MASK);
+#endif /* STM32_PVD_ENABLE */
 }
 
 /**
@@ -155,7 +203,7 @@ void stm32_clock_init(void) {
                STM32_PPRE2 | STM32_PPRE1 | STM32_HPRE;
   RCC->CSR  |= STM32_RTCSEL;
 
-  /* Flash setup and final clock selection.   */
+  /* Flash setup and final clock selection.*/
 #if defined(STM32_FLASHBITS1)
   FLASH->ACR = STM32_FLASHBITS1;
 #endif
@@ -165,7 +213,7 @@ void stm32_clock_init(void) {
 
   /* Switching to the configured clock source if it is different from MSI.*/
 #if (STM32_SW != STM32_SW_MSI)
-  RCC->CFGR |= STM32_SW; /* Switches on the selected clock source.   */
+  RCC->CFGR |= STM32_SW;        /* Switches on the selected clock source.   */
   while ((RCC->CFGR & RCC_CFGR_SWS) != (STM32_SW << 2))
     ;
 #endif

@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -33,6 +33,13 @@
 #define _HALCONF_H_
 
 #include "mcuconf.h"
+
+/**
+ * @brief   Enables the TM subsystem.
+ */
+#if !defined(HAL_USE_TM) || defined(__DOXYGEN__)
+#define HAL_USE_TM                  FALSE
+#endif
 
 /**
  * @brief   Enables the PAL subsystem.
@@ -183,10 +190,6 @@
 #if !defined(CAN_USE_SLEEP_MODE) || defined(__DOXYGEN__)
 #define CAN_USE_SLEEP_MODE          TRUE
 #endif
-
-/*===========================================================================*/
-/* EXT driver related settings.                                              */
-/*===========================================================================*/
 
 /*===========================================================================*/
 /* I2C driver related settings.                                              */

@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -44,6 +44,11 @@
 /*===========================================================================*/
 
 /**
+ * @brief   Defines the support for realtime counters in the HAL.
+ */
+#define HAL_IMPLEMENTS_COUNTERS TRUE
+
+/**
  * @name    Platform identification
  * @{
  */
@@ -66,6 +71,16 @@
 #define STM32_VOS_1P8           (1 << 11)   /**< Core voltage 1.8 Volts.    */
 #define STM32_VOS_1P5           (2 << 11)   /**< Core voltage 1.5 Volts.    */
 #define STM32_VOS_1P2           (3 << 11)   /**< Core voltage 1.2 Volts.    */
+
+#define STM32_PLS_MASK          (7 << 5)    /**< PLS bits mask.             */
+#define STM32_PLS_LEV0          (0 << 5)    /**< PVD level 0.               */
+#define STM32_PLS_LEV1          (1 << 5)    /**< PVD level 1.               */
+#define STM32_PLS_LEV2          (2 << 5)    /**< PVD level 2.               */
+#define STM32_PLS_LEV3          (3 << 5)    /**< PVD level 3.               */
+#define STM32_PLS_LEV4          (4 << 5)    /**< PVD level 4.               */
+#define STM32_PLS_LEV5          (5 << 5)    /**< PVD level 5.               */
+#define STM32_PLS_LEV6          (6 << 5)    /**< PVD level 6.               */
+#define STM32_PLS_LEV7          (7 << 5)    /**< PVD level 7.               */
 /** @} */
 
 /**
@@ -384,6 +399,20 @@
  */
 #if !defined(STM32_VOS) || defined(__DOXYGEN__)
 #define STM32_VOS                   STM32_VOS_1P8
+#endif
+
+/**
+ * @brief   Enables or disables the programmable voltage detector.
+ */
+#if !defined(STM32_PVD_ENABLE) || defined(__DOXYGEN__)
+#define STM32_PVD_ENABLE            FALSE
+#endif
+
+/**
+ * @brief   Sets voltage level for programmable voltage detector.
+ */
+#if !defined(STM32_PLS) || defined(__DOXYGEN__)
+#define STM32_PLS                   STM32_PLS_LEV0
 #endif
 
 /**
@@ -971,9 +1000,42 @@
 /* Driver data structures and types.                                         */
 /*===========================================================================*/
 
+/**
+ * @brief   Type representing a system clock frequency.
+ */
+typedef uint32_t halclock_t;
+
+/**
+ * @brief   Type of the realtime free counter value.
+ */
+typedef uint32_t halrtcnt_t;
+
 /*===========================================================================*/
 /* Driver macros.                                                            */
 /*===========================================================================*/
+
+/**
+ * @brief   Returns the current value of the system free running counter.
+ * @note    This service is implemented by returning the content of the
+ *          DWT_CYCCNT register.
+ *
+ * @return              The value of the system free running counter of
+ *                      type halrtcnt_t.
+ *
+ * @notapi
+ */
+#define hal_lld_get_counter_value()         DWT_CYCCNT
+
+/**
+ * @brief   Realtime counter frequency.
+ * @note    The DWT_CYCCNT register is incremented directly by the system
+ *          clock so this function returns STM32_HCLK.
+ *
+ * @return              The realtime counter frequency of type halclock_t.
+ *
+ * @notapi
+ */
+#define hal_lld_get_counter_frequency()     STM32_HCLK
 
 /*===========================================================================*/
 /* External declarations.                                                    */

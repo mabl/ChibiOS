@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -177,7 +177,7 @@
 /** @} */
 
 /**
- * @brief   ADC peripherals specific RCC operations
+ * @name    ADC peripherals specific RCC operations
  * @{
  */
 /**
@@ -207,7 +207,7 @@
 /** @} */
 
 /**
- * @brief   DMA peripheral specific RCC operations
+ * @name    DMA peripheral specific RCC operations
  * @{
  */
 /**
@@ -237,7 +237,39 @@
 /** @} */
 
 /**
- * @brief   I2C peripherals specific RCC operations
+ * @name    PWR interface specific RCC operations
+ * @{
+ */
+/**
+ * @brief   Enables the PWR interface clock.
+ * @note    The @p lp parameter is ignored in this family.
+ *
+ * @param[in] lp        low power enable flag
+ *
+ * @api
+ */
+#define rccEnablePWRInterface(lp) rccEnableAPB1(RCC_APB1ENR_PWREN, lp)
+
+/**
+ * @brief   Disables PWR interface clock.
+ * @note    The @p lp parameter is ignored in this family.
+ *
+ * @param[in] lp        low power enable flag
+ *
+ * @api
+ */
+#define rccDisablePWRInterface(lp) rccDisableAPB1(RCC_APB1ENR_BKPEN, lp)
+
+/**
+ * @brief   Resets the PWR interface.
+ *
+ * @api
+ */
+#define rccResetPWRInterface() rccResetAPB1(RCC_APB1ENR_BKPRST)
+/** @} */
+
+/**
+ * @name    I2C peripherals specific RCC operations
  * @{
  */
 /**
@@ -292,7 +324,7 @@
 /** @} */
 
 /**
- * @brief   SPI peripherals specific RCC operations
+ * @name    SPI peripherals specific RCC operations
  * @{
  */
 /**
@@ -347,7 +379,7 @@
 /** @} */
 
 /**
- * @brief   TIM peripherals specific RCC operations
+ * @name    TIM peripherals specific RCC operations
  * @{
  */
 /**
@@ -427,7 +459,7 @@
 /** @} */
 
 /**
- * @brief   USART/UART peripherals specific RCC operations
+ * @name    USART/UART peripherals specific RCC operations
  * @{
  */
 /**
@@ -507,7 +539,7 @@
 /** @} */
 
 /**
- * @brief   USB peripheral specific RCC operations
+ * @name    USB peripheral specific RCC operations
  * @{
  */
 /**

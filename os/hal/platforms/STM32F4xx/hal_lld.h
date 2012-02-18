@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -45,6 +45,11 @@
 /*===========================================================================*/
 
 /**
+ * @brief   Defines the support for realtime counters in the HAL.
+ */
+#define HAL_IMPLEMENTS_COUNTERS TRUE
+
+/**
  * @name    Platform identification
  * @{
  */
@@ -56,24 +61,24 @@
  * @{
  */
 /**
- * @brief   Maximum HSE  clock frequency.
+ * @brief   Maximum HSE clock frequency.
  */
 #define STM32_HSECLK_MAX        26000000
 
 /**
- * @brief   Minimum HSE  clock frequency.
+ * @brief   Minimum HSE clock frequency.
  */
 #define STM32_HSECLK_MIN        1000000
 
 /**
- * @brief   Maximum LSE  clock frequency.
+ * @brief   Maximum LSE clock frequency.
  */
 #define STM32_LSECLK_MAX        1000000
 
 /**
- * @brief   Minimum LSE  clock frequency.
+ * @brief   Minimum LSE clock frequency.
  */
-#define STM32_LSECLK_MIN        1000
+#define STM32_LSECLK_MIN        32768
 
 /**
  * @brief   Maximum PLLs input clock frequency.
@@ -126,26 +131,26 @@
  * @{
  */
 #define STM32_HSICLK            16000000    /**< High speed internal clock. */
-#define STM32_LSICLK            38000       /**< Low speed internal clock.  */
+#define STM32_LSICLK            32000       /**< Low speed internal clock.  */
 /** @} */
 
 /**
  * @name    PWR_CR register bits definitions
  * @{
  */
-#define STM32_VOS_MASK      (1 << 14)   /**< Core voltage mask.             */
-#define STM32_VOS_LOW       (0 << 14)   /**< Core voltage set to low.       */
-#define STM32_VOS_HIGH      (1 << 14)   /**< Core voltage set to high.      */
+#define STM32_VOS_MASK          (1 << 14)   /**< Core voltage mask.         */
+#define STM32_VOS_LOW           (0 << 14)   /**< Core voltage set to low.   */
+#define STM32_VOS_HIGH          (1 << 14)   /**< Core voltage set to high.  */
 
-#define STM32_PLS_MASK      (7 << 5)    /**< PLS bits mask.                 */
-#define STM32_PLS_LEV0      (0 << 5)    /**< PVD level 0.                   */
-#define STM32_PLS_LEV1      (1 << 5)    /**< PVD level 0.                   */
-#define STM32_PLS_LEV2      (2 << 5)    /**< PVD level 0.                   */
-#define STM32_PLS_LEV3      (3 << 5)    /**< PVD level 0.                   */
-#define STM32_PLS_LEV4      (4 << 5)    /**< PVD level 0.                   */
-#define STM32_PLS_LEV5      (5 << 5)    /**< PVD level 0.                   */
-#define STM32_PLS_LEV6      (6 << 5)    /**< PVD level 0.                   */
-#define STM32_PLS_LEV7      (7 << 5)    /**< PVD level 0.                   */
+#define STM32_PLS_MASK          (7 << 5)    /**< PLS bits mask.             */
+#define STM32_PLS_LEV0          (0 << 5)    /**< PVD level 0.               */
+#define STM32_PLS_LEV1          (1 << 5)    /**< PVD level 1.               */
+#define STM32_PLS_LEV2          (2 << 5)    /**< PVD level 2.               */
+#define STM32_PLS_LEV3          (3 << 5)    /**< PVD level 3.               */
+#define STM32_PLS_LEV4          (4 << 5)    /**< PVD level 4.               */
+#define STM32_PLS_LEV5          (5 << 5)    /**< PVD level 5.               */
+#define STM32_PLS_LEV6          (6 << 5)    /**< PVD level 6.               */
+#define STM32_PLS_LEV7          (7 << 5)    /**< PVD level 7.               */
 /** @} */
 
 /**
@@ -204,9 +209,9 @@
 #define STM32_MCO1SEL_HSE       (2 << 21)   /**< HSE clock on MCO1 pin.     */
 #define STM32_MCO1SEL_PLL       (3 << 21)   /**< PLL clock on MCO1 pin.     */
 
-#define STM32_I2CSRC_MASK       (1 << 23)   /**< I2CSRC mask.               */
-#define STM32_I2CSRC_PLLI2S     (0 << 23)   /**< I2SSRC is PLLI2S.          */
-#define STM32_I2CSRC_CKIN       (1 << 23)   /**< I2S_CKIN is PLLI2S.        */
+#define STM32_I2SSRC_MASK       (1 << 23)   /**< I2CSRC mask.               */
+#define STM32_I2SSRC_PLLI2S     (0 << 23)   /**< I2SSRC is PLLI2S.          */
+#define STM32_I2SSRC_CKIN       (1 << 23)   /**< I2S_CKIN is PLLI2S.        */
 
 #define STM32_MCO1PRE_MASK      (7 << 24)   /**< MCO1PRE mask.              */
 #define STM32_MCO1PRE_DIV1      (0 << 24)   /**< MCO1 divided by 1.         */
@@ -549,14 +554,14 @@
 #endif
 
 /**
- * @brief   Enables or disables the power voltage detector.
+ * @brief   Enables or disables the programmable voltage detector.
  */
 #if !defined(STM32_PVD_ENABLE) || defined(__DOXYGEN__)
 #define STM32_PVD_ENABLE            FALSE
 #endif
 
 /**
- * @brief   Enables or disables the power voltage detector.
+ * @brief   Sets voltage level for programmable voltage detector.
  */
 #if !defined(STM32_PLS) || defined(__DOXYGEN__)
 #define STM32_PLS                   STM32_PLS_LEV0
@@ -692,7 +697,7 @@
 /**
  * @brief   RTC HSE prescaler value.
  */
-#if !defined(STM32_RTCSEL) || defined(__DOXYGEN__)
+#if !defined(STM32_RTCPRE_VALUE) || defined(__DOXYGEN__)
 #define STM32_RTCPRE_VALUE          8
 #endif
 
@@ -732,7 +737,7 @@
  * @brief   I2S clock source.
  */
 #if !defined(STM32_I2SSRC) || defined(__DOXYGEN__)
-#define STM32_I2SSRC                STM32_I2CSRC_CKIN
+#define STM32_I2SSRC                STM32_I2SSRC_CKIN
 #endif
 
 /**
@@ -836,7 +841,7 @@
 #error "HSI not enabled, required by STM32_MCO2SEL"
 #endif
 
-#if (STM32_I2SSRC == STM32_I2CSRC_PLLI2S) &&                                \
+#if (STM32_I2SSRC == STM32_I2SSRC_PLLI2S) &&                                \
     (STM32_PLLSRC == STM32_PLLSRC_HSI)
 #error "HSI not enabled, required by STM32_I2SSRC"
 #endif
@@ -876,7 +881,7 @@
 #error "HSE not enabled, required by STM32_MCO2SEL"
 #endif
 
-#if (STM32_I2SSRC == STM32_I2CSRC_PLLI2S) &&                                \
+#if (STM32_I2SSRC == STM32_I2SSRC_PLLI2S) &&                                \
     (STM32_PLLSRC == STM32_PLLSRC_HSE)
 #error "HSE not enabled, required by STM32_I2SSRC"
 #endif
@@ -894,7 +899,7 @@
 #else /* !STM32_LSI_ENABLED */
 
 #if STM32_RTCSEL == STM32_RTCSEL_LSI
-#error "required LSI clock is not enabled"
+#error "LSI not enabled, required by STM32_RTCSEL"
 #endif
 
 #endif /* !STM32_LSI_ENABLED */
@@ -1126,7 +1131,7 @@
 /*
  * PLLI2S enable check.
  */
-#if (STM32_I2CSRC == STM32_I2CSRC_PLLI2S) || defined(__DOXYGEN__)
+#if (STM32_I2SSRC == STM32_I2SSRC_PLLI2S) || defined(__DOXYGEN__)
 /**
  * @brief   PLL activation flag.
  */
@@ -1184,13 +1189,13 @@
  * @brief   MCO1 divider clock.
  */
 #if (STM32_MCO1SEL == STM32_MCO1SEL_HSI) || defined(__DOXYGEN__)
-#define STM_MCO1DIVCLK               STM32_HSICLK
+#define STM32_MCO1DIVCLK             STM32_HSICLK
 #elif STM32_MCO1SEL == STM32_MCO1SEL_LSE
-#define STM_MCO1DIVCLK               STM32_LSECLK
+#define STM32_MCO1DIVCLK             STM32_LSECLK
 #elif STM32_MCO1SEL == STM32_MCO1SEL_HSE
-#define STM_MCO1DIVCLK               STM32_HSECLK
+#define STM32_MCO1DIVCLK             STM32_HSECLK
 #elif STM32_MCO1SEL == STM32_MCO1SEL_PLL
-#define STM_MCO1DIVCLK               STM32_PLLCLKOUT
+#define STM32_MCO1DIVCLK             STM32_PLLCLKOUT
 #else
 #error "invalid STM32_MCO1SEL value specified"
 #endif
@@ -1199,15 +1204,15 @@
  * @brief   MCO1 output pin clock.
  */
 #if (STM32_MCO1PRE == STM32_MCO1PRE_DIV1) || defined(__DOXYGEN__)
-#define STM_MCO1CLK                  STM_MCO1DIVCLK
+#define STM32_MCO1CLK                STM32_MCO1DIVCLK
 #elif STM32_MCO1PRE == STM32_MCO1PRE_DIV2
-#define STM_MCO1CLK                  (STM_MCO1DIVCLK / 2)
+#define STM32_MCO1CLK                (STM32_MCO1DIVCLK / 2)
 #elif STM32_MCO1PRE == STM32_MCO1PRE_DIV3
-#define STM_MCO1CLK                  (STM_MCO1DIVCLK / 3)
+#define STM32_MCO1CLK                (STM32_MCO1DIVCLK / 3)
 #elif STM32_MCO1PRE == STM32_MCO1PRE_DIV4
-#define STM_MCO1CLK                  (STM_MCO1DIVCLK / 4)
+#define STM32_MCO1CLK                (STM32_MCO1DIVCLK / 4)
 #elif STM32_MCO1PRE == STM32_MCO1PRE_DIV5
-#define STM_MCO1CLK                  (STM_MCO1DIVCLK / 5)
+#define STM32_MCO1CLK                (STM32_MCO1DIVCLK / 5)
 #else
 #error "invalid STM32_MCO1PRE value specified"
 #endif
@@ -1216,13 +1221,13 @@
  * @brief   MCO2 divider clock.
  */
 #if (STM32_MCO2SEL == STM32_MCO2SEL_HSE) || defined(__DOXYGEN__)
-#define STM_MCO2DIVCLK               STM32_HSECLK
+#define STM32_MCO2DIVCLK             STM32_HSECLK
 #elif STM32_MCO2SEL == STM32_MCO2SEL_PLL
-#define STM_MCO2DIVCLK               STM32_PLLCLKOUT
+#define STM32_MCO2DIVCLK             STM32_PLLCLKOUT
 #elif STM32_MCO2SEL == STM32_MCO2SEL_SYSCLK
-#define STM_MCO2DIVCLK               STM32_SYSCLK
+#define STM32_MCO2DIVCLK             STM32_SYSCLK
 #elif STM32_MCO2SEL == STM32_MCO2SEL_PLLI2S
-#define STM_MCO2DIVCLK               STM32_PLLI2S
+#define STM32_MCO2DIVCLK             STM32_PLLI2S
 #else
 #error "invalid STM32_MCO2SEL value specified"
 #endif
@@ -1231,27 +1236,17 @@
  * @brief   MCO2 output pin clock.
  */
 #if (STM32_MCO2PRE == STM32_MCO2PRE_DIV1) || defined(__DOXYGEN__)
-#define STM_MCO2CLK                  STM_MCO2DIVCLK
+#define STM32_MCO2CLK                STM32_MCO2DIVCLK
 #elif STM32_MCO2PRE == STM32_MCO2PRE_DIV2
-#define STM_MCO2CLK                  (STM_MCO2DIVCLK / 2)
+#define STM32_MCO2CLK                (STM32_MCO2DIVCLK / 2)
 #elif STM32_MCO2PRE == STM32_MCO2PRE_DIV3
-#define STM_MCO2CLK                  (STM_MCO2DIVCLK / 3)
+#define STM32_MCO2CLK                (STM32_MCO2DIVCLK / 3)
 #elif STM32_MCO2PRE == STM32_MCO2PRE_DIV4
-#define STM_MCO2CLK                  (STM_MCO2DIVCLK / 4)
+#define STM32_MCO2CLK                (STM32_MCO2DIVCLK / 4)
 #elif STM32_MCO2PRE == STM32_MCO2PRE_DIV5
-#define STM_MCO2CLK                  (STM_MCO2DIVCLK / 5)
+#define STM32_MCO2CLK                (STM32_MCO2DIVCLK / 5)
 #else
 #error "invalid STM32_MCO2PRE value specified"
-#endif
-
-/**
- * @brief   HSE divider toward RTC clock.
- */
-#if ((STM32_RTCPRE_VALUE >= 2) && (STM32_RTCPRE_VALUE <= 31))  ||           \
-    defined(__DOXYGEN__)
-#define STM32_HSEDIVCLK             (STM32_HSECLK / STM32_RTCPRE_VALUE)
-#else
-#error "invalid STM32_RTCPRE value specified"
 #endif
 
 /**
@@ -1265,18 +1260,38 @@
 #endif
 
 /**
+ * @brief   HSE divider toward RTC clock.
+ */
+#if ((STM32_RTCPRE_VALUE >= 2) && (STM32_RTCPRE_VALUE <= 31))  ||           \
+    defined(__DOXYGEN__)
+#define STM32_HSEDIVCLK             (STM32_HSECLK / STM32_RTCPRE_VALUE)
+#else
+#error "invalid STM32_RTCPRE value specified"
+#endif
+
+/**
  * @brief   RTC clock.
  */
 #if (STM32_RTCSEL == STM32_RTCSEL_NOCLOCK) || defined(__DOXYGEN__)
-#define STM_RTCCLK                  0
+#define STM32_RTCCLK                0
 #elif STM32_RTCSEL == STM32_RTCSEL_LSE
-#define STM_RTCCLK                  STM32_LSECLK
+#define STM32_RTCCLK                STM32_LSECLK
 #elif STM32_RTCSEL == STM32_RTCSEL_LSI
-#define STM_RTCCLK                  STM32_LSICLK
+#define STM32_RTCCLK                STM32_LSICLK
 #elif STM32_RTCSEL == STM32_RTCSEL_HSEDIV
-#define STM_RTCCLK                  STM32_HSEDIVCLK
+#define STM32_RTCCLK                STM32_HSEDIVCLK
 #else
 #error "invalid STM32_RTCSEL value specified"
+#endif
+
+/**
+ * @brief   RTC HSE divider setting.
+ */
+#if ((STM32_RTCPRE_VALUE >= 2) && (STM32_RTCPRE_VALUE <= 31)) ||            \
+    defined(__DOXYGEN__)
+#define STM32_RTCPRE                (STM32_RTCPRE_VALUE << 16)
+#else
+#error "invalid STM32_RTCPRE value specified"
 #endif
 
 /**
@@ -1340,9 +1355,42 @@
 /* Driver data structures and types.                                         */
 /*===========================================================================*/
 
+/**
+ * @brief   Type representing a system clock frequency.
+ */
+typedef uint32_t halclock_t;
+
+/**
+ * @brief   Type of the realtime free counter value.
+ */
+typedef uint32_t halrtcnt_t;
+
 /*===========================================================================*/
 /* Driver macros.                                                            */
 /*===========================================================================*/
+
+/**
+ * @brief   Returns the current value of the system free running counter.
+ * @note    This service is implemented by returning the content of the
+ *          DWT_CYCCNT register.
+ *
+ * @return              The value of the system free running counter of
+ *                      type halrtcnt_t.
+ *
+ * @notapi
+ */
+#define hal_lld_get_counter_value()         DWT_CYCCNT
+
+/**
+ * @brief   Realtime counter frequency.
+ * @note    The DWT_CYCCNT register is incremented directly by the system
+ *          clock so this function returns STM32_HCLK.
+ *
+ * @return              The realtime counter frequency of type halclock_t.
+ *
+ * @notapi
+ */
+#define hal_lld_get_counter_frequency()     STM32_HCLK
 
 /*===========================================================================*/
 /* External declarations.                                                    */

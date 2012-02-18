@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -17,6 +17,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+/*
+   Concepts and parts of this file have been contributed by Uladzimir Pylinsky
+   aka barthess.
+ */
 
 /**
  * @file    i2c.c
@@ -25,7 +29,6 @@
  * @addtogroup I2C
  * @{
  */
-
 #include "ch.h"
 #include "hal.h"
 
@@ -71,17 +74,14 @@ void i2cInit(void) {
  */
 void i2cObjectInit(I2CDriver *i2cp) {
 
-  i2cp->id_state  = I2C_STOP;
-  i2cp->id_config = NULL;
-  i2cp->rxbuf = NULL;
-  i2cp->txbuf = NULL;
-  i2cp->id_thread   = NULL;
+  i2cp->state  = I2C_STOP;
+  i2cp->config = NULL;
 
 #if I2C_USE_MUTUAL_EXCLUSION
 #if CH_USE_MUTEXES
-  chMtxInit(&i2cp->id_mutex);
+  chMtxInit(&i2cp->mutex);
 #else
-  chSemInit(&i2cp->id_semaphore, 1);
+  chSemInit(&i2cp->semaphore, 1);
 #endif /* CH_USE_MUTEXES */
 #endif /* I2C_USE_MUTUAL_EXCLUSION */
 
@@ -101,14 +101,15 @@ void i2cObjectInit(I2CDriver *i2cp) {
 void i2cStart(I2CDriver *i2cp, const I2CConfig *config) {
 
   chDbgCheck((i2cp != NULL) && (config != NULL), "i2cStart");
-  chDbgAssert((i2cp->id_state == I2C_STOP) || (i2cp->id_state == I2C_READY),
+  chDbgAssert((i2cp->state == I2C_STOP) || (i2cp->state == I2C_READY) ||
+              (i2cp->state == I2C_LOCKED),
               "i2cStart(), #1",
               "invalid state");
 
   chSysLock();
-  i2cp->id_config = config;
+  i2cp->config = config;
   i2c_lld_start(i2cp);
-  i2cp->id_state = I2C_READY;
+  i2cp->state = I2C_READY;
   chSysUnlock();
 }
 
@@ -122,14 +123,30 @@ void i2cStart(I2CDriver *i2cp, const I2CConfig *config) {
 void i2cStop(I2CDriver *i2cp) {
 
   chDbgCheck(i2cp != NULL, "i2cStop");
-  chDbgAssert((i2cp->id_state == I2C_STOP) || (i2cp->id_state == I2C_READY),
+  chDbgAssert((i2cp->state == I2C_STOP) || (i2cp->state == I2C_READY) ||
+              (i2cp->state == I2C_LOCKED),
               "i2cStop(), #1",
               "invalid state");
 
   chSysLock();
   i2c_lld_stop(i2cp);
-  i2cp->id_state = I2C_STOP;
+  i2cp->state = I2C_STOP;
   chSysUnlock();
+}
+
+/**
+ * @brief   Returns the errors mask associated to the previous operation.
+ *
+ * @param[in] i2cp      pointer to the @p I2CDriver object
+ * @return              The errors mask.
+ *
+ * @api
+ */
+i2cflags_t i2cGetErrors(I2CDriver *i2cp) {
+
+  chDbgCheck(i2cp != NULL, "i2cGetErrors");
+
+  return i2c_lld_get_errors(i2cp);
 }
 
 /**
@@ -138,124 +155,136 @@ void i2cStop(I2CDriver *i2cp) {
  *          paradigm. If you want transmit data without any further read,
  *          than set @b rxbytes field to 0.
  *
- * @param[in] i2cp        pointer to the @p I2CDriver object
- * @param[in] slave_addr  Slave device address (7 bits) without R/W bit
- * @param[in] txbuf       pointer to transmit buffer
- * @param[in] txbytes     number of bytes to be transmitted
- * @param[in] rxbuf       pointer to receive buffer
- * @param[in] rxbytes     number of bytes to be received, set it to 0 if
- *                        you want transmit only
- * @param[in] errors      pointer to variable to store error code, zero means
- *                        no error.
- * @param[in] timeout     operation timeout
+ * @param[in] i2cp      pointer to the @p I2CDriver object
+ * @param[in] addr      slave device address (7 bits) without R/W bit
+ * @param[in] txbuf     pointer to transmit buffer
+ * @param[in] txbytes   number of bytes to be transmitted
+ * @param[out] rxbuf    pointer to receive buffer
+ * @param[in] rxbytes   number of bytes to be received, set it to 0 if
+ *                      you want transmit only
+ * @param[in] timeout   the number of ticks before the operation timeouts,
+ *                      the following special values are allowed:
+ *                      - @a TIME_INFINITE no timeout.
+ *                      .
  *
- * @return                timeout status
- * @retval RDY_OK         if timeout not reached
- * @retval RDY_TIMEOUT    if a timeout occurs
+ * @return              The operation status.
+ * @retval RDY_OK       if the function succeeded.
+ * @retval RDY_RESET    if one or more I2C errors occurred, the errors can
+ *                      be retrieved using @p i2cGetErrors().
+ * @retval RDY_TIMEOUT  if a timeout occurred before operation end.
+ *
+ * @api
  */
-msg_t i2cMasterTransmit(I2CDriver *i2cp,
-                             uint8_t slave_addr,
-                             uint8_t *txbuf,
-                             size_t txbytes,
-                             uint8_t *rxbuf,
-                             size_t rxbytes,
-                             i2cflags_t *errors,
-                             systime_t timeout) {
+msg_t i2cMasterTransmitTimeout(I2CDriver *i2cp,
+                               i2caddr_t addr,
+                               const uint8_t *txbuf,
+                               size_t txbytes,
+                               uint8_t *rxbuf,
+                               size_t rxbytes,
+                               systime_t timeout) {
   msg_t rdymsg;
 
-  chDbgCheck((i2cp != NULL) && (slave_addr != 0) &&
+  chDbgCheck((i2cp != NULL) && (addr != 0) &&
              (txbytes > 0) && (txbuf != NULL) &&
              ((rxbytes == 0) || ((rxbytes > 0) && (rxbuf != NULL))) &&
-             (timeout > TIME_IMMEDIATE) && (errors != NULL),
-             "i2cMasterTransmit");
+             (timeout != TIME_IMMEDIATE),
+             "i2cMasterTransmitTimeout");
 
-  i2c_lld_wait_bus_free(i2cp);
-  i2cp->errors = I2CD_NO_ERROR; /* clear error flags from previous run */
-  chDbgAssert(i2cp->id_state == I2C_READY,
-              "i2cMasterTransmit(), #1", "not ready");
+  chDbgAssert(i2cp->state == I2C_READY,
+              "i2cMasterTransmitTimeout(), #1", "not ready");
 
-  i2cp->id_state = I2C_ACTIVE_TRANSMIT;
-  i2c_lld_master_transmit(i2cp, slave_addr, txbuf, txbytes, rxbuf, rxbytes);
-  _i2c_wait_s(i2cp, timeout, rdymsg);
-
-  *errors = i2cp->errors;
-
+  chSysLock();
+  i2cp->errors = I2CD_NO_ERROR;
+  i2cp->state = I2C_ACTIVE_TX;
+  rdymsg = i2c_lld_master_transmit_timeout(i2cp, addr, txbuf, txbytes,
+                                           rxbuf, rxbytes, timeout);
+  if (rdymsg == RDY_TIMEOUT)
+    i2cp->state = I2C_LOCKED;
+  else
+    i2cp->state = I2C_READY;
+  chSysUnlock();
   return rdymsg;
 }
 
 /**
  * @brief   Receives data from the I2C bus.
  *
- * @param[in] i2cp        pointer to the @p I2CDriver object
- * @param[in] slave_addr  slave device address (7 bits) without R/W bit
- * @param[in] rxbytes     number of bytes to be received
- * @param[in] rxbuf       pointer to receive buffer
- * @param[in] errors      pointer to variable to store error code, zero means
- *                        no error.
- * @param[in] timeout     operation timeout
+ * @param[in] i2cp      pointer to the @p I2CDriver object
+ * @param[in] addr      slave device address (7 bits) without R/W bit
+ * @param[out] rxbuf    pointer to receive buffer
+ * @param[in] rxbytes   number of bytes to be received
+ * @param[in] timeout   the number of ticks before the operation timeouts,
+ *                      the following special values are allowed:
+ *                      - @a TIME_INFINITE no timeout.
+ *                      .
  *
- * @return                timeout status
- * @retval RDY_OK         if timeout not reached
- * @retval RDY_TIMEOUT    if a timeout occurs
+ * @return              The operation status.
+ * @retval RDY_OK       if the function succeeded.
+ * @retval RDY_RESET    if one or more I2C errors occurred, the errors can
+ *                      be retrieved using @p i2cGetErrors().
+ * @retval RDY_TIMEOUT  if a timeout occurred before operation end.
+ *
+ * @api
  */
-msg_t i2cMasterReceive(I2CDriver *i2cp,
-                            uint8_t slave_addr,
-                            uint8_t *rxbuf,
-                            size_t rxbytes,
-                            i2cflags_t *errors,
-                            systime_t timeout){
+msg_t i2cMasterReceiveTimeout(I2CDriver *i2cp,
+                              i2caddr_t addr,
+                              uint8_t *rxbuf,
+                              size_t rxbytes,
+                              systime_t timeout){
 
   msg_t rdymsg;
 
-  chDbgCheck((i2cp != NULL) && (slave_addr != 0) &&
+  chDbgCheck((i2cp != NULL) && (addr != 0) &&
              (rxbytes > 0) && (rxbuf != NULL) &&
-             (timeout > TIME_IMMEDIATE) && (errors != NULL),
-             "i2cMasterReceive");
+             (timeout != TIME_IMMEDIATE),
+             "i2cMasterReceiveTimeout");
 
-  i2c_lld_wait_bus_free(i2cp);
-  i2cp->errors = I2CD_NO_ERROR; /* clear error flags from previous run */
-  chDbgAssert(i2cp->id_state == I2C_READY,
+  chDbgAssert(i2cp->state == I2C_READY,
               "i2cMasterReceive(), #1", "not ready");
 
-  i2cp->id_state = I2C_ACTIVE_RECEIVE;
-  i2c_lld_master_receive(i2cp, slave_addr, rxbuf, rxbytes);
-  _i2c_wait_s(i2cp, timeout, rdymsg);
-
-  *errors = i2cp->errors;
-
+  chSysLock();
+  i2cp->errors = I2CD_NO_ERROR;
+  i2cp->state = I2C_ACTIVE_RX;
+  rdymsg = i2c_lld_master_receive_timeout(i2cp, addr, rxbuf, rxbytes, timeout);
+  if (rdymsg == RDY_TIMEOUT)
+    i2cp->state = I2C_LOCKED;
+  else
+    i2cp->state = I2C_READY;
+  chSysUnlock();
   return rdymsg;
 }
 
-
 #if I2C_USE_MUTUAL_EXCLUSION || defined(__DOXYGEN__)
 /**
- * @brief Gains exclusive access to the I2C bus.
- * @details This function tries to gain ownership to the I2C bus, if the bus
+ * @brief   Gains exclusive access to the I2C bus.
+ * @details This function tries to gain ownership to the SPI bus, if the bus
  *          is already being used then the invoking thread is queued.
+ * @pre     In order to use this function the option @p I2C_USE_MUTUAL_EXCLUSION
+ *          must be enabled.
  *
  * @param[in] i2cp      pointer to the @p I2CDriver object
  *
- * @note This function is only available when the @p I2C_USE_MUTUAL_EXCLUSION
- *       option is set to @p TRUE.
+ * @api
  */
 void i2cAcquireBus(I2CDriver *i2cp) {
 
   chDbgCheck(i2cp != NULL, "i2cAcquireBus");
 
 #if CH_USE_MUTEXES
-  chMtxLock(&i2cp->id_mutex);
+  chMtxLock(&i2cp->mutex);
 #elif CH_USE_SEMAPHORES
-  chSemWait(&i2cp->id_semaphore);
+  chSemWait(&i2cp->semaphore);
 #endif
 }
 
 /**
- * @brief Releases exclusive access to the I2C bus.
+ * @brief   Releases exclusive access to the I2C bus.
+ * @pre     In order to use this function the option @p I2C_USE_MUTUAL_EXCLUSION
+ *          must be enabled.
  *
  * @param[in] i2cp      pointer to the @p I2CDriver object
  *
- * @note This function is only available when the @p I2C_USE_MUTUAL_EXCLUSION
- *       option is set to @p TRUE.
+ * @api
  */
 void i2cReleaseBus(I2CDriver *i2cp) {
 
@@ -264,7 +293,7 @@ void i2cReleaseBus(I2CDriver *i2cp) {
 #if CH_USE_MUTEXES
   chMtxUnlock();
 #elif CH_USE_SEMAPHORES
-  chSemSignal(&i2cp->id_semaphore);
+  chSemSignal(&i2cp->semaphore);
 #endif
 }
 #endif /* I2C_USE_MUTUAL_EXCLUSION */

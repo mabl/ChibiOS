@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -39,6 +39,8 @@
 static const struct uip_eth_addr macaddr = {
   {0xC2, 0xAF, 0x51, 0x03, 0xCF, 0x46}
 };
+
+static const MACConfig mac_config = {macaddr.addr};
 
 #define BUF ((struct uip_eth_hdr *)&uip_buf[0])
 
@@ -164,9 +166,9 @@ msg_t WebThread(void *p) {
   chEvtRegister(&evt2.et_es, &el2, ARP_TIMER_ID);
 
   /*
-   * EMAC settings.
+   * EMAC driver start.
    */
-  macSetAddress(&ETH1, &macaddr.addr[0]);
+  macStart(&ETH1, &mac_config);
   (void)macPollLinkStatus(&ETH1);
 
   /*

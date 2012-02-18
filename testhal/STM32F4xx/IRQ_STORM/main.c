@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -328,5 +328,4 @@ int main(void) {
   while (TRUE) {
     chThdSleepMilliseconds(5000);
   }
-  return 0;
 }

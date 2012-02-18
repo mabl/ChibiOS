@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -21,8 +21,8 @@
 /*
  * LPC1114 memory setup.
  */
-__main_stack_size__     = 0x0100;
-__process_stack_size__  = 0x0100;
+__main_stack_size__     = 0x0200;
+__process_stack_size__  = 0x0200;
 
 MEMORY
 {

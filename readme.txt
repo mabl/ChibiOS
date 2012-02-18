@@ -30,7 +30,11 @@
   |  |  |  +--LPC214x/  - Drivers for LPC214x platform.
   |  |  |  +--MSP430/   - Drivers for MSP430 platform.
   |  |  |  +--SPC56x/   - Drivers for SPC56x/MPC563xx platforms.
-  |  |  |  +--STM32/    - Drivers for STM32 platform.
+  |  |  |  +--STM32/    - Drivers for STM32 platform (common).
+  |  |  |  +--STM32F1xx/- Drivers for STM32F1xx platform.
+  |  |  |  +--STM32F2xx/- Drivers for STM32F2xx platform.
+  |  |  |  +--STM32F4xx/- Drivers for STM32F4xx platform.
+  |  |  |  +--STM32L1xx/- Drivers for STM32L1xx platform.
   |  |  |  +--STM8L/    - Drivers for STM8L platform.
   |  |  |  +--STM8S/    - Drivers for STM8S platform.
   |  |  |  +--Posix/    - Drivers for x86 Linux/OSX simulator platform.
@@ -61,11 +65,12 @@
   +--test/              - Kernel test suite source code.
   |  +--coverage/       - Code coverage project.
   +--testhal/           - HAL integration test demos.
-  |  +--LPC11xx/        - LPC11xx HAL test demos.
-  |  +--LPC13xx/        - LPC13xx HAL test demos.
-  |  +--STM32F1xx/      - STM32F1xx HAL test demos.
-  |  +--STM32L1xx/      - STM32L1xx HAL test demos.
-  |  +--STM8S/          - STM8S HAL test demos.
+  |  +--LPC11xx/        - LPC11xx HAL demos.
+  |  +--LPC13xx/        - LPC11xx HAL demos.
+  |  +--STM32F1xx/      - STM32F1xx HAL demos.
+  |  +--STM32F4xx/      - STM32F4xx HAL demos (valid for STM32F2xx too).
+  |  +--STM32L1xx/      - STM32L1xx HAL demos.
+  |  +--STM8S/          - STM8S HAL demos.
   +--tools              - Various tools.
      +--eclipse         - Eclipse enhancements.
 
@@ -73,15 +78,70 @@
 *** Releases                                                              ***
 *****************************************************************************
 
+*** 2.5.0 ***
+- FIX: Fixed MMC over SPI driver performs an unnecessary SPI read (bug
+  3486930)(backported to 2.2.9 and 2.4.1). Also removed unnecessary CRC7
+  calculation.
+- FIX: Fixed Realtime counter initialization in STM32 HALs (bug 3485500)
+  (backported to 2.4.1).
+- FIX: Fixed PPC port broken when CH_DBG_SYSTEM_STATE_CHECK is activated
+  (bug 3485667)(backported to 2.4.1).
+- FIX: Fixed missing PLL3 check in STM32F107 HAL (bug 3485278)(backported
+  to 2.4.1).
+- FIX: Fixed ADC maximum frequency limit in STM32F2/F4 ADC drivers (bug
+  3484947)(backported to 2.4.1).
+- FIX: Fixed various minor documentation errors (bug 3484942)(backported
+  to 2.4.1).
+- NEW: Updated debug plugin 1.0.8 (backported to 2.4.0).
+- NEW: Added more accurate UBRR calculation in AVR serial driver (backported
+  to 2.4.0).
+- NEW: Revision of the round-robin scheduling, now threads do not lose their
+  time slice when preempted. Each thread has its own time slices counter.
+  TODO: Seek optimizations.
+- NEW: Modified the Virtual Timers management, now the callback is invoked
+  not in lock mode. This change reduces the interrupt jitter caused by
+  multiple timers used at same time.
+- NEW: Added board files and demo for Olimex LPC-P1343 (contributed by
+  Johnny Halfmoon).
+
 *** 2.3.5 ***
+- FIX: Fixed RTC compile problem on STM32F103 (bug 3468445).
+- FIX: Fixed PWM with TIM1 and TIM8 broken in STM32 HAL (bug 3458947).
 - FIX: Fixed SYSCFG clock not started in STM32L1/F4 HALs (bug 3449139).
 - FIX: Fixed wrong definitions in STM32L-Discovery board file (bug 3449076).
-- NEW: Modified the STM32F4-Discovery demo to put critical kernel data
-  structures and stacks in the CCM RAM instead normal RAM. It is done using
-  a special .ld file that can be customized to decide how to allocate data
-  in the various RAM sections.
-- NEW: Added support for the Cortex-M4 FPU (default when the FPU is present).
+- OPT: Improved the exception exit code in the GCC Cortex-Mx ports.
+- NEW: Added a DMA stress test application for the STM32F4 in order to assess
+  robustness of the whole HAL.
+- NEW: Added a Time Measurement driver to the HAL, this generic driver uses
+  the realtime counters abstracted in the HAL driver.
+- NEW: Improved the STM32F1xx HAL driver, it now has the same features and
+  configuration options of the newer STM32s.
+- NEW: MMC over SPI driver improved to handle high capacity cards, by
+  Matthias Blaicher.
+- NEW: Added PVD support to the HAL of all STM32s, by Barthess.
+- NEW: Added to the HAL driver the handling of an abstract realtime free
+  running counter, added the capability to all the STM32 HALs.
+- NEW: Modified ARM and ARMCMx build rules to allow parallel build. Now the
+  log outputs one dummy compilation command in order to allow paths discovery
+  by Eclipse.
+- NEW: Added an utility module to access LIS302DL MEMS using a SPI.
+- NEW: Updated STM32F2xx support by inheriting the work done on the STM32F4xx,
+  the whole thing is untested because lack of hardware.
+- NEW: Files nvic.c and nvic.h moved under ./os/ports/common/ARMCMx, removed
+  the duplicated instances under the GCC, IAR and Keil ports. Function names
+  prefixes changed from "NVIC" to "nvic" because style conventions.
+- NEW: Added voltage regulator initialization to the STM32F4xx HAL.
+- NEW: Added a linker script that demonstrates how to put stacks and other
+  critical structures in the CCM RAM instead normal RAM.
+- NEW: Added experimental support for the Cortex-M4 FPU (default when the
+  FPU is present but can be disabled).
 - NEW: Improved I2C driver model and STM32 implementation by Barthess.
+- CHANGE: Removed the option to change the stack alignment in the GCC
+  Cortex-Mx ports, now alignment is always 64 bits.
+- CHANGE: Modified the function palSetGroupMode() to have an offset parameter
+  in order to make it similar to other functions operating on groups.
+- CHANGE: Increased main and process default stack sizes from 0x100 to 0x200
+  in LPC1114 and LPC1343 linker scripts.
 
 *** 2.3.4 ***
 - FIX: Fixed Extra initialization in STM32 SPI driver (bug 3436127)
@@ -180,7 +240,6 @@
   (API and functionality review)
 - NEW: Improved MAC driver model, it now follows the same template of other
   drivers.
-  TODO: uIP demo to be adapted.
   TODO: implement macStop() in AT91SAM7X implementation.
 - NEW: New RCC helper driver for STM32F1xx and STM32L1xx, it simplifies
   the use of the RCC resources and hides most differences found among the
@@ -202,7 +261,6 @@
 - NEW: Added a new debug option CH_DBG_SYSTEM_STATE_CHECK that ensures the
   correct API call protocol. If an API is invoked out of the correct context
   then the kernel panics with a debug message.
-- NEW: Added Eclipse ChibiOS/RT debugger plugin 1.0.5 under ./tools/eclipse.
 - NEW: The ARMCMx startup file (crt0.c) now is able to fill the stack areas
   with a filler (default behavior). This is required in order to easily assess
   the stack usage at runtime.
@@ -314,7 +372,6 @@
   started and released when it is stopped.
 - NEW: Added an STM32 C++ demo for the GNU compiler.
 - NEW: Added an STM32F103ZG demo for the STM3210E-EVAL evaluation board.
-
 - OPT: STM32 PWM driver implementation simplified.
 - CHANGE: Now pwmChangePeriod() does not implicitly disable the active
   PWM channels.

@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -122,10 +122,16 @@ struct Thread {
    */
   trefs_t               p_refs;
 #endif
+  /**
+   * @brief Number of ticks remaining to this thread.
+   */
+#if (CH_TIME_QUANTUM > 0) || defined(__DOXYGEN__)
+  tslices_t             p_preempt;
+#endif
 #if CH_DBG_THREADS_PROFILING || defined(__DOXYGEN__)
   /**
    * @brief Thread consumed time in ticks.
-   * @note This field can overflow.
+   * @note  This field can overflow.
    */
   volatile systime_t    p_time;
 #endif

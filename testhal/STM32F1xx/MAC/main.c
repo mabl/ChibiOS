@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011 Giovanni Di Sirio.
+                 2011,2012 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -37,7 +37,7 @@ int main(void) {
   chSysInit();
 
   /*
-   * Activates the EXT driver 1.
+   * Activates the MAC driver 1.
    */
 /*  macStart(&ETHD1, NULL);*/
 
