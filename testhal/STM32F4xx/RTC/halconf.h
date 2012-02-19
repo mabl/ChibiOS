@@ -337,6 +337,16 @@
 #define SPI_USE_MUTUAL_EXCLUSION    TRUE
 #endif
 
+/*===========================================================================*/
+/* RTC driver related settings.                                              */
+/*===========================================================================*/
+/**
+ * @brief   Enables interrupts from RTC cell.
+ */
+#if !defined(RTC_USE_INTERRUPTS) || defined(__DOXYGEN__)
+#define RTC_USE_INTERRUPTS                TRUE
+#endif
+
 #endif /* _HALCONF_H_ */
 
 /** @} */
