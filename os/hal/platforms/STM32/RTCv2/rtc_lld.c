@@ -26,7 +26,6 @@
 TODO: time format (12 or 24 hours) through the FMT bit in the RTC_CR register
 TODO: If the frequency of the APB1 clock is less than seven times the frequency
 of RTCCLK, BYPSHAD must be set to ‘1’ otherwise we must use 3-read workaround.
-TODO: Is it really need of have ability of multiple RTC in single MCU?
 */
 
 /**
@@ -186,14 +185,10 @@ void rtc_lld_set_alarm(RTCDriver *rtcp,
         ;
       rtcp->id_rtc->ALRMAR = alarmspec->tv_datetime;
       rtcp->id_rtc->CR |= RTC_CR_ALRAE;
-      #if RTC_USE_INTERRUPTS
-        rtcp->id_rtc->CR |= RTC_CR_ALRAIE;
-      #endif
+      rtcp->id_rtc->CR |= RTC_CR_ALRAIE;
     }
     else {
-      #if RTC_USE_INTERRUPTS
-        rtcp->id_rtc->CR &= ~RTC_CR_ALRAIE;
-      #endif
+      rtcp->id_rtc->CR &= ~RTC_CR_ALRAIE;
       rtcp->id_rtc->CR &= ~RTC_CR_ALRAE;
     }
   }
@@ -204,14 +199,10 @@ void rtc_lld_set_alarm(RTCDriver *rtcp,
         ;
       rtcp->id_rtc->ALRMBR = alarmspec->tv_datetime;
       rtcp->id_rtc->CR |= RTC_CR_ALRBE;
-      #if RTC_USE_INTERRUPTS
-        rtcp->id_rtc->CR |= RTC_CR_ALRBIE;
-      #endif
+      rtcp->id_rtc->CR |= RTC_CR_ALRBIE;
     }
     else {
-      #if RTC_USE_INTERRUPTS
-        rtcp->id_rtc->CR &= ~RTC_CR_ALRBIE;
-      #endif
+      rtcp->id_rtc->CR &= ~RTC_CR_ALRBIE;
       rtcp->id_rtc->CR &= ~RTC_CR_ALRBE;
     }
   }
@@ -255,16 +246,12 @@ void rtcSetPeriodicWakeup_v2(RTCDriver *rtcp, RTCWakeup *wakeupspec){
       ;
     rtcp->id_rtc->WUTR = wakeupspec->wakeup & 0xFFFF;
     rtcp->id_rtc->CR   = (wakeupspec->wakeup >> 16) & 0x7;
+    rtcp->id_rtc->CR |= RTC_CR_WUTIE;
     rtcp->id_rtc->CR |= RTC_CR_WUTE;
-    #if RTC_USE_INTERRUPTS
-      rtcp->id_rtc->CR |= RTC_CR_WUTIE;
-    #endif
   }
   else {
+    rtcp->id_rtc->CR &= ~RTC_CR_WUTIE;
     rtcp->id_rtc->CR &= ~RTC_CR_WUTE;
-    #if RTC_USE_INTERRUPTS
-      rtcp->id_rtc->CR &= ~RTC_CR_WUTIE;
-    #endif
   }
 }
 

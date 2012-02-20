@@ -41,10 +41,10 @@ int tm_yday      days since January 1st [0-365]
 int tm_isdst     daylight savings indicator (1 = yes, 0 = no, -1 = unknown)
 */
 
-RTCTime  timespec;
-RTCAlarm alarmspec;
-RTCWakeup wakeupspec;
-time_t unix_time;
+static RTCTime  timespec;
+static RTCAlarm alarmspec;
+static RTCWakeup wakeupspec;
+static time_t unix_time;
 
 /**
  * Alarms callback

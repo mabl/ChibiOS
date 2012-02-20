@@ -72,10 +72,6 @@
 #define RTC_USE_INTERRUPTS                FALSE
 #endif
 
-#if RTC_USE_INTERRUPTS && !(HAL_USE_EXT)
-#error "interrupts from RTC works only through EXTI on this platform"
-#endif
-
 /*===========================================================================*/
 /* Driver data structures and types.                                         */
 /*===========================================================================*/
