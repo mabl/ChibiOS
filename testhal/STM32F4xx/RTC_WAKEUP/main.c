@@ -54,11 +54,13 @@ int main(void){
     chSysLock();
 
     /* going to anabiosis */
-    SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
-    PWR->CR |= (PWR_CR_PDDS | PWR_CR_LPDS | PWR_CR_CSBF | PWR_CR_CWUF);
-    RTC->ISR &= ~(RTC_ISR_ALRBF | RTC_ISR_ALRAF | RTC_ISR_WUTF | RTC_ISR_TAMP1F |
-                  RTC_ISR_TSOVF | RTC_ISR_TSF);
-    __WFI();
+//    SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
+//    PWR->CR |= (PWR_CR_PDDS | PWR_CR_LPDS | PWR_CR_CSBF | PWR_CR_CWUF);
+//    RTC->ISR &= ~(RTC_ISR_ALRBF | RTC_ISR_ALRAF | RTC_ISR_WUTF | RTC_ISR_TAMP1F |
+//                  RTC_ISR_TSOVF | RTC_ISR_TSF);
+//    __WFI();
+
+    chSysUnlock();
   }
   return 0;
 }
