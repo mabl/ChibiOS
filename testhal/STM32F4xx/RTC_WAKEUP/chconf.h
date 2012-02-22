@@ -33,7 +33,7 @@
 #define _CHCONF_H_
 
 #define PORT_IDLE_THREAD_STACK_SIZE     32
-#define CORTEX_USE_FPU    FALSE
+#define CORTEX_USE_FPU                  FALSE
 
 /*===========================================================================*/
 /* Kernel parameters.                                                        */
