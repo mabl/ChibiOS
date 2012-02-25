@@ -41,14 +41,29 @@
 /* Driver constants.                                                         */
 /*===========================================================================*/
 
-/*===========================================================================*/
-/* Driver constants.                                                         */
-/*===========================================================================*/
-
 /**
  * @brief   Two alarm comparators available on STM32F4x.
  */
 #define RTC_ALARMS                  2
+
+/**
+ * @brief   Data offsets in RTC date and time registers.
+ */
+#define RTC_TR_PM_OFFSET    22
+#define RTC_TR_HT_OFFSET    20
+#define RTC_TR_HU_OFFSET    16
+#define RTC_TR_MNT_OFFSET   12
+#define RTC_TR_MNU_OFFSET   8
+#define RTC_TR_ST_OFFSET    4
+#define RTC_TR_SU_OFFSET    0
+
+#define RTC_DR_YT_OFFSET    20
+#define RTC_DR_YU_OFFSET    16
+#define RTC_DR_WDU_OFFSET   13
+#define RTC_DR_MT_OFFSET    12
+#define RTC_DR_MU_OFFSET    8
+#define RTC_DR_DT_OFFSET    4
+#define RTC_DR_DU_OFFSET    0
 
 /*===========================================================================*/
 /* Driver pre-compile time settings.                                         */

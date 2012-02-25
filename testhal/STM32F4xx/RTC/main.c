@@ -18,8 +18,24 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*
+This structure is used to hold the values representing a calendar time.
+It contains the following members, with the meanings as shown.
+
+int tm_sec       seconds after minute [0-61] (61 allows for 2 leap-seconds)
+int tm_min       minutes after hour [0-59]
+int tm_hour      hours after midnight [0-23]
+int tm_mday      day of the month [1-31]
+int tm_mon       month of year [0-11]
+int tm_year      current year-1900
+int tm_wday      days since Sunday [0-6]
+int tm_yday      days since January 1st [0-365]
+int tm_isdst     daylight savings indicator (1 = yes, 0 = no, -1 = unknown)
+*/
+
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "ch.h"
 #include "hal.h"
@@ -30,6 +46,21 @@
 static RTCWakeup wakeupspec;
 static RTCTime timespec;
 static time_t unix_time;
+
+/* libc stubs */
+int _getpid(void) {return 1;}
+
+void _exit(int i) {(void)i;}
+
+#include <errno.h>
+#undef errno
+extern int errno;
+int _kill(int pid, int sig) {
+  (void)pid;
+  (void)sig;
+  errno = EINVAL;
+  return -1;
+}
 
 
 /* sleep indicator thread */
@@ -85,7 +116,7 @@ static void cmd_date(BaseChannel *chp, int argc, char *argv[]){
     goto ERROR;
   }
 
-  if ((argc == 1) && (strcmp(argv[0], "get"))){
+  if ((argc == 1) && (strcmp(argv[0], "get") == 0)){
     rtcGetTime(&RTCD1, &timespec);
     stm32_rtc_bcd2tm(&timp, &timespec);
     unix_time = mktime(&timp);
@@ -94,12 +125,10 @@ static void cmd_date(BaseChannel *chp, int argc, char *argv[]){
       chprintf(chp, "incorrect time in RTC cell\r\n");
     }
     else{
-      chprintf(chp, "%D%s","unix_time","\r\n");
+      chprintf(chp, "%D%s",unix_time," - unix time\r\n");
+      chprintf(chp, "%s",asctime(&timp)," - unix time\r\n");
     }
     return;
-  }
-  else{
-    goto ERROR;
   }
 
   if ((argc == 2) && (strcmp(argv[0], "set") == 0)){
@@ -120,10 +149,18 @@ static void cmd_date(BaseChannel *chp, int argc, char *argv[]){
 ERROR:
   chprintf(chp, "Usage: date get\r\n");
   chprintf(chp, "       date set N\r\n");
-  chprintf(chp, "       where N is time in seconds sins Unix epoch\r\n");
+  chprintf(chp, "where N is time in seconds sins Unix epoch\r\n");
+  chprintf(chp, "you cant get current N value from unix console by the command\r\n");
+  chprintf(chp, "%s", "date +\%s\r\n");
   return;
 }
 
+static SerialConfig ser_cfg = {
+    115200,
+    0,
+    0,
+    0,
+};
 
 static const ShellCommand commands[] = {
   {"alarm", cmd_alarm},
@@ -149,9 +186,11 @@ int main(void){
   chThdCreateStatic(blinkWA, sizeof(blinkWA), NORMALPRIO, blink_thd, NULL);
 
   /* Shell manager initialization.*/
+  sdStart(&SD2, &ser_cfg);
   shellInit();
   static WORKING_AREA(waShell, 1024);
   shellCreateStatic(&shell_cfg1, waShell, sizeof(waShell), NORMALPRIO);
+  chThdSleepMilliseconds(200);
 
   /* tune wakeup */
   wakeupspec.wakeup = ((uint32_t)4) << 16; /* select 1 Hz clock source */
