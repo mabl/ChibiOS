@@ -66,8 +66,7 @@ RTCDriver RTCD1;
 #define rtc_lld_apb1_sync() {while ((RTCD1.id_rtc->ISR & RTC_ISR_RSF) == 0);}
 
 /**
- * @brief   TODO.
- * @details .
+ * @brief   Beginning of configuration procedure.
  *
  * @notapi
  */
@@ -78,7 +77,7 @@ RTCDriver RTCD1;
 }
 
 /**
- * @brief   TODO.
+ * @brief   Finalizing of configuration procedure.
  *
  * @notapi
  */
