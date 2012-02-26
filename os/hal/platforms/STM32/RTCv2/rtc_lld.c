@@ -22,12 +22,6 @@
    aka barthess.
  */
 
-/*
-TODO: time format (12 or 24 hours) through the FMT bit in the RTC_CR register
-TODO: If the frequency of the APB1 clock is less than seven times the frequency
-of RTCCLK, BYPSHAD must be set to ‘1’ otherwise we must use 3-read workaround.
-*/
-
 /**
  * @file    STM32/RTCv2/rtc_lld.c
  * @brief   STM32L1xx/STM32F2xx/STM32F4xx RTC low level driver.
