@@ -132,7 +132,7 @@ static void cmd_alarm(BaseChannel *chp, int argc, char *argv[]){
 ERROR:
   chprintf(chp, "Usage: alarm get\r\n");
   chprintf(chp, "       alarm set N\r\n");
-  chprintf(chp, "where N is alarm in seconds\r\n");
+  chprintf(chp, "where N is alarm time in seconds\r\n");
 }
 
 /*
@@ -156,7 +156,7 @@ static void cmd_date(BaseChannel *chp, int argc, char *argv[]){
     }
     else{
       chprintf(chp, "%D%s",unix_time," - unix time\r\n");
-      chprintf(chp, "%s",asctime(&timp)," - unix time\r\n");
+      chprintf(chp, "%s%s",asctime(&timp)," - formatted time string\r\n");
     }
     return;
   }
@@ -180,7 +180,7 @@ ERROR:
   chprintf(chp, "Usage: date get\r\n");
   chprintf(chp, "       date set N\r\n");
   chprintf(chp, "where N is time in seconds sins Unix epoch\r\n");
-  chprintf(chp, "you cant get current N value from unix console by the command\r\n");
+  chprintf(chp, "you can get current N value from unix console by the command\r\n");
   chprintf(chp, "%s", "date +\%s\r\n");
   return;
 }
