@@ -125,6 +125,10 @@ struct RTCTime {
    */
   uint32_t tv_time;
   /**
+   * @brief Set this to TRUE to use 12 hour notation.
+   */
+  bool_t h12;
+  /**
    * @brief Fractional part of time.
    */
 #if STM32_RTC_HAS_SUBSECONDS

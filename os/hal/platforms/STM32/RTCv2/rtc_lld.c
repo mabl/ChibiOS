@@ -103,10 +103,6 @@ void rtc_lld_init(void){
   /* Asynchronous part of preloader. Set it to maximum value. */
   uint32_t prediv_a = 0x7F;
 
-  /* Add async part to preload value. */
-  volatile uint32_t preload = prediv_a << 16;
-  preload |= ((STM32_RTCCLK / (prediv_a + 1)) - 1) & 0x7FFF;
-
   /* Disable write protection. */
   RTCD1.id_rtc->WPR = 0xCA;
   RTCD1.id_rtc->WPR = 0x53;
@@ -115,9 +111,9 @@ void rtc_lld_init(void){
   if (!(RTC->ISR & RTC_ISR_INITS)){
     rtc_lld_enter_init();
 
-    /* Prescaler registers must be written in two SEPARATE writes. */
-    RTCD1.id_rtc->PRER = preload;
-    RTCD1.id_rtc->PRER = preload;
+    /* Prescaler register must be written in two SEPARATE writes. */
+    RTCD1.id_rtc->PRER = prediv_a << 16;
+    RTCD1.id_rtc->PRER = ((STM32_RTCCLK / (prediv_a + 1)) - 1) & 0x7FFF;
     rtc_lld_exit_init();
   }
 }
@@ -136,6 +132,10 @@ void rtc_lld_set_time(RTCDriver *rtcp, const RTCTime *timespec) {
   (void)rtcp;
 
   rtc_lld_enter_init();
+  if (timespec->h12)
+    RTCD1.id_rtc->CR |= RTC_CR_FMT;
+  else
+    RTCD1.id_rtc->CR &= ~RTC_CR_FMT;
   RTCD1.id_rtc->TR = timespec->tv_time;
   RTCD1.id_rtc->DR = timespec->tv_date;
   rtc_lld_exit_init();

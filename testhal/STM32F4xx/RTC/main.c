@@ -32,7 +32,7 @@ int tm_wday      days since Sunday [0-6]
 int tm_yday      days since January 1st [0-365]
 int tm_isdst     daylight savings indicator (1 = yes, 0 = no, -1 = unknown)
 */
-#define WAKEUP_TEST TRUE
+#define WAKEUP_TEST FALSE
 
 #include <string.h>
 #include <stdlib.h>
@@ -47,15 +47,15 @@ int tm_isdst     daylight savings indicator (1 = yes, 0 = no, -1 = unknown)
 #if WAKEUP_TEST
 static RTCWakeup wakeupspec;
 #endif
-static RTCTime timespec;
+static RTCTime timespec = {0,0,FALSE,0};
 static RTCAlarm alarmspec;
 static time_t unix_time;
 
-/* libc stubs */
+/* libc stub */
 int _getpid(void) {return 1;}
-
+/* libc stub */
 void _exit(int i) {(void)i;}
-
+/* libc stub */
 #include <errno.h>
 #undef errno
 extern int errno;
