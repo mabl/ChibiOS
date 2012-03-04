@@ -168,10 +168,6 @@ struct RTCDriver{
    * @brief Pointer to the RTC registers block.
    */
   RTC_TypeDef               *id_rtc;
-  /**
-   * @brief Current callback confuguration.
-   */
-  const RTCCallbackConfig   *cb_cfg;
 };
 
 /*===========================================================================*/
