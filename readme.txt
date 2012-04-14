@@ -70,6 +70,10 @@
 *** Releases                                                              ***
 *****************************************************************************
 
+*** 2.2.10 ***
+- FIX: Fixed missing serial driver functionality for SAM7S64, SAM7S128 and
+  SAM7S512 (bug 3517648).
+
 *** 2.2.9 ***
 - FIX: Fixed chMBFetchI does not decrement mb_fullsem (bug 3504450).
 - FIX: Fixed STM8S HSI clock initialization error (bug 3489727).
