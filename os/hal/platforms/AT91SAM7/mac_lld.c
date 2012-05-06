@@ -273,7 +273,7 @@ void mac_lld_set_address(MACDriver *macp, const uint8_t *p) {
  *
  * @notapi
  */
-msg_t max_lld_get_transmit_descriptor(MACDriver *macp,
+msg_t mac_lld_get_transmit_descriptor(MACDriver *macp,
                                       MACTransmitDescriptor *tdp) {
   EMACDescriptor *edp;
 
@@ -363,7 +363,7 @@ void mac_lld_release_transmit_descriptor(MACTransmitDescriptor *tdp) {
  *
  * @notapi
  */
-msg_t max_lld_get_receive_descriptor(MACDriver *macp,
+msg_t mac_lld_get_receive_descriptor(MACDriver *macp,
                                      MACReceiveDescriptor *rdp) {
   unsigned n;
   EMACDescriptor *edp;

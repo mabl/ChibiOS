@@ -127,7 +127,7 @@ msg_t macWaitTransmitDescriptor(MACDriver *macp,
                                 systime_t time) {
   msg_t msg;
 
-  while (((msg = max_lld_get_transmit_descriptor(macp, tdp)) != RDY_OK) &&
+  while (((msg = mac_lld_get_transmit_descriptor(macp, tdp)) != RDY_OK) &&
          (time > 0)) {
     chSysLock();
     systime_t now = chTimeNow();
@@ -179,7 +179,7 @@ msg_t macWaitReceiveDescriptor(MACDriver *macp,
                                systime_t time) {
   msg_t msg;
 
-  while (((msg = max_lld_get_receive_descriptor(macp, rdp)) != RDY_OK) &&
+  while (((msg = mac_lld_get_receive_descriptor(macp, rdp)) != RDY_OK) &&
          (time > 0)) {
     chSysLock();
     systime_t now = chTimeNow();
