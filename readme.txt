@@ -71,6 +71,7 @@
 *****************************************************************************
 
 *** 2.2.10 ***
+- FIX: Fixed inconsistent LPCxxx Internal RC oscillator names (bug 3524138).
 - FIX: Fixed MAC driver functions with invalid name (bug 3522808).
 - FIX: Fixed ARM addresses generated in vectors table (bug 3519037).
 - FIX: Fixed missing serial driver functionality for SAM7S64, SAM7S128 and
