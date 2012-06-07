@@ -106,12 +106,9 @@
  * Port B setup.
  * Everything input with pull-up except:
  * PB1  - Push Pull output  (LED).
- * PB13 - Alternate output  (MMC SPI2 SCK).
- * PB14 - Normal input      (MMC SPI2 MISO).
- * PB15 - Alternate output  (MMC SPI2 MOSI).
  */
 #define VAL_GPIOBCRL            0x88888838      /*  PB7...PB0 */
-#define VAL_GPIOBCRH            0xB4B88888      /* PB15...PB8 */
+#define VAL_GPIOBCRH            0x88888888      /* PB15...PB8 */
 #define VAL_GPIOBODR            0xFFFFFFFF
 
 /*
