@@ -398,9 +398,11 @@ void spi_lld_unselect(SPIDriver *spip) {
 void spi_lld_ignore(SPIDriver *spip, size_t n) {
 
   dmaChannelSetup(spip->spd_dmarx, n, &dummyrx,
-                  spip->spd_dmaccr | DMA_CCR1_TCIE | DMA_CCR1_EN);
+                  spip->spd_dmaccr | DMA_CCR1_TCIE );
   dmaChannelSetup(spip->spd_dmatx, n, &dummytx,
-                  spip->spd_dmaccr | DMA_CCR1_DIR | DMA_CCR1_EN);
+                  spip->spd_dmaccr | DMA_CCR1_DIR);
+  dmaChannelEnable(spip->spd_dmarx);
+  dmaChannelEnable(spip->spd_dmatx);
 }
 
 /**
@@ -422,11 +424,11 @@ void spi_lld_exchange(SPIDriver *spip, size_t n,
                       const void *txbuf, void *rxbuf) {
 
   dmaChannelSetup(spip->spd_dmarx, n, rxbuf,
-                  spip->spd_dmaccr | DMA_CCR1_TCIE | DMA_CCR1_MINC |
-                  DMA_CCR1_EN);
+                  spip->spd_dmaccr | DMA_CCR1_TCIE | DMA_CCR1_MINC);
   dmaChannelSetup(spip->spd_dmatx, n, txbuf,
-                  spip->spd_dmaccr | DMA_CCR1_DIR | DMA_CCR1_MINC |
-                  DMA_CCR1_EN);
+                  spip->spd_dmaccr | DMA_CCR1_DIR | DMA_CCR1_MINC);
+  dmaChannelEnable(spip->spd_dmarx);
+  dmaChannelEnable(spip->spd_dmatx);
 }
 
 /**
@@ -445,10 +447,11 @@ void spi_lld_exchange(SPIDriver *spip, size_t n,
 void spi_lld_send(SPIDriver *spip, size_t n, const void *txbuf) {
 
   dmaChannelSetup(spip->spd_dmarx, n, &dummyrx,
-                  spip->spd_dmaccr | DMA_CCR1_TCIE | DMA_CCR1_EN);
+                  spip->spd_dmaccr | DMA_CCR1_TCIE );
   dmaChannelSetup(spip->spd_dmatx, n, txbuf,
-                  spip->spd_dmaccr | DMA_CCR1_DIR | DMA_CCR1_MINC |
-                  DMA_CCR1_EN);
+                  spip->spd_dmaccr | DMA_CCR1_DIR | DMA_CCR1_MINC);
+  dmaChannelEnable(spip->spd_dmarx);
+  dmaChannelEnable(spip->spd_dmatx);
 }
 
 /**
@@ -467,10 +470,11 @@ void spi_lld_send(SPIDriver *spip, size_t n, const void *txbuf) {
 void spi_lld_receive(SPIDriver *spip, size_t n, void *rxbuf) {
 
   dmaChannelSetup(spip->spd_dmarx, n, rxbuf,
-                  spip->spd_dmaccr | DMA_CCR1_TCIE | DMA_CCR1_MINC |
-                  DMA_CCR1_EN);
+                  spip->spd_dmaccr | DMA_CCR1_TCIE | DMA_CCR1_MINC);
   dmaChannelSetup(spip->spd_dmatx, n, &dummytx,
-                  spip->spd_dmaccr | DMA_CCR1_DIR | DMA_CCR1_EN);
+                  spip->spd_dmaccr | DMA_CCR1_DIR);
+  dmaChannelEnable(spip->spd_dmarx);
+  dmaChannelEnable(spip->spd_dmatx);
 }
 
 /**

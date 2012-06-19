@@ -110,8 +110,9 @@ void adc_lld_init(void) {
   ADCD1.ad_adc = ADC1;
   ADCD1.ad_dmachp = STM32_DMA1_CH1;
   ADCD1.ad_dmaccr = (STM32_ADC_ADC1_DMA_PRIORITY << 12) |
-                    DMA_CCR1_EN   | DMA_CCR1_MSIZE_0 | DMA_CCR1_PSIZE_0 |
-                    DMA_CCR1_MINC | DMA_CCR1_TCIE    | DMA_CCR1_TEIE;
+                    DMA_CCR1_MSIZE_0 | DMA_CCR1_PSIZE_0 |
+                    DMA_CCR1_MINC    | DMA_CCR1_TCIE    |
+                    DMA_CCR1_TEIE;
 
   /* Temporary activation.*/
   RCC->APB2ENR |= RCC_APB2ENR_ADC1EN;
@@ -209,6 +210,7 @@ void adc_lld_start_conversion(ADCDriver *adcp) {
   else
     n = (uint32_t)grpp->acg_num_channels;
   dmaChannelSetup(adcp->ad_dmachp, n, adcp->ad_samples, ccr);
+  dmaChannelEnable(adcp->dmastp);
 
   /* ADC setup.*/
   adcp->ad_adc->CR1   = grpp->acg_cr1 | ADC_CR1_SCAN;

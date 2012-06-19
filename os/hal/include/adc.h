@@ -187,7 +187,9 @@ typedef enum {
       if ((adcp)->ad_depth > 1) {                                           \
         /* Invokes the callback passing the 2nd half of the buffer.*/       \
         size_t half = (adcp)->ad_depth / 2;                                 \
-        (adcp)->ad_grpp->acg_endcb(adcp, (adcp)->ad_samples + half, half);  \
+        size_t half_index = half * (adcp)->grpp->acg_num_channels;          \
+        (adcp)->grpp->acg_endcb(adcp,                                       \
+                                (adcp)->ad_samples + half_index, half);     \
       }                                                                     \
       else {                                                                \
         /* Invokes the callback passing the whole buffer.*/                 \
@@ -204,7 +206,9 @@ typedef enum {
       if ((adcp)->ad_depth > 1) {                                           \
         /* Invokes the callback passing the 2nd half of the buffer.*/       \
         size_t half = (adcp)->ad_depth / 2;                                 \
-        (adcp)->ad_grpp->acg_endcb(adcp, (adcp)->ad_samples + half, half);  \
+        size_t half_index = half * (adcp)->grpp->acg_num_channels;          \
+        (adcp)->grpp->acg_endcb(adcp,                                       \
+                                (adcp)->ad_samples + half_index, half);     \
       }                                                                     \
       else {                                                                \
         /* Invokes the callback passing the whole buffer.*/                 \

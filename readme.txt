@@ -71,6 +71,9 @@
 *****************************************************************************
 
 *** 2.2.10 ***
+- FIX: Fixed issue with DMA channel init in STM32 ADC and SPI drivers (bug
+  3535938).
+- FIX: Fixed wrong ADC callback buffer pointer in ADC driver (bug 3534767).
 - FIX: Fixed inconsistent LPCxxx Internal RC oscillator names (bug 3524138).
 - FIX: Fixed MAC driver functions with invalid name (bug 3522808).
 - FIX: Fixed ARM addresses generated in vectors table (bug 3519037).
