@@ -33,6 +33,7 @@
 #include "halconf.h"
 
 #include "hal_lld.h"
+#include "dyn_clk_lld.h"
 
 /* Abstract interfaces.*/
 #include "io_channel.h"
