@@ -29,14 +29,21 @@
 /** @brief Dynamic clock configs' identifiers.*/
 ClockConfig clk_cfg_default = {
     STM32_SW_PLL,
+    ((STM32_PLLMUL_VALUE - 2) << 18),
     STM32_HPRE_DIV1,
     STM32_PPRE1_DIV2,
     STM32_PPRE2_DIV2,
     STM32_ADCPRE_DIV4,
     STM32_PLLSRC_HSE,
     STM32_PLLXTPRE_DIV1,
+    TRUE,
     STM32_USBPRE_DIV1P5,
     STM32_MCOSEL_NOCLOCK,
+    72000000,
+    72000000,
+    36000000,
+    36000000,
+    9000000,
 };
 
 ClockConfig *CLK_CFG = &clk_cfg_default;
