@@ -26,26 +26,38 @@
 /* Driver exported variables.                                                */
 /*===========================================================================*/
 
-/** @brief Dynamic clock configs' identifiers.*/
-ClockConfig clk_cfg_default = {
-    STM32_SW_PLL,
-    ((STM32_PLLMUL_VALUE - 2) << 18),
-    STM32_HPRE_DIV1,
-    STM32_PPRE1_DIV2,
-    STM32_PPRE2_DIV2,
-    STM32_ADCPRE_DIV4,
-    STM32_PLLSRC_HSE,
-    STM32_PLLXTPRE_DIV1,
-    TRUE,
-    STM32_USBPRE_DIV1P5,
-    STM32_MCOSEL_NOCLOCK,
-    72000000,
-    72000000,
-    36000000,
-    36000000,
-    9000000,
+static const ClockConfig clk_cfg_default = {
+
+        (STM32_SW_PLL |    (9 - 2) << 18 |    STM32_HPRE_DIV1 |    STM32_PPRE1_DIV2 |    STM32_PPRE2_DIV2 |    STM32_ADCPRE_DIV4 |    STM32_PLLSRC_HSE |    STM32_PLLXTPRE_DIV1 |    0 |    STM32_MCOSEL_NOCLOCK),
+        18,
+        TRUE,
+        72000000,
+        72000000,
+        36000000,
+        36000000,
+        9000000,
+
+
 };
 
-ClockConfig *CLK_CFG = &clk_cfg_default;
+
+ClockConfig const * CLK_CFG = &clk_cfg_default;
+
+
+ClockConfig const* clkcfgObjectInit(void){
+  return &clk_cfg_default;
+}
+
+
+bool_t stm32_hse_enabled(void) {
+  if ((STM32_SW == STM32_SW_HSE) || (STM32_PLLSRC == STM32_PLLSRC_HSE))
+    return TRUE;
+  else
+    return FALSE;
+}
+
+
+
+
 
 

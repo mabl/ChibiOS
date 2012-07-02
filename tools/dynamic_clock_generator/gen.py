@@ -47,6 +47,12 @@ def gen_profile(section):
     hsiclk = 8000000
     HSICLK = str(hsiclk)
 
+    pll = cfg.getboolean(section, "PLL")#{{{
+    if pll is True:
+        PLL = "TRUE"
+    else:
+        PLL = "FALSE"
+    #}}}
     sw = cfg.get(section, "SW")#{{{
     if sw == "HSI":
         SW = "STM32_SW_HSI"
@@ -134,7 +140,7 @@ def gen_profile(section):
     i = 1
     while i <= 16:
         if ppre2 == i:
-            PPRE2 = "STM32_PPRE1_DIV"+str(i)
+            PPRE2 = "STM32_PPRE2_DIV"+str(i)
         i = i * 2
     if PPRE2 == "":
         raise ValueError("PPRE2 must be power of 2 and lay between 1..16 inclusively")
@@ -146,34 +152,70 @@ def gen_profile(section):
     #}}}
     adcpre = cfg.getint(section, "ADCPRE")#{{{
     ADCPRE = ""
-    adcdivs = [2, 4, 6, 8]
-    for i in adcdivs:
+    adcpre_allowed = [2, 4, 6, 8]
+    for i in adcpre_allowed:
         if adcpre == i:
             ADCPRE = "STM32_ADCPRE_DIV"+str(i)
     if ADCPRE == "":
-        raise ValueError("ADCPRE must be one of", adcdivs)
+        raise ValueError("ADCPRE must be one of", adcpre_allowed)
 
     adcclk = pclk2 / adcpre
     ADCCLK = str(adcclk)
     if adcclk > STM32_ADCCLK_MAX:
         raise ValueError("ADC clock set to", adcclk, "limit is", STM32_ADCCLK_MAX)
     #}}}
+    usb_clock_required = cfg.getboolean(section, "USB_CLOCK_REQUIRED")#{{{
+    USBPRE = "0"
+    if usb_clock_required is True:
+        if pll != True or pllsrc != "HSE":
+            raise ValueError("In order to use USB you must enable PLL and select HSE as PLLSRC")
+        usbpre = cfg.getfloat(section, "USBPRE")
+        if usbpre == 1.5:
+            if hseclk * pllmul != 72000000:
+                raise ValueError("HCECLK * PLLMUL must be equal 72000000 to use USB")
+            else:
+                USBPRE = "STM32_USBPRE_DIV1P5"
+        elif usbpre == 1:
+            if hseclk * pllmul != 48000000:
+                raise ValueError("HCECLK * PLLMUL must be equal 48000000 to use USB")
+            else:
+                USBPRE = "STM32_USBPRE_DIV1"
+        else:
+            raise ValueError("Acceptable values for USBPRE is 1.5 or 1")
+    #}}}
+    mcosel = cfg.get(section, "MCOSEL")#{{{
+    MCOSEL = ""
+    mcosel_allowed = ["NOCLOCK", "SYSCLK", "HSI", "HSE", "PLLDIV2"]
+    for i in mcosel_allowed:
+        if mcosel == i:
+            MCOSEL = "STM32_MCOSEL_"+str(i)
+    if MCOSEL == "":
+        raise ValueError("MCOSEL must be one of", adcpre_allowed)
+    #}}}
 
-    # usbpre = cfg.getfloat(section, "USBPRE")
-    # print usbpre
-
-
+    if hclk <= 24000000:
+        flashbits = 0x10
+    elif hclk <= 48000000:
+        flashbits = 0x11
+    else:
+        flashbits = 0x12
+    FLASHBITS = str(flashbits)
 
     print(
     "ClockConfig clk_cfg_"+section+" = {\n"
-    "   "+SW+",\n"
-    "   "+PLLMUL+",\n"
-    "   "+HPRE+",\n"
-    "   "+PPRE1+",\n"
-    "   "+PPRE2+",\n"
-    "   "+ADCPRE+",\n"
-    "   "+PLLSRC+",\n"
-    "   "+PLLXTPRE+",\n"
+    "   ("+SW+" | "
+    "   "+PLLMUL+" | "
+    "   "+HPRE+" | "
+    "   "+PPRE1+" | "
+    "   "+PPRE2+" | "
+    "   "+ADCPRE+" | "
+    "   "+PLLSRC+" | "
+    "   "+PLLXTPRE+" | "
+    "   "+USBPRE+" | "
+    "   "+MCOSEL+"),\n"
+
+    "   "+FLASHBITS+",\n"
+    "   "+PLL+",\n"
     "   "+SYSCLK+",\n"
     "   "+HCLK+",\n"
     "   "+PCLK1+",\n"

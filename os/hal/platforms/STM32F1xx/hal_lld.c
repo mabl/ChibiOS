@@ -142,6 +142,7 @@ void hal_lld_init(void) {
 void stm32_clock_init(void) {
 
 #if !STM32_NO_INIT
+
   /* HSI setup, it enforces the reset situation in order to handle possible
      problems with JTAG probes and re-initializations.*/
   RCC->CR |= RCC_CR_HSION;                  /* Make sure HSI is ON.         */
@@ -152,26 +153,36 @@ void stm32_clock_init(void) {
   while ((RCC->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_HSI)
     ;                                       /* Waits until HSI is selected. */
 
-#if STM32_HSE_ENABLED
-  /* HSE activation.*/
-  RCC->CR |= RCC_CR_HSEON;
-  while (!(RCC->CR & RCC_CR_HSERDY))
-    ;                                       /* Waits until HSE is stable.   */
-#endif
+
+
+
+  uint32_t tmo = 0x2FFFFF;
+  while (tmo)
+    tmo--;
+
+  CLK_CFG = clkcfgObjectInit();
+
+
+  if (stm32_hse_enabled()){
+    /* HSE activation.*/
+    RCC->CR |= RCC_CR_HSEON;
+    while (!(RCC->CR & RCC_CR_HSERDY))
+      ;                                     /* Waits until HSE is stable.   */
+  }
+
+  if (STM32_ACTIVATE_PLL){
+    /* PLL activation.*/
+    RCC->CFGR |= STM32_PLLMUL | STM32_PLLXTPRE | STM32_PLLSRC;
+    RCC->CR   |= RCC_CR_PLLON;
+    while (!(RCC->CR & RCC_CR_PLLRDY))
+      ;                                     /* Waits until PLL is stable.   */
+  }
 
 #if STM32_LSI_ENABLED
   /* LSI activation.*/
   RCC->CSR |= RCC_CSR_LSION;
   while ((RCC->CSR & RCC_CSR_LSIRDY) == 0)
     ;                                       /* Waits until LSI is stable.   */
-#endif
-
-#if STM32_ACTIVATE_PLL
-  /* PLL activation.*/
-  RCC->CFGR |= STM32_PLLMUL | STM32_PLLXTPRE | STM32_PLLSRC;
-  RCC->CR   |= RCC_CR_PLLON;
-  while (!(RCC->CR & RCC_CR_PLLRDY))
-    ;                                       /* Waits until PLL is stable.   */
 #endif
 
   /* Clock settings.*/
@@ -185,15 +196,22 @@ void stm32_clock_init(void) {
               STM32_HPRE;
 #endif
 
-  /* Switching to the configured clock source if it is different from HSI.*/
-#if (STM32_SW != STM32_SW_HSI)
-  /* Switches clock source.*/
+  /* Flash setup and final clock selection.   */
+  FLASH->ACR = STM32_FLASHBITS;
+
+  /* Switching to the configured clock source.*/
   RCC->CFGR |= STM32_SW;
   while ((RCC->CFGR & RCC_CFGR_SWS) != (STM32_SW << 2))
     ;                                       /* Waits selection complete.    */
-#endif
+
 #endif /* !STM32_NO_INIT */
 }
+
+
+
+
+
+
 
 #elif defined(STM32F10X_CL)
 /*

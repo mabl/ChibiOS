@@ -136,6 +136,7 @@
 #define STM32_SW_HSI            (0 << 0)    /**< SYSCLK source is HSI.      */
 #define STM32_SW_HSE            (1 << 0)    /**< SYSCLK source is HSE.      */
 #define STM32_SW_PLL            (2 << 0)    /**< SYSCLK source is PLL.      */
+#define STM32_SW_MASK           (3 << 0)    /**< SW mask.                   */
 
 #define STM32_HPRE_DIV1         (0 << 4)    /**< SYSCLK divided by 1.       */
 #define STM32_HPRE_DIV2         (8 << 4)    /**< SYSCLK divided by 2.       */
@@ -146,38 +147,48 @@
 #define STM32_HPRE_DIV128       (13 << 4)   /**< SYSCLK divided by 128.     */
 #define STM32_HPRE_DIV256       (14 << 4)   /**< SYSCLK divided by 256.     */
 #define STM32_HPRE_DIV512       (15 << 4)   /**< SYSCLK divided by 512.     */
+#define STM32_HPRE_MASK         (15 << 4)   /**< HPRE mask.                 */
 
 #define STM32_PPRE1_DIV1        (0 << 8)    /**< HCLK divided by 1.         */
 #define STM32_PPRE1_DIV2        (4 << 8)    /**< HCLK divided by 2.         */
 #define STM32_PPRE1_DIV4        (5 << 8)    /**< HCLK divided by 4.         */
 #define STM32_PPRE1_DIV8        (6 << 8)    /**< HCLK divided by 8.         */
 #define STM32_PPRE1_DIV16       (7 << 8)    /**< HCLK divided by 16.        */
+#define STM32_PPRE1_MASK        (7 << 8)    /**< PPRE1 mask.                */
 
 #define STM32_PPRE2_DIV1        (0 << 11)   /**< HCLK divided by 1.         */
 #define STM32_PPRE2_DIV2        (4 << 11)   /**< HCLK divided by 2.         */
 #define STM32_PPRE2_DIV4        (5 << 11)   /**< HCLK divided by 4.         */
 #define STM32_PPRE2_DIV8        (6 << 11)   /**< HCLK divided by 8.         */
 #define STM32_PPRE2_DIV16       (7 << 11)   /**< HCLK divided by 16.        */
+#define STM32_PPRE2_MASK        (7 << 11)   /**< PPRE2 mask.                */
 
 #define STM32_ADCPRE_DIV2       (0 << 14)   /**< PPRE2 divided by 2.        */
 #define STM32_ADCPRE_DIV4       (1 << 14)   /**< PPRE2 divided by 4.        */
 #define STM32_ADCPRE_DIV6       (2 << 14)   /**< PPRE2 divided by 6.        */
 #define STM32_ADCPRE_DIV8       (3 << 14)   /**< PPRE2 divided by 8.        */
+#define STM32_ADCPRE_MASK       (3 << 14)   /**< ADCPRE mask.               */
 
 #define STM32_PLLSRC_HSI        (0 << 16)   /**< PLL clock source is HSI.   */
 #define STM32_PLLSRC_HSE        (1 << 16)   /**< PLL clock source is HSE.   */
+#define STM32_PLLSRC_MASK       (1 << 16)   /**< PLLSRC mask.               */
 
 #define STM32_PLLXTPRE_DIV1     (0 << 17)   /**< HSE divided by 1.          */
 #define STM32_PLLXTPRE_DIV2     (1 << 17)   /**< HSE divided by 2.          */
+#define STM32_PLLXTPRE_MASK     (1 << 17)   /**< PLLXTPRE mask.             */
+
+#define STM32_PLLMUL_MASK       (15 << 18)  /**< PLLMUL mask.               */
 
 #define STM32_USBPRE_DIV1P5     (0 << 22)   /**< PLLOUT divided by 1.5.     */
 #define STM32_USBPRE_DIV1       (1 << 22)   /**< PLLOUT divided by 1.       */
+#define STM32_USBPRE_MASK       (1 << 22)   /**< USRBPRE mask.              */
 
 #define STM32_MCOSEL_NOCLOCK    (0 << 24)   /**< No clock on MCO pin.       */
 #define STM32_MCOSEL_SYSCLK     (4 << 24)   /**< SYSCLK on MCO pin.         */
 #define STM32_MCOSEL_HSI        (5 << 24)   /**< HSI clock on MCO pin.      */
 #define STM32_MCOSEL_HSE        (6 << 24)   /**< HSE clock on MCO pin.      */
 #define STM32_MCOSEL_PLLDIV2    (7 << 24)   /**< PLL/2 clock on MCO pin.    */
+#define STM32_MCOSEL_MASK       (7 << 24)   /**< MCOSEL mask.               */
 /** @} */
 
 /**
@@ -867,79 +878,6 @@
  * @name    Configuration options
  * @{
  */
-/**
- * @brief   Main clock source selection.
- * @note    If the selected clock source is not the PLL then the PLL is not
- *          initialized and started.
- * @note    The default value is calculated for a 72MHz system clock from
- *          a 8MHz crystal using the PLL.
- */
-#if !defined(STM32_SW) || defined(__DOXYGEN__)
-#define STM32_SW                    STM32_SW_PLL
-#endif
-
-/**
- * @brief   Clock source for the PLL.
- * @note    This setting has only effect if the PLL is selected as the
- *          system clock source.
- * @note    The default value is calculated for a 72MHz system clock from
- *          a 8MHz crystal using the PLL.
- */
-#if !defined(STM32_PLLSRC) || defined(__DOXYGEN__)
-#define STM32_PLLSRC                STM32_PLLSRC_HSE
-#endif
-
-/**
- * @brief   Crystal PLL pre-divider.
- * @note    This setting has only effect if the PLL is selected as the
- *          system clock source.
- * @note    The default value is calculated for a 72MHz system clock from
- *          a 8MHz crystal using the PLL.
- */
-#if !defined(STM32_PLLXTPRE) || defined(__DOXYGEN__)
-#define STM32_PLLXTPRE              STM32_PLLXTPRE_DIV1
-#endif
-
-/**
- * @brief   PLL multiplier value.
- * @note    The allowed range is 2...16.
- * @note    The default value is calculated for a 72MHz system clock from
- *          a 8MHz crystal using the PLL.
- */
-#if !defined(STM32_PLLMUL_VALUE) || defined(__DOXYGEN__)
-#define STM32_PLLMUL_VALUE          9
-#endif
-
-/**
- * @brief   AHB prescaler value.
- * @note    The default value is calculated for a 72MHz system clock from
- *          a 8MHz crystal using the PLL.
- */
-#if !defined(STM32_HPRE) || defined(__DOXYGEN__)
-#define STM32_HPRE                  STM32_HPRE_DIV1
-#endif
-
-/**
- * @brief   USB clock setting.
- */
-#if !defined(STM32_USB_CLOCK_REQUIRED) || defined(__DOXYGEN__)
-#define STM32_USB_CLOCK_REQUIRED    TRUE
-#endif
-
-/**
- * @brief   USB prescaler initialization.
- */
-#if !defined(STM32_USBPRE) || defined(__DOXYGEN__)
-#define STM32_USBPRE                STM32_USBPRE_DIV1P5
-#endif
-
-/**
- * @brief   MCO pin setting.
- */
-#if !defined(STM32_MCOSEL) || defined(__DOXYGEN__)
-#define STM32_MCOSEL                STM32_MCOSEL_NOCLOCK
-#endif
-
 /**
  * @brief   RTC clock source.
  */
