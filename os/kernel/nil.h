@@ -31,7 +31,7 @@
 #define _NIL_H_
 
 #include "nilconf.h"
-#include "nilport.h"
+#include "nilcore.h"
 
 /*===========================================================================*/
 /* Module constants.                                                         */
