@@ -222,7 +222,7 @@ bool_t nilTimeIsWithin(systime_t start, systime_t end) {
  *                      .
  * @return              A message specifying how the invoking thread has been
  *                      released from the semaphore.
- * @retval NIL_MSG_OS   if the thread has not stopped on the semaphore or the
+ * @retval NIL_MSG_OK   if the thread has not stopped on the semaphore or the
  *                      semaphore has been signaled.
  * @retval NIL_MSG_RST  if the semaphore has been reset using @p nilSemReset().
  * @retval NIL_MSG_TMO  if the semaphore has not been signaled or reset within
@@ -250,7 +250,7 @@ msg_t nilSemWaitTimeout(Semaphore *sp, systime_t time) {
  *                      .
  * @return              A message specifying how the invoking thread has been
  *                      released from the semaphore.
- * @retval NIL_MSG_OS   if the thread has not stopped on the semaphore or the
+ * @retval NIL_MSG_OK   if the thread has not stopped on the semaphore or the
  *                      semaphore has been signaled.
  * @retval NIL_MSG_RST  if the semaphore has been reset using @p nilSemReset().
  * @retval NIL_MSG_TMO  if the semaphore has not been signaled or reset within
