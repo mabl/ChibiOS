@@ -111,7 +111,7 @@ __attribute__ ((naked))
 #endif
 void _unhandled_exception(void) {
 
-  while (TRUE)
+  while (1)
     ;
 }
 

@@ -31,7 +31,7 @@
 #define _NIL_H_
 
 #include "nilconf.h"
-#include "nilcore.h"
+//#include "nilcore.h"
 
 /*===========================================================================*/
 /* Module constants.                                                         */
@@ -154,34 +154,6 @@
 /*===========================================================================*/
 
 /**
- * @brief   System data structure.
- * @note    This structure contain all the data areas used by the OS except
- *          stacks.
- */
-typedef struct {
-  /**
-   * @brief Pointer to the running thread.
-   */
-  Thread            *currp;
-  /**
-   * @brief System time.
-   */
-  systime_t         systime;
-  /**
-   * @brief   Thread structures for all the defined threads.
-   */
-  Thread            threads[NIL_CFG_NUM_THREADS + 1];
-#if NIL_DBG_ENABLED || defined(__DOXYGEN__)
-  /**
-   * @brief   Panic message.
-   * @note    This field is only present if some debug option has been
-   *          activated.
-   */
-  const char        *dbg_msg;
-#endif
-} NilSystem;
-
-/**
  * @brief   Type of a structure representing a thread static configuration.
  */
 typedef struct nil_thread_cfg ThreadConfig;
@@ -225,6 +197,34 @@ struct nil_thread {
 typedef struct {
   volatile cnt_t    cnt;        /**< @brief Semaphore counter.              */
 } Semaphore;
+
+/**
+ * @brief   System data structure.
+ * @note    This structure contain all the data areas used by the OS except
+ *          stacks.
+ */
+typedef struct {
+  /**
+   * @brief Pointer to the running thread.
+   */
+  Thread            *currp;
+  /**
+   * @brief System time.
+   */
+  systime_t         systime;
+  /**
+   * @brief   Thread structures for all the defined threads.
+   */
+  Thread            threads[NIL_CFG_NUM_THREADS + 1];
+#if NIL_DBG_ENABLED || defined(__DOXYGEN__)
+  /**
+   * @brief   Panic message.
+   * @note    This field is only present if some debug option has been
+   *          activated.
+   */
+  const char        *dbg_msg;
+#endif
+} NilSystem;
 
 /*===========================================================================*/
 /* Module macros.                                                            */
