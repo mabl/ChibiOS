@@ -136,13 +136,6 @@
 #endif
 
 /**
- * @brief   Enables or disables the HSE clock source.
- */
-#if !defined(STM32_HSE_ENABLED) || defined(__DOXYGEN__)
-#define STM32_HSE_ENABLED           TRUE
-#endif
-
-/**
  * @brief   Enables or disables the LSE clock source.
  */
 #if !defined(STM32_LSE_ENABLED) || defined(__DOXYGEN__)
@@ -250,6 +243,7 @@ extern "C" {
 #endif
   void hal_lld_init(void);
   void stm32_clock_init(void);
+  void stm32_clock_init_later(void);
 #ifdef __cplusplus
 }
 #endif

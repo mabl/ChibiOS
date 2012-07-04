@@ -93,6 +93,10 @@ static void hal_lld_backup_domain_init(void) {
  */
 void hal_lld_init(void) {
 
+  /* Switch to default clock profile. */
+  CLKCFG.clk_profile = &clk_prf_default;
+  stm32_clock_init_later();
+
   /* Reset of all peripherals.*/
   rccResetAPB1(0xFFFFFFFF);
   rccResetAPB2(0xFFFFFFFF);
@@ -153,17 +157,29 @@ void stm32_clock_init(void) {
   while ((RCC->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_HSI)
     ;                                       /* Waits until HSI is selected. */
 
-
-
-
+#if CH_DBG_ENABLE_CHECKS
+  /* stupid timout allowing slow JTAG probe to break here */
   uint32_t tmo = 0x2FFFFF;
   while (tmo)
     tmo--;
+#endif
 
-  CLK_CFG = clkcfgObjectInit();
+#if STM32_LSI_ENABLED
+  /* LSI activation.*/
+  RCC->CSR |= RCC_CSR_LSION;
+  while ((RCC->CSR & RCC_CSR_LSIRDY) == 0)
+    ;                                       /* Waits until LSI is stable.   */
+#endif
 
+#endif /* !STM32_NO_INIT */
+}
 
-  if (stm32_hse_enabled()){
+/**
+ * @brief   Switch to HSE and PLL if needed.
+ */
+void stm32_clock_init_later(void) {
+
+  if (STM32_HSE_ENABLED){
     /* HSE activation.*/
     RCC->CR |= RCC_CR_HSEON;
     while (!(RCC->CR & RCC_CR_HSERDY))
@@ -177,13 +193,6 @@ void stm32_clock_init(void) {
     while (!(RCC->CR & RCC_CR_PLLRDY))
       ;                                     /* Waits until PLL is stable.   */
   }
-
-#if STM32_LSI_ENABLED
-  /* LSI activation.*/
-  RCC->CSR |= RCC_CSR_LSION;
-  while ((RCC->CSR & RCC_CSR_LSIRDY) == 0)
-    ;                                       /* Waits until LSI is stable.   */
-#endif
 
   /* Clock settings.*/
 #if STM32_HAS_USB
@@ -203,15 +212,7 @@ void stm32_clock_init(void) {
   RCC->CFGR |= STM32_SW;
   while ((RCC->CFGR & RCC_CFGR_SWS) != (STM32_SW << 2))
     ;                                       /* Waits selection complete.    */
-
-#endif /* !STM32_NO_INIT */
 }
-
-
-
-
-
-
 
 #elif defined(STM32F10X_CL)
 /*

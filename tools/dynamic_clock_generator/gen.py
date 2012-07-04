@@ -44,8 +44,15 @@ def gen_profile(section):
     Generates clock config structure.
     section -- name of section in config, it will be the name of structure
     """
+    # some defaults
     hsiclk = 8000000
     HSICLK = str(hsiclk)
+
+    pllmul = 2
+    PLLMUL = "("+str(pllmul)+" - 2) << 18"
+
+    PLLSRC = "STM32_PLLSRC_HSE"
+    PLLXTPRE = "STM32_PLLXTPRE_DIV1"
 
     pll = cfg.getboolean(section, "PLL")#{{{
     if pll is True:
@@ -63,8 +70,8 @@ def gen_profile(section):
         if hseclk < STM32_HSE_OSC_MIN or hseclk > STM32_HSE_OSC_MAX:
             raise ValueError('HSECKL value out of acceptable bounds')
         else:
+            sysclk = hseclk
             HSECLK = str(hseclk)
-            sysclk = HSECLK
     elif sw == "PLL":
         SW = "STM32_SW_PLL"
 
@@ -202,7 +209,8 @@ def gen_profile(section):
     FLASHBITS = str(flashbits)
 
     print(
-    "ClockConfig clk_cfg_"+section+" = {\n"
+    "\n"
+    "const ClockProfile clk_prf_"+section+" = {\n"
     "   ("+SW+" | "
     "   "+PLLMUL+" | "
     "   "+HPRE+" | "
@@ -221,7 +229,7 @@ def gen_profile(section):
     "   "+PCLK1+",\n"
     "   "+PCLK2+",\n"
     "   "+ADCCLK+",\n"
-    "}"
+    "};"
     )
 
 

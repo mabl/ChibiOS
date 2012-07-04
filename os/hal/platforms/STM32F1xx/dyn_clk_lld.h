@@ -21,30 +21,39 @@
 #ifndef _DYN_CLK_LLD_H_
 #define _DYN_CLK_LLD_H_
 
-#define STM32_SW            ((CLK_CFG->rcc_cfgr) & STM32_SW_MASK)
-#define STM32_PPRE1         ((CLK_CFG->rcc_cfgr) & STM32_PPRE1_MASK)
-#define STM32_HPRE          ((CLK_CFG->rcc_cfgr) & STM32_HPRE_MASK)
-#define STM32_PPRE2         ((CLK_CFG->rcc_cfgr) & STM32_PPRE2_MASK)
-#define STM32_ADCPRE        ((CLK_CFG->rcc_cfgr) & STM32_ADCPRE_MASK)
-#define STM32_USBPRE        ((CLK_CFG->rcc_cfgr) & STM32_USBPRE_MASK)
-#define STM32_PLLMUL        ((CLK_CFG->rcc_cfgr) & STM32_PLLMUL_MASK)
-#define STM32_MCOSEL        ((CLK_CFG->rcc_cfgr) & STM32_MCOSEL_MASK)
-#define STM32_PLLXTPRE      ((CLK_CFG->rcc_cfgr) & STM32_PLLXTPRE_MASK)
-#define STM32_PLLSRC        ((CLK_CFG->rcc_cfgr) & STM32_PLLSRC_MASK)
+/* compatibility macros */
+#define STM32_SW            ((CLKCFG.clk_profile->rcc_cfgr) & STM32_SW_MASK)
+#define STM32_PPRE1         ((CLKCFG.clk_profile->rcc_cfgr) & STM32_PPRE1_MASK)
+#define STM32_HPRE          ((CLKCFG.clk_profile->rcc_cfgr) & STM32_HPRE_MASK)
+#define STM32_PPRE2         ((CLKCFG.clk_profile->rcc_cfgr) & STM32_PPRE2_MASK)
+#define STM32_ADCPRE        ((CLKCFG.clk_profile->rcc_cfgr) & STM32_ADCPRE_MASK)
+#define STM32_USBPRE        ((CLKCFG.clk_profile->rcc_cfgr) & STM32_USBPRE_MASK)
+#define STM32_PLLMUL        ((CLKCFG.clk_profile->rcc_cfgr) & STM32_PLLMUL_MASK)
+#define STM32_MCOSEL        ((CLKCFG.clk_profile->rcc_cfgr) & STM32_MCOSEL_MASK)
+#define STM32_PLLXTPRE      ((CLKCFG.clk_profile->rcc_cfgr) & STM32_PLLXTPRE_MASK)
+#define STM32_PLLSRC        ((CLKCFG.clk_profile->rcc_cfgr) & STM32_PLLSRC_MASK)
 
-#define STM32_FLASHBITS     (CLK_CFG->flashbits)
-#define STM32_ACTIVATE_PLL  (CLK_CFG->pll)
-#define STM32_SYSCLK        (CLK_CFG->sysclk)
-#define STM32_HCLK          (CLK_CFG->hclk)
-#define STM32_PCLK1         (CLK_CFG->pclk1)
-#define STM32_PCLK2         (CLK_CFG->pclk2)
+#define STM32_FLASHBITS     (CLKCFG.clk_profile->flashbits)
+#define STM32_ACTIVATE_PLL  (CLKCFG.clk_profile->pll)
+#define STM32_SYSCLK        (CLKCFG.clk_profile->sysclk)
+#define STM32_HCLK          (CLKCFG.clk_profile->hclk)
+#define STM32_PCLK1         (CLKCFG.clk_profile->pclk1)
+#define STM32_PCLK2         (CLKCFG.clk_profile->pclk2)
 
-typedef struct ClockConfig ClockConfig;
+#define STM32_HSE_ENABLED   (stm32_hse_enabled())
+
 
 /**
- * @brief   Configuration structure.
+ * @brief
  */
-struct ClockConfig{
+typedef struct ClockProfile ClockProfile;
+
+
+/**
+ * @brief
+ */
+//TODO: add TIM clocking
+struct ClockProfile{
   uint32_t                  rcc_cfgr;
   uint32_t                  flashbits;
   bool_t                    pll;
@@ -55,16 +64,29 @@ struct ClockConfig{
   uint32_t                  adcclk;
 };
 
+/**
+ * @brief
+ */
+typedef struct {
+  ClockProfile     const * clk_profile;
+} ClockConfig;
 
+/**
+ * @brief
+ */
+extern ClockConfig CLKCFG;
 
-extern ClockConfig const * CLK_CFG;
+extern const ClockProfile clk_prf_default;
+extern const ClockProfile clk_prf_low;
+
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
   bool_t stm32_hse_enabled(void);
-  ClockConfig const* clkcfgObjectInit(void);
+  void clkcfgObjectInit(ClockConfig *cfg, ClockProfile const *prf);
+  void stm32_clock_profile_switch(ClockProfile const *prf);
 #ifdef __cplusplus
 }
 #endif
