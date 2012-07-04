@@ -525,7 +525,7 @@ extern NilSystem nil;
 #ifdef __cplusplus
 extern "C" {
 #endif
-  void nilSysStart(void);
+  void nilSysInit(void);
   void nilSysTimerHandlerI(void);
   msg_t nilSchGoSleepTimeoutS(void *waitobj, systime_t time);
   void nilSchRescheduleS();

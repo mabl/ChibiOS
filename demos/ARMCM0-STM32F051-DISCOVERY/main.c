@@ -28,7 +28,7 @@ int main(void) {
   /*
    * System initializations.
    */
-  nilInit();
+  nilSysInit();
 
   while (TRUE) {
   }

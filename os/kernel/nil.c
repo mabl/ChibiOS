@@ -74,7 +74,7 @@ static void nil_switch_to(Thread *ntp) {
  *
  * @special
  */
-void chSysStart(void) {
+void nilSysInit(void) {
   const ThreadConfig *tcp = nil_thd_configs;
   Thread *tp = nil.threads;
 
