@@ -110,8 +110,8 @@ int main(void) {
   /*
    * Start timer to check frequency changes with oscilloscope on LED pin.
    */
-  gptStart(&GPTD1, &gpt1cfg);
-  gptStartContinuous(&GPTD1, 1000);
+//  gptStart(&GPTD1, &gpt1cfg);
+//  gptStartContinuous(&GPTD1, 1000);
 
   /*
    * Normal main() thread activity.
@@ -121,16 +121,28 @@ int main(void) {
   while (TRUE) {
     uartStart(&UARTD2, &uart_cfg_1);
     uartStartSend(&UARTD2, 19, "Default clocks...\r\n");
-    chThdSleepMilliseconds(1000);
+    gptStart(&GPTD1, &gpt1cfg);
+    gptStartContinuous(&GPTD1, 1000);
+
+    chThdSleepMilliseconds(3000);
 
     uartStop(&UARTD2);
+    gptStopTimer(&GPTD1);
+    gptStop(&GPTD1);
+
     stm32_clock_profile_switch(&clk_prf_low);
 
     uartStart(&UARTD2, &uart_cfg_1);
     uartStartSend(&UARTD2, 21, "Low power clocks...\r\n");
-    chThdSleepMilliseconds(1000);
+    gptStart(&GPTD1, &gpt1cfg);
+    gptStartContinuous(&GPTD1, 1000);
+
+    chThdSleepMilliseconds(3000);
 
     uartStop(&UARTD2);
+    gptStopTimer(&GPTD1);
+    gptStop(&GPTD1);
+
     stm32_clock_profile_switch(&clk_prf_default);
   }
   return 0;
