@@ -157,6 +157,18 @@ def gen_profile(section):
     if pclk2 > STM32_PCLK2_MAX:
         raise ValueError("APB1 clock set to", pclk2, "limit is", STM32_PCLK2_MAX)
     #}}}
+    if ppre1 == 1:#{{{
+        timclk1 = pclk1 * 1
+    else:
+        timclk1 = pclk1 * 2
+    TIMCLK1 = str(timclk1)
+
+    if ppre2 == 1:
+        timclk2 = pclk2 * 1
+    else:
+        timclk2 = pclk2 * 2
+    TIMCLK2 = str(timclk2)
+    #}}}
     adcpre = cfg.getint(section, "ADCPRE")#{{{
     ADCPRE = ""
     adcpre_allowed = [2, 4, 6, 8]
@@ -229,6 +241,8 @@ def gen_profile(section):
     "   "+PCLK1+",\n"
     "   "+PCLK2+",\n"
     "   "+ADCCLK+",\n"
+    "   "+TIMCLK1+",\n"
+    "   "+TIMCLK2+",\n"
     "};"
     )
 

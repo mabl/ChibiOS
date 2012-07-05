@@ -35,6 +35,8 @@ const ClockProfile clk_prf_default = {
     36000000,
     36000000,
     9000000,
+    72000000,
+    72000000,
 };
 
 const ClockProfile clk_prf_low = {
@@ -46,6 +48,8 @@ const ClockProfile clk_prf_low = {
     8000000,
     8000000,
     4000000,
+    8000000,
+    8000000,
 };
 
 /**
@@ -137,4 +141,20 @@ void stm32_clock_profile_switch(ClockProfile const *prf) {
   RCC->CFGR |= STM32_SW;
   while ((RCC->CFGR & RCC_CFGR_SWS) != (STM32_SW << 2))
     ;                                       /* Waits selection complete.    */
+
+  /* Switch systick timer to new frequency. */
+  hal_lld_systick_init();
 }
+
+/**
+ *
+ */
+void hal_lld_systick_init(void){
+  /* SysTick initialization using the system clock.*/
+  SysTick->LOAD = STM32_HCLK / CH_FREQUENCY - 1;
+  SysTick->VAL = 0;
+  SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk |
+                  SysTick_CTRL_ENABLE_Msk |
+                  SysTick_CTRL_TICKINT_Msk;
+}
+

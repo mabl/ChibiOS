@@ -39,6 +39,8 @@
 #define STM32_HCLK          (CLKCFG.clk_profile->hclk)
 #define STM32_PCLK1         (CLKCFG.clk_profile->pclk1)
 #define STM32_PCLK2         (CLKCFG.clk_profile->pclk2)
+#define STM32_TIMCLK1       (CLKCFG.clk_profile->timclk1)
+#define STM32_TIMCLK2       (CLKCFG.clk_profile->timclk2)
 
 #define STM32_HSE_ENABLED   (stm32_hse_enabled())
 
@@ -62,6 +64,8 @@ struct ClockProfile{
   uint32_t                  pclk1;
   uint32_t                  pclk2;
   uint32_t                  adcclk;
+  uint32_t                  timclk1;
+  uint32_t                  timclk2;
 };
 
 /**
@@ -87,6 +91,7 @@ extern "C" {
   bool_t stm32_hse_enabled(void);
   void clkcfgObjectInit(ClockConfig *cfg, ClockProfile const *prf);
   void stm32_clock_profile_switch(ClockProfile const *prf);
+  void hal_lld_systick_init(void);
 #ifdef __cplusplus
 }
 #endif

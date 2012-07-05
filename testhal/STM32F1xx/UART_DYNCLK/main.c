@@ -21,45 +21,19 @@
 #include "ch.h"
 #include "hal.h"
 
-static VirtualTimer vt1, vt2;
-
-static void restart(void *p) {
-
-  (void)p;
-
-  chSysLockFromIsr();
-  uartStartSendI(&UARTD2, 14, "Hello World!\r\n");
-  chSysUnlockFromIsr();
-}
-
-static void ledoff(void *p) {
-
-  (void)p;
-  palSetPad(IOPORT3, GPIOC_LED);
-}
-
 /*
  * This callback is invoked when a transmission buffer has been completely
  * read by the driver.
  */
 static void txend1(UARTDriver *uartp) {
-
   (void)uartp;
-  palClearPad(IOPORT3, GPIOC_LED);
 }
 
 /*
  * This callback is invoked when a transmission has physically completed.
  */
 static void txend2(UARTDriver *uartp) {
-
   (void)uartp;
-  palSetPad(IOPORT3, GPIOC_LED);
-  chSysLockFromIsr();
-  if (chVTIsArmedI(&vt1))
-    chVTResetI(&vt1);
-  chVTSetI(&vt1, MS2ST(5000), restart, NULL);
-  chSysUnlockFromIsr();
 }
 
 /*
@@ -67,7 +41,6 @@ static void txend2(UARTDriver *uartp) {
  * as parameter.
  */
 static void rxerr(UARTDriver *uartp, uartflags_t e) {
-
   (void)uartp;
   (void)e;
 }
@@ -77,23 +50,14 @@ static void rxerr(UARTDriver *uartp, uartflags_t e) {
  * was not ready to receive it, the character is passed as parameter.
  */
 static void rxchar(UARTDriver *uartp, uint16_t c) {
-
   (void)uartp;
   (void)c;
-  /* Flashing the LED each time a character is received.*/
-  palClearPad(IOPORT3, GPIOC_LED);
-  chSysLockFromIsr();
-  if (chVTIsArmedI(&vt2))
-    chVTResetI(&vt2);
-  chVTSetI(&vt2, MS2ST(200), ledoff, NULL);
-  chSysUnlockFromIsr();
 }
 
 /*
  * This callback is invoked when a receive buffer has been completely written.
  */
 static void rxend(UARTDriver *uartp) {
-
   (void)uartp;
 }
 
@@ -106,10 +70,26 @@ static UARTConfig uart_cfg_1 = {
   rxend,
   rxchar,
   rxerr,
-  115200,
+  9600,
   0,
   USART_CR2_LINEN,
   0
+};
+
+/*
+ * GPT1 callback.
+ */
+static void gpt1cb(GPTDriver *gptp) {
+  (void)gptp;
+  palTogglePad(IOPORT3, GPIOC_LED);
+}
+
+/*
+ * GPT1 configuration.
+ */
+static const GPTConfig gpt1cfg = {
+  1000000,    /* timer clock.*/
+  gpt1cb    /* Timer callback.*/
 };
 
 /*
@@ -128,20 +108,30 @@ int main(void) {
   chSysInit();
 
   /*
-   * Activates the serial driver 2 using the driver default configuration.
+   * Start timer to check frequency changes with oscilloscope on LED pin.
    */
-  uartStart(&UARTD2, &uart_cfg_1);
+  gptStart(&GPTD1, &gpt1cfg);
+  gptStartContinuous(&GPTD1, 1000);
 
   /*
-   * Starts the transmission, it will be handled entirely in background.
-   */
-  uartStartSend(&UARTD2, 13, "Starting...\r\n");
-
-  /*
-   * Normal main() thread activity, in this demo it does nothing.
+   * Normal main() thread activity.
+   * Switche clock profiles and print a string with clock profile name.
+   * Note! GPT settings keep unchanged to detect is clock really changed.
    */
   while (TRUE) {
-    chThdSleepMilliseconds(500);
+    uartStart(&UARTD2, &uart_cfg_1);
+    uartStartSend(&UARTD2, 19, "Default clocks...\r\n");
+    chThdSleepMilliseconds(1000);
+
+    uartStop(&UARTD2);
+    stm32_clock_profile_switch(&clk_prf_low);
+
+    uartStart(&UARTD2, &uart_cfg_1);
+    uartStartSend(&UARTD2, 21, "Low power clocks...\r\n");
+    chThdSleepMilliseconds(1000);
+
+    uartStop(&UARTD2);
+    stm32_clock_profile_switch(&clk_prf_default);
   }
   return 0;
 }
