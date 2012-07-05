@@ -94,7 +94,7 @@ static void hal_lld_backup_domain_init(void) {
 void hal_lld_init(void) {
 
   /* Switch to default clock profile. */
-  CLKCFG.clk_profile = &clk_prf_default;
+  CLKCFG.profile = &clk_prf_default;
 
   /* Start remaining clock sources and init systick. */
   stm32_clock_init_later();
