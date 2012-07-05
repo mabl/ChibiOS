@@ -21,7 +21,63 @@
 #ifndef _DYN_CLK_LLD_H_
 #define _DYN_CLK_LLD_H_
 
-/* compatibility macros */
+/*===========================================================================*/
+/* Driver constants.                                                         */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Platform capabilities.                                                    */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Driver pre-compile time settings.                                         */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Derived constants and error checks.                                       */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Driver data structures and types.                                         */
+/*===========================================================================*/
+
+/**
+ * @brief Type representing a system clock profile.
+ */
+typedef struct ClockProfile ClockProfile;
+
+/**
+ * @brief
+ */
+//TODO: add TIM clocking
+struct ClockProfile{
+  uint32_t                  rcc_cfgr;
+  uint32_t                  flashbits;
+  bool_t                    pll;
+  bool_t                    hse;
+  uint32_t                  sysclk;
+  uint32_t                  hclk;
+  uint32_t                  pclk1;
+  uint32_t                  pclk2;
+  uint32_t                  adcclk;
+  uint32_t                  timclk1;
+  uint32_t                  timclk2;
+};
+
+/**
+ * @brief
+ */
+typedef struct {
+  ClockProfile     const * clk_profile;
+} ClockConfig;
+
+/*===========================================================================*/
+/* Driver macros.                                                            */
+/*===========================================================================*/
+
+/*
+ * compatibility macros
+ */
 #define STM32_SW            ((CLKCFG.clk_profile->rcc_cfgr) & STM32_SW_MASK)
 #define STM32_PPRE1         ((CLKCFG.clk_profile->rcc_cfgr) & STM32_PPRE1_MASK)
 #define STM32_HPRE          ((CLKCFG.clk_profile->rcc_cfgr) & STM32_HPRE_MASK)
@@ -42,54 +98,19 @@
 #define STM32_TIMCLK1       (CLKCFG.clk_profile->timclk1)
 #define STM32_TIMCLK2       (CLKCFG.clk_profile->timclk2)
 
-#define STM32_HSE_ENABLED   (stm32_hse_enabled())
+#define STM32_HSE_ENABLED   (CLKCFG.clk_profile->hse)
 
+/*===========================================================================*/
+/* External declarations.                                                    */
+/*===========================================================================*/
 
-/**
- * @brief
- */
-typedef struct ClockProfile ClockProfile;
-
-
-/**
- * @brief
- */
-//TODO: add TIM clocking
-struct ClockProfile{
-  uint32_t                  rcc_cfgr;
-  uint32_t                  flashbits;
-  bool_t                    pll;
-  uint32_t                  sysclk;
-  uint32_t                  hclk;
-  uint32_t                  pclk1;
-  uint32_t                  pclk2;
-  uint32_t                  adcclk;
-  uint32_t                  timclk1;
-  uint32_t                  timclk2;
-};
-
-/**
- * @brief
- */
-typedef struct {
-  ClockProfile     const * clk_profile;
-} ClockConfig;
-
-/**
- * @brief
- */
 extern ClockConfig CLKCFG;
-
 extern const ClockProfile clk_prf_default;
 extern const ClockProfile clk_prf_low;
-
-
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-  bool_t stm32_hse_enabled(void);
-  void clkcfgObjectInit(ClockConfig *cfg, ClockProfile const *prf);
   void stm32_clock_profile_switch(ClockProfile const *prf);
   void hal_lld_systick_init(void);
 #ifdef __cplusplus

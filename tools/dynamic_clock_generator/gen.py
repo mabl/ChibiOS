@@ -51,8 +51,11 @@ def gen_profile(section):
     pllmul = 2
     PLLMUL = "("+str(pllmul)+" - 2) << 18"
 
-    PLLSRC = "STM32_PLLSRC_HSE"
-    PLLXTPRE = "STM32_PLLXTPRE_DIV1"
+    pllsrc = "HSE"
+    PLLSRC = "STM32_PLLSRC_"+pllsrc
+
+    pllxtpre = 1
+    PLLXTPRE = "STM32_PLLXTPRE_DIV"+str(pllxtpre)
 
     pll = cfg.getboolean(section, "PLL")#{{{
     if pll is True:
@@ -114,6 +117,13 @@ def gen_profile(section):
     else:
         SYSCLK = str(sysclk)
     #}}}
+    if (sw == "HSE") or (PLLSRC == "STM32_PLLSRC_HSE"):#{{{
+        hse = True
+        HSE = "TRUE"
+    else:
+        hse = False
+        HSE = "FALSE"
+        #}}}
     hpre = cfg.getint(section, "HPRE")#{{{
     HPRE = ""
     i = 1
@@ -223,19 +233,20 @@ def gen_profile(section):
     print(
     "\n"
     "const ClockProfile clk_prf_"+section+" = {\n"
-    "   ("+SW+" | "
-    "   "+PLLMUL+" | "
-    "   "+HPRE+" | "
-    "   "+PPRE1+" | "
-    "   "+PPRE2+" | "
-    "   "+ADCPRE+" | "
-    "   "+PLLSRC+" | "
-    "   "+PLLXTPRE+" | "
-    "   "+USBPRE+" | "
-    "   "+MCOSEL+"),\n"
+    "   ("+SW+" | \n"
+    "       "+PLLMUL+" | \n"
+    "       "+HPRE+" | \n"
+    "       "+PPRE1+" | \n"
+    "       "+PPRE2+" | \n"
+    "       "+ADCPRE+" | \n"
+    "       "+PLLSRC+" | \n"
+    "       "+PLLXTPRE+" | \n"
+    "       "+USBPRE+" | \n"
+    "       "+MCOSEL+"),\n"
 
     "   "+FLASHBITS+",\n"
     "   "+PLL+",\n"
+    "   "+HSE+",\n"
     "   "+SYSCLK+",\n"
     "   "+HCLK+",\n"
     "   "+PCLK1+",\n"

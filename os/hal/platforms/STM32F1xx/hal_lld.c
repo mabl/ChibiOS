@@ -95,6 +95,8 @@ void hal_lld_init(void) {
 
   /* Switch to default clock profile. */
   CLKCFG.clk_profile = &clk_prf_default;
+
+  /* Start remaining clock sources and init systick. */
   stm32_clock_init_later();
   hal_lld_systick_init();
 
@@ -151,12 +153,13 @@ void stm32_clock_init(void) {
   while ((RCC->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_HSI)
     ;                                       /* Waits until HSI is selected. */
 
-//#if CH_DBG_ENABLE_CHECKS
-//  /* stupid timout allowing slow JTAG probe to break here */
-//  uint32_t tmo = 0x2FFFFF;
-//  while (tmo)
-//    tmo--;
-//#endif
+  /* stupid timout allowing slow JTAG probe to break here */
+  /*
+#if CH_DBG_ENABLE_CHECKS
+  uint32_t tmo = 0x2FFFFF;
+  while (tmo)
+    tmo--;
+#endif */
 
 #if STM32_LSI_ENABLED
   /* LSI activation.*/

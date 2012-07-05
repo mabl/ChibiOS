@@ -27,47 +27,66 @@
 /*===========================================================================*/
 
 const ClockProfile clk_prf_default = {
-    (STM32_SW_PLL |    (9 - 2) << 18 |    STM32_HPRE_DIV1 |    STM32_PPRE1_DIV2 |    STM32_PPRE2_DIV2 |    STM32_ADCPRE_DIV4 |    STM32_PLLSRC_HSE |    STM32_PLLXTPRE_DIV1 |    0 |    STM32_MCOSEL_NOCLOCK),
-    18,
-    TRUE,
-    72000000,
-    72000000,
-    36000000,
-    36000000,
-    9000000,
-    72000000,
-    72000000,
+   (STM32_SW_PLL |
+       (9 - 2) << 18 |
+       STM32_HPRE_DIV1 |
+       STM32_PPRE1_DIV2 |
+       STM32_PPRE2_DIV2 |
+       STM32_ADCPRE_DIV4 |
+       STM32_PLLSRC_HSE |
+       STM32_PLLXTPRE_DIV1 |
+       0 |
+       STM32_MCOSEL_NOCLOCK),
+   18,
+   TRUE,
+   TRUE,
+   72000000,
+   72000000,
+   36000000,
+   36000000,
+   9000000,
+   72000000,
+   72000000,
 };
 
 const ClockProfile clk_prf_low = {
-    (STM32_SW_HSE |    (2 - 2) << 18 |    STM32_HPRE_DIV1 |    STM32_PPRE1_DIV1 |    STM32_PPRE2_DIV1 |    STM32_ADCPRE_DIV2 |    STM32_PLLSRC_HSE |    STM32_PLLXTPRE_DIV1 |    0 |    STM32_MCOSEL_NOCLOCK),
-    16,
-    FALSE,
-    8000000,
-    8000000,
-    8000000,
-    8000000,
-    4000000,
-    8000000,
-    8000000,
+   (STM32_SW_HSE |
+       (2 - 2) << 18 |
+       STM32_HPRE_DIV1 |
+       STM32_PPRE1_DIV1 |
+       STM32_PPRE2_DIV1 |
+       STM32_ADCPRE_DIV2 |
+       STM32_PLLSRC_HSE |
+       STM32_PLLXTPRE_DIV1 |
+       0 |
+       STM32_MCOSEL_NOCLOCK),
+   16,
+   FALSE,
+   TRUE,
+   8000000,
+   8000000,
+   8000000,
+   8000000,
+   4000000,
+   8000000,
+   8000000,
 };
 
 /**
  * @brief Clock config structure.
- * @note  Must be initially set to @p NULL in order to proper clock init during
- *        startup.
  */
 ClockConfig CLKCFG = {NULL};
 
-bool_t stm32_hse_enabled(void) {
-  if ((STM32_SW == STM32_SW_HSE) || (STM32_PLLSRC == STM32_PLLSRC_HSE))
-    return TRUE;
-  else
-    return FALSE;
-}
+/*===========================================================================*/
+/* Driver local variables.                                                   */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Driver local functions.                                                   */
+/*===========================================================================*/
 
 /**
- * @brief   Switch to HSI.
+ * @brief Switch MCU to HSI.
  */
 void stm32_switch_to_hsi(void){
   RCC->CR |= RCC_CR_HSION;                  /* Make sure HSI is ON.         */
@@ -80,10 +99,16 @@ void stm32_switch_to_hsi(void){
     ;                                       /* Waits until HSI is selected. */
 }
 
+/*===========================================================================*/
+/* Driver interrupt handlers.                                                */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Driver exported functions.                                                */
+/*===========================================================================*/
 
 /**
- * @brief   Switching clocks to new profile.
- * @details Detect what must be stopped and what must be started.
+ * @brief   Switch clocks to new profile.
  */
 void stm32_clock_profile_switch(ClockProfile const *prf) {
 
@@ -147,7 +172,7 @@ void stm32_clock_profile_switch(ClockProfile const *prf) {
 }
 
 /**
- *
+ * @brief Initialize systick timer with proper value.
  */
 void hal_lld_systick_init(void){
   /* SysTick initialization using the system clock.*/
