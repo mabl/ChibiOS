@@ -31,7 +31,7 @@
 #define _NIL_H_
 
 #include "nilconf.h"
-//#include "nilcore.h"
+#include "niltypes.h"
 
 /*===========================================================================*/
 /* Module constants.                                                         */
@@ -154,6 +154,23 @@
 /*===========================================================================*/
 
 /**
+ * @brief   Type of internal context structure.
+ */
+typedef struct port_intctx intctx;
+
+/**
+ * @brief   Type of a structure representing a counting semaphore.
+ */
+typedef struct {
+  volatile cnt_t    cnt;        /**< @brief Semaphore counter.              */
+} Semaphore;
+
+/**
+ * @brief Thread function.
+ */
+typedef msg_t (*tfunc_t)(void *);
+
+/**
  * @brief   Type of a structure representing a thread static configuration.
  */
 typedef struct nil_thread_cfg ThreadConfig;
@@ -178,7 +195,7 @@ struct nil_thread_cfg {
  * @brief   Structure representing a thread.
  */
 struct nil_thread {
-  port_intctx       *ctxp;      /**< @brief Pointer to internal context.    */
+  intctx            *ctxp;      /**< @brief Pointer to internal context.    */
   tmode_t           mode;       /**< @brief Mode flags.                     */
   union {
     void            *p;         /**< @brief Generic pointer to object.      */
@@ -190,13 +207,6 @@ struct nil_thread {
     msg_t           msg;        /**< @brief Timeout message.                */
   } wakeup;                     /**< @brief Wake-up related info.           */
 };
-
-/**
- * @brief   Type of a structure representing a counting semaphore.
- */
-typedef struct {
-  volatile cnt_t    cnt;        /**< @brief Semaphore counter.              */
-} Semaphore;
 
 /**
  * @brief   System data structure.
@@ -238,13 +248,13 @@ typedef struct {
  * @brief   Start of user threads table.
  */
 #define NIL_THREADS_TABLE_BEGIN()                                           \
-  static const ThreadConfig nil_thd_configs[NIL_CFG_NUM_THREADS + 1] = {
+  const ThreadConfig nil_thd_configs[NIL_CFG_NUM_THREADS + 1] = {
 
 /**
  * @brief   Entry of user threads table
  */
 #define NIL_THREADS_TABLE_ENTRY(name, funcp, arg, wap, size)                \
-  {name, funcp, wap, size, arg),
+  {name, funcp, arg, wap, size},
 
 /**
  * @brief   End of user threads table.
@@ -391,7 +401,7 @@ typedef struct {
  *          the port layer could define optimizations for thread functions.
  */
 #if !defined(PORT_THREAD) || defined(__DOXYGEN__)
-#define NIL_THREAD(tname, arg) void tname(void *arg)
+#define NIL_THREAD(tname, arg) msg_t tname(void *arg)
 #else
 #define NIL_THREAD(tname, arg) PORT_THREAD(tname, arg)
 #endif
@@ -518,8 +528,11 @@ typedef struct {
 /* External declarations.                                                    */
 /*===========================================================================*/
 
+#include "nilcore.h"
+
 #if !defined(__DOXYGEN__)
 extern NilSystem nil;
+extern const ThreadConfig nil_thd_configs[NIL_CFG_NUM_THREADS + 1];
 #endif
 
 #ifdef __cplusplus
@@ -528,7 +541,7 @@ extern "C" {
   void nilSysInit(void);
   void nilSysTimerHandlerI(void);
   msg_t nilSchGoSleepTimeoutS(void *waitobj, systime_t time);
-  void nilSchRescheduleS();
+  void nilSchRescheduleS(void);
   bool_t nilTimeIsWithin(systime_t start, systime_t end);
   msg_t nilSemWaitTimeout(Semaphore *sp, systime_t time);
   msg_t nilSemWaitTimeoutS(Semaphore *sp, systime_t time);

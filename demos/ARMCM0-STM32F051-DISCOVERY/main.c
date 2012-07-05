@@ -20,6 +20,11 @@
 
 #include "nil.h"
 
+NIL_THREADS_TABLE_BEGIN()
+  NIL_THREADS_TABLE_ENTRY("", NULL, NULL, NULL, 0)
+  NIL_THREADS_TABLE_ENTRY("", NULL, NULL, NULL, 0)
+NIL_THREADS_TABLE_END(NULL, 0)
+
 /*
  * Application entry point.
  */

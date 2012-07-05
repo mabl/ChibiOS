@@ -59,8 +59,12 @@ NilSystem nil;
 static void nil_switch_to(Thread *ntp) {
   Thread *otp = nil.currp;
   nil.currp = ntp;
-  port_switch(ntp, otp);
+//  port_switch(ntp, otp);
 }
+
+/*===========================================================================*/
+/* Module interrupt handlers.                                                */
+/*===========================================================================*/
 
 /*===========================================================================*/
 /* Module exported functions.                                                */
@@ -85,12 +89,12 @@ void nilSysInit(void) {
     tp->waitobj.p = NULL;
 
     /* Port dependent thread initialization.*/
-    SETUP_CONTEXT(tcp->wap, tcp->size, tcp->fp, tcp->arg);
+    SETUP_CONTEXT(tcp->wap, tcp->size, tcp->funcp, tcp->arg);
 
-    if (tcp->fp == NULL) {
+    if (tcp->funcp == NULL) {
       /* The last thread found in the list is the idle thread and it is
          associated to the current instructions flow.*/
-      nul.currp = tp;
+      nil.currp = tp;
       break;
     }
 
@@ -121,7 +125,7 @@ void nilSysTimerHandlerI(void) {
       /* TODO: Assert it is ready because NIL_THD_TIMEOUT is set.*/
       nilSchReadyI(tp);
     }
-  } while (tp < nil.threads[NIL_CFG_NUM_THREADS]);
+  } while (tp < &nil.threads[NIL_CFG_NUM_THREADS]);
 }
 
 /**
@@ -265,7 +269,7 @@ msg_t nilSemWaitTimeoutS(Semaphore *sp, systime_t time) {
   cnt_t cnt = sp->cnt;
   if (cnt <= 0) {
     if (TIME_IMMEDIATE == time)
-      return RDY_TIMEOUT;
+      return NIL_MSG_TMO;
     sp->cnt = cnt - 1;
     return nilSchGoSleepTimeoutS((void *)sp, time);
   }
@@ -404,9 +408,9 @@ void nilThdSleep(systime_t time) {
  */
 void nilThdSleepUntil(systime_t time) {
 
-  chSysLock();
+  nilSysLock();
   nilSchGoSleepTimeoutS(nil.currp, time);
-  chSysUnlock();
+  nilSysUnlock();
 }
 
 /**
@@ -417,7 +421,7 @@ void nilThdSleepUntil(systime_t time) {
 void nilThdExit(void) {
 
   /* Unbounded waiting for itself is the final state.*/
-  chSysLock();
+  nilSysLock();
   nilSchGoSleepTimeoutS(nil.currp, TIME_INFINITE);
 }
 

@@ -1,0 +1,337 @@
+/*
+    Nil RTOS - Copyright (C) 2012 Giovanni Di Sirio.
+
+    This file is part of Nil RTOS.
+
+    Nil RTOS is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 3 of the License, or
+    (at your option) any later version.
+
+    Nil RTOS is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/**
+ * @file    GCC/ARMCM0/nilcore.h
+ * @brief   Nil RTOS Cortex-M0 port main header file.
+ *
+ * @addtogroup ARMCM0_CORE
+ * @{
+ */
+
+#ifndef _NILCORE_H_
+#define _NILCORE_H_
+
+#include "cmparams.h"
+#include "nvic.h"
+
+/*===========================================================================*/
+/* Module constants.                                                         */
+/*===========================================================================*/
+
+/**
+ * @brief   Total priority levels.
+ */
+#define CORTEX_PRIORITY_LEVELS          (1 << CORTEX_PRIORITY_BITS)
+
+/**
+ * @brief   Minimum priority level.
+ * @details This minimum priority level is calculated from the number of
+ *          priority bits supported by the specific Cortex-Mx implementation.
+ */
+#define CORTEX_MINIMUM_PRIORITY         (CORTEX_PRIORITY_LEVELS - 1)
+
+/**
+ * @brief   Maximum priority level.
+ * @details The maximum allowed priority level is always zero.
+ */
+#define CORTEX_MAXIMUM_PRIORITY         0
+
+/**
+ * @brief   PendSV priority level.
+ * @note    This priority is enforced to be equal to @p CORTEX_MAXIMUM_PRIORITY,
+ *          this handler always has the highest priority that cannot preempt
+ *          the kernel.
+ */
+#define CORTEX_PRIORITY_PENDSV          CORTEX_MAXIMUM_PRIORITY
+
+/*===========================================================================*/
+/* Module pre-compile time settings.                                         */
+/*===========================================================================*/
+
+/**
+ * @brief   Per-thread stack overhead for interrupts servicing.
+ * @details This constant is used in the calculation of the correct working
+ *          area size.
+ * @note    In this port this value is conservatively set to 32 because the
+ *          function @p chSchDoReschedule() can have a stack frame, especially
+ *          with compiler optimizations disabled. The value can be reduced
+ *          when compiler optimizations are enabled.
+ */
+#if !defined(PORT_INT_REQUIRED_STACK)
+#define PORT_INT_REQUIRED_STACK         32
+#endif
+
+/**
+ * @brief   SYSTICK handler priority.
+ * @note    The default SYSTICK handler priority is calculated as the priority
+ *          level in the middle of the numeric priorities range.
+ */
+#if !defined(CORTEX_PRIORITY_SYSTICK)
+#define CORTEX_PRIORITY_SYSTICK         (CORTEX_PRIORITY_LEVELS >> 1)
+#endif
+
+/**
+ * @brief   Alternate preemption method.
+ * @details Activating this option will make the Kernel use the PendSV
+ *          handler for preemption instead of the NMI handler.
+ */
+#ifndef CORTEX_ALTERNATE_SWITCH
+#define CORTEX_ALTERNATE_SWITCH         FALSE
+#endif
+
+/*===========================================================================*/
+/* Derived constants and error checks.                                       */
+/*===========================================================================*/
+
+/**
+ * @brief   Maximum usable priority for normal ISRs.
+ */
+#if CORTEX_ALTERNATE_SWITCH || defined(__DOXYGEN__)
+#define CORTEX_MAX_KERNEL_PRIORITY      1
+#else
+#define CORTEX_MAX_KERNEL_PRIORITY      0
+#endif
+
+/**
+ * @brief   Priority level verification macro.
+ */
+#define CORTEX_IS_VALID_PRIORITY(n)                                         \
+  (((n) >= 0) && ((n) < CORTEX_PRIORITY_LEVELS))
+
+/**
+ * @brief   Priority level verification macro.
+ */
+#define CORTEX_IS_VALID_KERNEL_PRIORITY(n)                                  \
+  (((n) >= CORTEX_MAX_KERNEL_PRIORITY) && ((n) < CORTEX_PRIORITY_LEVELS))
+
+/**
+ * @brief   Priority level to priority mask conversion macro.
+ */
+#define CORTEX_PRIORITY_MASK(n)                                             \
+  ((n) << (8 - CORTEX_PRIORITY_BITS))
+
+#if !CORTEX_IS_VALID_PRIORITY(CORTEX_PRIORITY_SYSTICK)
+/* If it is externally redefined then better perform a validity check on it.*/
+#error "invalid priority level specified for CORTEX_PRIORITY_SYSTICK"
+#endif
+
+/*===========================================================================*/
+/* Module data structures and types.                                         */
+/*===========================================================================*/
+
+/**
+ * @brief   Generic ARM register.
+ */
+typedef void *regarm_t;
+
+/**
+ * @brief   Stack and memory alignment enforcement.
+ */
+typedef uint64_t stkalign_t __attribute__ ((aligned (8)));
+
+/**
+ * @brief   Interrupt saved context.
+ * @details This structure represents the stack frame saved during a
+ *          preemption-capable interrupt handler.
+ * @note    It is implemented to match the Cortex-M0 exception context.
+ */
+struct port_extctx {
+  regarm_t      r0;
+  regarm_t      r1;
+  regarm_t      r2;
+  regarm_t      r3;
+  regarm_t      r12;
+  regarm_t      lr_thd;
+  regarm_t      pc;
+  regarm_t      xpsr;
+};
+
+/**
+ * @brief   System saved context.
+ * @details This structure represents the inner stack frame during a context
+ *          switching.
+ */
+struct port_intctx {
+  regarm_t      r8;
+  regarm_t      r9;
+  regarm_t      r10;
+  regarm_t      r11;
+  regarm_t      r4;
+  regarm_t      r5;
+  regarm_t      r6;
+  regarm_t      r7;
+  regarm_t      lr;
+};
+
+/*===========================================================================*/
+/* Module macros.                                                            */
+/*===========================================================================*/
+
+/**
+ * @brief   Platform dependent context creation for new threads.
+ * @details This code usually setup the context switching frame represented
+ *          by an @p intctx structure.
+ */
+#define SETUP_CONTEXT(workspace, wsize, pf, arg) {                          \
+  tp->ctxp = (struct port_intctx *)((uint8_t *)workspace + (size_t)wsize -  \
+                                    sizeof(struct port_intctx));            \
+  tp->ctxp->r4 = (void *)(pf);                                              \
+  tp->ctxp->r5 = (void *)(arg);                                             \
+  tp->ctxp->lr = (void *)(_port_thread_start);                              \
+}
+
+/**
+ * @brief   Enforces a correct alignment for a stack area size value.
+ */
+#define STACK_ALIGN(n) ((((n) - 1) | (sizeof(stkalign_t) - 1)) + 1)
+
+/**
+ * @brief   Computes the thread working area global size.
+ */
+#define THD_WA_SIZE(n) STACK_ALIGN(sizeof(Thread) +                         \
+                                   sizeof(struct intctx) +                  \
+                                   sizeof(struct extctx) +                  \
+                                   (n) + (PORT_INT_REQUIRED_STACK))
+
+/**
+ * @brief   Static working area allocation.
+ * @details This macro is used to allocate a static thread working area
+ *          aligned as both position and size.
+ */
+#define WORKING_AREA(s, n) stkalign_t s[THD_WA_SIZE(n) / sizeof(stkalign_t)]
+
+/**
+ * @brief   IRQ prologue code.
+ * @details This macro must be inserted at the start of all IRQ handlers
+ *          enabled to invoke system APIs.
+ */
+#define PORT_IRQ_PROLOGUE()                                                 \
+  regarm_t _saved_lr;                                                       \
+  asm volatile ("mov     %0, lr" : "=r" (_saved_lr) : : "memory")
+
+/**
+ * @brief   IRQ epilogue code.
+ * @details This macro must be inserted at the end of all IRQ handlers
+ *          enabled to invoke system APIs.
+ */
+#define PORT_IRQ_EPILOGUE() _port_irq_epilogue(_saved_lr)
+
+/**
+ * @brief   IRQ handler function declaration.
+ * @note    @p id can be a function name or a vector number depending on the
+ *          port implementation.
+ */
+#define PORT_IRQ_HANDLER(id) void id(void)
+
+/**
+ * @brief   Fast IRQ handler function declaration.
+ * @note    @p id can be a function name or a vector number depending on the
+ *          port implementation.
+ */
+#define PORT_FAST_IRQ_HANDLER(id) void id(void)
+
+/**
+ * @brief   Port-related initialization code.
+ */
+#define port_init() {                                                       \
+  SCB_AIRCR = AIRCR_VECTKEY | AIRCR_PRIGROUP(0);                            \
+  nvicSetSystemHandlerPriority(HANDLER_PENDSV,                              \
+    CORTEX_PRIORITY_MASK(CORTEX_PRIORITY_PENDSV));                          \
+  nvicSetSystemHandlerPriority(HANDLER_SYSTICK,                             \
+    CORTEX_PRIORITY_MASK(CORTEX_PRIORITY_SYSTICK));                         \
+}
+
+/**
+ * @brief   Kernel-lock action.
+ * @details Usually this function just disables interrupts but may perform
+ *          more actions.
+ */
+#define port_lock() asm volatile ("cpsid   i" : : : "memory")
+
+/**
+ * @brief   Kernel-unlock action.
+ * @details Usually this function just enables interrupts but may perform
+ *          more actions.
+ */
+#define port_unlock() asm volatile ("cpsie   i" : : : "memory")
+
+/**
+ * @brief   Kernel-lock action from an interrupt handler.
+ * @details This function is invoked before invoking I-class APIs from
+ *          interrupt handlers. The implementation is architecture dependent,
+ *          in its simplest form it is void.
+ * @note    Same as @p port_lock() in this port.
+ */
+#define port_lock_from_isr() port_lock()
+
+/**
+ * @brief   Kernel-unlock action from an interrupt handler.
+ * @details This function is invoked after invoking I-class APIs from interrupt
+ *          handlers. The implementation is architecture dependent, in its
+ *          simplest form it is void.
+ * @note    Same as @p port_lock() in this port.
+ */
+#define port_unlock_from_isr() port_unlock()
+
+/**
+ * @brief   Disables all the interrupt sources.
+ */
+#define port_disable() asm volatile ("cpsid   i" : : : "memory")
+
+/**
+ * @brief   Disables the interrupt sources below kernel-level priority.
+ */
+#define port_suspend() asm volatile ("cpsid   i" : : : "memory")
+
+/**
+ * @brief   Enables all the interrupt sources.
+ */
+#define port_enable() asm volatile ("cpsie   i" : : : "memory")
+
+/**
+ * @brief   Enters an architecture-dependent IRQ-waiting mode.
+ * @details The function is meant to return when an interrupt becomes pending.
+ *          The simplest implementation is an empty function or macro but this
+ *          would not take advantage of architecture-specific power saving
+ *          modes.
+ * @note    Implemented as an inlined @p WFI instruction.
+ */
+#define port_wait_for_interrupt() asm volatile ("wfi" : : : "memory")
+
+/*===========================================================================*/
+/* External declarations.                                                    */
+/*===========================================================================*/
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+   void port_halt(void);
+   void _port_irq_epilogue(regarm_t lr);
+   void _port_switch_from_isr(void);
+   void _port_exit_from_isr(void);
+   void _port_switch(Thread *ntp, Thread *otp);
+   void _port_thread_start(void);
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* _NILCORE_H_ */
+
+/** @} */
