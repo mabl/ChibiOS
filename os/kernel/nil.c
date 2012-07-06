@@ -201,6 +201,24 @@ msg_t nilSchGoSleepTimeoutS(void *waitobj, systime_t time) {
 }
 
 /**
+ * @brief   Suspends the invoking thread for the specified time.
+ *
+ * @param[in] time      the delay in system ticks, the special values are
+ *                      handled as follow:
+ *                      - @a TIME_INFINITE the thread enters an infinite sleep
+ *                        state.
+ *                      - @a TIME_IMMEDIATE this value is not allowed.
+ *                      .
+ * @api
+ */
+void nilThdSleep(systime_t time) {
+
+  nilSysLock();
+  nilThdSleepUntilS(nilTimeNow() + time);
+  nilSysUnlock();
+}
+
+/**
  * @brief   Suspends the invoking thread until the system time arrives to the
  *          specified value.
  *

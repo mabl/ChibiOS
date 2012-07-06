@@ -219,6 +219,12 @@ struct port_intctx {
   stkalign_t s[THD_WA_SIZE(n) / sizeof(stkalign_t)]
 
 /**
+ * @brief   Thread declaration macro optimized for GCC.
+ */
+#define PORT_THREAD(tname, arg)                                             \
+  __attribute__((noreturn)) void tname(void *arg)
+
+/**
  * @brief   IRQ prologue code.
  * @details This macro must be inserted at the start of all IRQ handlers
  *          enabled to invoke system APIs.

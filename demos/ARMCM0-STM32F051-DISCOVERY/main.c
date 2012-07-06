@@ -52,7 +52,7 @@ NIL_THREAD(Thread2, arg) {
 NIL_THREADS_TABLE_BEGIN()
   NIL_THREADS_TABLE_ENTRY("thread1", Thread1, NULL, waThread1, sizeof(waThread1))
   NIL_THREADS_TABLE_ENTRY("thread2", Thread2, NULL, waThread2, sizeof(waThread2))
-NIL_THREADS_TABLE_END(NULL, 0)
+NIL_THREADS_TABLE_END()
 
 /*
  * Application entry point.
