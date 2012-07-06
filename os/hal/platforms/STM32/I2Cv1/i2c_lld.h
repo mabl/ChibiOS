@@ -264,7 +264,7 @@
 #endif
 
 /* Check clock range. */
-#if defined(STM32F4XX)
+/*#if defined(STM32F4XX)
 #if !(I2C_CLK_FREQ >= 2) && (I2C_CLK_FREQ <= 42)
 #error "I2C peripheral clock frequency out of range."
 #endif
@@ -293,7 +293,7 @@
 #endif
 #else
 #error "unspecified, unsupported or invalid STM32 platform"
-#endif
+#endif*/
 
 /*===========================================================================*/
 /* Driver data structures and types.                                         */

@@ -61,6 +61,7 @@ struct ClockProfile{
   uint32_t                  adcclk;
   uint32_t                  timclk1;
   uint32_t                  timclk2;
+  uint32_t                  usbclk;
 };
 
 /**
@@ -96,6 +97,7 @@ typedef struct {
 #define STM32_PCLK2         (CLKCFG.profile->pclk2)
 #define STM32_TIMCLK1       (CLKCFG.profile->timclk1)
 #define STM32_TIMCLK2       (CLKCFG.profile->timclk2)
+#define STM32_USBCLK        (CLKCFG.profile->usbclk)
 
 #define STM32_HSE_ENABLED   (CLKCFG.profile->hse_enabled)
 

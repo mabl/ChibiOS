@@ -57,6 +57,9 @@ def gen_profile(section):
     pllxtpre = 1
     PLLXTPRE = "STM32_PLLXTPRE_DIV"+str(pllxtpre)
 
+    usbclk = 0
+    USBCLK = str(usbclk)
+
     pll = cfg.getboolean(section, "PLL")#{{{
     if pll is True:
         PLL = "TRUE"
@@ -204,11 +207,15 @@ def gen_profile(section):
                 raise ValueError("HCECLK * PLLMUL must be equal 72000000 to use USB")
             else:
                 USBPRE = "STM32_USBPRE_DIV1P5"
+                usbclk = (hseclk * pllmul * 2) / 3
+                USBCLK = str(usbclk)
         elif usbpre == 1:
             if hseclk * pllmul != 48000000:
                 raise ValueError("HCECLK * PLLMUL must be equal 48000000 to use USB")
             else:
                 USBPRE = "STM32_USBPRE_DIV1"
+                usbclk = hseclk * pllmul
+                USBCLK = str(usbclk)
         else:
             raise ValueError("Acceptable values for USBPRE is 1.5 or 1")
     #}}}
@@ -254,6 +261,7 @@ def gen_profile(section):
     "   "+ADCCLK+",\n"
     "   "+TIMCLK1+",\n"
     "   "+TIMCLK2+",\n"
+    "   "+USBCLK+",\n"
     "};"
     )
 

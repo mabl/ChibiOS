@@ -103,10 +103,6 @@
 #error "Invalid IRQ priority assigned to USB LP"
 #endif
 
-#if STM32_USBCLK != 48000000
-#error "the USB driver requires a 48MHz clock"
-#endif
-
 /*===========================================================================*/
 /* Driver data structures and types.                                         */
 /*===========================================================================*/

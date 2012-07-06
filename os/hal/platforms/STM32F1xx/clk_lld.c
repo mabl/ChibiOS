@@ -47,6 +47,7 @@ const ClockProfile clk_prf_default = {
    9000000,
    72000000,
    72000000,
+   48000000,
 };
 
 const ClockProfile clk_prf_low = {
@@ -70,6 +71,7 @@ const ClockProfile clk_prf_low = {
    4000000,
    8000000,
    8000000,
+   0,
 };
 
 /**

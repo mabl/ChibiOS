@@ -442,6 +442,10 @@ void usb_lld_init(void) {
  */
 void usb_lld_start(USBDriver *usbp) {
 
+  chDbgAssert(STM32_USBCLK == 48000000,
+      "usb_lld_start(), #1",
+      "the USB driver requires a 48MHz clock");
+
   if (usbp->state == USB_STOP) {
     /* Clock activation.*/
 #if STM32_USB_USE_USB1
