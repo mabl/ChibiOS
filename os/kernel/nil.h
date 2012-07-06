@@ -414,11 +414,7 @@ typedef struct {
  * @note    Thread declarations should be performed using this macro because
  *          the port layer could define optimizations for thread functions.
  */
-#if !defined(PORT_THREAD) || defined(__DOXYGEN__)
-#define NIL_THREAD(tname, arg) void tname(void *arg)
-#else
 #define NIL_THREAD(tname, arg) PORT_THREAD(tname, arg)
-#endif
 
 #if NIL_CFG_ENABLE_ASSERTS || defined(__DOXYGEN__)
 /**
