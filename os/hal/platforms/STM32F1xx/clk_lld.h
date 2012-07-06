@@ -18,8 +18,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef _DYN_CLK_LLD_H_
-#define _DYN_CLK_LLD_H_
+#ifndef _CLK_LLD_H_
+#define _CLK_LLD_H_
 
 /*===========================================================================*/
 /* Driver constants.                                                         */
@@ -116,6 +116,6 @@ extern "C" {
 }
 #endif
 
-#endif /* _DYN_CLK_LLD_H_ */
+#endif /* _CLK_LLD_H_ */
 
 /** @} */
