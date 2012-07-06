@@ -331,6 +331,42 @@ typedef struct {
 #define nilSysUnlockFromIsr() port_unlock_from_isr()
 
 /**
+ * @brief   Suspends the invoking thread for the specified time.
+ *
+ * @param[in] time      the delay in system ticks, the special values are
+ *                      handled as follow:
+ *                      - @a TIME_INFINITE the thread enters an infinite sleep
+ *                        state.
+ *                      - @a TIME_IMMEDIATE this value is not allowed.
+ *                      .
+ * @api
+ */
+#define nilThdSleep(time) nilThdSleepUntil(nilTimeNow() + (time))
+
+/**
+ * @brief   Suspends the invoking thread for the specified time.
+ *
+ * @param[in] time      the delay in system ticks, the special values are
+ *                      handled as follow:
+ *                      - @a TIME_INFINITE the thread enters an infinite sleep
+ *                        state.
+ *                      - @a TIME_IMMEDIATE this value is not allowed.
+ *                      .
+ * @sclass
+ */
+#define nilThdSleepS(time) nilThdSleepUntilS(nilTimeNow() + (time))
+
+/**
+ * @brief   Suspends the invoking thread until the system time arrives to the
+ *          specified value.
+ *
+ * @param[in] time      absolute system time
+ *
+ * @sclass
+ */
+#define nilThdSleepUntilS(time) nilSchGoSleepTimeoutS(nil.currp, (time))
+
+/**
  * @brief   Initializes a semaphore with the specified counter value.
  *
  * @param[out] sp       pointer to a @p Semaphore structure
@@ -534,6 +570,7 @@ extern "C" {
   Thread *nilSchReadyI(Thread *tp);
   msg_t nilSchGoSleepTimeoutS(void *waitobj, systime_t time);
   void nilSchRescheduleS(void);
+  void nilThdSleepUntil(systime_t time);
   bool_t nilTimeIsWithin(systime_t start, systime_t end);
   msg_t nilSemWaitTimeout(Semaphore *sp, systime_t time);
   msg_t nilSemWaitTimeoutS(Semaphore *sp, systime_t time);
@@ -541,8 +578,6 @@ extern "C" {
   void nilSemSignalI(Semaphore *sp);
   void nilSemReset(Semaphore *sp, cnt_t n);
   void nilSemResetI(Semaphore *sp, cnt_t n);
-  void nilThdSleep(systime_t time);
-  void nilThdSleepUntil(systime_t time);
 #ifdef __cplusplus
 }
 #endif

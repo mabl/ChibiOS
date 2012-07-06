@@ -69,6 +69,9 @@ void nilSysInit(void) {
   Thread *tp;
   const ThreadConfig *tcp;
 
+  /* Port layer initialization.*/
+  port_init();
+
   /* Iterates through the list of defined threads.*/
   for (tp = &nil.threads[0], tcp = nil_thd_configs;
        tp <= &nil.threads[NIL_CFG_NUM_THREADS];
@@ -198,6 +201,21 @@ msg_t nilSchGoSleepTimeoutS(void *waitobj, systime_t time) {
 }
 
 /**
+ * @brief   Suspends the invoking thread until the system time arrives to the
+ *          specified value.
+ *
+ * @param[in] time      absolute system time
+ *
+ * @api
+ */
+void nilThdSleepUntil(systime_t time) {
+
+  nilSysLock();
+  nilThdSleepUntilS(time);
+  nilSysUnlock();
+}
+
+/**
  * @brief   Checks if the current system time is within the specified time
  *          window.
  * @note    When start==end then the function returns always true because the
@@ -205,6 +223,7 @@ msg_t nilSchGoSleepTimeoutS(void *waitobj, systime_t time) {
  *
  * @param[in] start     the start of the time window (inclusive)
  * @param[in] end       the end of the time window (non inclusive)
+ *
  * @retval TRUE         current time within the specified time window.
  * @retval FALSE        current time not within the specified time window.
  *
@@ -378,39 +397,6 @@ void nilSemResetI(Semaphore *sp, cnt_t n) {
     }
     tp++;
   }
-}
-
-/**
- * @brief   Suspends the invoking thread for the specified time.
- *
- * @param[in] time      the delay in system ticks, the special values are
- *                      handled as follow:
- *                      - @a TIME_INFINITE the thread enters an infinite sleep
- *                        state.
- *                      - @a TIME_IMMEDIATE this value is not allowed.
- *                      .
- * @api
- */
-void nilThdSleep(systime_t time) {
-
-  nilSysLock();
-  nilSchGoSleepTimeoutS(nil.currp, nilTimeNow() + time);
-  nilSysUnlock();
-}
-
-/**
- * @brief   Suspends the invoking thread until the system time arrives to the
- *          specified value.
- *
- * @param[in] time      absolute system time
- *
- * @api
- */
-void nilThdSleepUntil(systime_t time) {
-
-  nilSysLock();
-  nilSchGoSleepTimeoutS(nil.currp, time);
-  nilSysUnlock();
 }
 
 /** @} */
