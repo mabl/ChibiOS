@@ -49,7 +49,6 @@ typedef struct ClockProfile ClockProfile;
 /**
  * @brief
  */
-//TODO: add TIM clocking
 struct ClockProfile{
   uint32_t                  rcc_cfgr;
   uint32_t                  flashbits;
