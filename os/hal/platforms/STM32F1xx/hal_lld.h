@@ -122,13 +122,6 @@
 #endif
 
 /**
- * @brief   Enables or disables the HSI clock source.
- */
-#if !defined(STM32_HSI_ENABLED) || defined(__DOXYGEN__)
-#define STM32_HSI_ENABLED           TRUE
-#endif
-
-/**
  * @brief   Enables or disables the LSI clock source.
  */
 #if !defined(STM32_LSI_ENABLED) || defined(__DOXYGEN__)

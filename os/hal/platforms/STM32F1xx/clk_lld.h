@@ -111,7 +111,7 @@ extern const ClockProfile clk_prf_low;
 extern "C" {
 #endif
   void stm32_clock_profile_switch(ClockProfile const *prf);
-  void hal_lld_systick_init(void);
+  void hal_lld_systick_switch(void);
 #ifdef __cplusplus
 }
 #endif

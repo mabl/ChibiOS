@@ -78,6 +78,18 @@ static void hal_lld_backup_domain_init(void) {
 #endif /* STM32_RTCSEL != STM32_RTCSEL_NOCLOCK */
 }
 
+/**
+ * @brief Initialize systick timer with proper value.
+ */
+void hal_lld_systick_init(void){
+  /* SysTick initialization using the system clock.*/
+  hal_lld_systick_switch();
+  SysTick->VAL  = 0;
+  SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk |
+                  SysTick_CTRL_ENABLE_Msk |
+                  SysTick_CTRL_TICKINT_Msk;
+}
+
 /*===========================================================================*/
 /* Driver interrupt handlers.                                                */
 /*===========================================================================*/
@@ -93,12 +105,11 @@ static void hal_lld_backup_domain_init(void) {
  */
 void hal_lld_init(void) {
 
-  /* Switch to default clock profile. */
-  CLKCFG.profile = &clk_prf_default;
-
-  /* Start remaining clock sources and init systick. */
-  stm32_clock_init_later();
+  /* Start remaining clock sources (if need) and initialize systick. */
+#if !STM32_NO_INIT
+  stm32_clock_profile_switch(&clk_prf_default);
   hal_lld_systick_init();
+#endif /* !STM32_NO_INIT */
 
   /* Reset of all peripherals.*/
   rccResetAPB1(0xFFFFFFFF);
@@ -126,18 +137,7 @@ void hal_lld_init(void) {
 }
 
 /**
- * @brief   STM32 clocks and PLL initialization.
- * @note    All the involved constants come from the file @p board.h.
- * @note    This function should be invoked just after the system reset.
- *
- * @special
- */
-#if defined(STM32F10X_LD) || defined(STM32F10X_LD_VL) ||                    \
-    defined(STM32F10X_MD) || defined(STM32F10X_MD_VL) ||                    \
-    defined(STM32F10X_HD) || defined(STM32F10X_XL) ||                       \
-    defined(__DOXYGEN__)
-/*
- * Clocks initialization for all sub-families except CL.
+ * @brief   STM32 HSI early clock initialization.
  */
 void stm32_clock_init(void) {
 
@@ -170,129 +170,4 @@ void stm32_clock_init(void) {
 
 #endif /* !STM32_NO_INIT */
 }
-
-/**
- * @brief   Switch to HSE and PLL if needed.
- */
-void stm32_clock_init_later(void) {
-
-  if (STM32_HSE_ENABLED){
-    /* HSE activation.*/
-    RCC->CR |= RCC_CR_HSEON;
-    while (!(RCC->CR & RCC_CR_HSERDY))
-      ;                                     /* Waits until HSE is stable.   */
-  }
-
-  if (STM32_ACTIVATE_PLL){
-    /* PLL activation.*/
-    RCC->CFGR |= STM32_PLLMUL | STM32_PLLXTPRE | STM32_PLLSRC;
-    RCC->CR   |= RCC_CR_PLLON;
-    while (!(RCC->CR & RCC_CR_PLLRDY))
-      ;                                     /* Waits until PLL is stable.   */
-  }
-
-  /* Clock settings.*/
-#if STM32_HAS_USB
-  RCC->CFGR = STM32_MCOSEL | STM32_USBPRE | STM32_PLLMUL | STM32_PLLXTPRE |
-              STM32_PLLSRC | STM32_ADCPRE | STM32_PPRE2  | STM32_PPRE1    |
-              STM32_HPRE;
-#else
-  RCC->CFGR = STM32_MCOSEL |                STM32_PLLMUL | STM32_PLLXTPRE |
-              STM32_PLLSRC | STM32_ADCPRE | STM32_PPRE2  | STM32_PPRE1    |
-              STM32_HPRE;
-#endif
-
-  /* Flash setup and final clock selection.   */
-  FLASH->ACR = STM32_FLASHBITS;
-
-  /* Switching to the configured clock source.*/
-  RCC->CFGR |= STM32_SW;
-  while ((RCC->CFGR & RCC_CFGR_SWS) != (STM32_SW << 2))
-    ;                                       /* Waits selection complete.    */
-}
-
-#elif defined(STM32F10X_CL)
-/*
- * Clocks initialization for the CL sub-family.
- */
-void stm32_clock_init(void) {
-
-#if !STM32_NO_INIT
-  /* HSI setup.*/
-  RCC->CR |= RCC_CR_HSION;                  /* Make sure HSI is ON.         */
-  while (!(RCC->CR & RCC_CR_HSIRDY))
-    ;                                       /* Wait until HSI is stable.    */
-  RCC->CFGR = 0;
-  RCC->CR &= RCC_CR_HSITRIM | RCC_CR_HSION; /* CR Reset value.              */
-  while ((RCC->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_HSI)
-    ;                                       /* Wait until HSI is the source.*/
-
-#if STM32_HSE_ENABLED
-#if defined(STM32_HSE_BYPASS)
-  /* HSE Bypass.*/
-  RCC->CR |= RCC_CR_HSEBYP;
-#endif
-  /* HSE activation.*/
-  RCC->CR |= RCC_CR_HSEON;
-  while (!(RCC->CR & RCC_CR_HSERDY))
-    ;                                       /* Waits until HSE is stable.   */
-#endif
-
-#if STM32_LSI_ENABLED
-  /* LSI activation.*/
-  RCC->CSR |= RCC_CSR_LSION;
-  while ((RCC->CSR & RCC_CSR_LSIRDY) == 0)
-    ;                                       /* Waits until LSI is stable.   */
-#endif
-
-  /* Settings of various dividers and multipliers in CFGR2.*/
-  RCC->CFGR2 = STM32_PLL3MUL | STM32_PLL2MUL | STM32_PREDIV2 |
-               STM32_PREDIV1 | STM32_PREDIV1SRC;
-
-  /* PLL2 setup, if activated.*/
-#if STM32_ACTIVATE_PLL2
-  RCC->CR |= RCC_CR_PLL2ON;
-  while (!(RCC->CR & RCC_CR_PLL2RDY))
-    ;                                        /* Waits until PLL2 is stable. */
-#endif
-
-  /* PLL3 setup, if activated.*/
-#if STM32_ACTIVATE_PLL3
-  RCC->CR |= RCC_CR_PLL3ON;
-  while (!(RCC->CR & RCC_CR_PLL3RDY))
-    ;                                        /* Waits until PLL3 is stable. */
-#endif
-
-  /* PLL1 setup, if activated.*/
-#if STM32_ACTIVATE_PLL1
-  RCC->CFGR |= STM32_PLLMUL | STM32_PLLSRC;
-  RCC->CR   |= RCC_CR_PLLON;
-  while (!(RCC->CR & RCC_CR_PLLRDY))
-    ;                           /* Waits until PLL1 is stable.              */
-#endif
-
-  /* Clock settings.*/
-#if STM32_HAS_OTG1
-  RCC->CFGR = STM32_MCOSEL | STM32_OTGFSPRE | STM32_PLLMUL | STM32_PLLSRC |
-              STM32_ADCPRE | STM32_PPRE2    | STM32_PPRE1  | STM32_HPRE;
-#else
-  RCC->CFGR = STM32_MCO    |                  STM32_PLLMUL | STM32_PLLSRC |
-              STM32_ADCPRE | STM32_PPRE2    | STM32_PPRE1  | STM32_HPRE;
-#endif
-
-  /* Flash setup and final clock selection.   */
-  FLASH->ACR = STM32_FLASHBITS; /* Flash wait states depending on clock.    */
-
-  /* Switching to the configured clock source if it is different from HSI.*/
-#if (STM32_SW != STM32_SW_HSI)
-  RCC->CFGR |= STM32_SW;        /* Switches on the selected clock source.   */
-  while ((RCC->CFGR & RCC_CFGR_SWS) != (STM32_SW << 2))
-    ;
-#endif
-#endif /* !STM32_NO_INIT */
-}
-#else
-void stm32_clock_init(void) {}
-#endif
-
 /** @} */

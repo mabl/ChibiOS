@@ -49,7 +49,7 @@ def gen_profile(section):
     HSICLK = str(hsiclk)
 
     pllmul = 2
-    PLLMUL = "("+str(pllmul)+" - 2) << 18"
+    PLLMUL = "(("+str(pllmul)+" - 2) << 18)"
 
     pllsrc = "HSE"
     PLLSRC = "STM32_PLLSRC_"+pllsrc
@@ -82,7 +82,7 @@ def gen_profile(section):
         if pllmul < STM32_PLLMUL_MIN or pllmul > STM32_PLLMUL_MAX:
             raise ValueError('Acceptable values for PLLMUL is', STM32_PLLMUL_MIN, "..",  STM32_PLLMUL_MAX)
         else:
-            PLLMUL = "("+str(pllmul)+" - 2) << 18"
+            PLLMUL = "(("+str(pllmul)+" - 2) << 18)"
 
         pllsrc = cfg.get(section, "PLLSRC")
         if pllsrc == "HSE":
@@ -194,7 +194,7 @@ def gen_profile(section):
         raise ValueError("ADC clock set to", adcclk, "limit is", STM32_ADCCLK_MAX)
     #}}}
     usb_clock_required = cfg.getboolean(section, "USB_CLOCK_REQUIRED")#{{{
-    USBPRE = "0"
+    USBPRE = "STM32_USBPRE_DIV1P5"
     if usb_clock_required is True:
         if pll != True or pllsrc != "HSE":
             raise ValueError("In order to use USB you must enable PLL and select HSE as PLLSRC")
