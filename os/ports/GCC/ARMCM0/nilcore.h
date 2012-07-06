@@ -206,8 +206,8 @@ struct port_intctx {
  * @brief   Computes the thread working area global size.
  */
 #define THD_WA_SIZE(n) STACK_ALIGN(sizeof(Thread) +                         \
-                                   sizeof(struct intctx) +                  \
-                                   sizeof(struct extctx) +                  \
+                                   sizeof(struct port_intctx) +             \
+                                   sizeof(struct port_extctx) +             \
                                    (n) + (PORT_INT_REQUIRED_STACK))
 
 /**
@@ -215,7 +215,8 @@ struct port_intctx {
  * @details This macro is used to allocate a static thread working area
  *          aligned as both position and size.
  */
-#define WORKING_AREA(s, n) stkalign_t s[THD_WA_SIZE(n) / sizeof(stkalign_t)]
+#define NIL_WORKING_AREA(s, n)                                              \
+  stkalign_t s[THD_WA_SIZE(n) / sizeof(stkalign_t)]
 
 /**
  * @brief   IRQ prologue code.

@@ -20,9 +20,39 @@
 
 #include "nil.h"
 
+/*
+ * Thread 1.
+ */
+NIL_WORKING_AREA(waThread1, 128);
+NIL_THREAD(Thread1, arg) {
+
+  (void)arg;
+
+  while(1) {
+    nilThdSleep(MS2ST(500));
+  }
+}
+
+/*
+ * Thread 2.
+ */
+NIL_WORKING_AREA(waThread2, 128);
+NIL_THREAD(Thread2, arg) {
+
+  (void)arg;
+
+  while(1) {
+    nilThdSleep(MS2ST(1000));
+  }
+}
+
+/*
+ * Threads static table, one entry per thread. The number of entries must
+ * match NIL_CFG_NUM_THREADS.
+ */
 NIL_THREADS_TABLE_BEGIN()
-  NIL_THREADS_TABLE_ENTRY("", NULL, NULL, NULL, 0)
-  NIL_THREADS_TABLE_ENTRY("", NULL, NULL, NULL, 0)
+  NIL_THREADS_TABLE_ENTRY("thread1", Thread1, NULL, waThread1, sizeof(waThread1))
+  NIL_THREADS_TABLE_ENTRY("thread2", Thread2, NULL, waThread2, sizeof(waThread2))
 NIL_THREADS_TABLE_END(NULL, 0)
 
 /*
@@ -30,11 +60,11 @@ NIL_THREADS_TABLE_END(NULL, 0)
  */
 int main(void) {
 
-  /*
-   * System initializations.
-   */
+  /* System initializations, this function starts all threads.*/
   nilSysInit();
 
+  /* This is now the idle thread loop, you may perform here a low priority
+     task but you must never try to sleep or wait in this loop.*/
   while (TRUE) {
   }
 }
