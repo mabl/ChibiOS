@@ -27,7 +27,7 @@ NIL_THREAD(Thread1, arg) {
 
   (void)arg;
 
-  while(1) {
+  while (TRUE) {
     nilThdSleep(MS2ST(500));
   }
 }
@@ -40,7 +40,7 @@ NIL_THREAD(Thread2, arg) {
 
   (void)arg;
 
-  while(1) {
+  while (TRUE) {
     nilThdSleep(MS2ST(1000));
   }
 }

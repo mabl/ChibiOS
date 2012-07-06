@@ -205,8 +205,7 @@ struct port_intctx {
 /**
  * @brief   Computes the thread working area global size.
  */
-#define THD_WA_SIZE(n) STACK_ALIGN(sizeof(Thread) +                         \
-                                   sizeof(struct port_intctx) +             \
+#define THD_WA_SIZE(n) STACK_ALIGN(sizeof(struct port_intctx) +             \
                                    sizeof(struct port_extctx) +             \
                                    (n) + (PORT_INT_REQUIRED_STACK))
 
