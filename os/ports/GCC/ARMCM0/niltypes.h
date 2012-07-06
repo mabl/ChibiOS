@@ -39,7 +39,6 @@
  * @{
  */
 typedef int32_t         bool_t;     /**< @brief Fast boolean type.          */
-typedef uint8_t         tmode_t;    /**< @brief Thread flags.               */
 typedef int32_t         msg_t;      /**< @brief Inter-thread message.       */
 typedef uint32_t        systime_t;  /**< @brief System time.                */
 typedef int32_t         cnt_t;      /**< @brief Signed resources counter.   */

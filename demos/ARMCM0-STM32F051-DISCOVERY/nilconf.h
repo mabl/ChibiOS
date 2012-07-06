@@ -51,7 +51,7 @@
  * @brief   System assertions.
  */
 #if !defined(NIL_CFG_ENABLE_ASSERTS) || defined(__DOXYGEN__)
-#define NIL_CFG_ENABLE_ASSERTS          TRUE
+#define NIL_CFG_ENABLE_ASSERTS          FALSE
 #endif
 
 /*===========================================================================*/

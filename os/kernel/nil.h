@@ -74,13 +74,6 @@
 /** @} */
 
 /**
- * @name    Thread mode flags
- * @{
- */
-#define NIL_THD_TIMEOUT     1       /**< @brief Timeout flag.               */
-/** @} */
-
-/**
  * @name    Special time constants
  * @{
  */
@@ -196,7 +189,7 @@ struct nil_thread_cfg {
  */
 struct nil_thread {
   intctx            *ctxp;      /**< @brief Pointer to internal context.    */
-  tmode_t           mode;       /**< @brief Mode flags.                     */
+  bool_t            timeout;    /**< @brief Timeout flags.                  */
   union {
     void            *p;         /**< @brief Generic pointer to object.      */
     Semaphore       *semp;      /**< @brief Pointer to semaphore.           */
@@ -215,11 +208,17 @@ struct nil_thread {
  */
 typedef struct {
   /**
-   * @brief Pointer to the running thread.
+   * @brief   Pointer to the running thread.
    */
   Thread            *currp;
   /**
-   * @brief System time.
+   * @brief   Pointer to the next thread to be executed.
+   * @note    This pointer must point at the same thread pointed by @p currp
+   *          or to an higher priority thread in a switch is required.
+   */
+  Thread            *nextp;
+  /**
+   * @brief   System time.
    */
   systime_t         systime;
   /**
@@ -332,14 +331,6 @@ typedef struct {
 #define nilSysUnlockFromIsr() port_unlock_from_isr()
 
 /**
- * @brief   Makes the specified thread ready for execution.
- *
- * @param[in] tp        pointer to the @p Thread object
- */
-#define nilSchReadyI(tp) ((tp)->mode &= ~NIL_THD_TIMEOUT,                   \
-                          (tp)->waitobj.p = NULL)
-
-/**
  * @brief   Initializes a semaphore with the specified counter value.
  *
  * @param[out] sp       pointer to a @p Semaphore structure
@@ -427,13 +418,13 @@ typedef struct {
 #if !defined(nilDbgAssert)
 #define nilDbgAssert(c, m, r) {                                             \
   if (!(c)) {                                                               \
-    dbg_msg = (m);                                                          \
+    nil.dbg_msg = (m);                                                      \
     nilSysHalt();                                                           \
   }                                                                         \
 }
 #endif /* !defined(chDbgAssert) */
 #else /* !NIL_CFG_ENABLE_ASSERTS */
-#define chDbgAssert(c, m, r) {(void)(c);}
+#define nilDbgAssert(c, m, r) {(void)(c);}
 #endif /* !NIL_CFG_ENABLE_ASSERTS */
 /** @} */
 
@@ -540,6 +531,7 @@ extern "C" {
 #endif
   void nilSysInit(void);
   void nilSysTimerHandlerI(void);
+  Thread *nilSchReadyI(Thread *tp);
   msg_t nilSchGoSleepTimeoutS(void *waitobj, systime_t time);
   void nilSchRescheduleS(void);
   bool_t nilTimeIsWithin(systime_t start, systime_t end);
@@ -551,7 +543,6 @@ extern "C" {
   void nilSemResetI(Semaphore *sp, cnt_t n);
   void nilThdSleep(systime_t time);
   void nilThdSleepUntil(systime_t time);
-  void nilThdExit(void);
 #ifdef __cplusplus
 }
 #endif

@@ -49,19 +49,6 @@ NilSystem nil;
 /* Module local functions.                                                   */
 /*===========================================================================*/
 
-/**
- * @brief   Switches to the specified thread.
- *
- * @param[in] ntp       pointer to a @p Thread object
- *
- * @notapi
- */
-static void nil_switch_to(Thread *ntp) {
-  Thread *otp = nil.currp;
-  nil.currp = ntp;
-//  port_switch(ntp, otp);
-}
-
 /*===========================================================================*/
 /* Module interrupt handlers.                                                */
 /*===========================================================================*/
@@ -79,31 +66,26 @@ static void nil_switch_to(Thread *ntp) {
  * @special
  */
 void nilSysInit(void) {
-  const ThreadConfig *tcp = nil_thd_configs;
-  Thread *tp = nil.threads;
+  Thread *tp;
+  const ThreadConfig *tcp;
 
   /* Iterates through the list of defined threads.*/
-  while (TRUE) {
+  for (tp = &nil.threads[0], tcp = nil_thd_configs;
+       tp <= &nil.threads[NIL_CFG_NUM_THREADS];
+       tp++, tcp++) {
 
     /* The thread is marked as not waiting on anything thus runnable.*/
+    tp->timeout = FALSE;
     tp->waitobj.p = NULL;
 
     /* Port dependent thread initialization.*/
     SETUP_CONTEXT(tcp->wap, tcp->size, tcp->funcp, tcp->arg);
-
-    if (tcp->funcp == NULL) {
-      /* The last thread found in the list is the idle thread and it is
-         associated to the current instructions flow.*/
-      nil.currp = tp;
-      break;
-    }
-
-    /* Next thread in the initialization list.*/
-    tp++;
   }
 
-  /* Runs the highest priority thread.*/
-  nilSchRescheduleS();
+  /* Runs the highest priority thread, the current one becomes the null
+     thread.*/
+  nil.currp = nil.nextp = nil.threads;
+  port_switch(nil.threads, &nil.threads[NIL_CFG_NUM_THREADS]);
 
   /* Interrupts enabled for the idle thread.*/
   nilSysEnable();
@@ -117,15 +99,41 @@ void nilSysInit(void) {
  * @iclass
  */
 void nilSysTimerHandlerI(void) {
-  Thread *tp = nil.threads;
+  Thread *tp;
+  systime_t time;
 
-  nil.systime++;
+  time = ++nil.systime;
+  tp = &nil.threads[0];
   do {
-    if ((tp->mode & NIL_THD_TIMEOUT) && (tp->wakeup.time == nil.systime)) {
-      /* TODO: Assert it is ready because NIL_THD_TIMEOUT is set.*/
+    if (tp->timeout && (tp->wakeup.time == time)) {
+      nilDbgAssert(tp->waitobj.p == NULL,
+                   "nilSysTimerHandlerI(), #1", "");
       nilSchReadyI(tp);
     }
+    tp++;
   } while (tp < &nil.threads[NIL_CFG_NUM_THREADS]);
+}
+
+/**
+ * @brief   Makes the specified thread ready for execution.
+ *
+ * @param[in] tp        pointer to the @p Thread object
+ *
+ * @return              The same pointer passed as parameter.
+ */
+Thread *nilSchReadyI(Thread *tp) {
+
+  nilDbgAssert((tp >= nil.threads) &&
+               (tp < &nil.threads[NIL_CFG_NUM_THREADS]),
+               "nilSchReadyI(), #1", "");
+  nilDbgAssert(tp->waitobj.p != NULL, "nilSchReadyI(), #2", "");
+  nilDbgAssert(nil.nextp <= nil.currp, "nilSchReadyI(), #3", "");
+
+  tp->timeout = FALSE;
+  tp->waitobj.p = NULL;
+  if (tp < nil.nextp)
+    nil.nextp = tp;
+  return tp;
 }
 
 /**
@@ -134,18 +142,12 @@ void nilSysTimerHandlerI(void) {
  * @sclass
  */
 void nilSchRescheduleS() {
-  Thread *tp = nil.threads;
-  while (TRUE) {
-    /* Is this thread ready to execute?*/
-    if (tp->waitobj.p == NULL) {
+  Thread *otp = nil.currp;
+  Thread *ntp = nil.nextp;
 
-      /* If the found thread is the current one then there is nothing
-         to reschedule.*/
-      if (tp != nil.currp)
-        nil_switch_to(tp);
-      return;
-    }
-    tp++;
+  if (ntp != otp) {
+    nil.currp = ntp;
+    port_switch(ntp, otp);
   }
 }
 
@@ -169,29 +171,29 @@ void nilSchRescheduleS() {
  * @sclass
  */
 msg_t nilSchGoSleepTimeoutS(void *waitobj, systime_t time) {
-  Thread *tp = nil.currp;
+  Thread *ntp, *otp = nil.currp;
 
-  if (time != TIME_INFINITE) {
-    tp->mode |= NIL_THD_TIMEOUT;
-    tp->wakeup.time = time;
-  }
-  else
-    tp->mode &= ~NIL_THD_TIMEOUT;
+  /* Timeout settings, if required.*/
+  otp->timeout = (bool_t)(time != TIME_INFINITE);
+  otp->wakeup.time = time;
 
   /* Storing the wait object for the current thread.*/
-  tp->waitobj.p = waitobj;
+  otp->waitobj.p = waitobj;
 
-  /* Starting the scanning from the thread going to sleep because it is
-     supposed to have the highest priority among the ready ones.*/
+  /* Scanning the whole threads array.*/
+  ntp = nil.threads;
   while (TRUE) {
-    /* Points to the next thread in lowering priority order.*/
-    tp++;
-
     /* Is this thread ready to execute?*/
-    if (tp->waitobj.p == NULL) {
-      nil_switch_to(tp);
-      return tp->wakeup.msg;
+    if (ntp->waitobj.p == NULL) {
+      nil.currp = nil.nextp = ntp;
+      port_switch(ntp, otp);
+      return ntp->wakeup.msg;
     }
+
+    /* Points to the next thread in lowering priority order.*/
+    ntp++;
+    nilDbgAssert(ntp <= &nil.threads[NIL_CFG_NUM_THREADS],
+                 "nilSchGoSleepTimeoutS(), #1", "");
   }
 }
 
@@ -267,9 +269,7 @@ msg_t nilSemWaitTimeoutS(Semaphore *sp, systime_t time) {
   /* Note, the semaphore counter is a volatile variable so accesses are
      manually optimized.*/
   cnt_t cnt = sp->cnt;
-  if (cnt <= 0) {
-    if (TIME_IMMEDIATE == time)
-      return NIL_MSG_TMO;
+  if ((cnt <= 0) && (TIME_IMMEDIATE != time)) {
     sp->cnt = cnt - 1;
     return nilSchGoSleepTimeoutS((void *)sp, time);
   }
@@ -411,18 +411,6 @@ void nilThdSleepUntil(systime_t time) {
   nilSysLock();
   nilSchGoSleepTimeoutS(nil.currp, time);
   nilSysUnlock();
-}
-
-/**
- * @brief   Stops the current thread.
- *
- * @api
- */
-void nilThdExit(void) {
-
-  /* Unbounded waiting for itself is the final state.*/
-  nilSysLock();
-  nilSchGoSleepTimeoutS(nil.currp, TIME_INFINITE);
 }
 
 /** @} */

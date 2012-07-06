@@ -315,6 +315,18 @@ struct port_intctx {
  */
 #define port_wait_for_interrupt() asm volatile ("wfi" : : : "memory")
 
+/**
+ * @brief   Performs a context switch between two threads.
+ * @details This is the most critical code in any port, this function
+ *          is responsible for the context switch between 2 threads.
+ * @note    The implementation of this code affects <b>directly</b> the context
+ *          switch performance so optimize here as much as you can.
+ *
+ * @param[in] ntp       the thread to be switched in
+ * @param[in] otp       the thread to be switched out
+ */
+#define port_switch(ntp, otp) _port_switch(ntp, otp)
+
 /*===========================================================================*/
 /* External declarations.                                                    */
 /*===========================================================================*/

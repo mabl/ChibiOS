@@ -166,7 +166,7 @@ void _port_switch_from_isr(void) {
 __attribute__((naked))
 #endif
 void _port_switch(Thread *ntp, Thread *otp) {
-  register struct intctx *r13 asm ("r13");
+  register struct port_intctx *r13 asm ("r13");
 
   asm volatile ("push    {r4, r5, r6, r7, lr}                   \n\t"
                 "mov     r4, r8                                 \n\t"
@@ -195,8 +195,8 @@ void _port_thread_start(void) {
 
   nilSysUnlock();
   asm volatile ("mov     r0, r5                                 \n\t"
-                "blx     r4                                     \n\t"
-                "bl      nilThdExit");
+                "blx     r4");
+  nilDbgAssert(TRUE, "_port_thread_start(), #1", "thread returned");
 }
 
 /**
