@@ -29,7 +29,10 @@ NIL_THREAD(Thread1, arg) {
   (void)arg;
 
   while (TRUE) {
-    nilThdSleep(MS2ST(500));
+    gpioClearPad(GPIOC, GPIOC_LED4);
+    nilThdSleepMilliseconds(500);
+    gpioSetPad(GPIOC, GPIOC_LED4);
+    nilThdSleepMilliseconds(500);
   }
 }
 
@@ -41,9 +44,10 @@ NIL_THREAD(Thread2, arg) {
 
   (void)arg;
 
-  while (TRUE) {
-    nilThdSleep(MS2ST(1000));
-  }
+  gpioClearPad(GPIOC, GPIOC_LED3);
+  nilThdSleepMilliseconds(500);
+  gpioSetPad(GPIOC, GPIOC_LED3);
+  nilThdSleepMilliseconds(500);
 }
 
 /*

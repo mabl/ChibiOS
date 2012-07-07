@@ -20,6 +20,50 @@
 #include "nil.h"
 #include "hwinit.h"
 
+/*===========================================================================*/
+/* Module local definitions.                                                 */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Module exported variables.                                                */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Module local variables.                                                   */
+/*===========================================================================*/
+
+static const GPIOConfig gpio_default_config =
+{
+  {VAL_GPIOA_MODER, VAL_GPIOA_OTYPER, VAL_GPIOA_OSPEEDR, VAL_GPIOA_PUPDR, VAL_GPIOA_ODR, VAL_GPIOA_AFRL, VAL_GPIOA_AFRH},
+  {VAL_GPIOB_MODER, VAL_GPIOB_OTYPER, VAL_GPIOB_OSPEEDR, VAL_GPIOB_PUPDR, VAL_GPIOB_ODR, VAL_GPIOB_AFRL, VAL_GPIOB_AFRH},
+  {VAL_GPIOC_MODER, VAL_GPIOC_OTYPER, VAL_GPIOC_OSPEEDR, VAL_GPIOC_PUPDR, VAL_GPIOC_ODR, VAL_GPIOC_AFRL, VAL_GPIOC_AFRH},
+  {VAL_GPIOD_MODER, VAL_GPIOD_OTYPER, VAL_GPIOD_OSPEEDR, VAL_GPIOD_PUPDR, VAL_GPIOD_ODR, VAL_GPIOD_AFRL, VAL_GPIOD_AFRH},
+  {VAL_GPIOF_MODER, VAL_GPIOF_OTYPER, VAL_GPIOF_OSPEEDR, VAL_GPIOF_PUPDR, VAL_GPIOF_ODR, VAL_GPIOF_AFRL, VAL_GPIOF_AFRH}
+};
+
+/*===========================================================================*/
+/* Module local functions.                                                   */
+/*===========================================================================*/
+
+static void initgpio(GPIO_TypeDef *gpiop, const stm32_gpio_setup_t *config) {
+
+  gpiop->MODER   = config->moder;
+  gpiop->OTYPER  = config->otyper;
+  gpiop->OSPEEDR = config->ospeedr;
+  gpiop->PUPDR   = config->pupdr;
+  gpiop->ODR     = config->odr;
+  gpiop->AFRL    = config->afrl;
+  gpiop->AFRH    = config->afrh;
+}
+
+/*===========================================================================*/
+/* Module interrupt handlers.                                                */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Module exported functions.                                                */
+/*===========================================================================*/
+
 /**
  * @brief   RCC initialization.
  */
@@ -93,6 +137,17 @@ void hwInit(void) {
 #if STM32_PVD_ENABLE
   PWR->CR |= PWR_CR_PVDE | (STM32_PLS & STM32_PLS_MASK);
 #endif /* STM32_PVD_ENABLE */
+
+  /* GPIO initialization.*/
+  rccEnableAHB((RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOBEN | RCC_AHBENR_GPIOCEN |
+                RCC_AHBENR_GPIODEN | RCC_AHBENR_GPIOFEN),
+               TRUE);
+  initgpio(GPIOA, &gpio_default_config.PAData);
+  initgpio(GPIOB, &gpio_default_config.PBData);
+  initgpio(GPIOC, &gpio_default_config.PCData);
+  initgpio(GPIOD, &gpio_default_config.PDData);
+  initgpio(GPIOF, &gpio_default_config.PFData);
+
 #endif /* !STM32_NO_INIT */
 
   /* SysTick initialization using the system clock.*/

@@ -331,6 +331,44 @@ typedef struct {
 #define nilSysUnlockFromIsr() port_unlock_from_isr()
 
 /**
+ * @brief   Delays the invoking thread for the specified number of seconds.
+ * @note    The specified time is rounded up to a value allowed by the real
+ *          system clock.
+ * @note    The maximum specified value is implementation dependent.
+ *
+ * @param[in] sec       time in seconds, must be different from zero
+ *
+ * @api
+ */
+#define nilThdSleepSeconds(sec) nilThdSleep(S2ST(sec))
+
+/**
+ * @brief   Delays the invoking thread for the specified number of
+ *          milliseconds.
+ * @note    The specified time is rounded up to a value allowed by the real
+ *          system clock.
+ * @note    The maximum specified value is implementation dependent.
+ *
+ * @param[in] msec      time in milliseconds, must be different from zero
+ *
+ * @api
+ */
+#define nilThdSleepMilliseconds(msec) nilThdSleep(MS2ST(msec))
+
+/**
+ * @brief   Delays the invoking thread for the specified number of
+ *          microseconds.
+ * @note    The specified time is rounded up to a value allowed by the real
+ *          system clock.
+ * @note    The maximum specified value is implementation dependent.
+ *
+ * @param[in] usec      time in microseconds, must be different from zero
+ *
+ * @api
+ */
+#define nilThdSleepMicroseconds(usec) nilThdSleep(US2ST(usec))
+
+/**
  * @brief   Suspends the invoking thread for the specified time.
  *
  * @param[in] time      the delay in system ticks, the special values are

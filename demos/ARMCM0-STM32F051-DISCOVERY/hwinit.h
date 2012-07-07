@@ -737,9 +737,69 @@
 /* Module data structures and types.                                         */
 /*===========================================================================*/
 
+/**
+ * @brief   STM32 GPIO registers block.
+ */
+typedef struct {
+
+  volatile uint32_t     MODER;
+  volatile uint32_t     OTYPER;
+  volatile uint32_t     OSPEEDR;
+  volatile uint32_t     PUPDR;
+  volatile uint32_t     IDR;
+  volatile uint32_t     ODR;
+  volatile union {
+    uint32_t            W;
+    struct {
+      uint16_t          set;
+      uint16_t          clear;
+    } H;
+  } BSRR;
+  volatile uint32_t     LCKR;
+  volatile uint32_t     AFRL;
+  volatile uint32_t     AFRH;
+} GPIO_TypeDef;
+
+/**
+ * @brief   GPIO port setup info.
+ */
+typedef struct {
+  /** Initial value for MODER register.*/
+  uint32_t              moder;
+  /** Initial value for OTYPER register.*/
+  uint32_t              otyper;
+  /** Initial value for OSPEEDR register.*/
+  uint32_t              ospeedr;
+  /** Initial value for PUPDR register.*/
+  uint32_t              pupdr;
+  /** Initial value for ODR register.*/
+  uint32_t              odr;
+  /** Initial value for AFRL register.*/
+  uint32_t              afrl;
+  /** Initial value for AFRH register.*/
+  uint32_t              afrh;
+} stm32_gpio_setup_t;
+
+/**
+ * @brief   STM32 GPIO static initializer.
+ */
+typedef struct {
+  /** @brief Port A setup data.*/
+  stm32_gpio_setup_t    PAData;
+  /** @brief Port B setup data.*/
+  stm32_gpio_setup_t    PBData;
+  /** @brief Port C setup data.*/
+  stm32_gpio_setup_t    PCData;
+  /** @brief Port D setup data.*/
+  stm32_gpio_setup_t    PDData;
+  /** @brief Port F setup data.*/
+  stm32_gpio_setup_t    PFData;
+} GPIOConfig;
+
 /*===========================================================================*/
 /* Module macros.                                                            */
 /*===========================================================================*/
+
 /**
  * @name    Generic RCC operations
  * @{
@@ -857,6 +917,130 @@
   RCC->AHBRSTR |= (mask);                                                   \
   RCC->AHBRSTR = 0;                                                         \
 }
+/** @} */
+
+/**
+ * @name    GPIO helpers
+ * @{
+ */
+/**
+ * @brief   Reads an I/O port.
+ *
+ * @param[in] port      port identifier
+ * @return              The port bits.
+ */
+#define gpioReadPort(port) ((port)->IDR)
+
+/**
+ * @brief   Reads the output latch.
+ *
+ * @param[in] port      port identifier
+ * @return              The latched logical states.
+ */
+#define gpioReadLatch(port) ((port)->ODR)
+
+/**
+ * @brief   Writes on a I/O port.
+ *
+ * @param[in] port      port identifier
+ * @param[in] bits      bits to be written on the specified port
+ */
+#define gpioWritePort(port, bits) ((port)->ODR = (bits))
+
+/**
+ * @brief   Sets a bits mask on a I/O port.
+ *
+ * @param[in] port      port identifier
+ * @param[in] bits      bits to be ORed on the specified port
+ */
+#define gpioSetPort(port, bits) ((port)->BSRR.H.set = (uint16_t)(bits))
+
+/**
+ * @brief   Clears a bits mask on a I/O port.
+ *
+ * @param[in] port      port identifier
+ * @param[in] bits      bits to be cleared on the specified port
+ */
+#define gpioClearPort(port, bits) ((port)->BSRR.H.clear = (uint16_t)(bits))
+
+/**
+ * @brief   Toggles a bits mask on a I/O port.
+ *
+ * @param[in] port      port identifier
+ * @param[in] bits      bits to be XORed on the specified port
+ */
+#define gpioTogglePort(port, bits)                                          \
+  gpioWritePort(port, gpioReadLatch(port) ^ (bits))
+
+/**
+ * @brief   Reads a group of bits.
+ *
+ * @param[in] port      port identifier
+ * @param[in] mask      group mask, a logical AND is performed on the input
+ *                      data
+ * @param[in] offset    group bit offset within the port
+ * @return              The group logical states.
+ */
+#define gpioReadGroup(port, mask, offset)                                   \
+  ((gpioReadPort(port) >> (offset)) & (mask))
+
+/**
+ * @brief   Writes a group of bits.
+ *
+ * @param[in] port      port identifier
+ * @param[in] mask      group mask
+ * @param[in] offset    the group bit offset within the port
+ * @param[in] bits      bits to be written. Values exceeding the group
+ *                      width are masked.
+ */
+#define gpioWriteGroup(port, mask, offset, bits)                            \
+  ((port)->BSRR.W = ((~(bits) & (mask)) << (16 + (offset))) |               \
+                     (((bits) & (mask)) << (offset)))
+
+/**
+ * @brief   Reads an input pad logical state.
+ *
+ * @param[in] port      port identifier
+ * @param[in] pad       pad number within the port
+ * @return              The logical state.
+ * @retval PAL_LOW      low logical state.
+ * @retval PAL_HIGH     high logical state.
+ */
+#define gpioReadPad(port, pad) ((gpioReadPort(port) >> (pad)) & 1)
+
+/**
+ * @brief   Writes a logical state on an output pad.
+ *
+ * @param[in] port      port identifier
+ * @param[in] pad       pad number within the port
+ * @param[in] bit       logical value, the value must be @p PAL_LOW or
+ *                      @p PAL_HIGH
+ */
+#define gpioWritePad(port, pad, bit) gpioWriteGroup(port, 1, pad, bit)
+
+/**
+ * @brief   Sets a pad logical state to @p PAL_HIGH.
+ *
+ * @param[in] port      port identifier
+ * @param[in] pad       pad number within the port
+ */
+#define gpioSetPad(port, pad) gpioSetPort(port, 1 << (pad))
+
+/**
+ * @brief   Clears a pad logical state to @p PAL_LOW.
+ *
+ * @param[in] port      port identifier
+ * @param[in] pad       pad number within the port
+ */
+#define gpioClearPad(port, pad) gpioClearPort(port, 1 << (pad))
+
+/**
+ * @brief   Toggles a pad logical state.
+ *
+ * @param[in] port      port identifier
+ * @param[in] pad       pad number within the port
+ */
+#define gpioTogglePad(port, pad) gpioTogglePort(port, 1 << (pad))
 /** @} */
 
 /*===========================================================================*/
