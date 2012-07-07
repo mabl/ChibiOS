@@ -74,12 +74,8 @@ void nilSysInit(void) {
 
   /* Iterates through the list of defined threads.*/
   for (tp = &nil.threads[0], tcp = nil_thd_configs;
-       tp <= &nil.threads[NIL_CFG_NUM_THREADS];
+       tp < &nil.threads[NIL_CFG_NUM_THREADS];
        tp++, tcp++) {
-
-    /* The thread is marked as not waiting on anything thus runnable.*/
-    tp->timeout = FALSE;
-    tp->waitobj.p = NULL;
 
     /* Port dependent thread initialization.*/
     SETUP_CONTEXT(tcp->wap, tcp->size, tcp->funcp, tcp->arg);

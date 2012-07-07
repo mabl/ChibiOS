@@ -46,9 +46,9 @@ NIL_THREAD(Thread2, arg) {
 
   while (TRUE) {
     gpioClearPad(GPIOC, GPIOC_LED3);
-    nilThdSleepMilliseconds(500);
+    nilThdSleepMilliseconds(250);
     gpioSetPad(GPIOC, GPIOC_LED3);
-    nilThdSleepMilliseconds(500);
+    nilThdSleepMilliseconds(250);
   }
 }
 
