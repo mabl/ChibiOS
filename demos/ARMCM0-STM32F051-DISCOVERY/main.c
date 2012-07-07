@@ -18,6 +18,7 @@
 */
 
 #include "nil.h"
+#include "hwinit.h"
 
 /*
  * Thread 1.
@@ -59,7 +60,12 @@ NIL_THREADS_TABLE_END()
  */
 int main(void) {
 
-  /* System initializations, this function starts all threads.*/
+  /*
+   * System initializations:
+   * - HW specific initialization.
+   * - Nil RTOS initialization.
+   */
+  hwInit();
   nilSysInit();
 
   /* This is now the idle thread loop, you may perform here a low priority
