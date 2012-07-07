@@ -108,7 +108,7 @@
 /**
  * @brief   System tick frequency.
  */
-#if !defined(NIL_FREQUENCY) || defined(__DOXYGEN__)
+#if !defined(NIL_CFG_FREQUENCY) || defined(__DOXYGEN__)
 #define NIL_CFG_FREQUENCY               100
 #endif
 

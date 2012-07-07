@@ -6,7 +6,8 @@ PORTSRC = $(NILRTOS)/os/ports/common/ARMCMx/nvic.c \
 
 PORTASM =
 
-PORTINC = $(NILRTOS)/os/ports/common/ARMCMx \
+PORTINC = ${NILRTOS}/os/ports/common/ARMCMx/CMSIS/include \
+          $(NILRTOS)/os/ports/common/ARMCMx \
           ${NILRTOS}/os/ports/GCC/ARMCM0 \
           ${NILRTOS}/os/ports/GCC/ARMCM0/STM32F0xx
 
