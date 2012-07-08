@@ -587,7 +587,7 @@ extern const ThreadConfig nil_thd_configs[NIL_CFG_NUM_THREADS + 1];
 extern "C" {
 #endif
   void nilSysInit(void);
-  void nilSysTimerHandlerI(void);
+  void nilSysTimerHandler(void);
   Thread *nilSchReadyI(Thread *tp);
   msg_t nilSchGoSleepTimeoutS(void *waitobj, systime_t time);
   void nilSchRescheduleS(void);

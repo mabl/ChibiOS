@@ -95,20 +95,22 @@ void nilSysInit(void) {
  * @note    This handler has to be invoked by a periodic ISR in order to
  *          reschedule the waiting threads.
  *
- * @iclass
+ * @special
  */
-void nilSysTimerHandlerI(void) {
+void nilSysTimerHandler(void) {
   Thread *tp;
   systime_t time;
 
   time = ++nil.systime;
   tp = &nil.threads[0];
   do {
+    nilSysLockFromIsr();
     if (tp->timeout && (tp->wakeup.time == time)) {
       nilDbgAssert(tp->waitobj.p == NULL,
                    "nilSysTimerHandlerI(), #1", "");
       nilSchReadyI(tp);
     }
+    nilSysUnlockFromIsr();
     tp++;
   } while (tp < &nil.threads[NIL_CFG_NUM_THREADS]);
 }
