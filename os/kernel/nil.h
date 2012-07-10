@@ -197,7 +197,7 @@ struct nil_thread {
   } waitobj;                    /**< @brief Pointer to the wake-up object.  */
   union {
     systime_t       time;       /**< @brief Timeout deadline, if enabled.   */
-    msg_t           msg;        /**< @brief Timeout message.                */
+    msg_t           msg;        /**< @brief Wake-up message.                */
   } wakeup;                     /**< @brief Wake-up related info.           */
 };
 
