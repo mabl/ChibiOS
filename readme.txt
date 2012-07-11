@@ -79,6 +79,7 @@
 - FIX: Fixed ARM addresses generated in vectors table (bug 3519037).
 - FIX: Fixed missing serial driver functionality for SAM7S64, SAM7S128 and
   SAM7S512 (bug 3517648).
+- Various documentation fixes and improvements.
 
 *** 2.2.9 ***
 - FIX: Fixed chMBFetchI does not decrement mb_fullsem (bug 3504450).
