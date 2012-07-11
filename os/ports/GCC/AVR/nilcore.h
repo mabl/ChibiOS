@@ -18,48 +18,22 @@
 */
 
 /**
- * @file    GCC/ARMCM0/nilcore.h
- * @brief   Nil RTOS Cortex-M0 port main header file.
+ * @file    GCC/AVR/nilcore.h
+ * @brief   Nil RTOS AVR port main header file.
  *
- * @addtogroup ARMCM0_CORE
+ * @addtogroup AVR_CORE
  * @{
  */
 
 #ifndef _NILCORE_H_
 #define _NILCORE_H_
 
-#include "cmparams.h"
-#include "nvic.h"
+#include <avr/io.h>
+#include <avr/interrupt.h>
 
 /*===========================================================================*/
 /* Module constants.                                                         */
 /*===========================================================================*/
-
-/**
- * @brief   Total priority levels.
- */
-#define CORTEX_PRIORITY_LEVELS          (1 << CORTEX_PRIORITY_BITS)
-
-/**
- * @brief   Minimum priority level.
- * @details This minimum priority level is calculated from the number of
- *          priority bits supported by the specific Cortex-Mx implementation.
- */
-#define CORTEX_MINIMUM_PRIORITY         (CORTEX_PRIORITY_LEVELS - 1)
-
-/**
- * @brief   Maximum priority level.
- * @details The maximum allowed priority level is always zero.
- */
-#define CORTEX_MAXIMUM_PRIORITY         0
-
-/**
- * @brief   PendSV priority level.
- * @note    This priority is enforced to be equal to @p CORTEX_MAXIMUM_PRIORITY,
- *          this handler always has the highest priority that cannot preempt
- *          the kernel.
- */
-#define CORTEX_PRIORITY_PENDSV          CORTEX_MAXIMUM_PRIORITY
 
 /*===========================================================================*/
 /* Module pre-compile time settings.                                         */
@@ -69,115 +43,80 @@
  * @brief   Per-thread stack overhead for interrupts servicing.
  * @details This constant is used in the calculation of the correct working
  *          area size.
- * @note    In this port this value is conservatively set to 32 because the
- *          function @p chSchDoReschedule() can have a stack frame, especially
- *          with compiler optimizations disabled. The value can be reduced
- *          when compiler optimizations are enabled.
  */
 #if !defined(PORT_INT_REQUIRED_STACK)
 #define PORT_INT_REQUIRED_STACK         32
-#endif
-
-/**
- * @brief   SYSTICK handler priority.
- * @note    The default SYSTICK handler priority is calculated as the priority
- *          level in the middle of the numeric priorities range.
- */
-#if !defined(CORTEX_PRIORITY_SYSTICK)
-#define CORTEX_PRIORITY_SYSTICK         (CORTEX_PRIORITY_LEVELS >> 1)
-#endif
-
-/**
- * @brief   Alternate preemption method.
- * @details Activating this option will make the Kernel use the PendSV
- *          handler for preemption instead of the NMI handler.
- */
-#ifndef CORTEX_ALTERNATE_SWITCH
-#define CORTEX_ALTERNATE_SWITCH         FALSE
 #endif
 
 /*===========================================================================*/
 /* Derived constants and error checks.                                       */
 /*===========================================================================*/
 
-/**
- * @brief   Maximum usable priority for normal ISRs.
- */
-#if CORTEX_ALTERNATE_SWITCH || defined(__DOXYGEN__)
-#define CORTEX_MAX_KERNEL_PRIORITY      1
-#else
-#define CORTEX_MAX_KERNEL_PRIORITY      0
-#endif
-
-/**
- * @brief   Priority level verification macro.
- */
-#define CORTEX_IS_VALID_PRIORITY(n)                                         \
-  (((n) >= 0) && ((n) < CORTEX_PRIORITY_LEVELS))
-
-/**
- * @brief   Priority level verification macro.
- */
-#define CORTEX_IS_VALID_KERNEL_PRIORITY(n)                                  \
-  (((n) >= CORTEX_MAX_KERNEL_PRIORITY) && ((n) < CORTEX_PRIORITY_LEVELS))
-
-/**
- * @brief   Priority level to priority mask conversion macro.
- */
-#define CORTEX_PRIORITY_MASK(n)                                             \
-  ((n) << (8 - CORTEX_PRIORITY_BITS))
-
-#if !CORTEX_IS_VALID_PRIORITY(CORTEX_PRIORITY_SYSTICK)
-/* If it is externally redefined then better perform a validity check on it.*/
-#error "invalid priority level specified for CORTEX_PRIORITY_SYSTICK"
-#endif
-
 /*===========================================================================*/
 /* Module data structures and types.                                         */
 /*===========================================================================*/
 
 /**
- * @brief   Generic ARM register.
- */
-typedef void *regarm_t;
-
-/**
  * @brief   Stack and memory alignment enforcement.
  */
-typedef uint64_t stkalign_t __attribute__ ((aligned (8)));
+typedef uint8_t stkalign_t;
 
 /**
  * @brief   Interrupt saved context.
  * @details This structure represents the stack frame saved during a
  *          preemption-capable interrupt handler.
- * @note    It is implemented to match the Cortex-M0 exception context.
+ * @note    The field @p _next is not part of the context, it represents the
+ *          offset of the structure relative to the stack pointer.
  */
 struct port_extctx {
-  regarm_t      r0;
-  regarm_t      r1;
-  regarm_t      r2;
-  regarm_t      r3;
-  regarm_t      r12;
-  regarm_t      lr_thd;
-  regarm_t      pc;
-  regarm_t      xpsr;
+  uint8_t       _next;
+  uint8_t       r31;
+  uint8_t       r30;
+  uint8_t       r27;
+  uint8_t       r26;
+  uint8_t       r25;
+  uint8_t       r24;
+  uint8_t       r23;
+  uint8_t       r22;
+  uint8_t       r21;
+  uint8_t       r20;
+  uint8_t       r19;
+  uint8_t       r18;
+  uint8_t       sr;
+  uint8_t       r1;
+  uint8_t       r0;
+  uint16_t      pc;
 };
 
 /**
  * @brief   System saved context.
  * @details This structure represents the inner stack frame during a context
  *          switching.
+ * @note    The field @p _next is not part of the context, it represents the
+ *          offset of the structure relative to the stack pointer.
  */
 struct port_intctx {
-  regarm_t      r8;
-  regarm_t      r9;
-  regarm_t      r10;
-  regarm_t      r11;
-  regarm_t      r4;
-  regarm_t      r5;
-  regarm_t      r6;
-  regarm_t      r7;
-  regarm_t      lr;
+  uint8_t       _next;
+  uint8_t       r29;
+  uint8_t       r28;
+  uint8_t       r17;
+  uint8_t       r16;
+  uint8_t       r15;
+  uint8_t       r14;
+  uint8_t       r13;
+  uint8_t       r12;
+  uint8_t       r11;
+  uint8_t       r10;
+  uint8_t       r9;
+  uint8_t       r8;
+  uint8_t       r7;
+  uint8_t       r6;
+  uint8_t       r5;
+  uint8_t       r4;
+  uint8_t       r3;
+  uint8_t       r2;
+  uint8_t       pcl;
+  uint8_t       pch;
 };
 
 /*===========================================================================*/
@@ -190,11 +129,14 @@ struct port_intctx {
  *          by an @p intctx structure.
  */
 #define SETUP_CONTEXT(workspace, wsize, pf, arg) {                          \
-  tp->ctxp = (struct port_intctx *)((uint8_t *)workspace + (size_t)wsize -  \
-                                    sizeof(struct port_intctx));            \
-  tp->ctxp->r4 = (void *)(pf);                                              \
-  tp->ctxp->r5 = (void *)(arg);                                             \
-  tp->ctxp->lr = (void *)(_port_thread_start);                              \
+  tp->p_ctx.sp = (struct port_intctx *)((uint8_t *)workspace + wsize  -     \
+                                        sizeof(struct port_intctx));        \
+  tp->p_ctx.sp->r2  = (uint8_t)pf;                                          \
+  tp->p_ctx.sp->r3  = (uint8_t)((unsigned)pf >> 8);                         \
+  tp->p_ctx.sp->r4  = (uint8_t)arg;                                         \
+  tp->p_ctx.sp->r5  = (uint8_t)((unsigned)arg >> 8);                        \
+  tp->p_ctx.sp->pcl = (uint8_t)((unsigned)_port_thread_start >> 8);         \
+  tp->p_ctx.sp->pch = (uint8_t)_port_thread_start;                          \
 }
 
 /**
@@ -205,8 +147,8 @@ struct port_intctx {
 /**
  * @brief   Computes the thread working area global size.
  */
-#define THD_WA_SIZE(n) STACK_ALIGN(sizeof(struct port_intctx) +             \
-                                   sizeof(struct port_extctx) +             \
+#define THD_WA_SIZE(n) STACK_ALIGN((sizeof(struct port_intctx) - 1) +       \
+                                   (sizeof(struct port_extctx) - 1) +       \
                                    (n) + (PORT_INT_REQUIRED_STACK))
 
 /**
@@ -228,55 +170,48 @@ struct port_intctx {
  * @details This macro must be inserted at the start of all IRQ handlers
  *          enabled to invoke system APIs.
  */
-#define PORT_IRQ_PROLOGUE()                                                 \
-  regarm_t _saved_lr;                                                       \
-  asm volatile ("mov     %0, lr" : "=r" (_saved_lr) : : "memory")
+#define PORT_IRQ_PROLOGUE() {                                               \
+  asm ("" : : : "r18", "r19", "r20", "r21", "r22", "r23", "r24",            \
+                "r25", "r26", "r27", "r30", "r31");                         \
+}
 
 /**
  * @brief   IRQ epilogue code.
  * @details This macro must be inserted at the end of all IRQ handlers
  *          enabled to invoke system APIs.
  */
-#define PORT_IRQ_EPILOGUE() _port_irq_epilogue(_saved_lr)
+#define PORT_IRQ_EPILOGUE() {                                               \
+  nilSysLockFromIsr();                                                      \
+  nilSchRescheduleS();                                                      \
+  nilSysUnlockFromIsr();                                                    \
+}
 
 /**
  * @brief   IRQ handler function declaration.
  * @note    @p id can be a function name or a vector number depending on the
  *          port implementation.
  */
-#define PORT_IRQ_HANDLER(id) void id(void)
-
-/**
- * @brief   Fast IRQ handler function declaration.
- * @note    @p id can be a function name or a vector number depending on the
- *          port implementation.
- */
-#define PORT_FAST_IRQ_HANDLER(id) void id(void)
+#define PORT_IRQ_HANDLER(id) ISR(id)
 
 /**
  * @brief   Port-related initialization code.
+ * @note    This function is empty in this port.
  */
-#define port_init() {                                                       \
-  SCB_AIRCR = AIRCR_VECTKEY | AIRCR_PRIGROUP(0);                            \
-  nvicSetSystemHandlerPriority(HANDLER_PENDSV,                              \
-    CORTEX_PRIORITY_MASK(CORTEX_PRIORITY_PENDSV));                          \
-  nvicSetSystemHandlerPriority(HANDLER_SYSTICK,                             \
-    CORTEX_PRIORITY_MASK(CORTEX_PRIORITY_SYSTICK));                         \
-}
+#define port_init()
 
 /**
  * @brief   Kernel-lock action.
  * @details Usually this function just disables interrupts but may perform
  *          more actions.
  */
-#define port_lock() asm volatile ("cpsid   i" : : : "memory")
+#define port_lock() asm volatile ("cli" : : : "memory")
 
 /**
  * @brief   Kernel-unlock action.
  * @details Usually this function just enables interrupts but may perform
  *          more actions.
  */
-#define port_unlock() asm volatile ("cpsie   i" : : : "memory")
+#define port_unlock() asm volatile ("sei" : : : "memory")
 
 /**
  * @brief   Kernel-lock action from an interrupt handler.
@@ -285,7 +220,7 @@ struct port_intctx {
  *          in its simplest form it is void.
  * @note    Same as @p port_lock() in this port.
  */
-#define port_lock_from_isr() port_lock()
+#define port_lock_from_isr()
 
 /**
  * @brief   Kernel-unlock action from an interrupt handler.
@@ -294,22 +229,22 @@ struct port_intctx {
  *          simplest form it is void.
  * @note    Same as @p port_lock() in this port.
  */
-#define port_unlock_from_isr() port_unlock()
+#define port_unlock_from_isr()
 
 /**
  * @brief   Disables all the interrupt sources.
  */
-#define port_disable() asm volatile ("cpsid   i" : : : "memory")
+#define port_disable() asm volatile ("cli" : : : "memory")
 
 /**
  * @brief   Disables the interrupt sources below kernel-level priority.
  */
-#define port_suspend() asm volatile ("cpsid   i" : : : "memory")
+#define port_suspend() asm volatile ("cli" : : : "memory")
 
 /**
  * @brief   Enables all the interrupt sources.
  */
-#define port_enable() asm volatile ("cpsie   i" : : : "memory")
+#define port_enable() asm volatile ("sei" : : : "memory")
 
 /**
  * @brief   Enters an architecture-dependent IRQ-waiting mode.
@@ -319,7 +254,7 @@ struct port_intctx {
  *          modes.
  * @note    Implemented as an inlined @p WFI instruction.
  */
-#define port_wait_for_interrupt() asm volatile ("wfi" : : : "memory")
+#define port_wait_for_interrupt() asm volatile ("sleep" : : : "memory")
 
 /**
  * @brief   Performs a context switch between two threads.
@@ -340,12 +275,9 @@ struct port_intctx {
 #ifdef __cplusplus
 extern "C" {
 #endif
-   void _port_irq_epilogue(regarm_t lr);
-   void _port_switch_from_isr(void);
-   void _port_exit_from_isr(void);
-   void _port_switch(Thread *ntp, Thread *otp);
-   void _port_thread_start(void);
-   void port_halt(void);
+  void _port_switch(Thread *ntp, Thread *otp);
+  void _port_thread_start(void);
+  void port_halt(void);
 #ifdef __cplusplus
 }
 #endif

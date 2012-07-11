@@ -186,9 +186,10 @@ void _port_switch(Thread *ntp, Thread *otp) {
 
 /**
  * @brief   Start a thread by invoking its work function.
- * @details If the work function returns @p chThdExit() is automatically
- *          invoked.
  */
+#if !defined(__DOXYGEN__)
+__attribute__((naked))
+#endif
 void _port_thread_start(void) {
 
   nilSysUnlock();
@@ -203,7 +204,7 @@ void _port_thread_start(void) {
  *          to redefine it in your application code.
  */
 #if !defined(__DOXYGEN__)
-__attribute__((weak))
+__attribute__((naked, weak))
 #endif
 void port_halt(void) {
 
