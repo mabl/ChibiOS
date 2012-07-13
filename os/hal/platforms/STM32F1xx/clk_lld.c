@@ -25,52 +25,51 @@
 /*===========================================================================*/
 /* Driver exported variables.                                                */
 /*===========================================================================*/
-
 const ClockProfile clk_prf_default = {
    (STM32_SW_PLL |
-       (9 - 2) << 18 |
+       ((12 - 2) << 18) |
        STM32_HPRE_DIV1 |
        STM32_PPRE1_DIV2 |
        STM32_PPRE2_DIV2 |
        STM32_ADCPRE_DIV4 |
        STM32_PLLSRC_HSE |
        STM32_PLLXTPRE_DIV1 |
-       0 |
+       STM32_USBPRE_DIV1 |
        STM32_MCOSEL_NOCLOCK),
-   18,
+   17,
    TRUE,
    TRUE,
-   72000000,
-   72000000,
-   36000000,
-   36000000,
-   9000000,
-   72000000,
-   72000000,
+   48000000,
+   48000000,
+   24000000,
+   24000000,
+   6000000,
+   48000000,
+   48000000,
    48000000,
 };
 
 const ClockProfile clk_prf_low = {
    (STM32_SW_HSE |
-       (2 - 2) << 18 |
+       ((2 - 2) << 18) |
        STM32_HPRE_DIV1 |
        STM32_PPRE1_DIV1 |
        STM32_PPRE2_DIV1 |
        STM32_ADCPRE_DIV2 |
        STM32_PLLSRC_HSE |
        STM32_PLLXTPRE_DIV1 |
-       0 |
+       STM32_USBPRE_DIV1P5 |
        STM32_MCOSEL_NOCLOCK),
    16,
    FALSE,
    TRUE,
-   8000000,
-   8000000,
-   8000000,
-   8000000,
    4000000,
-   8000000,
-   8000000,
+   4000000,
+   4000000,
+   4000000,
+   2000000,
+   4000000,
+   4000000,
    0,
 };
 
