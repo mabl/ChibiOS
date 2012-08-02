@@ -1,15 +1,33 @@
+/*
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011,2012 Giovanni Di Sirio.
+
+    This file is part of ChibiOS/RT.
+
+    ChibiOS/RT is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 3 of the License, or
+    (at your option) any later version.
+
+    ChibiOS/RT is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.chibios.tools.eclipse.config.wizards;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.ISelection;
@@ -24,6 +42,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Combo;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 import org.osgi.framework.Bundle;
 
 import config_wizard.Activator;
@@ -36,11 +58,15 @@ import config_wizard.Activator;
 
 public class ConfigurationNewWizardPage extends WizardPage {
 
-  private Combo configurationTemplatesCombo;
-  private Text fileText;
-
   private ISelection selection;
   private IContainer container;
+
+  private Document processorsDocument;
+
+  private Combo configurationTemplatesCombo;
+  private Text confProjectFilenameText;
+  private Text confDataFilenameText;
+  private Text confOutputDirectoryText;
 
   /**
    * Constructor for SampleNewWizardPage.
@@ -51,7 +77,7 @@ public class ConfigurationNewWizardPage extends WizardPage {
 
     super("wizardPage");
     setTitle("ChibiOS/RT Configuration Project File");
-    setDescription("This wizard creates ChibiOS/RT configuration project represented by a .chcfg file. Configuration projects allow to generate project resources starting from high level descriptions written in XML.");
+    setDescription("This wizard creates a ChibiOS/RT configuration resource. Configuration resources allow to generate project resources starting from high level descriptions written in XML.");
     this.selection = selection;
   }
 
@@ -59,44 +85,98 @@ public class ConfigurationNewWizardPage extends WizardPage {
    * @see IDialogPage#createControl(Composite)
    */
   public void createControl(Composite parent) {
-
     Composite container = new Composite(parent, SWT.NULL);
     GridLayout layout = new GridLayout();
     container.setLayout(layout);
     layout.numColumns = 2;
     layout.verticalSpacing = 9;
 
-    Label lblConfigurationTemplate = new Label(container, SWT.NULL);
-    lblConfigurationTemplate.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER,
-                                                        false, false, 1, 1));
-    lblConfigurationTemplate.setText("Configuration template:");
+    Label lbl1 = new Label(container, SWT.NULL);
+    lbl1.setText("Configuration template:");
 
-    configurationTemplatesCombo = new Combo(container, SWT.NONE);
+    configurationTemplatesCombo = new Combo(container, SWT.READ_ONLY);
     configurationTemplatesCombo.setLayoutData(new GridData(SWT.FILL,
                                                            SWT.CENTER, true,
                                                            false, 1, 1));
-    populateConfigurationTemplatesCombo(configurationTemplatesCombo);
 
-    Label label = new Label(container, SWT.NULL);
-    label.setText("&File name:");
+    Label lbl2 = new Label(container, SWT.NULL);
+    lbl2.setText("Configuration project filename:");
 
-    fileText = new Text(container, SWT.BORDER | SWT.SINGLE);
-    fileText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-    fileText.addModifyListener(new ModifyListener() {
+    confProjectFilenameText = new Text(container, SWT.BORDER | SWT.SINGLE);
+    confProjectFilenameText.setText("config.chcfg");
+    confProjectFilenameText
+        .setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+    confProjectFilenameText.addModifyListener(new ModifyListener() {
       public void modifyText(ModifyEvent e) {
-        dialogChanged();
+        confProjectFilenameUpdated();
       }
     });
 
+    Label lbl3 = new Label(container, SWT.NONE);
+    lbl3.setText("Configuration data filename:");
+
+    confDataFilenameText = new Text(container, SWT.BORDER);
+    confDataFilenameText.setText("config.chxml");
+    confDataFilenameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
+                                                    false, 1, 1));
+    confDataFilenameText.addModifyListener(new ModifyListener() {
+      public void modifyText(ModifyEvent e) {
+        confDataFilenameUpdated();
+      }
+    });
+
+    Label lbl4 = new Label(container, SWT.NONE);
+    lbl4.setText("Configuration output directory:");
+
+    confOutputDirectoryText = new Text(container, SWT.BORDER);
+    confOutputDirectoryText.setText(".");
+    confOutputDirectoryText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
+                                                       true, false, 1, 1));
+
+    /* Note, it must stay after the creation of the text fields. */
+    configurationTemplatesCombo.addModifyListener(new ModifyListener() {
+      public void modifyText(ModifyEvent e) {
+        Element processor = getSelectedTemplate();
+        String basefilename = processor.getChildText("basefilename");
+        confProjectFilenameText.setText(basefilename.concat(".chcfg"));
+        confDataFilenameText.setText(basefilename.concat(".chxml"));
+      }
+    });
+    confOutputDirectoryText.addModifyListener(new ModifyListener() {
+      public void modifyText(ModifyEvent e) {
+        confOutputDirectoryUpdated();
+      }
+    });
+
+    populateWizardPanel();
     initialize();
-    dialogChanged();
+    confProjectFilenameUpdated();
     setControl(container);
+  }
+
+  public String getContainerName() {
+
+    return container.getFullPath().toString();
+  }
+
+  public String getProjectFileName() {
+
+    return confProjectFilenameText.getText();
+  }
+
+  public String getDataFileName() {
+
+    return confDataFilenameText.getText();
+  }
+
+  public String getOutputDirName() {
+
+    return confOutputDirectoryText.getText();
   }
 
   /**
    * Tests if the current workbench selection is a suitable container to use.
    */
-
   private void initialize() {
 
     if (selection != null && selection.isEmpty() == false
@@ -110,34 +190,60 @@ public class ConfigurationNewWizardPage extends WizardPage {
           container = (IContainer) obj;
         else
           container = ((IResource) obj).getParent();
-        // containerText.setText(container.getFullPath().toString());
       }
     }
-    fileText.setText("config.chcfg");
   }
 
   /**
-   * Ensures that both text fields are set.
+   * Fills the wizard configuration panel from XML data.
+   * 
+   * @param configurationTemplateCombo
+   *          the combo box to be populated
    */
+  private void populateWizardPanel() {
+    String fpath;
 
-  private void dialogChanged() {
-    IResource container = ResourcesPlugin.getWorkspace().getRoot()
-        .findMember(new Path(getContainerName()));
-    String fileName = getFileName();
+    /* Retrieving the resource path of the processors.xml file. */
+    try {
+      Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
+      Path path = new Path("resources/gencfg/processors/processors.xml");
+      fpath = FileLocator.toFileURL(FileLocator.find(bundle, path, null))
+          .getFile();
+    } catch (IOException e) {
+      e.printStackTrace();
+      return;
+    }
 
-    if (getContainerName().length() == 0) {
-      updateStatus("File container must be specified");
+    /* DOM tree creation. */
+    SAXBuilder builder = new SAXBuilder();
+    try {
+      processorsDocument = builder.build(fpath);
+    } catch (JDOMException e) {
+      e.printStackTrace();
+      return;
+    } catch (IOException e) {
+      e.printStackTrace();
       return;
     }
-    if (container == null
-        || (container.getType() & (IResource.PROJECT | IResource.FOLDER)) == 0) {
-      updateStatus("File container must exist");
-      return;
+
+    /*
+     * Parsing the content of the processors.xml file in order to populate the
+     * panel objects.
+     */
+    Element root = processorsDocument.getRootElement();
+    for (Element processor : root.getChildren("processor")) {
+      String s = processor.getChildText("name");
+      configurationTemplatesCombo.add(s);
     }
-    if (!container.isAccessible()) {
-      updateStatus("Project must be writable");
-      return;
-    }
+    configurationTemplatesCombo.select(0);
+  }
+
+  /**
+   * Checks the content of the confProjectFilenameText field.
+   */
+  private void confProjectFilenameUpdated() {
+    String fileName = getProjectFileName();
+
     if (fileName.length() == 0) {
       updateStatus("File name must be specified");
       return;
@@ -150,47 +256,88 @@ public class ConfigurationNewWizardPage extends WizardPage {
     if (dotLoc != -1) {
       String ext = fileName.substring(dotLoc + 1);
       if (ext.equalsIgnoreCase("chcfg") == false) {
-        updateStatus("File extension must be \"chcfg\"");
+        updateStatus("Configuration project filename extension must be \"chcfg\"");
         return;
       }
     }
     updateStatus(null);
   }
 
-  private void updateStatus(String message) {
-    setErrorMessage(message);
-    setPageComplete(message == null);
-  }
+  /**
+   * Checks the content of the confProjectFilenameText field.
+   */
+  private void confDataFilenameUpdated() {
+    String fileName = getDataFileName();
 
-  private void populateConfigurationTemplatesCombo(Combo configurationTemplateCombo) {
-    URL url1, url2;
-
-    Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
-    Path path = new Path("resources/gencfg/processors/processors.properties");
-    url1 = FileLocator.find(bundle, path, null);
-    try {
-      url2 = FileLocator.toFileURL(url1);
-    } catch (IOException e1) {
-      // TODO Auto-generated catch block
-      e1.printStackTrace();
+    if (fileName.length() == 0) {
+      updateStatus("File name must be specified");
       return;
     }
-    String s = url2.getFile();
-    try {
-      FileInputStream fs = new FileInputStream(s);
-    } catch (FileNotFoundException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+    if (fileName.replace('\\', '/').indexOf('/', 1) > 0) {
+      updateStatus("File name must be valid");
+      return;
     }
-    return;
+    int dotLoc = fileName.lastIndexOf('.');
+    if (dotLoc != -1) {
+      String ext = fileName.substring(dotLoc + 1);
+      if (ext.equalsIgnoreCase("chxml") == false) {
+        updateStatus("Configuration project filename extension must be \"chxml\"");
+        return;
+      }
+    }
+    updateStatus(null);
   }
 
-  public String getContainerName() {
+  /**
+   * Checks the content of the confOutputDirectoryText field.
+   */
+  private void confOutputDirectoryUpdated() {
 
-    return container.getFullPath().toString();
+    IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+    IPath outputPath = container.getFullPath().addTrailingSeparator()
+        .append(getOutputDirName());
+    IResource outputContainer = root.findMember(outputPath);
+
+    if (outputContainer == null) {
+      updateStatus("The directory must exists");
+      return;
+    }
+    if (!(outputContainer instanceof IContainer)) {
+      updateStatus("A directory must be specified");
+      return;
+    }
+    updateStatus(null);
   }
 
-  public String getFileName() {
-    return fileText.getText();
+  /**
+   * Returns the XML Element associated to the current selection in the combo
+   * box.
+   * 
+   * @return An Element Object.
+   */
+  private Element getSelectedTemplate() {
+
+    for (Element processor : processorsDocument.getRootElement()
+        .getChildren("processor")) {
+      String name = processor.getChildText("name");
+      String item = configurationTemplatesCombo
+          .getItem(configurationTemplatesCombo.getSelectionIndex());
+      if (name.compareTo(item) == 0) {
+        return processor;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Updates the status text in the Wizard page.
+   * 
+   * @param message
+   *          the message to be shown
+   */
+  private void updateStatus(String message) {
+
+    setErrorMessage(message);
+    setPageComplete(message == null);
   }
 }
