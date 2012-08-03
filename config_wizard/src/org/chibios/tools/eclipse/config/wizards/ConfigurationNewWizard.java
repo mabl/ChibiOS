@@ -140,6 +140,19 @@ public class ConfigurationNewWizard extends Wizard implements INewWizard {
    * We will initialize file contents with a sample text.
    */
   private InputStream openContentStream() {
+    /*
+# Automatically generated configuration project file.
+
+# Templates path in the configuration plugin resources, do not modify.
+source=resources/gencfg/processors/boards/stm32f4xx/templates
+
+# XML configuration data file path relative to this configuration file.
+xmlfile=config.chxml
+
+# Output directory path relative to directory containing this configuration
+# file.
+output=.
+     */
     String contents = "This is the initial file contents for *.chcfg file that should be word-sorted in the Preview page of the multi-page editor";
     return new ByteArrayInputStream(contents.getBytes());
   }

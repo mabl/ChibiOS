@@ -21,21 +21,29 @@
 package org.chibios.tools.eclipse.config.handlers;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Properties;
 
+import org.chibios.tools.eclipse.config.utils.TemplateEngine;
+import org.chibios.tools.eclipse.config.utils.TemplateException;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.ui.ISelectionService;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.osgi.framework.Bundle;
+
+import config_wizard.Activator;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
@@ -60,14 +68,76 @@ public class GenerateFiles extends AbstractHandler {
         .getActiveWorkbenchWindowChecked(event);
     ISelection selection = window.getSelectionService().getSelection();
     if (selection instanceof IStructuredSelection) {
-      IStructuredSelection sselection = (IStructuredSelection)selection;
-      IFile file = (IFile)sselection.getFirstElement();
+      /* Retrieves the full path of the configuration file. */
+      IStructuredSelection sselection = (IStructuredSelection) selection;
+      IFile file = (IFile) sselection.getFirstElement();
+      IPath cfgfilepath = ResourcesPlugin.getWorkspace().getRoot()
+          .getLocation().addTrailingSeparator().append(file.getFullPath());
+      IPath basepath = cfgfilepath.removeLastSegments(1);
 
-      IPath rootpath = ResourcesPlugin.getWorkspace().getRoot().getFullPath();
-      IPath filepath = rootpath.addTrailingSeparator().append(file.getFullPath());
+      /* Reads the configuration file into a Properties object. */
+      Properties cfgfile = new Properties();
+      try {
+        cfgfile.load(new FileReader(cfgfilepath.toFile()));
+      } catch (IOException e) {
+        MessageDialog.openInformation(window.getShell(), "I/O Error",
+                                      e.getMessage());
+        return null;
+      }
 
-      MessageDialog.openInformation(window.getShell(),
-          "ChibiOS-RT:", filepath.toString());
+      /* Retrieves source property. */
+      String source = cfgfile.getProperty("source");
+      if (source == null) {
+        MessageDialog
+            .openInformation(window.getShell(), "Properties Error",
+                             "Property \"source\" not found in configuration file.");
+        return null;
+      }
+
+      /* Retrieves xmlfile property. */
+      String xmlfile = cfgfile.getProperty("xmlfile");
+      if (xmlfile == null) {
+        MessageDialog
+            .openInformation(window.getShell(), "Properties Error",
+                             "Property \"xmlfile\" not found in configuration file.");
+        return null;
+      }
+
+      /* Retrieves output property. */
+      String output = cfgfile.getProperty("output");
+      if (output == null) {
+        MessageDialog
+            .openInformation(window.getShell(), "Properties Error",
+                             "Property \"output\" not found in configuration file.");
+        return null;
+      }
+
+      /* Calculating derived paths. */
+      IPath sourcepath = new Path(source);
+      IPath libpath = new Path("resources/gencfg/lib");
+      try {
+        Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
+        sourcepath = new Path(FileLocator
+            .toFileURL(FileLocator.find(bundle, sourcepath, null)).getFile());
+        libpath = new Path(FileLocator.toFileURL(FileLocator
+                                                     .find(bundle, libpath,
+                                                           null)).getFile());
+      } catch (IOException e) {
+        MessageDialog.openInformation(window.getShell(), "Path Error",
+                                      e.getMessage());
+        return null;
+      }
+
+      /* Templates execution.*/
+      try {
+        TemplateEngine.process(basepath.addTrailingSeparator().append(xmlfile).toFile(),
+                               libpath.toFile(), sourcepath.toFile(),
+                               basepath.toFile(), new File(output));
+      } catch (TemplateException e) {
+        MessageDialog.openInformation(window.getShell(), "Processing Error",
+                                      e.getMessage());
+        return null;
+      }
     }
     return null;
   }
