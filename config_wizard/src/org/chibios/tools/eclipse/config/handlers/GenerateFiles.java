@@ -31,7 +31,6 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -64,15 +63,17 @@ public class GenerateFiles extends AbstractHandler {
    * from the application context.
    */
   public Object execute(ExecutionEvent event) throws ExecutionException {
+
     IWorkbenchWindow window = HandlerUtil
         .getActiveWorkbenchWindowChecked(event);
     ISelection selection = window.getSelectionService().getSelection();
     if (selection instanceof IStructuredSelection) {
+
       /* Retrieves the full path of the configuration file. */
-      IStructuredSelection sselection = (IStructuredSelection) selection;
-      IFile file = (IFile) sselection.getFirstElement();
-      IPath cfgfilepath = ResourcesPlugin.getWorkspace().getRoot()
-          .getLocation().addTrailingSeparator().append(file.getFullPath());
+      IPath cfgfilepath = ((IFile) ((IStructuredSelection) selection)
+          .getFirstElement()).getLocation();
+      
+      /* Determines the base path as the parent of the configuration file.*/
       IPath basepath = cfgfilepath.removeLastSegments(1);
 
       /* Reads the configuration file into a Properties object. */
@@ -81,34 +82,31 @@ public class GenerateFiles extends AbstractHandler {
         cfgfile.load(new FileReader(cfgfilepath.toFile()));
       } catch (IOException e) {
         MessageDialog.openInformation(window.getShell(), "I/O Error",
-                                      e.getMessage());
+            e.getMessage());
         return null;
       }
 
       /* Retrieves source property. */
       String source = cfgfile.getProperty("source");
       if (source == null) {
-        MessageDialog
-            .openInformation(window.getShell(), "Properties Error",
-                             "Property \"source\" not found in configuration file.");
+        MessageDialog.openInformation(window.getShell(), "Properties Error",
+            "Property \"source\" not found in configuration file.");
         return null;
       }
 
       /* Retrieves xmlfile property. */
       String xmlfile = cfgfile.getProperty("xmlfile");
       if (xmlfile == null) {
-        MessageDialog
-            .openInformation(window.getShell(), "Properties Error",
-                             "Property \"xmlfile\" not found in configuration file.");
+        MessageDialog.openInformation(window.getShell(), "Properties Error",
+            "Property \"xmlfile\" not found in configuration file.");
         return null;
       }
 
       /* Retrieves output property. */
       String output = cfgfile.getProperty("output");
       if (output == null) {
-        MessageDialog
-            .openInformation(window.getShell(), "Properties Error",
-                             "Property \"output\" not found in configuration file.");
+        MessageDialog.openInformation(window.getShell(), "Properties Error",
+            "Property \"output\" not found in configuration file.");
         return null;
       }
 
@@ -117,25 +115,24 @@ public class GenerateFiles extends AbstractHandler {
       IPath libpath = new Path("resources/gencfg/lib");
       try {
         Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
-        sourcepath = new Path(FileLocator
-            .toFileURL(FileLocator.find(bundle, sourcepath, null)).getFile());
-        libpath = new Path(FileLocator.toFileURL(FileLocator
-                                                     .find(bundle, libpath,
-                                                           null)).getFile());
+        sourcepath = new Path(FileLocator.toFileURL(
+            FileLocator.find(bundle, sourcepath, null)).getFile());
+        libpath = new Path(FileLocator.toFileURL(
+            FileLocator.find(bundle, libpath, null)).getFile());
       } catch (IOException e) {
         MessageDialog.openInformation(window.getShell(), "Path Error",
-                                      e.getMessage());
+            e.getMessage());
         return null;
       }
 
-      /* Templates execution.*/
+      /* Templates execution. */
       try {
-        TemplateEngine.process(basepath.addTrailingSeparator().append(xmlfile).toFile(),
-                               libpath.toFile(), sourcepath.toFile(),
-                               basepath.toFile(), new File(output));
+        TemplateEngine.process(basepath.addTrailingSeparator().append(xmlfile)
+            .toFile(), libpath.toFile(), sourcepath.toFile(),
+            basepath.toFile(), new File(output));
       } catch (TemplateException e) {
         MessageDialog.openInformation(window.getShell(), "Processing Error",
-                                      e.getMessage());
+            e.getMessage());
         return null;
       }
     }
