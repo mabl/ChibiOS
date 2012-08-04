@@ -16,7 +16,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package org.chibios.tools.eclipse.config.wizards;
 
@@ -49,6 +49,12 @@ public class ConfigurationNewWizard extends Wizard implements INewWizard {
   private ConfigurationNewWizardPage page;
   private ISelection selection;
 
+  private String containerName;
+  private String projectFileName;
+  private String dataFileName;
+  private String templatesPath;
+  private String outputDirName;
+
   /**
    * Constructor for ConfigurationNewWizard.
    */
@@ -70,13 +76,18 @@ public class ConfigurationNewWizard extends Wizard implements INewWizard {
    * will create an operation and run it using wizard as execution context.
    */
   public boolean performFinish() {
-    final String containerName = page.getContainerName();
-    final String fileName = page.getProjectFileName();
+
+    containerName = page.getContainerName();
+    projectFileName = page.getProjectFileName();
+    dataFileName = page.getDataFileName();
+    templatesPath = page.getTemplatesPath();
+    outputDirName = page.getOutputDirName();
+
     IRunnableWithProgress op = new IRunnableWithProgress() {
       public void run(IProgressMonitor monitor)
           throws InvocationTargetException {
         try {
-          doFinish(containerName, fileName, monitor);
+          doFinish(monitor);
         } catch (CoreException e) {
           throw new InvocationTargetException(e);
         } finally {
@@ -101,23 +112,26 @@ public class ConfigurationNewWizard extends Wizard implements INewWizard {
    * or just replace its contents, and open the editor on the newly created
    * file.
    */
-  private void doFinish(String containerName, String fileName,
-      IProgressMonitor monitor) throws CoreException {
-    // create a sample file
-    monitor.beginTask("Creating " + fileName, 2);
+  private void doFinish(IProgressMonitor monitor) throws CoreException {
+
     IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
     IResource resource = root.findMember(new Path(containerName));
     if (!resource.exists() || !(resource instanceof IContainer)) {
       throwCoreException("Container \"" + containerName + "\" does not exist.");
     }
-    IContainer container = (IContainer) resource;
-    final IFile file = container.getFile(new Path(fileName));
+    IContainer container = (IContainer)resource;
+
+    /* Creates the project file.*/
+    monitor.beginTask("Creating " + projectFileName, 2);
+    final IFile projectFile = container.getFile(new Path(projectFileName));
     try {
-      InputStream stream = openContentStream();
-      if (file.exists()) {
-        file.setContents(stream, true, true, monitor);
+      InputStream stream = openProjectContentStream(templatesPath,
+                                                    dataFileName,
+                                                    outputDirName);
+      if (projectFile.exists()) {
+        projectFile.setContents(stream, true, true, monitor);
       } else {
-        file.create(stream, true, monitor);
+        projectFile.create(stream, true, monitor);
       }
       stream.close();
     } catch (IOException e) {
@@ -129,7 +143,7 @@ public class ConfigurationNewWizard extends Wizard implements INewWizard {
         IWorkbenchPage page = PlatformUI.getWorkbench()
             .getActiveWorkbenchWindow().getActivePage();
         try {
-          IDE.openEditor(page, file, true);
+          IDE.openEditor(page, projectFile, true);
         } catch (PartInitException e) {
         }
       }
@@ -140,27 +154,25 @@ public class ConfigurationNewWizard extends Wizard implements INewWizard {
   /**
    * We will initialize file contents with a sample text.
    */
-  private InputStream openContentStream() {
-    /*
-# Automatically generated configuration project file.
+  private InputStream openProjectContentStream(String templatesPath,
+                                               String dataFileName,
+                                               String outputDirName) {
 
-# Templates path in the configuration plugin resources, do not modify.
-source=resources/gencfg/processors/boards/stm32f4xx/templates
-
-# XML configuration data file path relative to this configuration file.
-xmlfile=config.chxml
-
-# Output directory path relative to directory containing this configuration
-# file.
-output=.
-     */
-    String contents = "This is the initial file contents for *.chcfg file that should be word-sorted in the Preview page of the multi-page editor";
+    String contents = "# Automatically generated configuration project file.\n\n" +
+                      "# Templates path in the configuration plugin resources, do not modify.\n" +
+                      "source=" + templatesPath + "\n\n" +
+                      "# XML configuration data file path relative to this configuration file.\n" +
+                      "xmlfile=" + dataFileName + "\n\n" +
+                      "# Output directory path relative to directory containing this configuration\n" +
+                      "# file.\n" +
+                      "output=" + outputDirName + "\n";
     return new ByteArrayInputStream(contents.getBytes());
   }
 
   private void throwCoreException(String message) throws CoreException {
     IStatus status = new Status(IStatus.ERROR,
-        "org.chibios.tools.eclipse.config", IStatus.OK, message, null);
+                                "org.chibios.tools.eclipse.config", IStatus.OK,
+                                message, null);
     throw new CoreException(status);
   }
 

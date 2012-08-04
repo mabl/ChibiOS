@@ -64,6 +64,9 @@ public class ConfigurationNewWizardPage extends WizardPage {
   private IContainer container;
 
   private Document processorsDocument;
+  private String currentName;
+  private String currentTemplatesPath;
+  private String currentDefaultDataFile;
 
   private Combo configurationTemplatesCombo;
   private Text confProjectFilenameText;
@@ -176,6 +179,16 @@ public class ConfigurationNewWizardPage extends WizardPage {
     return confOutputDirectoryText.getText();
   }
 
+  public String getTemplatesPath() {
+
+    return currentTemplatesPath;
+  }
+
+  public String getDefaultDataFile() {
+
+    return currentDefaultDataFile;
+  }
+
   /**
    * Tests if the current workbench selection is a suitable container to use.
    */
@@ -234,8 +247,10 @@ public class ConfigurationNewWizardPage extends WizardPage {
      */
     Element root = processorsDocument.getRootElement();
     for (Element processor : root.getChildren("processor")) {
-      String s = processor.getChildText("name");
-      configurationTemplatesCombo.add(s);
+      currentName = processor.getChildText("name");
+      currentTemplatesPath = processor.getChildText("path");
+      currentDefaultDataFile = processor.getChildText("default");
+      configurationTemplatesCombo.add(currentName);
     }
     configurationTemplatesCombo.select(0);
   }
