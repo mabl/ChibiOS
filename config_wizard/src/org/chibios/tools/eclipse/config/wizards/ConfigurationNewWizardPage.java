@@ -158,7 +158,6 @@ public class ConfigurationNewWizardPage extends WizardPage {
 
     populateWizardPanel();
     initialize();
-    confProjectFilenameUpdated();
     setControl(container);
   }
 
@@ -214,7 +213,6 @@ public class ConfigurationNewWizardPage extends WizardPage {
       MessageDialog.openError(getShell(),
                               "Error", "Container for the resource not selected.");
       container.setEnabled(false);
-      dispose();
     }
   }
 
