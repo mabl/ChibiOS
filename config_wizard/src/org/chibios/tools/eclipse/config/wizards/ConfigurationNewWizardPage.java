@@ -64,7 +64,6 @@ public class ConfigurationNewWizardPage extends WizardPage {
   private IContainer container;
 
   private Document processorsDocument;
-  private String currentName;
   private String currentTemplatesPath;
   private String currentDefaultDataFile;
 
@@ -145,6 +144,8 @@ public class ConfigurationNewWizardPage extends WizardPage {
         String basefilename = processor.getChildText("basefilename");
         confProjectFilenameText.setText(basefilename.concat(".chcfg"));
         confDataFilenameText.setText(basefilename.concat(".chxml"));
+        currentTemplatesPath = processor.getChildText("path");
+        currentDefaultDataFile = processor.getChildText("default");
       }
     });
     confOutputDirectoryText.addModifyListener(new ModifyListener() {
@@ -221,7 +222,7 @@ public class ConfigurationNewWizardPage extends WizardPage {
     /* Retrieving the resource path of the processors.xml file. */
     try {
       Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
-      Path path = new Path("resources/gencfg/processors/processors.xml");
+      IPath path = new Path("resources/gencfg/processors/processors.xml");
       fpath = FileLocator.toFileURL(FileLocator.find(bundle, path, null))
           .getFile();
     } catch (IOException e) {
@@ -247,10 +248,8 @@ public class ConfigurationNewWizardPage extends WizardPage {
      */
     Element root = processorsDocument.getRootElement();
     for (Element processor : root.getChildren("processor")) {
-      currentName = processor.getChildText("name");
-      currentTemplatesPath = processor.getChildText("path");
-      currentDefaultDataFile = processor.getChildText("default");
-      configurationTemplatesCombo.add(currentName);
+      String name = processor.getChildText("name");
+      configurationTemplatesCombo.add(name);
     }
     configurationTemplatesCombo.select(0);
   }

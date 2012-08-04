@@ -35,6 +35,9 @@ import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.*;
 import org.eclipse.ui.ide.IDE;
+import org.osgi.framework.Bundle;
+
+import config_wizard.Activator;
 
 /**
  * This is a sample new wizard. Its role is to create a new file resource in the
@@ -54,6 +57,7 @@ public class ConfigurationNewWizard extends Wizard implements INewWizard {
   private String dataFileName;
   private String templatesPath;
   private String outputDirName;
+  private String defaultDataFile;
 
   /**
    * Constructor for ConfigurationNewWizard.
@@ -82,6 +86,7 @@ public class ConfigurationNewWizard extends Wizard implements INewWizard {
     dataFileName = page.getDataFileName();
     templatesPath = page.getTemplatesPath();
     outputDirName = page.getOutputDirName();
+    defaultDataFile = page.getDefaultDataFile();
 
     IRunnableWithProgress op = new IRunnableWithProgress() {
       public void run(IProgressMonitor monitor)
@@ -120,9 +125,9 @@ public class ConfigurationNewWizard extends Wizard implements INewWizard {
       throwCoreException("Container \"" + containerName + "\" does not exist.");
     }
     IContainer container = (IContainer)resource;
+    monitor.beginTask("Creating " + projectFileName, 3);
 
-    /* Creates the project file.*/
-    monitor.beginTask("Creating " + projectFileName, 2);
+    /* Step #1, creates the project file.*/
     final IFile projectFile = container.getFile(new Path(projectFileName));
     try {
       InputStream stream = openProjectContentStream(templatesPath,
@@ -137,7 +142,27 @@ public class ConfigurationNewWizard extends Wizard implements INewWizard {
     } catch (IOException e) {
     }
     monitor.worked(1);
-    monitor.setTaskName("Opening file for editing...");
+    
+    /* Step #2, creates the XML data file.*/
+    final IFile dataFile = container.getFile(new Path(dataFileName));
+    Bundle bundle = Platform.getBundle(Activator.PLUGIN_ID);
+    IPath path = new Path(defaultDataFile);
+    String s;
+    try {
+      s = FileLocator.toFileURL(FileLocator.find(bundle, path, null)).getFile();
+      InputStream stream = new FileInputStream(s);
+      if (dataFile.exists()) {
+        dataFile.setContents(stream, true, true, monitor);
+      } else {
+        dataFile.create(stream, true, monitor);
+      }
+      stream.close();
+    } catch (IOException e) {
+    }
+    monitor.worked(1);
+
+    /* Step #2, opens the XML data file.*/
+    monitor.setTaskName("Opening XML data file for editing...");
     getShell().getDisplay().asyncExec(new Runnable() {
       public void run() {
         IWorkbenchPage page = PlatformUI.getWorkbench()
