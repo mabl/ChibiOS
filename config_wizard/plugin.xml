@@ -17,6 +17,14 @@
       </wizard>
    </extension>
 
+   <!-- Registers the file extension .chxml as an XML type. -->
+   <extension point="org.eclipse.core.contenttype.contentTypes">
+      <file-association
+            content-type="org.eclipse.core.runtime.xml"
+            file-extensions="chxml">
+      </file-association>
+   </extension>
+
    <!-- Commands. -->
    <extension
          point="org.eclipse.ui.commands">
