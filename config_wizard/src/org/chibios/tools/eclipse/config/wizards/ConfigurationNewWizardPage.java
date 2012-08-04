@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
@@ -61,12 +62,13 @@ import config_wizard.Activator;
 public class ConfigurationNewWizardPage extends WizardPage {
 
   private ISelection selection;
-  private IContainer container;
+  private IContainer resourceContainer;
 
   private Document processorsDocument;
   private String currentTemplatesPath;
   private String currentDefaultDataFile;
 
+  private Composite container;
   private Combo configurationTemplatesCombo;
   private Text confProjectFilenameText;
   private Text confDataFilenameText;
@@ -89,7 +91,7 @@ public class ConfigurationNewWizardPage extends WizardPage {
    * @see IDialogPage#createControl(Composite)
    */
   public void createControl(Composite parent) {
-    Composite container = new Composite(parent, SWT.NULL);
+    container = new Composite(parent, SWT.NULL);
     GridLayout layout = new GridLayout();
     container.setLayout(layout);
     layout.numColumns = 2;
@@ -162,7 +164,7 @@ public class ConfigurationNewWizardPage extends WizardPage {
 
   public String getContainerName() {
 
-    return container.getFullPath().toString();
+    return resourceContainer.getFullPath().toString();
   }
 
   public String getProjectFileName() {
@@ -203,10 +205,16 @@ public class ConfigurationNewWizardPage extends WizardPage {
       Object obj = ssel.getFirstElement();
       if (obj instanceof IResource) {
         if (obj instanceof IContainer)
-          container = (IContainer) obj;
+          resourceContainer = (IContainer) obj;
         else
-          container = ((IResource) obj).getParent();
+          resourceContainer = ((IResource) obj).getParent();
       }
+    }
+    else {
+      MessageDialog.openError(getShell(),
+                              "Error", "Container for the resource not selected.");
+      container.setEnabled(false);
+      dispose();
     }
   }
 
@@ -310,7 +318,7 @@ public class ConfigurationNewWizardPage extends WizardPage {
   private void confOutputDirectoryUpdated() {
 
     IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-    IPath outputPath = container.getFullPath().addTrailingSeparator()
+    IPath outputPath = resourceContainer.getFullPath().addTrailingSeparator()
         .append(getOutputDirName());
     IResource outputContainer = root.findMember(outputPath);
 
