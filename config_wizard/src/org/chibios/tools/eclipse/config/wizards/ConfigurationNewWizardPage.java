@@ -191,6 +191,11 @@ public class ConfigurationNewWizardPage extends WizardPage {
     return currentDefaultDataFile;
   }
 
+  public boolean canFinish() {
+
+    return container.getEnabled();
+  }
+
   /**
    * Tests if the current workbench selection is a suitable container to use.
    */
@@ -213,6 +218,7 @@ public class ConfigurationNewWizardPage extends WizardPage {
       MessageDialog.openError(getShell(),
                               "Error", "Container for the resource not selected.");
       container.setEnabled(false);
+      updateStatus("Container for the resource not selected.");
     }
   }
 

@@ -76,6 +76,14 @@ public class ConfigurationNewWizard extends Wizard implements INewWizard {
   }
 
   /**
+   * Checks if the wizard page allows to finish.
+   */
+  public boolean canFinish() {
+
+    return page.canFinish();
+  }
+
+  /**
    * This method is called when 'Finish' button is pressed in the wizard. We
    * will create an operation and run it using wizard as execution context.
    */
