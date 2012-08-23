@@ -71,6 +71,7 @@
 *****************************************************************************
 
 *** 2.2.10 ***
+- FIX: Fixed Problem in FatFs demos related to LFN (bug 3560980).
 - FIX: Fixed issue with DMA channel init in STM32 ADC and SPI drivers (bug
   3535938).
 - FIX: Fixed wrong ADC callback buffer pointer in ADC driver (bug 3534767).
