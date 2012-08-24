@@ -71,6 +71,8 @@
 *****************************************************************************
 
 *** 2.2.10 ***
+- FIX: Fixed packed structures macros not functional in IAR and RVCT port
+  (bug 3561279).
 - FIX: Fixed Problem in FatFs demos related to LFN (bug 3560980).
 - FIX: Fixed issue with DMA channel init in STM32 ADC and SPI drivers (bug
   3535938).
