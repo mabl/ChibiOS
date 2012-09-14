@@ -1,0 +1,94 @@
+Available 4 hours
+12:00-13:00, 14:00-17:00
+
+Marked with [*] means that a slide is required.
+
+Program:
+
+1) 12:00 - People Introduction (15 minutes).
+  a) Introduction about myself (2 minutes).
+  b) Attending people introduction (remaining time).
+  c) Rules: feel free to interrupt me and ask questions.
+
+2) 12:15 - Project Introduction (45 minutes with margin until the pause).
+  a) What does ChibiOS/RT means.
+     - Mini, Micro, nano, pico, femto etc already taken, so
+       "Chibi" (1 minutes).
+  b) ChibiOS/RT brief introduction.
+    - Project history [*] (2 minutes).
+    - Project goals [*] (2 minutes).
+      - More than an RTOS, a complete development environment.
+      - Ease of development, hiding inner details.
+      - Portability across architecture, platforms and compilers.
+      - Efficiency.
+    - Project audience [*] (1 minute).
+    - Features [*].
+      - Kernel (feature matrix) [*] (5 minutes).
+      - HAL (feature matrix) [*] (5 minutes).
+      - Integration with lwIP and FatFs [*] (1 minute).
+      - External contributions like ChibiOS/GFX [*] (1 minute).
+    - Project supported architectures, platforms and boards.
+      - Stressing about the meaning of "supported" (1 minute).
+      - Mention that other architectures/platforms are supported by external
+        developers or community (1 minute).
+    - Project strengths.
+      - Whole OS not just a scheduler [*] (1 minute).
+      - Advantages (static, no fixed structures, no errors, elegant, portable)
+        [*] (1 minute).
+      - Performance and footprint with examples (1 minute).
+      - Hardware and compiler abstraction (1 minute).
+      - Growing and active community (1 minute).
+    - Future plans [*] (2 minutes).
+  c) Licensing.
+    - Project branches and licensing (stable-unstable) (2 minutes).
+    - The three licensing options [*] (3 minutes).
+  d) Questions [*] (remaining time).
+
+3) 13:00 - Pause.
+
+4) 14:00 - Technical description.
+  a) Architecture [*].
+    - General Architecture [*] (5 minutes).
+    - Kernel Architecture [*] (5 minutes).
+      - Static core, dynamic extensions.
+      - Optional subsystems.
+    - HAL Architecture [*] (5 minutes).
+      - Device driver classes (normal, platform, complex, device) [*].
+      - List of device drivers and small description for the less obvious
+        ones [*].
+    - Board files [*] (5 minutes).
+      - Mention configuration tool.
+  b) Application structure [*].
+    - Makefile system [*] (2 minutes).
+    - Configuration file (2 minutes).
+    - Simple main.c template (2 minutes).
+  c) Questions [*] (remaining time).
+
+5) 14:45 Hardware setup for the demo, troubleshooting [*] (15 minutes).
+  a) Assessing how many of the attendees installed the prerequisite software.
+  b) Last minute installations using USB dongles (better have several).
+  c) Distribution of Discovery boards to those not having one.
+  d) Test connection of the GDB server to the board [*].
+
+6) 15:00 Demo.
+  a) Introduction.
+    - Describe discovery board [*] (2 minutes).
+    - Demo functionality [*] (2 minutes).
+    - ST32F407 peripherals used by the demo and device drivers
+      involved [*] (2 minutes).
+    - Demo source code description and comments, viewing it in Eclipse
+     (5 minutes).
+  b) Running the demo in Eclipse, attendees can replicate the process
+     locally (estimated 30 minutes).
+    - Clean and build (2 minutes).
+    - Running the GDB server with brief explanation (5 minutes).
+    - Launching the debug session (2 minutes).
+    - Single stepping and breakpoints (2 minutes).
+    - Letting it run.
+    - Looking at the effect on LEDs.
+    - Connecting USB cable and playing with the shell.
+    - Stopping it and examining the OS status with the ChibiOS plugin.
+    - Stopping debug session and returning to the C/C++ perspective.
+  c) Questions about the demo or the toolchain (remaining time).
+
+7) 16:00 - Various and Questions (remaining time).
