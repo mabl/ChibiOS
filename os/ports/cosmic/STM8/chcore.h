@@ -87,6 +87,7 @@ typedef void (*stm8func_t)(void);
  */
 struct extctx {
   uint8_t       _next;
+  uint8_t       c_lreg[4];
   uint8_t       c_y[3];
   uint8_t       c_x[3];
   uint8_t       cc;
@@ -209,7 +210,7 @@ struct stm8_startctx {
  * @note    @p id can be a function name or a vector number depending on the
  *          port implementation.
  */
-#define PORT_IRQ_HANDLER(id) @far @interrupt void vector##id(void)
+#define PORT_IRQ_HANDLER(id) @far @interrupt @svlreg void vector##id(void)
 
 /**
  * @brief   Port-related initialization code.
