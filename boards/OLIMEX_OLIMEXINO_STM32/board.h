@@ -22,7 +22,7 @@
 #define _BOARD_H_
 
 /*
- * Setup for the LeafLabs Maple Mini.
+ * Setup for the Olimex Olimexino STM32.
  */
 
 /*
