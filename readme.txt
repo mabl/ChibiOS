@@ -71,6 +71,7 @@
 *****************************************************************************
 
 *** 2.2.10 ***
+- FIX: Fixed bug in abstract file interface (bug 3579660).
 - FIX: Fixed STM8L, cosmic compiler: c_lreg not saved (bug 3566342).
 - FIX: Fixed packed structures macros not functional in IAR and RVCT port
   (bug 3561279).
