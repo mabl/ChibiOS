@@ -71,6 +71,7 @@
 *****************************************************************************
 
 *** 2.2.10 ***
+- FIX: Fixed typo in chOQGetEmptyI() macro (bug 3595910).
 - FIX: Fixed error in palWritePad() macro (bug 3586230).
 - FIX: Fixed double chSysInit() call in MSP430F1611 demo (bug 3581304).
 - FIX: Fixed bug in abstract file interface (bug 3579660).
