@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+<!-- All SPC5 Component extension shall have the namespace "com.st.tools.spc5"-->
+   <extension
+         id="org.chibios.spc5.components.board.spc563mxx"
+         name="ChibiOS-RT SPC563Mxx Board Component"
+         point="com.st.tools.spc5.extension">
+      <component
+            hidden="true"
+            isPlatform="false">
+            <description>
+                ChibiOS/RT SPC563Mxx board description files.
+            </description>
+            <groups
+                  name="Board Settings">
+               <description>
+                  Board options and settings.
+               </description>
+               <group
+                     name="Identification">
+                  <description>
+                     Board info related settings.
+                  </description>
+                  <property
+                        brief="An identifier for the board, a macro is generated\nprefixed with &quot;BOARD_&quot;."
+                        default="GENERIC_SPC563MXX"
+                        editable="true"
+                        name="Board Identifier"
+                        regex="[a-zA-Z_][a-zA-Z0-9_]*"
+                        required="true"
+                        type="string">
+                  </property>
+                  <property
+                        brief="A readable name for the board, must not contain double quotes."
+                        default="Generic SPC563Mxx"
+                        editable="true"
+                        name="Board Name"
+                        required="true"
+                        type="string">
+                  </property>
+               </group>
+               <group
+                     name="Clock Settings">
+                  <description>
+                     Clock related settings.
+                  </description>
+                  <property
+                        brief="XOSC crystal frequency in Hz."
+                        default="8000000"
+                        editable="true"
+                        max="40000000"
+                        min="4000000"
+                        name="XOSC Clock"
+                        required="true"
+                        type="unsigned">
+                  </property>
+               </group>
+               <group
+                     name="I/O Settings">
+                  <description>
+                     I/O pins related settings.
+                  </description>
+                  <property
+                        brief="Pin modes to be programmed when the HAL is initialized."
+                        editable="true"
+                        length="0"
+                        name="Pins List"
+                        required="true"
+                        type="list"
+                        value="Pin Identification|Port,Pin Identification|Bit,Pin Identification|Identifier,Settings|Pin Mode,Settings|Latched State">
+                     <groups
+                           name="Pin Settings">
+                        <description>
+                           Pin initialization data and identification. Note, setting of alternate function requires knowledge of the HW details, please consult the table 7 in section 3 &quot;Pin Muxing&quot; of the Reference Manual.
+                        </description>
+                        <group
+                              name="Pin Identification">
+                           <description>
+                              Pin identification properties.
+                           </description>
+                           <property
+                                 brief="Pin Identifier, a macro is generated prefixed with\nthe port name."
+                                 default="pin_name"
+                                 editable="true"
+                                 name="Identifier"
+                                 regex="[a-zA-Z_][a-zA-Z0-9_]*"
+                                 required="true"
+                                 type="string">
+                           </property>
+                           <property
+                                 brief="Port where the pin belongs to."
+                                 default="0"
+                                 editable="true"
+                                 name="Port"
+                                 required="true"
+                                 type="enum"
+                                 value="PORT5,PORT6,PORT7,PORT8,PORT9,PORT10,PORT11,PORT12,PORT13,PORT14,PORT15,PORT16,PORT17,PORT18,PORT19,PORT20,PORT21,PORT22,PORT23,PORT24,PORT25">
+                           </property>
+                           <property
+                                 brief="Pin bit number within the specified port, note, pin 0\n is the most significant bit within the port."
+                                 default="0"
+                                 editable="true"
+                                 name="Bit"
+                                 required="true"
+                                 type="enum"
+                                 value="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+                           </property>
+                        </group>
+                        <group
+                              name="Settings">
+                           <description>
+                              Pin state and mode settings.
+                           </description>
+                           <property
+                                 brief="Pin modes such as direction, pull-up/down resistors etc."
+                                 default="1"
+                                 editable="true"
+                                 name="Pin Mode"
+                                 required="true"
+                                 type="enum"
+                                 value="MODE_RESET,MODE_UNCONNECTED,MODE_INPUT,MODE_INPUT_PULLUP,MODE_INPUT_PULLDOWN,MODE_INPUT_ANALOG,MODE_OUTPUT_PUSHPULL,MODE_OUTPUT_OPENDRAIN,MODE_OUTPUT_ALTERNATE(0),MODE_OUTPUT_ALTERNATE(1),MODE_OUTPUT_ALTERNATE(2),MODE_OUTPUT_ALTERNATE(3)">
+                           </property>
+                           <property
+                                 brief="Logic state to be latched into the output register."
+                                 default="0"
+                                 editable="true"
+                                 name="Latched State"
+                                 required="true"
+                                 type="enum"
+                                 value="LOW,HIGH">
+                           </property>
+                        </group>
+                     </groups>
+                  </property>
+               </group>
+               <group
+                     name="Initialization Code">
+                  <description>
+                     Code snippets to be executed at system initialization. Ident the code using two spaces in order to ensure generated code formatting.
+                  </description>
+                  <property
+                        brief="Code to be executed immediately after clock initialization and before C runtime initialization."
+                        editable="true"
+                        name="Early Initialization Code"
+                        required="false"
+                        type="formatted">
+                  </property>
+                  <property
+                        brief="Code to be executed immediately after C runtime initialization and before any defined constructor."
+                        editable="true"
+                        name="Late Initialization Code"
+                        required="false"
+                        type="formatted">
+                  </property>
+                  <property
+                        brief="Code to be executed after the HAL has been initialized, board-related initializations should go here."
+                        editable="true"
+                        name="Board Initialization Code"
+                        required="false"
+                        type="formatted">
+                  </property>
+               </group></groups>
+            <exportedFeatures>
+               <exportedFeature
+                     brief="Board definitions interface."
+                     exclusive="true"
+                     id="org.chibios.spc5.features.board">
+               </exportedFeature>
+            </exportedFeatures>
+      </component>
+   </extension>
+
+</plugin>

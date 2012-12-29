@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ChibiOS-RT SPC5 Branding Plugin
+Bundle-SymbolicName: org.chibios.spc5.branding;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Vendor: chibios.org

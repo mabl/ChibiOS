@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.chibios.spc5.components.feature_1.0.0.qualifier.jar" id="org.chibios.spc5.components.feature" version="1.0.0.qualifier">
+      <category name="ChibiOS/RT"/>
+   </feature>
+   <category-def name="ChibiOS/RT" label="ChibiOS/RT"/>
+</site>

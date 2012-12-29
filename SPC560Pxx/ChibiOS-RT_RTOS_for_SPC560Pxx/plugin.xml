@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="org.chibios.spc5.components.rtos.spc560pxx"
+         name="ChibiOS/RT free embedded RTOS for SPC560Pxx Component"
+         point="com.st.tools.spc5.extension">
+      <component
+            headerName="ch.h,hal.h"
+            initFunction="halInit,chSysInit"
+            isPlatform="false">
+            <description>
+                This is a meta component that depends on all components required to create a ChibiOS/RT environment for the STMicroelectronics SPC560Pxx automotive microcontrollers family.
+            </description>
+            <groups
+                  name="ChibiOS/RT Settings">
+               <description>
+                  This is a meta components with no settings.
+               </description>
+            </groups>
+            <requiredFeatures>
+               <requiredFeature
+                     id="com.st.tools.spc5.features.build.gccenv">
+               </requiredFeature>
+               <requiredFeature
+                     id="com.st.tools.spc5.features.platform.spc560pxx">
+               </requiredFeature>
+            </requiredFeatures>
+            <exportedFeatures>
+               <exportedFeature
+                     brief="Generic ChibiOS/RT environment."
+                     exclusive="false"
+                     id="org.chibios.spc5.components.chibios">
+               </exportedFeature>
+               <exportedFeature
+                     brief="SPC560Pxx ChibiOS/RT environment."
+                     exclusive="false"
+                     id="org.chibios.spc5.components.chibios.spc560pxx">
+               </exportedFeature>
+            </exportedFeatures>
+      </component>
+   </extension>
+
+</plugin>

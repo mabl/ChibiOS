@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+<!-- All SPC5 Component extension shall have the namespace "com.st.tools.spc5"-->
+   <extension
+         id="org.chibios.spc5.components.hal"
+         name="ChibiOS-RT Portable HAL Component"
+         point="com.st.tools.spc5.extension">
+      <component
+            headerName="hal.h"
+            hidden="true"
+            initFunction="halInit"
+            isPlatform="false">
+            <description>
+                ChibiOS/RT portable HAL files.
+            </description>
+            <groups
+                  name="HAL Settings">
+               <description>
+                  Portable HAL options and settings.
+               </description>
+               <group
+                     expanded="false"
+                     name="PAL Driver Settings">
+                  <description>
+                     Settings related to the PAL Driver (Ports Abstraction Layer).
+                  </description>
+                  <property
+                        brief="This options globally enables/disables the PAL Driver"
+                        default="true"
+                        editable="true"
+                        name="Enabled"
+                        required="true"
+                        type="boolean">
+                  </property>
+               </group>
+               <group
+                     expanded="false"
+                     name="Serial Driver Settings">
+                  <description>
+                     Settings related to the Serial Driver.
+                  </description>
+                  <property
+                        brief="This options globally enables/disables the Serial Driver"
+                        default="true"
+                        editable="true"
+                        name="Enabled"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Bit rate for the default driver configuration."
+                        default="38400"
+                        editable="true"
+                        min="300"
+                        name="Default Bit Rate"
+                        required="true"
+                        type="unsigned">
+                  </property>
+                  <property
+                        brief="Size of the TX and RX circular buffers"
+                        default="16"
+                        editable="true"
+                        min="4"
+                        name="Buffers Size"
+                        required="true"
+                        type="unsigned">
+                  </property>
+               </group></groups>
+            <requiredFeatures>
+               <requiredFeature
+                     id="org.chibios.spc5.features.kernel">
+               </requiredFeature>
+               <requiredFeature
+                     id="org.chibios.spc5.features.board">
+               </requiredFeature>
+            </requiredFeatures>
+            <exportedFeatures>
+               <exportedFeature
+                     brief="ChibiOS/RT hardware abstraction layer (HAL) API interface."
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal">
+               </exportedFeature>
+               <exportedFeature
+                     brief="ChibiOS/RT hardware abstraction layer (HAL) configuration interface."
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.configuration">
+               </exportedFeature>
+            </exportedFeatures>
+      </component>
+   </extension>
+
+</plugin>

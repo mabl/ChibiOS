@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+<!-- All SPC5 Component extension shall have the namespace "com.st.tools.spc5"-->
+   <extension
+         id="org.chibios.spc5.components.various.shell"
+         name="ChibiOS/RT Portable Mini Shell Component"
+         point="com.st.tools.spc5.extension">
+      <component
+            headerName="shell.h"
+            hidden="false"
+            initFunction="shellInit"
+            isPlatform="false">
+            <description>
+                ChibiOS/RT portable output formatter, chprintf() function.
+            </description>
+      </component>
+   </extension>
+
+</plugin>
