@@ -4,7 +4,8 @@
       label="ChibiOS/RT SPC5 Components"
       version="1.0.0.qualifier"
       provider-name="www.chibios.org"
-      plugin="org.chibios.spc5.branding">
+      plugin="org.chibios.spc5.branding"
+      exclusive="true">
 
    <description>
       ChibiOS/RT SPC5 Studio components collection.
