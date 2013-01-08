@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<site>
-   <feature url="features/org.chibios.eclipse.tools.feature_1.0.0.qualifier.jar" id="org.chibios.eclipse.tools.feature" version="1.0.0.qualifier">
-      <category name="org.chibios.eclipse.tools.category"/>
-   </feature>
-   <category-def name="org.chibios.eclipse.tools.category" label="Eclipse Tools"/>
-</site>

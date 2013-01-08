@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<site>
-   <feature url="features/org.chibios.spc5.components.feature_1.0.0.qualifier.jar" id="org.chibios.spc5.components.feature" version="1.0.0.qualifier">
-      <category name="org.chibios.spc5.components.category"/>
-   </feature>
-   <category-def name="org.chibios.spc5.components.category" label="SPC5 Components"/>
-</site>
