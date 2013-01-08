@@ -3,15 +3,15 @@
    <description name="ChibiOS/RT Eclipse Update Site" url="http://www.chibios.org/eclipse">
       ChibiOS/RT Eclipse Update Site.
    </description>
-   <feature url="features/org.chibios.spc5.components.feature_1.0.0.201212291139.jar" id="org.chibios.spc5.components.feature" version="1.0.0.201212291139">
-      <category name="org.chibios.eclipse.update"/>
+   <feature url="features/org.chibios.eclipse.tools.feature_1.0.0.201301081322.jar" id="org.chibios.eclipse.tools.feature" version="1.0.0.201301081322">
+      <category name="ChibiOS/RT"/>
    </feature>
-   <feature url="features/org.chibios.eclipse.tools.feature_1.0.0.201212291139.jar" id="org.chibios.eclipse.tools.feature" version="1.0.0.201212291139">
-      <category name="org.chibios.eclipse.update"/>
+   <feature url="features/org.chibios.spc5.components.feature_1.0.0.201301081322.jar" id="org.chibios.spc5.components.feature" version="1.0.0.201301081322">
+      <category name="ChibiOS/RT"/>
    </feature>
-   <category-def name="org.chibios.eclipse.update" label="ChibiOS/RT">
+   <category-def name="ChibiOS/RT" label="ChibiOS/RT">
       <description>
-         ChibiOS/RT components and plugins.
+         ChibiOS/RT Components and Plugis.
       </description>
    </category-def>
 </site>
