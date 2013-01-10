@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <category-def name="org.chibios.eclipse.tools.feature.category" label="ChibiOS/RT Tools">
+      <description>
+         ChibiOS/RT Tools for Eclipse.
+      </description>
+   </category-def>
+</site>

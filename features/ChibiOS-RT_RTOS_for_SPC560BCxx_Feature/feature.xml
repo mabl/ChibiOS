@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.chibios.spc5.components.rtos.spc560bcxx.feature"
+      label="ChibiOS/RT free embedded RTOS for SPC560B/Cxx Components"
+      version="1.0.0.qualifier"
+      provider-name="www.chibios.org"
+      plugin="org.chibios.spc5.branding"
+      exclusive="true">
+
+   <description>
+      ChibiOS/RT free embedded RTOS for SPC560B/Cxx Components.
+   </description>
+
+   <copyright url="http://www.chibios.org/dokuwiki/doku.php?id=chibios:copyright">
+      ChibiOS/RT - Copyright (C) 2007,2008,2009,2010,2011,2012 Giovanni Di Sirio.
+   </copyright>
+
+   <license url="http://www.chibios.org/dokuwiki/doku.php?id=chibios:license">
+      ChibiOS/RT is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
+
+ChibiOS/RT is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+   </license>
+
+   <url>
+      <update label="ChibiOS/RT Eclipse update site" url="http://www.chibios.org/eclipse"/>
+      <discovery label="ChibiOS/RT free embedded RTOS homepage" url="http://www.chibios.org"/>
+   </url>
+
+   <requires>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="com.st.tools.spc5" version="1.0.0" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="org.chibios.spc5.branding"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.chibios.spc5.components.board.spc560bcxx"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.chibios.spc5.components.hal.platform.spc560bcxx"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.chibios.spc5.components.kernel.port.gcc.spc560bcxx"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.chibios.spc5.components.rtos.spc560bcxx"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+</feature>
