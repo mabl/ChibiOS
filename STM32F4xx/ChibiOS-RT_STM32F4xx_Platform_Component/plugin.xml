@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+    <extension
+         id="org.chibios.spc5.components.platform.stm32f4xx"
+         name="ChibiOS/RT STM32F4xx Platform Component"
+         point="com.st.tools.spc5.extension">
+        <component
+            isPlatform="true">
+            <description>
+                Startup files and linker scripts for STM32F4xx.
+            </description>
+            <groups
+                  name="Platform Settings">
+               <description>
+                  STM32F4xx platform options and settings.
+               </description>
+                <group
+                     name="Platform Settings">
+                    <description>
+                     Platform-related settings.
+                    </description>
+                    <property
+                        brief="Specific STM32F4xx model, the setting affects memory sizes in the linker script."
+                        default="1"
+                        name="Specific Model"
+                        editable="true"
+                        required="true"
+                        type="enum"
+                        value="STM32F4xxyE,STM32F4xxyG,STM32F4xxyI">
+                    </property>
+                </group>
+                <group
+                      name="Runtime Settings">
+                   <description>
+                      Runtime-related settings.
+                   </description>
+                   <property
+                         brief="IRQ and Exceptions stack size."
+                         default="2048"
+                         editable="true"
+                         name="IRQ Stack Size"
+                         required="true"
+                         type="unsigned">
+                   </property>
+                   <property
+                         brief="C runtime stack size."
+                         default="2048"
+                         editable="true"
+                         name="C Stack Size"
+                         required="true"
+                         type="unsigned">
+                   </property>
+                </group>
+                <group
+                      name="Memory Layout Settings">
+                   <description>
+                      RAM memory organization.
+                   </description>
+                   <property
+                         brief="The DMA-accessible RAM can be organized in an unified section or separate sections with a dedicated Ethernet section."
+                         default="0"
+                         editable="true"
+                         name="RAM Areas Organization"
+                         required="true"
+                         type="enum"
+                         value="128KB[192KB],112KB+16KB[+64KB]">
+                   </property>
+                   <property
+                         brief="If selected then the stacks are allocated into the CCM RAM memory."
+                         default="false"
+                         editable="true"
+                         name="Use CCM RAM for Stacks"
+                         required="true"
+                         type="boolean">
+                   </property>
+                </group>
+                <group
+                     name="Build Settings">
+                    <description>
+                     Compiler related options and switches.
+                    </description>
+                    <property
+                        brief="Application binaries base name."
+                        default="out"
+                        name="Application Name"
+                        editable="true"
+                        length="16"
+                        regex="[a-zA-Z_]+"
+                        required="true"
+                        type="string">
+                    </property>
+                    <property
+                          brief="GCC prefix string, this string can be different in different GCC-based compilers."
+                          default="0"
+                          editable="false"
+                          name="Compiler Variant"
+                          required="true"
+                          type="enum"
+                          value="arm-none-eabi-">
+                    </property>
+                    <property
+                        brief="GCC optimization level, this setting affects code size and execution speed. It is recommended to use -O0 during debug."
+                        default="3"
+                        name="Optimization Level"
+                        editable="true"
+                        required="true"
+                        type="enum"
+                        value="-O0,-Os,-O1,-O2,-O3">
+                    </property>
+                    <property
+                        brief="Enables the Cortex-M4 internal FPU."
+                        default="1"
+                        name="Enable FPU"
+                        editable="true"
+                        required="true"
+                        type="enum"
+                        value="yes,no">
+                    </property>
+                    <property
+                        brief="Common options to be passed to both the C and C++ compilers."
+                        default="-ggdb -fomit-frame-pointer -falign-functions=16"
+                        name="Common Options"
+                        editable="true"
+                        required="false"
+                        type="string">
+                    </property>
+                    <property
+                          brief="Options for the C modules only."
+                          editable="true"
+                          name="C Options"
+                          required="false"
+                          type="string">
+                    </property>
+                    <property
+                          brief="Options for the C++ modules only."
+                          default="-fno-rtti"
+                          editable="true"
+                          name="CPP Options"
+                          required="false"
+                          type="string">
+                    </property>
+                    <property
+                        brief="Enables garbage collection of unused memory objects."
+                        default="0"
+                        name="Use Linker GC"
+                        editable="true"
+                        required="true"
+                        type="enum"
+                        value="yes,no">
+                    </property>
+                    <property
+                        brief="Enables a verbose build log instead of the simplified one."
+                        default="1"
+                        name="Use Verbose Compile"
+                        editable="true"
+                        required="true"
+                        type="enum"
+                        value="yes,no">
+                    </property>
+                </group>
+            </groups>
+            <exportedFeatures>
+               <exportedFeature
+                     brief="This feature declares a GCC build environment for the project."
+                     exclusive="false"
+                     id="com.st.tools.spc5.features.build.gccenv">
+               </exportedFeature>
+               <exportedFeature
+                     brief="This feature declares an STM32F4xx based project."
+                     exclusive="false"
+                     id="com.st.tools.spc5.features.platform.stm32f4xx">
+               </exportedFeature>
+            </exportedFeatures>
+        </component>
+    </extension>
+</plugin>
