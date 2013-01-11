@@ -113,7 +113,8 @@
                         editable="true"
                         name="ID"
                         required="true"
-                        type="enum">
+                        type="enum"
+                        value="MII_DP83848I_ID,MII_STE101P_ID,MII_KS8721_ID,MII_DM9161_ID,MII_AM79C875_ID">
                   </property>
                   <property
                         brief="PHY connection mode."
