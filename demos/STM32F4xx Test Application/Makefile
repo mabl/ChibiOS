@@ -1,6 +1,3 @@
-[#ftl]
-[@pp.dropOutputFile /]
-[@pp.changeOutputFile name="Makefile" /]
 ##############################################################################
 # Build global options
 # NOTE: Can be overridden externally.
@@ -8,22 +5,22 @@
 
 # Compiler options here.
 ifeq ($(USE_OPT),)
-  USE_OPT = ${conf.groups.build_settings.optimization_level[0]} ${conf.groups.build_settings.common_options[0]}
+  USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16
 endif
 
 # C specific options here (added to USE_OPT).
 ifeq ($(USE_COPT),)
-  USE_COPT = ${conf.groups.build_settings.c_options[0]}
+  USE_COPT = 
 endif
 
 # C++ specific options here (added to USE_OPT).
 ifeq ($(USE_CPPOPT),)
-  USE_CPPOPT = ${conf.groups.build_settings.cpp_options[0]}
+  USE_CPPOPT = -fno-rtti -fno-exceptions
 endif
 
 # Enable this if you want the linker to remove unused code and data
 ifeq ($(USE_LINK_GC),)
-  USE_LINK_GC = ${conf.groups.build_settings.use_linker_gc[0]}
+  USE_LINK_GC = yes
 endif
 
 # If enabled, this option allows to compile the application in THUMB mode.
@@ -33,7 +30,7 @@ endif
 
 # Enable this if you want to see the full log while compiling.
 ifeq ($(USE_VERBOSE_COMPILE),)
-  USE_VERBOSE_COMPILE = ${conf.groups.build_settings.use_verbose_compile[0]}
+  USE_VERBOSE_COMPILE = no
 endif
 
 #
@@ -64,7 +61,7 @@ endif
 #
 
 # Define project name here
-PROJECT = ${conf.groups.build_settings.application_name[0]}
+PROJECT = out
 
 # Imported source files
 include components/components.mak
@@ -107,7 +104,7 @@ INCDIR =    ./components \
 
 MCU  = cortex-m4
 
-TRGT = ${conf.groups.build_settings.compiler_variant[0]}
+TRGT = arm-none-eabi-
 CC   = $(TRGT)gcc
 CPPC = $(TRGT)g++
 # Enable loading with g++ only if you need C++ runtime support.
@@ -142,7 +139,7 @@ CPPWARN = -Wall -Wextra
 #
 
 # List all default C defines here, like -D_DEBUG=1
-DDEFS   = -D${conf.groups.platform_settings.specific_model[0]}
+DDEFS   = -DSTM32F4xxyG
 
 # List all default ASM defines here, like -D_DEBUG=1
 DADEFS  =
@@ -160,4 +157,4 @@ DLIBS   =
 # End of default section
 ##############################################################################
 
-include ${global.component_path}/lib/rsc/rules.mk
+include C:/ChibiStudio/workspace/SPC5-ChibiOS/STM32F4xx/ChibiOS-RT_STM32F4xx_Platform_Component/component/lib/rsc/rules.mk

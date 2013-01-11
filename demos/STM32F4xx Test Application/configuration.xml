@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SPC5-Config version="1.0.0">
+  <application name="STM32F4xx Test Application" version="1.0.0" standalone="false" locked="false">
+    <description>Test application for the STM32F4xx created using the SPC5's Application Wizard.</description>
+    <component id="org.chibios.spc5.components.platform.stm32f4xx" />
+    <instances>
+      <instance locked="false" id="org.chibios.spc5.components.platform.stm32f4xx">
+        <groups>
+          <platform_settings>
+            <specific_model index="1">STM32F4xxyG</specific_model>
+          </platform_settings>
+          <runtime_settings>
+            <irq_stack_size>2048</irq_stack_size>
+            <c_stack_size>2048</c_stack_size>
+          </runtime_settings>
+          <memory_layout_settings>
+            <ram_areas_organization index="0">128KB[192KB]</ram_areas_organization>
+            <use_ccm_ram_for_stacks>false</use_ccm_ram_for_stacks>
+          </memory_layout_settings>
+          <build_settings>
+            <application_name>out</application_name>
+            <compiler_variant index="0">arm-none-eabi-</compiler_variant>
+            <optimization_level index="3">-O2</optimization_level>
+            <enable_fpu index="1">no</enable_fpu>
+            <common_options>-ggdb -fomit-frame-pointer -falign-functions=16</common_options>
+            <c_options />
+            <cpp_options>-fno-rtti -fno-exceptions</cpp_options>
+            <use_linker_gc index="0">yes</use_linker_gc>
+            <use_verbose_compile index="1">no</use_verbose_compile>
+          </build_settings>
+        </groups>
+      </instance>
+    </instances>
+    <exportedFeatures />
+  </application>
+</SPC5-Config>
