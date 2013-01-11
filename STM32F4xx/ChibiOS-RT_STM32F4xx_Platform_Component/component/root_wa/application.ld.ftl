@@ -38,7 +38,6 @@ MEMORY
     ethram : org = 0x2001C000, len = 16k
 [/#if]
     ccmram : org = 0x10000000, len = 64k
-
 [#elseif conf.groups.platform_settings.specific_model[0] == "STM32F4xxyG"]
     flash : org = 0x08000000, len = 1M
 [#if conf.groups.memory_layout_settings.ram_areas_organization[0].@index[0]?string == "0"]
@@ -48,7 +47,6 @@ MEMORY
     ethram : org = 0x2001C000, len = 16k
 [/#if]
     ccmram : org = 0x10000000, len = 64k
-
 [#elseif conf.groups.platform_settings.specific_model[0] == "STM32F4xxyI"]
     flash : org = 0x08000000, len = 2M
 [#if conf.groups.memory_layout_settings.ram_areas_organization[0].@index[0]?string == "0"]
@@ -59,7 +57,6 @@ MEMORY
 [/#if]
     ram2 : org = 0x20020000, len = 64k
     ccmram : org = 0x10000000, len = 64k
-
 [#else]
 [#stop "unknown ST32F4xx model"]
 [/#if]

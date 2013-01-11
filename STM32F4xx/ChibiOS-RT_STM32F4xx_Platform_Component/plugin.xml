@@ -134,7 +134,7 @@
                     </property>
                     <property
                           brief="Options for the C++ modules only."
-                          default="-fno-rtti"
+                          default="-fno-rtti -fno-exceptions"
                           editable="true"
                           name="CPP Options"
                           required="false"
