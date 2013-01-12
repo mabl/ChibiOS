@@ -190,7 +190,7 @@
                                  name="Pin Mode"
                                  required="true"
                                  type="enum"
-                                 value="INPUT,OUTPUT,ALTERNATE,ANALOG">
+                                 value="Input,Output,Alternate,Analog">
                            </property>
                            <property
                                  brief="Logic state to be latched into the output register."
@@ -199,7 +199,7 @@
                                  name="Latched State"
                                  required="true"
                                  type="enum"
-                                 value="LOW,HIGH">
+                                 value="Low,High">
                            </property>
                            <property
                                  brief="Output mode setting for output pins."
@@ -208,7 +208,7 @@
                                  name="Output Type"
                                  required="true"
                                  type="enum"
-                                 value="PUSHPULL,OPENDRAIN">
+                                 value="PushPull,OpenDrain">
                            </property>
                            <property
                                  brief="Output speed setting for output pins."
@@ -226,7 +226,7 @@
                                  name="Input Resistor"
                                  required="true"
                                  type="enum"
-                                 value="None (floating pin),Weak Pull-Up, Weak Pull-Down">
+                                 value="Floating,Pull-Up,Pull-Down">
                            </property>
                            <property
                                  brief="Alternate function number settings for alternate pins."

@@ -86,9 +86,10 @@
 [#-- Creating an hash with all the defined pins and performing checks.--]
 [#assign pins = {} /]
 [#list conf.groups.i_o_settings.pins_list.pin_settings as pin_settings]
-  [#assign pin_port      = pin_settings.pin_identification.port[0] /]
-  [#assign pin_bit       = pin_settings.pin_identification.bit[0] /]
-  [#assign pin_id        = pin_settings.pin_identification.identifier[0] /]
+  [#assign pin_port         = pin_settings.pin_identification.port[0] /]
+  [#assign pin_bit          = pin_settings.pin_identification.bit[0]?number /]
+  [#assign pin_id           = pin_settings.pin_identification.identifier[0] /]
+[#-- 
   [#assign pin_mode      = ["PIN_MODE_INPUT", "PIN_MODE_OUTPUT",
                             "PIN_MODE_ALTERNATE", "PIN_MODE_ANALOG"][pin_settings.settings.pin_mode[0].@index?number] /]
   [#assign pin_state     = ["PIN_ODR_LOW", "PIN_ODR_HIGH"][pin_settings.settings.latched_state[0].@index?number] /]
@@ -96,16 +97,31 @@
   [#assign pin_ospeed    = ["PIN_OSPEED_2M", "PIN_OSPEED_25M", "PIN_OSPEED_50M", "PIN_OSPEED_100M"][pin_settings.settings.output_speed[0].@index?number] /]
   [#assign pin_iresistor = ["PIN_PUPDR_FLOATING", "PIN_PUPDR_PULLUP",
                             "PIN_PUPDR_PULLDOWN"][pin_settings.settings.input_resistor[0].@index?number] /]
-  [#assign pin_alternate = pin_settings.settings.alternate_function[0].@index /]
+--]
+  [#assign pin_mode         = pin_settings.settings.pin_mode[0] /]
+  [#assign pin_state        = pin_settings.settings.latched_state[0] /]
+  [#assign pin_otype        = pin_settings.settings.output_type[0] /]
+  [#assign pin_ospeed       = pin_settings.settings.output_speed[0] /]
+  [#assign pin_resistor     = pin_settings.settings.input_resistor[0] /]
+  [#assign pin_mode_idx     = pin_settings.settings.pin_mode[0].@index?number /]
+  [#assign pin_state_idx    = pin_settings.settings.latched_state[0].@index?number /]
+  [#assign pin_otype_idx    = pin_settings.settings.output_type[0].@index?number /]
+  [#assign pin_ospeed_idx   = pin_settings.settings.output_speed[0].@index?number /]
+  [#assign pin_resistor_idx = pin_settings.settings.input_resistor[0].@index?number /]
+  [#assign pin_alternate    = pin_settings.settings.alternate_function[0].@index?number /]
   [#assign key = pin_port + "-" + pin_bit /]
   [#if pins[key]?? ]
     [#stop "Multiple definitions of " + key /]
   [#else]
-    [#assign value = {"port":pin_port, "bit":pin_bit, "id":pin_id} /]
+    [#assign value = {"port":pin_port, "bit":pin_bit, "id":pin_id,
+                      "mode":pin_mode,         "mode_idx":pin_mode_idx,
+                      "otype":pin_otype,       "otype_idx":pin_otype_idx,
+                      "ospeed":pin_ospeed,     "ospeed_idx":pin_ospeed_idx,
+                      "resistor":pin_resistor, "resistor_idx":pin_resistor_idx,
+                      "alternate":pin_alternate} /]
     [#assign pins = pins + {key:value} /]
   [/#if]
 [/#list]
-
 /*
  * IO pins assignments.
  */
@@ -114,15 +130,20 @@
     [#assign key = port + "-" + bit /]
     [#if pins[key]?? ]
       [#assign pin = pins[key] /]
-      [#assign id = port + "_" + pin["id"] /]
+      [#assign id = pin["id"] /]
     [#else]
-      [#-- The pin has not been defined esplicitly, adding to the hash
+      [#-- The pin has not been defined explicitly, adding to the hash
            using the default settings.--]
-      [#assign id = port + "_PIN" + bit /]
-      [#assign value = {"port":port, "bit":bit, "id":id} /]
+      [#assign id = "PIN" + bit /]
+      [#assign value = {"port":port, "bit":bit, "id":id,
+                        "mode":"Input",         "mode_idx":0,
+                        "otype":"",             "otype_idx":0,
+                        "ospeed":"",            "ospeed_idx":3,
+                        "resistor":"Weak Pull-Up", "resistor_idx":1,
+                        "alternate":0} /]
       [#assign pins = pins + {key:value} /]
     [/#if]
-#define ${id?right_pad(27, " ")} ${bit}
+#define ${port + "_"  + id?right_pad(27, " ")} ${bit}
   [/#list]
 
 [/#list]
@@ -150,8 +171,24 @@
 #define PIN_AFIO_AF(n, v)           ((v##U) << ((n % 8) * 4))
 
 [#list ports as port]
+/*
+ * ${port} setup:
+ *
   [#list bits as bit]
+    [#assign pin = pins[port + "-" + bit] /]
+    [#assign mode = pin["mode_idx"] /]
+    [#if mode == 0]
+      [#assign desc = "Input " + pin["resistor"] /]
+    [#elseif mode == 1]
+      [#assign desc = "Output " + pin["otype"] + " " + pin["ospeed"] /]
+    [#elseif mode == 2]
+      [#assign desc = "Alternate " + pin["alternate"] /]
+    [#else]
+      [#assign desc = "Analog" /]
+    [/#if]
+ * P${(port[4..] + bit?string)?right_pad(3, " ")} - ${pin["id"]?right_pad(26, " ")}(${desc?lower_case}).
   [/#list]
+ */
 
 [/#list]
 
