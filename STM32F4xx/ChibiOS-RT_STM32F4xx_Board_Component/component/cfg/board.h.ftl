@@ -1,6 +1,10 @@
 [#ftl]
 [@pp.dropOutputFile /]
 [@pp.changeOutputFile name="board.h" /]
+[#assign bits = ["0", "1", "2", "3", "4", "5", "6", "7",
+                 "8", "9", "10", "11", "12", "13", "14", "15"] /]
+[#assign ports = ["GPIOA", "GPIOB", "GPIOC", "GPIOD", "GPIOE",
+                  "GPIOF", "GPIOG", "GPIOH", "GPIOI"] /]
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
                  2011,2012 Giovanni Di Sirio.
@@ -82,178 +86,46 @@
 [#-- Creating an hash with all the defined pins and performing checks.--]
 [#assign pins = {} /]
 [#list conf.groups.i_o_settings.pins_list.pin_settings as pin_settings]
-  [#assign pin_id        = pin_settings.pin_identification.identifier[0] /]
   [#assign pin_port      = pin_settings.pin_identification.port[0] /]
   [#assign pin_bit       = pin_settings.pin_identification.bit[0] /]
-  [#assign pin_mode      = pin_settings.settings.pin_mode[0].@index /]
-  [#assign pin_state     = pin_settings.settings.latched_state[0].@index /]
-  [#assign pin_otype     = pin_settings.settings.output_type[0].@index /]
-  [#assign pin_ospeed    = pin_settings.settings.output_speed[0].@index /]
-  [#assign pin_iresistor = pin_settings.settings.input_resistor[0].@index /]
+  [#assign pin_id        = pin_settings.pin_identification.identifier[0] /]
+  [#assign pin_mode      = ["PIN_MODE_INPUT", "PIN_MODE_OUTPUT",
+                            "PIN_MODE_ALTERNATE", "PIN_MODE_ANALOG"][pin_settings.settings.pin_mode[0].@index?number] /]
+  [#assign pin_state     = ["PIN_ODR_LOW", "PIN_ODR_HIGH"][pin_settings.settings.latched_state[0].@index?number] /]
+  [#assign pin_otype     = ["PIN_OTYPE_PUSHPULL","PIN_OTYPE_OPENDRAIN"][pin_settings.settings.output_type[0].@index?number] /]
+  [#assign pin_ospeed    = ["PIN_OSPEED_2M", "PIN_OSPEED_25M", "PIN_OSPEED_50M", "PIN_OSPEED_100M"][pin_settings.settings.output_speed[0].@index?number] /]
+  [#assign pin_iresistor = ["PIN_PUPDR_FLOATING", "PIN_PUPDR_PULLUP",
+                            "PIN_PUPDR_PULLDOWN"][pin_settings.settings.input_resistor[0].@index?number] /]
   [#assign pin_alternate = pin_settings.settings.alternate_function[0].@index /]
   [#assign key = pin_port + "-" + pin_bit /]
   [#if pins[key]?? ]
     [#stop "Multiple definitions of " + key /]
   [#else]
-    [#assign pins = pins + {key:"hehe"} /]
+    [#assign value = {"port":pin_port, "bit":pin_bit, "id":pin_id} /]
+    [#assign pins = pins + {key:value} /]
   [/#if]
 [/#list]
 
 /*
  * IO pins assignments.
  */
-#define GPIOA_BUTTON_WKUP           0
-#define GPIOA_ETH_RMII_REF_CLK      1
-#define GPIOA_ETH_RMII_MDIO         2
-#define GPIOA_ETH_RMII_MDINT        3
-#define GPIOA_PIN4                  4
-#define GPIOA_PIN5                  5
-#define GPIOA_PIN6                  6
-#define GPIOA_ETH_RMII_CRS_DV       7
-#define GPIOA_USB_HS_BUSON          8
-#define GPIOA_OTG_FS_VBUS           9
-#define GPIOA_OTG_FS_ID             10
-#define GPIOA_OTG_FS_DM             11
-#define GPIOA_OTG_FS_DP             12
-#define GPIOA_JTAG_TMS              13
-#define GPIOA_JTAG_TCK              14
-#define GPIOA_JTAG_TDI              15
+[#list ports as port]
+  [#list bits as bit]
+    [#assign key = port + "-" + bit /]
+    [#if pins[key]?? ]
+      [#assign pin = pins[key] /]
+      [#assign id = port + "_" + pin["id"] /]
+    [#else]
+      [#-- The pin has not been defined esplicitly, adding to the hash
+           using the default settings.--]
+      [#assign id = port + "_PIN" + bit /]
+      [#assign value = {"port":port, "bit":bit, "id":id} /]
+      [#assign pins = pins + {key:value} /]
+    [/#if]
+#define ${id?right_pad(27, " ")} ${bit}
+  [/#list]
 
-#define GPIOB_USB_FS_BUSON          0
-#define GPIOB_USB_HS_FAULT          1
-#define GPIOB_BOOT1                 2
-#define GPIOB_JTAG_TDO              3
-#define GPIOB_JTAG_TRST             4
-#define GPIOB_PIN5                  5
-#define GPIOB_PIN6                  6
-#define GPIOB_PIN7                  7
-#define GPIOB_I2C1_SCL              8
-#define GPIOB_I2C1_SDA              9
-#define GPIOB_SPI2_SCK              10
-#define GPIOB_PIN11                 11
-#define GPIOB_OTG_HS_ID             12
-#define GPIOB_OTG_HS_VBUS           13
-#define GPIOB_OTG_HS_DM             14
-#define GPIOB_OTG_HS_DP             15
-
-#define GPIOC_PIN0                  0
-#define GPIOC_ETH_RMII_MDC          1
-#define GPIOC_SPI2_MISO             2
-#define GPIOC_SPI2_MOSI             3
-#define GPIOC_ETH_RMII_RXD0         4
-#define GPIOC_ETH_RMII_RXD1         5
-#define GPIOC_USART6_TX             6
-#define GPIOC_USART6_RX             7
-#define GPIOC_SD_D0                 8
-#define GPIOC_SD_D1                 9
-#define GPIOC_SD_D2                 10
-#define GPIOC_SD_D3                 11
-#define GPIOC_SD_CLK                12
-#define GPIOC_LED                   13
-#define GPIOC_OSC32_IN              14
-#define GPIOC_OSC32_OUT             15
-
-#define GPIOD_PIN0                  0
-#define GPIOD_PIN1                  1
-#define GPIOD_SD_CMD                2
-#define GPIOD_PIN3                  3
-#define GPIOD_PIN4                  4
-#define GPIOD_PIN5                  5
-#define GPIOD_PIN6                  6
-#define GPIOD_PIN7                  7
-#define GPIOD_PIN8                  8
-#define GPIOD_PIN9                  9
-#define GPIOD_PIN10                 10
-#define GPIOD_PIN11                 11
-#define GPIOD_PIN12                 12
-#define GPIOD_PIN13                 13
-#define GPIOD_PIN14                 14
-#define GPIOD_PIN15                 15
-
-#define GPIOE_PIN0                  0
-#define GPIOE_PIN1                  1
-#define GPIOE_PIN2                  2
-#define GPIOE_PIN3                  3
-#define GPIOE_PIN4                  4
-#define GPIOE_PIN5                  5
-#define GPIOE_PIN6                  6
-#define GPIOE_PIN7                  7
-#define GPIOE_PIN8                  8
-#define GPIOE_PIN9                  9
-#define GPIOE_PIN10                 10
-#define GPIOE_PIN11                 11
-#define GPIOE_PIN12                 12
-#define GPIOE_PIN13                 13
-#define GPIOE_PIN14                 14
-#define GPIOE_PIN15                 15
-
-#define GPIOF_PIN0                  0
-#define GPIOF_PIN1                  1
-#define GPIOF_PIN2                  2
-#define GPIOF_PIN3                  3
-#define GPIOF_PIN4                  4
-#define GPIOF_PIN5                  5
-#define GPIOF_PIN6                  6
-#define GPIOF_PIN7                  7
-#define GPIOF_PIN8                  8
-#define GPIOF_PIN9                  9
-#define GPIOF_PIN10                 10
-#define GPIOF_USB_FS_FAULT          11
-#define GPIOF_PIN12                 12
-#define GPIOF_PIN13                 13
-#define GPIOF_PIN14                 14
-#define GPIOF_PIN15                 15
-
-#define GPIOG_PIN0                  0
-#define GPIOG_PIN1                  1
-#define GPIOG_PIN2                  2
-#define GPIOG_PIN3                  3
-#define GPIOG_PIN4                  4
-#define GPIOG_PIN5                  5
-#define GPIOG_PIN6                  6
-#define GPIOG_PIN7                  7
-#define GPIOG_PIN8                  8
-#define GPIOG_PIN9                  9
-#define GPIOG_SPI2_CS               10
-#define GPIOG_ETH_RMII_TXEN         11
-#define GPIOG_PIN12                 12
-#define GPIOG_ETH_RMII_TXD0         13
-#define GPIOG_ETH_RMII_TXD1         14
-#define GPIOG_PIN15                 15
-
-#define GPIOH_OSC_IN                0
-#define GPIOH_OSC_OUT               1
-#define GPIOH_PIN2                  2
-#define GPIOH_PIN3                  3
-#define GPIOH_PIN4                  4
-#define GPIOH_PIN5                  5
-#define GPIOH_PIN6                  6
-#define GPIOH_PIN7                  7
-#define GPIOH_PIN8                  8
-#define GPIOH_PIN9                  9
-#define GPIOH_PIN10                 10
-#define GPIOH_PIN11                 11
-#define GPIOH_PIN12                 12
-#define GPIOH_PIN13                 13
-#define GPIOH_PIN14                 14
-#define GPIOH_PIN15                 15
-
-#define GPIOI_PIN0                  0
-#define GPIOI_PIN1                  1
-#define GPIOI_PIN2                  2
-#define GPIOI_PIN3                  3
-#define GPIOI_PIN4                  4
-#define GPIOI_PIN5                  5
-#define GPIOI_PIN6                  6
-#define GPIOI_PIN7                  7
-#define GPIOI_PIN8                  8
-#define GPIOI_PIN9                  9
-#define GPIOI_PIN10                 10
-#define GPIOI_PIN11                 11
-#define GPIOI_PIN12                 12
-#define GPIOI_PIN13                 13
-#define GPIOI_PIN14                 14
-#define GPIOI_PIN15                 15
+[/#list]
 
 /*
  * I/O ports initial setup, this configuration is established soon after reset
@@ -276,6 +148,12 @@
 #define PIN_PUPDR_PULLUP(n)         (1U << ((n) * 2))
 #define PIN_PUPDR_PULLDOWN(n)       (2U << ((n) * 2))
 #define PIN_AFIO_AF(n, v)           ((v##U) << ((n % 8) * 4))
+
+[#list ports as port]
+  [#list bits as bit]
+  [/#list]
+
+[/#list]
 
 /*
  * GPIOA setup:
