@@ -79,6 +79,26 @@
  */
 #define STM32F4XX
 
+[#-- Creating an hash with all the defined pins and performing checks.--]
+[#assign pins = {} /]
+[#list conf.groups.i_o_settings.pins_list.pin_settings as pin_settings]
+  [#assign pin_id        = pin_settings.pin_identification.identifier[0] /]
+  [#assign pin_port      = pin_settings.pin_identification.port[0] /]
+  [#assign pin_bit       = pin_settings.pin_identification.bit[0] /]
+  [#assign pin_mode      = pin_settings.settings.pin_mode[0].@index /]
+  [#assign pin_state     = pin_settings.settings.latched_state[0].@index /]
+  [#assign pin_otype     = pin_settings.settings.output_type[0].@index /]
+  [#assign pin_ospeed    = pin_settings.settings.output_speed[0].@index /]
+  [#assign pin_iresistor = pin_settings.settings.input_resistor[0].@index /]
+  [#assign pin_alternate = pin_settings.settings.alternate_function[0].@index /]
+  [#assign key = pin_port + "-" + pin_bit /]
+  [#if pins[key]?? ]
+    [#stop "Multiple definitions of " + key /]
+  [#else]
+    [#assign pins = pins + {key:"hehe"} /]
+  [/#if]
+[/#list]
+
 /*
  * IO pins assignments.
  */

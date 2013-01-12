@@ -157,4 +157,4 @@ DLIBS   =
 # End of default section
 ##############################################################################
 
-include C:/ChibiStudio/workspace/SPC5-ChibiOS/STM32F4xx/ChibiOS-RT_STM32F4xx_Platform_Component/component/lib/rsc/rules.mk
+include D:/Progetti/ChibiOS-Components/STM32F4xx/ChibiOS-RT_STM32F4xx_Platform_Component/component/lib/rsc/rules.mk

@@ -214,7 +214,7 @@
                                  brief="Output speed setting for output pins."
                                  default="2"
                                  editable="true"
-                                 name="Outout Speed"
+                                 name="Output Speed"
                                  required="true"
                                  type="enum"
                                  value="2MHz,25MHz,50MHz,100MHz">
