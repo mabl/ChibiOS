@@ -49,6 +49,7 @@
                         brief="MCU voltage in hundredths of Volt, the voltage affects wait states and maximum core frequency."
                         default="330"
                         editable="true"
+                        max="360"
                         min="180"
                         name="VDD"
                         required="true"
@@ -69,7 +70,7 @@
                         editable="true"
                         max="26000000"
                         min="1000000"
-                        name="HSE Clock"
+                        name="HSE Frequency"
                         required="true"
                         type="unsigned">
                   </property>
@@ -88,7 +89,7 @@
                         editable="true"
                         max="1000000"
                         min="32768"
-                        name="LSE frequency"
+                        name="LSE Frequency"
                         required="true"
                         type="unsigned">
                   </property>
@@ -138,7 +139,7 @@
                         name="Pins List"
                         required="true"
                         type="list"
-                        value="Pin Identification|Port,Pin Identification|Bit,Pin Identification|Identifier,Settings|Pin Mode,Settings|Latched State">
+                        value="Pin Identification|Port,Pin Identification|Bit,Pin Identification|Identifier,Settings|Pin Mode">
                      <groups
                            name="Pin Settings">
                         <description>
@@ -151,7 +152,7 @@
                            </description>
                            <property
                                  brief="Pin Identifier, a macro is generated prefixed with the port name."
-                                 default="pin_name"
+                                 default="PIN_NAME"
                                  editable="true"
                                  name="Identifier"
                                  regex="[a-zA-Z_][a-zA-Z0-9_]*"
