@@ -151,12 +151,11 @@
                               Pin identification properties.
                            </description>
                            <property
-                                 brief="Pin Identifier, a macro is generated prefixed with the port name."
-                                 default="PIN_NAME"
+                                 brief="Pin Identifier, a macro is generated prefixed with the port name. If left empty an unique name is generated."
                                  editable="true"
                                  name="Identifier"
-                                 regex="[a-zA-Z_][a-zA-Z0-9_]*"
-                                 required="true"
+                                 regex="[a-zA-Z_]*[a-zA-Z0-9_]*"
+                                 required="false"
                                  type="string">
                            </property>
                            <property

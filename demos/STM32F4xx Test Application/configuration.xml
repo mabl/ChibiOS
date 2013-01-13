@@ -63,23 +63,38 @@
                   <latched_state index="0">Low</latched_state>
                   <output_type index="0">PushPull</output_type>
                   <output_speed index="2">50MHz</output_speed>
-                  <input_resistor index="2">Pull-Down</input_resistor>
+                  <input_resistor index="1">Pull-Up</input_resistor>
                   <alternate_function index="0">0</alternate_function>
                 </settings>
               </pin_settings>
               <pin_settings>
                 <pin_identification>
-                  <identifier>PIN_NAME</identifier>
+                  <identifier>LED2</identifier>
                   <port index="0">GPIOA</port>
                   <bit index="1">1</bit>
                 </pin_identification>
                 <settings>
-                  <pin_mode index="0">Input</pin_mode>
+                  <pin_mode index="1">Output</pin_mode>
                   <latched_state index="0">Low</latched_state>
                   <output_type index="0">PushPull</output_type>
                   <output_speed index="2">50MHz</output_speed>
-                  <input_resistor index="1">Pull-Up</input_resistor>
+                  <input_resistor index="0">Floating</input_resistor>
                   <alternate_function index="0">0</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifier />
+                  <port index="0">GPIOA</port>
+                  <bit index="2">2</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="2">Alternate</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="5">5</alternate_function>
                 </settings>
               </pin_settings>
             </pins_list>
