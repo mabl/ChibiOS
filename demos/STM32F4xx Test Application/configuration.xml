@@ -59,11 +59,11 @@
                   <bit index="0">0</bit>
                 </pin_identification>
                 <settings>
-                  <pin_mode index="0">INPUT</pin_mode>
-                  <latched_state index="0">LOW</latched_state>
-                  <output_type index="0">PUSHPULL</output_type>
+                  <pin_mode index="0">Input</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
                   <output_speed index="2">50MHz</output_speed>
-                  <input_resistor index="0">None (floating pin)</input_resistor>
+                  <input_resistor index="2">Pull-Down</input_resistor>
                   <alternate_function index="0">0</alternate_function>
                 </settings>
               </pin_settings>
@@ -74,11 +74,11 @@
                   <bit index="1">1</bit>
                 </pin_identification>
                 <settings>
-                  <pin_mode index="0">INPUT</pin_mode>
-                  <latched_state index="0">LOW</latched_state>
-                  <output_type index="0">PUSHPULL</output_type>
+                  <pin_mode index="0">Input</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
                   <output_speed index="2">50MHz</output_speed>
-                  <input_resistor index="0">None (floating pin)</input_resistor>
+                  <input_resistor index="1">Pull-Up</input_resistor>
                   <alternate_function index="0">0</alternate_function>
                 </settings>
               </pin_settings>
@@ -88,6 +88,7 @@
             <early_initialization_code />
             <late_initialization_code />
             <board_initialization_code />
+            <additional_code />
           </initialization_code>
         </groups>
       </instance>

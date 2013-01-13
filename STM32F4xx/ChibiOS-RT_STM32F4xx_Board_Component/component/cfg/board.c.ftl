@@ -61,55 +61,32 @@ const PALConfig pal_default_config =
 void __early_init(void) {
 
   stm32_clock_init();
+[#if conf.groups.initialization_code.early_initialization_code[0]?trim != ""]
+
+${conf.groups.initialization_code.early_initialization_code[0]}
+[/#if]
 }
 
-#if HAL_USE_SDC || defined(__DOXYGEN__)
-/**
- * @brief   SDC card detection.
+[#if conf.groups.initialization_code.late_initialization_code[0]?trim != ""]
+/*
+ * Late initialization code.
  */
-bool_t sdc_lld_is_card_inserted(SDCDriver *sdcp) {
-  static bool_t last_status = FALSE;
+void __late_init(void) {
 
-  if (blkIsTransferring(sdcp))
-    return last_status;
-  return last_status = (bool_t)palReadPad(GPIOC, GPIOC_SD_D3);
+${conf.groups.initialization_code.late_initialization_code[0]}
 }
 
-/**
- * @brief   SDC card write protection detection.
- */
-bool_t sdc_lld_is_write_protected(SDCDriver *sdcp) {
-
-  (void)sdcp;
-  return FALSE;
-}
-#endif /* HAL_USE_SDC */
-
-#if HAL_USE_MMC_SPI || defined(__DOXYGEN__)
-/**
- * @brief   MMC_SPI card detection.
- */
-bool_t mmc_lld_is_card_inserted(MMCDriver *mmcp) {
-
-  (void)mmcp;
-  /* TODO: Fill the implementation.*/
-  return TRUE;
-}
-
-/**
- * @brief   MMC_SPI card write protection detection.
- */
-bool_t mmc_lld_is_write_protected(MMCDriver *mmcp) {
-
-  (void)mmcp;
-  /* TODO: Fill the implementation.*/
-  return FALSE;
-}
-#endif
-
+[/#if]
 /**
  * @brief   Board-specific initialization code.
- * @todo    Add your board-specific code, if any.
  */
 void boardInit(void) {
+[#if conf.groups.initialization_code.board_initialization_code[0]?trim != ""]
+
+${conf.groups.initialization_code.board_initialization_code[0]}
+[/#if]
 }
+
+[#if conf.groups.initialization_code.additional_code[0]?trim != ""]
+${conf.groups.initialization_code.additional_code[0]}
+[/#if]

@@ -242,6 +242,7 @@
                   </property>
                </group>
                <group
+                     expanded="false"
                      name="Initialization Code">
                   <description>
                      Code snippets to be executed at system initialization. Ident the code using two spaces in order to ensure generated code formatting.
@@ -264,6 +265,13 @@
                         brief="Code to be executed after the HAL has been initialized, board-related initializations should go here."
                         editable="true"
                         name="Board Initialization Code"
+                        required="false"
+                        type="formatted">
+                  </property>
+                  <property
+                        brief="Additional functions to be added to board.c."
+                        editable="true"
+                        name="Additional Code"
                         required="false"
                         type="formatted">
                   </property>
