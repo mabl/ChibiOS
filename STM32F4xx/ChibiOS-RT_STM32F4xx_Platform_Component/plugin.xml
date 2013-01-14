@@ -11,7 +11,7 @@
                 Startup files and linker scripts for STM32F4xx.
             </description>
             <groups
-                  name="Platform Settings">
+                  name="Settings">
                <description>
                   STM32F4xx platform options and settings.
                </description>
