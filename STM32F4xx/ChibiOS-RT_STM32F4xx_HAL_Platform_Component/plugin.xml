@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+<!-- All SPC5 Component extension shall have the namespace "com.st.tools.spc5"-->
+   <extension
+         id="org.chibios.spc5.components.hal.platform.stm32f4pxx"
+         name="ChibiOS-RT STM32F4xx HAL Platform Component"
+         point="com.st.tools.spc5.extension">
+      <component
+            hidden="true"
+            isPlatform="false">
+            <description>
+                ChibiOS/RT STM32F4xx low level drivice drivers files.
+            </description>
+            <groups
+                  name="STM32F4xx Settings">
+               <description>
+                  STM32F4xx Low Level Drivers options and settings.
+               </description>
+               <group
+                     expanded="false"
+                     name="Initialization Settings">
+                  <description>
+                     Generic initialization-related settings.
+                  </description>
+                  <property
+                        brief="Activating this options bypasses the whole clock initialization phase"
+                        default="false"
+                        editable="true"
+                        name="Do Not Init"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enabling this options disables all consistency checks on the clock initialization values"
+                        default="false"
+                        editable="true"
+                        name="Allow Overclocking"
+                        required="true"
+                        type="boolean">
+                  </property>
+               </group>
+               <group
+                     expanded="false"
+                     name="FMPLL0 Settings">
+                  <description>
+                     FMPLL0 settings, errors in settings or invalid settings are detected at compile time.
+                  </description>
+                  <property
+                        brief="FMPLL0 Input Divider Value"
+                        default="5"
+                        editable="true"
+                        max="15"
+                        min="1"
+                        name="IDF Value"
+                        required="true"
+                        type="unsigned">
+                  </property>
+                  <property
+                        brief="FMPLL0 Multiplier Value"
+                        default="32"
+                        editable="true"
+                        max="96"
+                        min="32"
+                        name="NDIV Value"
+                        required="true"
+                        type="unsigned">
+                  </property>
+                  <property
+                        brief="FMPLL0 Output Divider Value"
+                        default="1"
+                        editable="true"
+                        name="ODF Value"
+                        required="true"
+                        type="enum"
+                        value="SPC5_FMPLL_ODF_DIV2,SPC5_FMPLL_ODF_DIV4,SPC5_FMPLL_ODF_DIV8,SPC5_FMPLL_ODF_DIV16">
+                  </property>
+               </group>
+               <group
+                     expanded="false"
+                     name="FMPLL1 Settings">
+                  <description>
+                     FMPLL1 settings, errors in settings or invalid settings are detected at compile time.
+                  </description>
+                  <property
+                        brief="FMPLL1 Input Divider Value"
+                        default="5"
+                        editable="true"
+                        max="15"
+                        min="1"
+                        name="IDF Value"
+                        required="true"
+                        type="unsigned">
+                  </property>
+                  <property
+                        brief="FMPLL1 Multiplier Value"
+                        default="60"
+                        editable="true"
+                        max="96"
+                        min="32"
+                        name="NDIV Value"
+                        required="true"
+                        type="unsigned">
+                  </property>
+                  <property
+                        brief="FMPLL1 Output Divider Value"
+                        default="1"
+                        editable="true"
+                        name="ODF Value"
+                        required="true"
+                        type="enum"
+                        value="SPC5_FMPLL_ODF_DIV2,SPC5_FMPLL_ODF_DIV4,SPC5_FMPLL_ODF_DIV8,SPC5_FMPLL_ODF_DIV16">
+                  </property>
+               </group>
+               <group
+                     expanded="false"
+                     name="Serial Driver Settings">
+                  <description>
+                     Settings related to the Serial Driver, note that the driver must be enabled in the portable HAL configuration.
+                  </description>
+                  <property
+                        brief="Enables support for LINFLEX0 in the Serial Driver"
+                        default="true"
+                        editable="true"
+                        name="Use LINFLEX0"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables support for LINFLEX1 in the Serial Driver"
+                        default="true"
+                        editable="true"
+                        name="Use LINFLEX1"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="IRQ priority to be assigned to the LINFLEX0 peripheral"
+                        default="8"
+                        editable="true"
+                        max="15"
+                        min="1"
+                        name="LINFLEX0 IRQ Priority"
+                        required="true"
+                        type="unsigned">
+                  </property>
+                  <property
+                        brief="IRQ priority to be assigned to the LINFLEX1 peripheral"
+                        default="8"
+                        editable="true"
+                        max="15"
+                        min="1"
+                        name="LINFLEX1 IRQ Priority"
+                        required="true"
+                        type="unsigned">
+                  </property>
+               </group>
+            </groups>
+            <exportedFeatures>
+               <exportedFeature
+                     exclusive="true"
+                     id="org.chibios.spc5.features.hal.platform.stm32f4xx">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="true"
+                     id="org.chibios.spc5.features.hal.platform">
+               </exportedFeature>
+            </exportedFeatures>
+            <requiredFeatures>
+               <requiredFeature
+                     id="org.chibios.spc5.features.hal">
+               </requiredFeature>
+               <requiredFeature
+                     id="org.chibios.spc5.features.kernel">
+               </requiredFeature>
+               <requiredFeature
+                     id="org.chibios.spc5.features.kernel.port.gcc.ppc.stm32f4xx">
+               </requiredFeature>
+            </requiredFeatures>
+      </component>
+   </extension>
+
+</plugin>
