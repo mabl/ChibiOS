@@ -3,7 +3,7 @@
 <plugin>
 <!-- All SPC5 Component extension shall have the namespace "com.st.tools.spc5"-->
    <extension
-         id="org.chibios.spc5.components.kernel.port.gcc.stm32f4xx"
+         id="org.chibios.spc5.components.kernel.port.gcc.armcmx.stm32f4xx"
          name="ChibiOS-RT STM32F4xx Kernel Port Component"
          point="com.st.tools.spc5.extension">
       <component
@@ -20,20 +20,20 @@
             <exportedFeatures>
                <exportedFeature
                      brief="Generic ChibiOS/RT port interface."
-                     exclusive="true"
+                     exclusive="false"
                      id="org.chibios.spc5.features.kernel.port">
                </exportedFeature>
                <exportedFeature
-                     exclusive="true"
+                     exclusive="false"
                      id="org.chibios.spc5.features.kernel.port.gcc">
                </exportedFeature>
                <exportedFeature
-                     exclusive="true"
-                     id="org.chibios.spc5.features.kernel.port.gcc.arm">
+                     exclusive="false"
+                     id="org.chibios.spc5.features.kernel.port.gcc.armcmx">
                </exportedFeature>
                <exportedFeature
-                     exclusive="true"
-                     id="org.chibios.spc5.features.kernel.port.gcc.arm.stm32f4xx">
+                     exclusive="false"
+                     id="org.chibios.spc5.features.kernel.port.gcc.armcmx.stm32f4xx">
                </exportedFeature>
             </exportedFeatures>
             <requiredFeatures>

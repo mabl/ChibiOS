@@ -174,7 +174,7 @@
                      id="org.chibios.spc5.features.kernel">
                </requiredFeature>
                <requiredFeature
-                     id="org.chibios.spc5.features.kernel.port.gcc.ppc.stm32f4xx">
+                     id="org.chibios.spc5.features.kernel.port.gcc.armcmx.stm32f4xx">
                </requiredFeature>
             </requiredFeatures>
       </component>

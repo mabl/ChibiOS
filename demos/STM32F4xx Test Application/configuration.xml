@@ -3,7 +3,7 @@
   <application name="STM32F4xx Test Application" version="1.0.0" standalone="false" locked="false">
     <description>Test application for the STM32F4xx created using the SPC5's Application Wizard.</description>
     <component id="org.chibios.spc5.components.platform.stm32f4xx">
-      <component id="org.chibios.spc5.components.board.stm32f4xx" />
+      <component id="org.chibios.spc5.components.rtos.stm32f4xx" />
     </component>
     <instances>
       <instance locked="false" id="org.chibios.spc5.components.platform.stm32f4xx">
@@ -32,6 +32,104 @@
           </build_settings>
         </groups>
       </instance>
+      <instance locked="false" id="org.chibios.spc5.components.rtos.stm32f4xx">
+        <groups />
+      </instance>
+      <instance locked="false" id="org.chibios.spc5.components.kernel">
+        <groups>
+          <kernel_options>
+            <system_tick_clock_frequency>1000</system_tick_clock_frequency>
+            <time_quantum>20</time_quantum>
+            <memory_core_size>0</memory_core_size>
+            <no_internal_idle_thread>false</no_internal_idle_thread>
+          </kernel_options>
+          <performance_options>
+            <optimize_for_speed>true</optimize_for_speed>
+          </performance_options>
+          <subsystem_options>
+            <use_registry>true</use_registry>
+            <use_wait_exit>true</use_wait_exit>
+            <use_semaphores>true</use_semaphores>
+            <use_semaphores_priority>false</use_semaphores_priority>
+            <use_semaphores_atomic_wait_signal>true</use_semaphores_atomic_wait_signal>
+            <use_mutexes>true</use_mutexes>
+            <use_condition_variables>true</use_condition_variables>
+            <use_condition_variables_with_timeout>true</use_condition_variables_with_timeout>
+            <use_events>true</use_events>
+            <use_events_with_timeout>true</use_events_with_timeout>
+            <use_messages>true</use_messages>
+            <use_messages_priority>false</use_messages_priority>
+            <use_mailboxes>true</use_mailboxes>
+            <use_queues>true</use_queues>
+            <use_memory_core_allocator>true</use_memory_core_allocator>
+            <use_heap_allocator>true</use_heap_allocator>
+            <use_heap_allocator>true</use_heap_allocator>
+            <use_malloc_for_heap>false</use_malloc_for_heap>
+            <use_memory_pools_allocator>true</use_memory_pools_allocator>
+            <use_dynamic_extensions>true</use_dynamic_extensions>
+          </subsystem_options>
+          <debug_options>
+            <enable_system_state_checker>false</enable_system_state_checker>
+            <enable_function_parameters_checks>false</enable_function_parameters_checks>
+            <enable_assertions>false</enable_assertions>
+            <enable_trace_buffer>false</enable_trace_buffer>
+            <enable_stack_check>false</enable_stack_check>
+            <enable_fill_threads>false</enable_fill_threads>
+            <enable_threads_profiling>true</enable_threads_profiling>
+          </debug_options>
+          <hooks>
+            <thread_extra_fields_hook />
+            <thread_initialization_hook />
+            <thread_finalization_hook />
+            <thread_context_switch_hook />
+            <idle_loop_hook />
+            <system_tick_hook />
+            <system_halt_hook />
+          </hooks>
+        </groups>
+      </instance>
+      <instance locked="false" id="org.chibios.spc5.components.kernel.port.gcc.stm32f4xx">
+        <groups />
+      </instance>
+      <instance locked="false" id="org.chibios.spc5.components.external.cmsis">
+        <groups />
+      </instance>
+      <instance locked="false" id="org.chibios.spc5.components.hal">
+        <groups>
+          <pal_driver_settings>
+            <enabled>true</enabled>
+          </pal_driver_settings>
+          <serial_driver_settings>
+            <enabled>true</enabled>
+            <default_bit_rate>38400</default_bit_rate>
+            <buffers_size>16</buffers_size>
+          </serial_driver_settings>
+        </groups>
+      </instance>
+      <instance locked="false" id="org.chibios.spc5.components.hal.platform.stm32f4pxx">
+        <groups>
+          <initialization_settings>
+            <do_not_init>false</do_not_init>
+            <allow_overclocking>false</allow_overclocking>
+          </initialization_settings>
+          <fmpll0_settings>
+            <idf_value>5</idf_value>
+            <ndiv_value>32</ndiv_value>
+            <odf_value index="1">SPC5_FMPLL_ODF_DIV4</odf_value>
+          </fmpll0_settings>
+          <fmpll1_settings>
+            <idf_value>5</idf_value>
+            <ndiv_value>60</ndiv_value>
+            <odf_value index="1">SPC5_FMPLL_ODF_DIV4</odf_value>
+          </fmpll1_settings>
+          <serial_driver_settings>
+            <use_linflex0>true</use_linflex0>
+            <use_linflex1>true</use_linflex1>
+            <linflex0_irq_priority>8</linflex0_irq_priority>
+            <linflex1_irq_priority>8</linflex1_irq_priority>
+          </serial_driver_settings>
+        </groups>
+      </instance>
       <instance locked="false" id="org.chibios.spc5.components.board.stm32f4xx">
         <groups>
           <identification>
@@ -51,53 +149,7 @@
             <mode index="0">RMII</mode>
           </phy_settings>
           <i_o_settings>
-            <pins_list>
-              <pin_settings>
-                <pin_identification>
-                  <identifier>PIN_NAME</identifier>
-                  <port index="0">GPIOA</port>
-                  <bit index="0">0</bit>
-                </pin_identification>
-                <settings>
-                  <pin_mode index="0">Input</pin_mode>
-                  <latched_state index="0">Low</latched_state>
-                  <output_type index="0">PushPull</output_type>
-                  <output_speed index="2">50MHz</output_speed>
-                  <input_resistor index="1">Pull-Up</input_resistor>
-                  <alternate_function index="0">0</alternate_function>
-                </settings>
-              </pin_settings>
-              <pin_settings>
-                <pin_identification>
-                  <identifier>LED2</identifier>
-                  <port index="0">GPIOA</port>
-                  <bit index="1">1</bit>
-                </pin_identification>
-                <settings>
-                  <pin_mode index="1">Output</pin_mode>
-                  <latched_state index="0">Low</latched_state>
-                  <output_type index="0">PushPull</output_type>
-                  <output_speed index="2">50MHz</output_speed>
-                  <input_resistor index="0">Floating</input_resistor>
-                  <alternate_function index="0">0</alternate_function>
-                </settings>
-              </pin_settings>
-              <pin_settings>
-                <pin_identification>
-                  <identifier />
-                  <port index="0">GPIOA</port>
-                  <bit index="2">2</bit>
-                </pin_identification>
-                <settings>
-                  <pin_mode index="2">Alternate</pin_mode>
-                  <latched_state index="0">Low</latched_state>
-                  <output_type index="0">PushPull</output_type>
-                  <output_speed index="2">50MHz</output_speed>
-                  <input_resistor index="0">Floating</input_resistor>
-                  <alternate_function index="5">5</alternate_function>
-                </settings>
-              </pin_settings>
-            </pins_list>
+            <pins_list />
           </i_o_settings>
           <initialization_code>
             <early_initialization_code />

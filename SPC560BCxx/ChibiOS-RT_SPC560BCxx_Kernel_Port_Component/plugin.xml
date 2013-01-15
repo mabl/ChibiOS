@@ -20,19 +20,19 @@
             <exportedFeatures>
                <exportedFeature
                      brief="Generic ChibiOS/RT port interface."
-                     exclusive="true"
+                     exclusive="false"
                      id="org.chibios.spc5.features.kernel.port">
                </exportedFeature>
                <exportedFeature
-                     exclusive="true"
+                     exclusive="false"
                      id="org.chibios.spc5.features.kernel.port.gcc">
                </exportedFeature>
                <exportedFeature
-                     exclusive="true"
+                     exclusive="false"
                      id="org.chibios.spc5.features.kernel.port.gcc.ppc">
                </exportedFeature>
                <exportedFeature
-                     exclusive="true"
+                     exclusive="false"
                      id="org.chibios.spc5.features.kernel.port.gcc.ppc.spc560bcxx">
                </exportedFeature>
             </exportedFeatures>
