@@ -40,130 +40,15 @@
                         type="boolean">
                   </property>
                </group>
-               <group
-                     expanded="false"
-                     name="FMPLL0 Settings">
-                  <description>
-                     FMPLL0 settings, errors in settings or invalid settings are detected at compile time.
-                  </description>
-                  <property
-                        brief="FMPLL0 Input Divider Value"
-                        default="5"
-                        editable="true"
-                        max="15"
-                        min="1"
-                        name="IDF Value"
-                        required="true"
-                        type="unsigned">
-                  </property>
-                  <property
-                        brief="FMPLL0 Multiplier Value"
-                        default="32"
-                        editable="true"
-                        max="96"
-                        min="32"
-                        name="NDIV Value"
-                        required="true"
-                        type="unsigned">
-                  </property>
-                  <property
-                        brief="FMPLL0 Output Divider Value"
-                        default="1"
-                        editable="true"
-                        name="ODF Value"
-                        required="true"
-                        type="enum"
-                        value="SPC5_FMPLL_ODF_DIV2,SPC5_FMPLL_ODF_DIV4,SPC5_FMPLL_ODF_DIV8,SPC5_FMPLL_ODF_DIV16">
-                  </property>
-               </group>
-               <group
-                     expanded="false"
-                     name="FMPLL1 Settings">
-                  <description>
-                     FMPLL1 settings, errors in settings or invalid settings are detected at compile time.
-                  </description>
-                  <property
-                        brief="FMPLL1 Input Divider Value"
-                        default="5"
-                        editable="true"
-                        max="15"
-                        min="1"
-                        name="IDF Value"
-                        required="true"
-                        type="unsigned">
-                  </property>
-                  <property
-                        brief="FMPLL1 Multiplier Value"
-                        default="60"
-                        editable="true"
-                        max="96"
-                        min="32"
-                        name="NDIV Value"
-                        required="true"
-                        type="unsigned">
-                  </property>
-                  <property
-                        brief="FMPLL1 Output Divider Value"
-                        default="1"
-                        editable="true"
-                        name="ODF Value"
-                        required="true"
-                        type="enum"
-                        value="SPC5_FMPLL_ODF_DIV2,SPC5_FMPLL_ODF_DIV4,SPC5_FMPLL_ODF_DIV8,SPC5_FMPLL_ODF_DIV16">
-                  </property>
-               </group>
-               <group
-                     expanded="false"
-                     name="Serial Driver Settings">
-                  <description>
-                     Settings related to the Serial Driver, note that the driver must be enabled in the portable HAL configuration.
-                  </description>
-                  <property
-                        brief="Enables support for LINFLEX0 in the Serial Driver"
-                        default="true"
-                        editable="true"
-                        name="Use LINFLEX0"
-                        required="true"
-                        type="boolean">
-                  </property>
-                  <property
-                        brief="Enables support for LINFLEX1 in the Serial Driver"
-                        default="true"
-                        editable="true"
-                        name="Use LINFLEX1"
-                        required="true"
-                        type="boolean">
-                  </property>
-                  <property
-                        brief="IRQ priority to be assigned to the LINFLEX0 peripheral"
-                        default="8"
-                        editable="true"
-                        max="15"
-                        min="1"
-                        name="LINFLEX0 IRQ Priority"
-                        required="true"
-                        type="unsigned">
-                  </property>
-                  <property
-                        brief="IRQ priority to be assigned to the LINFLEX1 peripheral"
-                        default="8"
-                        editable="true"
-                        max="15"
-                        min="1"
-                        name="LINFLEX1 IRQ Priority"
-                        required="true"
-                        type="unsigned">
-                  </property>
-               </group>
             </groups>
             <exportedFeatures>
                <exportedFeature
                      exclusive="true"
-                     id="org.chibios.spc5.features.hal.platform.stm32f4xx">
+                     id="org.chibios.spc5.features.hal.platform">
                </exportedFeature>
                <exportedFeature
                      exclusive="true"
-                     id="org.chibios.spc5.features.hal.platform">
+                     id="org.chibios.spc5.features.hal.platform.stm32f4xx">
                </exportedFeature>
             </exportedFeatures>
             <requiredFeatures>
