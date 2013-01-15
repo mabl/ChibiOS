@@ -167,6 +167,16 @@
                      id="com.st.tools.spc5.features.build.gccenv">
                </exportedFeature>
                <exportedFeature
+                     brief="This feature declares an Cortex-Mx based project."
+                     exclusive="false"
+                     id="com.st.tools.spc5.features.platform.arm.cortex.mx">
+               </exportedFeature>
+               <exportedFeature
+                     brief="This feature declares an Cortex-M4 based project."
+                     exclusive="false"
+                     id="com.st.tools.spc5.features.platform.arm.cortex.m4">
+               </exportedFeature>
+               <exportedFeature
                      brief="This feature declares an STM32F4xx based project."
                      exclusive="false"
                      id="com.st.tools.spc5.features.platform.stm32f4xx">

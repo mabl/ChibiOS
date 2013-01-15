@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: CMSIS Component
+Bundle-SymbolicName: org.chibios.spc5.components.external.cmsis;singleton:=true
+Bundle-Version: 3.1.0.qualifier
+Bundle-Activator: activator.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ com.st.tools.spc5;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: .
+Bundle-Vendor: arm.com

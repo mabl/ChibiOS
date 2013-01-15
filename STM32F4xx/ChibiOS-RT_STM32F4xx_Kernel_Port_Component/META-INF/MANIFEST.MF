@@ -7,7 +7,8 @@ Bundle-Activator: activator.Activator
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
  com.st.tools.spc5;bundle-version="1.0.0",
- org.chibios.spc5.components.kernel;bundle-version="[2.5.1,2.5.2)"
+ org.chibios.spc5.components.kernel;bundle-version="[2.5.1,2.5.2)",
+ org.chibios.spc5.components.external.cmsis;bundle-version="3.1.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .

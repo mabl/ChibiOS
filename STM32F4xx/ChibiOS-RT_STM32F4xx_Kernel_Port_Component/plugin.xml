@@ -13,7 +13,7 @@
                 Kernel GCC port layer for Power Architecture core on the STM32F4xx.
             </description>
             <groups
-                  name="Power Architecture Settings">
+                  name="Cortex-M4 Architecture Settings">
                <description>
                   Power Architecture GCC port options and settings.
                </description></groups>
