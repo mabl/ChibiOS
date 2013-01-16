@@ -21,10 +21,10 @@
                      expanded="false"
                      name="Initialization Settings">
                   <description>
-                     Generic initialization-related settings.
+                     Generic initialization-related settings. Note that the validity of the following settings is performed at compile time. Changing the default values requires a careful reading of the STM32F4xx Reference Manual, especially the section regarding the RCC unit.
                   </description>
                   <property
-                        brief="Activating this options bypasses the whole clock initialization phase"
+                        brief="Activating this options bypasses the whole clock initialization phase. All the following settings are ignored."
                         default="false"
                         editable="true"
                         name="Do Not Init"
@@ -32,12 +32,236 @@
                         type="boolean">
                   </property>
                   <property
-                        brief="Enabling this options disables all consistency checks on the clock initialization values"
-                        default="false"
+                        brief="Enables or disables the HSI oscillator."
+                        default="true"
                         editable="true"
-                        name="Allow Overclocking"
+                        name="Enable HSI Oscillator"
                         required="true"
                         type="boolean">
+                  </property>
+                  <property
+                        brief="Enables or disables the LSI oscillator."
+                        default="true"
+                        editable="true"
+                        name="Enable LSI Oscillator"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables or disables the HSE oscillator."
+                        default="true"
+                        editable="true"
+                        name="Enable HSE Oscillator"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables or disables the LSE oscillator."
+                        default="false"
+                        editable="true"
+                        name="Enable LSE Oscillator"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Select if the 48MHz internal clock is required. This clock is used by USB and SDIO."
+                        default="true"
+                        editable="true"
+                        name="Enable 48MHz Clock"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Clock source used by the system."
+                        default="2"
+                        editable="true"
+                        name="System Clock Source"
+                        required="true"
+                        type="enum"
+                        value="HSI,HSE,PLL">
+                  </property>
+                  <property
+                        brief="Clock source used to drive the PLL."
+                        default="1"
+                        editable="true"
+                        name="PLL Clock Source"
+                        required="true"
+                        type="enum"
+                        value="HSI,HSE">
+                  </property>
+                  <property
+                        brief="PLL &quot;M&quot; Divider, divides the input clock."
+                        default="8"
+                        editable="true"
+                        max="63"
+                        min="2"
+                        name="PLL Q Input Divider"
+                        required="true"
+                        type="unsigned">
+                  </property>
+                  <property
+                        brief="PLL &quot;N&quot; Multiplier."
+                        default="336"
+                        editable="true"
+                        max="432"
+                        min="192"
+                        name="PLL N Multiplier"
+                        required="true"
+                        type="unsigned">
+                  </property>
+                  <property
+                        brief="PLL &quot;P&quot; Divider."
+                        default="0"
+                        editable="true"
+                        name="PLL P Divider"
+                        required="true"
+                        type="enum"
+                        value="2,4,6,8">
+                  </property>
+                  <property
+                        brief="PLL &quot;Q&quot; Divider."
+                        default="5"
+                        editable="true"
+                        name="PLL Q Divider"
+                        required="true"
+                        type="enum"
+                        value="2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+                  </property>
+                  <property
+                        brief="AHB Divider."
+                        default="0"
+                        editable="true"
+                        name="AHB Divider"
+                        required="true"
+                        type="enum"
+                        value="1,2,4,8,16,64,128,256,512">
+                  </property>
+                  <property
+                        brief="APB1 Divider."
+                        default="2"
+                        editable="true"
+                        name="APB1 Divider"
+                        required="true"
+                        type="enum"
+                        value="1,2,4,8,16">
+                  </property>
+                  <property
+                        brief="APB2 Divider."
+                        default="1"
+                        editable="true"
+                        name="APB2 Divider"
+                        required="true"
+                        type="enum"
+                        value="1,2,4,8,16">
+                  </property>
+                  <property
+                        brief="Clock source used by the RTC."
+                        default="2"
+                        editable="true"
+                        name="RTC Clock Source"
+                        required="true"
+                        type="enum"
+                        value="NOCLOCK,LSE,LSI,HSEDIV">
+                  </property>
+                  <property
+                        brief="RTC HSE divider value if the source is HSEDIV."
+                        default="8"
+                        editable="true"
+                        max="31"
+                        min="2"
+                        name="RTC HSE Divider"
+                        required="true"
+                        type="unsigned">
+                  </property>
+                  <property
+                        brief="Clock source used by the MCO1 output pin."
+                        default="0"
+                        editable="true"
+                        name="MCO1 Clock Source"
+                        required="true"
+                        type="enum"
+                        value="HSI,LSE,HSE,PLL">
+                  </property>
+                  <property
+                        brief="MCO1 Divider."
+                        default="0"
+                        editable="true"
+                        name="MCO1 Divider"
+                        required="true"
+                        type="enum"
+                        value="1,2,3,4,5">
+                  </property>
+                  <property
+                        brief="Clock source used by the MCO2 output pin."
+                        default="0"
+                        editable="true"
+                        name="MCO2 Clock Source"
+                        required="true"
+                        type="enum"
+                        value="SYSCLK,PLLI2S,HSE,PLL">
+                  </property>
+                  <property
+                        brief="MCO2 Divider."
+                        default="4"
+                        editable="true"
+                        name="MCO2 Divider"
+                        required="true"
+                        type="enum"
+                        value="1,2,3,4,5">
+                  </property>
+                  <property
+                        brief="I2S clock source."
+                        default="1"
+                        editable="true"
+                        name="I2S Clock Source"
+                        required="true"
+                        type="enum"
+                        value="PLLI2S,CKIN">
+                  </property>
+                  <property
+                        brief="I2S PLL &quot;N&quot; Multiplier."
+                        default="192"
+                        editable="true"
+                        max="432"
+                        min="192"
+                        name="I2S PLL N Multiplier"
+                        required="true"
+                        type="unsigned">
+                  </property>
+                  <property
+                        brief="I2S PLL &quot;R&quot; Divider."
+                        default="3"
+                        editable="true"
+                        name="I2S PLL R Divider"
+                        required="true"
+                        type="enum"
+                        value="2,3,4,5,6,7">
+                  </property>
+                  <property
+                        brief="Scalability level 1 is for maximum performance."
+                        default="0"
+                        editable="true"
+                        name="Voltage Output Scaling"
+                        required="true"
+                        type="enum"
+                        value="Scale 1, Scale 2, Scale 3">
+                  </property>
+                  <property
+                        brief="Enable Power Voltage Detector."
+                        default="false"
+                        editable="true"
+                        name="Enable Power Voltage Detector"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Power Voltage Detector Level."
+                        default="0"
+                        editable="true"
+                        name="Power Voltage Detector Level"
+                        required="true"
+                        type="enum"
+                        value="2.0,2.1,2.3,2.5,2.6,2.7,2.8,2.9">
                   </property>
                </group>
             </groups>
