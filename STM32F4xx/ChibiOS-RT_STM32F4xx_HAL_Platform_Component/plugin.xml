@@ -264,6 +264,914 @@
                         value="2.0,2.1,2.3,2.5,2.6,2.7,2.8,2.9">
                   </property>
                </group>
+               <group
+                     expanded="false"
+                     name="DMA Settings">
+                  <description>
+                     DMA settings for the various peripherals. Note that peripherals can share DMA streams but the drivers cannot be activated at the same time. DMA conflicts are runtime errors and are catched by an assertion.
+                  </description>
+                  <property
+                        brief="Stream associated to the ADC1 peripheral."
+                        default="1"
+                        editable="true"
+                        name="ADC1 Stream"
+                        required="true"
+                        type="enum"
+                        value="DMA 2 Stream 0,DMA 2 Stream 4">
+                  </property>
+                  <property
+                        brief="Stream associated to the ADC2 peripheral."
+                        default="0"
+                        editable="true"
+                        name="ADC2 Stream"
+                        required="true"
+                        type="enum"
+                        value="DMA 2 Stream 2,DMA 2 Stream 3">
+                  </property>
+                  <property
+                        brief="Stream associated to the ADC3 peripheral."
+                        default="1"
+                        editable="true"
+                        name="ADC3 Stream"
+                        required="true"
+                        type="enum"
+                        value="DMA 2 Stream 0,DMA 2 Stream 1">
+                  </property>
+                  <property
+                        brief="DMA priority of the ADC1 DMA stream."
+                        default="2"
+                        editable="true"
+                        name="ADC1 Stream Priority"
+                        required="true"
+                        type="enum"
+                        value="Lowest,Medium-Low,Medium-High,Highest">
+                  </property>
+                  <property
+                        brief="DMA priority of the ADC2 DMA stream."
+                        default="2"
+                        editable="true"
+                        name="ADC2 Stream Priority"
+                        required="true"
+                        type="enum"
+                        value="Lowest,Medium-Low,Medium-High,Highest">
+                  </property>
+                  <property
+                        brief="DMA priority of the ADC3 DMA stream."
+                        default="2"
+                        editable="true"
+                        name="ADC3 Stream Priority"
+                        required="true"
+                        type="enum"
+                        value="Lowest,Medium-Low,Medium-High,Highest">
+                  </property>
+                  <property
+                        brief="Function to be invoked in case of a DMA fault, note that a DMA fault is a serious hardware condition and is best handle with a system stop or reset."
+                        default="chSysHalt()"
+                        editable="true"
+                        name="ADC DMAs Error Hook"
+                        required="true"
+                        type="string">
+                  </property>
+                  <property
+                        brief="Stream associated to the I2C1 (RX) peripheral."
+                        default="0"
+                        editable="true"
+                        name="I2C1 RX Stream"
+                        required="true"
+                        type="enum"
+                        value="DMA 1 Stream 0,DMA 1 Stream 5">
+                  </property>
+                  <property
+                        brief="Stream associated to the I2C1 (TX) peripheral."
+                        default="0"
+                        editable="true"
+                        name="I2C1 TX Stream"
+                        required="true"
+                        type="enum"
+                        value="DMA 1 Stream 6,DMA 1 Stream 7">
+                  </property>
+                  <property
+                        brief="Stream associated to the I2C2 (RX) peripheral."
+                        default="0"
+                        editable="true"
+                        name="I2C2 RX Stream"
+                        required="true"
+                        type="enum"
+                        value="DMA 1 Stream 2,DMA 1 Stream 3">
+                  </property>
+                  <property
+                        brief="Stream associated to the I2C2 (TX) peripheral."
+                        default="0"
+                        editable="true"
+                        name="I2C2 TX Stream"
+                        required="true"
+                        type="enum"
+                        value="DMA 1 Stream 7">
+                  </property>
+                  <property
+                        brief="Stream associated to the I2C3 (RX) peripheral."
+                        default="0"
+                        editable="true"
+                        name="I2C3 RX Stream"
+                        required="true"
+                        type="enum"
+                        value="DMA 1 Stream 2">
+                  </property>
+                  <property
+                        brief="Stream associated to the I2C3 (TX) peripheral."
+                        default="0"
+                        editable="true"
+                        name="I2C3 TX Stream"
+                        required="true"
+                        type="enum"
+                        value="DMA 1 Stream 4">
+                  </property>
+                  <property
+                        brief="DMA priority of the I2C1 RX DMA stream."
+                        default="3"
+                        editable="true"
+                        name="I2C1 RX Stream Priority"
+                        required="true"
+                        type="enum"
+                        value="Lowest,Medium-Low,Medium-High,Highest">
+                  </property>
+                  <property
+                        brief="DMA priority of the I2C1 TX DMA stream."
+                        default="3"
+                        editable="true"
+                        name="I2C1 TX Stream Priority"
+                        required="true"
+                        type="enum"
+                        value="Lowest,Medium-Low,Medium-High,Highest">
+                  </property>
+                  <property
+                        brief="DMA priority of the I2C2 RX DMA stream."
+                        default="3"
+                        editable="true"
+                        name="I2C2 RX Stream Priority"
+                        required="true"
+                        type="enum"
+                        value="Lowest,Medium-Low,Medium-High,Highest">
+                  </property>
+                  <property
+                        brief="DMA priority of the I2C2 TX DMA stream."
+                        default="3"
+                        editable="true"
+                        name="I2C2 TX Stream Priority"
+                        required="true"
+                        type="enum"
+                        value="Lowest,Medium-Low,Medium-High,Highest">
+                  </property>
+                  <property
+                        brief="DMA priority of the I2C3 RX DMA stream."
+                        default="3"
+                        editable="true"
+                        name="I2C3 RX Stream Priority"
+                        required="true"
+                        type="enum"
+                        value="Lowest,Medium-Low,Medium-High,Highest">
+                  </property>
+                  <property
+                        brief="DMA priority of the I2C3 TX DMA stream."
+                        default="3"
+                        editable="true"
+                        name="I2C3 TX Stream Priority"
+                        required="true"
+                        type="enum"
+                        value="Lowest,Medium-Low,Medium-High,Highest">
+                  </property>
+                  <property
+                        brief="Function to be invoked in case of a DMA fault, note that a DMA fault is a serious hardware condition and is best handle with a system stop or reset."
+                        default="chSysHalt()"
+                        editable="true"
+                        name="I2C DMAs Error Hook"
+                        required="true"
+                        type="string">
+                  </property>
+                  <property
+                        brief="Stream associated to the SDIO peripheral."
+                        default="0"
+                        editable="true"
+                        name="SDIO Stream"
+                        required="true"
+                        type="enum"
+                        value="DMA 2 Stream 3,DMA 2 Stream 6">
+                  </property>
+                  <property
+                        brief="DMA priority of the SDIO DMA stream."
+                        default="3"
+                        editable="true"
+                        name="SDIO Stream Priority"
+                        required="true"
+                        type="enum"
+                        value="Lowest,Medium-Low,Medium-High,Highest">
+                  </property>
+                  <property
+                        brief="Stream associated to the SPI1 (RX) peripheral."
+                        default="0"
+                        editable="true"
+                        name="SPI1 RX Stream"
+                        required="true"
+                        type="enum"
+                        value="DMA 2 Stream 0,DMA 2 Stream 2">
+                  </property>
+                  <property
+                        brief="Stream associated to the SPI1 (TX) peripheral."
+                        default="0"
+                        editable="true"
+                        name="SPI1 TX Stream"
+                        required="true"
+                        type="enum"
+                        value="DMA 2 Stream 3,DMA 2 Stream 5">
+                  </property>
+                  <property
+                        brief="Stream associated to the SPI2 (RX) peripheral."
+                        default="0"
+                        editable="true"
+                        name="SPI2 RX Stream"
+                        required="true"
+                        type="enum"
+                        value="DMA 1 Stream 3">
+                  </property>
+                  <property
+                        brief="Stream associated to the SPI2 (TX) peripheral."
+                        default="0"
+                        editable="true"
+                        name="SPI2 TX Stream"
+                        required="true"
+                        type="enum"
+                        value="DMA 1 Stream 4">
+                  </property>
+                  <property
+                        brief="Stream associated to the SPI3 (RX) peripheral."
+                        default="0"
+                        editable="true"
+                        name="SPI3 RX Stream"
+                        required="true"
+                        type="enum"
+                        value="DMA 1 Stream 0,DMA 1 Stream 2">
+                  </property>
+                  <property
+                        brief="Stream associated to the SPI3 (TX) peripheral."
+                        default="1"
+                        editable="true"
+                        name="SPI3 TX Stream"
+                        required="true"
+                        type="enum"
+                        value="DMA 1 Stream 5,DMA 1 Stream 7">
+                  </property>
+                  <property
+                        brief="DMA priority of the SPI1 RX DMA stream."
+                        default="1"
+                        editable="true"
+                        name="SPI1 RX Stream Priority"
+                        required="true"
+                        type="enum"
+                        value="Lowest,Medium-Low,Medium-High,Highest">
+                  </property>
+                  <property
+                        brief="DMA priority of the SPI1 TX DMA stream."
+                        default="1"
+                        editable="true"
+                        name="SPI1 TX Stream Priority"
+                        required="true"
+                        type="enum"
+                        value="Lowest,Medium-Low,Medium-High,Highest">
+                  </property>
+                  <property
+                        brief="DMA priority of the SPI2 RX DMA stream."
+                        default="1"
+                        editable="true"
+                        name="SPI2 RX Stream Priority"
+                        required="true"
+                        type="enum"
+                        value="Lowest,Medium-Low,Medium-High,Highest">
+                  </property>
+                  <property
+                        brief="DMA priority of the SPI2 TX DMA stream."
+                        default="1"
+                        editable="true"
+                        name="SPI2 TX Stream Priority"
+                        required="true"
+                        type="enum"
+                        value="Lowest,Medium-Low,Medium-High,Highest">
+                  </property>
+                  <property
+                        brief="DMA priority of the SPI3 RX DMA stream."
+                        default="1"
+                        editable="true"
+                        name="SPI3 RX Stream Priority"
+                        required="true"
+                        type="enum"
+                        value="Lowest,Medium-Low,Medium-High,Highest">
+                  </property>
+                  <property
+                        brief="DMA priority of the SPI3 TX DMA stream."
+                        default="1"
+                        editable="true"
+                        name="SPI3 TX Stream Priority"
+                        required="true"
+                        type="enum"
+                        value="Lowest,Medium-Low,Medium-High,Highest">
+                  </property>
+                  <property
+                        brief="Function to be invoked in case of a DMA fault, note that a DMA fault is a serious hardware condition and is best handle with a system stop or reset."
+                        default="chSysHalt()"
+                        editable="true"
+                        name="SPI DMAs Error Hook"
+                        required="true"
+                        type="string">
+                  </property>
+                  <property
+                        brief="Stream associated to the USART1 (RX) peripheral."
+                        default="1"
+                        editable="true"
+                        name="USART1 RX Stream"
+                        required="true"
+                        type="enum"
+                        value="DMA 2 Stream 2,DMA 2 Stream 5">
+                  </property>
+                  <property
+                        brief="Stream associated to the USART1 (TX) peripheral."
+                        default="0"
+                        editable="true"
+                        name="USART1 TX Stream"
+                        required="true"
+                        type="enum"
+                        value="DMA 2 Stream 7">
+                  </property>
+                  <property
+                        brief="Stream associated to the USART2 (RX) peripheral."
+                        default="0"
+                        editable="true"
+                        name="USART2 RX Stream"
+                        required="true"
+                        type="enum"
+                        value="DMA 1 Stream 5">
+                  </property>
+                  <property
+                        brief="Stream associated to the USART2 (TX) peripheral."
+                        default="0"
+                        editable="true"
+                        name="USART2 TX Stream"
+                        required="true"
+                        type="enum"
+                        value="DMA 1 Stream 6">
+                  </property>
+                  <property
+                        brief="Stream associated to the USART3 (RX) peripheral."
+                        default="0"
+                        editable="true"
+                        name="USART3 RX Stream"
+                        required="true"
+                        type="enum"
+                        value="DMA 1 Stream 1">
+                  </property>
+                  <property
+                        brief="Stream associated to the USART3 (TX) peripheral."
+                        default="0"
+                        editable="true"
+                        name="USART3 TX Stream"
+                        required="true"
+                        type="enum"
+                        value="DMA 1 Stream 3,DMA 1 Stream 4">
+                  </property>
+                  <property
+                        brief="Stream associated to the USART6 (RX) peripheral."
+                        default="1"
+                        editable="true"
+                        name="USART6 RX Stream"
+                        required="true"
+                        type="enum"
+                        value="DMA 2 Stream 1,DMA 2 Stream 2">
+                  </property>
+                  <property
+                        brief="Stream associated to the USART6 (TX) peripheral."
+                        default="1"
+                        editable="true"
+                        name="USART6 TX Stream"
+                        required="true"
+                        type="enum"
+                        value="DMA 2 Stream 6,DMA 2 Stream 7">
+                  </property>
+                  <property
+                        brief="DMA priority of the USART1 RX DMA stream."
+                        default="0"
+                        editable="true"
+                        name="USART1 RX Stream Priority"
+                        required="true"
+                        type="enum"
+                        value="Lowest,Medium-Low,Medium-High,Highest">
+                  </property>
+                  <property
+                        brief="DMA priority of the USART1 TX DMA stream."
+                        default="0"
+                        editable="true"
+                        name="USART1 TX Stream Priority"
+                        required="true"
+                        type="enum"
+                        value="Lowest,Medium-Low,Medium-High,Highest">
+                  </property>
+                  <property
+                        brief="DMA priority of the USART2 RX DMA stream."
+                        default="0"
+                        editable="true"
+                        name="USART2 RX Stream Priority"
+                        required="true"
+                        type="enum"
+                        value="Lowest,Medium-Low,Medium-High,Highest">
+                  </property>
+                  <property
+                        brief="DMA priority of the USART2 TX DMA stream."
+                        default="0"
+                        editable="true"
+                        name="USART2 TX Stream Priority"
+                        required="true"
+                        type="enum"
+                        value="Lowest,Medium-Low,Medium-High,Highest">
+                  </property>
+                  <property
+                        brief="DMA priority of the USART3 RX DMA stream."
+                        default="0"
+                        editable="true"
+                        name="USART3 RX Stream Priority"
+                        required="true"
+                        type="enum"
+                        value="Lowest,Medium-Low,Medium-High,Highest">
+                  </property>
+                  <property
+                        brief="DMA priority of the USART3 TX DMA stream."
+                        default="0"
+                        editable="true"
+                        name="USART3 TX Stream Priority"
+                        required="true"
+                        type="enum"
+                        value="Lowest,Medium-Low,Medium-High,Highest">
+                  </property>
+                  <property
+                        brief="DMA priority of the USART6 RX DMA stream."
+                        default="0"
+                        editable="true"
+                        name="USART6 RX Stream Priority"
+                        required="true"
+                        type="enum"
+                        value="Lowest,Medium-Low,Medium-High,Highest">
+                  </property>
+                  <property
+                        brief="DMA priority of the USART6 TX DMA stream."
+                        default="0"
+                        editable="true"
+                        name="USART6 TX Stream Priority"
+                        required="true"
+                        type="enum"
+                        value="Lowest,Medium-Low,Medium-High,Highest">
+                  </property>
+                  <property
+                        brief="Function to be invoked in case of a DMA fault, note that a DMA fault is a serious hardware condition and is best handle with a system stop or reset."
+                        default="chSysHalt()"
+                        editable="true"
+                        name="USART DMAs Error Hook"
+                        required="true"
+                        type="string">
+                  </property>
+               </group>
+               <group
+                     expanded="false"
+                     name="ISR Settings">
+                  <description>
+                     ISR priorities. By default, allowed priorities range from 2 (highest) to 15 (lowest). Priorities 0 and 1 are reserved to Fast Interrupts and cannot be used by the HAL drivers. Note that the number of level reserved for Fast Interrupts can change if port settings are changed.
+                  </description>
+                  <property
+                        brief="Priority of the ADC shared IRQ."
+                        default="6"
+                        editable="true"
+                        name="ADC Shared IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the ADC1 DMA IRQ."
+                        default="6"
+                        editable="true"
+                        name="ADC1 DMA IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the ADC2 DMA IRQ."
+                        default="6"
+                        editable="true"
+                        name="ADC2 DMA IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the ADC3 DMA IRQ."
+                        default="6"
+                        editable="true"
+                        name="ADC3 DMA IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the CAN1 IRQ."
+                        default="11"
+                        editable="true"
+                        name="CAN1 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the CAN2 IRQ."
+                        default="11"
+                        editable="true"
+                        name="CAN2 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the ETH IRQ."
+                        default="13"
+                        editable="true"
+                        name="ETH IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the EXTI0 IRQ."
+                        default="6"
+                        editable="true"
+                        name="EXTI0 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the EXTI1 IRQ."
+                        default="6"
+                        editable="true"
+                        name="EXTI1 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the EXTI2 IRQ."
+                        default="6"
+                        editable="true"
+                        name="EXTI2 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the EXTI3 IRQ."
+                        default="6"
+                        editable="true"
+                        name="EXTI3 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the EXTI4 IRQ."
+                        default="6"
+                        editable="true"
+                        name="EXTI4 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the EXTI5-9 IRQ."
+                        default="6"
+                        editable="true"
+                        name="EXTI5-9 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the EXTI10-15 IRQ."
+                        default="6"
+                        editable="true"
+                        name="EXTI10-15 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the EXTI16 IRQ."
+                        default="6"
+                        editable="true"
+                        name="EXTI16 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the EXTI17 IRQ."
+                        default="6"
+                        editable="true"
+                        name="EXTI17 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the EXTI18 IRQ."
+                        default="6"
+                        editable="true"
+                        name="EXTI18 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the EXTI19 IRQ."
+                        default="6"
+                        editable="true"
+                        name="EXTI19 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the EXTI20 IRQ."
+                        default="6"
+                        editable="true"
+                        name="EXTI20 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the EXTI21 IRQ."
+                        default="6"
+                        editable="true"
+                        name="EXTI21 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the EXTI22 IRQ."
+                        default="6"
+                        editable="true"
+                        name="EXTI22 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the TIM1 IRQ."
+                        default="7"
+                        editable="true"
+                        name="TIM1 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the TIM2 IRQ."
+                        default="7"
+                        editable="true"
+                        name="TIM2 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the TIM3 IRQ."
+                        default="7"
+                        editable="true"
+                        name="TIM3 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the TIM4 IRQ."
+                        default="7"
+                        editable="true"
+                        name="TIM4 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the TIM5 IRQ."
+                        default="7"
+                        editable="true"
+                        name="TIM5 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the TIM8 IRQ."
+                        default="7"
+                        editable="true"
+                        name="TIM8 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the I2C1 IRQ."
+                        default="5"
+                        editable="true"
+                        name="I2C1 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the I2C2 IRQ."
+                        default="5"
+                        editable="true"
+                        name="I2C2 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the I2C3 IRQ."
+                        default="5"
+                        editable="true"
+                        name="I2C3 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the OTGFS IRQ."
+                        default="14"
+                        editable="true"
+                        name="OTGFS IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the OTGHS IRQ."
+                        default="14"
+                        editable="true"
+                        name="OTGHS IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the SPI1 IRQ."
+                        default="10"
+                        editable="true"
+                        name="SPI1 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the SPI2 IRQ."
+                        default="10"
+                        editable="true"
+                        name="SPI2 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the SPI3 IRQ."
+                        default="10"
+                        editable="true"
+                        name="SPI3 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the USART1 IRQ."
+                        default="12"
+                        editable="true"
+                        name="USART1 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the USART2 IRQ."
+                        default="12"
+                        editable="true"
+                        name="USART2 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the USART3 IRQ."
+                        default="12"
+                        editable="true"
+                        name="USART3 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the UART4 IRQ."
+                        default="12"
+                        editable="true"
+                        name="UART4 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the UART5 IRQ."
+                        default="12"
+                        editable="true"
+                        name="UART5 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+                  <property
+                        brief="Priority of the USART6 IRQ."
+                        default="12"
+                        editable="true"
+                        name="USART6 IRQ Priority"
+                        required="true"
+                        type="enum"
+                        value="0 (Fast),1 (Fast),2 (Highest),3,4,5,6,7,8,9,10,11,12,13,14,15 (Lowest)">
+                  </property>
+               </group>
+               <group
+                     expanded="false"
+                     name="Timer Settings">
+                  <description>
+                     Timer peripherals are shared between the GPT, ICU and PWM drivers. Here you can assign each time to a driver or keep them reserved/unused.
+                  </description>
+                  <property
+                        brief="Driver owning the TIM1 timer."
+                        default="0"
+                        editable="true"
+                        name="TIM1 Assignment"
+                        required="true"
+                        type="enum"
+                        value="None,GPT,ICU,PWM">
+                  </property>
+                  <property
+                        brief="Driver owning the TIM2 timer."
+                        default="0"
+                        editable="true"
+                        name="TIM2 Assignment"
+                        required="true"
+                        type="enum"
+                        value="None,GPT,ICU,PWM">
+                  </property>
+                  <property
+                        brief="Driver owning the TIM3 timer."
+                        default="0"
+                        editable="true"
+                        name="TIM3 Assignment"
+                        required="true"
+                        type="enum"
+                        value="None,GPT,ICU,PWM">
+                  </property>
+                  <property
+                        brief="Driver owning the TIM4 timer."
+                        default="0"
+                        editable="true"
+                        name="TIM4 Assignment"
+                        required="true"
+                        type="enum"
+                        value="None,GPT,ICU,PWM">
+                  </property>
+                  <property
+                        brief="Driver owning the TIM5 timer."
+                        default="0"
+                        editable="true"
+                        name="TIM5 Assignment"
+                        required="true"
+                        type="enum"
+                        value="None,GPT,ICU,PWM">
+                  </property>
+                  <property
+                        brief="Driver owning the TIM8 timer."
+                        default="0"
+                        editable="true"
+                        name="TIM8 Assignment"
+                        required="true"
+                        type="enum"
+                        value="None,GPT,ICU,PWM">
+                  </property>
+               </group>
             </groups>
             <exportedFeatures>
                <exportedFeature

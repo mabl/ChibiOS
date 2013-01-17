@@ -88,7 +88,7 @@
           </hooks>
         </groups>
       </instance>
-      <instance locked="false" id="org.chibios.spc5.components.kernel.port.gcc.stm32f4xx">
+      <instance locked="false" id="org.chibios.spc5.components.kernel.port.gcc.armcmx.stm32f4xx">
         <groups />
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.external.cmsis">
@@ -110,24 +110,85 @@
         <groups>
           <initialization_settings>
             <do_not_init>false</do_not_init>
-            <allow_overclocking>false</allow_overclocking>
+            <enable_hsi_oscillator>true</enable_hsi_oscillator>
+            <enable_lsi_oscillator>true</enable_lsi_oscillator>
+            <enable_hse_oscillator>true</enable_hse_oscillator>
+            <enable_lse_oscillator>false</enable_lse_oscillator>
+            <enable_48mhz_clock>true</enable_48mhz_clock>
+            <system_clock_source index="2">PLL</system_clock_source>
+            <pll_clock_source index="1">HSE</pll_clock_source>
+            <pll_q_input_divider>8</pll_q_input_divider>
+            <pll_n_multiplier>336</pll_n_multiplier>
+            <pll_p_divider index="0">2</pll_p_divider>
+            <pll_q_divider index="5">7</pll_q_divider>
+            <ahb_divider index="0">1</ahb_divider>
+            <apb1_divider index="2">4</apb1_divider>
+            <apb2_divider index="1">2</apb2_divider>
+            <rtc_clock_source index="2">LSI</rtc_clock_source>
+            <rtc_hse_divider>8</rtc_hse_divider>
+            <mco1_clock_source index="0">HSI</mco1_clock_source>
+            <mco1_divider index="0">1</mco1_divider>
+            <mco2_clock_source index="0">SYSCLK</mco2_clock_source>
+            <mco2_divider index="4">5</mco2_divider>
+            <i2s_clock_source index="1">CKIN</i2s_clock_source>
+            <i2s_pll_n_multiplier>192</i2s_pll_n_multiplier>
+            <i2s_pll_r_divider index="3">5</i2s_pll_r_divider>
+            <voltage_output_scaling index="0">Scale 1</voltage_output_scaling>
+            <enable_power_voltage_detector>false</enable_power_voltage_detector>
+            <power_voltage_detector_level index="0">2.0</power_voltage_detector_level>
           </initialization_settings>
-          <fmpll0_settings>
-            <idf_value>5</idf_value>
-            <ndiv_value>32</ndiv_value>
-            <odf_value index="1">SPC5_FMPLL_ODF_DIV4</odf_value>
-          </fmpll0_settings>
-          <fmpll1_settings>
-            <idf_value>5</idf_value>
-            <ndiv_value>60</ndiv_value>
-            <odf_value index="1">SPC5_FMPLL_ODF_DIV4</odf_value>
-          </fmpll1_settings>
-          <serial_driver_settings>
-            <use_linflex0>true</use_linflex0>
-            <use_linflex1>true</use_linflex1>
-            <linflex0_irq_priority>8</linflex0_irq_priority>
-            <linflex1_irq_priority>8</linflex1_irq_priority>
-          </serial_driver_settings>
+          <dma_settings>
+            <adc1_stream index="1">DMA 2 Stream 4</adc1_stream>
+            <adc2_stream index="0">DMA 2 Stream 2</adc2_stream>
+            <adc3_stream index="1">DMA 2 Stream 1</adc3_stream>
+            <adc1_stream_priority index="2">Medium-High</adc1_stream_priority>
+            <adc2_stream_priority index="2">Medium-High</adc2_stream_priority>
+            <adc3_stream_priority index="2">Medium-High</adc3_stream_priority>
+            <adc_dmas_error_hook>chSysHalt()</adc_dmas_error_hook>
+            <i2c1_rx_stream index="0">DMA 1 Stream 0</i2c1_rx_stream>
+            <i2c1_tx_stream index="0">DMA 1 Stream 6</i2c1_tx_stream>
+            <i2c2_rx_stream index="0">DMA 1 Stream 2</i2c2_rx_stream>
+            <i2c2_tx_stream index="0">DMA 1 Stream 7</i2c2_tx_stream>
+            <i2c3_rx_stream index="0">DMA 1 Stream 2</i2c3_rx_stream>
+            <i2c3_tx_stream index="0">DMA 1 Stream 4</i2c3_tx_stream>
+            <i2c1_rx_stream_priority index="3">Highest</i2c1_rx_stream_priority>
+            <i2c1_tx_stream_priority index="3">Highest</i2c1_tx_stream_priority>
+            <i2c2_rx_stream_priority index="3">Highest</i2c2_rx_stream_priority>
+            <i2c2_tx_stream_priority index="3">Highest</i2c2_tx_stream_priority>
+            <i2c3_rx_stream_priority index="3">Highest</i2c3_rx_stream_priority>
+            <i2c3_tx_stream_priority index="3">Highest</i2c3_tx_stream_priority>
+            <i2c_dmas_error_hook>chSysHalt()</i2c_dmas_error_hook>
+            <spi1_rx_stream index="0">DMA 2 Stream 0</spi1_rx_stream>
+            <spi1_tx_stream index="0">DMA 2 Stream 3</spi1_tx_stream>
+            <spi2_rx_stream index="0">DMA 1 Stream 3</spi2_rx_stream>
+            <spi2_tx_stream index="0">DMA 1 Stream 4</spi2_tx_stream>
+            <spi3_rx_stream index="0">DMA 1 Stream 0</spi3_rx_stream>
+            <spi3_tx_stream index="1">DMA 1 Stream 7</spi3_tx_stream>
+            <spi1_rx_stream_priority index="1">Medium-Low</spi1_rx_stream_priority>
+            <spi1_tx_stream_priority index="1">Medium-Low</spi1_tx_stream_priority>
+            <spi2_rx_stream_priority index="1">Medium-Low</spi2_rx_stream_priority>
+            <spi2_tx_stream_priority index="1">Medium-Low</spi2_tx_stream_priority>
+            <spi3_rx_stream_priority index="1">Medium-Low</spi3_rx_stream_priority>
+            <spi3_tx_stream_priority index="1">Medium-Low</spi3_tx_stream_priority>
+            <spi_dmas_error_hook>chSysHalt()</spi_dmas_error_hook>
+            <usart1_rx_stream index="1">DMA 2 Stream 5</usart1_rx_stream>
+            <usart1_tx_stream index="0">DMA 2 Stream 7</usart1_tx_stream>
+            <usart2_rx_stream index="0">DMA 1 Stream 5</usart2_rx_stream>
+            <usart2_tx_stream index="0">DMA 1 Stream 6</usart2_tx_stream>
+            <usart3_rx_stream index="0">DMA 1 Stream 1</usart3_rx_stream>
+            <usart3_tx_stream index="0">DMA 1 Stream 3</usart3_tx_stream>
+            <usart6_rx_stream index="1">DMA 2 Stream 2</usart6_rx_stream>
+            <usart6_tx_stream index="1">DMA 2 Stream 7</usart6_tx_stream>
+            <usart1_rx_stream_priority index="0">Lowest</usart1_rx_stream_priority>
+            <usart1_tx_stream_priority index="0">Lowest</usart1_tx_stream_priority>
+            <usart2_rx_stream_priority index="0">Lowest</usart2_rx_stream_priority>
+            <usart2_tx_stream_priority index="0">Lowest</usart2_tx_stream_priority>
+            <usart3_rx_stream_priority index="0">Lowest</usart3_rx_stream_priority>
+            <usart3_tx_stream_priority index="0">Lowest</usart3_tx_stream_priority>
+            <usart6_rx_stream_priority index="0">Lowest</usart6_rx_stream_priority>
+            <usart6_tx_stream_priority index="0">Lowest</usart6_tx_stream_priority>
+            <usart_dmas_error_hook>chSysHalt()</usart_dmas_error_hook>
+          </dma_settings>
         </groups>
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.board.stm32f4xx">
