@@ -117,7 +117,7 @@
             <enable_48mhz_clock>true</enable_48mhz_clock>
             <system_clock_source index="2">PLL</system_clock_source>
             <pll_clock_source index="1">HSE</pll_clock_source>
-            <pll_q_input_divider>8</pll_q_input_divider>
+            <pll_m_input_divider>8</pll_m_input_divider>
             <pll_n_multiplier>336</pll_n_multiplier>
             <pll_p_divider index="0">2</pll_p_divider>
             <pll_q_divider index="5">7</pll_q_divider>
@@ -138,7 +138,7 @@
             <power_voltage_detector_level index="0">2.0</power_voltage_detector_level>
           </initialization_settings>
           <dma_settings>
-            <adc1_stream index="1">DMA 2 Stream 4</adc1_stream>
+            <adc1_stream index="0">DMA 2 Stream 0</adc1_stream>
             <adc2_stream index="0">DMA 2 Stream 2</adc2_stream>
             <adc3_stream index="1">DMA 2 Stream 1</adc3_stream>
             <adc1_stream_priority index="2">Medium-High</adc1_stream_priority>
@@ -151,25 +151,22 @@
             <i2c2_tx_stream index="0">DMA 1 Stream 7</i2c2_tx_stream>
             <i2c3_rx_stream index="0">DMA 1 Stream 2</i2c3_rx_stream>
             <i2c3_tx_stream index="0">DMA 1 Stream 4</i2c3_tx_stream>
-            <i2c1_rx_stream_priority index="3">Highest</i2c1_rx_stream_priority>
-            <i2c1_tx_stream_priority index="3">Highest</i2c1_tx_stream_priority>
-            <i2c2_rx_stream_priority index="3">Highest</i2c2_rx_stream_priority>
-            <i2c2_tx_stream_priority index="3">Highest</i2c2_tx_stream_priority>
-            <i2c3_rx_stream_priority index="3">Highest</i2c3_rx_stream_priority>
-            <i2c3_tx_stream_priority index="3">Highest</i2c3_tx_stream_priority>
+            <i2c1_streams_priority index="3">Highest</i2c1_streams_priority>
+            <i2c2_streams_priority index="3">Highest</i2c2_streams_priority>
+            <i2c3_streams_priority index="3">Highest</i2c3_streams_priority>
             <i2c_dmas_error_hook>chSysHalt()</i2c_dmas_error_hook>
+            <sdio_stream index="0">DMA 2 Stream 3</sdio_stream>
+            <sdio_stream_priority index="3">Highest</sdio_stream_priority>
+            <sdio_dmas_error_hook>chSysHalt()</sdio_dmas_error_hook>
             <spi1_rx_stream index="0">DMA 2 Stream 0</spi1_rx_stream>
             <spi1_tx_stream index="0">DMA 2 Stream 3</spi1_tx_stream>
             <spi2_rx_stream index="0">DMA 1 Stream 3</spi2_rx_stream>
             <spi2_tx_stream index="0">DMA 1 Stream 4</spi2_tx_stream>
             <spi3_rx_stream index="0">DMA 1 Stream 0</spi3_rx_stream>
             <spi3_tx_stream index="1">DMA 1 Stream 7</spi3_tx_stream>
-            <spi1_rx_stream_priority index="1">Medium-Low</spi1_rx_stream_priority>
-            <spi1_tx_stream_priority index="1">Medium-Low</spi1_tx_stream_priority>
-            <spi2_rx_stream_priority index="1">Medium-Low</spi2_rx_stream_priority>
-            <spi2_tx_stream_priority index="1">Medium-Low</spi2_tx_stream_priority>
-            <spi3_rx_stream_priority index="1">Medium-Low</spi3_rx_stream_priority>
-            <spi3_tx_stream_priority index="1">Medium-Low</spi3_tx_stream_priority>
+            <spi1_streams_priority index="1">Medium-Low</spi1_streams_priority>
+            <spi2_streams_priority index="1">Medium-Low</spi2_streams_priority>
+            <spi3_streams_priority index="1">Medium-Low</spi3_streams_priority>
             <spi_dmas_error_hook>chSysHalt()</spi_dmas_error_hook>
             <usart1_rx_stream index="1">DMA 2 Stream 5</usart1_rx_stream>
             <usart1_tx_stream index="0">DMA 2 Stream 7</usart1_tx_stream>
@@ -179,16 +176,63 @@
             <usart3_tx_stream index="0">DMA 1 Stream 3</usart3_tx_stream>
             <usart6_rx_stream index="1">DMA 2 Stream 2</usart6_rx_stream>
             <usart6_tx_stream index="1">DMA 2 Stream 7</usart6_tx_stream>
-            <usart1_rx_stream_priority index="0">Lowest</usart1_rx_stream_priority>
-            <usart1_tx_stream_priority index="0">Lowest</usart1_tx_stream_priority>
-            <usart2_rx_stream_priority index="0">Lowest</usart2_rx_stream_priority>
-            <usart2_tx_stream_priority index="0">Lowest</usart2_tx_stream_priority>
-            <usart3_rx_stream_priority index="0">Lowest</usart3_rx_stream_priority>
-            <usart3_tx_stream_priority index="0">Lowest</usart3_tx_stream_priority>
-            <usart6_rx_stream_priority index="0">Lowest</usart6_rx_stream_priority>
-            <usart6_tx_stream_priority index="0">Lowest</usart6_tx_stream_priority>
+            <usart1_streams_priority index="0">Lowest</usart1_streams_priority>
+            <usart2_streams_priority index="0">Lowest</usart2_streams_priority>
+            <usart3_streams_priority index="0">Lowest</usart3_streams_priority>
+            <usart6_streams_priority index="0">Lowest</usart6_streams_priority>
             <usart_dmas_error_hook>chSysHalt()</usart_dmas_error_hook>
           </dma_settings>
+          <irq_settings>
+            <adc_shared_irq_priority index="6">6</adc_shared_irq_priority>
+            <adc1_dma_irq_priority index="6">6</adc1_dma_irq_priority>
+            <adc2_dma_irq_priority index="6">6</adc2_dma_irq_priority>
+            <adc3_dma_irq_priority index="6">6</adc3_dma_irq_priority>
+            <can1_irq_priority index="11">11</can1_irq_priority>
+            <can2_irq_priority index="11">11</can2_irq_priority>
+            <eth_irq_priority index="13">13</eth_irq_priority>
+            <exti0_irq_priority index="6">6</exti0_irq_priority>
+            <exti1_irq_priority index="6">6</exti1_irq_priority>
+            <exti2_irq_priority index="6">6</exti2_irq_priority>
+            <exti3_irq_priority index="6">6</exti3_irq_priority>
+            <exti4_irq_priority index="6">6</exti4_irq_priority>
+            <exti5_9_irq_priority index="6">6</exti5_9_irq_priority>
+            <exti10_15_irq_priority index="6">6</exti10_15_irq_priority>
+            <exti16_irq_priority index="6">6</exti16_irq_priority>
+            <exti17_irq_priority index="6">6</exti17_irq_priority>
+            <exti18_irq_priority index="6">6</exti18_irq_priority>
+            <exti19_irq_priority index="6">6</exti19_irq_priority>
+            <exti20_irq_priority index="6">6</exti20_irq_priority>
+            <exti21_irq_priority index="6">6</exti21_irq_priority>
+            <exti22_irq_priority index="6">6</exti22_irq_priority>
+            <tim1_irq_priority index="7">7</tim1_irq_priority>
+            <tim2_irq_priority index="7">7</tim2_irq_priority>
+            <tim3_irq_priority index="7">7</tim3_irq_priority>
+            <tim4_irq_priority index="7">7</tim4_irq_priority>
+            <tim5_irq_priority index="7">7</tim5_irq_priority>
+            <tim8_irq_priority index="7">7</tim8_irq_priority>
+            <i2c1_irq_priority index="5">5</i2c1_irq_priority>
+            <i2c2_irq_priority index="5">5</i2c2_irq_priority>
+            <i2c3_irq_priority index="5">5</i2c3_irq_priority>
+            <otgfs_irq_priority index="14">14</otgfs_irq_priority>
+            <otghs_irq_priority index="14">14</otghs_irq_priority>
+            <spi1_irq_priority index="10">10</spi1_irq_priority>
+            <spi2_irq_priority index="10">10</spi2_irq_priority>
+            <spi3_irq_priority index="10">10</spi3_irq_priority>
+            <usart1_irq_priority index="12">12</usart1_irq_priority>
+            <usart2_irq_priority index="12">12</usart2_irq_priority>
+            <usart3_irq_priority index="12">12</usart3_irq_priority>
+            <uart4_irq_priority index="12">12</uart4_irq_priority>
+            <uart5_irq_priority index="12">12</uart5_irq_priority>
+            <usart6_irq_priority index="12">12</usart6_irq_priority>
+          </irq_settings>
+          <timer_settings>
+            <tim1_assignment index="0">None</tim1_assignment>
+            <tim2_assignment index="0">None</tim2_assignment>
+            <tim3_assignment index="0">None</tim3_assignment>
+            <tim4_assignment index="0">None</tim4_assignment>
+            <tim5_assignment index="0">None</tim5_assignment>
+            <tim8_assignment index="0">None</tim8_assignment>
+          </timer_settings>
         </groups>
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.board.stm32f4xx">

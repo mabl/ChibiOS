@@ -95,7 +95,7 @@
                         editable="true"
                         max="63"
                         min="2"
-                        name="PLL Q Input Divider"
+                        name="PLL M Input Divider"
                         required="true"
                         type="unsigned">
                   </property>
@@ -327,7 +327,7 @@
                   <property
                         brief="Function to be invoked in case of a DMA fault, note that a DMA fault is a serious hardware condition and is best handle with a system stop or reset."
                         default="chSysHalt()"
-                        editable="true"
+                        editable="false"
                         name="ADC DMAs Error Hook"
                         required="true"
                         type="string">
@@ -387,55 +387,28 @@
                         value="DMA 1 Stream 4">
                   </property>
                   <property
-                        brief="DMA priority of the I2C1 RX DMA stream."
+                        brief="DMA priority of the I2C1 RX/TX DMA streams."
                         default="3"
                         editable="true"
-                        name="I2C1 RX Stream Priority"
+                        name="I2C1 Streams Priority"
                         required="true"
                         type="enum"
                         value="Lowest,Medium-Low,Medium-High,Highest">
                   </property>
                   <property
-                        brief="DMA priority of the I2C1 TX DMA stream."
+                        brief="DMA priority of the I2C2 RX/TX DMA streams."
                         default="3"
                         editable="true"
-                        name="I2C1 TX Stream Priority"
+                        name="I2C2 Streams Priority"
                         required="true"
                         type="enum"
                         value="Lowest,Medium-Low,Medium-High,Highest">
                   </property>
                   <property
-                        brief="DMA priority of the I2C2 RX DMA stream."
+                        brief="DMA priority of the I2C3 RX/TX DMA streams."
                         default="3"
                         editable="true"
-                        name="I2C2 RX Stream Priority"
-                        required="true"
-                        type="enum"
-                        value="Lowest,Medium-Low,Medium-High,Highest">
-                  </property>
-                  <property
-                        brief="DMA priority of the I2C2 TX DMA stream."
-                        default="3"
-                        editable="true"
-                        name="I2C2 TX Stream Priority"
-                        required="true"
-                        type="enum"
-                        value="Lowest,Medium-Low,Medium-High,Highest">
-                  </property>
-                  <property
-                        brief="DMA priority of the I2C3 RX DMA stream."
-                        default="3"
-                        editable="true"
-                        name="I2C3 RX Stream Priority"
-                        required="true"
-                        type="enum"
-                        value="Lowest,Medium-Low,Medium-High,Highest">
-                  </property>
-                  <property
-                        brief="DMA priority of the I2C3 TX DMA stream."
-                        default="3"
-                        editable="true"
-                        name="I2C3 TX Stream Priority"
+                        name="I2C3 Streams Priority"
                         required="true"
                         type="enum"
                         value="Lowest,Medium-Low,Medium-High,Highest">
@@ -465,6 +438,14 @@
                         required="true"
                         type="enum"
                         value="Lowest,Medium-Low,Medium-High,Highest">
+                  </property>
+                  <property
+                        brief="Function to be invoked in case of a DMA fault, note that a DMA fault is a serious hardware condition and is best handle with a system stop or reset."
+                        default="chSysHalt()"
+                        editable="false"
+                        name="SDIO DMAs Error Hook"
+                        required="true"
+                        type="string">
                   </property>
                   <property
                         brief="Stream associated to the SPI1 (RX) peripheral."
@@ -521,55 +502,28 @@
                         value="DMA 1 Stream 5,DMA 1 Stream 7">
                   </property>
                   <property
-                        brief="DMA priority of the SPI1 RX DMA stream."
+                        brief="DMA priority of the SPI1 RX/TX DMA streams."
                         default="1"
                         editable="true"
-                        name="SPI1 RX Stream Priority"
+                        name="SPI1 Streams Priority"
                         required="true"
                         type="enum"
                         value="Lowest,Medium-Low,Medium-High,Highest">
                   </property>
                   <property
-                        brief="DMA priority of the SPI1 TX DMA stream."
+                        brief="DMA priority of the SPI2 RX/TX DMA streams."
                         default="1"
                         editable="true"
-                        name="SPI1 TX Stream Priority"
+                        name="SPI2 Streams Priority"
                         required="true"
                         type="enum"
                         value="Lowest,Medium-Low,Medium-High,Highest">
                   </property>
                   <property
-                        brief="DMA priority of the SPI2 RX DMA stream."
+                        brief="DMA priority of the SPI3 RX/TX DMA streams."
                         default="1"
                         editable="true"
-                        name="SPI2 RX Stream Priority"
-                        required="true"
-                        type="enum"
-                        value="Lowest,Medium-Low,Medium-High,Highest">
-                  </property>
-                  <property
-                        brief="DMA priority of the SPI2 TX DMA stream."
-                        default="1"
-                        editable="true"
-                        name="SPI2 TX Stream Priority"
-                        required="true"
-                        type="enum"
-                        value="Lowest,Medium-Low,Medium-High,Highest">
-                  </property>
-                  <property
-                        brief="DMA priority of the SPI3 RX DMA stream."
-                        default="1"
-                        editable="true"
-                        name="SPI3 RX Stream Priority"
-                        required="true"
-                        type="enum"
-                        value="Lowest,Medium-Low,Medium-High,Highest">
-                  </property>
-                  <property
-                        brief="DMA priority of the SPI3 TX DMA stream."
-                        default="1"
-                        editable="true"
-                        name="SPI3 TX Stream Priority"
+                        name="SPI3 Streams Priority"
                         required="true"
                         type="enum"
                         value="Lowest,Medium-Low,Medium-High,Highest">
@@ -655,73 +609,37 @@
                         value="DMA 2 Stream 6,DMA 2 Stream 7">
                   </property>
                   <property
-                        brief="DMA priority of the USART1 RX DMA stream."
+                        brief="DMA priority of the USART1 RX/TX DMA streams."
                         default="0"
                         editable="true"
-                        name="USART1 RX Stream Priority"
+                        name="USART1 Streams Priority"
                         required="true"
                         type="enum"
                         value="Lowest,Medium-Low,Medium-High,Highest">
                   </property>
                   <property
-                        brief="DMA priority of the USART1 TX DMA stream."
+                        brief="DMA priority of the USART2 RX/TX DMA streams."
                         default="0"
                         editable="true"
-                        name="USART1 TX Stream Priority"
+                        name="USART2 Streams Priority"
                         required="true"
                         type="enum"
                         value="Lowest,Medium-Low,Medium-High,Highest">
                   </property>
                   <property
-                        brief="DMA priority of the USART2 RX DMA stream."
+                        brief="DMA priority of the USART3 RX/TX DMA streams."
                         default="0"
                         editable="true"
-                        name="USART2 RX Stream Priority"
+                        name="USART3 Streams Priority"
                         required="true"
                         type="enum"
                         value="Lowest,Medium-Low,Medium-High,Highest">
                   </property>
                   <property
-                        brief="DMA priority of the USART2 TX DMA stream."
+                        brief="DMA priority of the USART6 RX/TX DMA streams."
                         default="0"
                         editable="true"
-                        name="USART2 TX Stream Priority"
-                        required="true"
-                        type="enum"
-                        value="Lowest,Medium-Low,Medium-High,Highest">
-                  </property>
-                  <property
-                        brief="DMA priority of the USART3 RX DMA stream."
-                        default="0"
-                        editable="true"
-                        name="USART3 RX Stream Priority"
-                        required="true"
-                        type="enum"
-                        value="Lowest,Medium-Low,Medium-High,Highest">
-                  </property>
-                  <property
-                        brief="DMA priority of the USART3 TX DMA stream."
-                        default="0"
-                        editable="true"
-                        name="USART3 TX Stream Priority"
-                        required="true"
-                        type="enum"
-                        value="Lowest,Medium-Low,Medium-High,Highest">
-                  </property>
-                  <property
-                        brief="DMA priority of the USART6 RX DMA stream."
-                        default="0"
-                        editable="true"
-                        name="USART6 RX Stream Priority"
-                        required="true"
-                        type="enum"
-                        value="Lowest,Medium-Low,Medium-High,Highest">
-                  </property>
-                  <property
-                        brief="DMA priority of the USART6 TX DMA stream."
-                        default="0"
-                        editable="true"
-                        name="USART6 TX Stream Priority"
+                        name="USART6 Streams Priority"
                         required="true"
                         type="enum"
                         value="Lowest,Medium-Low,Medium-High,Highest">
@@ -737,7 +655,7 @@
                </group>
                <group
                      expanded="false"
-                     name="ISR Settings">
+                     name="IRQ Settings">
                   <description>
                      ISR priorities. By default, allowed priorities range from 2 (highest) to 15 (lowest). Priorities 0 and 1 are reserved to Fast Interrupts and cannot be used by the HAL drivers. Note that the number of level reserved for Fast Interrupts can change if port settings are changed.
                   </description>
