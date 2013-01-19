@@ -1031,7 +1031,7 @@
                </group>
                <group
                      expanded="false"
-                     name="Timer Settings">
+                     name="Timers Settings">
                   <description>
                      Timer peripherals are shared between the GPT, ICU and PWM drivers. Here you can assign each time to a driver or keep them reserved/unused.
                   </description>
@@ -1088,6 +1088,266 @@
                         required="true"
                         type="enum"
                         value="None,GPT,ICU,PWM">
+                  </property>
+               </group>
+               <group
+                     expanded="false"
+                     name="ADC Settings">
+                  <description>
+                     Settings related to the ADC units. Note that the ADC driver is enabled in the generic HAL component.
+                  </description>
+                  <property
+                        brief="Clock divider shared among all ADC units."
+                        default="1"
+                        editable="true"
+                        name="ADC Clock Divider"
+                        required="true"
+                        type="enum"
+                        value="2,4,6,8">
+                  </property>
+                  <property
+                        brief="Enables the use of ADC1 through the HAL ADC driver."
+                        default="false"
+                        editable="true"
+                        name="Use ADC1"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables the use of ADC2 through the HAL ADC driver."
+                        default="false"
+                        editable="true"
+                        name="Use ADC2"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables the use of ADC3 through the HAL ADC driver."
+                        default="false"
+                        editable="true"
+                        name="Use ADC3"
+                        required="true"
+                        type="boolean">
+                  </property>
+               </group>
+               <group
+                     expanded="false"
+                     name="CAN Settings">
+                  <description>
+                     Settings related to the CAN units. Note that the CAN driver is enabled in the generic HAL component.
+                  </description>
+                  <property
+                        brief="Enables the use of CAN1 through the HAL CAN driver."
+                        default="false"
+                        editable="true"
+                        name="Use CAN1"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables the use of CAN2 through the HAL CAN driver."
+                        default="false"
+                        editable="true"
+                        name="Use CAN2"
+                        required="true"
+                        type="boolean">
+                  </property>
+               </group>
+               <group
+                     expanded="false"
+                     name="I2C Settings">
+                  <description>
+                     Settings related to the I2C units. Note that the I2C driver is enabled in the generic HAL component.
+                  </description>
+                  <property
+                        brief="Enables the use of I2C1 through the HAL I2C driver."
+                        default="false"
+                        editable="true"
+                        name="Use I2C1"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables the use of I2C2 through the HAL I2C driver."
+                        default="false"
+                        editable="true"
+                        name="Use I2C2"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables the use of I2C3 through the HAL I2C driver."
+                        default="false"
+                        editable="true"
+                        name="Use I2C3"
+                        required="true"
+                        type="boolean">
+                  </property>
+               </group>
+               <group
+                     expanded="false"
+                     name="MAC">
+                  <description>
+                     Settings related to the MAC unit. Note that the MAC driver is enabled in the generic HAL component.
+                  </description>
+                  <property
+                        brief="Number of transmit buffers large enough to contain a full frame."
+                        default="2"
+                        editable="true"
+                        min="2"
+                        name="Transmit Buffers"
+                        required="true"
+                        type="unsigned">
+                  </property>
+                  <property
+                        brief="Number of receive buffers large enough to contain a full frame."
+                        default="4"
+                        editable="true"
+                        min="2"
+                        name="Receive Buffers"
+                        required="true"
+                        type="unsigned">
+                  </property>
+                  <property
+                        brief="Timeout in searching the PHY during initialization. Zero means single attempt."
+                        default="100"
+                        editable="true"
+                        min="0"
+                        name="PHY Search Timeout"
+                        required="true"
+                        type="unsigned">
+                  </property>
+                  <property
+                        brief="If enabled then the MAC driver is allowed to change the PHY state."
+                        default="true"
+                        editable="true"
+                        name="Enable PHY state change"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Checksum Offload mode."
+                        default="0"
+                        editable="true"
+                        name="Checksum Offload"
+                        required="true"
+                        type="enum"
+                        value="0,1,2">
+                  </property>
+               </group>
+               <group
+                     expanded="false"
+                     name="OTG Settings">
+                  <description>
+                     Settings related to the OTG units. Note that the USB driver is enabled in the generic HAL component.
+                  </description>
+                  <property
+                        brief="Enables the use of OTG-FS through the HAL USB driver."
+                        default="false"
+                        editable="true"
+                        name="Use OTG-FS"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables the use of OTG-HS through the HAL USB driver."
+                        default="false"
+                        editable="true"
+                        name="Use OTG-HS"
+                        required="true"
+                        type="boolean">
+                  </property>
+               </group>
+               <group
+                     expanded="false"
+                     name="SPI Settings">
+                  <description>
+                     Settings related to the SPI units. Note that the SPI driver is enabled in the generic HAL component.
+                  </description>
+                  <property
+                        brief="Enables the use of SPI1 through the HAL SPI driver."
+                        default="false"
+                        editable="true"
+                        name="Use SPI1"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables the use of SPI2 through the HAL SPI driver."
+                        default="false"
+                        editable="true"
+                        name="Use SPI2"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables the use of SPI3 through the HAL SPI driver."
+                        default="false"
+                        editable="true"
+                        name="Use SPI3"
+                        required="true"
+                        type="boolean">
+                  </property>
+               </group>
+               <group
+                     expanded="false"
+                     name="USART Settings">
+                  <description>
+                     USART/UART peripherals are shared between the Serial and UART drivers. Here you can assign each time to a driver or keep them reserved/unused.
+                  </description>
+                  <property
+                        brief="Driver owning the USART1."
+                        default="0"
+                        editable="true"
+                        name="USART1 Assignment"
+                        required="true"
+                        type="enum"
+                        value="None,Serial,UART">
+                  </property>
+                  <property
+                        brief="Driver owning the USART2."
+                        default="0"
+                        editable="true"
+                        name="USART2 Assignment"
+                        required="true"
+                        type="enum"
+                        value="None,Serial,UART">
+                  </property>
+                  <property
+                        brief="Driver owning the USART3."
+                        default="0"
+                        editable="true"
+                        name="USART3 Assignment"
+                        required="true"
+                        type="enum"
+                        value="None,Serial,UART">
+                  </property>
+                  <property
+                        brief="Driver owning the UART4."
+                        default="0"
+                        editable="true"
+                        name="UART4 Assignment"
+                        required="true"
+                        type="enum"
+                        value="None,Serial">
+                  </property>
+                  <property
+                        brief="Driver owning the UART5."
+                        default="0"
+                        editable="true"
+                        name="UART5 Assignment"
+                        required="true"
+                        type="enum"
+                        value="None,Serial">
+                  </property>
+                  <property
+                        brief="Driver owning the USART6."
+                        default="0"
+                        editable="true"
+                        name="USART6 Assignment"
+                        required="true"
+                        type="enum"
+                        value="None,Serial,UART">
                   </property>
                </group>
             </groups>
