@@ -371,15 +371,12 @@ typedef struct {
 /**
  * @brief   Suspends the invoking thread for the specified time.
  *
- * @param[in] time      the delay in system ticks, the special values are
- *                      handled as follow:
- *                      - @a TIME_INFINITE the thread enters an infinite sleep
- *                        state.
- *                      - @a TIME_IMMEDIATE this value is not allowed.
- *                      .
+ * @param[in] time      the delay in system ticks
+ *
  * @sclass
  */
-#define nilThdSleepS(time) nilThdSleepUntilS(nilTimeNow() + (time))
+#define nilThdSleepS(time)                                                  \
+  nilSchGoSleepTimeoutS(nil.currp, TRUE, nilTimeNow() - time)
 
 /**
  * @brief   Suspends the invoking thread until the system time arrives to the
@@ -389,7 +386,8 @@ typedef struct {
  *
  * @sclass
  */
-#define nilThdSleepUntilS(time) nilSchGoSleepTimeoutS(nil.currp, (time))
+#define nilThdSleepUntilS(time)                                             \
+  nilSchGoSleepTimeoutS(nil.currp, TRUE, (time))
 
 /**
  * @brief   Initializes a semaphore with the specified counter value.
@@ -589,7 +587,7 @@ extern "C" {
   void nilSysInit(void);
   void nilSysTimerHandler(void);
   Thread *nilSchReadyI(Thread *tp);
-  msg_t nilSchGoSleepTimeoutS(void *waitobj, systime_t time);
+  msg_t nilSchGoSleepTimeoutS(void *waitobj, bool_t timeout, systime_t time);
   void nilSchRescheduleS(void);
   void nilThdSleep(systime_t time);
   void nilThdSleepUntil(systime_t time);

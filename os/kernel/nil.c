@@ -156,26 +156,22 @@ void nilSchRescheduleS() {
  * @brief   Puts the current thread to sleep into the specified state with
  *          timeout specification.
  * @details The thread goes into a sleeping state, if it is not awakened
- *          explicitly within the specified timeout then it is forcibly
+ *          explicitly within the specified system time then it is forcibly
  *          awakened with a @p NIL_MSG_TMO low level message.
  *
  * @param[in] newstate  the new thread state
- * @param[in] time      the number of ticks before the operation timeouts, the
- *                      special values are handled as follow:
- *                      - @a TIME_INFINITE the thread enters an unbounded sleep
- *                        state.
- *                      - @a TIME_IMMEDIATE this value is not allowed.
- *                      .
+ * @param[in] timeout   timeout flag
+ * @param[in] time      absolute system time, only used if @p timeout is TRUE
  * @return              The wakeup message.
  * @retval NIL_MSG_TMO if a timeout occurs.
  *
  * @sclass
  */
-msg_t nilSchGoSleepTimeoutS(void *waitobj, systime_t time) {
+msg_t nilSchGoSleepTimeoutS(void *waitobj, bool_t timeout, systime_t time) {
   Thread *ntp, *otp = nil.currp;
 
-  /* Timeout settings, if required.*/
-  otp->timeout = (bool_t)(time != TIME_INFINITE);
+  /* Timeout settings.*/
+  otp->timeout = timeout;
   otp->wakeup.time = time;
 
   /* Storing the wait object for the current thread.*/
@@ -201,18 +197,14 @@ msg_t nilSchGoSleepTimeoutS(void *waitobj, systime_t time) {
 /**
  * @brief   Suspends the invoking thread for the specified time.
  *
- * @param[in] time      the delay in system ticks, the special values are
- *                      handled as follow:
- *                      - @a TIME_INFINITE the thread enters an infinite sleep
- *                        state.
- *                      - @a TIME_IMMEDIATE this value is not allowed.
- *                      .
+ * @param[in] time      the delay in system ticks
+ *
  * @api
  */
 void nilThdSleep(systime_t time) {
 
   nilSysLock();
-  nilThdSleepUntilS(nilTimeNow() + time);
+  nilThdSleepS(time);
   nilSysUnlock();
 }
 
@@ -306,7 +298,9 @@ msg_t nilSemWaitTimeoutS(Semaphore *sp, systime_t time) {
   cnt_t cnt = sp->cnt;
   if ((cnt <= 0) && (TIME_IMMEDIATE != time)) {
     sp->cnt = cnt - 1;
-    return nilSchGoSleepTimeoutS((void *)sp, time);
+    return nilSchGoSleepTimeoutS((void *)sp,
+                                 time != TIME_INFINITE,
+                                 nilTimeNow() - time);
   }
   return NIL_MSG_TMO;
 }
