@@ -82,10 +82,10 @@
 /*
  * ADC driver system settings.
  */
-#define STM32_ADC_ADCPRE                    ADC_CCR_ADCPRE_DIV4
-#define STM32_ADC_USE_ADC1                  FALSE
-#define STM32_ADC_USE_ADC2                  FALSE
-#define STM32_ADC_USE_ADC3                  FALSE
+#define STM32_ADC_ADCPRE                    ADC_CCR_ADCPRE_DIV${conf.groups.adc_settings.adc_clock_divider[0]}
+#define STM32_ADC_USE_ADC1                  ${conf.groups.adc_settings.use_adc1[0]?upper_case}
+#define STM32_ADC_USE_ADC2                  ${conf.groups.adc_settings.use_adc2[0]?upper_case}
+#define STM32_ADC_USE_ADC3                  ${conf.groups.adc_settings.use_adc3[0]?upper_case}
 #define STM32_ADC_ADC1_DMA_STREAM           ${DMA(conf.groups.dma_settings.adc1_stream[0])}
 #define STM32_ADC_ADC2_DMA_STREAM           ${DMA(conf.groups.dma_settings.adc2_stream[0])}
 #define STM32_ADC_ADC3_DMA_STREAM           ${DMA(conf.groups.dma_settings.adc3_stream[0])}
@@ -100,8 +100,8 @@
 /*
  * CAN driver system settings.
  */
-#define STM32_CAN_USE_CAN1                  FALSE
-#define STM32_CAN_USE_CAN2                  FALSE
+#define STM32_CAN_USE_CAN1                  ${conf.groups.can_settings.use_can1[0]?upper_case}
+#define STM32_CAN_USE_CAN2                  ${conf.groups.can_settings.use_can2[0]?upper_case}
 #define STM32_CAN_CAN1_IRQ_PRIORITY         ${conf.groups.irq_settings.can1_irq_priority[0].@index[0]?string}
 #define STM32_CAN_CAN2_IRQ_PRIORITY         ${conf.groups.irq_settings.can2_irq_priority[0].@index[0]?string}
 
@@ -126,12 +126,12 @@
 /*
  * GPT driver system settings.
  */
-#define STM32_GPT_USE_TIM1                  FALSE
-#define STM32_GPT_USE_TIM2                  FALSE
-#define STM32_GPT_USE_TIM3                  FALSE
-#define STM32_GPT_USE_TIM4                  FALSE
-#define STM32_GPT_USE_TIM5                  FALSE
-#define STM32_GPT_USE_TIM8                  FALSE
+#define STM32_GPT_USE_TIM1                  ${(conf.groups.tim_settings.tim1_assignment[0] == "GPT")?string?upper_case}
+#define STM32_GPT_USE_TIM2                  ${(conf.groups.tim_settings.tim2_assignment[0] == "GPT")?string?upper_case}
+#define STM32_GPT_USE_TIM3                  ${(conf.groups.tim_settings.tim3_assignment[0] == "GPT")?string?upper_case}
+#define STM32_GPT_USE_TIM4                  ${(conf.groups.tim_settings.tim4_assignment[0] == "GPT")?string?upper_case}
+#define STM32_GPT_USE_TIM5                  ${(conf.groups.tim_settings.tim5_assignment[0] == "GPT")?string?upper_case}
+#define STM32_GPT_USE_TIM8                  ${(conf.groups.tim_settings.tim8_assignment[0] == "GPT")?string?upper_case}
 #define STM32_GPT_TIM1_IRQ_PRIORITY         ${conf.groups.irq_settings.tim1_irq_priority[0].@index[0]?string}
 #define STM32_GPT_TIM2_IRQ_PRIORITY         ${conf.groups.irq_settings.tim2_irq_priority[0].@index[0]?string}
 #define STM32_GPT_TIM3_IRQ_PRIORITY         ${conf.groups.irq_settings.tim3_irq_priority[0].@index[0]?string}
@@ -142,9 +142,9 @@
 /*
  * I2C driver system settings.
  */
-#define STM32_I2C_USE_I2C1                  FALSE
-#define STM32_I2C_USE_I2C2                  FALSE
-#define STM32_I2C_USE_I2C3                  FALSE
+#define STM32_I2C_USE_I2C1                  ${conf.groups.i2c_settings.use_i2c1[0]?upper_case}
+#define STM32_I2C_USE_I2C2                  ${conf.groups.i2c_settings.use_i2c2[0]?upper_case}
+#define STM32_I2C_USE_I2C3                  ${conf.groups.i2c_settings.use_i2c3[0]?upper_case}
 #define STM32_I2C_I2C1_RX_DMA_STREAM        ${DMA(conf.groups.dma_settings.i2c1_rx_stream[0])}
 #define STM32_I2C_I2C1_TX_DMA_STREAM        ${DMA(conf.groups.dma_settings.i2c1_tx_stream[0])}
 #define STM32_I2C_I2C2_RX_DMA_STREAM        ${DMA(conf.groups.dma_settings.i2c2_rx_stream[0])}
@@ -164,12 +164,12 @@
 /*
  * ICU driver system settings.
  */
-#define STM32_ICU_USE_TIM1                  FALSE
-#define STM32_ICU_USE_TIM2                  FALSE
-#define STM32_ICU_USE_TIM3                  FALSE
-#define STM32_ICU_USE_TIM4                  FALSE
-#define STM32_ICU_USE_TIM5                  FALSE
-#define STM32_ICU_USE_TIM8                  FALSE
+#define STM32_ICU_USE_TIM1                  ${(conf.groups.tim_settings.tim1_assignment[0] == "ICU")?string?upper_case}
+#define STM32_ICU_USE_TIM2                  ${(conf.groups.tim_settings.tim2_assignment[0] == "ICU")?string?upper_case}
+#define STM32_ICU_USE_TIM3                  ${(conf.groups.tim_settings.tim3_assignment[0] == "ICU")?string?upper_case}
+#define STM32_ICU_USE_TIM4                  ${(conf.groups.tim_settings.tim4_assignment[0] == "ICU")?string?upper_case}
+#define STM32_ICU_USE_TIM5                  ${(conf.groups.tim_settings.tim5_assignment[0] == "ICU")?string?upper_case}
+#define STM32_ICU_USE_TIM8                  ${(conf.groups.tim_settings.tim8_assignment[0] == "ICU")?string?upper_case}
 #define STM32_ICU_TIM1_IRQ_PRIORITY         ${conf.groups.irq_settings.tim1_irq_priority[0].@index[0]?string}
 #define STM32_ICU_TIM2_IRQ_PRIORITY         ${conf.groups.irq_settings.tim2_irq_priority[0].@index[0]?string}
 #define STM32_ICU_TIM3_IRQ_PRIORITY         ${conf.groups.irq_settings.tim3_irq_priority[0].@index[0]?string}
@@ -180,24 +180,24 @@
 /*
  * MAC driver system settings.
  */
-#define STM32_MAC_TRANSMIT_BUFFERS          2
-#define STM32_MAC_RECEIVE_BUFFERS           4
+#define STM32_MAC_TRANSMIT_BUFFERS          ${conf.groups.mac_settings.transmit_buffers[0]}
+#define STM32_MAC_RECEIVE_BUFFERS           ${conf.groups.mac_settings.receive_buffers[0]}
 #define STM32_MAC_BUFFERS_SIZE              1522
-#define STM32_MAC_PHY_TIMEOUT               100
-#define STM32_MAC_ETH1_CHANGE_PHY_STATE     TRUE
+#define STM32_MAC_PHY_TIMEOUT               ${conf.groups.mac_settings.phy_search_timeout[0]}
+#define STM32_MAC_ETH1_CHANGE_PHY_STATE     ${conf.groups.mac_settings.enable_phy_state_change[0]}
 #define STM32_MAC_ETH1_IRQ_PRIORITY         ${conf.groups.irq_settings.eth_irq_priority[0].@index[0]?string}
-#define STM32_MAC_IP_CHECKSUM_OFFLOAD       0
+#define STM32_MAC_IP_CHECKSUM_OFFLOAD       ${conf.groups.mac_settings.checksum_offload[0]}
 
 /*
  * PWM driver system settings.
  */
-#define STM32_PWM_USE_ADVANCED              FALSE
-#define STM32_PWM_USE_TIM1                  FALSE
-#define STM32_PWM_USE_TIM2                  FALSE
-#define STM32_PWM_USE_TIM3                  FALSE
-#define STM32_PWM_USE_TIM4                  TRUE
-#define STM32_PWM_USE_TIM5                  FALSE
-#define STM32_PWM_USE_TIM8                  FALSE
+#define STM32_PWM_USE_ADVANCED              ${conf.groups.tim_settings.advanced_pwm_mode[0]?upper_case}
+#define STM32_PWM_USE_TIM1                  ${(conf.groups.tim_settings.tim1_assignment[0] == "PWM")?string?upper_case}
+#define STM32_PWM_USE_TIM2                  ${(conf.groups.tim_settings.tim2_assignment[0] == "PWM")?string?upper_case}
+#define STM32_PWM_USE_TIM3                  ${(conf.groups.tim_settings.tim3_assignment[0] == "PWM")?string?upper_case}
+#define STM32_PWM_USE_TIM4                  ${(conf.groups.tim_settings.tim4_assignment[0] == "PWM")?string?upper_case}
+#define STM32_PWM_USE_TIM5                  ${(conf.groups.tim_settings.tim5_assignment[0] == "PWM")?string?upper_case}
+#define STM32_PWM_USE_TIM8                  ${(conf.groups.tim_settings.tim8_assignment[0] == "PWM")?string?upper_case}
 #define STM32_PWM_TIM1_IRQ_PRIORITY         ${conf.groups.irq_settings.tim1_irq_priority[0].@index[0]?string}
 #define STM32_PWM_TIM2_IRQ_PRIORITY         ${conf.groups.irq_settings.tim2_irq_priority[0].@index[0]?string}
 #define STM32_PWM_TIM3_IRQ_PRIORITY         ${conf.groups.irq_settings.tim3_irq_priority[0].@index[0]?string}
@@ -208,12 +208,12 @@
 /*
  * SERIAL driver system settings.
  */
-#define STM32_SERIAL_USE_USART1             FALSE
-#define STM32_SERIAL_USE_USART2             TRUE
-#define STM32_SERIAL_USE_USART3             FALSE
-#define STM32_SERIAL_USE_UART4              FALSE
-#define STM32_SERIAL_USE_UART5              FALSE
-#define STM32_SERIAL_USE_USART6             FALSE
+#define STM32_SERIAL_USE_USART1             ${(conf.groups.usart_settings.usart1_assignment[0] == "Serial")?string?upper_case}
+#define STM32_SERIAL_USE_USART2             ${(conf.groups.usart_settings.usart2_assignment[0] == "Serial")?string?upper_case}
+#define STM32_SERIAL_USE_USART3             ${(conf.groups.usart_settings.usart3_assignment[0] == "Serial")?string?upper_case}
+#define STM32_SERIAL_USE_UART4              ${(conf.groups.usart_settings.uart4_assignment[0] == "Serial")?string?upper_case}
+#define STM32_SERIAL_USE_UART5              ${(conf.groups.usart_settings.uart5_assignment[0] == "Serial")?string?upper_case}
+#define STM32_SERIAL_USE_USART6             ${(conf.groups.usart_settings.usart6_assignment[0] == "Serial")?string?upper_case}
 #define STM32_SERIAL_USART1_PRIORITY        ${conf.groups.irq_settings.usart1_irq_priority[0].@index[0]?string}
 #define STM32_SERIAL_USART2_PRIORITY        ${conf.groups.irq_settings.usart2_irq_priority[0].@index[0]?string}
 #define STM32_SERIAL_USART3_PRIORITY        ${conf.groups.irq_settings.usart3_irq_priority[0].@index[0]?string}
@@ -224,9 +224,9 @@
 /*
  * SPI driver system settings.
  */
-#define STM32_SPI_USE_SPI1                  TRUE
-#define STM32_SPI_USE_SPI2                  TRUE
-#define STM32_SPI_USE_SPI3                  FALSE
+#define STM32_SPI_USE_SPI1                  ${conf.groups.spi_settings.use_spi1[0]?upper_case}
+#define STM32_SPI_USE_SPI2                  ${conf.groups.spi_settings.use_spi2[0]?upper_case}
+#define STM32_SPI_USE_SPI3                  ${conf.groups.spi_settings.use_spi3[0]?upper_case}
 #define STM32_SPI_SPI1_RX_DMA_STREAM        ${DMA(conf.groups.dma_settings.spi1_rx_stream[0])}
 #define STM32_SPI_SPI1_TX_DMA_STREAM        ${DMA(conf.groups.dma_settings.spi1_tx_stream[0])}
 #define STM32_SPI_SPI2_RX_DMA_STREAM        ${DMA(conf.groups.dma_settings.spi2_rx_stream[0])}
@@ -244,10 +244,10 @@
 /*
  * UART driver system settings.
  */
-#define STM32_UART_USE_USART1               FALSE
-#define STM32_UART_USE_USART2               FALSE
-#define STM32_UART_USE_USART3               FALSE
-#define STM32_UART_USE_USART6               FALSE
+#define STM32_UART_USE_USART1               ${(conf.groups.usart_settings.usart1_assignment[0] == "UART")?string?upper_case}
+#define STM32_UART_USE_USART2               ${(conf.groups.usart_settings.usart2_assignment[0] == "UART")?string?upper_case}
+#define STM32_UART_USE_USART3               ${(conf.groups.usart_settings.usart3_assignment[0] == "UART")?string?upper_case}
+#define STM32_UART_USE_USART6               ${(conf.groups.usart_settings.usart6_assignment[0] == "UART")?string?upper_case}
 #define STM32_UART_USART1_RX_DMA_STREAM     ${DMA(conf.groups.dma_settings.usart1_rx_stream[0])}
 #define STM32_UART_USART1_TX_DMA_STREAM     ${DMA(conf.groups.dma_settings.usart1_tx_stream[0])}
 #define STM32_UART_USART2_RX_DMA_STREAM     ${DMA(conf.groups.dma_settings.usart2_rx_stream[0])}
@@ -269,12 +269,12 @@
 /*
  * USB driver system settings.
  */
-#define STM32_USB_USE_OTG1                  TRUE
-#define STM32_USB_USE_OTG2                  FALSE
+#define STM32_USB_USE_OTG1                  ${conf.groups.otg_settings.use_otg_fs[0]?upper_case}
+#define STM32_USB_USE_OTG2                  ${conf.groups.otg_settings.use_otg_hs[0]?upper_case}
 #define STM32_USB_OTG1_IRQ_PRIORITY         ${conf.groups.irq_settings.otgfs_irq_priority[0].@index[0]?string}
 #define STM32_USB_OTG2_IRQ_PRIORITY         ${conf.groups.irq_settings.otghs_irq_priority[0].@index[0]?string}
-#define STM32_USB_OTG1_RX_FIFO_SIZE         512
-#define STM32_USB_OTG2_RX_FIFO_SIZE         1024
+#define STM32_USB_OTG1_RX_FIFO_SIZE         ${conf.groups.otg_settings.otg_fs_rx_fifo_size[0]}
+#define STM32_USB_OTG2_RX_FIFO_SIZE         ${conf.groups.otg_settings.otg_hs_rx_fifo_size[0]}
 #define STM32_USB_OTG_THREAD_PRIO           LOWPRIO
 #define STM32_USB_OTG_THREAD_STACK_SIZE     128
 #define STM32_USB_OTGFIFO_FILL_BASEPRI      0

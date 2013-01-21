@@ -225,14 +225,56 @@
             <uart5_irq_priority index="12">12</uart5_irq_priority>
             <usart6_irq_priority index="12">12</usart6_irq_priority>
           </irq_settings>
-          <timer_settings>
+          <adc_settings>
+            <adc_clock_divider index="1">4</adc_clock_divider>
+            <use_adc1>false</use_adc1>
+            <use_adc2>false</use_adc2>
+            <use_adc3>false</use_adc3>
+          </adc_settings>
+          <can_settings>
+            <use_can1>false</use_can1>
+            <use_can2>false</use_can2>
+          </can_settings>
+          <i2c_settings>
+            <use_i2c1>false</use_i2c1>
+            <use_i2c2>false</use_i2c2>
+            <use_i2c3>false</use_i2c3>
+          </i2c_settings>
+          <mac_settings>
+            <transmit_buffers>2</transmit_buffers>
+            <receive_buffers>4</receive_buffers>
+            <phy_search_timeout>100</phy_search_timeout>
+            <enable_phy_state_change>true</enable_phy_state_change>
+            <checksum_offload index="0">0</checksum_offload>
+          </mac_settings>
+          <otg_settings>
+            <use_otg_fs>false</use_otg_fs>
+            <use_otg_hs>false</use_otg_hs>
+            <otg_fs_rx_fifo_size>512</otg_fs_rx_fifo_size>
+            <otg_hs_rx_fifo_size>1024</otg_hs_rx_fifo_size>
+          </otg_settings>
+          <spi_settings>
+            <use_spi1>false</use_spi1>
+            <use_spi2>false</use_spi2>
+            <use_spi3>false</use_spi3>
+          </spi_settings>
+          <tim_settings>
+            <advanced_pwm_mode>false</advanced_pwm_mode>
             <tim1_assignment index="0">None</tim1_assignment>
             <tim2_assignment index="0">None</tim2_assignment>
             <tim3_assignment index="0">None</tim3_assignment>
             <tim4_assignment index="0">None</tim4_assignment>
             <tim5_assignment index="0">None</tim5_assignment>
             <tim8_assignment index="0">None</tim8_assignment>
-          </timer_settings>
+          </tim_settings>
+          <usart_settings>
+            <usart1_assignment index="0">None</usart1_assignment>
+            <usart2_assignment index="0">None</usart2_assignment>
+            <usart3_assignment index="0">None</usart3_assignment>
+            <uart4_assignment index="0">None</uart4_assignment>
+            <uart5_assignment index="0">None</uart5_assignment>
+            <usart6_assignment index="0">None</usart6_assignment>
+          </usart_settings>
         </groups>
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.board.stm32f4xx">

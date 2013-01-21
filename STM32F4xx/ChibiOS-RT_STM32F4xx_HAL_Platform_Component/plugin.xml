@@ -1031,67 +1031,6 @@
                </group>
                <group
                      expanded="false"
-                     name="Timers Settings">
-                  <description>
-                     Timer peripherals are shared between the GPT, ICU and PWM drivers. Here you can assign each time to a driver or keep them reserved/unused.
-                  </description>
-                  <property
-                        brief="Driver owning the TIM1 timer."
-                        default="0"
-                        editable="true"
-                        name="TIM1 Assignment"
-                        required="true"
-                        type="enum"
-                        value="None,GPT,ICU,PWM">
-                  </property>
-                  <property
-                        brief="Driver owning the TIM2 timer."
-                        default="0"
-                        editable="true"
-                        name="TIM2 Assignment"
-                        required="true"
-                        type="enum"
-                        value="None,GPT,ICU,PWM">
-                  </property>
-                  <property
-                        brief="Driver owning the TIM3 timer."
-                        default="0"
-                        editable="true"
-                        name="TIM3 Assignment"
-                        required="true"
-                        type="enum"
-                        value="None,GPT,ICU,PWM">
-                  </property>
-                  <property
-                        brief="Driver owning the TIM4 timer."
-                        default="0"
-                        editable="true"
-                        name="TIM4 Assignment"
-                        required="true"
-                        type="enum"
-                        value="None,GPT,ICU,PWM">
-                  </property>
-                  <property
-                        brief="Driver owning the TIM5 timer."
-                        default="0"
-                        editable="true"
-                        name="TIM5 Assignment"
-                        required="true"
-                        type="enum"
-                        value="None,GPT,ICU,PWM">
-                  </property>
-                  <property
-                        brief="Driver owning the TIM8 timer."
-                        default="0"
-                        editable="true"
-                        name="TIM8 Assignment"
-                        required="true"
-                        type="enum"
-                        value="None,GPT,ICU,PWM">
-                  </property>
-               </group>
-               <group
-                     expanded="false"
                      name="ADC Settings">
                   <description>
                      Settings related to the ADC units. Note that the ADC driver is enabled in the generic HAL component.
@@ -1186,7 +1125,7 @@
                </group>
                <group
                      expanded="false"
-                     name="MAC">
+                     name="MAC Settings">
                   <description>
                      Settings related to the MAC unit. Note that the MAC driver is enabled in the generic HAL component.
                   </description>
@@ -1257,6 +1196,24 @@
                         required="true"
                         type="boolean">
                   </property>
+                  <property
+                        brief="Size of the shared RX FIFO, higher values may improve performance depending on application."
+                        default="512"
+                        editable="true"
+                        min="128"
+                        name="OTG-FS RX FIFO Size"
+                        required="true"
+                        type="unsigned">
+                  </property>
+                  <property
+                        brief="Size of the shared RX FIFO, higher values may improve performance depending on application."
+                        default="1024"
+                        editable="true"
+                        min="128"
+                        name="OTG-HS RX FIFO Size"
+                        required="true"
+                        type="unsigned">
+                  </property>
                </group>
                <group
                      expanded="false"
@@ -1287,6 +1244,75 @@
                         name="Use SPI3"
                         required="true"
                         type="boolean">
+                  </property>
+               </group>
+               <group
+                     expanded="false"
+                     name="TIM Settings">
+                  <description>
+                     Timer peripherals are shared between the GPT, ICU and PWM drivers. Here you can assign each time to a driver or keep them reserved/unused.
+                  </description>
+                  <property
+                        brief="Enables the advanced PWM features on TIM1/TIM8 when assigned to the PWM driver."
+                        default="false"
+                        editable="true"
+                        name="Advanced PWM Mode"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Driver owning the TIM1 timer."
+                        default="0"
+                        editable="true"
+                        name="TIM1 Assignment"
+                        required="true"
+                        type="enum"
+                        value="None,GPT,ICU,PWM">
+                  </property>
+                  <property
+                        brief="Driver owning the TIM2 timer."
+                        default="0"
+                        editable="true"
+                        name="TIM2 Assignment"
+                        required="true"
+                        type="enum"
+                        value="None,GPT,ICU,PWM">
+                  </property>
+                  <property
+                        brief="Driver owning the TIM3 timer."
+                        default="0"
+                        editable="true"
+                        name="TIM3 Assignment"
+                        required="true"
+                        type="enum"
+                        value="None,GPT,ICU,PWM">
+                  </property>
+                  <property
+                        brief="Driver owning the TIM4 timer."
+                        default="0"
+                        editable="true"
+                        name="TIM4 Assignment"
+                        required="true"
+                        type="enum"
+                        value="None,GPT,ICU,PWM">
+                  </property>
+                  <property
+                        brief="Driver owning the TIM5 timer."
+                        default="0"
+                        editable="true"
+                        name="TIM5 Assignment"
+                        required="true"
+                        type="enum"
+                        value="None,GPT,ICU,PWM">
+                  </property>
+                  <property
+                        brief="Driver owning the TIM8 timer."
+                        default="0"
+                        editable="true"
+                        name="TIM8 Assignment"
+                        required="true"
+                        type="enum"
+                        value="None,GPT,ICU,PWM">
                   </property>
                </group>
                <group
