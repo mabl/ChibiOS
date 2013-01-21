@@ -96,14 +96,54 @@
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.hal">
         <groups>
-          <pal_driver_settings>
-            <enabled>true</enabled>
-          </pal_driver_settings>
+          <enabled_drivers>
+            <tm>false</tm>
+            <pal>true</pal>
+            <adc>false</adc>
+            <can>false</can>
+            <ext>false</ext>
+            <gpt>false</gpt>
+            <i2c>false</i2c>
+            <icu>false</icu>
+            <mac>false</mac>
+            <mmc_spi>false</mmc_spi>
+            <pwm>false</pwm>
+            <rtc>false</rtc>
+            <sdc>false</sdc>
+            <serial>true</serial>
+            <spi>false</spi>
+            <serial_usb>false</serial_usb>
+            <uart>false</uart>
+            <usb>false</usb>
+          </enabled_drivers>
           <serial_driver_settings>
-            <enabled>true</enabled>
             <default_bit_rate>38400</default_bit_rate>
             <buffers_size>16</buffers_size>
           </serial_driver_settings>
+          <adc_driver_settings>
+            <enable_synchronous_functions>true</enable_synchronous_functions>
+            <enable_mutual_exclusion_functions>false</enable_mutual_exclusion_functions>
+          </adc_driver_settings>
+          <can_driver_settings>
+            <enable_sleep_mode_functions>true</enable_sleep_mode_functions>
+          </can_driver_settings>
+          <i2c_driver_settings>
+            <enable_mutual_exclusion_functions>false</enable_mutual_exclusion_functions>
+          </i2c_driver_settings>
+          <mac_driver_settings>
+            <enable_events>true</enable_events>
+          </mac_driver_settings>
+          <mmc_spi_driver_settings>
+            <nice_waiting>true</nice_waiting>
+          </mmc_spi_driver_settings>
+          <sdc_driver_settings>
+            <init_retry>1</init_retry>
+            <nice_waiting>true</nice_waiting>
+          </sdc_driver_settings>
+          <spi_driver_settings>
+            <enable_synchronous_functions>true</enable_synchronous_functions>
+            <enable_mutual_exclusion_functions>false</enable_mutual_exclusion_functions>
+          </spi_driver_settings>
         </groups>
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.hal.platform.stm32f4pxx">

@@ -17,19 +17,155 @@
             <groups
                   name="HAL Settings">
                <description>
-                  Portable HAL options and settings.
+                  Portable HAL options and settings. Note that low level system settings are not performed here but in the HAL Platform Component for your platform.
                </description>
                <group
                      expanded="false"
-                     name="PAL Driver Settings">
+                     name="Enabled Drivers">
                   <description>
-                     Settings related to the PAL Driver (Ports Abstraction Layer).
+                     Select which drivers are needed in your application. Disabled drivers take no system resource.
                   </description>
                   <property
-                        brief="This options globally enables/disables the PAL Driver"
+                        brief="This options globally enables/disables the TM driver."
+                        default="false"
+                        editable="true"
+                        name="TM"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the PAL driver."
                         default="true"
                         editable="true"
-                        name="Enabled"
+                        name="PAL"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the ADC driver."
+                        default="false"
+                        editable="true"
+                        name="ADC"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the CAN driver."
+                        default="false"
+                        editable="true"
+                        name="CAN"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the EXT driver."
+                        default="false"
+                        editable="true"
+                        name="EXT"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the GPT driver."
+                        default="false"
+                        editable="true"
+                        name="GPT"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the I2C driver."
+                        default="false"
+                        editable="true"
+                        name="I2C"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the ICU driver."
+                        default="false"
+                        editable="true"
+                        name="ICU"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the MAC driver."
+                        default="false"
+                        editable="true"
+                        name="MAC"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the MMC over SPI driver."
+                        default="false"
+                        editable="true"
+                        name="MMC SPI"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the PWM driver."
+                        default="false"
+                        editable="true"
+                        name="PWM"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the RTC driver."
+                        default="false"
+                        editable="true"
+                        name="RTC"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the SDC driver."
+                        default="false"
+                        editable="true"
+                        name="SDC"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the Serial driver."
+                        default="true"
+                        editable="true"
+                        name="Serial"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the SPI driver."
+                        default="false"
+                        editable="true"
+                        name="SPI"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the Serial over USB driver."
+                        default="false"
+                        editable="true"
+                        name="Serial USB"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the UART driver."
+                        default="false"
+                        editable="true"
+                        name="UART"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the USB driver."
+                        default="false"
+                        editable="true"
+                        name="USB"
                         required="true"
                         type="boolean">
                   </property>
@@ -38,16 +174,8 @@
                      expanded="false"
                      name="Serial Driver Settings">
                   <description>
-                     Settings related to the Serial Driver.
+                     Settings related to the Serial driver.
                   </description>
-                  <property
-                        brief="This options globally enables/disables the Serial Driver"
-                        default="true"
-                        editable="true"
-                        name="Enabled"
-                        required="true"
-                        type="boolean">
-                  </property>
                   <property
                         brief="Bit rate for the default driver configuration."
                         default="38400"
@@ -58,13 +186,143 @@
                         type="unsigned">
                   </property>
                   <property
-                        brief="Size of the TX and RX circular buffers"
+                        brief="Size of the TX and RX circular buffers."
                         default="16"
                         editable="true"
                         min="4"
                         name="Buffers Size"
                         required="true"
                         type="unsigned">
+                  </property>
+               </group>
+               <group
+                     expanded="false"
+                     name="ADC Driver Settings">
+                  <description>
+                     Settings related to the ADC driver.
+                  </description>
+                  <property
+                        brief="Enables the synchronous API functions."
+                        default="true"
+                        editable="true"
+                        name="Enable Synchronous Functions"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables the dedicated API functions for mutual exclusion on driver access."
+                        default="false"
+                        editable="true"
+                        name="Enable Mutual Exclusion Functions"
+                        required="true"
+                        type="boolean">
+                  </property>
+               </group>
+               <group
+                     expanded="false"
+                     name="CAN Driver Settings">
+                  <description>
+                     Settings related to the CAN driver.
+                  </description>
+                  <property
+                        brief="Enables the sleep mode API functions."
+                        default="true"
+                        editable="true"
+                        name="Enable Sleep Mode Functions"
+                        required="true"
+                        type="boolean">
+                  </property>
+               </group>
+               <group
+                     expanded="false"
+                     name="I2C Driver Settings">
+                  <description>
+                     Settings related to the I2C driver.
+                  </description>
+                  <property
+                        brief="Enables the dedicated API functions for mutual exclusion on driver access."
+                        default="false"
+                        editable="true"
+                        name="Enable Mutual Exclusion Functions"
+                        required="true"
+                        type="boolean">
+                  </property>
+               </group>
+               <group
+                     expanded="false"
+                     name="MAC Driver Settings">
+                  <description>
+                     Settings related to the MAC driver.
+                  </description>
+                  <property
+                        brief="Enables the generation of events on frames reception."
+                        default="true"
+                        editable="true"
+                        name="Enable Events"
+                        required="true"
+                        type="boolean">
+                  </property>
+               </group>
+               <group
+                     expanded="false"
+                     name="MMC SPI Driver Settings">
+                  <description>
+                     Settings related to the MMC over SPI driver.
+                  </description>
+                  <property
+                        brief="If enabled this options inserts delays into the MMC waiting routines."
+                        default="true"
+                        editable="true"
+                        name="Nice Waiting"
+                        required="true"
+                        type="boolean">
+                  </property>
+               </group>
+               <group
+                     expanded="false"
+                     name="SDC Driver Settings">
+                  <description>
+                     Settings related to the SDC driver.
+                  </description>
+                  <property
+                        brief="Number of initialization attempts before rejecting the card."
+                        default="1"
+                        editable="true"
+                        min="1"
+                        name="Init Retry"
+                        required="true"
+                        type="unsigned">
+                  </property>
+                  <property
+                        brief="If enabled this options inserts delays into the SDC waiting routines."
+                        default="true"
+                        editable="true"
+                        name="Nice Waiting"
+                        required="true"
+                        type="boolean">
+                  </property>
+               </group>
+               <group
+                     expanded="false"
+                     name="SPI Driver Settings">
+                  <description>
+                     Settings related to the SPI driver.
+                  </description>
+                  <property
+                        brief="Enables the synchronous API functions."
+                        default="true"
+                        editable="true"
+                        name="Enable Synchronous Functions"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables the dedicated API functions for mutual exclusion on driver access."
+                        default="false"
+                        editable="true"
+                        name="Enable Mutual Exclusion Functions"
+                        required="true"
+                        type="boolean">
                   </property>
                </group></groups>
             <requiredFeatures>
