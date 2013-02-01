@@ -309,7 +309,7 @@
           </tim_settings>
           <usart_settings>
             <usart1_assignment index="0">None</usart1_assignment>
-            <usart2_assignment index="0">None</usart2_assignment>
+            <usart2_assignment index="1">Serial</usart2_assignment>
             <usart3_assignment index="0">None</usart3_assignment>
             <uart4_assignment index="0">None</uart4_assignment>
             <uart5_assignment index="0">None</uart5_assignment>

@@ -27,82 +27,82 @@
 		<link>
 			<name>components/chibios_rt_free_embedded_rtos_for_stm32f4xx_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/STM32F4xx/ChibiOS-RT_RTOS_for_STM32F4xx/component/doc/</location>
+			<location>D:/Progetti/ChibiOS-Components/STM32F4xx/ChibiOS-RT_RTOS_for_STM32F4xx/component/doc/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_free_embedded_rtos_for_stm32f4xx_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/STM32F4xx/ChibiOS-RT_RTOS_for_STM32F4xx/component/lib/</location>
+			<location>D:/Progetti/ChibiOS-Components/STM32F4xx/ChibiOS-RT_RTOS_for_STM32F4xx/component/lib/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_portable_hal_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_HAL_Component/component/doc/</location>
+			<location>D:/Progetti/ChibiOS-Components/portable/ChibiOS-RT_Portable_HAL_Component/component/doc/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_portable_hal_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_HAL_Component/component/lib/</location>
+			<location>D:/Progetti/ChibiOS-Components/portable/ChibiOS-RT_Portable_HAL_Component/component/lib/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_portable_kernel_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_Kernel_Component/component/doc/</location>
+			<location>D:/Progetti/ChibiOS-Components/portable/ChibiOS-RT_Portable_Kernel_Component/component/doc/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_portable_kernel_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_Kernel_Component/component/lib/</location>
+			<location>D:/Progetti/ChibiOS-Components/portable/ChibiOS-RT_Portable_Kernel_Component/component/lib/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_stm32f4xx_board_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/STM32F4xx/ChibiOS-RT_STM32F4xx_Board_Component/component/doc/</location>
+			<location>D:/Progetti/ChibiOS-Components/STM32F4xx/ChibiOS-RT_STM32F4xx_Board_Component/component/doc/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_stm32f4xx_board_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/STM32F4xx/ChibiOS-RT_STM32F4xx_Board_Component/component/lib/</location>
+			<location>D:/Progetti/ChibiOS-Components/STM32F4xx/ChibiOS-RT_STM32F4xx_Board_Component/component/lib/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_stm32f4xx_hal_platform_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/STM32F4xx/ChibiOS-RT_STM32F4xx_HAL_Platform_Component/component/doc/</location>
+			<location>D:/Progetti/ChibiOS-Components/STM32F4xx/ChibiOS-RT_STM32F4xx_HAL_Platform_Component/component/doc/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_stm32f4xx_hal_platform_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/STM32F4xx/ChibiOS-RT_STM32F4xx_HAL_Platform_Component/component/lib/</location>
+			<location>D:/Progetti/ChibiOS-Components/STM32F4xx/ChibiOS-RT_STM32F4xx_HAL_Platform_Component/component/lib/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_stm32f4xx_kernel_port_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/STM32F4xx/ChibiOS-RT_STM32F4xx_Kernel_Port_Component/component/doc/</location>
+			<location>D:/Progetti/ChibiOS-Components/STM32F4xx/ChibiOS-RT_STM32F4xx_Kernel_Port_Component/component/doc/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_stm32f4xx_kernel_port_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/STM32F4xx/ChibiOS-RT_STM32F4xx_Kernel_Port_Component/component/lib/</location>
+			<location>D:/Progetti/ChibiOS-Components/STM32F4xx/ChibiOS-RT_STM32F4xx_Kernel_Port_Component/component/lib/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_stm32f4xx_platform_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/STM32F4xx/ChibiOS-RT_STM32F4xx_Platform_Component/component/doc/</location>
+			<location>D:/Progetti/ChibiOS-Components/STM32F4xx/ChibiOS-RT_STM32F4xx_Platform_Component/component/doc/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_stm32f4xx_platform_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/STM32F4xx/ChibiOS-RT_STM32F4xx_Platform_Component/component/lib/</location>
+			<location>D:/Progetti/ChibiOS-Components/STM32F4xx/ChibiOS-RT_STM32F4xx_Platform_Component/component/lib/</location>
 		</link>
 		<link>
 			<name>components/cmsis_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/external/CMSIS_Component/component/doc/</location>
+			<location>D:/Progetti/ChibiOS-Components/external/CMSIS_Component/component/doc/</location>
 		</link>
 		<link>
 			<name>components/cmsis_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/external/CMSIS_Component/component/lib/</location>
+			<location>D:/Progetti/ChibiOS-Components/external/CMSIS_Component/component/lib/</location>
 		</link>
 	</linkedResources>
 </projectDescription>

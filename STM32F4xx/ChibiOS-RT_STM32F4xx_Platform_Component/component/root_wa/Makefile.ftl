@@ -50,11 +50,6 @@ ifeq ($(USE_FPU),)
   USE_FPU = no
 endif
 
-# Enable this if you really want to use the STM FWLib.
-ifeq ($(USE_FWLIB),)
-  USE_FWLIB = no
-endif
-
 #
 # Architecture or project specific options
 ##############################################################################
@@ -159,5 +154,12 @@ DLIBS   =
 #
 # End of default section
 ##############################################################################
+
+ifeq ($(USE_FPU),yes)
+  USE_OPT += -mfloat-abi=softfp -mfpu=fpv4-sp-d16 -fsingle-precision-constant
+  DDEFS += -DCORTEX_USE_FPU=TRUE
+else
+  DDEFS += -DCORTEX_USE_FPU=FALSE
+endif
 
 include ${global.component_path}/lib/rsc/rules.mk
