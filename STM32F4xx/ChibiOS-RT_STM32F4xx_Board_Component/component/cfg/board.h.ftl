@@ -88,9 +88,9 @@
 [#list conf.groups.i_o_settings.pins_list.pin_settings as pin_settings]
   [#assign pin_port         = pin_settings.pin_identification.port[0] /]
   [#assign pin_bit          = pin_settings.pin_identification.bit[0]?number /]
-  [#assign pin_id           = pin_settings.pin_identification.identifier[0] /]
-  [#if pin_id == ""]
-    [#assign pin_id = "PIN" + pin_bit /]
+  [#assign pin_ids          = pin_settings.pin_identification.identifiers[0] /]
+  [#if pin_ids == ""]
+    [#assign pin_ids = "PIN" + pin_bit /]
   [/#if]
   [#assign pin_mode         = pin_settings.settings.pin_mode[0] /]
   [#assign pin_level        = pin_settings.settings.latched_state[0].@index?number /]
@@ -104,18 +104,20 @@
   [#assign pin_resistor_idx = pin_settings.settings.input_resistor[0].@index?number /]
   [#assign pin_alternate    = pin_settings.settings.alternate_function[0].@index?number /]
   [#-- Adding to the identifiers hash in order to check for duplications.--]
-  [#assign id = pin_port + "_" + pin_id /]
-  [#if identifiers[id]??]
-    [#stop "Multiple definitions of " + id /]
-  [#else]
-    [#assign identifiers = identifiers + {id:""} /]
-  [/#if]
+  [#list pin_ids?word_list as id]
+    [#assign id = pin_port + "_" + id /]
+    [#if identifiers[id]??]
+      [#stop "Multiple definitions of " + id /]
+    [#else]
+      [#assign identifiers = identifiers + {id:""} /]
+    [/#if]
+  [/#list]
   [#-- Adding to the pins hash for later use.--]
   [#assign key = pin_port + "-" + pin_bit /]
   [#if pins[key]?? ]
     [#stop "Multiple definitions of " + key /]
   [#else]
-    [#assign value = {"port":pin_port, "bit":pin_bit, "id":pin_id,
+    [#assign value = {"port":pin_port, "bit":pin_bit, "ids":pin_ids,
                       "mode":pin_mode,         "mode_idx":pin_mode_idx,
                       "type":pin_type,         "type_idx":pin_type_idx,
                       "speed":pin_speed,       "speed_idx":pin_speed_idx,
@@ -132,12 +134,12 @@
     [#assign key = port + "-" + bit /]
     [#if pins[key]?? ]
       [#assign pin = pins[key] /]
-      [#assign id = pin["id"] /]
+      [#assign ids = pin["ids"] /]
     [#else]
       [#-- The pin has not been defined explicitly, adding to the hash
            using the default settings.--]
-      [#assign id = "PIN" + bit /]
-      [#assign value = {"port":port, "bit":bit, "id":id,
+      [#assign ids = "PIN" + bit /]
+      [#assign value = {"port":port, "bit":bit, "ids":ids,
                         "mode":"Input",         "mode_idx":0,
                         "type":"",              "type_idx":0,
                         "speed":"",             "speed_idx":0,
@@ -145,7 +147,9 @@
                         "level":0,              "alternate":0} /]
       [#assign pins = pins + {key:value} /]
     [/#if]
+    [#list ids?word_list as id]
 #define ${port + "_"  + id?right_pad(27, " ")} ${bit}
+    [/#list]
   [/#list]
 
 [/#list]
@@ -191,7 +195,7 @@
     [#else]
       [#assign desc = "Analog" /]
     [/#if]
- * P${(port[4..] + bit?string)?right_pad(3, " ")} - ${pin["id"]?right_pad(26, " ")}(${desc?lower_case}).
+ * P${(port[4..] + bit?string)?right_pad(3, " ")} - ${pin["ids"][0]?right_pad(26, " ")}(${desc?lower_case}).
   [/#list]
  */
   [#--
@@ -199,7 +203,7 @@
     --]
   [#list bits as bit]
     [#assign pin = pins[port + "-" + bit] /]
-    [#assign name = port + "_" + pin["id"] /]
+    [#assign name = port + "_" + pin["ids"]?word_list[0] /]
     [#assign mode = pin["mode_idx"] /]
     [#if mode == 0]
       [#assign out = "PIN_MODE_INPUT(" + name + ")" /]
@@ -226,7 +230,7 @@ ${line + ")"}
     --]
   [#list bits as bit]
     [#assign pin = pins[port + "-" + bit] /]
-    [#assign name = port + "_" + pin["id"] /]
+    [#assign name = port + "_" + pin["ids"]?word_list[0] /]
     [#assign type = pin["type_idx"] /]
     [#if type == 0]
       [#assign out = "PIN_OTYPE_PUSHPULL(" + name + ")" /]
@@ -249,7 +253,7 @@ ${line + ")"}
     --]
   [#list bits as bit]
     [#assign pin = pins[port + "-" + bit] /]
-    [#assign name = port + "_" + pin["id"] /]
+    [#assign name = port + "_" + pin["ids"]?word_list[0] /]
     [#assign speed = pin["speed_idx"] /]
     [#if speed == 0]
       [#assign out = "PIN_OSPEED_2M(" + name + ")" /]
@@ -276,7 +280,7 @@ ${line + ")"}
     --]
   [#list bits as bit]
     [#assign pin = pins[port + "-" + bit] /]
-    [#assign name = port + "_" + pin["id"] /]
+    [#assign name = port + "_" + pin["ids"]?word_list[0] /]
     [#assign resistor = pin["resistor_idx"] /]
     [#if resistor == 0]
       [#assign out = "PIN_PUPDR_FLOATING(" + name + ")" /]
@@ -301,7 +305,7 @@ ${line + ")"}
     --]
   [#list bits as bit]
     [#assign pin = pins[port + "-" + bit] /]
-    [#assign name = port + "_" + pin["id"] /]
+    [#assign name = port + "_" + pin["ids"]?word_list[0] /]
     [#assign level = pin["level"] /]
     [#if level == 0]
       [#assign out = "PIN_ODR_LOW(" + name + ")" /]
@@ -324,7 +328,7 @@ ${line + ")"}
     --]
   [#list bits as bit]
     [#assign pin = pins[port + "-" + bit] /]
-    [#assign name = port + "_" + pin["id"] /]
+    [#assign name = port + "_" + pin["ids"]?word_list[0] /]
     [#assign alternate = pin["alternate"] /]
     [#assign out = "PIN_AFIO_AF(" + name + ", " + alternate + ")" /]
     [#if bit?number == 0]

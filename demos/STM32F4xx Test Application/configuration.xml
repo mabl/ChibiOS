@@ -320,14 +320,14 @@
       <instance locked="false" id="org.chibios.spc5.components.board.stm32f4xx">
         <groups>
           <identification>
-            <board_identifier>GENERIC_STM32F4XX</board_identifier>
-            <board_name>Generic STM32F4xx</board_name>
+            <board_identifier>ST_STM32F4_DISCOVERY</board_identifier>
+            <board_name>STMicroelectronics STM32F4-Discovery</board_name>
           </identification>
           <clock_settings>
-            <vdd>330</vdd>
+            <vdd>300</vdd>
             <hse_oscillator_mode index="0">Crystal</hse_oscillator_mode>
             <hse_frequency>8000000</hse_frequency>
-            <lse_oscillator_mode index="0">Crystal</lse_oscillator_mode>
+            <lse_oscillator_mode index="2">None</lse_oscillator_mode>
             <lse_frequency>32768</lse_frequency>
           </clock_settings>
           <phy_settings>
@@ -336,7 +336,473 @@
             <mode index="0">RMII</mode>
           </phy_settings>
           <i_o_settings>
-            <pins_list />
+            <pins_list>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>BUTTON</identifiers>
+                  <port index="0">GPIOA</port>
+                  <bit index="0">0</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="0">Input</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="0">0</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>LRCK</identifiers>
+                  <port index="0">GPIOA</port>
+                  <bit index="4">4</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="2">Alternate</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="6">6</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>SPC</identifiers>
+                  <port index="0">GPIOA</port>
+                  <bit index="5">5</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="2">Alternate</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="5">5</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>SDO</identifiers>
+                  <port index="0">GPIOA</port>
+                  <bit index="6">6</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="2">Alternate</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="5">5</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>SDI</identifiers>
+                  <port index="0">GPIOA</port>
+                  <bit index="7">7</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="2">Alternate</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="5">5</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>VBUS_FS</identifiers>
+                  <port index="0">GPIOA</port>
+                  <bit index="9">9</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="0">Input</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="0">0</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>OTG_FS_ID</identifiers>
+                  <port index="0">GPIOA</port>
+                  <bit index="10">10</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="2">Alternate</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="10">10</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>OTG_FS_DM</identifiers>
+                  <port index="0">GPIOA</port>
+                  <bit index="11">11</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="2">Alternate</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="10">10</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>OTG_FS_DP</identifiers>
+                  <port index="0">GPIOA</port>
+                  <bit index="12">12</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="2">Alternate</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="10">10</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>SWDIO</identifiers>
+                  <port index="0">GPIOA</port>
+                  <bit index="13">13</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="2">Alternate</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="0">0</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>SWCLK</identifiers>
+                  <port index="0">GPIOA</port>
+                  <bit index="14">14</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="2">Alternate</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="0">0</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>SWO</identifiers>
+                  <port index="1">GPIOB</port>
+                  <bit index="3">3</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="2">Alternate</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="0">0</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>SCL</identifiers>
+                  <port index="1">GPIOB</port>
+                  <bit index="6">6</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="2">Alternate</pin_mode>
+                  <latched_state index="1">High</latched_state>
+                  <output_type index="1">OpenDrain</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="4">4</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>SDA</identifiers>
+                  <port index="1">GPIOB</port>
+                  <bit index="9">9</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="2">Alternate</pin_mode>
+                  <latched_state index="1">High</latched_state>
+                  <output_type index="1">OpenDrain</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="4">4</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>CLK_IN</identifiers>
+                  <port index="1">GPIOB</port>
+                  <bit index="10">10</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="0">Input</pin_mode>
+                  <latched_state index="1">High</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="1">Pull-Up</input_resistor>
+                  <alternate_function index="0">0</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>OTG_FS_POWER_ON</identifiers>
+                  <port index="2">GPIOC</port>
+                  <bit index="0">0</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="1">Output</pin_mode>
+                  <latched_state index="1">High</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="0">0</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>PDM_OUT</identifiers>
+                  <port index="2">GPIOC</port>
+                  <bit index="3">3</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="0">Input</pin_mode>
+                  <latched_state index="1">High</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="1">Pull-Up</input_resistor>
+                  <alternate_function index="0">0</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>MCLK</identifiers>
+                  <port index="2">GPIOC</port>
+                  <bit index="7">7</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="2">Alternate</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="6">6</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>SCLK</identifiers>
+                  <port index="2">GPIOC</port>
+                  <bit index="10">10</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="2">Alternate</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="6">6</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>SDIN</identifiers>
+                  <port index="2">GPIOC</port>
+                  <bit index="12">12</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="2">Alternate</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="6">6</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>RESET</identifiers>
+                  <port index="3">GPIOD</port>
+                  <bit index="4">4</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="1">Output</pin_mode>
+                  <latched_state index="1">High</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="0">0</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>OVER_CURRENT</identifiers>
+                  <port index="3">GPIOD</port>
+                  <bit index="5">5</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="0">Input</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="0">0</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>LED4 LED_GREEN</identifiers>
+                  <port index="3">GPIOD</port>
+                  <bit index="12">12</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="1">Output</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="0">0</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>LED3 LED_ORANGE</identifiers>
+                  <port index="3">GPIOD</port>
+                  <bit index="13">13</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="1">Output</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="0">0</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>LED5 LED_RED</identifiers>
+                  <port index="3">GPIOD</port>
+                  <bit index="14">14</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="1">Output</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="0">0</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>LED6 LED_BLUE</identifiers>
+                  <port index="3">GPIOD</port>
+                  <bit index="15">15</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="1">Output</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="0">0</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>INT1</identifiers>
+                  <port index="4">GPIOE</port>
+                  <bit index="0">0</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="0">Input</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="0">0</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>INT2</identifiers>
+                  <port index="4">GPIOE</port>
+                  <bit index="1">1</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="0">Input</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="0">0</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>CS_SPI</identifiers>
+                  <port index="4">GPIOE</port>
+                  <bit index="3">3</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="1">Output</pin_mode>
+                  <latched_state index="1">High</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="0">0</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>OSC_IN</identifiers>
+                  <port index="7">GPIOH</port>
+                  <bit index="0">0</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="0">Input</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="0">0</alternate_function>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifiers>OSC_OUT</identifiers>
+                  <port index="7">GPIOH</port>
+                  <bit index="1">1</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="0">Input</pin_mode>
+                  <latched_state index="0">Low</latched_state>
+                  <output_type index="0">PushPull</output_type>
+                  <output_speed index="2">50MHz</output_speed>
+                  <input_resistor index="0">Floating</input_resistor>
+                  <alternate_function index="0">0</alternate_function>
+                </settings>
+              </pin_settings>
+            </pins_list>
           </i_o_settings>
           <initialization_code>
             <early_initialization_code />
