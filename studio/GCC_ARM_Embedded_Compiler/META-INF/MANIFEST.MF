@@ -1,0 +1,7 @@
+Bundle-Version: 4.7.3.qualifier
+Bundle-Name: ChibiStudio GNU ARM Compiler Tool Plugin
+Bundle-Vendor: launchpad.net/gcc-arm-embedded
+Bundle-SymbolicName: org.chibios.tools.spc5.tools.gnuarm;singleton=true
+Eclipse-AutoStart: true
+Bundle-Activator: activator.Activator
+Require-Bundle: com.st.tools.spc5
