@@ -17,7 +17,7 @@
    </feature>
    <category-def name="ChibiOS/RT" label="ChibiOS/RT">
       <description>
-         ChibiOS/RT Components and Plugis.
+         ChibiOS/RT Components and Plugnis.
       </description>
    </category-def>
 </site>
