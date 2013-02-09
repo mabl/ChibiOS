@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="ChibiStudio Update Site" url="http://www.chibios.org/eclipse/chibistudio">
+      ChibiStudio Eclipse Update Site.
+   </description>
+</site>
