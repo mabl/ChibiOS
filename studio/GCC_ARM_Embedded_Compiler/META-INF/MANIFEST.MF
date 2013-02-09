@@ -1,5 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: GCC_ARM_Embedded_Compiler
-Bundle-SymbolicName: GCC_ARM_Embedded_Compiler
-Bundle-Version: 1.0.0.qualifier
+Bundle-Name: ChibiStudio GNU ARM Compiler Tool Plugin
+Bundle-SymbolicName: org.chibios.tools.spc5.tools.gnuarm;singleton:=true
+Bundle-Version: 4.7.3.qualifier
+Bundle-Vendor: launchpad.net/gcc-arm-embedded
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.8.0",com.st.tools.spc5
