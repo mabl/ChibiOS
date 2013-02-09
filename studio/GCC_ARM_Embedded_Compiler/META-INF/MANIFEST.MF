@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: GCC_ARM_Embedded_Compiler
+Bundle-SymbolicName: GCC_ARM_Embedded_Compiler
+Bundle-Version: 1.0.0.qualifier
