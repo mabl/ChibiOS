@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.chibios.eclipse.tools.feature"
-      label="ChibiOS/RT Eclipse Tools"
+      id="GCC_ARM_Embedded_Compiler_Feature"
+      label="GCC ARM Embedded Compiler"
       version="1.0.0.qualifier"
-      provider-name="www.chibios.org"
+      provider-name="launchpad.net/gcc-arm-embedded"
       plugin="org.chibios.spc5.branding"
+      os="win32"
       exclusive="true">
 
    <description>
-      ChibiOS/RT Eclipse plugins collection.
+      GCC ARM Compiler for ChibiStudio.
    </description>
 
    <copyright url="http://www.chibios.org/dokuwiki/doku.php?id=chibios:copyright">
-      ChibiOS/RT - Copyright (C) 2007...2013 Giovanni Di Sirio.
+      ChibiOS/RT - Copyright (C) 2007,2008,2009,2010,2011,2012,2013
+Giovanni Di Sirio.
    </copyright>
 
    <license url="http://www.chibios.org/dokuwiki/doku.php?id=chibios:license">
@@ -31,34 +33,19 @@ along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
    </license>
 
    <url>
-      <update label="ChibiOS/RT Eclipse update site" url="http://www.chibios.org/eclipse"/>
-      <discovery label="ChibiOS/RT free embedded RTOS homepage" url="http://www.chibios.org"/>
+      <update label="ChibiStudio Update Site" url="http://www.chibios.org/eclipse/chibistudio"/>
    </url>
 
    <requires>
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.ui.console" version="3.5.100" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.ui.ide"/>
-      <import plugin="org.eclipse.cdt.debug.mi.core"/>
-      <import plugin="org.eclipse.debug.ui"/>
-      <import plugin="org.eclipse.cdt.debug.core"/>
    </requires>
 
    <plugin
-         id="org.chibios.tools.eclipse.config"
+         id="org.chibios.tools.spc5.tools.gnuarm"
          download-size="0"
          install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.chibios.tools.eclipse.debug"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.chibios.spc5.branding"
