@@ -5,7 +5,6 @@
       version="1.0.0.qualifier"
       provider-name="launchpad.net/gcc-arm-embedded"
       plugin="org.chibios.spc5.branding"
-      os="win32"
       exclusive="true">
 
    <description>
