@@ -3,7 +3,7 @@
    <description name="ChibiStudio Update Site" url="http://www.chibios.org/eclipse/chibistudio">
       ChibiStudio Eclipse Update Site.
    </description>
-   <feature url="features/org.chibios.tools.spc5.tools.gnuarm.feature_1.0.0.201302091219.jar" id="org.chibios.tools.spc5.tools.gnuarm.feature" version="1.0.0.201302091219" os="win32">
+   <feature url="features/org.chibios.tools.spc5.tools.gnuarm.feature_1.0.0.201302091219.jar" id="org.chibios.tools.spc5.tools.gnuarm.feature" version="1.0.0.201302091219" os="">
       <category name="ChibiStudio"/>
    </feature>
    <feature url="features/org.chibios.eclipse.tools.feature_1.0.0.qualifier.jar" id="org.chibios.eclipse.tools.feature" version="1.0.0.qualifier">
