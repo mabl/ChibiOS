@@ -61,7 +61,7 @@
          unpack="false"/>
 
    <plugin
-         id="org.chibios.spc5.components.testsuite"
+         id="org.chibios.spc5.components.kernel.testsuite"
          download-size="0"
          install-size="0"
          version="0.0.0"
