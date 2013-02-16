@@ -231,6 +231,13 @@
 #endif
 
 /**
+ * @brief   Disables the watchdog on start.
+ */
+#if !defined(SPC5_DISABLE_WATCHDOG) || defined(__DOXYGEN__)
+#define SPC5_DISABLE_WATCHDOG               TRUE
+#endif
+
+/**
  * @brief   FMPLL0 IDF divider value.
  * @note    The default value is calculated for XOSC=40MHz and PHI=64MHz.
  */
@@ -256,7 +263,7 @@
 
 /**
  * @brief   FMPLL1 IDF divider value.
- * @note    The default value is calculated for XOSC=40MHz and PHI=64MHz.
+ * @note    The default value is calculated for XOSC=40MHz and PHI=120MHz.
  */
 #if !defined(SPC5_FMPLL1_IDF_VALUE) || defined(__DOXYGEN__)
 #define SPC5_FMPLL1_IDF_VALUE       5
@@ -264,7 +271,7 @@
 
 /**
  * @brief   FMPLL1 NDIV divider value.
- * @note    The default value is calculated for XOSC=40MHz and PHI=64MHz.
+ * @note    The default value is calculated for XOSC=40MHz and PHI=120MHz.
  */
 #if !defined(SPC5_FMPLL1_NDIV_VALUE) || defined(__DOXYGEN__)
 #define SPC5_FMPLL1_NDIV_VALUE      60
@@ -272,7 +279,7 @@
 
 /**
  * @brief   FMPLL1 ODF divider value.
- * @note    The default value is calculated for XOSC=40MHz and PHI=64MHz.
+ * @note    The default value is calculated for XOSC=40MHz and PHI=120MHz.
  */
 #if !defined(SPC5_FMPLL1_ODF) || defined(__DOXYGEN__)
 #define SPC5_FMPLL1_ODF             SPC5_FMPLL_ODF_DIV4
@@ -582,6 +589,15 @@
  */
 #if !defined(SPC5_PIT0_IRQ_PRIORITY) || defined(__DOXYGEN__)
 #define SPC5_PIT0_IRQ_PRIORITY              4
+#endif
+
+/**
+ * @brief   Clock initialization failure hook.
+ * @note    The default is to stop the system and let the RTC restart it.
+ * @note    The hook code must not return.
+ */
+#if !defined(SPC5_CLOCK_FAILURE_HOOK) || defined(__DOXYGEN__)
+#define SPC5_CLOCK_FAILURE_HOOK()           chSysHalt()
 #endif
 
 /*===========================================================================*/
