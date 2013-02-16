@@ -15,6 +15,9 @@
    <feature url="features/org.chibios.spc5.components.rtos.stm32f4xx.feature_1.0.0.qualifier.jar" id="org.chibios.spc5.components.rtos.stm32f4xx.feature" version="1.0.0.qualifier">
       <category name="ChibiOS/RT"/>
    </feature>
+   <feature url="features/org.chibios.spc5.components.portable.feature_1.0.0.qualifier.jar" id="org.chibios.spc5.components.portable.feature" version="1.0.0.qualifier">
+      <category name="ChibiOS/RT"/>
+   </feature>
    <category-def name="ChibiOS/RT" label="ChibiOS/RT">
       <description>
          ChibiOS/RT Components and Plugnis.

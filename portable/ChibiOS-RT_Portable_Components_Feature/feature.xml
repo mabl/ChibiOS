@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.chibios.spc5.components.portable.feature"
+      label="ChibiOS/RT Portable Components"
+      version="1.0.0.qualifier"
+      provider-name="www.chibios.org"
+      plugin="org.chibios.spc5.branding"
+      exclusive="true">
+
+   <description url="http://www.example.com/description">
+      [Enter Feature Description here.]
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <url>
+      <update label="ChibiOS/RT Eclipse update site" url="http://www.chibios.org/eclipse"/>
+   </url>
+
+   <requires>
+      <import plugin="com.st.tools.spc5"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.core.runtime"/>
+   </requires>
+
+   <plugin
+         id="org.chibios.spc5.components.hal"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.chibios.spc5.components.kernel"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.chibios.spc5.components.various.chprintf"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.chibios.spc5.components.various.shell"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="org.chibios.spc5.branding"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
