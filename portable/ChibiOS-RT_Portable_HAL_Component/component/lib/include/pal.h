@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -51,7 +51,7 @@
  * @brief   Safe state for <b>unconnected</b> pads.
  * @details The state itself is not specified and is architecture dependent,
  *          it may be mapped on @p PAL_MODE_INPUT_PULLUP,
- *          @p PAL_MODE_INPUT_PULLDOWN or @p PAL_MODE_OUTPUT_PUSHPULL as
+ *          @p PAL_MODE_INPUT_PULLDOWN or @p PAL_MODE_OUTPUT_PUSHPULL for
  *          example.
  */
 #define PAL_MODE_UNCONNECTED            1

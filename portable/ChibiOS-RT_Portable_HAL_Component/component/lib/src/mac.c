@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -34,6 +34,10 @@
 /*===========================================================================*/
 /* Driver local definitions.                                                 */
 /*===========================================================================*/
+
+#if MAC_USE_ZERO_COPY && !MAC_SUPPORTS_ZERO_COPY
+#error "MAC_USE_ZERO_COPY not supported by this implementation"
+#endif
 
 /*===========================================================================*/
 /* Driver exported variables.                                                */

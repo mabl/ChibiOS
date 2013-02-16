@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -156,10 +156,10 @@ static msg_t shell_thread(void *p) {
       chprintf(chp, "\r\nlogout");
       break;
     }
-    lp = _strtok(line, " \009", &tokp);
+    lp = _strtok(line, " \t", &tokp);
     cmd = lp;
     n = 0;
-    while ((lp = _strtok(NULL, " \009", &tokp)) != NULL) {
+    while ((lp = _strtok(NULL, " \t", &tokp)) != NULL) {
       if (n >= SHELL_MAX_ARGUMENTS) {
         chprintf(chp, "too many arguments\r\n");
         cmd = NULL;

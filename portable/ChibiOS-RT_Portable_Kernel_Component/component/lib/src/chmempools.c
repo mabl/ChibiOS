@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -41,8 +41,6 @@
 #if CH_USE_MEMPOOLS || defined(__DOXYGEN__)
 /**
  * @brief   Initializes an empty memory pool.
- * @note    The size is internally aligned to be a multiple of the
- *          @p stkalign_t type size.
  *
  * @param[out] mp       pointer to a @p MemoryPool structure
  * @param[in] size      the size of the objects contained in this memory pool,
