@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: ChibiOS/RT Portable Test Suite Component
-Bundle-SymbolicName: org.chibios.spc5.components.testsuite;singleton:=true
+Bundle-Name: ChibiOS/RT Portable Kernel Test Suite Component
+Bundle-SymbolicName: org.chibios.spc5.components.kernel.testsuite;singleton:=true
 Bundle-Version: 2.5.1.qualifier
 Bundle-Activator: activator.Activator
 Require-Bundle: org.eclipse.core.runtime,
