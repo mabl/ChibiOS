@@ -1,6 +1,3 @@
-[#ftl]
-[@pp.dropOutputFile /]
-[@pp.changeOutputFile name="halconf.h" /]
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
                  2011,2012,2013 Giovanni Di Sirio.
@@ -37,6 +34,9 @@
 
 #include "mcuconf.h"
 
+/**
+ * @name    Drivers enable switches
+ */
 /**
  * @brief   Enables the TM subsystem.
  */
@@ -162,9 +162,13 @@
 #if !defined(HAL_USE_USB) || defined(__DOXYGEN__)
 #define HAL_USE_USB                 ${conf.groups.enabled_drivers.usb[0]?upper_case}
 #endif
+/** @} */
 
 /*===========================================================================*/
-/* ADC driver related settings.                                              */
+/**
+ * @name ADC driver related setting
+ * @{
+ */
 /*===========================================================================*/
 
 /**
@@ -182,9 +186,13 @@
 #if !defined(ADC_USE_MUTUAL_EXCLUSION) || defined(__DOXYGEN__)
 #define ADC_USE_MUTUAL_EXCLUSION    ${conf.groups.adc_driver_settings.enable_mutual_exclusion_functions[0]?upper_case}
 #endif
+/** @} */
 
 /*===========================================================================*/
-/* CAN driver related settings.                                              */
+/**
+ * @name CAN driver related setting
+ * @{
+ */
 /*===========================================================================*/
 
 /**
@@ -193,9 +201,13 @@
 #if !defined(CAN_USE_SLEEP_MODE) || defined(__DOXYGEN__)
 #define CAN_USE_SLEEP_MODE          ${conf.groups.can_driver_settings.enable_sleep_mode_functions[0]?upper_case}
 #endif
+/** @} */
 
 /*===========================================================================*/
-/* I2C driver related settings.                                              */
+/**
+ * @name I2C driver related setting
+ * @{
+ */
 /*===========================================================================*/
 
 /**
@@ -204,10 +216,21 @@
 #if !defined(I2C_USE_MUTUAL_EXCLUSION) || defined(__DOXYGEN__)
 #define I2C_USE_MUTUAL_EXCLUSION    ${conf.groups.i2c_driver_settings.enable_mutual_exclusion_functions[0]?upper_case}
 #endif
+/** @} */
 
 /*===========================================================================*/
-/* MAC driver related settings.                                              */
+/**
+ * @name MAC driver related setting
+ * @{
+ */
 /*===========================================================================*/
+
+/**
+ * @brief   Enables an event sources for incoming packets.
+ */
+#if !defined(MAC_USE_ZERO_COPY) || defined(__DOXYGEN__)
+#define MAC_USE_ZERO_COPY           FALSE
+#endif
 
 /**
  * @brief   Enables an event sources for incoming packets.
@@ -215,9 +238,13 @@
 #if !defined(MAC_USE_EVENTS) || defined(__DOXYGEN__)
 #define MAC_USE_EVENTS              ${conf.groups.mac_driver_settings.enable_events[0]?upper_case}
 #endif
+/** @} */
 
 /*===========================================================================*/
-/* MMC_SPI driver related settings.                                          */
+/**
+ * @name MMC_SPI driver related setting
+ * @{
+ */
 /*===========================================================================*/
 
 /**
@@ -231,9 +258,13 @@
 #if !defined(MMC_NICE_WAITING) || defined(__DOXYGEN__)
 #define MMC_NICE_WAITING            ${conf.groups.mmc_spi_driver_settings.nice_waiting[0]?upper_case}
 #endif
+/** @} */
 
 /*===========================================================================*/
-/* SDC driver related settings.                                              */
+/**
+ * @name SDC driver related setting
+ * @{
+ */
 /*===========================================================================*/
 
 /**
@@ -262,9 +293,13 @@
 #if !defined(SDC_NICE_WAITING) || defined(__DOXYGEN__)
 #define SDC_NICE_WAITING            ${conf.groups.sdc_driver_settings.nice_waiting[0]?upper_case}
 #endif
+/** @} */
 
 /*===========================================================================*/
-/* SERIAL driver related settings.                                           */
+/**
+ * @name SERIAL driver related setting
+ * @{
+ */
 /*===========================================================================*/
 
 /**
@@ -286,9 +321,32 @@
 #if !defined(SERIAL_BUFFERS_SIZE) || defined(__DOXYGEN__)
 #define SERIAL_BUFFERS_SIZE         ${conf.groups.serial_driver_settings.buffers_size[0]}
 #endif
+/** @} */
 
 /*===========================================================================*/
-/* SPI driver related settings.                                              */
+/**
+ * @name SERIAL_USB driver related setting
+ * @{
+ */
+/*===========================================================================*/
+
+/**
+ * @brief   Serial over USB buffers size.
+ * @details Configuration parameter, the buffer size must be a multiple of
+ *          the USB data endpoint maximum packet size.
+ * @note    The default is 64 bytes for both the transmission and receive
+ *          buffers.
+ */
+#if !defined(SERIAL_USB_BUFFERS_SIZE) || defined(__DOXYGEN__)
+#define SERIAL_USB_BUFFERS_SIZE     64
+#endif
+/** @} */
+
+/*===========================================================================*/
+/**
+ * @name SPI driver related setting
+ * @{
+ */
 /*===========================================================================*/
 
 /**
@@ -306,6 +364,7 @@
 #if !defined(SPI_USE_MUTUAL_EXCLUSION) || defined(__DOXYGEN__)
 #define SPI_USE_MUTUAL_EXCLUSION    ${conf.groups.spi_driver_settings.enable_mutual_exclusion_functions[0]?upper_case}
 #endif
+/** @} */
 
 #endif /* _HALCONF_H_ */
 
