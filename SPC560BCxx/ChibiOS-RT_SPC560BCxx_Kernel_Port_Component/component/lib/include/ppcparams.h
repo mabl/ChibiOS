@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -35,32 +35,37 @@
 /**
  * @brief   PPC core model.
  */
-#define PPC_VARIANT             PPC_VARIANT_e200z0
+#define PPC_VARIANT                 PPC_VARIANT_e200z0
 
 /**
  * @brief   Number of writable bits in IVPR register.
  */
-#define PPC_IVPR_BITS           20
+#define PPC_IVPR_BITS               20
 
 /**
  * @brief   IVORx registers support.
  */
-#define PPC_SUPPORTS_IVORS      FALSE
+#define PPC_SUPPORTS_IVORS          FALSE
 
 /**
  * @brief   Book E instruction set support.
  */
-#define PPC_SUPPORTS_BOOKE      FALSE
+#define PPC_SUPPORTS_BOOKE          FALSE
 
 /**
  * @brief   VLE instruction set support.
  */
-#define PPC_SUPPORTS_VLE        TRUE
+#define PPC_SUPPORTS_VLE            TRUE
 
 /**
  * @brief   Supports VLS Load/Store Multiple Volatile instructions.
  */
-#define PPC_SUPPORTS_VLE_MULTI  TRUE
+#define PPC_SUPPORTS_VLE_MULTI      TRUE
+
+/**
+ * @brief   Supports the decrementer timer.
+ */
+#define PPC_SUPPORTS_DECREMENTER    FALSE
 
 #endif /* _PPCPARAMS_H_ */
 

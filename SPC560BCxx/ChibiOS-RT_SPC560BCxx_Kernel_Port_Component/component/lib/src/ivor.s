@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -19,8 +19,8 @@
 */
 
 /**
- * @file    SPC560BCxx/ivor.s
- * @brief   SPC560BCxx IVORx handlers.
+ * @file    PPC/ivor.s
+ * @brief   Kernel ISRs.
  *
  * @addtogroup PPC_CORE
  * @{
@@ -42,85 +42,75 @@
 
         .section    .handlers, "ax"
 
+#if PPC_SUPPORTS_DECREMENTER
         /*
-         * Fixed IVOR offset table.
+         * _IVOR10 handler (Book-E decrementer).
          */
-        .globl      IVORS
-IVORS:
-IVOR0:  b           IVOR0
         .align      4
-IVOR1:  b           _IVOR1
-        .align      4
-IVOR2:  b           _IVOR2
-        .align      4
-IVOR3:  b           _IVOR3
-        .align      4
-IVOR4:  b           _IVOR4
-        .align      4
-IVOR5:  b           _IVOR5
-        .align      4
-IVOR6:  b           _IVOR6
-        .align      4
-IVOR7:  b           _IVOR7
-        .align      4
-IVOR8:  b           _IVOR8
-        .align      4
-IVOR9:  b           _IVOR9
-        .align      4
-IVOR10: b           _IVOR10
-        .align      4
-IVOR11: b           _IVOR11
-        .align      4
-IVOR12: b           _IVOR12
-        .align      4
-IVOR13: b           _IVOR13
-        .align      4
-IVOR14: b           _IVOR14
-        .align      4
-IVOR15: b           _IVOR15
-
-        /*
-         * Unhandled exceptions handler.
-         */
-        .weak       _IVOR0
-_IVOR0:
-        .weak       _IVOR1
-_IVOR1:
-        .weak       _IVOR2
-_IVOR2:
-        .weak       _IVOR3
-_IVOR3:
-        .weak       _IVOR5
-_IVOR5:
-        .weak       _IVOR6
-_IVOR6:
-        .weak       _IVOR7
-_IVOR7:
-        .weak       _IVOR8
-_IVOR8:
-        .weak       _IVOR9
-_IVOR9:
-        .weak       _IVOR10
+        .globl      _IVOR10
+        .type       _IVOR10, @function
 _IVOR10:
-        .weak       _IVOR11
-_IVOR11:
-        .weak       _IVOR12
-_IVOR12:
-        .weak       _IVOR13
-_IVOR13:
-        .weak       _IVOR14
-_IVOR14:
-        .weak       _IVOR15
-_IVOR15:
-        .weak       _unhandled_exception
-        .type       _unhandled_exception, @function
-_unhandled_exception:
-        b           _unhandled_exception
+        /* Creation of the external stack frame (extctx structure).*/
+        stwu        %sp, -80(%sp)           /* Size of the extctx structure.*/
+#if PPC_USE_VLE && PPC_SUPPORTS_VLE_MULTI
+        e_stmvsrrw  8(%sp)                  /* Saves PC, MSR.               */
+        e_stmvsprw  16(%sp)                 /* Saves CR, LR, CTR, XER.      */
+        e_stmvgprw  32(%sp)                 /* Saves GPR0, GPR3...GPR12.    */
+#else /* !(PPC_USE_VLE && PPC_SUPPORTS_VLE_MULTI) */
+        stw         %r0, 32(%sp)            /* Saves GPR0.                  */
+        mfSRR0      %r0
+        stw         %r0, 8(%sp)             /* Saves PC.                    */
+        mfSRR1      %r0
+        stw         %r0, 12(%sp)            /* Saves MSR.                   */
+        mfCR        %r0
+        stw         %r0, 16(%sp)            /* Saves CR.                    */
+        mfLR        %r0
+        stw         %r0, 20(%sp)            /* Saves LR.                    */
+        mfCTR       %r0
+        stw         %r0, 24(%sp)            /* Saves CTR.                   */
+        mfXER       %r0
+        stw         %r0, 28(%sp)            /* Saves XER.                   */
+        stw         %r3, 36(%sp)            /* Saves GPR3...GPR12.          */
+        stw         %r4, 40(%sp)
+        stw         %r5, 44(%sp)
+        stw         %r6, 48(%sp)
+        stw         %r7, 52(%sp)
+        stw         %r8, 56(%sp)
+        stw         %r9, 60(%sp)
+        stw         %r10, 64(%sp)
+        stw         %r11, 68(%sp)
+        stw         %r12, 72(%sp)
+#endif /* !(PPC_USE_VLE && PPC_SUPPORTS_VLE_MULTI) */
+
+        /* Reset DIE bit in TSR register.*/
+        lis         %r3, 0x0800             /* DIS bit mask.                */
+        mtspr       336, %r3                /* TSR register.                */
+
+#if CH_DBG_SYSTEM_STATE_CHECK
+        bl          dbg_check_enter_isr
+        bl          dbg_check_lock_from_isr
+#endif
+        bl          chSysTimerHandlerI
+#if CH_DBG_SYSTEM_STATE_CHECK
+        bl          dbg_check_unlock_from_isr
+        bl          dbg_check_leave_isr
+#endif
+
+        /* System tick handler invocation.*/
+#if CH_DBG_SYSTEM_STATE_CHECK
+        bl          dbg_check_lock
+#endif
+        bl          chSchIsPreemptionRequired
+        cmpli       cr0, %r3, 0
+        beq         cr0, _ivor_exit
+        bl          chSchDoReschedule
+        b           _ivor_exit
+#endif /* PPC_SUPPORTS_DECREMENTER */
 
         /*
-         * IVOR4 handler (Book-E external interrupt).
+         * _IVOR4 handler (Book-E external interrupt).
          */
-        .align		4
+        .align      4
         .globl      _IVOR4
         .type       _IVOR4, @function
 _IVOR4:
