@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -399,6 +399,7 @@ void adcSTM32DisableTSVREFE(void) {
  * @brief   Enables the VBATE bit.
  * @details The VBATE bit is required in order to sample the VBAT channel.
  * @note    This is an STM32-only functionality.
+ * @note    This function is meant to be called after @p adcStart().
  */
 void adcSTM32EnableVBATE(void) {
 
@@ -409,6 +410,7 @@ void adcSTM32EnableVBATE(void) {
  * @brief   Disables the VBATE bit.
  * @details The VBATE bit is required in order to sample the VBAT channel.
  * @note    This is an STM32-only functionality.
+ * @note    This function is meant to be called after @p adcStart().
  */
 void adcSTM32DisableVBATE(void) {
 

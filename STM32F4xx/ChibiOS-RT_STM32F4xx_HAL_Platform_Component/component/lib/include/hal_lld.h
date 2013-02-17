@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -419,6 +419,8 @@
 #define STM32_HAS_TIM15         FALSE
 #define STM32_HAS_TIM16         FALSE
 #define STM32_HAS_TIM17         FALSE
+#define STM32_HAS_TIM18         FALSE
+#define STM32_HAS_TIM19         FALSE
 
 /* USART attributes.*/
 #define STM32_HAS_USART1        TRUE
@@ -1435,16 +1437,6 @@
 #define STM32_RTCCLK                STM32_HSEDIVCLK
 #else
 #error "invalid STM32_RTCSEL value specified"
-#endif
-
-/**
- * @brief   RTC HSE divider setting.
- */
-#if ((STM32_RTCPRE_VALUE >= 2) && (STM32_RTCPRE_VALUE <= 31)) ||            \
-    defined(__DOXYGEN__)
-#define STM32_RTCPRE                (STM32_RTCPRE_VALUE << 16)
-#else
-#error "invalid STM32_RTCPRE value specified"
 #endif
 
 /**

@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -51,7 +51,7 @@
                          RCC_AHB1ENR_GPIOGEN | RCC_AHB1ENR_GPIOHEN |        \
                          RCC_AHB1ENR_GPIOIEN)
 #define AHB1_LPEN_MASK  AHB1_EN_MASK
-#elif defined(STM32F30X)
+#elif defined(STM32F30X) || defined(STM32F37X)
 #define AHB_EN_MASK     (RCC_AHBENR_GPIOAEN | RCC_AHBENR_GPIOBEN |          \
                          RCC_AHBENR_GPIOCEN | RCC_AHBENR_GPIODEN |          \
                          RCC_AHBENR_GPIOEEN | RCC_AHBENR_GPIOFEN)

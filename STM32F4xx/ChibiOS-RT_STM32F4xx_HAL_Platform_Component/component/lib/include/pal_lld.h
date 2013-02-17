@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -60,7 +60,7 @@
 
 #define PAL_STM32_OSPEED_MASK           (3 << 3)
 #define PAL_STM32_OSPEED_LOWEST         (0 << 3)
-#if defined(STM32F0XX) || defined(STM32F30X)
+#if defined(STM32F0XX) || defined(STM32F30X) || defined(STM32F37X)
 #define PAL_STM32_OSPEED_MID            (1 << 3)
 #else
 #define PAL_STM32_OSPEED_MID1           (1 << 3)

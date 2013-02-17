@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -74,6 +74,20 @@
 #endif
 
 /**
+ * @brief   High Speed support for OTG-HS.
+ */
+#if !defined(STM32_USE_USB_OTG2_HS) || defined(__DOXYGEN__)
+#define STM32_USE_USB_OTG2_HS               FALSE
+#endif
+
+/**
+ * @brief   ULPI support for OTG-HS.
+ */
+#if !defined(STM32_USE_USB_OTG2_ULPI) || defined(__DOXYGEN__)
+#define STM32_USE_USB_OTG2_ULPI             FALSE
+#endif
+
+/**
  * @brief   OTG1 interrupt priority level setting.
  */
 #if !defined(STM32_USB_OTG1_IRQ_PRIORITY) || defined(__DOXYGEN__)
@@ -106,7 +120,7 @@
 /**
  * @brief   Dedicated data pump threads priority.
  */
-#if !defined(STM32_USB_OTG_THREAD_PRIORITY) || defined(__DOXYGEN__)
+#if !defined(STM32_USB_OTG_THREAD_PRIO) || defined(__DOXYGEN__)
 #define STM32_USB_OTG_THREAD_PRIO           LOWPRIO
 #endif
 
@@ -476,14 +490,14 @@ struct USBDriver {
  *
  * @api
  */
-#define usb_lld_connect_bus(usbp) (usbp->otg->GCCFG |= GCCFG_VBUSBSEN)
+#define usb_lld_connect_bus(usbp) ((usbp)->otg->GCCFG |= GCCFG_VBUSBSEN)
 
 /**
  * @brief   Disconnect the USB device.
  *
  * @api
  */
-#define usb_lld_disconnect_bus(usbp) (usbp->otg->GCCFG &= ~GCCFG_VBUSBSEN)
+#define usb_lld_disconnect_bus(usbp) ((usbp)->otg->GCCFG &= ~GCCFG_VBUSBSEN)
 
 /*===========================================================================*/
 /* External declarations.                                                    */

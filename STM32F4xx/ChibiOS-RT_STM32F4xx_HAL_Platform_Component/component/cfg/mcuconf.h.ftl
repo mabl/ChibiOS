@@ -271,6 +271,8 @@
  */
 #define STM32_USB_USE_OTG1                  ${conf.groups.otg_settings.use_otg_fs[0]?upper_case}
 #define STM32_USB_USE_OTG2                  ${conf.groups.otg_settings.use_otg_hs[0]?upper_case}
+#define STM32_USE_USB_OTG2_HS               FALSE
+#define STM32_USE_USB_OTG2_ULPI             FALSE
 #define STM32_USB_OTG1_IRQ_PRIORITY         ${conf.groups.irq_settings.otgfs_irq_priority[0].@index[0]?string}
 #define STM32_USB_OTG2_IRQ_PRIORITY         ${conf.groups.irq_settings.otghs_irq_priority[0].@index[0]?string}
 #define STM32_USB_OTG1_RX_FIFO_SIZE         ${conf.groups.otg_settings.otg_fs_rx_fifo_size[0]}
