@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -19,8 +19,8 @@
 */
 
 /**
- * @file    SPC563Mxx/ivor.s
- * @brief   SPC563Mxx IVORx handlers.
+ * @file    PPC/ivor.s
+ * @brief   Kernel ISRs.
  *
  * @addtogroup PPC_CORE
  * @{
@@ -42,46 +42,11 @@
 
         .section    .handlers, "ax"
 
-        /*
-         * Unhandled exceptions handler.
-         */
-         .weak      _IVOR0
-_IVOR0:
-         .weak      _IVOR1
-_IVOR1:
-         .weak      _IVOR2
-_IVOR2:
-         .weak      _IVOR3
-_IVOR3:
-         .weak      _IVOR5
-_IVOR5:
-         .weak      _IVOR6
-_IVOR6:
-         .weak      _IVOR7
-_IVOR7:
-         .weak      _IVOR8
-_IVOR8:
-         .weak      _IVOR9
-_IVOR9:
-         .weak      _IVOR11
-_IVOR11:
-         .weak      _IVOR12
-_IVOR12:
-         .weak      _IVOR13
-_IVOR13:
-         .weak      _IVOR14
-_IVOR14:
-         .weak      _IVOR15
-_IVOR15:
-        .weak      _unhandled_exception
-        .type       _unhandled_exception, @function
-_unhandled_exception:
-        b       _unhandled_exception
-
+#if PPC_SUPPORTS_DECREMENTER
         /*
          * _IVOR10 handler (Book-E decrementer).
          */
-        .align		4
+        .align      4
         .globl      _IVOR10
         .type       _IVOR10, @function
 _IVOR10:
@@ -140,11 +105,12 @@ _IVOR10:
         beq         cr0, _ivor_exit
         bl          chSchDoReschedule
         b           _ivor_exit
+#endif /* PPC_SUPPORTS_DECREMENTER */
 
         /*
          * _IVOR4 handler (Book-E external interrupt).
          */
-        .align		4
+        .align      4
         .globl      _IVOR4
         .type       _IVOR4, @function
 _IVOR4:

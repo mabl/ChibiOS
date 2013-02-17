@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -259,9 +259,6 @@ struct context {
  * @brief   Per-thread stack overhead for interrupts servicing.
  * @details This constant is used in the calculation of the correct working
  *          area size.
- *          This value can be zero on those architecture where there is a
- *          separate interrupt stack and the stack space between @p intctx and
- *          @p extctx is known to be zero.
  */
 #ifndef PORT_INT_REQUIRED_STACK
 #define PORT_INT_REQUIRED_STACK         256
@@ -345,6 +342,27 @@ struct context {
 #define port_enable() asm volatile ("wrteei  1" : : : "memory")
 
 /**
+ * @brief   Performs a context switch between two threads.
+ * @details This is the most critical code in any port, this function
+ *          is responsible for the context switch between 2 threads.
+ * @note    The implementation of this code affects <b>directly</b> the context
+ *          switch performance so optimize here as much as you can.
+ *
+ * @param[in] ntp       the thread to be switched in
+ * @param[in] otp       the thread to be switched out
+ */
+#if !CH_DBG_ENABLE_STACK_CHECK || defined(__DOXYGEN__)
+#define port_switch(ntp, otp) _port_switch(ntp, otp)
+#else
+#define port_switch(ntp, otp) {                                             \
+  register struct intctx *sp asm ("%r1");                                   \
+  if ((stkalign_t *)(sp - 1) < otp->p_stklimit)                             \
+    chDbgPanic("stack overflow");                                           \
+  _port_switch(ntp, otp);                                                   \
+}
+#endif
+
+/**
  * @brief   Writes to a special register.
  *
  * @param[in] spr       special register number
@@ -372,7 +390,7 @@ extern "C" {
 #endif
   void port_init(void);
   void port_halt(void);
-  void port_switch(Thread *ntp, Thread *otp);
+  void _port_switch(Thread *ntp, Thread *otp);
   void _port_thread_start(void);
 #ifdef __cplusplus
 }
