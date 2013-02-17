@@ -19,12 +19,19 @@
 */
 
 /**
- * @file    SPC560Pxx/vectors.s
- * @brief   SPC560Pxx vectors table.
+ * @file    SPC56ELxx/vectors.s
+ * @brief   SPC56ELxx vectors table.
  *
  * @addtogroup PPC_CORE
  * @{
  */
+
+/*
+ * Imports the PPC configuration headers.
+ */
+#define _FROM_ASM_
+#include "chconf.h"
+#include "chcore.h"
 
 #if !defined(__DOXYGEN__)
 
@@ -292,11 +299,6 @@ _vectors:
         .long       vector253
         .long       vector254
         .long       vector255
-        .long       vector256
-        .long       vector257
-        .long       vector258
-        .long       vector259
-        .long       vector260
 
         .text
         .align      2
@@ -1068,22 +1070,7 @@ vector254:
         .weak       vector255
 vector255:
 
-        .weak       vector256
-vector256:
-
-        .weak       vector257
-vector257:
-
-        .weak       vector258
-vector258:
-
-        .weak       vector259
-vector259:
-
-        .weak       vector260
-vector260:
-
-        .weak       _unhandled_irq
+        .weak      _unhandled_irq
         .type       _unhandled_irq, @function
 _unhandled_irq:
          b          _unhandled_irq

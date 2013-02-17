@@ -19,13 +19,13 @@
 */
 
 /**
- * @file    SPC560Pxx/ppcparams.h
- * @brief   PowerPC parameters for the SPC560Pxx.
+ * @file    SPC56ELxx/ppcparams.h
+ * @brief   PowerPC parameters for the SPC56ELxx.
  *
- * @defgroup PPC_SPC560Pxx SPC560Pxx Specific Parameters
+ * @defgroup PPC_SPC56ELxx SPC56ELxx Specific Parameters
  * @ingroup PPC_SPECIFIC
  * @details This file contains the PowerPC specific parameters for the
- *          SPC560Pxx platform.
+ *          SPC56ELxx platform.
  * @{
  */
 
@@ -35,7 +35,7 @@
 /**
  * @brief   PPC core model.
  */
-#define PPC_VARIANT             PPC_VARIANT_e200z0
+#define PPC_VARIANT                 PPC_VARIANT_e200z4
 
 /**
  * @brief   Number of writable bits in IVPR register.
@@ -45,12 +45,12 @@
 /**
  * @brief   IVORx registers support.
  */
-#define PPC_SUPPORTS_IVORS          FALSE
+#define PPC_SUPPORTS_IVORS          TRUE
 
 /**
  * @brief   Book E instruction set support.
  */
-#define PPC_SUPPORTS_BOOKE          FALSE
+#define PPC_SUPPORTS_BOOKE          TRUE
 
 /**
  * @brief   VLE instruction set support.
@@ -65,7 +65,7 @@
 /**
  * @brief   Supports the decrementer timer.
  */
-#define PPC_SUPPORTS_DECREMENTER    FALSE
+#define PPC_SUPPORTS_DECREMENTER    TRUE
 
 #endif /* _PPCPARAMS_H_ */
 

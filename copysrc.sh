@@ -90,3 +90,22 @@ cp ${chibios}/os/hal/platforms/SPC5xx/ESCI_v1/*.h       ./SPC563Mxx/ChibiOS-RT_S
 cp ${chibios}/os/hal/platforms/SPC5xx/ESCI_v1/*.c       ./SPC563Mxx/ChibiOS-RT_SPC563Mxx_HAL_Platform_Component/component/lib/src/
 cp ${chibios}/os/hal/platforms/SPC5xx/SIU_v1/*.h        ./SPC563Mxx/ChibiOS-RT_SPC563Mxx_HAL_Platform_Component/component/lib/include/
 cp ${chibios}/os/hal/platforms/SPC5xx/SIU_v1/*.c        ./SPC563Mxx/ChibiOS-RT_SPC563Mxx_HAL_Platform_Component/component/lib/src/
+
+#============================================================================#
+# SPC56ELxx Components.                                                      #
+#============================================================================#
+
+# SPC56ELxx Kernel Port.
+cp ${chibios}/os/ports/GCC/PPC/*.h                      ./SPC56ELxx/ChibiOS-RT_SPC56ELxx_Kernel_Port_Component/component/lib/include/
+cp ${chibios}/os/ports/GCC/PPC/SPC56ELxx/ppcparams.h    ./SPC56ELxx/ChibiOS-RT_SPC56ELxx_Kernel_Port_Component/component/lib/include/
+cp ${chibios}/os/ports/GCC/PPC/*.c                      ./SPC56ELxx/ChibiOS-RT_SPC56ELxx_Kernel_Port_Component/component/lib/src/
+cp ${chibios}/os/ports/GCC/PPC/ivor.s                   ./SPC56ELxx/ChibiOS-RT_SPC56ELxx_Kernel_Port_Component/component/lib/src/
+cp ${chibios}/os/ports/GCC/PPC/SPC56ELxx/vectors.s      ./SPC56ELxx/ChibiOS-RT_SPC56ELxx_Kernel_Port_Component/component/lib/src/
+
+# SPC56ELxx HAL Platform.
+cp ${chibios}/os/hal/platforms/SPC56ELxx/*.h            ./SPC56ELxx/ChibiOS-RT_SPC56ELxx_HAL_Platform_Component/component/lib/include/
+cp ${chibios}/os/hal/platforms/SPC56ELxx/*.c            ./SPC56ELxx/ChibiOS-RT_SPC56ELxx_HAL_Platform_Component/component/lib/src/
+cp ${chibios}/os/hal/platforms/SPC5xx/LINFlex_v1/*.h    ./SPC56ELxx/ChibiOS-RT_SPC56ELxx_HAL_Platform_Component/component/lib/include/
+cp ${chibios}/os/hal/platforms/SPC5xx/LINFlex_v1/*.c    ./SPC56ELxx/ChibiOS-RT_SPC56ELxx_HAL_Platform_Component/component/lib/src/
+cp ${chibios}/os/hal/platforms/SPC5xx/SIUL_v1/*.h       ./SPC56ELxx/ChibiOS-RT_SPC56ELxx_HAL_Platform_Component/component/lib/include/
+cp ${chibios}/os/hal/platforms/SPC5xx/SIUL_v1/*.c       ./SPC56ELxx/ChibiOS-RT_SPC56ELxx_HAL_Platform_Component/component/lib/src/
