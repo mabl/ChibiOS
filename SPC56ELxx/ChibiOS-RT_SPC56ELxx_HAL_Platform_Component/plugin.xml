@@ -4,7 +4,7 @@
 <!-- All SPC5 Component extension shall have the namespace "com.st.tools.spc5"-->
    <extension
          id="org.chibios.spc5.components.hal.platform.spc56elxx"
-         name="Clocks"
+         name="ChibiOS-RT SPC56ELxx HAL Platform Component"
          point="com.st.tools.spc5.extension">
       <component
             hidden="true"
@@ -157,11 +157,10 @@
                         brief="0"
                         default="3"
                         editable="true"
-                        length="IRC,XOSC,FMPLL0,FMPLL1,FMPLL1_1D1"
                         name="AUX0 Clock Source"
                         required="true"
                         type="enum"
-                        value="3">
+                        value="IRC,XOSC,FMPLL0,FMPLL1,FMPLL1_1D1">
                   </property>
                   <property
                         brief="Divider for the motor control peripherals clock, zero means disabled clock."

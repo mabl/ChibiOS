@@ -162,6 +162,12 @@
             <ndiv_value>60</ndiv_value>
             <odf_value index="1">SPC5_FMPLL_ODF_DIV4</odf_value>
           </fmpll1_settings>
+          <clocks>
+            <system_clock_divider index="2">2</system_clock_divider>
+            <aux0_clock_source index="3">FMPLL1</aux0_clock_source>
+            <motor_control_clock_divider index="2">2</motor_control_clock_divider>
+            <swg_clock_divider index="2">2</swg_clock_divider>
+          </clocks>
           <serial_driver_settings>
             <use_linflex0>true</use_linflex0>
             <use_linflex1>true</use_linflex1>

@@ -85,6 +85,16 @@
 			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC56ELxx/ChibiOS-RT_SPC56ELxx_Kernel_Port_Component/component/lib/</location>
 		</link>
 		<link>
+			<name>components/clocks/doc</name>
+			<type>2</type>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC56ELxx/ChibiOS-RT_SPC56ELxx_HAL_Platform_Component/component/doc</location>
+		</link>
+		<link>
+			<name>components/clocks/lib</name>
+			<type>2</type>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC56ELxx/ChibiOS-RT_SPC56ELxx_HAL_Platform_Component/component/lib</location>
+		</link>
+		<link>
 			<name>components/stmicroelectronics_spc56elxx_platform_component/doc</name>
 			<type>2</type>
 			<location>C:/ChibiStudio/workspace/SPC5/STMicroelectronics_SPC56ELxx_Platform_Component/component/doc/</location>
