@@ -4,7 +4,7 @@
 <!-- All SPC5 Component extension shall have the namespace "com.st.tools.spc5"-->
    <extension
          id="org.chibios.spc5.components.hal.platform.spc56elxx"
-         name="ChibiOS-RT SPC56ELxx HAL Platform Component"
+         name="Clocks"
          point="com.st.tools.spc5.extension">
       <component
             hidden="true"
@@ -136,6 +136,41 @@
                         required="true"
                         type="enum"
                         value="SPC5_FMPLL_ODF_DIV2,SPC5_FMPLL_ODF_DIV4,SPC5_FMPLL_ODF_DIV8,SPC5_FMPLL_ODF_DIV16">
+                  </property>
+               </group>
+               <group
+                     expanded="false"
+                     name="Clocks">
+                  <description>
+                     Settings related to the internal clocks distribution.
+                  </description>
+                  <property
+                        brief="Divider for the system peripherals clock, zero means disabled clock."
+                        default="2"
+                        editable="true"
+                        name="System Clock Divider"
+                        required="true"
+                        type="enum"
+                        value="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16">
+                  </property>
+                  <property
+                        brief="0"
+                        default="3"
+                        editable="true"
+                        length="IRC,XOSC,FMPLL0,FMPLL1,FMPLL1_1D1"
+                        name="AUX0 Clock Source"
+                        required="true"
+                        type="enum"
+                        value="3">
+                  </property>
+                  <property
+                        brief="Divider for the motor control peripherals clock, zero means disabled clock."
+                        default="2"
+                        editable="true"
+                        name="Motor Control Clock Divider"
+                        required="true"
+                        type="enum"
+                        value="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16">
                   </property>
                </group>
                <group

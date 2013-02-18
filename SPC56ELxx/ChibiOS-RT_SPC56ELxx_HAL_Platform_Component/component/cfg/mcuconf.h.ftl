@@ -42,10 +42,10 @@
 #define SPC5_FMPLL1_IDF_VALUE               ${conf.groups.fmpll1_settings.idf_value[0]}
 #define SPC5_FMPLL1_NDIV_VALUE              ${conf.groups.fmpll1_settings.ndiv_value[0]}
 #define SPC5_FMPLL1_ODF                     ${conf.groups.fmpll1_settings.odf_value[0]}
-#define SPC5_SYSCLK_DIVIDER_VALUE           1
-#define SPC5_AUX0CLK_SRC                    SPC5_CGM_SS_FMPLL1
-#define SPC5_MCONTROL_DIVIDER_VALUE         2
-#define SPC5_SWG_DIVIDER_VALUE              2
+#define SPC5_SYSCLK_DIVIDER_VALUE           ${conf.groups.clocks.system_clock_divider[0]}
+#define SPC5_AUX0CLK_SRC                    SPC5_CGM_SS_${conf.groups.clocks.aux0_clock_source[0]}
+#define SPC5_MCONTROL_DIVIDER_VALUE         ${conf.groups.clocks.motor_control_clock_divider[0]}
+#define SPC5_SWG_DIVIDER_VALUE              ${conf.groups.clocks.swg_clock_divider[0]}
 #define SPC5_AUX1CLK_SRC                    SPC5_CGM_SS_FMPLL1
 #define SPC5_FLEXRAY_DIVIDER_VALUE          2
 #define SPC5_AUX2CLK_SRC                    SPC5_CGM_SS_FMPLL1
