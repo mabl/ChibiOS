@@ -136,4 +136,4 @@ DLIBS   =
 # End of default section
 ##############################################################################
 
-include C:/SPC5Studio/eclipse/plugins/com.st.tools.spc5.components.platform.spc563mxx_1.0.0.201302011022/component/lib/rsc/rules.mk
+include C:/ChibiStudio/workspace/SPC5/STMicroelectronics_SPC563Mxx_Platform_Component/component/lib/rsc/rules.mk
