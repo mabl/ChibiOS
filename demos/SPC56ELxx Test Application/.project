@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>SPC56ELxx Test Application</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.cdt.managedbuilder.core.genmakebuilder</name>
+			<triggers>clean,full,incremental,</triggers>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.cdt.managedbuilder.core.ScannerConfigBuilder</name>
+			<triggers>full,incremental,</triggers>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.cdt.core.cnature</nature>
+		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
+		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>components/stmicroelectronics_spc56elxx_platform_component/doc</name>
+			<type>2</type>
+			<location>C:/ChibiStudio/workspace/SPC5/STMicroelectronics_SPC56ELxx_Platform_Component/component/doc/</location>
+		</link>
+		<link>
+			<name>components/stmicroelectronics_spc56elxx_platform_component/lib</name>
+			<type>2</type>
+			<location>C:/ChibiStudio/workspace/SPC5/STMicroelectronics_SPC56ELxx_Platform_Component/component/lib/</location>
+		</link>
+	</linkedResources>
+</projectDescription>
