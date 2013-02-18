@@ -154,7 +154,7 @@
                         value="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16">
                   </property>
                   <property
-                        brief="0"
+                        brief="AUX0 (Motor Contro, SWG) clock source selection."
                         default="3"
                         editable="true"
                         name="AUX0 Clock Source"
@@ -176,6 +176,42 @@
                         default="2"
                         editable="true"
                         name="SWG Clock Divider"
+                        required="true"
+                        type="enum"
+                        value="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16">
+                  </property>
+                  <property
+                        brief="AUX0 (FlexRay) clock source selection."
+                        default="1"
+                        editable="true"
+                        name="AUX1 Clock Source"
+                        required="true"
+                        type="enum"
+                        value="FMPLL0,FMPLL1,FMPLL1_1D1">
+                  </property>
+                  <property
+                        brief="Divider for the FlexRay peripheral clock, zero means disabled clock."
+                        default="2"
+                        editable="true"
+                        name="FlexRay Clock Divider"
+                        required="true"
+                        type="enum"
+                        value="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16">
+                  </property>
+                  <property
+                        brief="AUX0 (FlexCAN) clock source selection."
+                        default="1"
+                        editable="true"
+                        name="AUX2 Clock Source"
+                        required="true"
+                        type="enum"
+                        value="FMPLL0,FMPLL1,FMPLL1_1D1">
+                  </property>
+                  <property
+                        brief="Divider for the FlexCAN peripheral clock, zero means disabled clock."
+                        default="2"
+                        editable="true"
+                        name="FlexCAN Clock Divider"
                         required="true"
                         type="enum"
                         value="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16">

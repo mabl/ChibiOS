@@ -167,6 +167,10 @@
             <aux0_clock_source index="3">FMPLL1</aux0_clock_source>
             <motor_control_clock_divider index="2">2</motor_control_clock_divider>
             <swg_clock_divider index="2">2</swg_clock_divider>
+            <aux1_clock_source index="1">FMPLL1</aux1_clock_source>
+            <flexray_clock_divider index="2">2</flexray_clock_divider>
+            <aux2_clock_source index="1">FMPLL1</aux2_clock_source>
+            <flexcan_clock_divider index="2">2</flexcan_clock_divider>
           </clocks>
           <serial_driver_settings>
             <use_linflex0>true</use_linflex0>

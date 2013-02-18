@@ -46,10 +46,10 @@
 #define SPC5_AUX0CLK_SRC                    SPC5_CGM_SS_${conf.groups.clocks.aux0_clock_source[0]}
 #define SPC5_MCONTROL_DIVIDER_VALUE         ${conf.groups.clocks.motor_control_clock_divider[0]}
 #define SPC5_SWG_DIVIDER_VALUE              ${conf.groups.clocks.swg_clock_divider[0]}
-#define SPC5_AUX1CLK_SRC                    SPC5_CGM_SS_FMPLL1
-#define SPC5_FLEXRAY_DIVIDER_VALUE          2
-#define SPC5_AUX2CLK_SRC                    SPC5_CGM_SS_FMPLL1
-#define SPC5_FLEXCAN_DIVIDER_VALUE          2
+#define SPC5_AUX1CLK_SRC                    SPC5_CGM_SS_${conf.groups.clocks.aux1_clock_source[0]}
+#define SPC5_FLEXRAY_DIVIDER_VALUE          ${conf.groups.clocks.flexray_clock_divider[0]}
+#define SPC5_AUX2CLK_SRC                    SPC5_CGM_SS_${conf.groups.clocks.aux2_clock_source[0]}
+#define SPC5_FLEXCAN_DIVIDER_VALUE          ${conf.groups.clocks.flexcan_clock_divider[0]}
 #define SPC5_ME_ME_BITS                     (SPC5_ME_ME_RUN1 |              \
                                              SPC5_ME_ME_RUN2 |              \
                                              SPC5_ME_ME_RUN3 |              \
