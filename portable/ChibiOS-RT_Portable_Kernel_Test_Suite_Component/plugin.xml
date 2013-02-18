@@ -7,12 +7,18 @@
          name="ChibiOS/RT Portable Kernel Test Suite Component"
          point="com.st.tools.spc5.extension">
       <component
-            headerName="chprintf.h"
+            headerName="test.h"
             hidden="false"
             isPlatform="false">
             <description>
-                ChibiOS/RT portable output formatter, chprintf() function.
+                ChibiOS/RT portable kernel test suite.
             </description>
+            <groups
+                  name="Kernel Test Suite Settings">
+               <description>
+                  This component does not require any configuration.
+               </description>
+            </groups>
       </component>
    </extension>
 

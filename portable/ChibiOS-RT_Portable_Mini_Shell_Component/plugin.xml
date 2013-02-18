@@ -12,8 +12,14 @@
             initFunction="shellInit"
             isPlatform="false">
             <description>
-                ChibiOS/RT portable output formatter, chprintf() function.
+                ChibiOS/RT mini command shell.
             </description>
+            <groups
+                  name="Shell Settings">
+               <description>
+                  This component does not require any configuration.
+               </description>
+            </groups>
       </component>
    </extension>
 

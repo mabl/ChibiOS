@@ -13,6 +13,12 @@
             <description>
                 ChibiOS/RT portable output formatter, chprintf() function.
             </description>
+            <groups
+                  name="Output Formatter Settings">
+               <description>
+                  This component does not require any configuration.
+               </description>
+            </groups>
       </component>
    </extension>
 
