@@ -16,7 +16,7 @@
  */
 
 /*
- * SPC560Pxx drivers configuration.
+ * SPC56ELxx drivers configuration.
  * The following settings override the default settings present in
  * the various device driver implementation headers.
  * Note that the settings for each driver only have effect if the whole
@@ -26,88 +26,84 @@
  * 1...15       Lowest...Highest.
  */
 
-#define SPC560Pxx_MCUCONF
+#define SPC56ELxx_MCUCONF
 
 /*
  * HAL driver system settings.
  */
 #define SPC5_NO_INIT                        ${conf.groups.initialization_settings.do_not_init[0]?upper_case}
 #define SPC5_ALLOW_OVERCLOCK                ${conf.groups.initialization_settings.allow_overclocking[0]?upper_case}
+#define SPC5_DISABLE_WATCHDOG               ${conf.groups.initialization_settings.disable_watchdog[0]?upper_case}
+#define SPC5_FMPLL0_CLK_SRC                 SPC5_FMPLL_SRC_${conf.groups.fmpll0_settings.clock_source[0]}
 #define SPC5_FMPLL0_IDF_VALUE               ${conf.groups.fmpll0_settings.idf_value[0]}
 #define SPC5_FMPLL0_NDIV_VALUE              ${conf.groups.fmpll0_settings.ndiv_value[0]}
 #define SPC5_FMPLL0_ODF                     ${conf.groups.fmpll0_settings.odf_value[0]}
+#define SPC5_FMPLL1_CLK_SRC                 SPC5_FMPLL_SRC_${conf.groups.fmpll1_settings.clock_source[0]}
 #define SPC5_FMPLL1_IDF_VALUE               ${conf.groups.fmpll1_settings.idf_value[0]}
 #define SPC5_FMPLL1_NDIV_VALUE              ${conf.groups.fmpll1_settings.ndiv_value[0]}
 #define SPC5_FMPLL1_ODF                     ${conf.groups.fmpll1_settings.odf_value[0]}
+#define SPC5_SYSCLK_DIVIDER_VALUE           1
+#define SPC5_AUX0CLK_SRC                    SPC5_CGM_SS_FMPLL1
+#define SPC5_MCONTROL_DIVIDER_VALUE         2
+#define SPC5_SWG_DIVIDER_VALUE              2
+#define SPC5_AUX1CLK_SRC                    SPC5_CGM_SS_FMPLL1
+#define SPC5_FLEXRAY_DIVIDER_VALUE          2
+#define SPC5_AUX2CLK_SRC                    SPC5_CGM_SS_FMPLL1
+#define SPC5_FLEXCAN_DIVIDER_VALUE          2
 #define SPC5_ME_ME_BITS                     (SPC5_ME_ME_RUN1 |              \
                                              SPC5_ME_ME_RUN2 |              \
                                              SPC5_ME_ME_RUN3 |              \
                                              SPC5_ME_ME_HALT0 |             \
                                              SPC5_ME_ME_STOP0)
-#define SPC5_ME_TEST_MC_BITS                (SPC5_ME_MC_SYSCLK_IRC |        \
-                                             SPC5_ME_MC_IRCON |             \
-                                             SPC5_ME_MC_XOSC0ON |           \
-                                             SPC5_ME_MC_PLL0ON |            \
-                                             SPC5_ME_MC_PLL1ON |            \
-                                             SPC5_ME_MC_CFLAON_NORMAL |     \
-                                             SPC5_ME_MC_DFLAON_NORMAL |     \
-                                             SPC5_ME_MC_MVRON)
 #define SPC5_ME_SAFE_MC_BITS                (SPC5_ME_MC_PDO)
 #define SPC5_ME_DRUN_MC_BITS                (SPC5_ME_MC_SYSCLK_FMPLL0 |     \
                                              SPC5_ME_MC_IRCON |             \
                                              SPC5_ME_MC_XOSC0ON |           \
                                              SPC5_ME_MC_PLL0ON |            \
                                              SPC5_ME_MC_PLL1ON |            \
-                                             SPC5_ME_MC_CFLAON_NORMAL |     \
-                                             SPC5_ME_MC_DFLAON_NORMAL |     \
+                                             SPC5_ME_MC_FLAON_NORMAL |      \
                                              SPC5_ME_MC_MVRON)
 #define SPC5_ME_RUN0_MC_BITS                (SPC5_ME_MC_SYSCLK_FMPLL0 |     \
                                              SPC5_ME_MC_IRCON |             \
                                              SPC5_ME_MC_XOSC0ON |           \
                                              SPC5_ME_MC_PLL0ON |            \
                                              SPC5_ME_MC_PLL1ON |            \
-                                             SPC5_ME_MC_CFLAON_NORMAL |     \
-                                             SPC5_ME_MC_DFLAON_NORMAL |     \
+                                             SPC5_ME_MC_FLAON_NORMAL |      \
                                              SPC5_ME_MC_MVRON)
 #define SPC5_ME_RUN1_MC_BITS                (SPC5_ME_MC_SYSCLK_FMPLL0 |     \
                                              SPC5_ME_MC_IRCON |             \
                                              SPC5_ME_MC_XOSC0ON |           \
                                              SPC5_ME_MC_PLL0ON |            \
                                              SPC5_ME_MC_PLL1ON |            \
-                                             SPC5_ME_MC_CFLAON_NORMAL |     \
-                                             SPC5_ME_MC_DFLAON_NORMAL |     \
+                                             SPC5_ME_MC_FLAON_NORMAL |      \
                                              SPC5_ME_MC_MVRON)
 #define SPC5_ME_RUN2_MC_BITS                (SPC5_ME_MC_SYSCLK_FMPLL0 |     \
                                              SPC5_ME_MC_IRCON |             \
                                              SPC5_ME_MC_XOSC0ON |           \
                                              SPC5_ME_MC_PLL0ON |            \
                                              SPC5_ME_MC_PLL1ON |            \
-                                             SPC5_ME_MC_CFLAON_NORMAL |     \
-                                             SPC5_ME_MC_DFLAON_NORMAL |     \
+                                             SPC5_ME_MC_FLAON_NORMAL |      \
                                              SPC5_ME_MC_MVRON)
 #define SPC5_ME_RUN3_MC_BITS                (SPC5_ME_MC_SYSCLK_FMPLL0 |     \
                                              SPC5_ME_MC_IRCON |             \
                                              SPC5_ME_MC_XOSC0ON |           \
                                              SPC5_ME_MC_PLL0ON |            \
                                              SPC5_ME_MC_PLL1ON |            \
-                                             SPC5_ME_MC_CFLAON_NORMAL |     \
-                                             SPC5_ME_MC_DFLAON_NORMAL |     \
+                                             SPC5_ME_MC_FLAON_NORMAL |      \
                                              SPC5_ME_MC_MVRON)
 #define SPC5_ME_HALT0_MC_BITS               (SPC5_ME_MC_SYSCLK_FMPLL0 |     \
                                              SPC5_ME_MC_IRCON |             \
                                              SPC5_ME_MC_XOSC0ON |           \
                                              SPC5_ME_MC_PLL0ON |            \
                                              SPC5_ME_MC_PLL1ON |            \
-                                             SPC5_ME_MC_CFLAON_NORMAL |     \
-                                             SPC5_ME_MC_DFLAON_NORMAL |     \
+                                             SPC5_ME_MC_FLAON_NORMAL |      \
                                              SPC5_ME_MC_MVRON)
 #define SPC5_ME_STOP0_MC_BITS               (SPC5_ME_MC_SYSCLK_FMPLL0 |     \
                                              SPC5_ME_MC_IRCON |             \
                                              SPC5_ME_MC_XOSC0ON |           \
                                              SPC5_ME_MC_PLL0ON |            \
                                              SPC5_ME_MC_PLL1ON |            \
-                                             SPC5_ME_MC_CFLAON_NORMAL |     \
-                                             SPC5_ME_MC_DFLAON_NORMAL |     \
+                                             SPC5_ME_MC_FLAON_NORMAL |      \
                                              SPC5_ME_MC_MVRON)
 #define SPC5_ME_RUN_PC3_BITS                (SPC5_ME_RUN_PC_RUN0 |          \
                                              SPC5_ME_RUN_PC_RUN1 |          \
@@ -137,7 +133,7 @@
                                              SPC5_ME_LP_PC_STOP0)
 #define SPC5_ME_LP_PC7_BITS                 (SPC5_ME_LP_PC_HALT0 |          \
                                              SPC5_ME_LP_PC_STOP0)
-#define SPC5_PIT0_IRQ_PRIORITY              4
+#define SPC5_CLOCK_FAILURE_HOOK()           chSysHalt()
 
 /*
  * SERIAL driver system settings.

@@ -39,6 +39,14 @@
                         required="true"
                         type="boolean">
                   </property>
+                  <property
+                        brief="Disables the SWT watchdog on startup."
+                        default="true"
+                        editable="true"
+                        name="Disable Watchdog"
+                        required="true"
+                        type="boolean">
+                  </property>
                </group>
                <group
                      expanded="false"
@@ -46,6 +54,15 @@
                   <description>
                      FMPLL0 settings, errors in settings or invalid settings are detected at compile time.
                   </description>
+                  <property
+                        brief="Selects the clock sources for FMPLL0."
+                        default="1"
+                        editable="true"
+                        name="Clock Source"
+                        required="true"
+                        type="enum"
+                        value="IRC,XOSC">
+                  </property>
                   <property
                         brief="FMPLL0 Input Divider Value"
                         default="5"
@@ -58,7 +75,7 @@
                   </property>
                   <property
                         brief="FMPLL0 Multiplier Value"
-                        default="32"
+                        default="60"
                         editable="true"
                         max="96"
                         min="32"
@@ -82,6 +99,15 @@
                   <description>
                      FMPLL1 settings, errors in settings or invalid settings are detected at compile time.
                   </description>
+                  <property
+                        brief="Selects the clock sources for FMPLL1."
+                        default="1"
+                        editable="true"
+                        name="Clock Source"
+                        required="true"
+                        type="enum"
+                        value="IRC,XOSC">
+                  </property>
                   <property
                         brief="FMPLL1 Input Divider Value"
                         default="5"
