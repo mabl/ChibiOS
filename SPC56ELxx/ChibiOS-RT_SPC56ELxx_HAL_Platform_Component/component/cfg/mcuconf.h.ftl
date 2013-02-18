@@ -133,7 +133,7 @@
                                              SPC5_ME_LP_PC_STOP0)
 #define SPC5_ME_LP_PC7_BITS                 (SPC5_ME_LP_PC_HALT0 |          \
                                              SPC5_ME_LP_PC_STOP0)
-#define SPC5_CLOCK_FAILURE_HOOK()           chSysHalt()
+#define SPC5_CLOCK_FAILURE_HOOK()           ${conf.groups.clocks.clock_failure_hook[0]}
 
 /*
  * SERIAL driver system settings.

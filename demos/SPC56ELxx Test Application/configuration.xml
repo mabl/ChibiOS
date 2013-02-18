@@ -173,6 +173,7 @@
             <flexray_clock_divider index="2">2</flexray_clock_divider>
             <aux2_clock_source index="1">FMPLL1</aux2_clock_source>
             <flexcan_clock_divider index="2">2</flexcan_clock_divider>
+            <clock_failure_hook>chSysHalt()</clock_failure_hook>
           </clocks>
           <serial_driver_settings>
             <use_linflex0>true</use_linflex0>
