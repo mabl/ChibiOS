@@ -153,9 +153,9 @@
                   <property
                         brief="Settings related to the alternate\ninputs (PSMI register in SIUL)."
                         editable="true"
-                        length="9"
-                        max="9"
-                        min="9"
+                        length="10"
+                        max="10"
+                        min="10"
                         name="Alternate Inputs"
                         required="true"
                         type="list"
