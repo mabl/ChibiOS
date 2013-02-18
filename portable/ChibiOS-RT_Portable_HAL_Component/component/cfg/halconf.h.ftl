@@ -1,3 +1,6 @@
+[#ftl]
+[@pp.dropOutputFile /]
+[@pp.changeOutputFile name="halconf.h" /]
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
                  2011,2012,2013 Giovanni Di Sirio.

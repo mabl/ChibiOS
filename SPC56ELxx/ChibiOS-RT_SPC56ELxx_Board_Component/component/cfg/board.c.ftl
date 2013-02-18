@@ -61,7 +61,7 @@ const PALConfig pal_default_config =
  */
 void __early_init(void) {
 
-  spc_clock_init();
+  spc_early_init();
 [#if conf.groups.initialization_code.early_initialization_code[0]?trim != ""]
 
 ${conf.groups.initialization_code.early_initialization_code[0]}
