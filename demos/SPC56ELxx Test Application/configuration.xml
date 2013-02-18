@@ -4,6 +4,8 @@
     <description>Test application for the SPC56ELxx created using the SPC5's Application Wizard.</description>
     <component id="com.st.tools.spc5.components.platform.spc56elxx">
       <component id="org.chibios.spc5.components.rtos.spc56elxx" />
+      <component id="org.chibios.spc5.components.various.shell" />
+      <component id="org.chibios.spc5.components.various.chprintf" />
     </component>
     <instances>
       <instance locked="false" id="com.st.tools.spc5.components.platform.spc56elxx">
@@ -183,8 +185,8 @@
       <instance locked="false" id="org.chibios.spc5.components.board.spc56elxx">
         <groups>
           <identification>
-            <board_identifier>GENERIC_SPC56ELXX</board_identifier>
-            <board_name>Generic SPC56ELxx</board_name>
+            <board_identifier>GENERIC_SPC560PXX</board_identifier>
+            <board_name>Generic SPC560Pxx</board_name>
           </identification>
           <clock_settings>
             <xosc_clock>40000000</xosc_clock>
@@ -192,7 +194,118 @@
           </clock_settings>
           <i_o_settings>
             <unused_pins_mode index="1">MODE_UNCONNECTED</unused_pins_mode>
-            <pins_list />
+            <pins_list>
+              <pin_settings>
+                <pin_identification>
+                  <identifier>PB_LIN0_TDX</identifier>
+                  <port index="1">PORT_B</port>
+                  <bit index="2">2</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="9">MODE_OUTPUT_ALTERNATE(1)</pin_mode>
+                  <latched_state index="1">HIGH</latched_state>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifier>PB_LIN0_RDX</identifier>
+                  <port index="1">PORT_B</port>
+                  <bit index="3">3</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="2">MODE_INPUT</pin_mode>
+                  <latched_state index="1">HIGH</latched_state>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifier>PD_BUTTON1</identifier>
+                  <port index="3">PORT_D</port>
+                  <bit index="0">0</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="2">MODE_INPUT</pin_mode>
+                  <latched_state index="0">LOW</latched_state>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifier>PD_BUTTON2</identifier>
+                  <port index="3">PORT_D</port>
+                  <bit index="1">1</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="2">MODE_INPUT</pin_mode>
+                  <latched_state index="0">LOW</latched_state>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifier>PD_BUTTON3</identifier>
+                  <port index="3">PORT_D</port>
+                  <bit index="2">2</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="2">MODE_INPUT</pin_mode>
+                  <latched_state index="0">LOW</latched_state>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifier>PD_BUTTON4</identifier>
+                  <port index="3">PORT_D</port>
+                  <bit index="3">3</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="2">MODE_INPUT</pin_mode>
+                  <latched_state index="0">LOW</latched_state>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifier>PD_LED1</identifier>
+                  <port index="3">PORT_D</port>
+                  <bit index="4">4</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="6">MODE_OUTPUT_PUSHPULL</pin_mode>
+                  <latched_state index="1">HIGH</latched_state>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifier>PD_LED2</identifier>
+                  <port index="3">PORT_D</port>
+                  <bit index="5">5</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="6">MODE_OUTPUT_PUSHPULL</pin_mode>
+                  <latched_state index="1">HIGH</latched_state>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifier>PD_LED3</identifier>
+                  <port index="3">PORT_D</port>
+                  <bit index="6">6</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="6">MODE_OUTPUT_PUSHPULL</pin_mode>
+                  <latched_state index="1">HIGH</latched_state>
+                </settings>
+              </pin_settings>
+              <pin_settings>
+                <pin_identification>
+                  <identifier>PD_LED4</identifier>
+                  <port index="3">PORT_D</port>
+                  <bit index="7">7</bit>
+                </pin_identification>
+                <settings>
+                  <pin_mode index="6">MODE_OUTPUT_PUSHPULL</pin_mode>
+                  <latched_state index="1">HIGH</latched_state>
+                </settings>
+              </pin_settings>
+            </pins_list>
             <alternate_inputs>
               <psmi_register_settings>
                 <padsel_fields>
@@ -277,11 +390,17 @@
             </alternate_inputs>
           </i_o_settings>
           <initialization_code>
-            <early_initialization_code />
-            <late_initialization_code />
-            <board_initialization_code />
+            <early_initialization_code><![CDATA[/* Early Initialization Code.*/]]></early_initialization_code>
+            <late_initialization_code><![CDATA[/* Late Initialization Code.*/]]></late_initialization_code>
+            <board_initialization_code><![CDATA[/* Board Initialization Code.*/]]></board_initialization_code>
           </initialization_code>
         </groups>
+      </instance>
+      <instance locked="false" id="org.chibios.spc5.components.various.shell">
+        <groups />
+      </instance>
+      <instance locked="false" id="org.chibios.spc5.components.various.chprintf">
+        <groups />
       </instance>
     </instances>
     <exportedFeatures />
