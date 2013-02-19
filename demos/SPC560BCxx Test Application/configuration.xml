@@ -23,10 +23,14 @@
             <common_options>-ggdb -fomit-frame-pointer -falign-functions=16</common_options>
             <c_options />
             <cpp_options>-fno-rtti</cpp_options>
-            <use_linker_gc index="0">yes</use_linker_gc>
             <use_vle index="0">yes</use_vle>
             <use_verbose_compile index="1">no</use_verbose_compile>
           </build_settings>
+          <linker_settings>
+            <use_linker_gc index="0">yes</use_linker_gc>
+            <extra_flash_sections />
+            <extra_ram_sections />
+          </linker_settings>
         </groups>
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.rtos.spc560bcxx">
