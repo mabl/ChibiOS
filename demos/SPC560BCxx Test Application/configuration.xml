@@ -145,8 +145,7 @@
           <initialization_settings>
             <do_not_init>false</do_not_init>
             <allow_overclocking>false</allow_overclocking>
-            <fxosc_divider>1</fxosc_divider>
-            <firc_divider>1</firc_divider>
+            <disable_watchdog>true</disable_watchdog>
           </initialization_settings>
           <fmpll0_settings>
             <idf_value>1</idf_value>
@@ -154,6 +153,8 @@
             <odf_value index="1">SPC5_FMPLL_ODF_DIV4</odf_value>
           </fmpll0_settings>
           <clocks>
+            <fxosc_divider>1</fxosc_divider>
+            <firc_divider>1</firc_divider>
             <peripheral_set_1_clock_divider index="2">2</peripheral_set_1_clock_divider>
             <peripheral_set_2_clock_divider index="2">2</peripheral_set_2_clock_divider>
             <peripheral_set_3_clock_divider index="2">2</peripheral_set_3_clock_divider>
