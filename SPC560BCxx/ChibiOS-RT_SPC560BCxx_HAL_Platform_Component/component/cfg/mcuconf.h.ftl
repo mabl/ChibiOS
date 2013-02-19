@@ -38,6 +38,9 @@
 #define SPC5_FMPLL0_IDF_VALUE               ${conf.groups.fmpll0_settings.idf_value[0]}
 #define SPC5_FMPLL0_NDIV_VALUE              ${conf.groups.fmpll0_settings.ndiv_value[0]}
 #define SPC5_FMPLL0_ODF                     ${conf.groups.fmpll0_settings.odf_value[0]}
+#define SPC5_PERIPHERAL1_CLK_DIV_VALUE      ${conf.groups.clocks.peripheral_set_1_clock_divider[0]}
+#define SPC5_PERIPHERAL2_CLK_DIV_VALUE      ${conf.groups.clocks.peripheral_set_2_clock_divider[0]}
+#define SPC5_PERIPHERAL3_CLK_DIV_VALUE      ${conf.groups.clocks.peripheral_set_3_clock_divider[0]}
 #define SPC5_ME_ME_BITS                     (SPC5_ME_ME_RUN1 |              \
                                              SPC5_ME_ME_RUN2 |              \
                                              SPC5_ME_ME_RUN3 |              \
@@ -156,6 +159,7 @@
 #define SPC5_ME_LP_PC7_BITS                 (SPC5_ME_LP_PC_HALT0 |          \
                                              SPC5_ME_LP_PC_STOP0)
 #define SPC5_PIT0_IRQ_PRIORITY              4
+#define SPC5_CLOCK_FAILURE_HOOK()           ${conf.groups.clocks.clock_failure_hook[0]}
 
 /*
  * SERIAL driver system settings.
