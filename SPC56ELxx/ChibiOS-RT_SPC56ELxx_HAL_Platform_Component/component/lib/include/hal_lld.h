@@ -837,11 +837,10 @@
 /**
  * @brief   Motor Control clock point.
  */
-#if (SPC5_SWG_DIVIDER_VALUE) != 0 || defined(__DOXYGEN)
+#if (SPC5_MCONTROL_DIVIDER_VALUE) != 0 || defined(__DOXYGEN)
 #define SPC5_MCONTROL_CLK       (SPC5_AUX0_CLK / SPC5_MCONTROL_DIVIDER_VALUE)
 #else
 #define SPC5_MCONTROL_CLK       0
-_
 #endif
 
 /**
@@ -913,7 +912,6 @@ _
 #define SPC5_FLEXCAN_CLK        (SPC5_AUX2_CLK / SPC5_FLEXCAN_DIVIDER_VALUE)
 #else
 #define SPC5_FLEXCAN_CLK        0
-
 #endif
 
 /*===========================================================================*/
