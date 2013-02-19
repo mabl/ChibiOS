@@ -23,10 +23,14 @@
             <common_options>-ggdb -fomit-frame-pointer -falign-functions=16</common_options>
             <c_options />
             <cpp_options>-fno-rtti</cpp_options>
-            <use_linker_gc index="0">yes</use_linker_gc>
             <use_vle index="0">yes</use_vle>
             <use_verbose_compile index="1">no</use_verbose_compile>
           </build_settings>
+          <linker_settings>
+            <use_linker_gc index="0">yes</use_linker_gc>
+            <extra_flash_sections />
+            <extra_ram_sections />
+          </linker_settings>
         </groups>
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.rtos.spc560pxx">
@@ -90,14 +94,54 @@
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.hal">
         <groups>
-          <pal_driver_settings>
-            <enabled>true</enabled>
-          </pal_driver_settings>
+          <enabled_drivers>
+            <tm>false</tm>
+            <pal>true</pal>
+            <adc>false</adc>
+            <can>false</can>
+            <ext>false</ext>
+            <gpt>false</gpt>
+            <i2c>false</i2c>
+            <icu>false</icu>
+            <mac>false</mac>
+            <mmc_spi>false</mmc_spi>
+            <pwm>false</pwm>
+            <rtc>false</rtc>
+            <sdc>false</sdc>
+            <serial>true</serial>
+            <spi>false</spi>
+            <serial_usb>false</serial_usb>
+            <uart>false</uart>
+            <usb>false</usb>
+          </enabled_drivers>
           <serial_driver_settings>
-            <enabled>true</enabled>
             <default_bit_rate>38400</default_bit_rate>
             <buffers_size>16</buffers_size>
           </serial_driver_settings>
+          <adc_driver_settings>
+            <enable_synchronous_functions>true</enable_synchronous_functions>
+            <enable_mutual_exclusion_functions>false</enable_mutual_exclusion_functions>
+          </adc_driver_settings>
+          <can_driver_settings>
+            <enable_sleep_mode_functions>true</enable_sleep_mode_functions>
+          </can_driver_settings>
+          <i2c_driver_settings>
+            <enable_mutual_exclusion_functions>false</enable_mutual_exclusion_functions>
+          </i2c_driver_settings>
+          <mac_driver_settings>
+            <enable_events>true</enable_events>
+          </mac_driver_settings>
+          <mmc_spi_driver_settings>
+            <nice_waiting>true</nice_waiting>
+          </mmc_spi_driver_settings>
+          <sdc_driver_settings>
+            <init_retry>1</init_retry>
+            <nice_waiting>true</nice_waiting>
+          </sdc_driver_settings>
+          <spi_driver_settings>
+            <enable_synchronous_functions>true</enable_synchronous_functions>
+            <enable_mutual_exclusion_functions>false</enable_mutual_exclusion_functions>
+          </spi_driver_settings>
         </groups>
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.hal.platform.spc560pxx">
@@ -105,6 +149,7 @@
           <initialization_settings>
             <do_not_init>false</do_not_init>
             <allow_overclocking>false</allow_overclocking>
+            <disable_watchdog>true</disable_watchdog>
           </initialization_settings>
           <fmpll0_settings>
             <idf_value>5</idf_value>
@@ -116,6 +161,17 @@
             <ndiv_value>60</ndiv_value>
             <odf_value index="1">SPC5_FMPLL_ODF_DIV4</odf_value>
           </fmpll1_settings>
+          <clocks>
+            <aux0_clock_source index="3">FMPLL1</aux0_clock_source>
+            <motor_control_clock_divider index="2">2</motor_control_clock_divider>
+            <aux1_clock_source index="0">FMPLL1</aux1_clock_source>
+            <fmpll1_div_clock_divider index="2">2</fmpll1_div_clock_divider>
+            <aux2_clock_source index="3">FMPLL1</aux2_clock_source>
+            <sp_clock_divider index="2">2</sp_clock_divider>
+            <aux3_clock_source index="3">FMPLL1</aux3_clock_source>
+            <fr_clock_divider index="2">2</fr_clock_divider>
+            <clock_failure_hook>chSysHalt()</clock_failure_hook>
+          </clocks>
           <serial_driver_settings>
             <use_linflex0>true</use_linflex0>
             <use_linflex1>true</use_linflex1>
@@ -324,10 +380,7 @@
             </alternate_inputs>
           </i_o_settings>
           <initialization_code>
-            <early_initialization_code><![CDATA[/* Early Initialization Code.*/
-  SWT.SR.R = 0xC520;
-  SWT.SR.R = 0xD928;
-  SWT.CR.R = 0xFF00000A;]]></early_initialization_code>
+            <early_initialization_code><![CDATA[/* Early Initialization Code.*/]]></early_initialization_code>
             <late_initialization_code><![CDATA[/* Late Initialization Code.*/]]></late_initialization_code>
             <board_initialization_code><![CDATA[/* Board Initialization Code.*/]]></board_initialization_code>
           </initialization_code>

@@ -33,12 +33,20 @@
  */
 #define SPC5_NO_INIT                        ${conf.groups.initialization_settings.do_not_init[0]?upper_case}
 #define SPC5_ALLOW_OVERCLOCK                ${conf.groups.initialization_settings.allow_overclocking[0]?upper_case}
+#define SPC5_DISABLE_WATCHDOG               ${conf.groups.initialization_settings.disable_watchdog[0]?upper_case}
 #define SPC5_FMPLL0_IDF_VALUE               ${conf.groups.fmpll0_settings.idf_value[0]}
 #define SPC5_FMPLL0_NDIV_VALUE              ${conf.groups.fmpll0_settings.ndiv_value[0]}
 #define SPC5_FMPLL0_ODF                     ${conf.groups.fmpll0_settings.odf_value[0]}
 #define SPC5_FMPLL1_IDF_VALUE               ${conf.groups.fmpll1_settings.idf_value[0]}
 #define SPC5_FMPLL1_NDIV_VALUE              ${conf.groups.fmpll1_settings.ndiv_value[0]}
 #define SPC5_FMPLL1_ODF                     ${conf.groups.fmpll1_settings.odf_value[0]}
+#define SPC5_AUX0CLK_SRC                    SPC5_CGM_SS_${conf.groups.clocks.aux0_clock_source[0]}
+#define SPC5_MCONTROL_DIVIDER_VALUE         ${conf.groups.clocks.motor_control_clock_divider[0]}
+#define SPC5_FMPLL1_CLK_DIVIDER_VALUE       ${conf.groups.clocks.fmpll1_div_clock_divider[0]}
+#define SPC5_AUX2CLK_SRC                    SPC5_CGM_SS_${conf.groups.clocks.aux2_clock_source[0]}
+#define SPC5_SP_CLK_DIVIDER_VALUE           ${conf.groups.clocks.sp_clock_divider[0]}
+#define SPC5_AUX3CLK_SRC                    SPC5_CGM_SS_${conf.groups.clocks.aux3_clock_source[0]}
+#define SPC5_FR_CLK_DIVIDER_VALUE           ${conf.groups.clocks.fr_clock_divider[0]}
 #define SPC5_ME_ME_BITS                     (SPC5_ME_ME_RUN1 |              \
                                              SPC5_ME_ME_RUN2 |              \
                                              SPC5_ME_ME_RUN3 |              \
@@ -138,6 +146,7 @@
 #define SPC5_ME_LP_PC7_BITS                 (SPC5_ME_LP_PC_HALT0 |          \
                                              SPC5_ME_LP_PC_STOP0)
 #define SPC5_PIT0_IRQ_PRIORITY              4
+#define SPC5_CLOCK_FAILURE_HOOK()           ${conf.groups.clocks.clock_failure_hook[0]}
 
 /*
  * SERIAL driver system settings.
