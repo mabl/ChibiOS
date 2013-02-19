@@ -40,24 +40,12 @@
                         type="boolean">
                   </property>
                   <property
-                        brief="Divider value for the Fast External Crystal Oscillator"
-                        default="1"
+                        brief="Disables the SWT watchdog on startup."
+                        default="true"
                         editable="true"
-                        max="32"
-                        min="1"
-                        name="FXOSC Divider"
+                        name="Disable Watchdog"
                         required="true"
-                        type="unsigned">
-                  </property>
-                  <property
-                        brief="Divider value for the Fast Internal RC oscillator"
-                        default="1"
-                        editable="true"
-                        max="32"
-                        min="1"
-                        name="FIRC Divider"
-                        required="true"
-                        type="unsigned">
+                        type="boolean">
                   </property>
                </group>
                <group
@@ -102,6 +90,26 @@
                   <description>
                      Settings related to the internal clocks distribution.
                   </description>
+                  <property
+                        brief="Divider value for the Fast External Crystal Oscillator"
+                        default="1"
+                        editable="true"
+                        max="32"
+                        min="1"
+                        name="FXOSC Divider"
+                        required="true"
+                        type="unsigned">
+                  </property>
+                  <property
+                        brief="Divider value for the Fast Internal RC oscillator"
+                        default="1"
+                        editable="true"
+                        max="32"
+                        min="1"
+                        name="FIRC Divider"
+                        required="true"
+                        type="unsigned">
+                  </property>
                   <property
                         brief="Divider for the peripheral set 1 clock, zero means disabled clock."
                         default="2"

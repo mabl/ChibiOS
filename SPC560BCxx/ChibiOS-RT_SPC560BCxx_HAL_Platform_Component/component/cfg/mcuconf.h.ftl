@@ -33,11 +33,12 @@
  */
 #define SPC5_NO_INIT                        ${conf.groups.initialization_settings.do_not_init[0]?upper_case}
 #define SPC5_ALLOW_OVERCLOCK                ${conf.groups.initialization_settings.allow_overclocking[0]?upper_case}
-#define SPC5_XOSCDIV_VALUE                  ${conf.groups.initialization_settings.fxosc_divider[0]}
-#define SPC5_IRCDIV_VALUE                   ${conf.groups.initialization_settings.firc_divider[0]}
+#define SPC5_DISABLE_WATCHDOG               ${conf.groups.initialization_settings.disable_watchdog[0]?upper_case}
 #define SPC5_FMPLL0_IDF_VALUE               ${conf.groups.fmpll0_settings.idf_value[0]}
 #define SPC5_FMPLL0_NDIV_VALUE              ${conf.groups.fmpll0_settings.ndiv_value[0]}
 #define SPC5_FMPLL0_ODF                     ${conf.groups.fmpll0_settings.odf_value[0]}
+#define SPC5_XOSCDIV_VALUE                  ${conf.groups.clocks.fxosc_divider[0]}
+#define SPC5_IRCDIV_VALUE                   ${conf.groups.clocks.firc_divider[0]}
 #define SPC5_PERIPHERAL1_CLK_DIV_VALUE      ${conf.groups.clocks.peripheral_set_1_clock_divider[0]}
 #define SPC5_PERIPHERAL2_CLK_DIV_VALUE      ${conf.groups.clocks.peripheral_set_2_clock_divider[0]}
 #define SPC5_PERIPHERAL3_CLK_DIV_VALUE      ${conf.groups.clocks.peripheral_set_3_clock_divider[0]}
