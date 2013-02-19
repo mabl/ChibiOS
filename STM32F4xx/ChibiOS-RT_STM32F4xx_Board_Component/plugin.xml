@@ -47,7 +47,7 @@
                   </description>
                   <property
                         brief="MCU voltage in hundredths of Volt, the voltage affects wait states and maximum core frequency."
-                        default="330"
+                        default="300"
                         editable="true"
                         max="360"
                         min="180"
