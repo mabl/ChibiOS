@@ -295,12 +295,13 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
 	USBMassStorageDriver *msdp = (USBMassStorageDriver *)usbp->param;
   switch (event) {
   case USB_EVENT_RESET:
+    msdp->reconfigured_or_reset_event = TRUE;
     return;
   case USB_EVENT_ADDRESS:
     return;
   case USB_EVENT_CONFIGURED:
     chSysLockFromIsr();
-    msdp->reconfigured_event = TRUE;
+    msdp->reconfigured_or_reset_event = TRUE;
     usbInitEndpointI(usbp, USB_MS_DATA_EP, &epDataConfig);
 	/* initialise the thread */
 	chBSemSignalI(&msdp->bsem);
@@ -553,7 +554,7 @@ bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
 
          /* now write the block to the block device */
          if(blkWrite(msdp->bbdp, rw_block_address, (uint8_t*)rw_ping_pong_buffer[done_buffer_index].buf,
-                     rw_ping_pong_buffer[done_buffer_index].num_blocks_to_write) == CH_FAILED) {
+                     rw_ping_pong_buffer[done_buffer_index].num_blocks_to_write) == CH_FAILED || (!palReadPad(GPIOF, GPIOF_USER_BUTTON)) ) {
 
              chprintf(chp, "\r\nSD Block Write Error, halting\r\n");
              chThdSleepMilliseconds(50);
@@ -868,10 +869,10 @@ static msg_t MassStorageThd(void *arg) {
 	while (TRUE) {
 		wait_for_isr = FALSE;
 
-		if( msdp->reconfigured_event ) {
+		if( msdp->reconfigured_or_reset_event ) {
 		  /*If the devices is unplugged and re-plugged but did not have a CPU reset,
 		   * we must set the state back to idle.*/
-		  msdp->reconfigured_event = FALSE;
+		  msdp->reconfigured_or_reset_event = FALSE;
 		  msdp->state = idle;
 		}
 
