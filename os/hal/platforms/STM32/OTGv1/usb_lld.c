@@ -609,12 +609,15 @@ static void usb_lld_serve_interrupt(USBDriver *usbp) {
   uint32_t sts, src, dsts_enumspd;
 
   sts = otgp->GINTSTS & otgp->GINTMSK;
-  otgp->GINTSTS = sts; //Writing 1's to this register clears those respective interrupt flags
+  /*Writing 1's to this register clears those respective interrupt flags*/
+  otgp->GINTSTS = sts;
 
   if (sts & GINTSTS_WKUPINT) {
-    //If clocks are gated off, turn them back on (may be the case if coming out of suspend mode).
+    /*If clocks are gated off, turn them back on (may be the case if
+     coming out of suspend mode).*/
     if( otgp->PCGCCTL & (PCGCCTL_STPPCLK | PCGCCTL_GATEHCLK) ) {
-      otgp->PCGCCTL &= ~(PCGCCTL_STPPCLK | PCGCCTL_GATEHCLK);//Set to zero to un-gate the USB core clocks
+      /*Set to zero to un-gate the USB core clocks*/
+      otgp->PCGCCTL &= ~(PCGCCTL_STPPCLK | PCGCCTL_GATEHCLK);
     }
 
     /* Clear the Remote Wake-up Signaling */
@@ -622,7 +625,7 @@ static void usb_lld_serve_interrupt(USBDriver *usbp) {
   }
 
   if( sts & GINTSTS_USBSUSP ) {
-      //Implement suspend mode
+      /*TODO Implement suspend mode*/
   }
 
   /* Reset interrupt handling.*/
@@ -919,7 +922,7 @@ void usb_lld_start(USBDriver *usbp) {
     /* USB 2.0 High Speed PHY.*/
     otgp->DCFG = 0x02200000 | DCFG_DSPD_HS;
 #else
-#  if STM32_USE_USB_OTG2_HS_FS
+#  if STM32_USE_USB_OTG2_HS && STM32_USE_USB_OTG2_HS_FS
     /* USB 2.0 High Speed PHY but in full speed mode*/
     otgp->DCFG = 0x02200000 | DCFG_DSPD_HS_FS;
 #  else
