@@ -181,13 +181,11 @@ int main(void) {
    */
 #if STM32_SERIAL_USE_USART2
   sdStart(&SD2, NULL);
-  //Note: do not use GPIOA_PIN2 and GPIOA_PIN3 as they conflict with ULPI pins.
+  /*Note: do not use GPIOA_PIN3 as it conflicts with ULPI pins.*/
 #endif
 
 #if STM32_SERIAL_USE_USART3
   sdStart(&SD3, NULL);
-  palSetPadMode(GPIOC, 10, PAL_MODE_ALTERNATE(7));
-  palSetPadMode(GPIOC, 11, PAL_MODE_ALTERNATE(7));
 #endif
 
 

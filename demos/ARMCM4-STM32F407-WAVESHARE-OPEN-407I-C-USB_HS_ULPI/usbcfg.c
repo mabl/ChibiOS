@@ -22,6 +22,13 @@
 #include "hal.h"
 #include "usb_cdc.h"
 
+
+#if STM32_USB_USE_OTG2 && STM32_USE_USB_OTG2_HS
+#define MAX_USB_PACKET_SIZE   512
+#else
+#define MAX_USB_PACKET_SIZE   64
+#endif
+
 /*
  * USB Device Descriptor.
  */
@@ -116,12 +123,12 @@ static const uint8_t vcom_configuration_descriptor_data[67] = {
   /* Endpoint 3 Descriptor.*/
   USB_DESC_ENDPOINT     (USB_CDC_DATA_AVAILABLE_EP,     /* bEndpointAddress.*/
                          0x02,          /* bmAttributes (Bulk).             */
-                         0x0040,        /* wMaxPacketSize.                  */
+                         MAX_USB_PACKET_SIZE,/* wMaxPacketSize.                  */
                          0x00),         /* bInterval.                       */
   /* Endpoint 1 Descriptor.*/
   USB_DESC_ENDPOINT     (USB_CDC_DATA_REQUEST_EP|0x80,  /* bEndpointAddress.*/
                          0x02,          /* bmAttributes (Bulk).             */
-                         0x0040,        /* wMaxPacketSize.                  */
+                         MAX_USB_PACKET_SIZE,/* wMaxPacketSize.                  */
                          0x00)          /* bInterval.                       */
 };
 
