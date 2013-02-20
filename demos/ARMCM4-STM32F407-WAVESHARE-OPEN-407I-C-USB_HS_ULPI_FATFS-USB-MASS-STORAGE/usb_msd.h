@@ -137,7 +137,6 @@ struct USBMassStorageDriver {
 	msd_csw_t csw;
 	scsi_sense_response_t sense;
 	bool_t result;
-	uint8_t result_sense_code;
 };
 
 #define MSD_CONNECTED			0
