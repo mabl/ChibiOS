@@ -4,21 +4,25 @@
 
 ** TARGET **
 
-The demo runs on an Olimex STM32-E407 board.
+The demo runs on an WaveShare STM32F4 Open 407I-C board.
 
 ** The Demo **
 
-The demo currently just flashes a LED using a thread and serves HTTP requests
-at address 192.168.1.20 on port 80.
-FatFs integrated using SDIO.
-The USB-FS port is used as USB-CDC and a command shell is ready to accepts
-commands there.
+This will demonstrate the use of a USB Mass Storage device over the high 
+speed ULPI interface to access an SD card.
 
 ** Build Procedure **
 
-The demo has been tested by using the free Codesourcery GCC-based toolchain
-and YAGARTO.
-Just modify the TRGT line in the makefile in order to use different GCC ports.
+Refer to demo_picture.jpg.
+
+Make sure you do not plug anything into the other pin headers on the board.
+Only connect the USB3300 board, the SD board, and optionally the ethernet 
+board. Most of the other pin headers conflict with either the SDIO pins
+or the ULPI pins. You can see debug output on pins PD5 and PD6 of the header.
+
+The demo has been tested by using the free Codesourcery GCC-based toolchain. 
+Just modify the TRGT line in the makefile in order to use different GCC 
+toolchains.
 
 ** Notes **
 
