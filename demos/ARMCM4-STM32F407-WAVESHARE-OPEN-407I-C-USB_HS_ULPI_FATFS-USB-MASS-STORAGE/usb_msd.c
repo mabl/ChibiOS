@@ -3,6 +3,11 @@
 #include "usb_msd.h"
 #include "chprintf.h"
 
+#define MSD_DEBUG   FALSE
+#define msd_debug_print(args ...) if (MSD_DEBUG) { chprintf(args); }
+
+
+
 static BaseSequentialStream *chp = (BaseSequentialStream *)&SD2;
 
 static WORKING_AREA(waMassStorage, 1024);
@@ -547,7 +552,7 @@ bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
 
          if( rw_ping_pong_buffer[done_buffer_index].num_blocks_to_write <= 0 ) {
            /*This should never happen!!! Something is seriously wrong!*/
-           chprintf(chp, "\r\nCant write 0 blocks, this should not happen, halting\r\n");
+           msd_debug_print(chp, "\r\nCant write 0 blocks, this should not happen, halting\r\n");
            chThdSleepMilliseconds(50);
            chSysHalt();
          }
@@ -556,7 +561,7 @@ bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
          if(blkWrite(msdp->bbdp, rw_block_address, (uint8_t*)rw_ping_pong_buffer[done_buffer_index].buf,
                      rw_ping_pong_buffer[done_buffer_index].num_blocks_to_write) == CH_FAILED || (!palReadPad(GPIOF, GPIOF_USER_BUTTON)) ) {
 
-             chprintf(chp, "\r\nSD Block Write Error, halting\r\n");
+             msd_debug_print(chp, "\r\nSD Block Write Error, halting\r\n");
              chThdSleepMilliseconds(50);
              msdp->result = FALSE;
              SCSISetSense(   msdp,
@@ -595,18 +600,18 @@ bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
 		for(retry_count = 0; retry_count < 3; retry_count++ ) {
           if(blkRead(msdp->bbdp, rw_block_address, rw_buf[i % 2], 1) == CH_FAILED) {
               /* TODO: handle this */
-              chprintf(chp, "\r\nSD Block Read Error\r\n");
+              msd_debug_print(chp, "\r\nSD Block Read Error\r\n");
           } else {
             read_success = TRUE;
             break;
           }
 		}
 		if( (!read_success) || (!palReadPad(GPIOF, GPIOF_USER_BUTTON)) ) {
-		  chprintf(chp, "\r\nSD Block Read Error 1, halting\r\n");
+		  msd_debug_print(chp, "\r\nSD Block Read Error 1, halting\r\n");
 		  chThdSleepMilliseconds(70);//wait for printing to finish
 		  msdp->result = FALSE;
 
-		  chprintf(chp, "\r\nSetting sense code %u\r\n", SCSI_SENSE_KEY_MEDIUM_ERROR);
+		  msd_debug_print(chp, "\r\nSetting sense code %u\r\n", SCSI_SENSE_KEY_MEDIUM_ERROR);
           SCSISetSense(   msdp,
                           SCSI_SENSE_KEY_MEDIUM_ERROR,
                           SCSI_ASENSE_NO_ADDITIONAL_INFORMATION,
@@ -631,7 +636,7 @@ bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
 			    read_success = FALSE;
                 for(retry_count = 0; retry_count < 3; retry_count++ ) {
                   if(blkRead(msdp->bbdp, rw_block_address, rw_buf[(i+1) % 2], 1) == CH_FAILED ) {
-                      chprintf(chp, "\r\nSD Block Read Error 2\r\n");
+                      msd_debug_print(chp, "\r\nSD Block Read Error 2\r\n");
                   } else {
                     read_success = TRUE;
                     break;
@@ -639,10 +644,10 @@ bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
                 }
 
                 if( (! read_success) || (!palReadPad(GPIOF, GPIOF_USER_BUTTON)) ) {
-                  chprintf(chp, "\r\nSD Block Read Error 22, addr=%d, halting\r\n", rw_block_address);
+                  msd_debug_print(chp, "\r\nSD Block Read Error 22, addr=%d, halting\r\n", rw_block_address);
                   chThdSleepMilliseconds(70);//wait for printing to finish
                   msdp->result = FALSE;
-                  chprintf(chp, "\r\nSetting sense code %u\r\n", SCSI_SENSE_KEY_MEDIUM_ERROR);
+                  msd_debug_print(chp, "\r\nSetting sense code %u\r\n", SCSI_SENSE_KEY_MEDIUM_ERROR);
                   SCSISetSense(   msdp,
                                   SCSI_SENSE_KEY_MEDIUM_ERROR,
                                   SCSI_ASENSE_NO_ADDITIONAL_INFORMATION,
@@ -738,26 +743,26 @@ bool_t msdReadCommandBlock(USBMassStorageDriver *msdp) {
 	bool_t sleep = FALSE;
 	switch(cbw->scsi_cmd_data[0]) {
 	case SCSI_CMD_INQUIRY:
-	    chprintf(chp, "CMD_INQ\r\n");
+	    msd_debug_print(chp, "CMD_INQ\r\n");
 		sleep = SCSICommandInquiry(msdp);
 		break;
 	case SCSI_CMD_REQUEST_SENSE:
-	    chprintf(chp, "\r\nCMD_RS\r\n");
+	    msd_debug_print(chp, "\r\nCMD_RS\r\n");
 		sleep = SCSICommandRequestSense(msdp);
 		break;
 	case SCSI_CMD_READ_CAPACITY_10:
-	    chprintf(chp, "CMD_RC10\r\n");
+	    msd_debug_print(chp, "CMD_RC10\r\n");
 		sleep = SCSICommandReadCapacity10(msdp);
 		break;
 	case SCSI_CMD_READ_10:
 	case SCSI_CMD_WRITE_10:
-	    chprintf(chp, "CMD_RW\r\n");
+	    msd_debug_print(chp, "CMD_RW\r\n");
 		MSD_RW_LED_ON();
 		sleep = SCSICommandStartReadWrite10(msdp);
 		MSD_RW_LED_OFF();
 		break;
 	case SCSI_CMD_SEND_DIAGNOSTIC:
-	  chprintf(chp, "CMD_DIA\r\n");
+	  msd_debug_print(chp, "CMD_DIA\r\n");
 		sleep = SCSICommandSendDiagnostic(msdp);
 		break;
 	case SCSI_CMD_TEST_UNIT_READY:
@@ -767,11 +772,11 @@ bool_t msdReadCommandBlock(USBMassStorageDriver *msdp) {
 		msdp->result = TRUE;
 		break;
 	case SCSI_CMD_MODE_SENSE_6:
-	  chprintf(chp, "\r\nCMD_S6\r\n");
+	  msd_debug_print(chp, "\r\nCMD_S6\r\n");
 		sleep = SCSICommandModeSense6(msdp);
 		break;
 	case SCSI_CMD_START_STOP_UNIT:
-	    chprintf(chp, "CMD_STOP\r\n");
+	    msd_debug_print(chp, "CMD_STOP\r\n");
 		sleep = SCSICommandStartStopUnit(msdp);
 		break;
 	default:
@@ -862,9 +867,9 @@ static msg_t MassStorageThd(void *arg) {
 	bool_t wait_for_isr = FALSE;
 
 	/* wait for the usb to be initialised */
-	chprintf(chp, "Y");
+	msd_debug_print(chp, "Y");
 	WaitForISR(msdp, 0);
-	chprintf(chp, "y");
+	msd_debug_print(chp, "y");
 
 	while (TRUE) {
 		wait_for_isr = FALSE;
@@ -876,22 +881,22 @@ static msg_t MassStorageThd(void *arg) {
 		  msdp->state = idle;
 		}
 
-		chprintf(chp, "state=%d\r\n", msdp->state);
+		msd_debug_print(chp, "state=%d\r\n", msdp->state);
 		/* wait on data depending on the current state */
 		switch(msdp->state) {
 		case idle:
-		    chprintf(chp, "IDL");
+		    msd_debug_print(chp, "IDL");
 			wait_for_isr = msdWaitForCommandBlock(msdp);
-			chprintf(chp, "x\r\n");
+			msd_debug_print(chp, "x\r\n");
 		    break;
 		case read_cmd_block:
-		    chprintf(chp, "RCB");
+		    msd_debug_print(chp, "RCB");
 			wait_for_isr = msdReadCommandBlock(msdp);
-			chprintf(chp, "x\r\n");
+			msd_debug_print(chp, "x\r\n");
 			break;
 		case ejected:
 			/* disconnect usb device */
-		    chprintf(chp, "ejected\r\n");
+		    msd_debug_print(chp, "ejected\r\n");
 		    chThdSleepMilliseconds(70);
 			usbDisconnectBus(msdp->usbp);
 			usbStop(msdp->usbp);
@@ -901,9 +906,9 @@ static msg_t MassStorageThd(void *arg) {
 
 		/* wait until the ISR wakes thread */
 		if(wait_for_isr) {
-		    chprintf(chp, "W");
+		    msd_debug_print(chp, "W");
 			WaitForISR(msdp, 0);
-			chprintf(chp, "w");
+			msd_debug_print(chp, "w");
 		}
 	}
 
