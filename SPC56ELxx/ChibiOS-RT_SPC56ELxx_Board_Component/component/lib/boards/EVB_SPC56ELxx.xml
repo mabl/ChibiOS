@@ -3,8 +3,8 @@
   <instance locked="false" id="org.chibios.spc5.components.board.spc56elxx">
     <groups>
       <identification>
-        <board_identifier>GENERIC_SPC560PXX</board_identifier>
-        <board_name>Generic SPC560Pxx</board_name>
+        <board_identifier>SPC56ELXX_EVB</board_identifier>
+        <board_name>EVB with SPC56ELxx Mini Module</board_name>
       </identification>
       <clock_settings>
         <xosc_clock>40000000</xosc_clock>
