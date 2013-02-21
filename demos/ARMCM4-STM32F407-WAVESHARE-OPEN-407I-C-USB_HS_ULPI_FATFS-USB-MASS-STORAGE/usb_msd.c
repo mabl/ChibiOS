@@ -5,7 +5,7 @@
 
 #define MSD_ENABLE_PERF_DEBUG_GPIOS    FALSE
 
-#define MSD_DEBUG   TRUE
+#define MSD_DEBUG   FALSE
 #define msd_debug_print(args ...) if (MSD_DEBUG) { chprintf(args); }
 
 static BaseSequentialStream *chp = (BaseSequentialStream *)&SD2;
