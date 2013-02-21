@@ -138,6 +138,7 @@ struct USBMassStorageDriver {
 	scsi_sense_response_t sense;
 	bool_t result;
 	bool_t reconfigured_or_reset_event;
+	uint32_t trigger_transfer_index;
 };
 
 #define MSD_CONNECTED			0

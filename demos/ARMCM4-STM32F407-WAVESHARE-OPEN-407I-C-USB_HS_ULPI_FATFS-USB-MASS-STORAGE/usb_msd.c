@@ -6,8 +6,6 @@
 #define MSD_DEBUG   FALSE
 #define msd_debug_print(args ...) if (MSD_DEBUG) { chprintf(args); }
 
-
-
 static BaseSequentialStream *chp = (BaseSequentialStream *)&SD2;
 
 static WORKING_AREA(waMassStorage, 1024);
@@ -21,7 +19,7 @@ static Thread *msdUSBTransferThd = NULL;
 
 static void WaitForISR(USBMassStorageDriver *msdp, const int max_ms);
 
-static volatile uint32_t trigger_transfer_index = UINT32_MAX;
+
 
 #define BLOCK_SIZE_INCREMENT        512
 #define BLOCK_WRITE_ITTERATION_COUNT    32
@@ -53,9 +51,6 @@ inline uint32_t swap_uint32( uint32_t val ) {
 #if !defined(MSD_RW_LED_OFF)
 #define MSD_RW_LED_OFF()
 #endif
-
-
-
 
 
 
@@ -308,7 +303,7 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
     chSysLockFromIsr();
     msdp->reconfigured_or_reset_event = TRUE;
     usbInitEndpointI(usbp, USB_MS_DATA_EP, &epDataConfig);
-	/* initialise the thread */
+	/* Initialize the thread */
 	chBSemSignalI(&msdp->bsem);
 
 	/* signal that the device is connected */
@@ -514,7 +509,7 @@ bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
 	  //initiate a transfer
 	  rw_ping_pong_buffer[ping_pong_buffer_index].is_transfer_done = FALSE;
 	  rw_ping_pong_buffer[ping_pong_buffer_index].max_blocks_to_read = total_blocks;
-	  trigger_transfer_index = ping_pong_buffer_index;//Trigger the transfer in the other thread
+	  msdp->trigger_transfer_index = ping_pong_buffer_index;//Trigger the transfer in the other thread
 
 	  //wake other thread on semaphore to trigger the transfer
 	  chBSemSignal(&msdp->usb_transfer_thread_bsem);
@@ -533,10 +528,10 @@ bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
 
         if( queue_another_transfer ) {
           while( TRUE ) {
-            if(trigger_transfer_index == UINT32_MAX) {
+            if(msdp->trigger_transfer_index == UINT32_MAX) {
               rw_ping_pong_buffer[empty_buffer_index].max_blocks_to_read = total_blocks - i - BLOCK_WRITE_ITTERATION_COUNT;
 
-              trigger_transfer_index = empty_buffer_index;
+              msdp->trigger_transfer_index = empty_buffer_index;
 
               //wake other thread on semaphore to trigger the transfer
               chBSemSignal(&msdp->usb_transfer_thread_bsem);
@@ -848,9 +843,9 @@ static msg_t MassStorageUSBTransferThd(void *arg) {
   USBMassStorageDriver *msdp = (USBMassStorageDriver *)arg;
 
   for(;;) {
-    if( trigger_transfer_index != UINT32_MAX ) {
-      SCSIWriteTransferPingPong(msdp, &rw_ping_pong_buffer[trigger_transfer_index]);
-      trigger_transfer_index = UINT32_MAX;
+    if( msdp->trigger_transfer_index != UINT32_MAX ) {
+      SCSIWriteTransferPingPong(msdp, &rw_ping_pong_buffer[msdp->trigger_transfer_index]);
+      msdp->trigger_transfer_index = UINT32_MAX;
       //notify other thread
       chBSemSignal(&msdp->mass_sorage_thd_bsem);
     }
@@ -920,18 +915,19 @@ void msdInit(USBDriver *usbp, BaseBlockDevice *bbdp, USBMassStorageDriver *msdp)
 
 	msdp->usbp = usbp;
 	msdp->state = idle;
+	msdp->trigger_transfer_index = UINT32_MAX;
 	msdp->bbdp = bbdp;
 
 	chEvtInit(&msdp->evt_connected);
 	chEvtInit(&msdp->evt_ejected);
 
-	/* initialise binary semaphore as taken */
+	/* Initialize binary semaphore as taken */
 	chBSemInit(&msdp->bsem, TRUE);
-	/* initialise binary semaphore as NOT taken */
+	/* Initialize binary semaphore as NOT taken */
 	chBSemInit(&msdp->usb_transfer_thread_bsem, FALSE);
 	chBSemInit(&msdp->mass_sorage_thd_bsem, FALSE);
 
-	/* initialise sense values to zero */
+	/* Initialize sense values to zero */
 	for(i = 0; i < sizeof(scsi_sense_response_t); i++)
 		msdp->sense.byte[i] = 0x00;
 
