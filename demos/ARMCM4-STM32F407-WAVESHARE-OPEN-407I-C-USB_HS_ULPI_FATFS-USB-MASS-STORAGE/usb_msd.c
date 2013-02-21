@@ -3,7 +3,9 @@
 #include "usb_msd.h"
 #include "chprintf.h"
 
-#define MSD_DEBUG   FALSE
+#define MSD_ENABLE_PERF_DEBUG_GPIOS    FALSE
+
+#define MSD_DEBUG   TRUE
 #define msd_debug_print(args ...) if (MSD_DEBUG) { chprintf(args); }
 
 static BaseSequentialStream *chp = (BaseSequentialStream *)&SD2;
@@ -17,7 +19,9 @@ static msg_t MassStorageThd(void *arg);
 static Thread *msdThd = NULL;
 static Thread *msdUSBTransferThd = NULL;
 
-static void WaitForISR(USBMassStorageDriver *msdp, const int max_ms);
+#define WAIT_ISR_SUCCESS                     0
+#define WAIT_ISR_BUSS_RESET_OR_RECONNECT     1
+static uint8_t WaitForISR(USBMassStorageDriver *msdp, const bool_t check_reset);
 
 #define BLOCK_SIZE_INCREMENT        512
 #define BLOCK_WRITE_ITTERATION_COUNT    32
@@ -243,15 +247,28 @@ bool_t msdRequestsHook(USBDriver *usbp) {
   return FALSE;
 }
 
-static void WaitForISR(USBMassStorageDriver *msdp, const int max_ms) {
+static uint8_t WaitForISR(USBMassStorageDriver *msdp, const bool_t check_reset) {
+  uint8_t ret = WAIT_ISR_SUCCESS;
 	/* sleep until it completes */
 	chSysLock();
-	if( max_ms <= 0 ) {
-	  chBSemWaitS(&msdp->bsem);
+	if( check_reset ) {
+	  for(;;) {
+	    const msg_t m = chBSemWaitTimeoutS(&msdp->bsem, 1);
+	    if( m == RDY_OK ) {
+	      break;
+	    }
+
+	    if( msdp->reconfigured_or_reset_event ) {
+	      ret = WAIT_ISR_BUSS_RESET_OR_RECONNECT;
+	      break;
+	    }
+	  }
 	} else {
-	  chBSemWaitTimeoutS(&msdp->bsem, max_ms);
+	  chBSemWaitS(&msdp->bsem);
 	}
+
 	chSysUnlock();
+	return(ret);
 }
 
 void msdUsbEvent(USBDriver *usbp, usbep_t ep) {
@@ -430,7 +447,9 @@ void SCSIWriteTransferPingPong(USBMassStorageDriver *msdp, volatile rw_usb_sd_bu
   dest_buffer->is_transfer_done = FALSE;
   dest_buffer->num_blocks_to_write = 0;
 
+#if MSD_ENABLE_PERF_DEBUG_GPIOS
   palSetPad(GPIOH, GPIOH_LED2);
+#endif
   for(cnt = 0; cnt < BLOCK_WRITE_ITTERATION_COUNT && cnt < dest_buffer->max_blocks_to_read; cnt++ ) {
     usbPrepareReceive(msdp->usbp, USB_MS_DATA_EP, (uint8_t*)&dest_buffer->buf[cnt * BLOCK_SIZE_INCREMENT], (msdp->block_dev_info.blk_size));
 
@@ -438,11 +457,13 @@ void SCSIWriteTransferPingPong(USBMassStorageDriver *msdp, volatile rw_usb_sd_bu
     usbStartReceiveI(msdp->usbp, USB_MS_DATA_EP);
     chSysUnlock();
 
-    WaitForISR(msdp, 0);
+    WaitForISR(msdp, FALSE);
     dest_buffer->num_blocks_to_write++;
   }
   dest_buffer->is_transfer_done = TRUE;
+#if MSD_ENABLE_PERF_DEBUG_GPIOS
   palClearPad(GPIOH, GPIOH_LED2);
+#endif
 }
 
 static void WaitForUSBTransferComplete(USBMassStorageDriver *msdp, const int ping_pong_buffer_index) {
@@ -459,7 +480,6 @@ static void WaitForUSBTransferComplete(USBMassStorageDriver *msdp, const int pin
 
 bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
 	msd_cbw_t *cbw = &(msdp->cbw);
-	bool_t data_cached = FALSE;
 	int read_success;
 	int retry_count;
 
@@ -591,7 +611,6 @@ bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
 		read_success = FALSE;
 		for(retry_count = 0; retry_count < 3; retry_count++ ) {
           if(blkRead(msdp->bbdp, rw_block_address, read_buffer[i % 2], 1) == CH_FAILED) {
-              /* TODO: handle this */
               msd_debug_print(chp, "\r\nSD Block Read Error\r\n");
           } else {
             read_success = TRUE;
@@ -654,7 +673,10 @@ bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
 			 * endpoint ISR, this will never return, and when re-plugged into the host, the drive will
 			 * not show back up on the host. We need a way to break out of this loop when disconnected from the bus.
 			 */
-			WaitForISR(msdp, 0);
+			if( WaitForISR(msdp, TRUE) == WAIT_ISR_BUSS_RESET_OR_RECONNECT ) {
+              msdp->result = FALSE;
+              return FALSE;
+			}
 		}
 	}
 
@@ -809,7 +831,9 @@ bool_t msdReadCommandBlock(USBMassStorageDriver *msdp) {
 	}
 
 	if(sleep) {
-		WaitForISR(msdp, 0);
+        if( WaitForISR(msdp, TRUE) == WAIT_ISR_BUSS_RESET_OR_RECONNECT ) {
+          return(FALSE);
+        }
 	}
 
 	msd_csw_t *csw = &(msdp->csw);
@@ -862,9 +886,9 @@ static msg_t MassStorageThd(void *arg) {
 
 	bool_t wait_for_isr = FALSE;
 
-	/* wait for the usb to be initialised */
+	/* wait for the usb to be initialized */
 	msd_debug_print(chp, "Y");
-	WaitForISR(msdp, 0);
+	WaitForISR(msdp, FALSE);
 	msd_debug_print(chp, "y");
 
 	while (TRUE) {
@@ -901,9 +925,9 @@ static msg_t MassStorageThd(void *arg) {
 		}
 
 		/* wait until the ISR wakes thread */
-		if(wait_for_isr) {
+		if( wait_for_isr && (!msdp->reconfigured_or_reset_event) ) {
 		    msd_debug_print(chp, "W");
-			WaitForISR(msdp, 0);
+			WaitForISR(msdp, FALSE);
 			msd_debug_print(chp, "w");
 		}
 	}
@@ -922,7 +946,7 @@ void msdInit(USBDriver *usbp, BaseBlockDevice *bbdp, USBMassStorageDriver *msdp)
 	chEvtInit(&msdp->evt_connected);
 	chEvtInit(&msdp->evt_ejected);
 
-	/* Initialize binary semaphore as taken */
+	/* Initialize binary semaphore as taken, will cause the thread to initially wait on the  */
 	chBSemInit(&msdp->bsem, TRUE);
 	/* Initialize binary semaphore as NOT taken */
 	chBSemInit(&msdp->usb_transfer_thread_bsem, FALSE);
