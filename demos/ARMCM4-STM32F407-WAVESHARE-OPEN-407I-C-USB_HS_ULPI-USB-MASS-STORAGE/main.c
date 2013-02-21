@@ -30,8 +30,6 @@
 #include "shell.h"
 #include "usb_msd.h"
 
-#include "ff.h"
-
 /*
  * Green LED blinker thread, times are in milliseconds.
  */
