@@ -19,12 +19,8 @@ static Thread *msdUSBTransferThd = NULL;
 
 static void WaitForISR(USBMassStorageDriver *msdp, const int max_ms);
 
-
-
 #define BLOCK_SIZE_INCREMENT        512
 #define BLOCK_WRITE_ITTERATION_COUNT    32
-
-static uint8_t rw_buf[2][BLOCK_SIZE_INCREMENT];
 
 typedef struct {
   uint8_t is_transfer_done;
@@ -36,6 +32,7 @@ typedef struct {
 } rw_usb_sd_buffer_t;
 
 static volatile rw_usb_sd_buffer_t rw_ping_pong_buffer[2];
+static uint8_t read_buffer[2][BLOCK_SIZE_INCREMENT];
 
 inline uint32_t swap_uint32( uint32_t val ) {
     val = ((val << 8) & 0xFF00FF00 ) | ((val >> 8) & 0xFF00FF );
@@ -554,7 +551,7 @@ bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
 
          /* now write the block to the block device */
          if(blkWrite(msdp->bbdp, rw_block_address, (uint8_t*)rw_ping_pong_buffer[done_buffer_index].buf,
-                     rw_ping_pong_buffer[done_buffer_index].num_blocks_to_write) == CH_FAILED || (!palReadPad(GPIOF, GPIOF_USER_BUTTON)) ) {
+                     rw_ping_pong_buffer[done_buffer_index].num_blocks_to_write) == CH_FAILED ) {
 
              msd_debug_print(chp, "\r\nSD Block Write Error, halting\r\n");
              chThdSleepMilliseconds(50);
@@ -593,7 +590,7 @@ bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
 		/* read the first block from block device */
 		read_success = FALSE;
 		for(retry_count = 0; retry_count < 3; retry_count++ ) {
-          if(blkRead(msdp->bbdp, rw_block_address, rw_buf[i % 2], 1) == CH_FAILED) {
+          if(blkRead(msdp->bbdp, rw_block_address, read_buffer[i % 2], 1) == CH_FAILED) {
               /* TODO: handle this */
               msd_debug_print(chp, "\r\nSD Block Read Error\r\n");
           } else {
@@ -601,7 +598,7 @@ bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
             break;
           }
 		}
-		if( (!read_success) || (!palReadPad(GPIOF, GPIOF_USER_BUTTON)) ) {
+		if( (!read_success) ) {
 		  msd_debug_print(chp, "\r\nSD Block Read Error 1, halting\r\n");
 		  chThdSleepMilliseconds(70);//wait for printing to finish
 		  msdp->result = FALSE;
@@ -618,7 +615,7 @@ bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
 		/* loop over each block */
 		for(i = 0; i < total_blocks; i++) {
 			/* transmit the block */
-			usbPrepareTransmit(msdp->usbp, USB_MS_DATA_EP, rw_buf[i % 2],
+			usbPrepareTransmit(msdp->usbp, USB_MS_DATA_EP, read_buffer[i % 2],
 					msdp->block_dev_info.blk_size);
 
 			chSysLock();
@@ -630,7 +627,7 @@ bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
 				/* so read that while the USB transfer takes place */
 			    read_success = FALSE;
                 for(retry_count = 0; retry_count < 3; retry_count++ ) {
-                  if(blkRead(msdp->bbdp, rw_block_address, rw_buf[(i+1) % 2], 1) == CH_FAILED ) {
+                  if(blkRead(msdp->bbdp, rw_block_address, read_buffer[(i+1) % 2], 1) == CH_FAILED ) {
                       msd_debug_print(chp, "\r\nSD Block Read Error 2\r\n");
                   } else {
                     read_success = TRUE;
@@ -638,7 +635,7 @@ bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
                   }
                 }
 
-                if( (! read_success) || (!palReadPad(GPIOF, GPIOF_USER_BUTTON)) ) {
+                if( (! read_success) ) {
                   msd_debug_print(chp, "\r\nSD Block Read Error 22, addr=%d, halting\r\n", rw_block_address);
                   chThdSleepMilliseconds(70);//wait for printing to finish
                   msdp->result = FALSE;
@@ -653,6 +650,10 @@ bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
                 rw_block_address++;
 			}
 
+			/*FIXME In the event that the USB connection is unplugged while we're waiting for a bulk
+			 * endpoint ISR, this will never return, and when re-plugged into the host, the drive will
+			 * not show back up on the host. We need a way to break out of this loop when disconnected from the bus.
+			 */
 			WaitForISR(msdp, 0);
 		}
 	}
