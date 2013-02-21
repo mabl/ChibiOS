@@ -8,6 +8,23 @@
 #define MSD_DEBUG   FALSE
 #define msd_debug_print(args ...) if (MSD_DEBUG) { chprintf(args); }
 
+
+#ifdef MSD_USB_DRIVER_EXT_FIELDS_NAME
+#  define   USBD_PARAM_NAME     MSD_USB_DRIVER_EXT_FIELDS_NAME
+#else
+#  define   USBD_PARAM_NAME     param
+#endif
+
+
+#if HAL_USE_SERIAL_USB
+#  ifndef MSD_USB_DRIVER_EXT_FIELDS_NAME
+#    error "The serial usb driver and the mass storage driver both use the USBD->param variable and they conflict, you must define MSD_USB_DRIVER_EXT_FIELDS_NAME for these to work concurently."
+#  endif
+#endif
+
+
+
+
 static BaseSequentialStream *chp = (BaseSequentialStream *)&SD2;
 
 static WORKING_AREA(waMassStorage, 1024);
@@ -276,7 +293,7 @@ void msdUsbEvent(USBDriver *usbp, usbep_t ep) {
 	(void)ep;
 
 	chSysLockFromIsr();
-	chBSemSignalI(&((USBMassStorageDriver *)usbp->param)->bsem);
+	chBSemSignalI(&((USBMassStorageDriver *)usbp->USBD_PARAM_NAME)->bsem);
 	chSysUnlockFromIsr();
 }
 
@@ -306,7 +323,7 @@ static const USBEndpointConfig epDataConfig = {
  * Handles the USB driver global events.
  */
 static void usb_event(USBDriver *usbp, usbevent_t event) {
-	USBMassStorageDriver *msdp = (USBMassStorageDriver *)usbp->param;
+	USBMassStorageDriver *msdp = (USBMassStorageDriver *)usbp->USBD_PARAM_NAME;
   switch (event) {
   case USB_EVENT_RESET:
     msdp->reconfigured_or_reset_event = TRUE;
@@ -970,7 +987,7 @@ void msdInit(USBDriver *usbp, BaseBlockDevice *bbdp, USBMassStorageDriver *msdp)
 
 	usbDisconnectBus(usbp);
 	chThdSleepMilliseconds(200);
-	usbp->param = (void *)msdp;
+	usbp->USBD_PARAM_NAME = (void *)msdp;
 
 	usbStart(usbp, &msd_usb_config);
 	usbConnectBus(usbp);
