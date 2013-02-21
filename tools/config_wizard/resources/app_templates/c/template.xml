@@ -42,6 +42,9 @@
         value="STM32F0xx"
         label="STMicroelectronics STM32F0xx" />
       <item
+        value="STM32F3xx"
+        label="STMicroelectronics STM32F3xx" />
+      <item
         value="STM32F4xx"
         label="STMicroelectronics STM32F4xx" />
       <item
