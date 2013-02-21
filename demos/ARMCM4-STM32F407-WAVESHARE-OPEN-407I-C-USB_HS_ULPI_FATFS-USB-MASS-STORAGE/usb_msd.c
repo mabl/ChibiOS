@@ -485,7 +485,7 @@ void SCSIWriteTransferPingPong(USBMassStorageDriver *msdp, volatile rw_usb_sd_bu
 
 static void WaitForUSBTransferComplete(USBMassStorageDriver *msdp, const int ping_pong_buffer_index) {
   while(TRUE) {
-    const msg_t m = chBSemWaitTimeout(&msdp->mass_sorage_thd_bsem, MS2ST(1));
+    chBSemWaitTimeout(&msdp->mass_sorage_thd_bsem, MS2ST(1));
 
     if( rw_ping_pong_buffer[ping_pong_buffer_index].is_transfer_done ) {
       break;
@@ -891,6 +891,8 @@ static msg_t MassStorageUSBTransferThd(void *arg) {
 
     chBSemWaitTimeout(&msdp->usb_transfer_thread_bsem, MS2ST(1));
   }
+
+  return(0);
 }
 
 static msg_t MassStorageThd(void *arg) {
