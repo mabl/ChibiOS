@@ -587,9 +587,6 @@ bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
              }
 
              return(FALSE);
-
-             /* TODO: handle this */
-             //chSysHalt();
          }
          rw_block_address += rw_ping_pong_buffer[done_buffer_index].num_blocks_to_write;
          i += rw_ping_pong_buffer[done_buffer_index].num_blocks_to_write;
