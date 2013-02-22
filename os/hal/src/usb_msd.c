@@ -820,7 +820,7 @@ void msdStart(USBDriver *usbp, USBMassStorageDriver *msdp) {
     //upon entry, bus should be disconnected
 	//usbDisconnectBus(usbp);
 	//chThdSleepMilliseconds(200);
-	usbStart(usbp, &msd_usb_config);
+	//usbStart(usbp, &msd_usb_config);
 	//usbConnectBus(usbp);
 
 	if(msdThd == NULL) {

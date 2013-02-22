@@ -31,6 +31,8 @@
 #include "usb_msd.h"
 #include "usb_msd_cfg.h"
 
+extern const USBConfig msd_usb_config;
+
 /*
  * Green LED blinker thread, times are in milliseconds.
  */
@@ -121,6 +123,7 @@ int main(void) {
 
   /*Start the useful functions*/
   msdStart(usb_driver, &UMSD1);
+  usbStart(usb_driver, &msd_usb_config);
 
   /*Connect the USB Bus*/
   usbConnectBus(usb_driver);

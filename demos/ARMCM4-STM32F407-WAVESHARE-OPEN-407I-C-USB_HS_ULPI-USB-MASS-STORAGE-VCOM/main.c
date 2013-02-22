@@ -39,6 +39,8 @@ SerialUSBConfig serusbcfg = { NULL };
 
 USBMassStorageDriver UMSD1;
 
+extern const USBConfig msd_usb_config;
+
 
 /*
  * CDC ACM Echo Thread
@@ -143,6 +145,7 @@ int main(void) {
   /*Start the useful functions*/
   sduStart(&SDU1, &serusbcfg);
   msdStart(usb_driver, &UMSD1);
+  usbStart(usb_driver, &msd_usb_config);
 
   /*Connect the USB Bus*/
   usbConnectBus(usb_driver);
