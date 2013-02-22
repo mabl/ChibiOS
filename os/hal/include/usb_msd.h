@@ -1,4 +1,36 @@
+/*
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011,2012,2013 Giovanni Di Sirio.
+
+    This file is part of ChibiOS/RT.
+
+    ChibiOS/RT is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 3 of the License, or
+    (at your option) any later version.
+
+    ChibiOS/RT is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "hal.h"
+
+
+
+
+/* Default to disabled for USB Mass Storage */
+#ifndef HAL_USE_MASS_STORAGE_USB
+#  define HAL_USE_MASS_STORAGE_USB   FALSE
+#endif
+
+#if HAL_USE_MASS_STORAGE_USB || defined(__DOXYGEN__)
+
+
 #define MSD_RW_LED_ON()   palSetPad(GPIOI, GPIOI_LED4);
 #define MSD_RW_LED_OFF()  palClearPad(GPIOI, GPIOI_LED4);
 
@@ -163,3 +195,7 @@ bool_t msdRequestsHook(USBDriver *usbp);
 #ifdef __cplusplus
 }
 #endif
+
+
+#endif /* HAL_USE_MASS_STORAGE_USB */
+
