@@ -12,7 +12,7 @@
       <instance locked="false" id="com.st.tools.spc5.components.platform.spc56elxx">
         <groups>
           <platform_settings>
-            <specific_model index="1">SPC56EL60L5</specific_model>
+            <specific_model index="3">SPC56EL70L5</specific_model>
           </platform_settings>
           <runtime_settings>
             <stack_size>2048</stack_size>
