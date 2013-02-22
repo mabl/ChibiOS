@@ -29,6 +29,7 @@
 #include "chprintf.h"
 #include "shell.h"
 #include "usb_msd.h"
+#include "usb_msd_cfg.h"
 
 /*
  * Green LED blinker thread, times are in milliseconds.
@@ -112,7 +113,7 @@ int main(void) {
   chprintf(chp, "setting up MSD\r\n");
   USBMassStorageDriver UMSD1;
 
-  msdInit(usb_driver, bbdp, &UMSD1);
+  msdInit(usb_driver, bbdp, &UMSD1, USB_MS_DATA_EP);
 
   /*Disconnect the USB Bus*/
   usbDisconnectBus(usb_driver);

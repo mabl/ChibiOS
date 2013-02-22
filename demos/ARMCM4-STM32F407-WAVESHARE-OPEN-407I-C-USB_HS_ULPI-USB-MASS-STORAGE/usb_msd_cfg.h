@@ -24,23 +24,5 @@
 
 #define USB_MS_DATA_EP 1
 
-#if STM32_USE_USB_OTG2_HS
-#  define USB_MS_EP_SIZE 512
-#else
-#  define USB_MS_EP_SIZE 64
-#endif
-
-
-#ifdef MSD_USB_DRIVER_EXT_FIELDS_NAME
-#  define   USBD_PARAM_NAME     MSD_USB_DRIVER_EXT_FIELDS_NAME
-#else
-#  define   USBD_PARAM_NAME     param
-#endif
-
-
-
-
-
-
 
 #endif /* USB_MSD_CFG_H_ */

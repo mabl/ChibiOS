@@ -201,7 +201,7 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
   case USB_EVENT_CONFIGURED:
     chSysLockFromIsr();
     msdp->reconfigured_or_reset_event = TRUE;
-    usbInitEndpointI(usbp, USB_MS_DATA_EP, &epDataConfig);
+    usbInitEndpointI(usbp, msdp->ms_ep_number, &epDataConfig);
     /* Initialize the thread */
     chBSemSignalI(&msdp->bsem);
 

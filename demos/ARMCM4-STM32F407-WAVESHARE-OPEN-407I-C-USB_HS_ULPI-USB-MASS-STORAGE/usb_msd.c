@@ -195,11 +195,11 @@ bool_t SCSICommandInquiry(USBMassStorageDriver *msdp) {
 		return FALSE;
 	}
 
-	usbPrepareTransmit(msdp->usbp, USB_MS_DATA_EP, (uint8_t *)&inquiry,
+	usbPrepareTransmit(msdp->usbp, msdp->ms_ep_number, (uint8_t *)&inquiry,
 			sizeof(scsi_inquiry_response_t));
 
 	chSysLock();
-	usbStartTransmitI(msdp->usbp, USB_MS_DATA_EP);
+	usbStartTransmitI(msdp->usbp, msdp->ms_ep_number);
 	chSysUnlock();
 
 	msdp->result = TRUE;
@@ -209,11 +209,11 @@ bool_t SCSICommandInquiry(USBMassStorageDriver *msdp) {
 }
 
 bool_t SCSICommandRequestSense(USBMassStorageDriver *msdp) {
-	usbPrepareTransmit(msdp->usbp, USB_MS_DATA_EP, (uint8_t *)&msdp->sense,
+	usbPrepareTransmit(msdp->usbp, msdp->ms_ep_number, (uint8_t *)&msdp->sense,
 			sizeof(scsi_sense_response_t));
 
 	chSysLock();
-	usbStartTransmitI(msdp->usbp, USB_MS_DATA_EP);
+	usbStartTransmitI(msdp->usbp, msdp->ms_ep_number);
 	chSysUnlock();
 
 	msdp->result = TRUE;
@@ -228,11 +228,11 @@ bool_t SCSICommandReadCapacity10(USBMassStorageDriver *msdp) {
 	response.block_size = swap_uint32(msdp->block_dev_info.blk_size);
 	response.last_block_addr = swap_uint32(msdp->block_dev_info.blk_num-1);
 
-	usbPrepareTransmit(msdp->usbp, USB_MS_DATA_EP, (uint8_t *)&response,
+	usbPrepareTransmit(msdp->usbp, msdp->ms_ep_number, (uint8_t *)&response,
 			sizeof(SCSIReadCapacity10Response_t));
 
 	chSysLock();
-	usbStartTransmitI(msdp->usbp, USB_MS_DATA_EP);
+	usbStartTransmitI(msdp->usbp, msdp->ms_ep_number);
 	chSysUnlock();
 
 	msdp->result = TRUE;
@@ -270,10 +270,10 @@ void SCSIWriteTransferPingPong(USBMassStorageDriver *msdp, volatile rw_usb_sd_bu
   palSetPad(GPIOH, GPIOH_LED2);
 #endif
   for(cnt = 0; cnt < BLOCK_WRITE_ITTERATION_COUNT && cnt < dest_buffer->max_blocks_to_read; cnt++ ) {
-    usbPrepareReceive(msdp->usbp, USB_MS_DATA_EP, (uint8_t*)&dest_buffer->buf[cnt * BLOCK_SIZE_INCREMENT], (msdp->block_dev_info.blk_size));
+    usbPrepareReceive(msdp->usbp, msdp->ms_ep_number, (uint8_t*)&dest_buffer->buf[cnt * BLOCK_SIZE_INCREMENT], (msdp->block_dev_info.blk_size));
 
     chSysLock();
-    usbStartReceiveI(msdp->usbp, USB_MS_DATA_EP);
+    usbStartReceiveI(msdp->usbp, msdp->ms_ep_number);
     chSysUnlock();
 
     WaitForISR(msdp, FALSE);
@@ -450,11 +450,11 @@ bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
 		/* loop over each block */
 		for(i = 0; i < total_blocks; i++) {
 			/* transmit the block */
-			usbPrepareTransmit(msdp->usbp, USB_MS_DATA_EP, read_buffer[i % 2],
+			usbPrepareTransmit(msdp->usbp, msdp->ms_ep_number, read_buffer[i % 2],
 					msdp->block_dev_info.blk_size);
 
 			chSysLock();
-			usbStartTransmitI(msdp->usbp, USB_MS_DATA_EP);
+			usbStartTransmitI(msdp->usbp, msdp->ms_ep_number);
 			chSysUnlock();
 
 			if(i < (total_blocks - 1)) {
@@ -523,10 +523,10 @@ bool_t SCSICommandModeSense6(USBMassStorageDriver *msdp) {
 	/* TODO set byte3 to 0x80 if disk is read only */
 	static uint8_t response[4] = {0x00, 0x00, 0x00, 0x00};
 
-	usbPrepareTransmit(msdp->usbp, USB_MS_DATA_EP, response, 4);
+	usbPrepareTransmit(msdp->usbp, msdp->ms_ep_number, response, 4);
 
 	chSysLock();
-	usbStartTransmitI(msdp->usbp, USB_MS_DATA_EP);
+	usbStartTransmitI(msdp->usbp, msdp->ms_ep_number);
 	chSysUnlock();
 
 	msdp->result = TRUE;
@@ -536,11 +536,11 @@ bool_t SCSICommandModeSense6(USBMassStorageDriver *msdp) {
 }
 
 bool_t msdWaitForCommandBlock(USBMassStorageDriver *msdp) {
-    usbPrepareReceive(msdp->usbp, USB_MS_DATA_EP,
+    usbPrepareReceive(msdp->usbp, msdp->ms_ep_number,
             (uint8_t *)&msdp->cbw, sizeof(msd_cbw_t));
 
     chSysLock();
-    usbStartReceiveI(msdp->usbp, USB_MS_DATA_EP);
+    usbStartReceiveI(msdp->usbp, msdp->ms_ep_number);
     chSysUnlock();
 
     msdp->state = read_cmd_block;
@@ -567,7 +567,7 @@ bool_t msdReadCommandBlock(USBMassStorageDriver *msdp) {
 
 		/* stall both IN and OUT endpoints */
 		chSysLockFromIsr();
-		usbStallReceiveI(msdp->usbp, USB_MS_DATA_EP);
+		usbStallReceiveI(msdp->usbp, msdp->ms_ep_number);
 		chSysUnlockFromIsr();
 
 		/* don't wait for ISR */
@@ -621,7 +621,7 @@ bool_t msdReadCommandBlock(USBMassStorageDriver *msdp) {
 
 		/* stall IN endpoint */
 		chSysLockFromIsr();
-		usbStallTransmitI(msdp->usbp, USB_MS_DATA_EP);
+		usbStallTransmitI(msdp->usbp, msdp->ms_ep_number);
 		chSysUnlockFromIsr();
 
 		cbw->data_len = 0;
@@ -639,7 +639,7 @@ bool_t msdReadCommandBlock(USBMassStorageDriver *msdp) {
 	} else {
         /* stall IN endpoint */
         chSysLockFromIsr();
-        usbStallTransmitI(msdp->usbp, USB_MS_DATA_EP);
+        usbStallTransmitI(msdp->usbp, msdp->ms_ep_number);
         chSysUnlockFromIsr();
 
         cbw->data_len = 0;
@@ -657,8 +657,8 @@ bool_t msdReadCommandBlock(USBMassStorageDriver *msdp) {
 	if( (!msdp->result) && cbw->data_len ) {
 		/* still bytes left to send, this is too early to send CSW? */
 		chSysLockFromIsr();
-		usbStallReceiveI(msdp->usbp, USB_MS_DATA_EP);
-		usbStallTransmitI(msdp->usbp, USB_MS_DATA_EP);
+		usbStallReceiveI(msdp->usbp, msdp->ms_ep_number);
+		usbStallTransmitI(msdp->usbp, msdp->ms_ep_number);
 		chSysUnlockFromIsr();
 
 	    return FALSE;
@@ -669,11 +669,11 @@ bool_t msdReadCommandBlock(USBMassStorageDriver *msdp) {
 	csw->data_residue = cbw->data_len;
 	csw->tag = cbw->tag;
 
-	usbPrepareTransmit(msdp->usbp, USB_MS_DATA_EP, (uint8_t *)csw,
+	usbPrepareTransmit(msdp->usbp, msdp->ms_ep_number, (uint8_t *)csw,
 			sizeof(msd_csw_t));
 
 	chSysLock();
-	usbStartTransmitI(msdp->usbp, USB_MS_DATA_EP);
+	usbStartTransmitI(msdp->usbp, msdp->ms_ep_number);
 	chSysUnlock();
 
 	/* wait on ISR */
@@ -753,13 +753,14 @@ static msg_t MassStorageThd(void *arg) {
 	return 0;
 }
 
-void msdInit(USBDriver *usbp, BaseBlockDevice *bbdp, USBMassStorageDriver *msdp) {
+void msdInit(USBDriver *usbp, BaseBlockDevice *bbdp, USBMassStorageDriver *msdp, const usbep_t  ms_ep_number) {
 	uint8_t i;
 
 	msdp->usbp = usbp;
 	msdp->state = idle;
 	msdp->trigger_transfer_index = UINT32_MAX;
 	msdp->bbdp = bbdp;
+	msdp->ms_ep_number = ms_ep_number;
 
 	chEvtInit(&msdp->evt_connected);
 	chEvtInit(&msdp->evt_ejected);
