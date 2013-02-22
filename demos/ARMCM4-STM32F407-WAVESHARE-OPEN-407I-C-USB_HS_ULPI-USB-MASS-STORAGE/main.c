@@ -95,6 +95,12 @@ int main(void) {
   chprintf(chp, "running main()\r\n");
   chThdSleepMilliseconds(100);
 
+#if STM32_USB_USE_OTG2
+  USBDriver *usb_driver = &USBD2;
+#else
+  USBDriver *usb_driver = &USBD1;
+#endif
+
   /*
    * Activates the card insertion monitor.
    */
@@ -105,11 +111,21 @@ int main(void) {
   BaseBlockDevice *bbdp = (BaseBlockDevice*) &SDCD1;
   chprintf(chp, "setting up MSD\r\n");
   USBMassStorageDriver UMSD1;
-#if STM32_USB_USE_OTG2
-  msdInit(&USBD2, bbdp, &UMSD1);
-#else
-  msdInit(&USBD1, bbdp, &UMSD1);
-#endif
+
+  msdInit(usb_driver, bbdp, &UMSD1);
+
+  /*Disconnect the USB Bus*/
+  usbDisconnectBus(usb_driver);
+  chThdSleepMilliseconds(200);
+
+  /*Start the useful functions*/
+  msdStart(usb_driver, &UMSD1);
+
+  /*Connect the USB Bus*/
+  usbConnectBus(usb_driver);
+
+
+
 
   /*
    * Creates the blinker thread.

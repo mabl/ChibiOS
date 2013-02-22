@@ -5,13 +5,8 @@
 
 
 
-#define USB_MS_DATA_EP 1
 
-#if STM32_USE_USB_OTG2_HS
-#  define USB_MS_EP_SIZE 512
-#else
-#  define USB_MS_EP_SIZE 64
-#endif
+
 
 #define MSD_REQ_RESET		0xFF
 #define MSD_GET_MAX_LUN		0xFE
@@ -148,6 +143,9 @@ struct USBMassStorageDriver {
 extern "C" {
 #endif
 void msdInit(USBDriver *usbp, BaseBlockDevice *bdp, USBMassStorageDriver *msdp);
+void msdStart(USBDriver *usbp,USBMassStorageDriver *msdp);
+void msdUsbEvent(USBDriver *usbp, usbep_t ep);
+bool_t msdRequestsHook(USBDriver *usbp);
 #ifdef __cplusplus
 }
 #endif
