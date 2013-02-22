@@ -89,7 +89,6 @@ CSRC = $(PORTSRC) \
        $(CHIBIOS)/os/various/evtimer.c \
        $(CHIBIOS)/os/various/chprintf.c \
        $(CHIBIOS)/os/various/shell.c \
-       usb_msd.c \
        usb_msd_cfg.c \
        main.c
 

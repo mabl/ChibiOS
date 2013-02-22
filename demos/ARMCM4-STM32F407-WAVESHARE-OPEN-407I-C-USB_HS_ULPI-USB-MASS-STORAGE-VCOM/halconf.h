@@ -156,6 +156,13 @@
 #endif
 
 /**
+ * @brief   Enables the Mass Storage over USB subsystem.
+ */
+#if !defined(HAL_USE_MASS_STORAGE_USB) || defined(__DOXYGEN__)
+#define HAL_USE_MASS_STORAGE_USB          TRUE
+#endif
+
+/**
  * @brief   Enables the SPI subsystem.
  */
 #if !defined(HAL_USE_SPI) || defined(__DOXYGEN__)
