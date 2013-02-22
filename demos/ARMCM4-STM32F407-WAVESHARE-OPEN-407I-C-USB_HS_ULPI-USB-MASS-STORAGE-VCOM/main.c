@@ -29,17 +29,31 @@
 #include "chprintf.h"
 #include "shell.h"
 #include "usb_msd.h"
+#include "serial_usb.h"
+
+
+/*Serial over USB Driver structure.*/
+SerialUSBDriver SDU1;
+SerialUSBConfig serusbcfg = { NULL };
+
+USBMassStorageDriver UMSD1;
+
 
 /*
- * Green LED blinker thread, times are in milliseconds.
+ * CDC ACM Echo Thread
  */
-static WORKING_AREA(waThread1, 128);
+static WORKING_AREA(waThread1, 1024);
 static msg_t Thread1(void *arg) {
   (void)arg;
   chRegSetThreadName("blinker");
+
+  BaseSequentialStream *usb_cdc = (BaseSequentialStream *) &SDU1;
+  char c;
+
   while (TRUE) {
-    palTogglePad(GPIOH, GPIOH_LED1);
-    chThdSleepMilliseconds(500);
+   if (chSequentialStreamRead(usb_cdc, (uint8_t *)&c, 1) != 0) {
+        chprintf(usb_cdc, "You entered hex char 0x%X\r\n", c);
+    }
   }
   return(0);
 }
@@ -71,6 +85,7 @@ int init_sd(void) {
     return(0);
 }
 
+
 /*
  * Application entry point.
  */
@@ -93,7 +108,15 @@ int main(void) {
 
   BaseSequentialStream *chp = (BaseSequentialStream *)&SD2;
   chprintf(chp, "running main()\r\n");
-  chThdSleepMilliseconds(100);
+  chThdSleepMilliseconds(50);
+
+
+#if STM32_USB_USE_OTG2
+  USBDriver *usb_driver = &USBD2;
+#else
+  USBDriver *usb_driver = &USBD1;
+#endif
+
 
   /*
    * Activates the card insertion monitor.
@@ -102,14 +125,26 @@ int main(void) {
   chprintf(chp, "done starting SDC\r\n");
   sdcConnect(&SDCD1);
 
-  BaseBlockDevice *bbdp = (BaseBlockDevice*) &SDCD1;
   chprintf(chp, "setting up MSD\r\n");
-  USBMassStorageDriver UMSD1;
-#if STM32_USB_USE_OTG2
-  msdInit(&USBD2, bbdp, &UMSD1);
-#else
-  msdInit(&USBD1, bbdp, &UMSD1);
-#endif
+  msdInit(usb_driver, (BaseBlockDevice*) &SDCD1, &UMSD1);
+
+  chprintf(chp, "Initializing SDU1...\r\n");
+  serusbcfg.usbp = usb_driver;
+  sduObjectInit(&SDU1);
+
+
+
+
+  /*Disconnect the USB Bus*/
+  usbDisconnectBus(usb_driver);
+  chThdSleepMilliseconds(200);
+
+  /*Start the useful functions*/
+  sduStart(&SDU1, &serusbcfg);
+  msdStart(usb_driver, &UMSD1);
+
+  /*Connect the USB Bus*/
+  usbConnectBus(usb_driver);
 
   /*
    * Creates the blinker thread.
@@ -119,6 +154,7 @@ int main(void) {
 
 
   while (TRUE) {
-    chThdSleepMilliseconds(100);
-  }
+       palTogglePad(GPIOH, GPIOH_LED1);
+       chThdSleepMilliseconds(500);
+   }
 }

@@ -789,12 +789,15 @@ void msdInit(USBDriver *usbp, BaseBlockDevice *bbdp, USBMassStorageDriver *msdp)
 
 	blkGetInfo(bbdp, &msdp->block_dev_info);
 
-	usbDisconnectBus(usbp);
-	chThdSleepMilliseconds(200);
 	usbp->USBD_PARAM_NAME = (void *)msdp;
+}
 
+void msdStart(USBDriver *usbp, USBMassStorageDriver *msdp) {
+    //upon entry, bus should be disconnected
+	//usbDisconnectBus(usbp);
+	//chThdSleepMilliseconds(200);
 	usbStart(usbp, &msd_usb_config);
-	usbConnectBus(usbp);
+	//usbConnectBus(usbp);
 
 	if(msdThd == NULL) {
 		msdThd = chThdCreateStatic(waMassStorage, sizeof(waMassStorage),

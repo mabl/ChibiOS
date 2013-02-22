@@ -22,7 +22,7 @@
 #define USB_MSD_CFG_H_
 
 
-#define USB_MS_DATA_EP 1
+#define USB_MS_DATA_EP       3
 
 #if STM32_USE_USB_OTG2_HS
 #  define USB_MS_EP_SIZE 512
