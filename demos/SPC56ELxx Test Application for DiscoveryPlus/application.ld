@@ -25,7 +25,7 @@ __process_stack_size__  = 2048;
 
 MEMORY
 {
-    flash     : org = 0x00000000, len = 1M
+    flash     : org = 0x00000000, len = 2M
     ram       : org = 0x40000000, len = 128k
 }
 
