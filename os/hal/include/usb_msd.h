@@ -18,7 +18,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef _USB_MSD_H_
+#define _USB_MSD_H_
+
 #include "hal.h"
+
 
 
 
@@ -198,4 +202,6 @@ bool_t msdRequestsHook(USBDriver *usbp);
 
 
 #endif /* HAL_USE_MASS_STORAGE_USB */
+
+#endif /* _USB_MSD_H_ */
 
