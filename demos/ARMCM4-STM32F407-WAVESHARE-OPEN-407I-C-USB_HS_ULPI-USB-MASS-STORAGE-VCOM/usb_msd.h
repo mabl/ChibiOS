@@ -1,9 +1,22 @@
-#include "board.h"
+#include "hal.h"
 #define MSD_RW_LED_ON()   palSetPad(GPIOI, GPIOI_LED4);
 #define MSD_RW_LED_OFF()  palClearPad(GPIOI, GPIOI_LED4);
 
 
 
+
+#if STM32_USB_USE_OTG2 && STM32_USE_USB_OTG2_HS
+#  define USB_MS_EP_SIZE 512
+#else
+#  define USB_MS_EP_SIZE 64
+#endif
+
+
+#ifdef MSD_USB_DRIVER_EXT_FIELDS_NAME
+#  define   USBD_PARAM_NAME     MSD_USB_DRIVER_EXT_FIELDS_NAME
+#else
+#  define   USBD_PARAM_NAME     param
+#endif
 
 
 
@@ -134,6 +147,7 @@ struct USBMassStorageDriver {
 	bool_t result;
 	bool_t reconfigured_or_reset_event;
 	uint32_t trigger_transfer_index;
+    usbep_t  ms_ep_number;
 };
 
 #define MSD_CONNECTED			0
@@ -142,7 +156,7 @@ struct USBMassStorageDriver {
 #ifdef __cplusplus
 extern "C" {
 #endif
-void msdInit(USBDriver *usbp, BaseBlockDevice *bdp, USBMassStorageDriver *msdp);
+void msdInit(USBDriver *usbp, BaseBlockDevice *bbdp, USBMassStorageDriver *msdp, const usbep_t  ms_ep_number);
 void msdStart(USBDriver *usbp,USBMassStorageDriver *msdp);
 void msdUsbEvent(USBDriver *usbp, usbep_t ep);
 bool_t msdRequestsHook(USBDriver *usbp);

@@ -30,6 +30,7 @@
 #include "shell.h"
 #include "usb_msd.h"
 #include "serial_usb.h"
+#include "usb_msd_cfg.h"
 
 
 /*Serial over USB Driver structure.*/
@@ -126,7 +127,7 @@ int main(void) {
   sdcConnect(&SDCD1);
 
   chprintf(chp, "setting up MSD\r\n");
-  msdInit(usb_driver, (BaseBlockDevice*) &SDCD1, &UMSD1);
+  msdInit(usb_driver, (BaseBlockDevice*) &SDCD1, &UMSD1, USB_MS_DATA_EP);
 
   chprintf(chp, "Initializing SDU1...\r\n");
   serusbcfg.usbp = usb_driver;

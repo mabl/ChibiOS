@@ -24,7 +24,7 @@
 #include "usb_msd.h"
 #include "usb_cdc.h"
 
-#define USB_MS_DATA_EP     3
+
 
 #if STM32_USB_USE_OTG2 && STM32_USE_USB_OTG2_HS
 #define USB_MAX_PACKET_SIZE         512
@@ -367,7 +367,7 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
   case USB_EVENT_CONFIGURED:
     chSysLockFromIsr();
     msdp->reconfigured_or_reset_event = TRUE;
-    usbInitEndpointI(usbp, USB_MS_DATA_EP, &epDataConfig);
+    usbInitEndpointI(usbp, msdp->ms_ep_number, &epDataConfig);
 
     /* Enables the endpoints specified into the configuration.
      Note, this callback is invoked from an ISR so I-Class functions
