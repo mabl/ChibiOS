@@ -706,6 +706,8 @@ bool_t msdReadCommandBlock(USBMassStorageDriver *msdp) {
 static msg_t MassStorageUSBTransferThd(void *arg) {
   USBMassStorageDriver *msdp = (USBMassStorageDriver *)arg;
 
+  chRegSetThreadName("USB-MSD-Transfer");
+
   for(;;) {
     if( msdp->trigger_transfer_index != UINT32_MAX ) {
       SCSIWriteTransferPingPong(msdp, &rw_ping_pong_buffer[msdp->trigger_transfer_index]);
