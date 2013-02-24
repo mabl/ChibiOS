@@ -15,13 +15,13 @@
             id="org.chibios.tools.eclipse.config.wizards.ConfigurationNewWizard"
             name="ChibiOS/RT Configuration Wizard">
       </wizard>
-      <wizard
+   <!--       <wizard
             category="org.chibios.tools.eclipse.config"
             class="org.chibios.tools.eclipse.config.wizards.NewApplicationProjectWizard"
             icon="icons/chibios.gif"
             id="org.chibios.tools.eclipse.config.wizards.NewApplicationProjectWizard"
             name="ChibiOS/RT New Application Project Wizard">
-      </wizard>
+      </wizard> -->
    </extension>
 
    <!-- Registers the file extension .chcfg as an XML type. -->
@@ -66,10 +66,10 @@
             name="Generate Files from Configuration Data">
       </command>
       <!-- Check Configuration Data command. -->
-      <command
+<!--       <command
             categoryId="org.chibios.tools.eclipse.config.commands.category"
             id="org.chibios.tools.eclipse.config.commands.checkDescription"
-            name="Check Configuration Data">
+            name="Check Configuration Data"> -->
       </command>
    </extension>
 
@@ -82,10 +82,10 @@
             commandId="org.chibios.tools.eclipse.config.commands.generateFiles">
       </handler>
       <!-- Check Configuration Data handler. -->
-      <handler
+<!--      <handler
             class="org.chibios.tools.eclipse.config.handlers.CheckDescription"
             commandId="org.chibios.tools.eclipse.config.commands.checkDescription">
-      </handler>
+      </handler> -->
    </extension>
 
    <!-- Configuration menu and toolbar. -->
@@ -122,11 +122,11 @@
                   id="org.chibios.tools.eclipse.config.menus.generateFiles"
                   mnemonic="S">
             </command>
-            <command
+<!--            <command
                   commandId="org.chibios.tools.eclipse.config.commands.checkDescription"
                   id="org.chibios.tools.eclipse.config.menus.checkDescription"
                   mnemonic="S">
-            </command>
+            </command> -->
          </menu>
       </menuContribution>
       <menuContribution
@@ -159,7 +159,7 @@
                   </with>
                </visibleWhen>
             </command>
-            <command
+<!--            <command
                   commandId="org.chibios.tools.eclipse.config.commands.checkDescription"
                   icon="icons/check.gif"
                   id="org.chibios.tools.eclipse.config.toolbars.checkDescription"
@@ -186,7 +186,7 @@
                </visibleWhen>
             </command>
          </toolbar>
-      </menuContribution>
+      </menuContribution> -->
    </extension>
 
    <!-- ChibiOS/RT application generator process type. -->
