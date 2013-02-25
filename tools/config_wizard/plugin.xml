@@ -69,8 +69,8 @@
 <!--       <command
             categoryId="org.chibios.tools.eclipse.config.commands.category"
             id="org.chibios.tools.eclipse.config.commands.checkDescription"
-            name="Check Configuration Data"> -->
-      </command>
+            name="Check Configuration Data">
+      </command> -->
    </extension>
 
    <!-- Handlers. -->
@@ -184,9 +184,9 @@
                      </iterate>
                   </with>
                </visibleWhen>
-            </command>
+            </command> -->
          </toolbar>
-      </menuContribution> -->
+      </menuContribution>
    </extension>
 
    <!-- ChibiOS/RT application generator process type. -->
