@@ -26,7 +26,6 @@
  * @{
  */
 
-#include "ch.h"
 #include "hal.h"
 
 #if HAL_USE_ADC || defined(__DOXYGEN__)
@@ -81,11 +80,7 @@ void adcObjectInit(ADCDriver *adcp) {
   adcp->thread   = NULL;
 #endif /* ADC_USE_WAIT */
 #if ADC_USE_MUTUAL_EXCLUSION
-#if CH_USE_MUTEXES
-  chMtxInit(&adcp->mutex);
-#else
-  chSemInit(&adcp->semaphore, 1);
-#endif
+  halOsMutexInit(&adcp->mutex);
 #endif /* ADC_USE_MUTUAL_EXCLUSION */
 #if defined(ADC_DRIVER_EXT_INIT_HOOK)
   ADC_DRIVER_EXT_INIT_HOOK(adcp);
@@ -103,15 +98,15 @@ void adcObjectInit(ADCDriver *adcp) {
  */
 void adcStart(ADCDriver *adcp, const ADCConfig *config) {
 
-  chDbgCheck(adcp != NULL, "adcStart");
+  halOsDbgCheck(adcp != NULL, "adcStart");
 
-  chSysLock();
-  chDbgAssert((adcp->state == ADC_STOP) || (adcp->state == ADC_READY),
+  halOsLock();
+  halOsDbgAssert((adcp->state == ADC_STOP) || (adcp->state == ADC_READY),
               "adcStart(), #1", "invalid state");
   adcp->config = config;
   adc_lld_start(adcp);
   adcp->state = ADC_READY;
-  chSysUnlock();
+  halOsUnlock();
 }
 
 /**
@@ -123,14 +118,14 @@ void adcStart(ADCDriver *adcp, const ADCConfig *config) {
  */
 void adcStop(ADCDriver *adcp) {
 
-  chDbgCheck(adcp != NULL, "adcStop");
+  halOsDbgCheck(adcp != NULL, "adcStop");
 
-  chSysLock();
-  chDbgAssert((adcp->state == ADC_STOP) || (adcp->state == ADC_READY),
+  halOsLock();
+  halOsDbgAssert((adcp->state == ADC_STOP) || (adcp->state == ADC_READY),
               "adcStop(), #1", "invalid state");
   adc_lld_stop(adcp);
   adcp->state = ADC_STOP;
-  chSysUnlock();
+  halOsUnlock();
 }
 
 /**
@@ -154,9 +149,9 @@ void adcStartConversion(ADCDriver *adcp,
                         adcsample_t *samples,
                         size_t depth) {
 
-  chSysLock();
+  halOsLock();
   adcStartConversionI(adcp, grpp, samples, depth);
-  chSysUnlock();
+  halOsUnlock();
 }
 
 /**
@@ -182,11 +177,11 @@ void adcStartConversionI(ADCDriver *adcp,
                          adcsample_t *samples,
                          size_t depth) {
 
-  chDbgCheckClassI();
-  chDbgCheck((adcp != NULL) && (grpp != NULL) && (samples != NULL) &&
+  halOsDbgCheckClassI();
+  halOsDbgCheck((adcp != NULL) && (grpp != NULL) && (samples != NULL) &&
              ((depth == 1) || ((depth & 1) == 0)),
              "adcStartConversionI");
-  chDbgAssert((adcp->state == ADC_READY) ||
+  halOsDbgAssert((adcp->state == ADC_READY) ||
               (adcp->state == ADC_COMPLETE) ||
               (adcp->state == ADC_ERROR),
               "adcStartConversionI(), #1", "not ready");
@@ -210,10 +205,10 @@ void adcStartConversionI(ADCDriver *adcp,
  */
 void adcStopConversion(ADCDriver *adcp) {
 
-  chDbgCheck(adcp != NULL, "adcStopConversion");
+  halOsDbgCheck(adcp != NULL, "adcStopConversion");
 
-  chSysLock();
-  chDbgAssert((adcp->state == ADC_READY) ||
+  halOsLock();
+  halOsDbgAssert((adcp->state == ADC_READY) ||
               (adcp->state == ADC_ACTIVE),
               "adcStopConversion(), #1", "invalid state");
   if (adcp->state != ADC_READY) {
@@ -222,7 +217,7 @@ void adcStopConversion(ADCDriver *adcp) {
     adcp->state = ADC_READY;
     _adc_reset_s(adcp);
   }
-  chSysUnlock();
+  halOsUnlock();
 }
 
 /**
@@ -237,9 +232,9 @@ void adcStopConversion(ADCDriver *adcp) {
  */
 void adcStopConversionI(ADCDriver *adcp) {
 
-  chDbgCheckClassI();
-  chDbgCheck(adcp != NULL, "adcStopConversionI");
-  chDbgAssert((adcp->state == ADC_READY) ||
+  halOsDbgCheckClassI();
+  halOsDbgCheck(adcp != NULL, "adcStopConversionI");
+  halOsDbgAssert((adcp->state == ADC_READY) ||
               (adcp->state == ADC_ACTIVE) ||
               (adcp->state == ADC_COMPLETE),
               "adcStopConversionI(), #1", "invalid state");
@@ -276,19 +271,17 @@ void adcStopConversionI(ADCDriver *adcp) {
  *
  * @api
  */
-msg_t adcConvert(ADCDriver *adcp,
-                 const ADCConversionGroup *grpp,
-                 adcsample_t *samples,
-                 size_t depth) {
-  msg_t msg;
+hal_os_message_t adcConvert(ADCDriver *adcp,
+                            const ADCConversionGroup *grpp,
+                            adcsample_t *samples,
+                            size_t depth) {
+  hal_os_message_t msg;
 
-  chSysLock();
-  chDbgAssert(adcp->thread == NULL, "adcConvert(), #1", "already waiting");
+  halOsLock();
+  halOsDbgAssert(adcp->thread == NULL, "adcConvert(), #1", "already waiting");
   adcStartConversionI(adcp, grpp, samples, depth);
-  (adcp)->thread = chThdSelf();
-  chSchGoSleepS(THD_STATE_SUSPENDED);
-  msg = chThdSelf()->p_u.rdymsg;
-  chSysUnlock();
+  msg = halOsThreadSuspendS(&adcp->thread);
+  halOsUnlock();
   return msg;
 }
 #endif /* ADC_USE_WAIT */
@@ -307,13 +300,9 @@ msg_t adcConvert(ADCDriver *adcp,
  */
 void adcAcquireBus(ADCDriver *adcp) {
 
-  chDbgCheck(adcp != NULL, "adcAcquireBus");
+  halOsDbgCheck(adcp != NULL, "adcAcquireBus");
 
-#if CH_USE_MUTEXES
-  chMtxLock(&adcp->mutex);
-#elif CH_USE_SEMAPHORES
-  chSemWait(&adcp->semaphore);
-#endif
+  halOsMutexLock(&adcp->mutex);
 }
 
 /**
@@ -327,14 +316,9 @@ void adcAcquireBus(ADCDriver *adcp) {
  */
 void adcReleaseBus(ADCDriver *adcp) {
 
-  chDbgCheck(adcp != NULL, "adcReleaseBus");
+  halOsDbgCheck(adcp != NULL, "adcReleaseBus");
 
-#if CH_USE_MUTEXES
-  (void)adcp;
-  chMtxUnlock();
-#elif CH_USE_SEMAPHORES
-  chSemSignal(&adcp->semaphore);
-#endif
+  halOsMutexUnlock(&adcp->mutex);
 }
 #endif /* ADC_USE_MUTUAL_EXCLUSION */
 

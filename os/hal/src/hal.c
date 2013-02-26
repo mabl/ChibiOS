@@ -26,7 +26,6 @@
  * @{
  */
 
-#include "ch.h"
 #include "hal.h"
 
 /*===========================================================================*/
@@ -164,7 +163,7 @@ void halInit(void) {
  *
  * @special
  */
-bool_t halIsCounterWithin(halrtcnt_t start, halrtcnt_t end) {
+bool halIsCounterWithin(halrtcnt_t start, halrtcnt_t end) {
   halrtcnt_t now = halGetCounterValue();
 
   return end > start ? (now >= start) && (now < end) :

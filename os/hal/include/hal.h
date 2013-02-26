@@ -29,40 +29,9 @@
 #ifndef _HAL_H_
 #define _HAL_H_
 
-#include "ch.h"
+#include "halos.h"
 #include "board.h"
 #include "halconf.h"
-
-#include "hal_lld.h"
-
-/* Abstract interfaces.*/
-#include "io_channel.h"
-#include "io_block.h"
-
-/* Shared headers.*/
-#include "mmcsd.h"
-
-/* Layered drivers.*/
-#include "tm.h"
-#include "pal.h"
-#include "adc.h"
-#include "can.h"
-#include "ext.h"
-#include "gpt.h"
-#include "i2c.h"
-#include "icu.h"
-#include "mac.h"
-#include "pwm.h"
-#include "rtc.h"
-#include "serial.h"
-#include "sdc.h"
-#include "spi.h"
-#include "uart.h"
-#include "usb.h"
-
-/* Complex drivers.*/
-#include "mmc_spi.h"
-#include "serial_usb.h"
 
 /*===========================================================================*/
 /* Driver constants.                                                         */
@@ -79,6 +48,14 @@
 /*===========================================================================*/
 /* Driver data structures and types.                                         */
 /*===========================================================================*/
+
+/**
+ * @brief   Type of a status condition.
+ */
+typedef enum {
+  HAL_SUCCESS = 0,
+  HAL_FAILED = 1
+} hal_status_t;
 
 /*===========================================================================*/
 /* Driver macros.                                                            */
@@ -192,6 +169,41 @@
 #endif /* HAL_IMPLEMENTS_COUNTERS */
 
 /*===========================================================================*/
+/* Late inclusions.                                                          */
+/*===========================================================================*/
+
+#include "hal_lld.h"
+
+/* Abstract interfaces.*/
+//#include "io_channel.h"
+//#include "io_block.h"
+
+/* Shared headers.*/
+//#include "mmcsd.h"
+
+/* Layered drivers.*/
+#include "tm.h"
+#include "pal.h"
+#include "adc.h"
+//#include "can.h"
+//#include "ext.h"
+//#include "gpt.h"
+//#include "i2c.h"
+//#include "icu.h"
+//#include "mac.h"
+//#include "pwm.h"
+//#include "rtc.h"
+//#include "serial.h"
+//#include "sdc.h"
+//#include "spi.h"
+//#include "uart.h"
+//#include "usb.h"
+
+/* Complex drivers.*/
+//#include "mmc_spi.h"
+//#include "serial_usb.h"
+
+/*===========================================================================*/
 /* External declarations.                                                    */
 /*===========================================================================*/
 
@@ -200,7 +212,7 @@ extern "C" {
 #endif
   void halInit(void);
 #if HAL_IMPLEMENTS_COUNTERS
-  bool_t halIsCounterWithin(halrtcnt_t start, halrtcnt_t end);
+  bool halIsCounterWithin(halrtcnt_t start, halrtcnt_t end);
   void halPolledDelay(halrtcnt_t ticks);
 #endif /* HAL_IMPLEMENTS_COUNTERS */
 #ifdef __cplusplus

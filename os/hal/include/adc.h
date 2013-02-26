@@ -64,10 +64,6 @@
 /* Derived constants and error checks.                                       */
 /*===========================================================================*/
 
-#if ADC_USE_WAIT && !CH_USE_SEMAPHORES
-#error "ADC driver requires CH_USE_SEMAPHORES when ADC_USE_WAIT is enabled"
-#endif
-
 /*===========================================================================*/
 /* Driver data structures and types.                                         */
 /*===========================================================================*/
@@ -104,10 +100,7 @@ typedef enum {
  */
 #define _adc_reset_i(adcp) {                                                \
   if ((adcp)->thread != NULL) {                                             \
-    Thread *tp = (adcp)->thread;                                            \
-    (adcp)->thread = NULL;                                                  \
-    tp->p_u.rdymsg  = RDY_RESET;                                            \
-    chSchReadyI(tp);                                                        \
+    halOsThreadResumeI((adcp)->thread, HAL_OS_MSG_RESET);                   \
   }                                                                         \
 }
 
@@ -120,9 +113,7 @@ typedef enum {
  */
 #define _adc_reset_s(adcp) {                                                \
   if ((adcp)->thread != NULL) {                                             \
-    Thread *tp = (adcp)->thread;                                            \
-    (adcp)->thread = NULL;                                                  \
-    chSchWakeupS(tp, RDY_RESET);                                            \
+    halOsThreadResumeS((adcp)->thread, HAL_OS_MSG_RESET);                   \
   }                                                                         \
 }
 
@@ -136,11 +127,7 @@ typedef enum {
 #define _adc_wakeup_isr(adcp) {                                             \
   chSysLockFromIsr();                                                       \
   if ((adcp)->thread != NULL) {                                             \
-    Thread *tp;                                                             \
-    tp = (adcp)->thread;                                                    \
-    (adcp)->thread = NULL;                                                  \
-    tp->p_u.rdymsg = RDY_OK;                                                \
-    chSchReadyI(tp);                                                        \
+    halOsThreadResumeI((adcp)->thread, HAL_OS_MSG_OK);                      \
   }                                                                         \
   chSysUnlockFromIsr();                                                     \
 }
@@ -155,11 +142,7 @@ typedef enum {
 #define _adc_timeout_isr(adcp) {                                            \
   chSysLockFromIsr();                                                       \
   if ((adcp)->thread != NULL) {                                             \
-    Thread *tp;                                                             \
-    tp = (adcp)->thread;                                                    \
-    (adcp)->thread = NULL;                                                  \
-    tp->p_u.rdymsg = RDY_TIMEOUT;                                           \
-    chSchReadyI(tp);                                                        \
+    halOsThreadResumeI((adcp)->thread, HAL_OS_MSG_TIMEOUT);                 \
   }                                                                         \
   chSysUnlockFromIsr();                                                     \
 }
@@ -297,10 +280,10 @@ extern "C" {
   void adcStopConversion(ADCDriver *adcp);
   void adcStopConversionI(ADCDriver *adcp);
 #if ADC_USE_WAIT
-  msg_t adcConvert(ADCDriver *adcp,
-                   const ADCConversionGroup *grpp,
-                   adcsample_t *samples,
-                   size_t depth);
+  hal_os_message_t adcConvert(ADCDriver *adcp,
+                              const ADCConversionGroup *grpp,
+                              adcsample_t *samples,
+                              size_t depth);
 #endif
 #if ADC_USE_MUTUAL_EXCLUSION || defined(__DOXYGEN__)
   void adcAcquireBus(ADCDriver *adcp);
