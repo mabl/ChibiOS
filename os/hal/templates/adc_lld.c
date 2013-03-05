@@ -39,8 +39,15 @@
 /* Driver exported variables.                                                */
 /*===========================================================================*/
 
+/**
+ * @brief   ADC1 driver identifier.
+ */
+#if PLATFORM_ADC_USE_ADC1 || defined(__DOXYGEN__)
+ADCDriver ADCD1;
+#endif
+
 /*===========================================================================*/
-/* Driver local variables.                                                   */
+/* Driver local variables and types.                                         */
 /*===========================================================================*/
 
 /*===========================================================================*/
@@ -62,6 +69,10 @@
  */
 void adc_lld_init(void) {
 
+#if PLATFORM_ADC_USE_ADC1
+  /* Driver initialization.*/
+  adcObjectInit(&ADCD1);
+#endif /* PLATFORM_ADC_USE_ADC1 */
 }
 
 /**
@@ -73,10 +84,16 @@ void adc_lld_init(void) {
  */
 void adc_lld_start(ADCDriver *adcp) {
 
-  if (adcp->adc_state == ADC_STOP) {
-    /* Clock activation.*/
+  if (adcp->state == ADC_STOP) {
+    /* Enables the peripheral.*/
+#if PLATFORM_ADC_USE_ADC1
+    if (&ADCD1 == adcp) {
+
+    }
+#endif /* PLATFORM_ADC_USE_ADC1 */
   }
-  /* Configuration.*/
+  /* Configures the peripheral.*/
+
 }
 
 /**
@@ -89,8 +106,14 @@ void adc_lld_start(ADCDriver *adcp) {
 void adc_lld_stop(ADCDriver *adcp) {
 
   if (adcp->state == ADC_READY) {
-    /* Clock de-activation.*/
+    /* Resets the peripheral.*/
 
+    /* Disables the peripheral.*/
+#if PLATFORM_ADC_USE_ADC1
+    if (&ADCD1 == adcp) {
+
+    }
+#endif /* PLATFORM_ADC_USE_ADC1 */
   }
 }
 
@@ -103,6 +126,7 @@ void adc_lld_stop(ADCDriver *adcp) {
  */
 void adc_lld_start_conversion(ADCDriver *adcp) {
 
+  (void)adcp;
 }
 
 /**
@@ -114,6 +138,7 @@ void adc_lld_start_conversion(ADCDriver *adcp) {
  */
 void adc_lld_stop_conversion(ADCDriver *adcp) {
 
+  (void)adcp;
 }
 
 #endif /* HAL_USE_ADC */

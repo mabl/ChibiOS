@@ -39,8 +39,15 @@
 /* Driver exported variables.                                                */
 /*===========================================================================*/
 
+/**
+ * @brief   GPTD1 driver identifier.
+ */
+#if PLATFORM_GPT_USE_GPT1 || defined(__DOXYGEN__)
+GPTDriver GPTD1;
+#endif
+
 /*===========================================================================*/
-/* Driver local variables.                                                   */
+/* Driver local variables and types.                                         */
 /*===========================================================================*/
 
 /*===========================================================================*/
@@ -62,6 +69,10 @@
  */
 void gpt_lld_init(void) {
 
+#if PLATFORM2_GPT_USE_TIM1
+  /* Driver initialization.*/
+  gptObjectInit(&GPTD1);
+#endif
 }
 
 /**
@@ -72,13 +83,17 @@ void gpt_lld_init(void) {
  * @notapi
  */
 void gpt_lld_start(GPTDriver *gptp) {
-  uint16_t psc;
 
   if (gptp->state == GPT_STOP) {
-    /* Clock activation.*/
+    /* Enables the peripheral.*/
+#if PLATFORM_GPT_USE_GPT1
+    if (&GPTD1 == gptp) {
 
+    }
+#endif /* PLATFORM_GPT_USE_GPT1 */
   }
-  /* Configuration.*/
+  /* Configures the peripheral.*/
+
 }
 
 /**
@@ -91,8 +106,14 @@ void gpt_lld_start(GPTDriver *gptp) {
 void gpt_lld_stop(GPTDriver *gptp) {
 
   if (gptp->state == GPT_READY) {
-    /* Clock de-activation.*/
+    /* Resets the peripheral.*/
 
+    /* Disables the peripheral.*/
+#if PLATFORM_GPT_USE_GPT1
+    if (&GPTD1 == gptp) {
+
+    }
+#endif /* PLATFORM_GPT_USE_GPT1 */
   }
 }
 
@@ -100,11 +121,14 @@ void gpt_lld_stop(GPTDriver *gptp) {
  * @brief   Starts the timer in continuous mode.
  *
  * @param[in] gptp      pointer to the @p GPTDriver object
- * @param[in] period    period in ticks
+ * @param[in] interval  period in ticks
  *
  * @notapi
  */
-void gpt_lld_start_timer(GPTDriver *gptp, gptcnt_t period) {
+void gpt_lld_start_timer(GPTDriver *gptp, gptcnt_t interval) {
+
+  (void)gptp;
+  (void)interval;
 
 }
 
@@ -116,6 +140,8 @@ void gpt_lld_start_timer(GPTDriver *gptp, gptcnt_t period) {
  * @notapi
  */
 void gpt_lld_stop_timer(GPTDriver *gptp) {
+
+  (void)gptp;
 
 }
 
@@ -131,6 +157,9 @@ void gpt_lld_stop_timer(GPTDriver *gptp) {
  * @notapi
  */
 void gpt_lld_polled_delay(GPTDriver *gptp, gptcnt_t interval) {
+
+  (void)gptp;
+  (void)interval;
 
 }
 

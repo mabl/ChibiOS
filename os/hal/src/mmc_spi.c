@@ -45,7 +45,7 @@
 /*===========================================================================*/
 
 /*===========================================================================*/
-/* Driver local variables.                                                   */
+/* Driver local variables and types.                                         */
 /*===========================================================================*/
 
 /* Forward declarations required by mmc_vmt.*/
@@ -559,6 +559,7 @@ bool_t mmcDisconnect(MMCDriver *mmcp) {
   chSysUnlock();
 
   /* Wait for the pending write operations to complete.*/
+  spiStart(mmcp->config->spip, mmcp->config->hscfg);
   sync(mmcp);
 
   spiStop(mmcp->config->spip);
@@ -599,6 +600,7 @@ bool_t mmcStartSequentialRead(MMCDriver *mmcp, uint32_t startblk) {
 
   if (recvr1(mmcp) != 0x00) {
     spiStop(mmcp->config->spip);
+    mmcp->state = BLK_READY;
     return CH_FAILED;
   }
   return CH_SUCCESS;
@@ -636,6 +638,7 @@ bool_t mmcSequentialRead(MMCDriver *mmcp, uint8_t *buffer) {
   /* Timeout.*/
   spiUnselect(mmcp->config->spip);
   spiStop(mmcp->config->spip);
+  mmcp->state = BLK_READY;
   return CH_FAILED;
 }
 
@@ -701,6 +704,7 @@ bool_t mmcStartSequentialWrite(MMCDriver *mmcp, uint32_t startblk) {
 
   if (recvr1(mmcp) != 0x00) {
     spiStop(mmcp->config->spip);
+    mmcp->state = BLK_READY;
     return CH_FAILED;
   }
   return CH_SUCCESS;
@@ -739,6 +743,7 @@ bool_t mmcSequentialWrite(MMCDriver *mmcp, const uint8_t *buffer) {
   /* Error.*/
   spiUnselect(mmcp->config->spip);
   spiStop(mmcp->config->spip);
+  mmcp->state = BLK_READY;
   return CH_FAILED;
 }
 
@@ -787,7 +792,14 @@ bool_t mmcSync(MMCDriver *mmcp) {
   if (mmcp->state != BLK_READY)
     return CH_FAILED;
 
+  /* Synchronization operation in progress.*/
+  mmcp->state = BLK_SYNCING;
+
+  spiStart(mmcp->config->spip, mmcp->config->hscfg);
   sync(mmcp);
+
+  /* Synchronization operation finished.*/
+  mmcp->state = BLK_READY;
   return CH_SUCCESS;
 }
 
@@ -833,6 +845,9 @@ bool_t mmcErase(MMCDriver *mmcp, uint32_t startblk, uint32_t endblk) {
 
   chDbgCheck((mmcp != NULL), "mmcErase");
 
+  /* Erase operation in progress.*/
+  mmcp->state = BLK_WRITING;
+
   /* Handling command differences between HC and normal cards.*/
   if (!mmcp->block_addresses) {
     startblk *= MMCSD_BLOCK_SIZE;
@@ -848,11 +863,13 @@ bool_t mmcErase(MMCDriver *mmcp, uint32_t startblk, uint32_t endblk) {
   if (send_command_R1(mmcp, MMCSD_CMD_ERASE, 0))
     goto failed;
 
+  mmcp->state = BLK_READY;
   return CH_SUCCESS;
 
   /* Command failed, state reset to BLK_ACTIVE.*/
 failed:
   spiStop(mmcp->config->spip);
+  mmcp->state = BLK_READY;
   return CH_FAILED;
 }
 

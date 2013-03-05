@@ -40,7 +40,7 @@
 /*===========================================================================*/
 
 /*===========================================================================*/
-/* Driver local variables.                                                   */
+/* Driver local variables and types.                                         */
 /*===========================================================================*/
 
 /*===========================================================================*/
@@ -54,6 +54,41 @@
 /*===========================================================================*/
 /* Driver exported functions.                                                */
 /*===========================================================================*/
+
+/**
+ * @brief   STM32 I/O ports configuration.
+ * @details Ports A-D(E, F, G, H) clocks enabled.
+ *
+ * @param[in] config    the STM32 ports configuration
+ *
+ * @notapi
+ */
+void _pal_lld_init(const PALConfig *config) {
+
+  (void)config;
+
+}
+
+/**
+ * @brief   Pads mode setup.
+ * @details This function programs a pads group belonging to the same port
+ *          with the specified mode.
+ *
+ * @param[in] port      the port identifier
+ * @param[in] mask      the group mask
+ * @param[in] mode      the mode
+ *
+ * @notapi
+ */
+void _pal_lld_setgroupmode(ioportid_t port,
+                           ioportmask_t mask,
+                           iomode_t mode) {
+
+  (void)port;
+  (void)mask;
+  (void)mode;
+
+}
 
 #endif /* HAL_USE_PAL */
 

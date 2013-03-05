@@ -35,9 +35,27 @@
 /* Driver constants.                                                         */
 /*===========================================================================*/
 
+/**
+ * @brief   This implementation supports the zero-copy mode API.
+ */
+#define MAC_SUPPORTS_ZERO_COPY              TRUE
+
 /*===========================================================================*/
 /* Driver pre-compile time settings.                                         */
 /*===========================================================================*/
+
+/**
+ * @name    Configuration options
+ * @{
+ */
+/**
+ * @brief   MAC driver enable switch.
+ * @details If set to @p TRUE the support for MAC1 is included.
+ */
+#if !defined(PLATFORM_MAC_USE_MAC1) || defined(__DOXYGEN__)
+#define PLATFORM_MAC_USE_MAC1               FALSE
+#endif
+/** @} */
 
 /*===========================================================================*/
 /* Derived constants and error checks.                                       */
@@ -94,11 +112,11 @@ typedef struct {
   /**
    * @brief Current write offset.
    */
-  size_t                offset;
+  size_t                    offset;
   /**
    * @brief Available space size.
    */
-  size_t                size;
+  size_t                    size;
   /* End of the mandatory fields.*/
 } MACTransmitDescriptor;
 
@@ -125,8 +143,8 @@ typedef struct {
 /* External declarations.                                                    */
 /*===========================================================================*/
 
-#if !defined(__DOXYGEN__)
-extern MACDriver ETH1;
+#if PLATFORM_MAC_USE_MAC1 && !defined(__DOXYGEN__)
+extern MACDriver ETHD1;
 #endif
 
 #ifdef __cplusplus
@@ -137,17 +155,24 @@ extern "C" {
   void mac_lld_stop(MACDriver *macp);
   msg_t mac_lld_get_transmit_descriptor(MACDriver *macp,
                                         MACTransmitDescriptor *tdp);
-  size_t mac_lld_write_transmit_descriptor(MACTransmitDescriptor *tdp,
-                                           uint8_t *buf,
-                                           size_t size);
   void mac_lld_release_transmit_descriptor(MACTransmitDescriptor *tdp);
   msg_t mac_lld_get_receive_descriptor(MACDriver *macp,
                                        MACReceiveDescriptor *rdp);
+  void mac_lld_release_receive_descriptor(MACReceiveDescriptor *rdp);
+  bool_t mac_lld_poll_link_status(MACDriver *macp);
+  size_t mac_lld_write_transmit_descriptor(MACTransmitDescriptor *tdp,
+                                           uint8_t *buf,
+                                           size_t size);
   size_t mac_lld_read_receive_descriptor(MACReceiveDescriptor *rdp,
                                          uint8_t *buf,
                                          size_t size);
-  void mac_lld_release_receive_descriptor(MACReceiveDescriptor *rdp);
-  bool_t mac_lld_poll_link_status(MACDriver *macp);
+#if MAC_USE_ZERO_COPY
+  uint8_t *mac_lld_get_next_transmit_buffer(MACTransmitDescriptor *tdp,
+                                            size_t size,
+                                            size_t *sizep);
+  const uint8_t *mac_lld_get_next_receive_buffer(MACReceiveDescriptor *rdp,
+                                                 size_t *sizep);
+#endif /* MAC_USE_ZERO_COPY */
 #ifdef __cplusplus
 }
 #endif

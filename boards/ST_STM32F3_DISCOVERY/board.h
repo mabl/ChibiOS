@@ -48,7 +48,7 @@
 #define STM32_HSE_BYPASS
 
 /*
- * MCU type as defined in the ST header file stm32f30x.h.
+ * MCU type as defined in the ST header.
  */
 #define STM32F30X
 

@@ -38,7 +38,7 @@
 /*===========================================================================*/
 
 /*===========================================================================*/
-/* Driver local variables.                                                   */
+/* Driver local variables and types.                                         */
 /*===========================================================================*/
 
 /*===========================================================================*/
@@ -59,6 +59,19 @@
  * @notapi
  */
 void hal_lld_init(void) {
+
+}
+
+/**
+ * @brief   Platform early initialization.
+ * @note    All the involved constants come from the file @p board.h.
+ * @note    This function is meant to be invoked early during the system
+ *          initialization, it is usually invoked from the file
+ *          @p board.c.
+ *
+ * @special
+ */
+void platform_early_init(void) {
 
 }
 

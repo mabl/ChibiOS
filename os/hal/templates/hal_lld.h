@@ -39,9 +39,11 @@
 #define HAL_IMPLEMENTS_COUNTERS TRUE
 
 /**
- * @brief   Platform name.
+ * @name    Platform identification
+ * @{
  */
-#define PLATFORM_NAME   ""
+#define PLATFORM_NAME           ""
+/** @} */
 
 /*===========================================================================*/
 /* Driver pre-compile time settings.                                         */
@@ -50,6 +52,13 @@
 /*===========================================================================*/
 /* Derived constants and error checks.                                       */
 /*===========================================================================*/
+
+/*
+ * Configuration-related checks.
+ */
+#if !defined(PLATFORM_MCUCONF)
+#error "Using a wrong mcuconf.h file, PLATFORM_MCUCONF not defined"
+#endif
 
 /*===========================================================================*/
 /* Driver data structures and types.                                         */
@@ -68,6 +77,29 @@ typedef uint32_t halrtcnt_t;
 /*===========================================================================*/
 /* Driver macros.                                                            */
 /*===========================================================================*/
+
+/**
+ * @brief   Returns the current value of the system free running counter.
+ * @note    This service is implemented by returning the content of the
+ *          DWT_CYCCNT register.
+ *
+ * @return              The value of the system free running counter of
+ *                      type halrtcnt_t.
+ *
+ * @notapi
+ */
+#define hal_lld_get_counter_value()         0
+
+/**
+ * @brief   Realtime counter frequency.
+ * @note    The DWT_CYCCNT register is incremented directly by the system
+ *          clock so this function returns STM32_HCLK.
+ *
+ * @return              The realtime counter frequency of type halclock_t.
+ *
+ * @notapi
+ */
+#define hal_lld_get_counter_frequency()     0
 
 /*===========================================================================*/
 /* External declarations.                                                    */

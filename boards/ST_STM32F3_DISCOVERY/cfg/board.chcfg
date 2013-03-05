@@ -10,6 +10,7 @@
   <board_name>STMicroelectronics STM32F3-Discovery</board_name>
   <board_id>ST_STM32F3_DISCOVERY</board_id>
   <board_functions></board_functions>
+  <subtype>STM32F30X</subtype>
   <clocks HSEFrequency="8000000" HSEBypass="true" LSEFrequency="0"
   	LSEBypass="false" LSEDrive="3 High Drive (default)" />
   <ports>

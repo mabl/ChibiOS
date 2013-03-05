@@ -85,6 +85,9 @@
 *****************************************************************************
 
 *** 2.5.2 ***
+- FIX: Fixed misplaced brace in icu_lld.c (bug 3605832)(backported to 2.4.4).
+- FIX: Fixed errors in MMC_SPI driver state machine (bug 3605794).
+- FIX: Fixed deadlock in Serial_USB driver (bug 3605793).
 - FIX: Fixed compile Error OLIMEX_SAM7_EX256/board.c (bug 3605058).
 - FIX: Fixed bug prevents calling adcStartConversionI() within ISR (bug
   3605053)(backported to 2.4.4).
@@ -117,6 +120,14 @@
   (backported to 2.4.3).
 - FIX: Fixed wrong SPI path in platform_f105_f107.mk (bug 3598151).
 - FIX: Fixed PHY powerdown issues not fixed (bug 3596911).
+- NEW: Added preliminary support to the STM32F37x family.
+- NEW: Now the general documentation includes data extracted from the low
+  level driver templates. Per-platform/architecture documents are no more
+  required and will be replaced with technical articles and examples for
+  each specific driver.
+- NEW: Added a build test project for low level device driver templates.
+- NEW: Enhanced CAN driver model, support for mailboxes has been added. STM32
+  driver implementation upgraded.
 - NEW: Added ADC and PWM drivers for the AT91SAM7 platform, both donated
   by Andrew Hannam.
 - NEW: Added kernel support for the SAM4L, an Atmel Studio 6 demo for the
