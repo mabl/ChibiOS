@@ -193,7 +193,7 @@ struct USBMassStorageDriver {
 extern "C" {
 #endif
 void msdInit(USBDriver *usbp, BaseBlockDevice *bbdp, USBMassStorageDriver *msdp, const usbep_t  ms_ep_number);
-void msdStart(USBDriver *usbp,USBMassStorageDriver *msdp);
+void msdStart(USBMassStorageDriver *msdp);
 void msdUsbEvent(USBDriver *usbp, usbep_t ep);
 bool_t msdRequestsHook(USBDriver *usbp);
 #ifdef __cplusplus

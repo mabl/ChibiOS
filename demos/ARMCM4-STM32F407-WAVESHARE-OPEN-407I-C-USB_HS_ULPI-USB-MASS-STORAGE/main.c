@@ -122,7 +122,7 @@ int main(void) {
   chThdSleepMilliseconds(200);
 
   /*Start the useful functions*/
-  msdStart(usb_driver, &UMSD1);
+  msdStart(&UMSD1);
   usbStart(usb_driver, &msd_usb_config);
 
   /*Connect the USB Bus*/

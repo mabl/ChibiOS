@@ -144,7 +144,7 @@ int main(void) {
 
   /*Start the useful functions*/
   sduStart(&SDU1, &serusbcfg);
-  msdStart(usb_driver, &UMSD1);
+  msdStart(&UMSD1);
   usbStart(usb_driver, &msd_usb_config);
 
   /*Connect the USB Bus*/
