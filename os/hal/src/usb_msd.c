@@ -47,7 +47,9 @@
 
 #if HAL_USE_SERIAL_USB
 #  ifndef MSD_USB_DRIVER_EXT_FIELDS_NAME
-#    error "The serial usb driver and the mass storage driver both use the USBD->param variable and they conflict, you must define MSD_USB_DRIVER_EXT_FIELDS_NAME for these to work concurently."
+#    error "The serial usb driver and the mass storage driver both use the \
+            USBD->param variable and they conflict, you must define \
+            MSD_USB_DRIVER_EXT_FIELDS_NAME for these to work concurrently."
 #  endif
 #endif
 
@@ -127,7 +129,9 @@ inline uint32_t swap_uint32( uint32_t val ) {
  * @param[in] msdp            pointer to the @p USBMassStorageDriver object
  * @param[in] ms_ep_number    USB Endpoint Number to be used by the mass storage endpoint
  */
-void msdInit(USBDriver *usbp, BaseBlockDevice *bbdp, USBMassStorageDriver *msdp, const usbep_t  ms_ep_number) {
+void msdInit(USBDriver *usbp, BaseBlockDevice *bbdp, USBMassStorageDriver *msdp,
+             const usbep_t  ms_ep_number)
+{
     uint8_t i;
 
     msdp->usbp = usbp;
@@ -139,7 +143,8 @@ void msdInit(USBDriver *usbp, BaseBlockDevice *bbdp, USBMassStorageDriver *msdp,
     chEvtInit(&msdp->evt_connected);
     chEvtInit(&msdp->evt_ejected);
 
-    /* Initialize binary semaphore as taken, will cause the thread to initially wait on the  */
+    /* Initialize binary semaphore as taken, will cause the thread to initially
+     * wait on the  */
     chBSemInit(&msdp->bsem, TRUE);
     /* Initialize binary semaphore as NOT taken */
     chBSemInit(&msdp->usb_transfer_thread_bsem, FALSE);
@@ -174,7 +179,7 @@ void msdInit(USBDriver *usbp, BaseBlockDevice *bbdp, USBMassStorageDriver *msdp,
  */
 
 void msdStart(USBMassStorageDriver *msdp) {
-    //upon entry, USB bus should be disconnected
+    /*upon entry, USB bus should be disconnected*/
 
     if(msdThd == NULL) {
         msdThd = chThdCreateStatic(waMassStorage, sizeof(waMassStorage),
@@ -182,7 +187,8 @@ void msdStart(USBMassStorageDriver *msdp) {
     }
 
     if(msdUSBTransferThd == NULL) {
-        msdUSBTransferThd = chThdCreateStatic(waMassStorageUSBTransfer, sizeof(waMassStorageUSBTransfer),
+        msdUSBTransferThd = chThdCreateStatic(waMassStorageUSBTransfer,
+                                              sizeof(waMassStorageUSBTransfer),
                 NORMALPRIO, MassStorageUSBTransferThd, msdp);
     }
 }
@@ -215,7 +221,8 @@ void msdUsbEvent(USBDriver *usbp, usbep_t ep) {
 bool_t msdRequestsHook(USBDriver *usbp) {
 
     if (((usbp->setup[0] & USB_RTYPE_TYPE_MASK) == USB_RTYPE_TYPE_CLASS) &&
-        ((usbp->setup[0] & USB_RTYPE_RECIPIENT_MASK) == USB_RTYPE_RECIPIENT_INTERFACE)) {
+        ((usbp->setup[0] & USB_RTYPE_RECIPIENT_MASK) == USB_RTYPE_RECIPIENT_INTERFACE))
+    {
         /* check that the request is for interface 0.*/
         if(MSD_SETUP_INDEX(usbp->setup) != 0)
             return FALSE;
@@ -260,13 +267,16 @@ bool_t msdRequestsHook(USBDriver *usbp) {
 /* Driver local functions.                                                   */
 /*===========================================================================*/
 
-static inline void SCSISetSense(USBMassStorageDriver *msdp, uint8_t key, uint8_t acode, uint8_t aqual) {
+static inline void SCSISetSense(USBMassStorageDriver *msdp, uint8_t key,
+                                uint8_t acode, uint8_t aqual)
+{
     msdp->sense.byte[2] = key;
     msdp->sense.byte[12] = acode;
     msdp->sense.byte[13] = aqual;
 }
 
-static uint8_t WaitForISR(USBMassStorageDriver *msdp, const bool_t check_reset) {
+static uint8_t WaitForISR(USBMassStorageDriver *msdp, const bool_t check_reset)
+{
   uint8_t ret = WAIT_ISR_SUCCESS;
     /* sleep until it completes */
     chSysLock();
@@ -304,11 +314,11 @@ static bool_t SCSICommandInquiry(USBMassStorageDriver *msdp) {
 	msd_cbw_t *cbw = &(msdp->cbw);
 
 	static const scsi_inquiry_response_t inquiry = {
-		0x00,						// direct access block device
-		0x80,						// removable
-		0x04, 						// SPC-2
-		0x02,						// response data format
-		0x20,						// response has 0x20 + 4 bytes
+		0x00,						/* direct access block device */
+		0x80,						/* removable */
+		0x04, 						/* SPC-2 */
+		0x02,						/* response data format */
+		0x20,						/* response has 0x20 + 4 bytes */
 		0x00,
 		0x00,
 		0x00,
@@ -319,7 +329,8 @@ static bool_t SCSICommandInquiry(USBMassStorageDriver *msdp) {
 
 	if((cbw->scsi_cmd_data[1] & ((1 << 0) | (1 << 1))) ||
 			cbw->scsi_cmd_data[2]) {
-		/* Optional but unsupported bits set - update the SENSE key and fail the request */
+		/* Optional but unsupported bits set - update the SENSE key and fail
+		 * the request */
 		SCSISetSense(	msdp,
 						SCSI_SENSE_KEY_ILLEGAL_REQUEST,
 		               	SCSI_ASENSE_INVALID_FIELD_IN_CDB,
@@ -394,7 +405,9 @@ static bool_t SCSICommandSendDiagnostic(USBMassStorageDriver *msdp) {
 	return FALSE;
 }
 
-static void SCSIWriteTransferPingPong(USBMassStorageDriver *msdp, volatile rw_usb_sd_buffer_t *dest_buffer) {
+static void SCSIWriteTransferPingPong(USBMassStorageDriver *msdp,
+                                      volatile rw_usb_sd_buffer_t *dest_buffer)
+{
   int cnt;
   dest_buffer->is_transfer_done = FALSE;
   dest_buffer->num_blocks_to_write = 0;
@@ -403,7 +416,9 @@ static void SCSIWriteTransferPingPong(USBMassStorageDriver *msdp, volatile rw_us
   palSetPad(GPIOH, GPIOH_LED2);
 #endif
   for(cnt = 0; cnt < BLOCK_WRITE_ITTERATION_COUNT && cnt < dest_buffer->max_blocks_to_read; cnt++ ) {
-    usbPrepareReceive(msdp->usbp, msdp->ms_ep_number, (uint8_t*)&dest_buffer->buf[cnt * BLOCK_SIZE_INCREMENT], (msdp->block_dev_info.blk_size));
+    usbPrepareReceive(msdp->usbp, msdp->ms_ep_number,
+       (uint8_t*)&dest_buffer->buf[cnt * BLOCK_SIZE_INCREMENT],
+       (msdp->block_dev_info.blk_size));
 
     chSysLock();
     usbStartReceiveI(msdp->usbp, msdp->ms_ep_number);
@@ -418,7 +433,9 @@ static void SCSIWriteTransferPingPong(USBMassStorageDriver *msdp, volatile rw_us
 #endif
 }
 
-static void WaitForUSBTransferComplete(USBMassStorageDriver *msdp, const int ping_pong_buffer_index) {
+static void WaitForUSBTransferComplete(USBMassStorageDriver *msdp,
+                                       const int ping_pong_buffer_index)
+{
   while(TRUE) {
     chBSemWaitTimeout(&msdp->mass_sorage_thd_bsem, MS2ST(1));
 
@@ -464,7 +481,7 @@ static bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
 	}
 
 	for(i = 0; i < 2; i++ ) {
-	  //initialized ping pong buffer
+	  /*initialized ping pong buffer*/
 	  rw_ping_pong_buffer[i].max_blocks_to_read = 0;
 	  rw_ping_pong_buffer[i].num_blocks_to_write = 0;
 	  rw_ping_pong_buffer[i].is_transfer_done = FALSE;
@@ -475,12 +492,15 @@ static bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
       /* loop over each block */
 
 	  int ping_pong_buffer_index = 0;
-	  //initiate a transfer
+	  /*initiate a transfer*/
 	  rw_ping_pong_buffer[ping_pong_buffer_index].is_transfer_done = FALSE;
 	  rw_ping_pong_buffer[ping_pong_buffer_index].max_blocks_to_read = total_blocks;
-	  msdp->trigger_transfer_index = ping_pong_buffer_index;//Trigger the transfer in the other thread
 
-	  //wake other thread on semaphore to trigger the transfer
+	  /*Trigger the transfer in the other thread*/
+	  msdp->trigger_transfer_index = ping_pong_buffer_index;
+
+
+	  /*wake other thread on semaphore to trigger the transfer*/
 	  chBSemSignal(&msdp->usb_transfer_thread_bsem);
 
 	  WaitForUSBTransferComplete(msdp, ping_pong_buffer_index);
@@ -489,7 +509,7 @@ static bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
         const int done_buffer_index = ping_pong_buffer_index;
         const int empty_buffer_index = ((ping_pong_buffer_index + 1) % 2);
 
-        //initiate another transfer in the other ping pong buffer
+        /*initiate another transfer in the other ping pong buffer*/
         int queue_another_transfer = FALSE;
         if( (i + BLOCK_WRITE_ITTERATION_COUNT) < total_blocks ) {
           queue_another_transfer = TRUE;
@@ -502,7 +522,7 @@ static bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
 
               msdp->trigger_transfer_index = empty_buffer_index;
 
-              //wake other thread on semaphore to trigger the transfer
+              /*wake other thread on semaphore to trigger the transfer*/
               chBSemSignal(&msdp->usb_transfer_thread_bsem);
               break;
             } else {
@@ -522,8 +542,10 @@ static bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
          }
 
          /* now write the block to the block device */
-         if(blkWrite(msdp->bbdp, rw_block_address, (uint8_t*)rw_ping_pong_buffer[done_buffer_index].buf,
-                     rw_ping_pong_buffer[done_buffer_index].num_blocks_to_write) == CH_FAILED ) {
+         if(blkWrite(msdp->bbdp, rw_block_address,
+                     (uint8_t*)rw_ping_pong_buffer[done_buffer_index].buf,
+                     rw_ping_pong_buffer[done_buffer_index].num_blocks_to_write) == CH_FAILED )
+         {
 
              msd_debug_print(chp, "\r\nSD Block Write Error, halting\r\n");
              chThdSleepMilliseconds(50);
@@ -550,7 +572,7 @@ static bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
            WaitForUSBTransferComplete(msdp, empty_buffer_index);
          }
 
-         //Swap the ping pong buffers
+         /*Swap the ping pong buffers*/
          ping_pong_buffer_index = empty_buffer_index;
       }
 
@@ -568,7 +590,8 @@ static bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
 		}
 		if( (!read_success) ) {
 		  msd_debug_print(chp, "\r\nSD Block Read Error 1, halting\r\n");
-		  chThdSleepMilliseconds(70);//wait for printing to finish
+		  /*wait for printing to finish*/
+		  chThdSleepMilliseconds(70);
 		  msdp->result = FALSE;
 
 		  msd_debug_print(chp, "\r\nSetting sense code %u\r\n", SCSI_SENSE_KEY_MEDIUM_ERROR);
@@ -605,7 +628,8 @@ static bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
 
                 if( (! read_success) ) {
                   msd_debug_print(chp, "\r\nSD Block Read Error 22, addr=%d, halting\r\n", rw_block_address);
-                  chThdSleepMilliseconds(70);//wait for printing to finish
+                  /*wait for printing to finish*/
+                  chThdSleepMilliseconds(70);
                   msdp->result = FALSE;
                   msd_debug_print(chp, "\r\nSetting sense code %u\r\n", SCSI_SENSE_KEY_MEDIUM_ERROR);
                   SCSISetSense(   msdp,
@@ -822,7 +846,7 @@ static msg_t MassStorageUSBTransferThd(void *arg) {
     if( msdp->trigger_transfer_index != UINT32_MAX ) {
       SCSIWriteTransferPingPong(msdp, &rw_ping_pong_buffer[msdp->trigger_transfer_index]);
       msdp->trigger_transfer_index = UINT32_MAX;
-      //notify other thread
+      /*notify other thread*/
       chBSemSignal(&msdp->mass_sorage_thd_bsem);
     }
 
