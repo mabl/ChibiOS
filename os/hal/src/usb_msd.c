@@ -119,7 +119,14 @@ inline uint32_t swap_uint32( uint32_t val ) {
 /*===========================================================================*/
 
 
-
+/**
+ * @brief
+ *
+ * @param[in] usbp            pointer to the @p USBDriver object
+ * @param[in] bbdp            pointer to the @p BaseBlockDevice object, such as an SDCDriver object
+ * @param[in] msdp            pointer to the @p USBMassStorageDriver object
+ * @param[in] ms_ep_number    USB Endpoint Number to be used by the mass storage endpoint
+ */
 void msdInit(USBDriver *usbp, BaseBlockDevice *bbdp, USBMassStorageDriver *msdp, const usbep_t  ms_ep_number) {
     uint8_t i;
 
@@ -160,6 +167,12 @@ void msdInit(USBDriver *usbp, BaseBlockDevice *bbdp, USBMassStorageDriver *msdp,
     usbp->USBD_PARAM_NAME = (void *)msdp;
 }
 
+/**
+ * @brief Starts data handling threads for USB mass storage driver
+ *
+ * @param[in] msdp      pointer to the @p USBMassStorageDriver object
+ */
+
 void msdStart(USBMassStorageDriver *msdp) {
     //upon entry, USB bus should be disconnected
 
@@ -175,7 +188,7 @@ void msdStart(USBMassStorageDriver *msdp) {
 }
 
 /**
- * @brief
+ * @brief USB Event handler calback
  *
  * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] ep        USB Endpoint Number
