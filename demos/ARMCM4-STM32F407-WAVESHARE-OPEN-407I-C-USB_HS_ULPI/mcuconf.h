@@ -259,6 +259,7 @@
 #define STM32_USB_USE_OTG2                  TRUE
 #define STM32_USE_USB_OTG2_HS               TRUE
 #define STM32_USE_USB_OTG2_ULPI             TRUE
+#define STM32_USE_USB_OTG2_HS_FS            FALSE
 #define STM32_USB_OTG1_IRQ_PRIORITY         14
 #define STM32_USB_OTG2_IRQ_PRIORITY         14
 #define STM32_USB_OTG1_RX_FIFO_SIZE         512
