@@ -71,6 +71,7 @@
 *****************************************************************************
 
 *** 2.2.10 ***
+- FIX: Fixed CAN_USE_SLEEP_MODE compilation problem (bug 3606616).
 - FIX: Fixed typo in chOQGetEmptyI() macro (bug 3595910).
 - FIX: Fixed error in palWritePad() macro (bug 3586230).
 - FIX: Fixed double chSysInit() call in MSP430F1611 demo (bug 3581304).

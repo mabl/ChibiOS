@@ -138,11 +138,15 @@ CH_IRQ_HANDLER(CAN1_SCE_IRQHandler) {
   msr = CAN1->MSR;
   CAN1->MSR = CAN_MSR_ERRI | CAN_MSR_WKUI | CAN_MSR_SLAKI;
   /* Wakeup event.*/
+#if CAN_USE_SLEEP_MODE
   if (msr & CAN_MSR_WKUI) {
+    CAND1.cd_state = CAN_READY;
+    CAND1.cd_can->MCR &= ~CAN_MCR_SLEEP;
     chSysLockFromIsr();
     chEvtBroadcastI(&CAND1.cd_wakeup_event);
     chSysUnlockFromIsr();
   }
+#endif /* CAN_USE_SLEEP_MODE */
   /* Error event.*/
   if (msr & CAN_MSR_ERRI) {
     canstatus_t flags;
