@@ -9,16 +9,22 @@
             isPlatform="false"
             hidden="false">
             <description>
-                Some description.
+                ADC driver implementation for the SPC5xx eQADC unit.
             </description>
+            <categories>
+               <category
+                     id="ChibiOS-RT/SPC563Mxx">
+               </category>
+            </categories>
             <configuration>
-               <description>ciao</description>
+               <description>The eQADC driver implements six virtual ADC drivers using the six internal eQADC FIFOs.
+ADCD1...ADCD3 represent 3 levels of priority over access of the physical unit ADC0. ADCD4...ADCD6 represent 3 levels of priority over access of the physical unit ADC1.</description>
                <group
                      columns="2"
                      expanded="false"
-                     name="Global Settings"
+                     name="Static Settings"
                      style="collapsable">
-                  <description>ewwqtwegtqwe v eqrgegrqwerg</description>
+                  <description>Global settings regarding the six virtual ADC units.</description>
                   <property
                         brief="Enables the driver ADCD1 mapped on the phisical unit ADC0 accessed through the FIFO 0."
                         default="false"
@@ -180,6 +186,221 @@
                         required="true"
                         type="enum"
                         value="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+                  </property>
+               </group>
+               <group
+                     columns="2"
+                     expanded="false"
+                     name="Runtime Settings"
+                     style="collapsable">
+                  <description>
+                     Settings affecting the runtime performance.
+                  </description>
+                  <property
+                        brief="eQADC clock divider (both units) 1...65."
+                        default="5"
+                        editable="true"
+                        max="65"
+                        min="1"
+                        name="Clock Divider"
+                        required="true"
+                        type="unsigned">
+                  </property>
+                  <line></line>
+                  <property
+                        brief="Input resistors settings for channel 0."
+                        default="0"
+                        editable="true"
+                        name="Channel 0"
+                        required="true"
+                        type="enum"
+                        value="None,Pull-Up 200k,Pull-Up 100k,Pull-Up 5k,Pull-Down 200k,Pull-Down 100k,Pull-Down 5k,Both 200k,Both 100k">
+                  </property>
+                  <property
+                        brief="Input resistors settings for channel 1."
+                        default="0"
+                        editable="true"
+                        name="Channel 1"
+                        required="true"
+                        type="enum"
+                        value="None,Pull-Up 200k,Pull-Up 100k,Pull-Up 5k,Pull-Down 200k,Pull-Down 100k,Pull-Down 5k,Both 200k,Both 100k">
+                  </property>
+                  <property
+                        brief="Input resistors settings for channel 2."
+                        default="0"
+                        editable="true"
+                        name="Channel 2"
+                        required="true"
+                        type="enum"
+                        value="None,Pull-Up 200k,Pull-Up 100k,Pull-Up 5k,Pull-Down 200k,Pull-Down 100k,Pull-Down 5k,Both 200k,Both 100k">
+                  </property>
+                  <property
+                        brief="Input resistors settings for channel 3."
+                        default="0"
+                        editable="true"
+                        name="Channel 3"
+                        required="true"
+                        type="enum"
+                        value="None,Pull-Up 200k,Pull-Up 100k,Pull-Up 5k,Pull-Down 200k,Pull-Down 100k,Pull-Down 5k,Both 200k,Both 100k">
+                  </property>
+                  <property
+                        brief="Input resistors settings for channel 4."
+                        default="0"
+                        editable="true"
+                        name="Channel 4"
+                        required="true"
+                        type="enum"
+                        value="None,Pull-Up 200k,Pull-Up 100k,Pull-Up 5k,Pull-Down 200k,Pull-Down 100k,Pull-Down 5k,Both 200k,Both 100k">
+                  </property>
+                  <property
+                        brief="Input resistors settings for channel 5."
+                        default="0"
+                        editable="true"
+                        name="Channel 5"
+                        required="true"
+                        type="enum"
+                        value="None,Pull-Up 200k,Pull-Up 100k,Pull-Up 5k,Pull-Down 200k,Pull-Down 100k,Pull-Down 5k,Both 200k,Both 100k">
+                  </property>
+                  <property
+                        brief="Input resistors settings for channel 6."
+                        default="0"
+                        editable="true"
+                        name="Channel 6"
+                        required="true"
+                        type="enum"
+                        value="None,Pull-Up 200k,Pull-Up 100k,Pull-Up 5k,Pull-Down 200k,Pull-Down 100k,Pull-Down 5k,Both 200k,Both 100k">
+                  </property>
+                  <property
+                        brief="Input resistors settings for channel 7."
+                        default="0"
+                        editable="true"
+                        name="Channel 7"
+                        required="true"
+                        type="enum"
+                        value="None,Pull-Up 200k,Pull-Up 100k,Pull-Up 5k,Pull-Down 200k,Pull-Down 100k,Pull-Down 5k,Both 200k,Both 100k">
+                  </property>
+               </group>
+               <group
+                     expanded="false"
+                     name="Conversion Groups">
+                  <description>
+                     Conversion groups are objects describing a conversion process. The  required data structures and definitions are automatically generated.
+                  </description>
+                  <property
+                        brief="List of the available conversion groups."
+                        editable="true"
+                        length="0"
+                        name="Groups"
+                        required="true"
+                        type="list"
+                        value="Conversion Group Settings|ADC Driver,Conversion Group Settings|Symbolic Name">
+                     <group
+                           expanded="true"
+                           name="Conversion Group Settings"
+                           style="collapsable">
+                        <description>
+                           Settings related to the conversion group.
+                        </description>
+                        <property
+                              brief="Conversion Groups are only usable with a specific driver."
+                              default="0"
+                              editable="true"
+                              name="ADC Driver"
+                              required="true"
+                              style="combo"
+                              type="enum"
+                              value="ADCD1 (ADC0/FIFO0),ADCD2 (ADC0/FIFO1),ADCD3 (ADC0/FIFO2),ADCD4 (ADC1/FIFO3),ADCD5 (ADC1/FIFO4),ADCD6 (ADC1/FIFO5)">
+                        </property>
+                        <property
+                              brief="Name for the conversion group, it must be compatibile with C identifiers."
+                              default="group_name"
+                              editable="true"
+                              name="Symbolic Name"
+                              regex="[a-zA-Z_][a-zA-Z0-9_]*"
+                              required="true"
+                              type="string">
+                        </property>
+                        <property
+                              brief="Conversion mode for this group, it can be linear buffer or circular buffer."
+                              default="0"
+                              editable="true"
+                              name="Conversion Mode"
+                              required="true"
+                              style="combo"
+                              type="enum"
+                              value="Linear Buffer,Circular Buffer">
+                        </property>
+                        <group
+                              columns="1"
+                              expanded="false"
+                              name="Triggers"
+                              style="collapsable">
+                           <description>
+                              Trigger related settings.
+                           </description>
+                           <property
+                                 brief="Trigger mode for this conversion group."
+                                 default="0"
+                                 editable="true"
+                                 name="Mode"
+                                 required="true"
+                                 style="combo"
+                                 type="enum"
+                                 value="SW Trigger, HW Trigger">
+                           </property>
+                           <text>
+                              Note, the exact mapping of the TSEL field depends on the FIFO number, consult the reference manual in section 15.8.17 for details about the physical mappings.
+                           </text>
+                           <property
+                                 brief="Main trigger source."
+                                 default="0"
+                                 editable="true"
+                                 name="TSEL"
+                                 required="true"
+                                 type="enum"
+                                 value="ETSEL (secondary selector),eTPUx,eMIOSx,eTRIGx">
+                           </property>
+                           <text>
+                              Note, the exact mapping of the ETSEL field depends on the FIFO number, consult the reference manual in section 15.8.20 for details about the physical mappings.
+                           </text>
+                           <property
+                                 brief="Extended trigger source (0..31)."
+                                 default="0"
+                                 editable="true"
+                                 max="31"
+                                 min="0"
+                                 name="ETSEL"
+                                 required="true"
+                                 type="unsigned">
+                           </property>
+                        </group>
+                        <group
+                              columns="1"
+                              expanded="false"
+                              name="Notifications"
+                              style="collapsable">
+                           <description>
+                              The driver notifies the application using callbacks, note that callbacks are invoked from ISR context so be careful with the code you put there, efficiency is mandatory.
+If you don&apos;t need callbacks just leave the fields empty.
+                           </description>
+                           <property
+                                 brief="Name of the callback invoked on conversion middle point and conversion end."
+                                 editable="true"
+                                 name="Conversion Callback"
+                                 regex="[a-zA-Z_]*[a-zA-Z0-9_]*"
+                                 required="true"
+                                 type="string">
+                           </property>
+                           <property
+                                 brief="Name of the callback invoked on conversion error."
+                                 editable="true"
+                                 name="Error Callback"
+                                 regex="[a-zA-Z_]*[a-zA-Z0-9_]*"
+                                 required="false"
+                                 type="string">
+                           </property>
+                        </group>
+                     </group>
                   </property>
                </group>
             </configuration>
