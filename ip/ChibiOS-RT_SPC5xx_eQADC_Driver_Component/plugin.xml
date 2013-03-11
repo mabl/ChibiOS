@@ -380,15 +380,14 @@ ADCD1...ADCD3 represent 3 levels of priority over access of the physical unit AD
                               name="Notifications"
                               style="collapsable">
                            <description>
-                              The driver notifies the application using callbacks, note that callbacks are invoked from ISR context so be careful with the code you put there, efficiency is mandatory.
-If you don&apos;t need callbacks just leave the fields empty.
+                              The driver notifies the application using callbacks, note that callbacks are invoked from ISR context so be careful with the code you put there, efficiency is mandatory. Leave empty if callbacks are not needed.
                            </description>
                            <property
                                  brief="Name of the callback invoked on conversion middle point and conversion end."
                                  editable="true"
                                  name="Conversion Callback"
                                  regex="[a-zA-Z_]*[a-zA-Z0-9_]*"
-                                 required="true"
+                                 required="false"
                                  type="string">
                            </property>
                            <property
@@ -398,6 +397,69 @@ If you don&apos;t need callbacks just leave the fields empty.
                                  regex="[a-zA-Z_]*[a-zA-Z0-9_]*"
                                  required="false"
                                  type="string">
+                           </property>
+                        </group>
+                        <group
+                              columns="1"
+                              expanded="false"
+                              name="Channels"
+                              style="collapsable">
+                           <description>
+                              List of the channels composing the conversion group, each channel has its own attributes.
+                           </description>
+                           <property
+                                 brief="Sequence of the channels belonging to the conversion group."
+                                 editable="true"
+                                 length="1"
+                                 min="1"
+                                 name="Sequence"
+                                 required="true"
+                                 type="list"
+                                 value="0">
+                              <group
+                                    columns="2"
+                                    expanded="true"
+                                    name="Channel Settings"
+                                    style="collapsable">
+                                 <description>
+                                    Settings related to the channel in a sequence.
+                                 </description>
+                                 <property
+                                       brief="Identifier of the analog channel."
+                                       default="0"
+                                       editable="true"
+                                       name="Analog Channel"
+                                       required="true"
+                                       type="enum"
+                                       value="AN0,AN1,AN2,AN3,AN4,AN5,AN6,AN7,AN8,AN9,AN10,AN11,AN12,AN13,AN14,AN15,AN16,AN17,AN18,AN19,AN20,AN21,AN22,AN23,AN24,AN25,AN26,AN27,AN28,AN29,AN30,AN31,AN32,AN33,AN34,AN35,AN36,AN37,AN38,AN39,VRH,VRL,VREF25,VREF50,VREF75,BANDGAP,DAN0,DAN1,DAN2,DAN3,TEMP_SENSOR,SPARE">
+                                 </property>
+                                 <property
+                                       brief="Sample size in bits."
+                                       default="0"
+                                       editable="true"
+                                       name="Sample Width"
+                                       required="true"
+                                       type="enum"
+                                       value="12,10,8">
+                                 </property>
+                                 <property
+                                       brief="Channel sampling time in cycles."
+                                       default="0"
+                                       editable="true"
+                                       name="Sampling Time"
+                                       required="true"
+                                       type="enum"
+                                       value="2,8,64,128">
+                                 </property>
+                                 <property
+                                       brief="Selects the calibrated or uncalibrated mode for the channel."
+                                       default="true"
+                                       editable="true"
+                                       name="Calibrated"
+                                       required="true"
+                                       type="boolean">
+                                 </property>
+                              </group>
                            </property>
                         </group>
                      </group>
