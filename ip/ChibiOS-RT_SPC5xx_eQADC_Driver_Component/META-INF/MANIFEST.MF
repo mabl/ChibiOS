@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ChibiOS-RT SPC5xx eQADC Driver Component
+Bundle-SymbolicName: org.chibios.spc5.components.hal.platform.spc5xx.ip.eqadc_v1;singleton:=true
+Bundle-Version: 2.5.2.qualifier
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ com.st.tools.spc5;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: .
+Bundle-Vendor: chibios.org
