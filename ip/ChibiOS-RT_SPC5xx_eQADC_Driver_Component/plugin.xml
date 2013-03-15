@@ -293,7 +293,7 @@ ADCD1...ADCD3 represent 3 levels of priority over access of the physical unit AD
                         name="Groups"
                         required="true"
                         type="list"
-                        value="Conversion Group Settings|ADC Driver,Conversion Group Settings|Symbolic Name">
+                        value="ADC Driver,Symbolic Name">
                      <group
                            expanded="true"
                            name="Conversion Group Settings"
