@@ -23,6 +23,18 @@
    automatically.*/
 #include "components.h"
 
+#include "shellcmd.h"
+
+/*
+ * Shell configuration structure, the first field is the serial port used by
+ * the shell, the second is the array of commands accepted by the shell and
+ * defined in shellcmd.c.
+ */
+static const ShellConfig shell_cfg1 = {
+  (BaseSequentialStream *)&SD2,
+  shell_commands
+};
+
 /*
  * This is a periodic thread that does absolutely nothing except flashing
  * a LED.
@@ -45,6 +57,7 @@ static msg_t Thread1(void *arg) {
  * Application entry point.
  */
 int main(void) {
+  Thread *shelltp = NULL;
 
   /* Initialization of all the imported components in the order specified in
      the application wizard. The function is generated automatically.*/
@@ -70,8 +83,12 @@ int main(void) {
    * driver 2.
    */
   while (TRUE) {
-    if (palReadPad(GPIOA, GPIOA_BUTTON))
-      TestThread(&SD2);
-    chThdSleepMilliseconds(500);
+    if (!shelltp)
+      shelltp = shellCreate(&shell_cfg1, SHELL_WA_SIZE, NORMALPRIO);
+    else if (chThdTerminated(shelltp)) {
+      chThdRelease(shelltp);    /* Recovers memory of the previous shell.   */
+      shelltp = NULL;           /* Triggers spawning of a new shell.        */
+    }
+    chThdSleepMilliseconds(1000);
   }
 }

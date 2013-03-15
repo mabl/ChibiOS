@@ -1,5 +1,6 @@
 # List of all user C source files
-U_C_SRC     = main.c
+U_C_SRC     = ./source/shellcmd.c \
+              main.c
 
 # List of all user C++ source files
 U_CPP_SRC   =
@@ -14,7 +15,7 @@ UDEFS       =
 UADEFS      =
 
 # List all user directories here
-UINCDIR     =
+UINCDIR     = ./source
 
 # List the user directory to look for the libraries here
 ULIBDIR     =
