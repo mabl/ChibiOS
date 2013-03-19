@@ -86,6 +86,10 @@ cp ${chibios}/os/ports/GCC/PPC/SPC563Mxx/vectors.s      ./SPC563Mxx/ChibiOS-RT_S
 # SPC563Mxx HAL Platform.
 cp ${chibios}/os/hal/platforms/SPC563Mxx/*.h            ./SPC563Mxx/ChibiOS-RT_SPC563Mxx_HAL_Platform_Component/component/lib/include/
 cp ${chibios}/os/hal/platforms/SPC563Mxx/*.c            ./SPC563Mxx/ChibiOS-RT_SPC563Mxx_HAL_Platform_Component/component/lib/src/
+cp ${chibios}/os/hal/platforms/SPC5xx/EDMA_v1/*.h       ./SPC563Mxx/ChibiOS-RT_SPC563Mxx_HAL_Platform_Component/component/lib/include/
+cp ${chibios}/os/hal/platforms/SPC5xx/EDMA_v1/*.c       ./SPC563Mxx/ChibiOS-RT_SPC563Mxx_HAL_Platform_Component/component/lib/src/
+cp ${chibios}/os/hal/platforms/SPC5xx/EQADC_v1/*.h      ./SPC563Mxx/ChibiOS-RT_SPC563Mxx_HAL_Platform_Component/component/lib/include/
+cp ${chibios}/os/hal/platforms/SPC5xx/EQADC_v1/*.c      ./SPC563Mxx/ChibiOS-RT_SPC563Mxx_HAL_Platform_Component/component/lib/src/
 cp ${chibios}/os/hal/platforms/SPC5xx/ESCI_v1/*.h       ./SPC563Mxx/ChibiOS-RT_SPC563Mxx_HAL_Platform_Component/component/lib/include/
 cp ${chibios}/os/hal/platforms/SPC5xx/ESCI_v1/*.c       ./SPC563Mxx/ChibiOS-RT_SPC563Mxx_HAL_Platform_Component/component/lib/src/
 cp ${chibios}/os/hal/platforms/SPC5xx/SIU_v1/*.h        ./SPC563Mxx/ChibiOS-RT_SPC563Mxx_HAL_Platform_Component/component/lib/include/
