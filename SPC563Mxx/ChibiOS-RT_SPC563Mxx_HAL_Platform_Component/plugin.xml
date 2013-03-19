@@ -5,26 +5,30 @@
    <extension
          id="org.chibios.spc5.components.hal.platform.spc563mxx"
          name="ChibiOS-RT SPC563Mxx HAL Platform Component"
-         point="com.st.tools.spc5.extension">
+         point="com.st.tools.spc5.extension.v1">
       <component
             hidden="true"
             isPlatform="false">
             <description>
                 ChibiOS/RT SPC563Mxx low level drivice drivers files.
             </description>
-            <groups
-                  name="SPC563Mxx Settings">
+            <categories>
+               <category
+                     id="ChibiOS-RT/SPC563Mxx">
+               </category>
+            </categories>
+            <configuration>
                <description>
                   SPC563Mxx Low Level Drivers options and settings.
                </description>
                <group
                      expanded="false"
-                     name="Initialization Settings">
+                     name="Clock Settings">
                   <description>
                      Generic initialization-related settings.
                   </description>
                   <property
-                        brief="Activating this options bypasses the whole clock initialization phase"
+                        brief="Activating this options bypasses the whole clock initialization phase."
                         default="false"
                         editable="true"
                         name="Do Not Init"
@@ -32,7 +36,7 @@
                         type="boolean">
                   </property>
                   <property
-                        brief="Activating this options bypasses the FMPLL"
+                        brief="Activating this options bypasses the FMPLL."
                         default="false"
                         editable="true"
                         name="Clock Bypass"
@@ -40,94 +44,381 @@
                         type="boolean">
                   </property>
                   <property
-                        brief="Enabling this options disables all consistency checks on the clock initialization values"
+                        brief="Enabling this options disables all consistency checks on the clock initialization values."
                         default="false"
                         editable="true"
                         name="Allow Overclocking"
                         required="true"
                         type="boolean">
                   </property>
+                  <group
+                        expanded="false"
+                        name="FMPLL0 Settings">
+                     <description>
+                        FMPLL0 settings, errors in settings or invalid settings are detected at compile time.
+                     </description>
+                     <property
+                           brief="FMPLL0 Input Divider Value."
+                           default="2"
+                           editable="true"
+                           max="15"
+                           min="1"
+                           name="Prediv Value"
+                           required="true"
+                           type="unsigned">
+                     </property>
+                     <property
+                           brief="FMPLL0 Multiplier Value."
+                           default="80"
+                           editable="true"
+                           max="96"
+                           min="32"
+                           name="MFD Value"
+                           required="true"
+                           type="unsigned">
+                     </property>
+                     <property
+                           brief="FMPLL0 Output Divider Value."
+                           default="1"
+                           editable="true"
+                           name="RFD Value"
+                           required="true"
+                           type="enum"
+                           value="SPC5_RFD_DIV2,SPC5_RFD_DIV4,SPC5_RFD_DIV8,SPC5_RFD_DIV16">
+                     </property>
+                  </group>
                </group>
                <group
+                     columns="2"
                      expanded="false"
-                     name="FMPLL0 Settings">
+                     name="IRQ Priority Settings"
+                     style="collapsable">
                   <description>
-                     FMPLL0 settings, errors in settings or invalid settings are detected at compile time.
+                     IRQ priority settings, the defaults are usually acceptable.
                   </description>
+                  <line></line>
                   <property
-                        brief="FMPLL0 Input Divider Value"
-                        default="2"
+                        brief="IRQ priority to be assigned to the eQADC FIFO0 peripheral."
+                        default="11"
                         editable="true"
-                        max="15"
-                        min="1"
-                        name="Prediv Value"
-                        required="true"
-                        type="unsigned">
-                  </property>
-                  <property
-                        brief="FMPLL0 Multiplier Value"
-                        default="80"
-                        editable="true"
-                        max="96"
-                        min="32"
-                        name="MFD Value"
-                        required="true"
-                        type="unsigned">
-                  </property>
-                  <property
-                        brief="FMPLL0 Output Divider Value"
-                        default="1"
-                        editable="true"
-                        name="RFD Value"
+                        name="eQADC FIFO0"
                         required="true"
                         type="enum"
-                        value="SPC5_RFD_DIV2,SPC5_RFD_DIV4,SPC5_RFD_DIV8,SPC5_RFD_DIV16">
+                        value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+                  </property>
+                  <property
+                        brief="IRQ priority to be assigned to the eQADC FIFO1 peripheral."
+                        default="11"
+                        editable="true"
+                        name="eQADC FIFO1"
+                        required="true"
+                        type="enum"
+                        value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+                  </property>
+                  <property
+                        brief="IRQ priority to be assigned to the eQADC FIFO2 peripheral."
+                        default="11"
+                        editable="true"
+                        name="eQADC FIFO2"
+                        required="true"
+                        type="enum"
+                        value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+                  </property>
+                  <property
+                        brief="IRQ priority to be assigned to the eQADC FIFO3 peripheral."
+                        default="11"
+                        editable="true"
+                        name="eQADC FIFO3"
+                        required="true"
+                        type="enum"
+                        value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+                  </property>
+                  <property
+                        brief="IRQ priority to be assigned to the eQADC FIFO4 peripheral."
+                        default="11"
+                        editable="true"
+                        name="eQADC FIFO4"
+                        required="true"
+                        type="enum"
+                        value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+                  </property>
+                  <property
+                        brief="IRQ priority to be assigned to the eQADC FIFO5 peripheral."
+                        default="11"
+                        editable="true"
+                        name="eQADC FIFO5"
+                        required="true"
+                        type="enum"
+                        value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+                  </property>
+                  <line>
+                     line body text
+                  </line>
+                  <property
+                        brief="IRQ priority to be assigned to the eSCI0 peripheral."
+                        default="7"
+                        editable="true"
+                        name="eSCI0"
+                        required="true"
+                        type="enum"
+                        value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+                  </property>
+                  <property
+                        brief="IRQ priority to be assigned to the eSCI1 peripheral."
+                        default="7"
+                        editable="true"
+                        name="eSCI1"
+                        required="true"
+                        type="enum"
+                        value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
                   </property>
                </group>
                <group
+                     columns="2"
                      expanded="false"
-                     name="Serial Driver Settings">
+                     name="eDMA Settings"
+                     style="collapsable">
                   <description>
-                     Settings related to the Serial Driver, note that the driver must be enabled in the portable HAL configuration.
+                     DMA priority settings, the defaults are usually acceptable.
                   </description>
+                  <line></line>
                   <property
-                        brief="Enables support for eSCI0 in the Serial Driver"
-                        default="true"
+                        brief="DMA priority for eQADC FIFO 0."
+                        default="12"
                         editable="true"
-                        name="Use eSCI0"
+                        name="eQADC FIFO0"
                         required="true"
-                        type="boolean">
+                        type="enum"
+                        value="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
                   </property>
                   <property
-                        brief="Enables support for eSCI1 in the Serial Driver"
-                        default="true"
+                        brief="DMA priority for eQADC FIFO 1."
+                        default="12"
                         editable="true"
-                        name="Use eSCI1"
+                        name="eQADC FIFO1"
                         required="true"
-                        type="boolean">
+                        type="enum"
+                        value="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
                   </property>
                   <property
-                        brief="IRQ priority to be assigned to the eSCI0 peripheral"
-                        default="8"
+                        brief="DMA priority for eQADC FIFO 2."
+                        default="12"
                         editable="true"
-                        max="15"
-                        min="1"
-                        name="eSCI0 IRQ Priority"
+                        name="eQADC FIFO2"
                         required="true"
-                        type="unsigned">
+                        type="enum"
+                        value="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
                   </property>
                   <property
-                        brief="IRQ priority to be assigned to the eSCI1 peripheral"
-                        default="8"
+                        brief="DMA priority for eQADC FIFO 3."
+                        default="12"
                         editable="true"
-                        max="15"
-                        min="1"
-                        name="eSCI1 IRQ Priority"
+                        name="eQADC FIFO3"
                         required="true"
-                        type="unsigned">
+                        type="enum"
+                        value="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+                  </property>
+                  <property
+                        brief="DMA priority for eQADC FIFO 4."
+                        default="12"
+                        editable="true"
+                        name="eQADC FIFO4"
+                        required="true"
+                        type="enum"
+                        value="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+                  </property>
+                  <property
+                        brief="DMA priority for eQADC FIFO 5."
+                        default="12"
+                        editable="true"
+                        name="eQADC FIFO5"
+                        required="true"
+                        type="enum"
+                        value="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
                   </property>
                </group>
-            </groups>
+               <group
+                     columns="2"
+                     expanded="false"
+                     name="eQADC Settings"
+                     style="collapsable">
+                  <description>
+                     Settings related to the eQADC FIFOs.
+                  </description>
+                  <line></line>
+                  <text>
+                     The eQADC clock frequency must not exceed 16MHz, the divider is fed from the system clock and drives the eQADC.
+                  </text>
+                  <property
+                        brief="eQADC clock prescale value."
+                        default="3"
+                        editable="true"
+                        name="Divider"
+                        required="true"
+                        type="enum"
+                        value="2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33">
+                  </property>
+                  <line>
+                     line body text
+                  </line>
+                  <text>
+                     Select the eQADC FIFOs to be used by the ADC driver, each used FIFO increases the required memory space.
+                  </text>
+                  <property
+                        brief="Enables the use of the eEQADC FIFO 0 from the ADC driver as ADCD1."
+                        default="false"
+                        editable="true"
+                        name="FIFO0"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables the use of the eEQADC FIFO 1 from the ADC driver as ADCD2."
+                        default="false"
+                        editable="true"
+                        name="FIFO1"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables the use of the eEQADC FIFO 2 from the ADC driver as ADCD3."
+                        default="false"
+                        editable="true"
+                        name="FIFO2"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables the use of the eEQADC FIFO 3 from the ADC driver as ADCD4."
+                        default="false"
+                        editable="true"
+                        name="FIFO3"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables the use of the eEQADC FIFO 4 from the ADC driver as ADCD5."
+                        default="false"
+                        editable="true"
+                        name="FIFO4"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables the use of the eEQADC FIFO 5 from the ADC driver as ADCD6."
+                        default="false"
+                        editable="true"
+                        name="FIFO5"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <line>
+                     line body text
+                  </line>
+                  <text>
+                     The analog channels from 0 to 7 can be programmed with optional Pull Up/Down resistors.
+                  </text>
+                  <property
+                        brief="Input resistors settings for AN0."
+                        default="0"
+                        editable="true"
+                        name="AN0"
+                        required="true"
+                        type="enum"
+                        value="None,Up 200k,Up 100k,Up 5k,Down 200k,Down 100k,Down 5k,UpDown 200k,UpDown 100k">
+                  </property>
+                  <property
+                        brief="Input resistors settings for AN1."
+                        default="0"
+                        editable="true"
+                        name="AN1"
+                        required="true"
+                        type="enum"
+                        value="None,Up 200k,Up 100k,Up 5k,Down 200k,Down 100k,Down 5k,UpDown 200k,UpDown 100k">
+                  </property>
+                  <property
+                        brief="Input resistors settings for AN2."
+                        default="0"
+                        editable="true"
+                        name="AN2"
+                        required="true"
+                        type="enum"
+                        value="None,Up 200k,Up 100k,Up 5k,Down 200k,Down 100k,Down 5k,UpDown 200k,UpDown 100k">
+                  </property>
+                  <property
+                        brief="Input resistors settings for AN3."
+                        default="0"
+                        editable="true"
+                        name="AN3"
+                        required="true"
+                        type="enum"
+                        value="None,Up 200k,Up 100k,Up 5k,Down 200k,Down 100k,Down 5k,UpDown 200k,UpDown 100k">
+                  </property>
+                  <property
+                        brief="Input resistors settings for AN4."
+                        default="0"
+                        editable="true"
+                        name="AN4"
+                        required="true"
+                        type="enum"
+                        value="None,Up 200k,Up 100k,Up 5k,Down 200k,Down 100k,Down 5k,UpDown 200k,UpDown 100k">
+                  </property>
+                  <property
+                        brief="Input resistors settings for AN5."
+                        default="0"
+                        editable="true"
+                        name="AN5"
+                        required="true"
+                        type="enum"
+                        value="None,Up 200k,Up 100k,Up 5k,Down 200k,Down 100k,Down 5k,UpDown 200k,UpDown 100k">
+                  </property>
+                  <property
+                        brief="Input resistors settings for AN6."
+                        default="0"
+                        editable="true"
+                        name="AN6"
+                        required="true"
+                        type="enum"
+                        value="None,Up 200k,Up 100k,Up 5k,Down 200k,Down 100k,Down 5k,UpDown 200k,UpDown 100k">
+                  </property>
+                  <property
+                        brief="Input resistors settings for AN7."
+                        default="0"
+                        editable="true"
+                        name="AN7"
+                        required="true"
+                        type="enum"
+                        value="None,Up 200k,Up 100k,Up 5k,Down 200k,Down 100k,Down 5k,UpDown 200k,UpDown 100k">
+                  </property>
+               </group>
+               <group
+                     columns="2"
+                     expanded="false"
+                     name="eSCI Settings"
+                     style="collapsable">
+                  <description>
+                     Settings related to the eSCI units, note that the selected drivers must be enabled in the portable HAL configuration.
+                  </description>
+                  <property
+                        brief="Driver owning the eSCI0."
+                        default="0"
+                        editable="true"
+                        name="eSCI0"
+                        required="true"
+                        type="enum"
+                        value="None,Serial">
+                  </property>
+                  <property
+                        brief="Driver owning the eSCI1."
+                        default="0"
+                        editable="true"
+                        name="eSCI1"
+                        required="true"
+                        type="enum"
+                        value="None,Serial">
+                  </property>
+               </group>
+            </configuration>
             <exportedFeatures>
                <exportedFeature
                      exclusive="true"

@@ -31,12 +31,12 @@
 /*
  * HAL driver system settings.
  */
-#define SPC5_NO_INIT                        ${conf.groups.initialization_settings.do_not_init[0]?upper_case}
-#define SPC5_CLK_BYPASS                     ${conf.groups.initialization_settings.clock_bypass[0]?upper_case}
-#define SPC5_ALLOW_OVERCLOCK                ${conf.groups.initialization_settings.allow_overclocking[0]?upper_case}
-#define SPC5_CLK_PREDIV_VALUE               ${conf.groups.fmpll0_settings.prediv_value[0]}
-#define SPC5_CLK_MFD_VALUE                  ${conf.groups.fmpll0_settings.mfd_value[0]}
-#define SPC5_CLK_RFD                        ${conf.groups.fmpll0_settings.rfd_value[0]}
+#define SPC5_NO_INIT                        ${conf.instance.clock_settings.do_not_init[0]?upper_case}
+#define SPC5_CLK_BYPASS                     ${conf.instance.clock_settings.clock_bypass[0]?upper_case}
+#define SPC5_ALLOW_OVERCLOCK                ${conf.instance.clock_settings.allow_overclocking[0]?upper_case}
+#define SPC5_CLK_PREDIV_VALUE               ${conf.instance.clock_settings.fmpll0_settings.prediv_value[0]}
+#define SPC5_CLK_MFD_VALUE                  ${conf.instance.clock_settings.fmpll0_settings.mfd_value[0]}
+#define SPC5_CLK_RFD                        ${conf.instance.clock_settings.fmpll0_settings.rfd_value[0]}
 #define SPC5_FLASH_BIUCR                    (BIUCR_BANK1_TOO |              \
                                              BIUCR_MASTER4_PREFETCH |       \
                                              BIUCR_MASTER0_PREFETCH |       \
@@ -46,9 +46,41 @@
                                              BIUCR_BFEN)
 
 /*
+ * ADC driver settings.
+ */
+#define SPC5_ADC_USE_ADC0_Q0                ${conf.instance.eqadc_settings.fifo0[0]?upper_case}
+#define SPC5_ADC_USE_ADC0_Q1                ${conf.instance.eqadc_settings.fifo1[0]?upper_case}
+#define SPC5_ADC_USE_ADC0_Q2                ${conf.instance.eqadc_settings.fifo2[0]?upper_case}
+#define SPC5_ADC_USE_ADC1_Q3                ${conf.instance.eqadc_settings.fifo3[0]?upper_case}
+#define SPC5_ADC_USE_ADC1_Q4                ${conf.instance.eqadc_settings.fifo4[0]?upper_case}
+#define SPC5_ADC_USE_ADC1_Q5                ${conf.instance.eqadc_settings.fifo5[0]?upper_case}
+#define SPC5_ADC_FIFO0_DMA_PRIO             ${conf.instance.edma_settings.eqadc_fifo0[0]}
+#define SPC5_ADC_FIFO1_DMA_PRIO             ${conf.instance.edma_settings.eqadc_fifo1[0]}
+#define SPC5_ADC_FIFO2_DMA_PRIO             ${conf.instance.edma_settings.eqadc_fifo2[0]}
+#define SPC5_ADC_FIFO3_DMA_PRIO             ${conf.instance.edma_settings.eqadc_fifo3[0]}
+#define SPC5_ADC_FIFO4_DMA_PRIO             ${conf.instance.edma_settings.eqadc_fifo4[0]}
+#define SPC5_ADC_FIFO5_DMA_PRIO             ${conf.instance.edma_settings.eqadc_fifo5[0]}
+#define SPC5_ADC_FIFO0_DMA_IRQ_PRIO         ${conf.instance.irq_priority_settings.eqadc_fifo0[0]}
+#define SPC5_ADC_FIFO1_DMA_IRQ_PRIO         ${conf.instance.irq_priority_settings.eqadc_fifo1[0]}
+#define SPC5_ADC_FIFO2_DMA_IRQ_PRIO         ${conf.instance.irq_priority_settings.eqadc_fifo2[0]}
+#define SPC5_ADC_FIFO3_DMA_IRQ_PRIO         ${conf.instance.irq_priority_settings.eqadc_fifo3[0]}
+#define SPC5_ADC_FIFO4_DMA_IRQ_PRIO         ${conf.instance.irq_priority_settings.eqadc_fifo4[0]}
+#define SPC5_ADC_FIFO5_DMA_IRQ_PRIO         ${conf.instance.irq_priority_settings.eqadc_fifo5[0]}
+#define SPC5_ADC_CR_CLK_PS                  ADC_CR_CLK_PS(${conf.instance.eqadc_settings.divider[0]})
+[#assign AN0 = conf.instance.eqadc_settings.an0[0]?upper_case?replace(" ", "_")]
+[#assign AN1 = conf.instance.eqadc_settings.an1[0]?upper_case?replace(" ", "_")]
+[#assign AN2 = conf.instance.eqadc_settings.an2[0]?upper_case?replace(" ", "_")]
+[#assign AN3 = conf.instance.eqadc_settings.an3[0]?upper_case?replace(" ", "_")]
+[#assign AN4 = conf.instance.eqadc_settings.an4[0]?upper_case?replace(" ", "_")]
+[#assign AN5 = conf.instance.eqadc_settings.an5[0]?upper_case?replace(" ", "_")]
+[#assign AN6 = conf.instance.eqadc_settings.an6[0]?upper_case?replace(" ", "_")]
+[#assign AN7 = conf.instance.eqadc_settings.an7[0]?upper_case?replace(" ", "_")]
+#define SPC5_ADC_PUDCR                      {ADC_PUDCR_${AN0},ADC_PUDCR_${AN1},ADC_PUDCR_${AN2},ADC_PUDCR_${AN3},ADC_PUDCR_${AN4},ADC_PUDCR_${AN5},ADC_PUDCR_${AN6},ADC_PUDCR_${AN7}}
+
+/*
  * SERIAL driver system settings.
  */
-#define SPC5_USE_ESCIA                      ${conf.groups.serial_driver_settings.use_esci0[0]?upper_case}
-#define SPC5_USE_ESCIB                      ${conf.groups.serial_driver_settings.use_esci1[0]?upper_case}
-#define SPC5_ESCIA_PRIORITY                 ${conf.groups.serial_driver_settings.esci0_irq_priority[0]}
-#define SPC5_ESCIB_PRIORITY                 ${conf.groups.serial_driver_settings.esci1_irq_priority[0]}
+#define SPC5_USE_ESCIA                      ${(conf.instance.esci_settings.esci0[0] == "Serial")?string?upper_case}
+#define SPC5_USE_ESCIB                      ${(conf.instance.esci_settings.esci1[0] == "Serial")?string?upper_case}
+#define SPC5_ESCIA_PRIORITY                 ${conf.instance.irq_priority_settings.esci0[0]}
+#define SPC5_ESCIB_PRIORITY                 ${conf.instance.irq_priority_settings.esci1[0]}
