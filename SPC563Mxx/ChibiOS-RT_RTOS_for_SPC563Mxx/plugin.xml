@@ -18,8 +18,7 @@
                      id="ChibiOS-RT/SPC563Mxx">
                </category>
             </categories>
-            <configuration
-                  name="ChibiOS/RT Settings">
+            <configuration>
                <description>
                   This is a meta components with no settings.
                </description>

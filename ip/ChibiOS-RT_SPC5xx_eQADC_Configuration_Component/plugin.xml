@@ -6,14 +6,14 @@
          name="ChibiOS-RT SPC5xx eQADC Configuration Component"
          point="com.st.tools.spc5.extension.v1">
       <component
-            isPlatform="false"
-            hidden="false">
+            hidden="false"
+            isPlatform="false">
             <description>
                 ADC driver implementation for the SPC5xx eQADC unit.
             </description>
             <categories>
                <category
-                     id="ChibiOS-RT/SPC5xx">
+                     id="ChibiOS-RT/SPC5xx (general)">
                </category>
             </categories>
             <configuration>
