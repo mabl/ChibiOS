@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ChibiOS-RT SPC5xx eQADC Configuration Component
-Bundle-SymbolicName: org.chibios.sorg.chibios.spc5.components.hal.platform.spc5xx.ip.eqadc_v1.configuration;singleton:=true
+Bundle-SymbolicName: org.chibios.spc5.components.hal.platform.spc5xx.ip.eqadc_v1.configuration;singleton:=true
 Bundle-Version: 2.5.2.qualifier
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
