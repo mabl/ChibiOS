@@ -8,6 +8,7 @@
          point="com.st.tools.spc5.extension.v1">
       <component
             hidden="true"
+            icon="rsc/chibios.ico"
             isPlatform="false">
             <description>
                 ChibiOS/RT SPC563Mxx low level drivice drivers files.
@@ -21,6 +22,13 @@
                <description>
                   SPC563Mxx Low Level Drivers options and settings.
                </description>
+               <image
+                     align="left"
+                     file="rsc/chibios48x48.png">
+                  <text>
+                     ChibiOS/RT is GPL3-licensed free software. A special exception has been added to the GPL3 in order to allow inclusion in closed source applications, details are in the exception.txt document.
+                  </text>
+               </image>
                <group
                      expanded="false"
                      name="Clock Settings">
