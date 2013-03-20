@@ -1,22 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-<!-- All SPC5 Component extension shall have the namespace "com.st.tools.spc5"-->
    <extension
          id="org.chibios.spc5.components.kernel.port.gcc.spc560bcxx"
          name="ChibiOS-RT SPC560B/Cxx Kernel Port Component"
-         point="com.st.tools.spc5.extension">
+         point="com.st.tools.spc5.extension.v1">
       <component
             hidden="true"
+            icon="rsc/chibios.ico"
             isPlatform="false">
             <description>
                 Kernel GCC port layer for Power Architecture core on the SPC560B/Cxx.
             </description>
-            <groups
-                  name="Power Architecture Settings">
+            <categories>
+               <category
+                     id="ChibiOS-RT/SPC563BCxx">
+               </category>
+            </categories>
+            <configuration>
                <description>
                   Power Architecture GCC port options and settings.
-               </description></groups>
+               </description>
+               <image
+                     align="left"
+                     file="rsc/chibios48x48.png">
+                  <text>
+                     ChibiOS/RT is GPL3-licensed free software. A special exception has been added to the GPL3 in order to allow inclusion in closed source applications, details are in the exception.txt document.
+                  </text>
+               </image>
+            </configuration>
             <exportedFeatures>
                <exportedFeature
                      brief="Generic ChibiOS/RT port interface."
