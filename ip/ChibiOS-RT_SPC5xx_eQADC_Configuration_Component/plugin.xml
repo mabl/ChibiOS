@@ -7,6 +7,7 @@
          point="com.st.tools.spc5.extension.v1">
       <component
             hidden="false"
+            icon="rsc/chibios.ico"
             isPlatform="false">
             <description>
                 ADC driver implementation for the SPC5xx eQADC unit.
@@ -19,6 +20,13 @@
             <configuration>
                <description>The eQADC driver implements six virtual ADC drivers using the six internal eQADC FIFOs.
 ADCD1...ADCD3 represent 3 levels of priority over access of the physical unit ADC0. ADCD4...ADCD6 represent 3 levels of priority over access of the physical unit ADC1.</description>
+               <image
+                     align="left"
+                     file="rsc/chibios48x48.png">
+                  <text>
+                     ChibiOS/RT is GPL3-licensed free software. A special exception has been added to the GPL3 in order to allow inclusion in closed source applications, details are in the exception.txt document.
+                  </text>
+               </image>
                <group
                      expanded="true"
                      name="Conversion Groups">
