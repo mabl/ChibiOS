@@ -33,7 +33,7 @@
                </image>
                <group
                      columns="3"
-                     expanded="false"
+                     expanded="true"
                      name="Enabled Drivers"
                      style="collapsable">
                   <description>
