@@ -25,20 +25,20 @@
 /*
  * Board identifiers.
  */
-#define BOARD_${conf.groups.identification.board_identifier[0]}
-#define BOARD_NAME                  "${conf.groups.identification.board_name[0]}"
+#define BOARD_${conf.instance.identification.board_identifier[0]}
+#define BOARD_NAME                  "${conf.instance.identification.board_name[0]}"
 
 /*
  * Board frequencies.
  */
 #if !defined(SPC5_XOSC_CLK)
-#define SPC5_XOSC_CLK               ${conf.groups.clock_settings.xosc_clock[0]}
+#define SPC5_XOSC_CLK               ${conf.instance.clock_settings.xosc_clock[0]}
 #endif
 
 /*
  * I/O definitions.
  */
-[#list conf.groups.i_o_settings.pins_list.pin_settings as pin_settings]
+[#list conf.instance.i_o_settings.pins_list.pin_settings as pin_settings]
   [#assign macro_name = (pin_settings.pin_identification.identifier[0])?right_pad(27) /]
 #define ${macro_name} ${pin_settings.pin_identification.bit[0]}
 [/#list]
