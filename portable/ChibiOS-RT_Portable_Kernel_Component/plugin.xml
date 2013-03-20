@@ -5,23 +5,32 @@
    <extension
          id="org.chibios.spc5.components.kernel"
          name="ChibiOS/RT Portable Kernel Component"
-         point="com.st.tools.spc5.extension">
+         point="com.st.tools.spc5.extension.v1">
       <component
             headerName="ch.h"
             hidden="true"
             initFunction="chSysInit"
+            icon="rsc/chibios.ico"
             isPlatform="false">
             <description>
                 ChibiOS/RT portable kernel files.
             </description>
-            <groups
-                  name="Kernel Settings">
+            <configuration>
                <description>
                   Portable Kernel options and settings.
                </description>
+               <image
+                     align="left"
+                     file="rsc/chibios48x48.png">
+                  <text>
+                     ChibiOS/RT is GPL3-licensed free software. A special exception has been added to the GPL3 in order to allow inclusion in closed source applications, details are in the exception.txt document.
+                  </text>
+               </image>
                <group
+                     columns="1"
                      expanded="false"
-                     name="Kernel Options">
+                     name="Kernel Options"
+                     style="collapsable">
                   <description>
                      Miscellaneous kernel parameters.
                   </description>
@@ -59,8 +68,10 @@
                   </property>
                </group>
                <group
+                     columns="1"
                      expanded="false"
-                     name="Performance Options">
+                     name="Performance Options"
+                     style="collapsable">
                   <description>
                      Options regarding performance.
                   </description>
@@ -74,8 +85,10 @@
                   </property>
                </group>
                <group
+                     columns="1"
                      expanded="false"
-                     name="Subsystem Options">
+                     name="Subsystem Options"
+                     style="collapsable">
                   <description>
                      Options for enabling or disabling the various subsystems.
                   </description>
@@ -241,8 +254,10 @@
                   </property>
                </group>
                <group
+                     columns="1"
                      expanded="false"
-                     name="Debug Options">
+                     name="Debug Options"
+                     style="collapsable">
                   <description>
                      Debug-related options.
                   </description>
@@ -304,8 +319,10 @@
                   </property>
                </group>
                <group
+                     columns="1"
                      expanded="false"
-                     name="Hooks">
+                     name="Hooks"
+                     style="collapsable">
                   <description>
                      The kernel functionality can be extended by using the hooks mechanisms. Hooks allow to insert user-defined code in specific kernel code paths. Note that hook code is inserted into a macro definition so lines must be terminated by a \.
                   </description>
@@ -359,7 +376,7 @@
                         type="formatted">
                   </property>
                </group>
-           </groups>
+           </configuration>
             <exportedFeatures>
                <exportedFeature
                      brief="ChibiOS/RT kernel API interface"
