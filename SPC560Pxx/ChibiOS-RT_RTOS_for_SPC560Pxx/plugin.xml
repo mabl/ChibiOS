@@ -4,20 +4,32 @@
    <extension
          id="org.chibios.spc5.components.rtos.spc560pxx"
          name="ChibiOS/RT free embedded RTOS for SPC560Pxx Component"
-         point="com.st.tools.spc5.extension">
+         point="com.st.tools.spc5.extension.v1">
       <component
             headerName="ch.h,hal.h"
+            icon="rsc/chibios.ico"
             initFunction="halInit,chSysInit"
             isPlatform="false">
             <description>
                 This is a meta component that depends on all components required to create a ChibiOS/RT environment for the STMicroelectronics SPC560Pxx automotive microcontrollers family.
             </description>
-            <groups
-                  name="ChibiOS/RT Settings">
+            <categories>
+               <category
+                     id="ChibiOS-RT/SPC560Pxx">
+               </category>
+            </categories>
+            <configuration>
                <description>
                   This is a meta components with no settings.
                </description>
-            </groups>
+               <image
+                     align="left"
+                     file="rsc/chibios48x48.png">
+                  <text>
+                     ChibiOS/RT is GPL3-licensed free software. A special exception has been added to the GPL3 in order to allow inclusion in closed source applications, details are in the exception.txt document.
+                  </text>
+               </image>
+            </configuration>
             <requiredFeatures>
                <requiredFeature
                      id="com.st.tools.spc5.features.build.gccenv">
