@@ -5,23 +5,37 @@
    <extension
          id="org.chibios.spc5.components.hal"
          name="ChibiOS-RT Portable HAL Component"
-         point="com.st.tools.spc5.extension">
+         point="com.st.tools.spc5.extension.v1">
       <component
             headerName="hal.h"
             hidden="true"
+            icon="rsc/chibios.ico"
             initFunction="halInit"
             isPlatform="false">
             <description>
                 ChibiOS/RT portable HAL files.
             </description>
-            <groups
-                  name="HAL Settings">
+            <categories>
+               <category
+                     id="ChibiOS-RT/Portable Components">
+               </category>
+            </categories>
+            <configuration>
                <description>
                   Portable HAL options and settings. Note that low level system settings are not performed here but in the HAL Platform Component for your platform.
                </description>
+               <image
+                     align="left"
+                     file="rsc/chibios48x48.png">
+                  <text>
+                     ChibiOS/RT is GPL3-licensed free software. A special exception has been added to the GPL3 in order to allow inclusion in closed source applications, details are in the exception.txt document.
+                  </text>
+               </image>
                <group
+                     columns="3"
                      expanded="false"
-                     name="Enabled Drivers">
+                     name="Enabled Drivers"
+                     style="collapsable">
                   <description>
                      Select which drivers are needed in your application. Disabled drivers take no system resource.
                   </description>
@@ -32,6 +46,9 @@
                         name="TM"
                         required="true"
                         type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.hal.counter">
+                     </override>
                   </property>
                   <property
                         brief="This options globally enables/disables the PAL driver."
@@ -40,6 +57,8 @@
                         name="PAL"
                         required="true"
                         type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.pal"></override>
                   </property>
                   <property
                         brief="This options globally enables/disables the ADC driver."
@@ -48,6 +67,8 @@
                         name="ADC"
                         required="true"
                         type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.adc"></override>
                   </property>
                   <property
                         brief="This options globally enables/disables the CAN driver."
@@ -56,6 +77,8 @@
                         name="CAN"
                         required="true"
                         type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.can"></override>
                   </property>
                   <property
                         brief="This options globally enables/disables the EXT driver."
@@ -64,6 +87,8 @@
                         name="EXT"
                         required="true"
                         type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.ext"></override>
                   </property>
                   <property
                         brief="This options globally enables/disables the GPT driver."
@@ -72,6 +97,8 @@
                         name="GPT"
                         required="true"
                         type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.gpt"></override>
                   </property>
                   <property
                         brief="This options globally enables/disables the I2C driver."
@@ -80,6 +107,8 @@
                         name="I2C"
                         required="true"
                         type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.i2c"></override>
                   </property>
                   <property
                         brief="This options globally enables/disables the ICU driver."
@@ -88,6 +117,8 @@
                         name="ICU"
                         required="true"
                         type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.icu"></override>
                   </property>
                   <property
                         brief="This options globally enables/disables the MAC driver."
@@ -96,6 +127,8 @@
                         name="MAC"
                         required="true"
                         type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.mac"></override>
                   </property>
                   <property
                         brief="This options globally enables/disables the MMC over SPI driver."
@@ -104,6 +137,8 @@
                         name="MMC SPI"
                         required="true"
                         type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.mmc_spi"></override>
                   </property>
                   <property
                         brief="This options globally enables/disables the PWM driver."
@@ -112,6 +147,8 @@
                         name="PWM"
                         required="true"
                         type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.pwm"></override>
                   </property>
                   <property
                         brief="This options globally enables/disables the RTC driver."
@@ -120,6 +157,8 @@
                         name="RTC"
                         required="true"
                         type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.rtc"></override>
                   </property>
                   <property
                         brief="This options globally enables/disables the SDC driver."
@@ -128,6 +167,8 @@
                         name="SDC"
                         required="true"
                         type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.sdc"></override>
                   </property>
                   <property
                         brief="This options globally enables/disables the Serial driver."
@@ -136,6 +177,8 @@
                         name="Serial"
                         required="true"
                         type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.serial"></override>
                   </property>
                   <property
                         brief="This options globally enables/disables the SPI driver."
@@ -144,6 +187,8 @@
                         name="SPI"
                         required="true"
                         type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.spi"></override>
                   </property>
                   <property
                         brief="This options globally enables/disables the Serial over USB driver."
@@ -152,6 +197,8 @@
                         name="Serial USB"
                         required="true"
                         type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.serial_usb"></override>
                   </property>
                   <property
                         brief="This options globally enables/disables the UART driver."
@@ -160,6 +207,8 @@
                         name="UART"
                         required="true"
                         type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.uart"></override>
                   </property>
                   <property
                         brief="This options globally enables/disables the USB driver."
@@ -168,11 +217,15 @@
                         name="USB"
                         required="true"
                         type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.usb"></override>
                   </property>
                </group>
                <group
+                     columns="1"
                      expanded="false"
-                     name="Serial Driver Settings">
+                     name="Serial Driver Settings"
+                     style="collapsable">
                   <description>
                      Settings related to the Serial driver.
                   </description>
@@ -196,8 +249,10 @@
                   </property>
                </group>
                <group
+                     columns="1"
                      expanded="false"
-                     name="ADC Driver Settings">
+                     name="ADC Driver Settings"
+                     style="collapsable">
                   <description>
                      Settings related to the ADC driver.
                   </description>
@@ -219,8 +274,10 @@
                   </property>
                </group>
                <group
+                     columns="1"
                      expanded="false"
-                     name="CAN Driver Settings">
+                     name="CAN Driver Settings"
+                     style="collapsable">
                   <description>
                      Settings related to the CAN driver.
                   </description>
@@ -234,8 +291,10 @@
                   </property>
                </group>
                <group
+                     columns="1"
                      expanded="false"
-                     name="I2C Driver Settings">
+                     name="I2C Driver Settings"
+                     style="collapsable">
                   <description>
                      Settings related to the I2C driver.
                   </description>
@@ -249,8 +308,10 @@
                   </property>
                </group>
                <group
+                     columns="1"
                      expanded="false"
-                     name="MAC Driver Settings">
+                     name="MAC Driver Settings"
+                     style="collapsable">
                   <description>
                      Settings related to the MAC driver.
                   </description>
@@ -264,8 +325,10 @@
                   </property>
                </group>
                <group
+                     columns="1"
                      expanded="false"
-                     name="MMC SPI Driver Settings">
+                     name="MMC SPI Driver Settings"
+                     style="collapsable">
                   <description>
                      Settings related to the MMC over SPI driver.
                   </description>
@@ -279,8 +342,10 @@
                   </property>
                </group>
                <group
+                     columns="1"
                      expanded="false"
-                     name="SDC Driver Settings">
+                     name="SDC Driver Settings"
+                     style="collapsable">
                   <description>
                      Settings related to the SDC driver.
                   </description>
@@ -303,8 +368,10 @@
                   </property>
                </group>
                <group
+                     columns="1"
                      expanded="false"
-                     name="SPI Driver Settings">
+                     name="SPI Driver Settings"
+                     style="collapsable">
                   <description>
                      Settings related to the SPI driver.
                   </description>
@@ -324,7 +391,8 @@
                         required="true"
                         type="boolean">
                   </property>
-               </group></groups>
+               </group>
+            </configuration>
             <requiredFeatures>
                <requiredFeature
                      id="org.chibios.spc5.features.kernel">

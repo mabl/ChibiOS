@@ -436,6 +436,22 @@
                      exclusive="true"
                      id="org.chibios.spc5.features.hal.platform">
                </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.adc">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.hal">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.pal">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.serial">
+               </exportedFeature>
             </exportedFeatures>
             <requiredFeatures>
                <requiredFeature

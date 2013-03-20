@@ -15,6 +15,11 @@
             <description>
                 ChibiOS/RT portable kernel files.
             </description>
+            <categories>
+               <category
+                     id="ChibiOS-RT/Portable Components">
+               </category>
+            </categories>
             <configuration>
                <description>
                   Portable Kernel options and settings.
