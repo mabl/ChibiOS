@@ -5,18 +5,30 @@
    <extension
          id="org.chibios.spc5.components.board.spc563mxx"
          name="ChibiOS-RT SPC563Mxx Board Component"
-         point="com.st.tools.spc5.extension">
+         point="com.st.tools.spc5.extension.v1">
       <component
             hidden="true"
+            icon="rsc/chibios.ico"
             isPlatform="false">
             <description>
                 ChibiOS/RT SPC563Mxx board description files.
             </description>
-            <groups
-                  name="Board Settings">
+            <categories>
+               <category
+                     id="ChibiOS-RT/SPC563Mxx">
+               </category>
+            </categories>
+            <configuration>
                <description>
                   Board options and settings.
                </description>
+               <image
+                     align="left"
+                     file="rsc/chibios48x48.png">
+                  <text>
+                     ChibiOS/RT is GPL3-licensed free software. A special exception has been added to the GPL3 in order to allow inclusion in closed source applications, details are in the exception.txt document.
+                  </text>
+               </image>
                <group
                      name="Identification">
                   <description>
@@ -68,8 +80,8 @@
                         name="Pins List"
                         required="true"
                         type="list"
-                        value="Pin Identification|Port,Pin Identification|Bit,Pin Identification|Identifier,Settings|Pin Mode,Settings|Latched State">
-                     <groups
+                        value="Pin Identification|Port,Pin Identification|Bit,Pin Identification|Identifier,Settings|Pin Mode">
+                     <group
                            name="Pin Settings">
                         <description>
                            Pin initialization data and identification. Note, setting of alternate function requires knowledge of the HW details, please consult the table 7 in section 3 &quot;Pin Muxing&quot; of the Reference Manual.
@@ -131,7 +143,7 @@
                                  value="LOW,HIGH">
                            </property>
                         </group>
-                     </groups>
+                     </group>
                   </property>
                </group>
                <group
@@ -160,7 +172,8 @@
                         required="false"
                         type="formatted">
                   </property>
-               </group></groups>
+               </group>
+             </configuration>
             <exportedFeatures>
                <exportedFeature
                      brief="Board definitions interface."
