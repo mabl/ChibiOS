@@ -135,7 +135,7 @@
         </spi_driver_settings>
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.hal.platform.spc563mxx">
-        <clock_settings>
+        <initialization_settings>
           <do_not_init>false</do_not_init>
           <clock_bypass>false</clock_bypass>
           <allow_overclocking>false</allow_overclocking>
@@ -144,7 +144,7 @@
             <mfd_value>80</mfd_value>
             <rfd_value index="1">SPC5_RFD_DIV4</rfd_value>
           </fmpll0_settings>
-        </clock_settings>
+        </initialization_settings>
         <irq_priority_settings>
           <eqadc_fifo0 index="11">12</eqadc_fifo0>
           <eqadc_fifo1 index="11">12</eqadc_fifo1>

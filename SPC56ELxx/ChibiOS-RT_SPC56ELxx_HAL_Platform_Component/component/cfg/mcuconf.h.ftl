@@ -31,25 +31,25 @@
 /*
  * HAL driver system settings.
  */
-#define SPC5_NO_INIT                        ${conf.groups.initialization_settings.do_not_init[0]?upper_case}
-#define SPC5_ALLOW_OVERCLOCK                ${conf.groups.initialization_settings.allow_overclocking[0]?upper_case}
-#define SPC5_DISABLE_WATCHDOG               ${conf.groups.initialization_settings.disable_watchdog[0]?upper_case}
-#define SPC5_FMPLL0_CLK_SRC                 SPC5_FMPLL_SRC_${conf.groups.fmpll0_settings.clock_source[0]}
-#define SPC5_FMPLL0_IDF_VALUE               ${conf.groups.fmpll0_settings.idf_value[0]}
-#define SPC5_FMPLL0_NDIV_VALUE              ${conf.groups.fmpll0_settings.ndiv_value[0]}
-#define SPC5_FMPLL0_ODF                     ${conf.groups.fmpll0_settings.odf_value[0]}
-#define SPC5_FMPLL1_CLK_SRC                 SPC5_FMPLL_SRC_${conf.groups.fmpll1_settings.clock_source[0]}
-#define SPC5_FMPLL1_IDF_VALUE               ${conf.groups.fmpll1_settings.idf_value[0]}
-#define SPC5_FMPLL1_NDIV_VALUE              ${conf.groups.fmpll1_settings.ndiv_value[0]}
-#define SPC5_FMPLL1_ODF                     ${conf.groups.fmpll1_settings.odf_value[0]}
-#define SPC5_SYSCLK_DIVIDER_VALUE           ${conf.groups.clocks.system_clock_divider[0]}
-#define SPC5_AUX0CLK_SRC                    SPC5_CGM_SS_${conf.groups.clocks.aux0_clock_source[0]}
-#define SPC5_MCONTROL_DIVIDER_VALUE         ${conf.groups.clocks.motor_control_clock_divider[0]}
-#define SPC5_SWG_DIVIDER_VALUE              ${conf.groups.clocks.swg_clock_divider[0]}
-#define SPC5_AUX1CLK_SRC                    SPC5_CGM_SS_${conf.groups.clocks.aux1_clock_source[0]}
-#define SPC5_FLEXRAY_DIVIDER_VALUE          ${conf.groups.clocks.flexray_clock_divider[0]}
-#define SPC5_AUX2CLK_SRC                    SPC5_CGM_SS_${conf.groups.clocks.aux2_clock_source[0]}
-#define SPC5_FLEXCAN_DIVIDER_VALUE          ${conf.groups.clocks.flexcan_clock_divider[0]}
+#define SPC5_NO_INIT                        ${conf.instance.initialization_settings.do_not_init[0]?upper_case}
+#define SPC5_ALLOW_OVERCLOCK                ${conf.instance.initialization_settings.allow_overclocking[0]?upper_case}
+#define SPC5_DISABLE_WATCHDOG               ${conf.instance.initialization_settings.disable_watchdog[0]?upper_case}
+#define SPC5_FMPLL0_CLK_SRC                 SPC5_FMPLL_SRC_${conf.instance.initialization_settings.fmpll0_settings.clock_source[0]}
+#define SPC5_FMPLL0_IDF_VALUE               ${conf.instance.initialization_settings.fmpll0_settings.idf_value[0]}
+#define SPC5_FMPLL0_NDIV_VALUE              ${conf.instance.initialization_settings.fmpll0_settings.ndiv_value[0]}
+#define SPC5_FMPLL0_ODF                     ${conf.instance.initialization_settings.fmpll0_settings.odf_value[0]}
+#define SPC5_FMPLL1_CLK_SRC                 SPC5_FMPLL_SRC_${conf.instance.initialization_settings.fmpll1_settings.clock_source[0]}
+#define SPC5_FMPLL1_IDF_VALUE               ${conf.instance.initialization_settings.fmpll1_settings.idf_value[0]}
+#define SPC5_FMPLL1_NDIV_VALUE              ${conf.instance.initialization_settings.fmpll1_settings.ndiv_value[0]}
+#define SPC5_FMPLL1_ODF                     ${conf.instance.initialization_settings.fmpll1_settings.odf_value[0]}
+#define SPC5_SYSCLK_DIVIDER_VALUE           ${conf.instance.initialization_settings.clocks.system_clock_divider[0]}
+#define SPC5_AUX0CLK_SRC                    SPC5_CGM_SS_${conf.instance.initialization_settings.clocks.aux0_clock_source[0]}
+#define SPC5_MCONTROL_DIVIDER_VALUE         ${conf.instance.initialization_settings.clocks.motor_control_clock_divider[0]}
+#define SPC5_SWG_DIVIDER_VALUE              ${conf.instance.initialization_settings.clocks.swg_clock_divider[0]}
+#define SPC5_AUX1CLK_SRC                    SPC5_CGM_SS_${conf.instance.initialization_settings.clocks.aux1_clock_source[0]}
+#define SPC5_FLEXRAY_DIVIDER_VALUE          ${conf.instance.initialization_settings.clocks.flexray_clock_divider[0]}
+#define SPC5_AUX2CLK_SRC                    SPC5_CGM_SS_${conf.instance.initialization_settings.clocks.aux2_clock_source[0]}
+#define SPC5_FLEXCAN_DIVIDER_VALUE          ${conf.instance.initialization_settings.clocks.flexcan_clock_divider[0]}
 #define SPC5_ME_ME_BITS                     (SPC5_ME_ME_RUN1 |              \
                                              SPC5_ME_ME_RUN2 |              \
                                              SPC5_ME_ME_RUN3 |              \
@@ -133,15 +133,15 @@
                                              SPC5_ME_LP_PC_STOP0)
 #define SPC5_ME_LP_PC7_BITS                 (SPC5_ME_LP_PC_HALT0 |          \
                                              SPC5_ME_LP_PC_STOP0)
-#define SPC5_CLOCK_FAILURE_HOOK()           ${conf.groups.clocks.clock_failure_hook[0]}
+#define SPC5_CLOCK_FAILURE_HOOK()           ${conf.instance.initialization_settings.clocks.clock_failure_hook[0]}
 
 /*
  * SERIAL driver system settings.
  */
-#define SPC5_SERIAL_USE_LINFLEX0            ${conf.groups.serial_driver_settings.use_linflex0[0]?upper_case}
-#define SPC5_SERIAL_USE_LINFLEX1            ${conf.groups.serial_driver_settings.use_linflex1[0]?upper_case}
-#define SPC5_SERIAL_LINFLEX0_PRIORITY       ${conf.groups.serial_driver_settings.linflex0_irq_priority[0]}
-#define SPC5_SERIAL_LINFLEX1_PRIORITY       ${conf.groups.serial_driver_settings.linflex1_irq_priority[0]}
+#define SPC5_SERIAL_USE_LINFLEX0            ${(conf.instance.linflex_settings.linflex0[0] == "Serial")?string?upper_case}
+#define SPC5_SERIAL_USE_LINFLEX1            ${(conf.instance.linflex_settings.linflex1[0] == "Serial")?string?upper_case}
+#define SPC5_SERIAL_LINFLEX0_PRIORITY       ${conf.instance.irq_priority_settings.linflex0[0]}
+#define SPC5_SERIAL_LINFLEX1_PRIORITY       ${conf.instance.irq_priority_settings.linflex1[0]}
 #define SPC5_SERIAL_LINFLEX0_START_PCTL     (SPC5_ME_PCTL_RUN(1) |          \
                                              SPC5_ME_PCTL_LP(2))
 #define SPC5_SERIAL_LINFLEX0_STOP_PCTL      (SPC5_ME_PCTL_RUN(0) |          \

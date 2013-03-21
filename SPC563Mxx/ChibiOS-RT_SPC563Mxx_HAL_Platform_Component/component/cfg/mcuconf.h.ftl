@@ -31,12 +31,12 @@
 /*
  * HAL driver system settings.
  */
-#define SPC5_NO_INIT                        ${conf.instance.clock_settings.do_not_init[0]?upper_case}
-#define SPC5_CLK_BYPASS                     ${conf.instance.clock_settings.clock_bypass[0]?upper_case}
-#define SPC5_ALLOW_OVERCLOCK                ${conf.instance.clock_settings.allow_overclocking[0]?upper_case}
-#define SPC5_CLK_PREDIV_VALUE               ${conf.instance.clock_settings.fmpll0_settings.prediv_value[0]}
-#define SPC5_CLK_MFD_VALUE                  ${conf.instance.clock_settings.fmpll0_settings.mfd_value[0]}
-#define SPC5_CLK_RFD                        ${conf.instance.clock_settings.fmpll0_settings.rfd_value[0]}
+#define SPC5_NO_INIT                        ${conf.instance.initialization_settings.do_not_init[0]?upper_case}
+#define SPC5_CLK_BYPASS                     ${conf.instance.initialization_settings.clock_bypass[0]?upper_case}
+#define SPC5_ALLOW_OVERCLOCK                ${conf.instance.initialization_settings.allow_overclocking[0]?upper_case}
+#define SPC5_CLK_PREDIV_VALUE               ${conf.instance.initialization_settings.fmpll0_settings.prediv_value[0]}
+#define SPC5_CLK_MFD_VALUE                  ${conf.instance.initialization_settings.fmpll0_settings.mfd_value[0]}
+#define SPC5_CLK_RFD                        ${conf.instance.initialization_settings.fmpll0_settings.rfd_value[0]}
 #define SPC5_FLASH_BIUCR                    (BIUCR_BANK1_TOO |              \
                                              BIUCR_MASTER4_PREFETCH |       \
                                              BIUCR_MASTER0_PREFETCH |       \

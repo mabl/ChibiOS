@@ -21,7 +21,7 @@
 #if HAL_USE_PAL || defined(__DOXYGEN__)
 /* Initial setup of all defined pads, the list is terminated by a {0, 0, 0}.*/
 static const spc_siu_init_t spc_siu_init[] = {
-[#list conf.groups.i_o_settings.pins_list.pin_settings as pin_settings]
+[#list conf.instance.i_o_settings.pins_list.pin_settings as pin_settings]
   [#assign pcrstr = ("PCR(" + pin_settings.pin_identification.port[0] +
                      ", "   + pin_settings.pin_identification.identifier[0] +
                      "),")?right_pad(24) /]
@@ -34,7 +34,7 @@ static const spc_siu_init_t spc_siu_init[] = {
 
 /* Initialization array for the PSMI registers.*/
 static const uint8_t spc_padsels_init[SPC5_SIUL_NUM_PADSELS] = {
-[#list conf.groups.i_o_settings.alternate_inputs.psmi_register_settings as psmi]
+[#list conf.instance.i_o_settings.alternate_inputs.psmi_register_settings as psmi]
   [#assign padsel0 = (psmi.padsel_fields.padsel0[0] + ",")?right_pad(5) /]
   [#assign padsel1 = (psmi.padsel_fields.padsel1[0] + ",")?right_pad(5) /]
   [#assign padsel2 = (psmi.padsel_fields.padsel2[0] + ",")?right_pad(5) /]
@@ -48,7 +48,7 @@ static const uint8_t spc_padsels_init[SPC5_SIUL_NUM_PADSELS] = {
  */
 const PALConfig pal_default_config =
 {
-  PAL_${conf.groups.i_o_settings.unused_pins_mode[0]},
+  PAL_${conf.instance.i_o_settings.unused_pins_mode[0]},
   spc_siu_init,
   spc_padsels_init
 };
@@ -62,19 +62,19 @@ const PALConfig pal_default_config =
 void __early_init(void) {
 
   spc_early_init();
-[#if conf.groups.initialization_code.early_initialization_code[0]?trim != ""]
+[#if conf.instance.initialization_code.early_initialization_code[0]?trim != ""]
 
-${conf.groups.initialization_code.early_initialization_code[0]}
+${conf.instance.initialization_code.early_initialization_code[0]}
 [/#if]
 }
 
-[#if conf.groups.initialization_code.late_initialization_code[0]?trim != ""]
+[#if conf.instance.initialization_code.late_initialization_code[0]?trim != ""]
 /*
  * Late initialization code.
  */
 void __late_init(void) {
 
-${conf.groups.initialization_code.late_initialization_code[0]}
+${conf.instance.initialization_code.late_initialization_code[0]}
 }
 [/#if]
 
@@ -82,8 +82,8 @@ ${conf.groups.initialization_code.late_initialization_code[0]}
  * Board-specific initialization code.
  */
 void boardInit(void) {
-[#if conf.groups.initialization_code.board_initialization_code[0]?trim != ""]
+[#if conf.instance.initialization_code.board_initialization_code[0]?trim != ""]
 
-${conf.groups.initialization_code.board_initialization_code[0]}
+${conf.instance.initialization_code.board_initialization_code[0]}
 [/#if]
 }

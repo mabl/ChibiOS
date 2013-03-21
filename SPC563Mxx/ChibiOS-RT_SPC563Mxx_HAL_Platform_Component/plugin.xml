@@ -31,7 +31,7 @@
                </image>
                <group
                      expanded="false"
-                     name="Clock Settings">
+                     name="Initialization Settings">
                   <description>
                      Generic initialization-related settings.
                   </description>
@@ -61,7 +61,8 @@
                   </property>
                   <group
                         expanded="false"
-                        name="FMPLL0 Settings">
+                        name="FMPLL0 Settings"
+                        style="collapsable">
                      <description>
                         FMPLL0 settings, errors in settings or invalid settings are detected at compile time.
                      </description>
