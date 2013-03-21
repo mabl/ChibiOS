@@ -3,13 +3,18 @@
 <plugin>
     <extension
          id="org.chibios.spc5.components.platform.stm32f4xx"
-         name="ChibiOS/RT STM32F4xx Platform Component"
+         name="STM32F4xx Platform Component"
          point="com.st.tools.spc5.extension.v1">
         <component
             isPlatform="true">
             <description>
                 Startup files and linker scripts for STM32F4xx.
             </description>
+            <categories>
+               <category
+                     id="ARM Cortex-Mx">
+               </category>
+            </categories>
             <configuration>
                 <description>
                   STM32F4xx platform options and settings.
