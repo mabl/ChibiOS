@@ -159,4 +159,4 @@ else
   DDEFS += -DCORTEX_USE_FPU=FALSE
 endif
 
-include C:/SPC5Studio/eclipse/plugins/org.chibios.spc5.components.platform.stm32f4xx_2.5.2.201302201859/component/lib/rsc/rules.mk
+include C:/ChibiStudio/workspace/SPC5-ChibiOS/STM32F4xx/ChibiOS-RT_STM32F4xx_Platform_Component/component/lib/rsc/rules.mk

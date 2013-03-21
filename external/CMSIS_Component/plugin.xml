@@ -3,11 +3,11 @@
 <plugin>
    <extension
          id="org.chibios.spc5.components.external.cmsis"
-            icon="rsc/chibios.ico"
          name="CMSIS Component"
          point="com.st.tools.spc5.extension.v1">
       <component
             hidden="true"
+            icon="rsc/arm.ico"
             isPlatform="false">
             <description>
                 CMSIS files.
@@ -23,9 +23,9 @@
                </description>
                <image
                      align="left"
-                     file="rsc/chibios48x48.png">
+                     file="rsc/arm.ico">
                   <text>
-                     ChibiOS/RT is GPL3-licensed free software. A special exception has been added to the GPL3 in order to allow inclusion in closed source applications, details are in the exception.txt document.
+                     Copyright (C) 2009-2012 ARM Limited. All rights reserved. ARM Limited (ARM) is supplying this software for use with Cortex-M processor based microcontrollers. This file can be freely distributed within development tools that are supporting such ARM based processors.
                   </text>
                </image>
             </configuration>

@@ -1,7 +1,8 @@
 [#ftl]
 [@pp.dropOutputFile /]
 [@pp.changeOutputFile name="component.mak" /]
-LIB_C_SRC       += ${global.component_path}/lib/src/hal_lld.c \
+LIB_C_SRC       += ${global.component_path}/lib/src/spc5_edma.c.c \
+                   ${global.component_path}/lib/src/hal_lld.c \
 [#if global.instances["org.chibios.spc5.components.hal"].enabled_drivers.adc[0]?lower_case == "true"]
                    ${global.component_path}/lib/src/adc_lld.c \
 [/#if]

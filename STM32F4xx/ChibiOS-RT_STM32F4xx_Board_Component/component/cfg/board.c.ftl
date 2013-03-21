@@ -61,19 +61,19 @@ const PALConfig pal_default_config =
 void __early_init(void) {
 
   stm32_clock_init();
-[#if conf.groups.initialization_code.early_initialization_code[0]?trim != ""]
+[#if conf.instance.initialization_code.early_initialization_code[0]?trim != ""]
 
-${conf.groups.initialization_code.early_initialization_code[0]}
+${conf.instance.initialization_code.early_initialization_code[0]}
 [/#if]
 }
 
-[#if conf.groups.initialization_code.late_initialization_code[0]?trim != ""]
+[#if conf.instance.initialization_code.late_initialization_code[0]?trim != ""]
 /*
  * Late initialization code.
  */
 void __late_init(void) {
 
-${conf.groups.initialization_code.late_initialization_code[0]}
+${conf.instance.initialization_code.late_initialization_code[0]}
 }
 
 [/#if]
@@ -81,12 +81,12 @@ ${conf.groups.initialization_code.late_initialization_code[0]}
  * @brief   Board-specific initialization code.
  */
 void boardInit(void) {
-[#if conf.groups.initialization_code.board_initialization_code[0]?trim != ""]
+[#if conf.instance.initialization_code.board_initialization_code[0]?trim != ""]
 
-${conf.groups.initialization_code.board_initialization_code[0]}
+${conf.instance.initialization_code.board_initialization_code[0]}
 [/#if]
 }
 
-[#if conf.groups.initialization_code.additional_code[0]?trim != ""]
-${conf.groups.initialization_code.additional_code[0]}
+[#if conf.instance.initialization_code.additional_code[0]?trim != ""]
+${conf.instance.initialization_code.additional_code[0]}
 [/#if]

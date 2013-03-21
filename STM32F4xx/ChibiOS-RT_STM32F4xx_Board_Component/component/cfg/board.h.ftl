@@ -35,36 +35,36 @@
 /*
  * Board identifier.
  */
-#define BOARD_${conf.groups.identification.board_identifier[0]}
-#define BOARD_NAME                  "${conf.groups.identification.board_name[0]}"
+#define BOARD_${conf.instance.identification.board_identifier[0]}
+#define BOARD_NAME                  "${conf.instance.identification.board_name[0]}"
 
-[#if conf.groups.phy_settings.address[0]?string?trim?lower_case != "none"]
+[#if conf.instance.phy_settings.address[0]?string?trim?lower_case != "none"]
 /*
  * Ethernet PHY type.
  */
-#define BOARD_PHY_ID                ${conf.groups.phy_settings.id[0]}
-[#if conf.groups.phy_settings.mode[0]?string?trim?lower_case == "rmii"]
+#define BOARD_PHY_ID                ${conf.instance.phy_settings.id[0]}
+[#if conf.instance.phy_settings.mode[0]?string?trim?lower_case == "rmii"]
 #define BOARD_PHY_RMII
 [/#if]
-[#if conf.groups.phy_settings.address[0]?string?trim?lower_case != "autoscan"]
-#define BOARD_PHY_ADDRESS           ${conf.groups.phy_settings.address[0]}
+[#if conf.instance.phy_settings.address[0]?string?trim?lower_case != "autoscan"]
+#define BOARD_PHY_ADDRESS           ${conf.instance.phy_settings.address[0]}
 [/#if]
 
 [/#if]
 /*
  * Board oscillators-related settings.
  */
-[#if conf.groups.clock_settings.lse_oscillator_mode[0]?string?trim?lower_case != "none"]
-#define STM32_LSECLK                ${conf.groups.clock_settings.lse_frequency[0]}
-[#if conf.groups.clock_settings.lse_oscillator_mode[0]?string?trim?lower_case == "bypass"]
+[#if conf.instance.clock_settings.lse_oscillator_mode[0]?string?trim?lower_case != "none"]
+#define STM32_LSECLK                ${conf.instance.clock_settings.lse_frequency[0]}
+[#if conf.instance.clock_settings.lse_oscillator_mode[0]?string?trim?lower_case == "bypass"]
 #define STM32_LSECLK_BYPASS
 [/#if]
 [#else]
 #define STM32_LSECLK                0
 [/#if]
-[#if conf.groups.clock_settings.hse_oscillator_mode[0]?string?trim?lower_case != "none"]
-#define STM32_HSECLK                ${conf.groups.clock_settings.hse_frequency[0]}
-[#if conf.groups.clock_settings.hse_oscillator_mode[0]?string?trim?lower_case == "bypass"]
+[#if conf.instance.clock_settings.hse_oscillator_mode[0]?string?trim?lower_case != "none"]
+#define STM32_HSECLK                ${conf.instance.clock_settings.hse_frequency[0]}
+[#if conf.instance.clock_settings.hse_oscillator_mode[0]?string?trim?lower_case == "bypass"]
 #define STM32_HSECLK_BYPASS
 [/#if]
 [#else]
@@ -75,7 +75,7 @@
  * Board voltages.
  * Required for performance limits calculation.
  */
-#define STM32_VDD                   ${conf.groups.clock_settings.vdd[0]}
+#define STM32_VDD                   ${conf.instance.clock_settings.vdd[0]}
 
 /*
  * MCU type as defined in the ST header file stm32f4xx.h.
@@ -85,7 +85,7 @@
 [#-- Creating an hash with all the defined pins and performing checks.--]
 [#assign pins = {} /]
 [#assign identifiers = {}]
-[#list conf.groups.i_o_settings.pins_list.pin_settings as pin_settings]
+[#list conf.instance.i_o_settings.pins_list.pin_settings as pin_settings]
   [#assign pin_port         = pin_settings.pin_identification.port[0] /]
   [#assign pin_bit          = pin_settings.pin_identification.bit[0]?number /]
   [#assign pin_ids          = pin_settings.pin_identification.identifiers[0] /]

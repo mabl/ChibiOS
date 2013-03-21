@@ -5,18 +5,30 @@
    <extension
          id="org.chibios.spc5.components.hal.platform.stm32f4pxx"
          name="ChibiOS-RT STM32F4xx HAL Platform Component"
-         point="com.st.tools.spc5.extension">
+         point="com.st.tools.spc5.extension.v1">
       <component
             hidden="true"
+            icon="rsc/chibios.ico"
             isPlatform="false">
             <description>
                 ChibiOS/RT STM32F4xx low level drivice drivers files.
             </description>
-            <groups
-                  name="STM32F4xx Settings">
+            <categories>
+               <category
+                     id="ChibiOS-RT/STM32F4xx">
+               </category>
+            </categories>
+            <configuration>
                <description>
                   STM32F4xx Low Level Drivers options and settings.
                </description>
+               <image
+                     align="left"
+                     file="rsc/chibios48x48.png">
+                  <text>
+                     ChibiOS/RT is GPL3-licensed free software. A special exception has been added to the GPL3 in order to allow inclusion in closed source applications, details are in the exception.txt document.
+                  </text>
+               </image>
                <group
                      expanded="false"
                      name="Initialization Settings">
@@ -1376,7 +1388,7 @@
                         value="None,Serial,UART">
                   </property>
                </group>
-            </groups>
+            </configuration>
             <exportedFeatures>
                <exportedFeature
                      exclusive="true"
@@ -1385,6 +1397,82 @@
                <exportedFeature
                      exclusive="true"
                      id="org.chibios.spc5.features.hal.platform.stm32f4xx">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.adc">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.can">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.ext">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.gpt">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.hal">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.hal.counter">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.i2c">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.icu">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.mac">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.mmc_spi">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.pal">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.pwm">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.rtc">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.sdc">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.serial">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.serial_usb">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.spi">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.uart">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.usb">
                </exportedFeature>
             </exportedFeatures>
             <requiredFeatures>

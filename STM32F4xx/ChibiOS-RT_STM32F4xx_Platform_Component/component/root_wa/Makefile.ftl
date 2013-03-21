@@ -8,22 +8,22 @@
 
 # Compiler options here.
 ifeq ($(USE_OPT),)
-  USE_OPT = ${conf.groups.build_settings.optimization_level[0]} ${conf.groups.build_settings.common_options[0]}
+  USE_OPT = ${conf.instance.build_settings.optimization_level[0]} ${conf.instance.build_settings.common_options[0]}
 endif
 
 # C specific options here (added to USE_OPT).
 ifeq ($(USE_COPT),)
-  USE_COPT = ${conf.groups.build_settings.c_options[0]}
+  USE_COPT = ${conf.instance.build_settings.c_options[0]}
 endif
 
 # C++ specific options here (added to USE_OPT).
 ifeq ($(USE_CPPOPT),)
-  USE_CPPOPT = ${conf.groups.build_settings.cpp_options[0]}
+  USE_CPPOPT = ${conf.instance.build_settings.cpp_options[0]}
 endif
 
 # Enable this if you want the linker to remove unused code and data
 ifeq ($(USE_LINK_GC),)
-  USE_LINK_GC = ${conf.groups.build_settings.use_linker_gc[0]}
+  USE_LINK_GC = ${conf.instance.build_settings.use_linker_gc[0]}
 endif
 
 # If enabled, this option allows to compile the application in THUMB mode.
@@ -33,7 +33,7 @@ endif
 
 # Enable this if you want to see the full log while compiling.
 ifeq ($(USE_VERBOSE_COMPILE),)
-  USE_VERBOSE_COMPILE = ${conf.groups.build_settings.use_verbose_compile[0]}
+  USE_VERBOSE_COMPILE = ${conf.instance.build_settings.use_verbose_compile[0]}
 endif
 
 #
@@ -59,7 +59,7 @@ endif
 #
 
 # Define project name here
-PROJECT = ${conf.groups.build_settings.application_name[0]}
+PROJECT = ${conf.instance.build_settings.application_name[0]}
 
 # Imported source files
 include components/components.mak
@@ -102,7 +102,7 @@ INCDIR =    ./components \
 
 MCU  = cortex-m4
 
-TRGT = ${conf.groups.build_settings.compiler_variant[0]}
+TRGT = ${conf.instance.build_settings.compiler_variant[0]}
 CC   = $(TRGT)gcc
 CPPC = $(TRGT)g++
 # Enable loading with g++ only if you need C++ runtime support.
@@ -137,7 +137,7 @@ CPPWARN = -Wall -Wextra
 #
 
 # List all default C defines here, like -D_DEBUG=1
-DDEFS   = -D${conf.groups.platform_settings.specific_model[0]}
+DDEFS   = -D${conf.instance.platform_settings.specific_model[0]}
 
 # List all default ASM defines here, like -D_DEBUG=1
 DADEFS  =
