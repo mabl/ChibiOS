@@ -14,7 +14,7 @@
             </description>
             <categories>
                <category
-                     id="ChibiOS-RT/SPC5xx (general)">
+                     id="ChibiOS-RT/Platforms/SPC5xx (all devices)">
                </category>
             </categories>
             <configuration>

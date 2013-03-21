@@ -15,7 +15,7 @@
             </description>
             <categories>
                <category
-                     id="ChibiOS-RT/SPC560BCxx">
+                     id="ChibiOS-RT/Platforms/SPC560BCxx">
                </category>
             </categories>
             <configuration>

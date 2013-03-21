@@ -15,7 +15,7 @@
             </description>
             <categories>
                <category
-                     id="ChibiOS-RT/SPC56ELxx">
+                     id="ChibiOS-RT/Platforms/SPC56ELxx">
                </category>
             </categories>
             <configuration>

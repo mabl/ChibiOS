@@ -15,7 +15,7 @@
             </description>
             <categories>
                <category
-                     id="ChibiOS-RT/STM32F4xx">
+                     id="ChibiOS-RT/Platforms/STM32F4xx">
                </category>
             </categories>
             <configuration>
