@@ -31,17 +31,17 @@
 /*
  * HAL driver system settings.
  */
-#define SPC5_NO_INIT                        ${conf.groups.initialization_settings.do_not_init[0]?upper_case}
-#define SPC5_ALLOW_OVERCLOCK                ${conf.groups.initialization_settings.allow_overclocking[0]?upper_case}
-#define SPC5_DISABLE_WATCHDOG               ${conf.groups.initialization_settings.disable_watchdog[0]?upper_case}
-#define SPC5_FMPLL0_IDF_VALUE               ${conf.groups.fmpll0_settings.idf_value[0]}
-#define SPC5_FMPLL0_NDIV_VALUE              ${conf.groups.fmpll0_settings.ndiv_value[0]}
-#define SPC5_FMPLL0_ODF                     ${conf.groups.fmpll0_settings.odf_value[0]}
-#define SPC5_XOSCDIV_VALUE                  ${conf.groups.clocks.fxosc_divider[0]}
-#define SPC5_IRCDIV_VALUE                   ${conf.groups.clocks.firc_divider[0]}
-#define SPC5_PERIPHERAL1_CLK_DIV_VALUE      ${conf.groups.clocks.peripheral_set_1_clock_divider[0]}
-#define SPC5_PERIPHERAL2_CLK_DIV_VALUE      ${conf.groups.clocks.peripheral_set_2_clock_divider[0]}
-#define SPC5_PERIPHERAL3_CLK_DIV_VALUE      ${conf.groups.clocks.peripheral_set_3_clock_divider[0]}
+#define SPC5_NO_INIT                        ${conf.instance.initialization_settings.do_not_init[0]?upper_case}
+#define SPC5_ALLOW_OVERCLOCK                ${conf.instance.initialization_settings.allow_overclocking[0]?upper_case}
+#define SPC5_DISABLE_WATCHDOG               ${conf.instance.initialization_settings.disable_watchdog[0]?upper_case}
+#define SPC5_FMPLL0_IDF_VALUE               ${conf.instance.initialization_settings.fmpll0_settings.idf_value[0]}
+#define SPC5_FMPLL0_NDIV_VALUE              ${conf.instance.initialization_settings.fmpll0_settings.ndiv_value[0]}
+#define SPC5_FMPLL0_ODF                     ${conf.instance.initialization_settings.fmpll0_settings.odf_value[0]}
+#define SPC5_XOSCDIV_VALUE                  ${conf.instance.initialization_settings.clocks.fxosc_divider[0]}
+#define SPC5_IRCDIV_VALUE                   ${conf.instance.initialization_settings.clocks.firc_divider[0]}
+#define SPC5_PERIPHERAL1_CLK_DIV_VALUE      ${conf.instance.initialization_settings.clocks.peripheral_set_1_clock_divider[0]}
+#define SPC5_PERIPHERAL2_CLK_DIV_VALUE      ${conf.instance.initialization_settings.clocks.peripheral_set_2_clock_divider[0]}
+#define SPC5_PERIPHERAL3_CLK_DIV_VALUE      ${conf.instance.initialization_settings.clocks.peripheral_set_3_clock_divider[0]}
 #define SPC5_ME_ME_BITS                     (SPC5_ME_ME_RUN1 |              \
                                              SPC5_ME_ME_RUN2 |              \
                                              SPC5_ME_ME_RUN3 |              \
@@ -160,15 +160,15 @@
 #define SPC5_ME_LP_PC7_BITS                 (SPC5_ME_LP_PC_HALT0 |          \
                                              SPC5_ME_LP_PC_STOP0)
 #define SPC5_PIT0_IRQ_PRIORITY              4
-#define SPC5_CLOCK_FAILURE_HOOK()           ${conf.groups.clocks.clock_failure_hook[0]}
+#define SPC5_CLOCK_FAILURE_HOOK()           ${conf.instance.initialization_settings.clocks.clock_failure_hook[0]}
 
 /*
  * SERIAL driver system settings.
  */
-#define SPC5_SERIAL_USE_LINFLEX0            ${conf.groups.serial_driver_settings.use_linflex0[0]?upper_case}
-#define SPC5_SERIAL_USE_LINFLEX1            ${conf.groups.serial_driver_settings.use_linflex1[0]?upper_case}
-#define SPC5_SERIAL_LINFLEX0_PRIORITY       ${conf.groups.serial_driver_settings.linflex0_irq_priority[0]}
-#define SPC5_SERIAL_LINFLEX1_PRIORITY       ${conf.groups.serial_driver_settings.linflex1_irq_priority[0]}
+#define SPC5_SERIAL_USE_LINFLEX0            ${(conf.instance.linflex_settings.linflex0[0] == "Serial")?string?upper_case}
+#define SPC5_SERIAL_USE_LINFLEX1            ${(conf.instance.linflex_settings.linflex1[0] == "Serial")?string?upper_case}
+#define SPC5_SERIAL_LINFLEX0_PRIORITY       ${conf.instance.irq_priority_settings.linflex0[0]}
+#define SPC5_SERIAL_LINFLEX1_PRIORITY       ${conf.instance.irq_priority_settings.linflex1[0]}
 #define SPC5_SERIAL_LINFLEX0_START_PCTL     (SPC5_ME_PCTL_RUN(1) |          \
                                              SPC5_ME_PCTL_LP(2))
 #define SPC5_SERIAL_LINFLEX0_STOP_PCTL      (SPC5_ME_PCTL_RUN(0) |          \

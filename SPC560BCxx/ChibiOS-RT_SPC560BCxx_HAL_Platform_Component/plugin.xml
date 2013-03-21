@@ -5,26 +5,39 @@
    <extension
          id="org.chibios.spc5.components.hal.platform.spc560bcxx"
          name="ChibiOS-RT SPC560B/Cxx HAL Platform Component"
-         point="com.st.tools.spc5.extension">
+         point="com.st.tools.spc5.extension.v1">
       <component
             hidden="true"
+            icon="rsc/chibios.ico"
             isPlatform="false">
             <description>
                 ChibiOS/RT SPC560B/Cxx low level drivice drivers files.
             </description>
-            <groups
-                  name="SPC560B/Cxx Settings">
+            <categories>
+               <category
+                     id="ChibiOS-RT/SPC560BCxx">
+               </category>
+            </categories>
+            <configuration>
                <description>
                   SPC560B/Cxx Low Level Drivers options and settings.
                </description>
+               <image
+                     align="left"
+                     file="rsc/chibios48x48.png">
+                  <text>
+                     ChibiOS/RT is GPL3-licensed free software. A special exception has been added to the GPL3 in order to allow inclusion in closed source applications, details are in the exception.txt document.
+                  </text>
+               </image>
                <group
                      expanded="false"
-                     name="Initialization Settings">
+                     name="Initialization Settings"
+                     style="collapsable">
                   <description>
                      Generic initialization-related settings.
                   </description>
                   <property
-                        brief="Activating this options bypasses the whole clock initialization phase"
+                        brief="Activating this options bypasses the whole clock initialization phase."
                         default="false"
                         editable="true"
                         name="Do Not Init"
@@ -32,7 +45,7 @@
                         type="boolean">
                   </property>
                   <property
-                        brief="Enabling this options disables all consistency checks on the clock initialization values"
+                        brief="Enabling this options disables all consistency checks on the clock initialization values."
                         default="false"
                         editable="true"
                         name="Allow Overclocking"
@@ -47,147 +60,163 @@
                         required="true"
                         type="boolean">
                   </property>
+                  <group
+                        expanded="false"
+                        name="FMPLL0 Settings"
+                        style="collapsable">
+                     <description>
+                        FMPLL0 settings, errors in settings or invalid settings are detected at compile time.
+                     </description>
+                     <property
+                           brief="FMPLL0 Input Divider Value."
+                           default="1"
+                           editable="true"
+                           max="15"
+                           min="1"
+                           name="IDF Value"
+                           required="true"
+                           type="unsigned">
+                     </property>
+                     <property
+                           brief="FMPLL0 Multiplier Value."
+                           default="32"
+                           editable="true"
+                           max="96"
+                           min="32"
+                           name="NDIV Value"
+                           required="true"
+                           type="unsigned">
+                     </property>
+                     <property
+                           brief="FMPLL0 Output Divider Value."
+                           default="1"
+                           editable="true"
+                           name="ODF Value"
+                           required="true"
+                           type="enum"
+                           value="SPC5_FMPLL_ODF_DIV2,SPC5_FMPLL_ODF_DIV4,SPC5_FMPLL_ODF_DIV8,SPC5_FMPLL_ODF_DIV16">
+                     </property>
+                  </group>
+                  <group
+                        expanded="false"
+                        name="Clocks"
+                        style="collapsable">
+                     <description>
+                        Settings related to the internal clocks distribution.
+                     </description>
+                     <property
+                           brief="Divider value for the Fast External Crystal Oscillator"
+                           default="0"
+                           editable="true"
+                           name="FXOSC Divider"
+                           required="true"
+                           type="enum"
+                           value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32">
+                     </property>
+                     <property
+                           brief="Divider value for the Fast Internal RC oscillator"
+                           default="0"
+                           editable="true"
+                           name="FIRC Divider"
+                           required="true"
+                           type="enum"
+                           value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32">
+                     </property>
+                     <property
+                           brief="Divider for the peripheral set 1 clock, zero means disabled clock."
+                           default="2"
+                           editable="true"
+                           name="Peripheral Set 1 Clock Divider"
+                           required="true"
+                           type="enum"
+                           value="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16">
+                     </property>
+                     <property
+                           brief="Divider for the peripheral set 2 clock, zero means disabled clock."
+                           default="2"
+                           editable="true"
+                           name="Peripheral Set 2 Clock Divider"
+                           required="true"
+                           type="enum"
+                           value="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16">
+                     </property>
+                     <property
+                           brief="Divider for the peripheral set 3 clock, zero means disabled clock."
+                           default="2"
+                           editable="true"
+                           name="Peripheral Set 3 Clock Divider"
+                           required="true"
+                           type="enum"
+                           value="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16">
+                     </property>
+                     <property
+                           brief="Function to be executed in case of clock initialization failure, this function must not return."
+                           default="chSysHalt()"
+                           editable="true"
+                           name="Clock Failure Hook"
+                           required="true"
+                           type="string">
+                     </property>
+                  </group>
                </group>
                <group
+                     columns="2"
                      expanded="false"
-                     name="FMPLL0 Settings">
+                     name="IRQ Priority Settings"
+                     style="collapsable">
                   <description>
-                     FMPLL0 settings, errors in settings or invalid settings are detected at compile time.
+                     IRQ priority settings, the defaults are usually acceptable.
                   </description>
+                  <line>
+                     line body text
+                  </line>
                   <property
-                        brief="FMPLL0 Input Divider Value"
-                        default="1"
+                        brief="IRQ priority to be assigned to the LINFlex0 peripheral."
+                        default="7"
                         editable="true"
-                        max="15"
-                        min="1"
-                        name="IDF Value"
-                        required="true"
-                        type="unsigned">
-                  </property>
-                  <property
-                        brief="FMPLL0 Multiplier Value"
-                        default="32"
-                        editable="true"
-                        max="96"
-                        min="32"
-                        name="NDIV Value"
-                        required="true"
-                        type="unsigned">
-                  </property>
-                  <property
-                        brief="FMPLL0 Output Divider Value"
-                        default="1"
-                        editable="true"
-                        name="ODF Value"
+                        name="LINFlex0"
                         required="true"
                         type="enum"
-                        value="SPC5_FMPLL_ODF_DIV2,SPC5_FMPLL_ODF_DIV4,SPC5_FMPLL_ODF_DIV8,SPC5_FMPLL_ODF_DIV16">
+                        value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+                  </property>
+                  <property
+                        brief="IRQ priority to be assigned to the LINFlex1 peripheral."
+                        default="7"
+                        editable="true"
+                        name="LINFlex1"
+                        required="true"
+                        type="enum"
+                        value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
                   </property>
                </group>
                <group
+                     columns="2"
                      expanded="false"
-                     name="Clocks">
+                     name="LINFlex Settings"
+                     style="collapsable">
                   <description>
-                     Settings related to the internal clocks distribution.
+                     Settings related to the LINFlex units, note that the selected drivers must be enabled in the portable HAL configuration.
                   </description>
                   <property
-                        brief="Divider value for the Fast External Crystal Oscillator"
+                        brief="Driver owning the LINFlex0."
                         default="0"
                         editable="true"
-                        name="FXOSC Divider"
+                        name="LINFlex0"
                         required="true"
                         type="enum"
-                        value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32">
+                        value="None,Serial">
                   </property>
                   <property
-                        brief="Divider value for the Fast Internal RC oscillator"
+                        brief="Driver owning the LINFlex1."
                         default="0"
                         editable="true"
-                        name="FIRC Divider"
+                        name="LINFlex1"
                         required="true"
                         type="enum"
-                        value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32">
-                  </property>
-                  <property
-                        brief="Divider for the peripheral set 1 clock, zero means disabled clock."
-                        default="2"
-                        editable="true"
-                        name="Peripheral Set 1 Clock Divider"
-                        required="true"
-                        type="enum"
-                        value="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16">
-                  </property>
-                  <property
-                        brief="Divider for the peripheral set 2 clock, zero means disabled clock."
-                        default="2"
-                        editable="true"
-                        name="Peripheral Set 2 Clock Divider"
-                        required="true"
-                        type="enum"
-                        value="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16">
-                  </property>
-                  <property
-                        brief="Divider for the peripheral set 3 clock, zero means disabled clock."
-                        default="2"
-                        editable="true"
-                        name="Peripheral Set 3 Clock Divider"
-                        required="true"
-                        type="enum"
-                        value="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16">
-                  </property>
-                  <property
-                        brief="Function to be executed in case of clock initialization failure, this function must not return."
-                        default="chSysHalt()"
-                        editable="true"
-                        name="Clock Failure Hook"
-                        required="true"
-                        type="string">
+                        value="None,Serial">
                   </property>
                </group>
-               <group
-                     expanded="false"
-                     name="Serial Driver Settings">
-                  <description>
-                     Settings related to the Serial Driver, note that the driver must be enabled in the portable HAL configuration.
-                  </description>
-                  <property
-                        brief="Enables support for LINFLEX0 in the Serial Driver"
-                        default="true"
-                        editable="true"
-                        name="Use LINFLEX0"
-                        required="true"
-                        type="boolean">
-                  </property>
-                  <property
-                        brief="Enables support for LINFLEX1 in the Serial Driver"
-                        default="true"
-                        editable="true"
-                        name="Use LINFLEX1"
-                        required="true"
-                        type="boolean">
-                  </property>
-                  <property
-                        brief="IRQ priority to be assigned to the LINFLEX0 peripheral"
-                        default="8"
-                        editable="true"
-                        max="15"
-                        min="1"
-                        name="LINFLEX0 IRQ Priority"
-                        required="true"
-                        type="unsigned">
-                  </property>
-                  <property
-                        brief="IRQ priority to be assigned to the LINFLEX1 peripheral"
-                        default="8"
-                        editable="true"
-                        max="15"
-                        min="1"
-                        name="LINFLEX1 IRQ Priority"
-                        required="true"
-                        type="unsigned">
-                  </property>
-               </group>
-            </groups>
+            </configuration>
             <exportedFeatures>
                <exportedFeature
                      exclusive="true"
@@ -196,6 +225,18 @@
                <exportedFeature
                      exclusive="true"
                      id="org.chibios.spc5.features.hal.platform">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.hal">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.pal">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.serial">
                </exportedFeature>
             </exportedFeatures>
             <requiredFeatures>

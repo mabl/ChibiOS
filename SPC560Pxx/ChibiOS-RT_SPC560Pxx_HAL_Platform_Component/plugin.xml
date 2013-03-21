@@ -256,6 +256,16 @@
                <group
                      columns="2"
                      expanded="false"
+                     name="eDMA Settings"
+                     style="collapsable">
+                  <description>
+                     DMA priority settings, the defaults are usually acceptable.
+                  </description>
+                  <line></line>
+               </group>
+               <group
+                     columns="2"
+                     expanded="false"
                      name="LINFlex Settings"
                      style="collapsable">
                   <description>
@@ -289,6 +299,18 @@
                <exportedFeature
                      exclusive="true"
                      id="org.chibios.spc5.features.hal.platform">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.hal">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.pal">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.serial">
                </exportedFeature>
             </exportedFeatures>
             <requiredFeatures>

@@ -27,92 +27,92 @@
 		<link>
 			<name>components/chibios_rt_free_embedded_rtos_for_spc560pxx_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC560Pxx/ChibiOS-RT_RTOS_for_SPC560Pxx/component/doc</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC560Pxx/ChibiOS-RT_RTOS_for_SPC560Pxx/component/doc/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_free_embedded_rtos_for_spc560pxx_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC560Pxx/ChibiOS-RT_RTOS_for_SPC560Pxx/component/lib</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC560Pxx/ChibiOS-RT_RTOS_for_SPC560Pxx/component/lib/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_portable_hal_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_HAL_Component/component/doc</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_HAL_Component/component/doc/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_portable_hal_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_HAL_Component/component/lib</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_HAL_Component/component/lib/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_portable_kernel_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_Kernel_Component/component/doc</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_Kernel_Component/component/doc/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_portable_kernel_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_Kernel_Component/component/lib</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_Kernel_Component/component/lib/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_portable_mini_shell_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_Mini_Shell_Component/component/doc</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_Mini_Shell_Component/component/doc/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_portable_mini_shell_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_Mini_Shell_Component/component/lib</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_Mini_Shell_Component/component/lib/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_portable_output_formatter_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_Output_Formatter_Component/component/doc</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_Output_Formatter_Component/component/doc/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_portable_output_formatter_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_Output_Formatter_Component/component/lib</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_Output_Formatter_Component/component/lib/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_spc560pxx_board_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC560Pxx/ChibiOS-RT_SPC560Pxx_Board_Component/component/doc</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC560Pxx/ChibiOS-RT_SPC560Pxx_Board_Component/component/doc/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_spc560pxx_board_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC560Pxx/ChibiOS-RT_SPC560Pxx_Board_Component/component/lib</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC560Pxx/ChibiOS-RT_SPC560Pxx_Board_Component/component/lib/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_spc560pxx_hal_platform_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC560Pxx/ChibiOS-RT_SPC560Pxx_HAL_Platform_Component/component/doc</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC560Pxx/ChibiOS-RT_SPC560Pxx_HAL_Platform_Component/component/doc/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_spc560pxx_hal_platform_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC560Pxx/ChibiOS-RT_SPC560Pxx_HAL_Platform_Component/component/lib</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC560Pxx/ChibiOS-RT_SPC560Pxx_HAL_Platform_Component/component/lib/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_spc560pxx_kernel_port_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC560Pxx/ChibiOS-RT_SPC560Pxx_Kernel_Port_Component/component/doc</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC560Pxx/ChibiOS-RT_SPC560Pxx_Kernel_Port_Component/component/doc/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_spc560pxx_kernel_port_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC560Pxx/ChibiOS-RT_SPC560Pxx_Kernel_Port_Component/component/lib</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC560Pxx/ChibiOS-RT_SPC560Pxx_Kernel_Port_Component/component/lib/</location>
 		</link>
 		<link>
 			<name>components/stmicroelectronics_spc560pxx_platform_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5/STMicroelectronics_SPC560Pxx_Platform_Component/component/doc</location>
+			<location>C:/ChibiStudio/workspace/SPC5/STMicroelectronics_SPC560Pxx_Platform_Component/component/doc/</location>
 		</link>
 		<link>
 			<name>components/stmicroelectronics_spc560pxx_platform_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5/STMicroelectronics_SPC560Pxx_Platform_Component/component/lib</location>
+			<location>C:/ChibiStudio/workspace/SPC5/STMicroelectronics_SPC560Pxx_Platform_Component/component/lib/</location>
 		</link>
 	</linkedResources>
 </projectDescription>
