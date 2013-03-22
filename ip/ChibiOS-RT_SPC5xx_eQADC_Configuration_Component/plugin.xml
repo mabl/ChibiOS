@@ -171,7 +171,7 @@ ADCD1...ADCD3 represent 3 levels of priority over access of the physical unit AD
                                  name="Sequence"
                                  required="true"
                                  type="list"
-                                 value="Channel,Sample Width">
+                                 value="Channel,Sample Size,Sampling Time">
                               <group
                                     columns="2"
                                     expanded="true"
