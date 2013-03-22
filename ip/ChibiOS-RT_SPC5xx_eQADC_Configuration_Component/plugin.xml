@@ -77,6 +77,15 @@ ADCD1...ADCD3 represent 3 levels of priority over access of the physical unit AD
                               type="enum"
                               value="Linear Buffer,Circular Buffer">
                         </property>
+                        <property
+                              brief="Maximum number of sequential conversions that can be performed on this group."
+                              default="1"
+                              editable="true"
+                              min="1"
+                              name="Maximum Sequential"
+                              required="true"
+                              type="unsigned">
+                        </property>
                         <group
                               columns="1"
                               expanded="false"
@@ -93,7 +102,7 @@ ADCD1...ADCD3 represent 3 levels of priority over access of the physical unit AD
                                  required="true"
                                  style="combo"
                                  type="enum"
-                                 value="SW Trigger, HW Trigger">
+                                 value="SW Trigger,HW Trigger Low Level,HW Trigger High Level,HW Trigger Falling Edge,HW Trigger Falling Edge,HW Trigger Both Edges">
                            </property>
                            <text>
                               Note, the exact mapping of the TSEL field depends on the FIFO number, consult the reference manual in section 15.8.17 for details about the physical mappings.
@@ -162,7 +171,7 @@ ADCD1...ADCD3 represent 3 levels of priority over access of the physical unit AD
                                  name="Sequence"
                                  required="true"
                                  type="list"
-                                 value="0">
+                                 value="Channel,Sample Width">
                               <group
                                     columns="2"
                                     expanded="true"
@@ -175,7 +184,7 @@ ADCD1...ADCD3 represent 3 levels of priority over access of the physical unit AD
                                        brief="Identifier of the analog channel."
                                        default="0"
                                        editable="true"
-                                       name="Analog Channel"
+                                       name="Channel"
                                        required="true"
                                        type="enum"
                                        value="AN0,AN1,AN2,AN3,AN4,AN5,AN6,AN7,AN8,AN9,AN10,AN11,AN12,AN13,AN14,AN15,AN16,AN17,AN18,AN19,AN20,AN21,AN22,AN23,AN24,AN25,AN26,AN27,AN28,AN29,AN30,AN31,AN32,AN33,AN34,AN35,AN36,AN37,AN38,AN39,VRH,VRL,VREF25,VREF50,VREF75,BANDGAP,DAN0,DAN1,DAN2,DAN3,TEMP_SENSOR,SPARE">
@@ -184,7 +193,7 @@ ADCD1...ADCD3 represent 3 levels of priority over access of the physical unit AD
                                        brief="Sample size in bits."
                                        default="0"
                                        editable="true"
-                                       name="Sample Width"
+                                       name="Sample Size"
                                        required="true"
                                        type="enum"
                                        value="12,10,8">
@@ -203,6 +212,14 @@ ADCD1...ADCD3 represent 3 levels of priority over access of the physical unit AD
                                        default="true"
                                        editable="true"
                                        name="Calibrated"
+                                       required="true"
+                                       type="boolean">
+                                 </property>
+                                 <property
+                                       brief="If selected then the result is a signed quantity."
+                                       default="false"
+                                       editable="true"
+                                       name="Signed Result"
                                        required="true"
                                        type="boolean">
                                  </property>
