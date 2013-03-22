@@ -172,7 +172,7 @@
                   </property>
                   <property
                         brief="This options globally enables/disables the Serial driver."
-                        default="true"
+                        default="false"
                         editable="true"
                         name="Serial"
                         required="true"

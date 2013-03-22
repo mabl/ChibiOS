@@ -38,7 +38,7 @@
  */
 [#list conf.instance.conversion_groups.groups.conversion_group_settings as group]
   [#assign name = group.symbolic_name[0]?upper_case /]
-#define ADC_GROUP_${name}_NUM_CHANNELS ${group.channels.sequence?size}
+#define ADC_GROUP_${name}_NUM_CHANNELS ${group.channels.sequence.sequence?size}
 #define ADC_GROUP_${name}_BUF_DEPTH    ${group.maximum_sequential[0]}
 #define ADC_GROUP_${name}_NUM_COMMANDS (ADC_GROUP_${name}_NUM_CHANNELS * ADC_GROUP_${name}_BUF_DEPTH)
   [#if group_has_next]
@@ -91,12 +91,16 @@ extern "C" {
 [#assign err_callbacks = []]
 [#list conf.instance.conversion_groups.groups.conversion_group_settings as group]
   [#assign conv_cb = group.notifications.conversion_callback[0]?string?trim /]
-  [#assign err_cb = group.notifications.error_callback[0]?string?trim /]
-  [#if !conv_callbacks?seq_contains(conv_cb)]
-    [#assign conv_callbacks = conv_callbacks + [conv_cb]]
+  [#if conv_cb != ""]
+    [#if !conv_callbacks?seq_contains(conv_cb)]
+      [#assign conv_callbacks = conv_callbacks + [conv_cb]]
+    [/#if]
   [/#if]
-  [#if !err_callbacks?seq_contains(err_cb)]
-    [#assign err_callbacks = err_callbacks + [err_cb]]
+  [#assign err_cb = group.notifications.error_callback[0]?string?trim /]
+  [#if err_cb != ""]
+    [#if !err_callbacks?seq_contains(err_cb)]
+      [#assign err_callbacks = err_callbacks + [err_cb]]
+    [/#if]
   [/#if]
 [/#list]
 [#list conv_callbacks?sort as cb]

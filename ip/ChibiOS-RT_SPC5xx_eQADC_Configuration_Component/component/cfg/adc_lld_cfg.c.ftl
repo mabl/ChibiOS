@@ -105,7 +105,7 @@ const ADCConversionGroup adc_group_${group.symbolic_name[0]?trim} = {
 /*
  * eQADC commands for conversion group "${group.symbolic_name[0]}".
  */
-static const adccommand_t adc_${group.symbolic_name[0]}_commands[ADC_${group.symbolic_name[0]?upper_case}_NUM_COMMANDS] = {
+static const adccommand_t adc_${group.symbolic_name[0]}_commands[ADC_GROUP_${group.symbolic_name[0]?upper_case}_NUM_COMMANDS] = {
   [#list 1..num_channels as n]
     [#list group.channels.sequence.sequence as channel_settings]
       [#assign CHANNEL = channel_settings.channel[0]?string /]
@@ -116,9 +116,9 @@ static const adccommand_t adc_${group.symbolic_name[0]}_commands[ADC_${group.sym
         [#assign CAL = "0" /]
       [/#if]
       [#if channel_settings.signed_result[0]?lower_case == "true"]
-        [#assign SIGNED = "QADC_CONV_FMT_RJS" /]
+        [#assign SIGNED = "EQADC_CONV_FMT_RJS" /]
       [#else]
-        [#assign SIGNED = "QADC_CONV_FMT_RJU" /]
+        [#assign SIGNED = "EQADC_CONV_FMT_RJU" /]
       [/#if]
       [#assign size = channel_settings.sample_size[0]?number /]
       [#if size == 12]
@@ -130,8 +130,8 @@ static const adccommand_t adc_${group.symbolic_name[0]}_commands[ADC_${group.sym
       [/#if]
 
   EQADC_CONV_BN_${ADC} | EQADC_CONV_LST_${CYCLES} | ${CAL} |
-  ${SIGNED} | ${SAMPLE} | EQADC_CONV_MSG_RFIFO(${FIFO}}) |
-  EQADC_CONV_CHANNEL(ADC_CHN_${CHANNEL}})[#rt]
+  ${SIGNED} | ${SAMPLE} | EQADC_CONV_MSG_RFIFO(${FIFO}) |
+  EQADC_CONV_CHANNEL(ADC_CHN_${CHANNEL})[#rt]
       [#if channel_settings_has_next]
 ,
       [#else]

@@ -87,7 +87,7 @@
         <enabled_drivers>
           <tm>false</tm>
           <pal>true</pal>
-          <adc>false</adc>
+          <adc>true</adc>
           <can>false</can>
           <ext>false</ext>
           <gpt>false</gpt>
@@ -98,7 +98,7 @@
           <pwm>false</pwm>
           <rtc>false</rtc>
           <sdc>false</sdc>
-          <serial>true</serial>
+          <serial>false</serial>
           <spi>false</spi>
           <serial_usb>false</serial_usb>
           <uart>false</uart>
@@ -164,12 +164,12 @@
         </edma_settings>
         <eqadc_settings>
           <divider index="3">5</divider>
-          <fifo0>false</fifo0>
-          <fifo1>false</fifo1>
-          <fifo2>false</fifo2>
-          <fifo3>false</fifo3>
-          <fifo4>false</fifo4>
-          <fifo5>false</fifo5>
+          <fifo0>true</fifo0>
+          <fifo1>true</fifo1>
+          <fifo2>true</fifo2>
+          <fifo3>true</fifo3>
+          <fifo4>true</fifo4>
+          <fifo5>true</fifo5>
           <an0 index="0">None</an0>
           <an1 index="0">None</an1>
           <an2 index="0">None</an2>
@@ -269,8 +269,8 @@
                 <etsel>0</etsel>
               </triggers>
               <notifications>
-                <conversion_callback />
-                <error_callback />
+                <conversion_callback>adc_conversion_callback</conversion_callback>
+                <error_callback>adc_error_callback</error_callback>
               </notifications>
               <channels>
                 <sequence>
@@ -296,13 +296,6 @@
                     <signed_result>false</signed_result>
                   </sequence>
                   <sequence>
-                    <channel index="42">VREF25</channel>
-                    <sample_size index="0">12</sample_size>
-                    <sampling_time index="2">64</sampling_time>
-                    <calibrated>true</calibrated>
-                    <signed_result>false</signed_result>
-                  </sequence>
-                  <sequence>
                     <channel index="43">VREF50</channel>
                     <sample_size index="0">12</sample_size>
                     <sampling_time index="2">64</sampling_time>
@@ -310,7 +303,7 @@
                     <signed_result>false</signed_result>
                   </sequence>
                   <sequence>
-                    <channel index="44">VREF75</channel>
+                    <channel index="43">VREF50</channel>
                     <sample_size index="0">12</sample_size>
                     <sampling_time index="2">64</sampling_time>
                     <calibrated>true</calibrated>
