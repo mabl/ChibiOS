@@ -27,82 +27,82 @@
 		<link>
 			<name>components/chibios_rt_free_embedded_rtos_for_spc563mxx_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC563Mxx/ChibiOS-RT_RTOS_for_SPC563Mxx/component/doc</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC563Mxx/ChibiOS-RT_RTOS_for_SPC563Mxx/component/doc/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_free_embedded_rtos_for_spc563mxx_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC563Mxx/ChibiOS-RT_RTOS_for_SPC563Mxx/component/lib</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC563Mxx/ChibiOS-RT_RTOS_for_SPC563Mxx/component/lib/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_portable_hal_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_HAL_Component/component/doc</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_HAL_Component/component/doc/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_portable_hal_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_HAL_Component/component/lib</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_HAL_Component/component/lib/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_portable_kernel_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_Kernel_Component/component/doc</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_Kernel_Component/component/doc/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_portable_kernel_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_Kernel_Component/component/lib</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/portable/ChibiOS-RT_Portable_Kernel_Component/component/lib/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_spc563mxx_board_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC563Mxx/ChibiOS-RT_SPC563Mxx_Board_Component/component/doc</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC563Mxx/ChibiOS-RT_SPC563Mxx_Board_Component/component/doc/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_spc563mxx_board_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC563Mxx/ChibiOS-RT_SPC563Mxx_Board_Component/component/lib</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC563Mxx/ChibiOS-RT_SPC563Mxx_Board_Component/component/lib/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_spc563mxx_hal_platform_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC563Mxx/ChibiOS-RT_SPC563Mxx_HAL_Platform_Component/component/doc</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC563Mxx/ChibiOS-RT_SPC563Mxx_HAL_Platform_Component/component/doc/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_spc563mxx_hal_platform_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC563Mxx/ChibiOS-RT_SPC563Mxx_HAL_Platform_Component/component/lib</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC563Mxx/ChibiOS-RT_SPC563Mxx_HAL_Platform_Component/component/lib/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_spc563mxx_kernel_port_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC563Mxx/ChibiOS-RT_SPC563Mxx_Kernel_Port_Component/component/doc</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC563Mxx/ChibiOS-RT_SPC563Mxx_Kernel_Port_Component/component/doc/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_spc563mxx_kernel_port_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC563Mxx/ChibiOS-RT_SPC563Mxx_Kernel_Port_Component/component/lib</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC563Mxx/ChibiOS-RT_SPC563Mxx_Kernel_Port_Component/component/lib/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_spc5xx_eqadc_configuration_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/ip/ChibiOS-RT_SPC5xx_eQADC_Configuration_Component/component/doc</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/ip/ChibiOS-RT_SPC5xx_eQADC_Configuration_Component/component/doc/</location>
 		</link>
 		<link>
 			<name>components/chibios_rt_spc5xx_eqadc_configuration_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/ip/ChibiOS-RT_SPC5xx_eQADC_Configuration_Component/component/lib</location>
+			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/ip/ChibiOS-RT_SPC5xx_eQADC_Configuration_Component/component/lib/</location>
 		</link>
 		<link>
 			<name>components/stmicroelectronics_spc563mxx_platform_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5/STMicroelectronics_SPC563Mxx_Platform_Component/component/doc</location>
+			<location>C:/ChibiStudio/workspace/SPC5/STMicroelectronics_SPC563Mxx_Platform_Component/component/doc/</location>
 		</link>
 		<link>
 			<name>components/stmicroelectronics_spc563mxx_platform_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5/STMicroelectronics_SPC563Mxx_Platform_Component/component/lib</location>
+			<location>C:/ChibiStudio/workspace/SPC5/STMicroelectronics_SPC563Mxx_Platform_Component/component/lib/</location>
 		</link>
 	</linkedResources>
 </projectDescription>
