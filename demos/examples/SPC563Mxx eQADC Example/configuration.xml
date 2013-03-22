@@ -193,7 +193,118 @@
           <xosc_clock>8000000</xosc_clock>
         </clock_settings>
         <i_o_settings>
-          <pins_list />
+          <pins_list>
+            <pin_settings>
+              <pin_identification>
+                <identifier>P5_ESCI_A_TX</identifier>
+                <port index="0">PORT5</port>
+                <bit index="9">9</bit>
+              </pin_identification>
+              <settings>
+                <pin_mode index="9">MODE_OUTPUT_ALTERNATE(1)</pin_mode>
+                <latched_state index="1">HIGH</latched_state>
+              </settings>
+            </pin_settings>
+            <pin_settings>
+              <pin_identification>
+                <identifier>P5_ESCI_A_RX</identifier>
+                <port index="0">PORT5</port>
+                <bit index="10">10</bit>
+              </pin_identification>
+              <settings>
+                <pin_mode index="9">MODE_OUTPUT_ALTERNATE(1)</pin_mode>
+                <latched_state index="1">HIGH</latched_state>
+              </settings>
+            </pin_settings>
+            <pin_settings>
+              <pin_identification>
+                <identifier>P11_BUTTON1</identifier>
+                <port index="6">PORT11</port>
+                <bit index="3">3</bit>
+              </pin_identification>
+              <settings>
+                <pin_mode index="2">MODE_INPUT</pin_mode>
+                <latched_state index="0">LOW</latched_state>
+              </settings>
+            </pin_settings>
+            <pin_settings>
+              <pin_identification>
+                <identifier>P11_BUTTON2</identifier>
+                <port index="6">PORT11</port>
+                <bit index="5">5</bit>
+              </pin_identification>
+              <settings>
+                <pin_mode index="2">MODE_INPUT</pin_mode>
+                <latched_state index="0">LOW</latched_state>
+              </settings>
+            </pin_settings>
+            <pin_settings>
+              <pin_identification>
+                <identifier>P11_BUTTON3</identifier>
+                <port index="6">PORT11</port>
+                <bit index="7">7</bit>
+              </pin_identification>
+              <settings>
+                <pin_mode index="2">MODE_INPUT</pin_mode>
+                <latched_state index="0">LOW</latched_state>
+              </settings>
+            </pin_settings>
+            <pin_settings>
+              <pin_identification>
+                <identifier>P11_BUTTON4</identifier>
+                <port index="6">PORT11</port>
+                <bit index="9">9</bit>
+              </pin_identification>
+              <settings>
+                <pin_mode index="2">MODE_INPUT</pin_mode>
+                <latched_state index="0">LOW</latched_state>
+              </settings>
+            </pin_settings>
+            <pin_settings>
+              <pin_identification>
+                <identifier>P11_LED1</identifier>
+                <port index="6">PORT11</port>
+                <bit index="12">12</bit>
+              </pin_identification>
+              <settings>
+                <pin_mode index="6">MODE_OUTPUT_PUSHPULL</pin_mode>
+                <latched_state index="1">HIGH</latched_state>
+              </settings>
+            </pin_settings>
+            <pin_settings>
+              <pin_identification>
+                <identifier>P11_LED2</identifier>
+                <port index="6">PORT11</port>
+                <bit index="13">13</bit>
+              </pin_identification>
+              <settings>
+                <pin_mode index="6">MODE_OUTPUT_PUSHPULL</pin_mode>
+                <latched_state index="1">HIGH</latched_state>
+              </settings>
+            </pin_settings>
+            <pin_settings>
+              <pin_identification>
+                <identifier>P11_LED3</identifier>
+                <port index="6">PORT11</port>
+                <bit index="14">14</bit>
+              </pin_identification>
+              <settings>
+                <pin_mode index="6">MODE_OUTPUT_PUSHPULL</pin_mode>
+                <latched_state index="1">HIGH</latched_state>
+              </settings>
+            </pin_settings>
+            <pin_settings>
+              <pin_identification>
+                <identifier>P11_LED4</identifier>
+                <port index="6">PORT11</port>
+                <bit index="15">15</bit>
+              </pin_identification>
+              <settings>
+                <pin_mode index="6">MODE_OUTPUT_PUSHPULL</pin_mode>
+                <latched_state index="1">HIGH</latched_state>
+              </settings>
+            </pin_settings>
+          </pins_list>
         </i_o_settings>
         <initialization_code>
           <early_initialization_code />
