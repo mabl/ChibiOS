@@ -26,11 +26,11 @@
  * @{
  */
 
-
 #include "ch.h"
 #include "hal.h"
 #include "usb_msd.h"
 #include "chprintf.h"
+
 
 #if HAL_USE_MASS_STORAGE_USB || defined(__DOXYGEN__)
 
@@ -191,6 +191,9 @@ void msdStart(USBMassStorageDriver *msdp) {
                                               sizeof(waMassStorageUSBTransfer),
                 NORMALPRIO, MassStorageUSBTransferThd, msdp);
     }
+
+
+
 }
 
 /**
@@ -549,6 +552,7 @@ static bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
 
              msd_debug_print(chp, "\r\nSD Block Write Error, halting\r\n");
              chThdSleepMilliseconds(50);
+             msdp->write_error_count++;
              msdp->result = FALSE;
              SCSISetSense(   msdp,
                              SCSI_SENSE_KEY_MEDIUM_ERROR,
@@ -583,6 +587,7 @@ static bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
 		for(retry_count = 0; retry_count < 3; retry_count++ ) {
           if(blkRead(msdp->bbdp, rw_block_address, read_buffer[i % 2], 1) == CH_FAILED) {
               msd_debug_print(chp, "\r\nSD Block Read Error\r\n");
+              msdp->read_error_count++;
           } else {
             read_success = TRUE;
             break;
@@ -620,6 +625,7 @@ static bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
                 for(retry_count = 0; retry_count < 3; retry_count++ ) {
                   if(blkRead(msdp->bbdp, rw_block_address, read_buffer[(i+1) % 2], 1) == CH_FAILED ) {
                       msd_debug_print(chp, "\r\nSD Block Read Error 2\r\n");
+                      msdp->read_error_count++;
                   } else {
                     read_success = TRUE;
                     break;
@@ -631,6 +637,7 @@ static bool_t SCSICommandStartReadWrite10(USBMassStorageDriver *msdp) {
                   /*wait for printing to finish*/
                   chThdSleepMilliseconds(70);
                   msdp->result = FALSE;
+
                   msd_debug_print(chp, "\r\nSetting sense code %u\r\n", SCSI_SENSE_KEY_MEDIUM_ERROR);
                   SCSISetSense(   msdp,
                                   SCSI_SENSE_KEY_MEDIUM_ERROR,
@@ -856,6 +863,7 @@ static msg_t MassStorageUSBTransferThd(void *arg) {
   return(0);
 }
 
+
 static msg_t MassStorageThd(void *arg) {
 	USBMassStorageDriver *msdp = (USBMassStorageDriver *)arg;
 
@@ -868,6 +876,7 @@ static msg_t MassStorageThd(void *arg) {
 	WaitForISR(msdp, FALSE);
 	msd_debug_print(chp, "y");
 
+
 	while (TRUE) {
 		wait_for_isr = FALSE;
 
@@ -878,28 +887,39 @@ static msg_t MassStorageThd(void *arg) {
 		  msdp->state = idle;
 		}
 
-		msd_debug_print(chp, "state=%d\r\n", msdp->state);
-		/* wait on data depending on the current state */
-		switch(msdp->state) {
-		case idle:
-		    msd_debug_print(chp, "IDL");
-			wait_for_isr = msdWaitForCommandBlock(msdp);
-			msd_debug_print(chp, "x\r\n");
-		    break;
-		case read_cmd_block:
-		    msd_debug_print(chp, "RCB");
-			wait_for_isr = msdReadCommandBlock(msdp);
-			msd_debug_print(chp, "x\r\n");
-			break;
-		case ejected:
-			/* disconnect usb device */
-		    msd_debug_print(chp, "ejected\r\n");
-		    chThdSleepMilliseconds(70);
-			usbDisconnectBus(msdp->usbp);
-			usbStop(msdp->usbp);
-			chThdExit(0);
-			return 0;
+
+
+		bool_t enable_msd = true;
+		if( msdp->enable_msd_callback != NULL ) {
+		  enable_msd = msdp->enable_msd_callback();
 		}
+
+
+		if( enable_msd ) {
+          msd_debug_print(chp, "state=%d\r\n", msdp->state);
+          /* wait on data depending on the current state */
+          switch(msdp->state) {
+          case idle:
+              msd_debug_print(chp, "IDL");
+              wait_for_isr = msdWaitForCommandBlock(msdp);
+              msd_debug_print(chp, "x\r\n");
+              break;
+          case read_cmd_block:
+              msd_debug_print(chp, "RCB");
+              wait_for_isr = msdReadCommandBlock(msdp);
+              msd_debug_print(chp, "x\r\n");
+              break;
+          case ejected:
+              /* disconnect usb device */
+              msd_debug_print(chp, "ejected\r\n");
+              chThdSleepMilliseconds(70);
+              usbDisconnectBus(msdp->usbp);
+              usbStop(msdp->usbp);
+              chThdExit(0);
+              return 0;
+          }
+		}
+
 
 		/* wait until the ISR wakes thread */
 		if( wait_for_isr && (!msdp->reconfigured_or_reset_event) ) {

@@ -178,6 +178,11 @@ struct USBMassStorageDriver {
 	bool_t reconfigured_or_reset_event;
 	uint32_t trigger_transfer_index;
     usbep_t  ms_ep_number;
+
+    bool_t (*enable_msd_callback)(void);
+
+    uint32_t read_error_count;
+    uint32_t write_error_count;
 };
 
 #define MSD_CONNECTED			0
