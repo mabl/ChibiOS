@@ -671,9 +671,10 @@ static bool_t SCSICommandStartStopUnit(USBMassStorageDriver *msdp) {
 
 	if((ssu->loej_start & 0b00000011) == 0b00000010) {
 		/* device has been ejected */
-		chEvtBroadcast(&msdp->evt_ejected);
-
-		msdp->state = ejected;
+	    if( ! msdp->disable_usb_bus_disconnect_on_eject ) {
+          chEvtBroadcast(&msdp->evt_ejected);
+          msdp->state = ejected;
+	    }
 	}
 
 	msdp->result = TRUE;
@@ -912,10 +913,12 @@ static msg_t MassStorageThd(void *arg) {
           case ejected:
               /* disconnect usb device */
               msd_debug_print(chp, "ejected\r\n");
-              chThdSleepMilliseconds(70);
-              usbDisconnectBus(msdp->usbp);
-              usbStop(msdp->usbp);
-              chThdExit(0);
+              if( ! msdp->disable_usb_bus_disconnect_on_eject ) {
+                chThdSleepMilliseconds(70);
+                usbDisconnectBus(msdp->usbp);
+                usbStop(msdp->usbp);
+                chThdExit(0);
+              }
               return 0;
           }
 		}

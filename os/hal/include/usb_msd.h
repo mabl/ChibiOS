@@ -180,6 +180,7 @@ struct USBMassStorageDriver {
     usbep_t  ms_ep_number;
 
     bool_t (*enable_msd_callback)(void);
+    bool_t disable_usb_bus_disconnect_on_eject;
 
     uint32_t read_error_count;
     uint32_t write_error_count;
