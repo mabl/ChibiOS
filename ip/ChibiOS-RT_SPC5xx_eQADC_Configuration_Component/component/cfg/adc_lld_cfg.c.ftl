@@ -107,7 +107,7 @@ const ADCConversionGroup adc_group_${group.symbolic_name[0]?trim} = {
  */
 static const adccommand_t adc_${group.symbolic_name[0]}_commands[ADC_GROUP_${group.symbolic_name[0]?upper_case}_NUM_COMMANDS] = {
   [#list 1..num_channels as n]
-    [#list group.channels.sequence.sequence as channel_settings]
+    [#list group.channels.sequence.channel_settings as channel_settings]
       [#assign CHANNEL = channel_settings.channel[0]?string /]
       [#assign CYCLES = channel_settings.sampling_time[0]?string /]
       [#if channel_settings.calibrated[0]?lower_case == "true"]

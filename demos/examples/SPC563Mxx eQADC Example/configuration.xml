@@ -331,41 +331,41 @@
               </notifications>
               <channels>
                 <sequence>
-                  <sequence>
+                  <channel_settings>
                     <channel index="41">VRL</channel>
                     <sample_size index="0">12</sample_size>
                     <sampling_time index="2">64</sampling_time>
                     <calibrated>true</calibrated>
                     <signed_result>false</signed_result>
-                  </sequence>
-                  <sequence>
+                  </channel_settings>
+                  <channel_settings>
                     <channel index="42">VREF25</channel>
                     <sample_size index="0">12</sample_size>
                     <sampling_time index="2">64</sampling_time>
                     <calibrated>true</calibrated>
                     <signed_result>false</signed_result>
-                  </sequence>
-                  <sequence>
+                  </channel_settings>
+                  <channel_settings>
                     <channel index="43">VREF50</channel>
                     <sample_size index="0">12</sample_size>
                     <sampling_time index="2">64</sampling_time>
                     <calibrated>true</calibrated>
                     <signed_result>false</signed_result>
-                  </sequence>
-                  <sequence>
+                  </channel_settings>
+                  <channel_settings>
                     <channel index="44">VREF75</channel>
                     <sample_size index="0">12</sample_size>
                     <sampling_time index="2">64</sampling_time>
                     <calibrated>true</calibrated>
                     <signed_result>false</signed_result>
-                  </sequence>
-                  <sequence>
+                  </channel_settings>
+                  <channel_settings>
                     <channel index="40">VRH</channel>
                     <sample_size index="0">12</sample_size>
                     <sampling_time index="2">64</sampling_time>
                     <calibrated>true</calibrated>
                     <signed_result>false</signed_result>
-                  </sequence>
+                  </channel_settings>
                 </sequence>
               </channels>
             </conversion_group_settings>
@@ -385,62 +385,62 @@
               </notifications>
               <channels>
                 <sequence>
-                  <sequence>
+                  <channel_settings>
                     <channel index="41">VRL</channel>
                     <sample_size index="0">12</sample_size>
                     <sampling_time index="2">64</sampling_time>
                     <calibrated>true</calibrated>
                     <signed_result>false</signed_result>
-                  </sequence>
-                  <sequence>
+                  </channel_settings>
+                  <channel_settings>
                     <channel index="41">VRL</channel>
                     <sample_size index="0">12</sample_size>
                     <sampling_time index="2">64</sampling_time>
                     <calibrated>true</calibrated>
                     <signed_result>false</signed_result>
-                  </sequence>
-                  <sequence>
+                  </channel_settings>
+                  <channel_settings>
                     <channel index="42">VREF25</channel>
                     <sample_size index="0">12</sample_size>
                     <sampling_time index="2">64</sampling_time>
                     <calibrated>true</calibrated>
                     <signed_result>false</signed_result>
-                  </sequence>
-                  <sequence>
+                  </channel_settings>
+                  <channel_settings>
                     <channel index="43">VREF50</channel>
                     <sample_size index="0">12</sample_size>
                     <sampling_time index="2">64</sampling_time>
                     <calibrated>true</calibrated>
                     <signed_result>false</signed_result>
-                  </sequence>
-                  <sequence>
+                  </channel_settings>
+                  <channel_settings>
                     <channel index="43">VREF50</channel>
                     <sample_size index="0">12</sample_size>
                     <sampling_time index="2">64</sampling_time>
                     <calibrated>true</calibrated>
                     <signed_result>false</signed_result>
-                  </sequence>
-                  <sequence>
+                  </channel_settings>
+                  <channel_settings>
                     <channel index="44">VREF75</channel>
                     <sample_size index="0">12</sample_size>
                     <sampling_time index="2">64</sampling_time>
                     <calibrated>true</calibrated>
                     <signed_result>false</signed_result>
-                  </sequence>
-                  <sequence>
+                  </channel_settings>
+                  <channel_settings>
                     <channel index="40">VRH</channel>
                     <sample_size index="0">12</sample_size>
                     <sampling_time index="2">64</sampling_time>
                     <calibrated>true</calibrated>
                     <signed_result>false</signed_result>
-                  </sequence>
-                  <sequence>
+                  </channel_settings>
+                  <channel_settings>
                     <channel index="40">VRH</channel>
                     <sample_size index="0">12</sample_size>
                     <sampling_time index="2">64</sampling_time>
                     <calibrated>true</calibrated>
                     <signed_result>false</signed_result>
-                  </sequence>
+                  </channel_settings>
                 </sequence>
               </channels>
             </conversion_group_settings>

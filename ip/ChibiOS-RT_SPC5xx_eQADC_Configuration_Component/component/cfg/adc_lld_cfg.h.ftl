@@ -38,7 +38,7 @@
  */
 [#list conf.instance.conversion_groups.groups.conversion_group_settings as group]
   [#assign name = group.symbolic_name[0]?upper_case /]
-#define ADC_GROUP_${name}_NUM_CHANNELS ${group.channels.sequence.sequence?size}
+#define ADC_GROUP_${name}_NUM_CHANNELS ${group.channels.sequence.channel_settings?size}
 #define ADC_GROUP_${name}_BUF_DEPTH    ${group.maximum_sequential[0]}
 #define ADC_GROUP_${name}_NUM_COMMANDS (ADC_GROUP_${name}_NUM_CHANNELS * ADC_GROUP_${name}_BUF_DEPTH)
   [#if group_has_next]
