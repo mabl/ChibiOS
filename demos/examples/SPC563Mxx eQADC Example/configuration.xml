@@ -4,7 +4,6 @@
     <description>This application shows how to use the eQADC unit found on the SPC563Mxx platform.</description>
     <component id="com.st.tools.spc5.components.platform.spc563mxx" version="1.0.0.qualifier">
       <component id="org.chibios.spc5.components.rtos.spc563mxx" version="2.5.2.qualifier" />
-      <component id="org.chibios.spc5.components.hal.platform.spc5xx.ip.eqadc_v1.configuration" version="2.5.2.qualifier" />
     </component>
     <instances>
       <instance locked="false" id="com.st.tools.spc5.components.platform.spc563mxx">
@@ -178,6 +177,139 @@
           <an5 index="0">None</an5>
           <an6 index="0">None</an6>
           <an7 index="0">None</an7>
+          <conversion_groups>
+            <groups>
+              <conversion_group_settings>
+                <adc_driver index="0">ADCD1 (ADC0/FIFO0)</adc_driver>
+                <symbolic_name>cgrp1</symbolic_name>
+                <conversion_mode index="0">Linear Buffer</conversion_mode>
+                <maximum_sequential>8</maximum_sequential>
+                <triggers>
+                  <mode index="0">SW Trigger</mode>
+                  <tsel index="0">ETSEL (secondary selector)</tsel>
+                  <etsel>0</etsel>
+                </triggers>
+                <notifications>
+                  <conversion_callback />
+                  <error_callback>adc_error_callback</error_callback>
+                </notifications>
+                <channels>
+                  <sequence>
+                    <channel_settings>
+                      <channel index="41">VRL</channel>
+                      <sample_size index="0">12</sample_size>
+                      <sampling_time index="2">64</sampling_time>
+                      <calibrated>true</calibrated>
+                      <signed_result>false</signed_result>
+                    </channel_settings>
+                    <channel_settings>
+                      <channel index="42">VREF25</channel>
+                      <sample_size index="0">12</sample_size>
+                      <sampling_time index="2">64</sampling_time>
+                      <calibrated>true</calibrated>
+                      <signed_result>false</signed_result>
+                    </channel_settings>
+                    <channel_settings>
+                      <channel index="43">VREF50</channel>
+                      <sample_size index="0">12</sample_size>
+                      <sampling_time index="2">64</sampling_time>
+                      <calibrated>true</calibrated>
+                      <signed_result>false</signed_result>
+                    </channel_settings>
+                    <channel_settings>
+                      <channel index="44">VREF75</channel>
+                      <sample_size index="0">12</sample_size>
+                      <sampling_time index="2">64</sampling_time>
+                      <calibrated>true</calibrated>
+                      <signed_result>false</signed_result>
+                    </channel_settings>
+                    <channel_settings>
+                      <channel index="40">VRH</channel>
+                      <sample_size index="0">12</sample_size>
+                      <sampling_time index="2">64</sampling_time>
+                      <calibrated>true</calibrated>
+                      <signed_result>false</signed_result>
+                    </channel_settings>
+                  </sequence>
+                </channels>
+              </conversion_group_settings>
+              <conversion_group_settings>
+                <adc_driver index="3">ADCD4 (ADC1/FIFO3)</adc_driver>
+                <symbolic_name>cgrp2</symbolic_name>
+                <conversion_mode index="1">Circular Buffer</conversion_mode>
+                <maximum_sequential>16</maximum_sequential>
+                <triggers>
+                  <mode index="0">SW Trigger</mode>
+                  <tsel index="0">ETSEL (secondary selector)</tsel>
+                  <etsel>0</etsel>
+                </triggers>
+                <notifications>
+                  <conversion_callback>adc_conversion_callback</conversion_callback>
+                  <error_callback>adc_error_callback</error_callback>
+                </notifications>
+                <channels>
+                  <sequence>
+                    <channel_settings>
+                      <channel index="41">VRL</channel>
+                      <sample_size index="0">12</sample_size>
+                      <sampling_time index="2">64</sampling_time>
+                      <calibrated>true</calibrated>
+                      <signed_result>false</signed_result>
+                    </channel_settings>
+                    <channel_settings>
+                      <channel index="41">VRL</channel>
+                      <sample_size index="0">12</sample_size>
+                      <sampling_time index="2">64</sampling_time>
+                      <calibrated>true</calibrated>
+                      <signed_result>false</signed_result>
+                    </channel_settings>
+                    <channel_settings>
+                      <channel index="42">VREF25</channel>
+                      <sample_size index="0">12</sample_size>
+                      <sampling_time index="2">64</sampling_time>
+                      <calibrated>true</calibrated>
+                      <signed_result>false</signed_result>
+                    </channel_settings>
+                    <channel_settings>
+                      <channel index="43">VREF50</channel>
+                      <sample_size index="0">12</sample_size>
+                      <sampling_time index="2">64</sampling_time>
+                      <calibrated>true</calibrated>
+                      <signed_result>false</signed_result>
+                    </channel_settings>
+                    <channel_settings>
+                      <channel index="43">VREF50</channel>
+                      <sample_size index="0">12</sample_size>
+                      <sampling_time index="2">64</sampling_time>
+                      <calibrated>true</calibrated>
+                      <signed_result>false</signed_result>
+                    </channel_settings>
+                    <channel_settings>
+                      <channel index="44">VREF75</channel>
+                      <sample_size index="0">12</sample_size>
+                      <sampling_time index="2">64</sampling_time>
+                      <calibrated>true</calibrated>
+                      <signed_result>false</signed_result>
+                    </channel_settings>
+                    <channel_settings>
+                      <channel index="40">VRH</channel>
+                      <sample_size index="0">12</sample_size>
+                      <sampling_time index="2">64</sampling_time>
+                      <calibrated>true</calibrated>
+                      <signed_result>false</signed_result>
+                    </channel_settings>
+                    <channel_settings>
+                      <channel index="40">VRH</channel>
+                      <sample_size index="0">12</sample_size>
+                      <sampling_time index="2">64</sampling_time>
+                      <calibrated>true</calibrated>
+                      <signed_result>false</signed_result>
+                    </channel_settings>
+                  </sequence>
+                </channels>
+              </conversion_group_settings>
+            </groups>
+          </conversion_groups>
         </eqadc_settings>
         <esci_settings>
           <esci0 index="0">None</esci0>
@@ -311,141 +443,6 @@
           <late_initialization_code />
           <board_initialization_code />
         </initialization_code>
-      </instance>
-      <instance locked="false" id="org.chibios.spc5.components.hal.platform.spc5xx.ip.eqadc_v1.configuration">
-        <conversion_groups>
-          <groups>
-            <conversion_group_settings>
-              <adc_driver index="0">ADCD1 (ADC0/FIFO0)</adc_driver>
-              <symbolic_name>cgrp1</symbolic_name>
-              <conversion_mode index="0">Linear Buffer</conversion_mode>
-              <maximum_sequential>8</maximum_sequential>
-              <triggers>
-                <mode index="0">SW Trigger</mode>
-                <tsel index="0">ETSEL (secondary selector)</tsel>
-                <etsel>0</etsel>
-              </triggers>
-              <notifications>
-                <conversion_callback />
-                <error_callback>adc_error_callback</error_callback>
-              </notifications>
-              <channels>
-                <sequence>
-                  <channel_settings>
-                    <channel index="41">VRL</channel>
-                    <sample_size index="0">12</sample_size>
-                    <sampling_time index="2">64</sampling_time>
-                    <calibrated>true</calibrated>
-                    <signed_result>false</signed_result>
-                  </channel_settings>
-                  <channel_settings>
-                    <channel index="42">VREF25</channel>
-                    <sample_size index="0">12</sample_size>
-                    <sampling_time index="2">64</sampling_time>
-                    <calibrated>true</calibrated>
-                    <signed_result>false</signed_result>
-                  </channel_settings>
-                  <channel_settings>
-                    <channel index="43">VREF50</channel>
-                    <sample_size index="0">12</sample_size>
-                    <sampling_time index="2">64</sampling_time>
-                    <calibrated>true</calibrated>
-                    <signed_result>false</signed_result>
-                  </channel_settings>
-                  <channel_settings>
-                    <channel index="44">VREF75</channel>
-                    <sample_size index="0">12</sample_size>
-                    <sampling_time index="2">64</sampling_time>
-                    <calibrated>true</calibrated>
-                    <signed_result>false</signed_result>
-                  </channel_settings>
-                  <channel_settings>
-                    <channel index="40">VRH</channel>
-                    <sample_size index="0">12</sample_size>
-                    <sampling_time index="2">64</sampling_time>
-                    <calibrated>true</calibrated>
-                    <signed_result>false</signed_result>
-                  </channel_settings>
-                </sequence>
-              </channels>
-            </conversion_group_settings>
-            <conversion_group_settings>
-              <adc_driver index="3">ADCD4 (ADC1/FIFO3)</adc_driver>
-              <symbolic_name>cgrp2</symbolic_name>
-              <conversion_mode index="1">Circular Buffer</conversion_mode>
-              <maximum_sequential>16</maximum_sequential>
-              <triggers>
-                <mode index="0">SW Trigger</mode>
-                <tsel index="0">ETSEL (secondary selector)</tsel>
-                <etsel>0</etsel>
-              </triggers>
-              <notifications>
-                <conversion_callback>adc_conversion_callback</conversion_callback>
-                <error_callback>adc_error_callback</error_callback>
-              </notifications>
-              <channels>
-                <sequence>
-                  <channel_settings>
-                    <channel index="41">VRL</channel>
-                    <sample_size index="0">12</sample_size>
-                    <sampling_time index="2">64</sampling_time>
-                    <calibrated>true</calibrated>
-                    <signed_result>false</signed_result>
-                  </channel_settings>
-                  <channel_settings>
-                    <channel index="41">VRL</channel>
-                    <sample_size index="0">12</sample_size>
-                    <sampling_time index="2">64</sampling_time>
-                    <calibrated>true</calibrated>
-                    <signed_result>false</signed_result>
-                  </channel_settings>
-                  <channel_settings>
-                    <channel index="42">VREF25</channel>
-                    <sample_size index="0">12</sample_size>
-                    <sampling_time index="2">64</sampling_time>
-                    <calibrated>true</calibrated>
-                    <signed_result>false</signed_result>
-                  </channel_settings>
-                  <channel_settings>
-                    <channel index="43">VREF50</channel>
-                    <sample_size index="0">12</sample_size>
-                    <sampling_time index="2">64</sampling_time>
-                    <calibrated>true</calibrated>
-                    <signed_result>false</signed_result>
-                  </channel_settings>
-                  <channel_settings>
-                    <channel index="43">VREF50</channel>
-                    <sample_size index="0">12</sample_size>
-                    <sampling_time index="2">64</sampling_time>
-                    <calibrated>true</calibrated>
-                    <signed_result>false</signed_result>
-                  </channel_settings>
-                  <channel_settings>
-                    <channel index="44">VREF75</channel>
-                    <sample_size index="0">12</sample_size>
-                    <sampling_time index="2">64</sampling_time>
-                    <calibrated>true</calibrated>
-                    <signed_result>false</signed_result>
-                  </channel_settings>
-                  <channel_settings>
-                    <channel index="40">VRH</channel>
-                    <sample_size index="0">12</sample_size>
-                    <sampling_time index="2">64</sampling_time>
-                    <calibrated>true</calibrated>
-                    <signed_result>false</signed_result>
-                  </channel_settings>
-                  <channel_settings>
-                    <channel index="40">VRH</channel>
-                    <sample_size index="0">12</sample_size>
-                    <sampling_time index="2">64</sampling_time>
-                    <calibrated>true</calibrated>
-                    <signed_result>false</signed_result>
-                  </channel_settings>
-                </sequence>
-              </channels>
-            </conversion_group_settings>
-          </groups>
-        </conversion_groups>
       </instance>
     </instances>
     <exportedFeatures />

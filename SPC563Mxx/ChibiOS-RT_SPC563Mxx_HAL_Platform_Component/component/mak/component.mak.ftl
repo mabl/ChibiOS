@@ -19,7 +19,10 @@ LIB_ASM_SRC     +=
 
 LIB_INCLUDES    += ${global.component_path}/lib/include
 
-APP_C_SRC       +=
+APP_C_SRC       += \
+[#if global.instances["org.chibios.spc5.components.hal"].enabled_drivers.adc[0]?lower_case == "true"]
+                   ${global.local_component_path}/cfg/adc_lld_cfg.c
+[/#if]
 
 APP_CPP_SRC     +=
 
