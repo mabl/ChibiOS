@@ -40,7 +40,7 @@
 /*===========================================================================*/
 
 /*===========================================================================*/
-/* Driver local variables.                                                   */
+/* Driver local variables and types.                                         */
 /*===========================================================================*/
 
 /**
@@ -218,8 +218,8 @@ bool_t sdcConnect(SDCDriver *sdcp) {
   else {
 #if SDC_MMC_SUPPORT
     /* MMC or SD V1.1 detection.*/
-    if (sdc_lld_send_cmd_short_crc(sdcp, SDMMC_CMD_APP_CMD, 0, resp) ||
-        SDC_R1_ERROR(resp[0]))
+    if (sdc_lld_send_cmd_short_crc(sdcp, MMCSD_CMD_APP_CMD, 0, resp) ||
+        MMCSD_R1_ERROR(resp[0]))
       sdcp->cardmode = SDC_MODE_CARDTYPE_MMC;
     else
 #endif /* SDC_MMC_SUPPORT */
@@ -468,13 +468,21 @@ sdcflags_t sdcGetAndClearErrors(SDCDriver *sdcp) {
  * @api
  */
 bool_t sdcSync(SDCDriver *sdcp) {
+  bool_t result;
 
   chDbgCheck(sdcp != NULL, "sdcSync");
 
   if (sdcp->state != BLK_READY)
     return CH_FAILED;
 
-  return sdc_lld_sync(sdcp);
+  /* Synchronization operation in progress.*/
+  sdcp->state = BLK_SYNCING;
+
+  result = sdc_lld_sync(sdcp);
+
+  /* Synchronization operation finished.*/
+  sdcp->state = BLK_READY;
+  return result;
 }
 
 /**
@@ -522,6 +530,9 @@ bool_t sdcErase(SDCDriver *sdcp, uint32_t startblk, uint32_t endblk) {
   chDbgCheck((sdcp != NULL), "sdcErase");
   chDbgAssert(sdcp->state == BLK_READY, "sdcErase(), #1", "invalid state");
 
+  /* Erase operation in progress.*/
+  sdcp->state = BLK_WRITING;
+
   /* Handling command differences between HC and normal cards.*/
   if (!(sdcp->cardmode & SDC_MODE_HIGH_CAPACITY)) {
     startblk *= MMCSD_BLOCK_SIZE;
@@ -533,17 +544,17 @@ bool_t sdcErase(SDCDriver *sdcp, uint32_t startblk, uint32_t endblk) {
   if ((sdc_lld_send_cmd_short_crc(sdcp, MMCSD_CMD_ERASE_RW_BLK_START,
                                   startblk, resp) != CH_SUCCESS) ||
       MMCSD_R1_ERROR(resp[0]))
-    return CH_FAILED;
+    goto failed;
 
   if ((sdc_lld_send_cmd_short_crc(sdcp, MMCSD_CMD_ERASE_RW_BLK_END,
                                   endblk, resp) != CH_SUCCESS) ||
       MMCSD_R1_ERROR(resp[0]))
-    return CH_FAILED;
+    goto failed;
 
   if ((sdc_lld_send_cmd_short_crc(sdcp, MMCSD_CMD_ERASE,
                                   0, resp) != CH_SUCCESS) ||
       MMCSD_R1_ERROR(resp[0]))
-    return CH_FAILED;
+    goto failed;
 
   /* Quick sleep to allow it to transition to programming or receiving state */
   /* TODO: ??????????????????????????? */
@@ -551,7 +562,12 @@ bool_t sdcErase(SDCDriver *sdcp, uint32_t startblk, uint32_t endblk) {
   /* Wait for it to return to transfer state to indicate it has finished erasing */
   _sdc_wait_for_transfer_state(sdcp);
 
+  sdcp->state = BLK_READY;
   return CH_SUCCESS;
+
+failed:
+  sdcp->state = BLK_READY;
+  return CH_FAILED;
 }
 
 #endif /* HAL_USE_SDC */

@@ -42,7 +42,7 @@
 /*===========================================================================*/
 
 /*===========================================================================*/
-/* Driver local variables.                                                   */
+/* Driver local variables and types.                                         */
 /*===========================================================================*/
 
 /*
@@ -323,8 +323,9 @@ void sduDataTransmitted(USBDriver *usbp, usbep_t ep) {
     chSysLockFromIsr();
     usbStartTransmitI(usbp, ep);
   }
-  else if (!(usbp->epc[ep]->in_state->txsize &
-            (usbp->epc[ep]->in_maxsize - 1))) {
+  else if ((usbp->epc[ep]->in_state->txsize > 0) &&
+           !(usbp->epc[ep]->in_state->txsize &
+             (usbp->epc[ep]->in_maxsize - 1))) {
     /* Transmit zero sized packet in case the last one has maximum allowed
        size. Otherwise the recipient may expect more data coming soon and
        not return buffered data to app. See section 5.8.3 Bulk Transfer

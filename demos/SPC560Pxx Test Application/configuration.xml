@@ -13,7 +13,8 @@
           <specific_model index="3">SPC560P50L5</specific_model>
         </platform_settings>
         <runtime_settings>
-          <stack_size>2048</stack_size>
+          <process_stack_size>2048</process_stack_size>
+          <irq_stack_size>0</irq_stack_size>
         </runtime_settings>
         <build_settings>
           <application_name>out</application_name>
@@ -27,6 +28,8 @@
         </build_settings>
         <linker_settings>
           <use_linker_gc index="0">yes</use_linker_gc>
+          <linker_options />
+          <entry_point>_reset_address</entry_point>
           <extra_flash_sections />
           <extra_ram_sections />
         </linker_settings>

@@ -40,7 +40,7 @@
 /*===========================================================================*/
 
 /*===========================================================================*/
-/* Driver local variables.                                                   */
+/* Driver local variables and types.                                         */
 /*===========================================================================*/
 
 /*===========================================================================*/
@@ -113,6 +113,30 @@ void gptStop(GPTDriver *gptp) {
               "gptStop(), #1", "invalid state");
   gpt_lld_stop(gptp);
   gptp->state = GPT_STOP;
+  chSysUnlock();
+}
+
+/**
+ * @brief   Changes the interval of GPT peripheral.
+ * @details This function changes the interval of a running GPT unit.
+ * @pre     The GPT unit must have been activated using @p gptStart().
+ * @pre     The GPT unit must have been running in continuous mode using
+ *          @p gptStartContinuous().
+ * @post    The GPT unit interval is changed to the new value.
+ *
+ * @param[in] gptp      pointer to a @p GPTDriver object
+ * @param[in] interval  new cycle time in timer ticks
+ *
+ * @api
+ */
+void gptChangeInterval(GPTDriver *gptp, gptcnt_t interval) {
+
+  chDbgCheck(gptp != NULL, "gptChangeInterval");
+
+  chSysLock();
+  chDbgAssert(gptp->state == GPT_CONTINUOUS,
+              "gptChangeInterval(), #1", "invalid state");
+  gptChangeIntervalI(gptp, interval);
   chSysUnlock();
 }
 

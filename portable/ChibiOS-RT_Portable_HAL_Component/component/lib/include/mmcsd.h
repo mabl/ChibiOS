@@ -21,6 +21,8 @@
 /**
  * @file    mmcsd.h
  * @brief   MMC/SD cards common header.
+ * @details This header defines an abstract interface useful to access MMC/SD
+ *          I/O block devices in a standardized way.
  *
  * @addtogroup MMCSD
  * @{
@@ -215,6 +217,32 @@ typedef struct {
 /*===========================================================================*/
 /* Driver macros.                                                            */
 /*===========================================================================*/
+
+/**
+ * @name    R1 response utilities
+ * @{
+ */
+/**
+ * @brief   Evaluates to @p TRUE if the R1 response contains error flags.
+ *
+ * @param[in] r1        the r1 response
+ */
+#define MMCSD_R1_ERROR(r1)              (((r1) & MMCSD_R1_ERROR_MASK) != 0)
+
+/**
+ * @brief   Returns the status field of an R1 response.
+ *
+ * @param[in] r1        the r1 response
+ */
+#define MMCSD_R1_STS(r1)                (((r1) >> 9) & 15)
+
+/**
+ * @brief   Evaluates to @p TRUE if the R1 response indicates a locked card.
+ *
+ * @param[in] r1        the r1 response
+ */
+#define MMCSD_R1_IS_CARD_LOCKED(r1)     (((r1) >> 21) & 1)
+/** @} */
 
 /**
  * @name    Macro Functions
