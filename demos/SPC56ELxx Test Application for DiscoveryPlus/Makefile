@@ -31,6 +31,11 @@ ifeq ($(USE_VLE),)
   USE_VLE = yes
 endif
 
+# Linker options here.
+ifeq ($(USE_LDOPT),)
+  USE_LDOPT = 
+endif
+
 # Enable this if you want to see the full log while compiling.
 ifeq ($(USE_VERBOSE_COMPILE),)
   USE_VERBOSE_COMPILE = no

@@ -20,7 +20,7 @@
 /*
  * SPC56EL60 memory setup in LSM mode.
  */
-__irq_stack_size__      = 0x0000; /* Not yet used.*/
+__irq_stack_size__      = 0;
 __process_stack_size__  = 2048;
 
 MEMORY
@@ -28,6 +28,8 @@ MEMORY
     flash     : org = 0x00000000, len = 2M
     ram       : org = 0x40000000, len = 128k
 }
+
+ENTRY(_reset_address)
 
 /*
  * Derived constants.

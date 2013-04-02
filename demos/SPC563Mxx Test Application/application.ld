@@ -20,7 +20,7 @@
 /*
  * SPC563Mxx memory setup.
  */
-__irq_stack_size__      = 0x0000; /* Not yet used.*/
+__irq_stack_size__      = 0;
 __process_stack_size__  = 2048;
 
 MEMORY
@@ -28,6 +28,8 @@ MEMORY
     flash     : org = 0x00000000, len = 1536k
     ram       : org = 0x40000000, len = 94k
 }
+
+ENTRY(_reset_address)
 
 /*
  * Derived constants.
