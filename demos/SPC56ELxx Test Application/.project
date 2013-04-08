@@ -107,12 +107,12 @@
 		<link>
 			<name>components/stmicroelectronics_spc56elxx_platform_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5/STMicroelectronics_SPC56ELxx_Platform_Component/component/doc/</location>
+			<location>C:/ChibiStudio/workspace/SPC5/SPC56ELxx/STMicroelectronics_SPC56ELxx_Platform_Component/component/doc/</location>
 		</link>
 		<link>
 			<name>components/stmicroelectronics_spc56elxx_platform_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5/STMicroelectronics_SPC56ELxx_Platform_Component/component/lib/</location>
+			<location>C:/ChibiStudio/workspace/SPC5/SPC56ELxx/STMicroelectronics_SPC56ELxx_Platform_Component/component/lib/</location>
 		</link>
 	</linkedResources>
 </projectDescription>

@@ -253,6 +253,111 @@
                      line body text
                   </line>
                   <property
+                        brief="IRQ priority to be assigned to the eTimer0 peripheral."
+                        default="6"
+                        editable="true"
+                        name="eTimer0"
+                        required="true"
+                        type="enum"
+                        value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+                  </property>
+                  <property
+                        brief="IRQ priority to be assigned to the eTimer1 peripheral."
+                        default="6"
+                        editable="true"
+                        name="eTimer1"
+                        required="true"
+                        type="enum"
+                        value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+                  </property>
+                  <property
+                        brief="IRQ priority to be assigned to the eTimer2 peripheral."
+                        default="6"
+                        editable="true"
+                        name="eTimer2"
+                        required="true"
+                        type="enum"
+                        value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+                  </property>
+                  <line>
+                     line body text
+                  </line>
+                  <property
+                        brief="IRQ priority to be assigned to the FlexPWM0 submodule0 peripheral."
+                        default="6"
+                        editable="true"
+                        name="FlexPWM0 SM0"
+                        required="true"
+                        type="enum"
+                        value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+                  </property>
+                  <property
+                        brief="IRQ priority to be assigned to the FlexPWM0 submodule1 peripheral."
+                        default="6"
+                        editable="true"
+                        name="FlexPWM0 SM1"
+                        required="true"
+                        type="enum"
+                        value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+                  </property>
+                  <property
+                        brief="IRQ priority to be assigned to the FlexPWM0 submodule2 peripheral."
+                        default="6"
+                        editable="true"
+                        name="FlexPWM0 SM2"
+                        required="true"
+                        type="enum"
+                        value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+                  </property>
+                  <property
+                        brief="IRQ priority to be assigned to the FlexPWM0 submodule3 peripheral."
+                        default="6"
+                        editable="true"
+                        name="FlexPWM0 SM3"
+                        required="true"
+                        type="enum"
+                        value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+                  </property>
+                  <property
+                        brief="IRQ priority to be assigned to the FlexPWM1 submodule0 peripheral."
+                        default="6"
+                        editable="true"
+                        name="FlexPWM1 SM0"
+                        required="true"
+                        type="enum"
+                        value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+                  </property>
+                  <property
+                        brief="IRQ priority to be assigned to the FlexPWM1 submodule1 peripheral."
+                        default="6"
+                        editable="true"
+                        name="FlexPWM1 SM1"
+                        required="true"
+                        type="enum"
+                        value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+                  </property>
+                  <property
+                        brief="IRQ priority to be assigned to the FlexPWM1 submodule2 peripheral."
+                        default="6"
+                        editable="true"
+                        name="FlexPWM1 SM2"
+                        required="true"
+                        type="enum"
+                        value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+                  </property>
+                  <property
+                        brief="IRQ priority to be assigned to the FlexPWM1 submodule3 peripheral."
+                        default="6"
+                        editable="true"
+                        name="FlexPWM1 SM3"
+                        required="true"
+                        type="enum"
+                        value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+                  </property>
+                  <line>
+                     line body text
+                  </line>
+                  <property
                         brief="IRQ priority to be assigned to the LINFlex0 peripheral."
                         default="7"
                         editable="true"
@@ -280,6 +385,236 @@
                      DMA priority settings, the defaults are usually acceptable.
                   </description>
                   <line></line>
+               </group>
+               <group
+                     columns="3"
+                     expanded="false"
+                     name="eTimer Settings">
+                  <description>
+                     Settings related to the eTimer units.
+                  </description>
+                  <line></line>
+                  <text>
+                     Enabled channels.
+                  </text>
+                  <property
+                        brief="If selected then this eTimer channel is enabled for Input Capture. "
+                        default="false"
+                        editable="true"
+                        name="eTimer0 ch0"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="If selected then this eTimer channel is enabled for Input Capture. "
+                        default="false"
+                        editable="true"
+                        name="eTimer0 ch1"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="If selected then this eTimer channel is enabled for Input Capture. "
+                        default="false"
+                        editable="true"
+                        name="eTimer0 ch2"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="If selected then this eTimer channel is enabled for Input Capture. "
+                        default="false"
+                        editable="true"
+                        name="eTimer0 ch3"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="If selected then this eTimer channel is enabled for Input Capture. "
+                        default="false"
+                        editable="true"
+                        name="eTimer0 ch4"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="If selected then this eTimer channel is enabled for Input Capture. "
+                        default="false"
+                        editable="true"
+                        name="eTimer0 ch5"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="If selected then this eTimer channel is enabled for Input Capture. "
+                        default="false"
+                        editable="true"
+                        name="eTimer1 ch0"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="If selected then this eTimer channel is enabled for Input Capture. "
+                        default="false"
+                        editable="true"
+                        name="eTimer1 ch1"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="If selected then this eTimer channel is enabled for Input Capture. "
+                        default="false"
+                        editable="true"
+                        name="eTimer1 ch2"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="If selected then this eTimer channel is enabled for Input Capture. "
+                        default="false"
+                        editable="true"
+                        name="eTimer1 ch3"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="If selected then this eTimer channel is enabled for Input Capture. "
+                        default="false"
+                        editable="true"
+                        name="eTimer1 ch4"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="If selected then this eTimer channel is enabled for Input Capture. "
+                        default="false"
+                        editable="true"
+                        name="eTimer1 ch5"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="If selected then this eTimer channel is enabled for Input Capture. "
+                        default="false"
+                        editable="true"
+                        name="eTimer2 ch0"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="If selected then this eTimer channel is enabled for Input Capture. "
+                        default="false"
+                        editable="true"
+                        name="eTimer2 ch1"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="If selected then this eTimer channel is enabled for Input Capture. "
+                        default="false"
+                        editable="true"
+                        name="eTimer2 ch2"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="If selected then this eTimer channel is enabled for Input Capture. "
+                        default="false"
+                        editable="true"
+                        name="eTimer2 ch3"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="If selected then this eTimer channel is enabled for Input Capture. "
+                        default="false"
+                        editable="true"
+                        name="eTimer2 ch4"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="If selected then this eTimer channel is enabled for Input Capture. "
+                        default="false"
+                        editable="true"
+                        name="eTimer2 ch5"
+                        required="true"
+                        type="boolean">
+                  </property>
+               </group>
+               <group
+                     columns="2"
+                     expanded="false"
+                     name="FlexPWM Settings"
+                     style="collapsable">
+                  <description>
+                     Settings related to the FlexPWM units.
+                  </description>
+                  <line></line>
+                  <property
+                        brief="If selected then this FlexPWM submodule is enabled for PWM Output. "
+                        default="false"
+                        editable="true"
+                        name="FlexPWM0 sm0"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="If selected then this FlexPWM submodule is enabled for PWM Output. "
+                        default="false"
+                        editable="true"
+                        name="FlexPWM0 sm1"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="If selected then this FlexPWM submodule is enabled for PWM Output. "
+                        default="false"
+                        editable="true"
+                        name="FlexPWM0 sm2"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="If selected then this FlexPWM submodule is enabled for PWM Output. "
+                        default="false"
+                        editable="true"
+                        name="FlexPWM0 sm3"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="If selected then this FlexPWM submodule is enabled for PWM Output. "
+                        default="false"
+                        editable="true"
+                        name="FlexPWM1 sm0"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="If selected then this FlexPWM submodule is enabled for PWM Output. "
+                        default="false"
+                        editable="true"
+                        name="FlexPWM1 sm1"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="If selected then this FlexPWM submodule is enabled for PWM Output. "
+                        default="false"
+                        editable="true"
+                        name="FlexPWM1 sm2"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="If selected then this FlexPWM submodule is enabled for PWM Output. "
+                        default="false"
+                        editable="true"
+                        name="FlexPWM1 sm3"
+                        required="true"
+                        type="boolean">
+                  </property>
                </group>
                <group
                      columns="2"
@@ -324,7 +659,15 @@
                </exportedFeature>
                <exportedFeature
                      exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.icu">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
                      id="org.chibios.spc5.features.hal.implementations.pal">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.implementations.pwm">
                </exportedFeature>
                <exportedFeature
                      exclusive="false"

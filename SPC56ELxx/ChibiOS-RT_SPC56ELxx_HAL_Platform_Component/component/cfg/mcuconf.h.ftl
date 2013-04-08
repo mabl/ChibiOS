@@ -136,6 +136,74 @@
 #define SPC5_CLOCK_FAILURE_HOOK()           ${conf.instance.initialization_settings.clocks.clock_failure_hook[0]}
 
 /*
+ * PWM driver system settings.
+ */
+#define SPC5_PWM_USE_SMOD0                  ${conf.instance.flexpwm_settings.flexpwm0_sm0[0]?upper_case}
+#define SPC5_PWM_USE_SMOD1                  ${conf.instance.flexpwm_settings.flexpwm0_sm1[0]?upper_case}
+#define SPC5_PWM_USE_SMOD2                  ${conf.instance.flexpwm_settings.flexpwm0_sm2[0]?upper_case}
+#define SPC5_PWM_USE_SMOD3                  ${conf.instance.flexpwm_settings.flexpwm0_sm3[0]?upper_case}
+#define SPC5_PWM_SMOD0_PRIORITY             ${conf.instance.irq_priority_settings.flexpwm0_sm0[0]}
+#define SPC5_PWM_SMOD1_PRIORITY             ${conf.instance.irq_priority_settings.flexpwm0_sm1[0]}
+#define SPC5_PWM_SMOD2_PRIORITY             ${conf.instance.irq_priority_settings.flexpwm0_sm2[0]}
+#define SPC5_PWM_SMOD3_PRIORITY             ${conf.instance.irq_priority_settings.flexpwm0_sm3[0]}
+#define SPC5_PWM_FLEXPWM0_START_PCTL        (SPC5_ME_PCTL_RUN(1) |          \
+                                             SPC5_ME_PCTL_LP(2))
+#define SPC5_PWM_FLEXPWM0_STOP_PCTL         (SPC5_ME_PCTL_RUN(0) |          \
+                                             SPC5_ME_PCTL_LP(0))
+
+#define SPC5_PWM_USE_SMOD4                  ${conf.instance.flexpwm_settings.flexpwm1_sm0[0]?upper_case}
+#define SPC5_PWM_USE_SMOD5                  ${conf.instance.flexpwm_settings.flexpwm1_sm1[0]?upper_case}
+#define SPC5_PWM_USE_SMOD6                  ${conf.instance.flexpwm_settings.flexpwm1_sm2[0]?upper_case}
+#define SPC5_PWM_USE_SMOD7                  ${conf.instance.flexpwm_settings.flexpwm1_sm3[0]?upper_case}
+#define SPC5_PWM_SMOD4_PRIORITY             ${conf.instance.irq_priority_settings.flexpwm1_sm0[0]}
+#define SPC5_PWM_SMOD5_PRIORITY             ${conf.instance.irq_priority_settings.flexpwm1_sm1[0]}
+#define SPC5_PWM_SMOD6_PRIORITY             ${conf.instance.irq_priority_settings.flexpwm1_sm2[0]}
+#define SPC5_PWM_SMOD7_PRIORITY             ${conf.instance.irq_priority_settings.flexpwm1_sm3[0]}
+#define SPC5_PWM_FLEXPWM1_START_PCTL        (SPC5_ME_PCTL_RUN(1) |          \
+                                             SPC5_ME_PCTL_LP(2))
+#define SPC5_PWM_FLEXPWM1_STOP_PCTL         (SPC5_ME_PCTL_RUN(0) |          \
+                                             SPC5_ME_PCTL_LP(0))
+
+/*
+ * ICU driver system settings.
+ */
+#define SPC5_ICU_USE_SMOD0                  ${conf.instance.etimer_settings.etimer0_ch0[0]?upper_case}
+#define SPC5_ICU_USE_SMOD1                  ${conf.instance.etimer_settings.etimer0_ch1[0]?upper_case}
+#define SPC5_ICU_USE_SMOD2                  ${conf.instance.etimer_settings.etimer0_ch2[0]?upper_case}
+#define SPC5_ICU_USE_SMOD3                  ${conf.instance.etimer_settings.etimer0_ch3[0]?upper_case}
+#define SPC5_ICU_USE_SMOD4                  ${conf.instance.etimer_settings.etimer0_ch4[0]?upper_case}
+#define SPC5_ICU_USE_SMOD5                  ${conf.instance.etimer_settings.etimer0_ch5[0]?upper_case}
+#define SPC5_ICU_ETIMER0_PRIORITY           ${conf.instance.irq_priority_settings.etimer0[0]}
+#define SPC5_ICU_ETIMER0_START_PCTL         (SPC5_ME_PCTL_RUN(1) |          \
+                                             SPC5_ME_PCTL_LP(2))
+#define SPC5_ICU_ETIMER0_STOP_PCTL          (SPC5_ME_PCTL_RUN(0) |          \
+                                             SPC5_ME_PCTL_LP(0))
+
+#define SPC5_ICU_USE_SMOD6                  ${conf.instance.etimer_settings.etimer1_ch0[0]?upper_case}
+#define SPC5_ICU_USE_SMOD7                  ${conf.instance.etimer_settings.etimer1_ch1[0]?upper_case}
+#define SPC5_ICU_USE_SMOD8                  ${conf.instance.etimer_settings.etimer1_ch2[0]?upper_case}
+#define SPC5_ICU_USE_SMOD9                  ${conf.instance.etimer_settings.etimer1_ch3[0]?upper_case}
+#define SPC5_ICU_USE_SMOD10                 ${conf.instance.etimer_settings.etimer1_ch4[0]?upper_case}
+#define SPC5_ICU_USE_SMOD11                 ${conf.instance.etimer_settings.etimer1_ch5[0]?upper_case}
+#define SPC5_ICU_ETIMER1_PRIORITY           ${conf.instance.irq_priority_settings.etimer1[0]}
+#define SPC5_ICU_ETIMER1_START_PCTL         (SPC5_ME_PCTL_RUN(1) |          \
+                                             SPC5_ME_PCTL_LP(2))
+#define SPC5_ICU_ETIMER1_STOP_PCTL          (SPC5_ME_PCTL_RUN(0) |          \
+                                             SPC5_ME_PCTL_LP(0))
+
+#define SPC5_ICU_USE_SMOD12                 ${conf.instance.etimer_settings.etimer2_ch0[0]?upper_case}
+#define SPC5_ICU_USE_SMOD13                 ${conf.instance.etimer_settings.etimer2_ch1[0]?upper_case}
+#define SPC5_ICU_USE_SMOD14                 ${conf.instance.etimer_settings.etimer2_ch2[0]?upper_case}
+#define SPC5_ICU_USE_SMOD15                 ${conf.instance.etimer_settings.etimer2_ch3[0]?upper_case}
+#define SPC5_ICU_USE_SMOD16                 ${conf.instance.etimer_settings.etimer2_ch4[0]?upper_case}
+#define SPC5_ICU_USE_SMOD17                 ${conf.instance.etimer_settings.etimer2_ch5[0]?upper_case}
+#define SPC5_ICU_ETIMER2_PRIORITY           ${conf.instance.irq_priority_settings.etimer2[0]}
+#define SPC5_ICU_ETIMER2_START_PCTL         (SPC5_ME_PCTL_RUN(1) |          \
+                                             SPC5_ME_PCTL_LP(2))
+#define SPC5_ICU_ETIMER2_STOP_PCTL          (SPC5_ME_PCTL_RUN(0) |          \
+                                             SPC5_ME_PCTL_LP(0))
+
+/*
  * SERIAL driver system settings.
  */
 #define SPC5_SERIAL_USE_LINFLEX0            ${(conf.instance.linflex_settings.linflex0[0] == "Serial")?string?upper_case}

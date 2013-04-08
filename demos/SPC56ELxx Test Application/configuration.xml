@@ -31,8 +31,7 @@
           <use_linker_gc index="0">yes</use_linker_gc>
           <linker_options />
           <entry_point>_reset_address</entry_point>
-          <extra_flash_sections />
-          <extra_ram_sections />
+          <custom_sections />
         </linker_settings>
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.rtos.spc56elxx" />
@@ -97,10 +96,10 @@
           <ext>false</ext>
           <gpt>false</gpt>
           <i2c>false</i2c>
-          <icu>false</icu>
+          <icu>true</icu>
           <mac>false</mac>
           <mmc_spi>false</mmc_spi>
-          <pwm>false</pwm>
+          <pwm>true</pwm>
           <rtc>false</rtc>
           <sdc>false</sdc>
           <serial>true</serial>
@@ -168,10 +167,51 @@
           </clocks>
         </initialization_settings>
         <irq_priority_settings>
+          <etimer0 index="6">7</etimer0>
+          <etimer1 index="6">7</etimer1>
+          <etimer2 index="6">7</etimer2>
+          <flexpwm0_sm0 index="6">7</flexpwm0_sm0>
+          <flexpwm0_sm1 index="6">7</flexpwm0_sm1>
+          <flexpwm0_sm2 index="6">7</flexpwm0_sm2>
+          <flexpwm0_sm3 index="6">7</flexpwm0_sm3>
+          <flexpwm1_sm0 index="6">7</flexpwm1_sm0>
+          <flexpwm1_sm1 index="6">7</flexpwm1_sm1>
+          <flexpwm1_sm2 index="6">7</flexpwm1_sm2>
+          <flexpwm1_sm3 index="6">7</flexpwm1_sm3>
           <linflex0 index="7">8</linflex0>
           <linflex1 index="7">8</linflex1>
         </irq_priority_settings>
         <edma_settings />
+        <etimer_settings>
+          <etimer0_ch0>true</etimer0_ch0>
+          <etimer0_ch1>true</etimer0_ch1>
+          <etimer0_ch2>true</etimer0_ch2>
+          <etimer0_ch3>true</etimer0_ch3>
+          <etimer0_ch4>true</etimer0_ch4>
+          <etimer0_ch5>true</etimer0_ch5>
+          <etimer1_ch0>true</etimer1_ch0>
+          <etimer1_ch1>true</etimer1_ch1>
+          <etimer1_ch2>true</etimer1_ch2>
+          <etimer1_ch3>true</etimer1_ch3>
+          <etimer1_ch4>true</etimer1_ch4>
+          <etimer1_ch5>true</etimer1_ch5>
+          <etimer2_ch0>true</etimer2_ch0>
+          <etimer2_ch1>true</etimer2_ch1>
+          <etimer2_ch2>true</etimer2_ch2>
+          <etimer2_ch3>true</etimer2_ch3>
+          <etimer2_ch4>true</etimer2_ch4>
+          <etimer2_ch5>true</etimer2_ch5>
+        </etimer_settings>
+        <flexpwm_settings>
+          <flexpwm0_sm0>true</flexpwm0_sm0>
+          <flexpwm0_sm1>true</flexpwm0_sm1>
+          <flexpwm0_sm2>true</flexpwm0_sm2>
+          <flexpwm0_sm3>true</flexpwm0_sm3>
+          <flexpwm1_sm0>true</flexpwm1_sm0>
+          <flexpwm1_sm1>true</flexpwm1_sm1>
+          <flexpwm1_sm2>true</flexpwm1_sm2>
+          <flexpwm1_sm3>true</flexpwm1_sm3>
+        </flexpwm_settings>
         <linflex_settings>
           <linflex0 index="1">Serial</linflex0>
           <linflex1 index="0">None</linflex1>

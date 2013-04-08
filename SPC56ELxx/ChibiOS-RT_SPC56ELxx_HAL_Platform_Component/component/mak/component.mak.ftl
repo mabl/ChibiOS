@@ -3,8 +3,14 @@
 [@pp.changeOutputFile name="component.mak" /]
 LIB_C_SRC       += ${global.component_path}/lib/src/spc5_edma.c \
                    ${global.component_path}/lib/src/hal_lld.c \
+[#if global.instances["org.chibios.spc5.components.hal"].enabled_drivers.icu[0]?lower_case == "true"]
+                   ${global.component_path}/lib/src/icu_lld.c \
+[/#if]
 [#if global.instances["org.chibios.spc5.components.hal"].enabled_drivers.pal[0]?lower_case == "true"]
                    ${global.component_path}/lib/src/pal_lld.c \
+[/#if]
+[#if global.instances["org.chibios.spc5.components.hal"].enabled_drivers.pwm[0]?lower_case == "true"]
+                   ${global.component_path}/lib/src/pwm_lld.c \
 [/#if]
 [#if global.instances["org.chibios.spc5.components.hal"].enabled_drivers.serial[0]?lower_case == "true"]
                    ${global.component_path}/lib/src/serial_lld.c \

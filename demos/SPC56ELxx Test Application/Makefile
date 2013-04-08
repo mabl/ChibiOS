@@ -141,4 +141,4 @@ DLIBS   =
 # End of default section
 ##############################################################################
 
-include C:/ChibiStudio/workspace/SPC5/STMicroelectronics_SPC56ELxx_Platform_Component/component/lib/rsc/rules.mk
+include C:/ChibiStudio/workspace/SPC5/SPC56ELxx/STMicroelectronics_SPC56ELxx_Platform_Component/component/lib/rsc/rules.mk
