@@ -541,6 +541,94 @@
                         required="true"
                         type="boolean">
                   </property>
+                  <line></line>
+                  <group
+                        columns="1"
+                        expanded="true"
+                        name="ICU Configurations"
+                        style="button">
+                     <description>
+                        Conversion Groups definition. A configuration group is a structure that describes a conversion process, the structures and the required definitions are automatically generated.
+                     </description>
+                     <property
+                           brief="List of the ICU configurations."
+                           editable="true"
+                           length="0"
+                           name="Configs"
+                           required="true"
+                           type="list"
+                           value="Symbolic Name,Capture Mode,Clock Frequency">
+                        <group
+                              expanded="true"
+                              name="ICU Configuration Settings"
+                              style="collapsable">
+                           <description>
+                              Settings related to the ICU configuration.
+                           </description>
+                           <property
+                                 brief="Name for the ICU configuration, it must be compatibile with C identifiers."
+                                 default="group_name"
+                                 editable="true"
+                                 name="Symbolic Name"
+                                 regex="^[a-zA-Z_][a-zA-Z0-9_]*$"
+                                 required="true"
+                                 type="string">
+                           </property>
+                           <property
+                                 brief="Input Capture polarity."
+                                 default="0"
+                                 editable="true"
+                                 length="0"
+                                 name="Capture Mode"
+                                 required="true"
+                                 type="enum"
+                                 value="ACTIVE_HIGH,ACTIVE_LOW">
+                           </property>
+                           <property
+                                 brief="Clock frequency of the capture unit. Note, the frequency must be a value phisically obtainable by the eTimer prescaler."
+                                 default="1000000"
+                                 editable="true"
+                                 min="1"
+                                 name="Clock Frequency"
+                                 required="true"
+                                 type="unsigned">
+                           </property>
+                           <group
+                                 columns="1"
+                                 expanded="false"
+                                 name="Notifications"
+                                 style="collapsable">
+                              <description>
+                                 The driver notifies the application using callbacks, note that callbacks are invoked from ISR context so be careful with the code you put there, efficiency is mandatory. Leave empty if callbacks are not needed.
+                              </description>
+                              <property
+                                    brief="Name of the callback invoked on input activation front."
+                                    editable="true"
+                                    name="Period Callback"
+                                    regex="^[a-zA-Z_][a-zA-Z0-9_]*$|^$"
+                                    required="false"
+                                    type="string">
+                              </property>
+                              <property
+                                    brief="Name of the callback invoked on input deactivation front."
+                                    editable="true"
+                                    name="Width Callback"
+                                    regex="^[a-zA-Z_][a-zA-Z0-9_]*$|^$"
+                                    required="false"
+                                    type="string">
+                              </property>
+                              <property
+                                    brief="Name of the callback invoked on counter overflow."
+                                    editable="true"
+                                    name="Overflow Callback"
+                                    regex="^[a-zA-Z_][a-zA-Z0-9_]*$|^$"
+                                    required="false"
+                                    type="string">
+                              </property>
+                           </group>
+                        </group>
+                     </property>
+                  </group>
                </group>
                <group
                      columns="2"

@@ -85,24 +85,14 @@
 			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/SPC563Mxx/ChibiOS-RT_SPC563Mxx_Kernel_Port_Component/component/lib/</location>
 		</link>
 		<link>
-			<name>components/chibios_rt_spc5xx_eqadc_configuration_component/doc</name>
-			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/ip/ChibiOS-RT_SPC5xx_eQADC_Configuration_Component/component/doc</location>
-		</link>
-		<link>
-			<name>components/chibios_rt_spc5xx_eqadc_configuration_component/lib</name>
-			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5-ChibiOS/ip/ChibiOS-RT_SPC5xx_eQADC_Configuration_Component/component/lib</location>
-		</link>
-		<link>
 			<name>components/stmicroelectronics_spc563mxx_platform_component/doc</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5/STMicroelectronics_SPC563Mxx_Platform_Component/component/doc/</location>
+			<location>C:/ChibiStudio/workspace/SPC5/SPC563Mxx/STMicroelectronics_SPC563Mxx_Platform_Component/component/doc/</location>
 		</link>
 		<link>
 			<name>components/stmicroelectronics_spc563mxx_platform_component/lib</name>
 			<type>2</type>
-			<location>C:/ChibiStudio/workspace/SPC5/STMicroelectronics_SPC563Mxx_Platform_Component/component/lib/</location>
+			<location>C:/ChibiStudio/workspace/SPC5/SPC563Mxx/STMicroelectronics_SPC563Mxx_Platform_Component/component/lib/</location>
 		</link>
 	</linkedResources>
 </projectDescription>
