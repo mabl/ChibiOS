@@ -49,18 +49,6 @@ along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
          unpack="false"/>
 
    <plugin
-         id="org.chibios.spc5.components.board.spc560bcxx"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.chibios.spc5.components.hal.platform.spc560bcxx"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
          id="org.chibios.spc5.components.kernel.port.gcc.spc560bcxx"
          download-size="0"
          install-size="0"
@@ -68,12 +56,6 @@ along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
 
    <plugin
          id="org.chibios.spc5.components.rtos.spc560bcxx"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.chibios.spc5.components.hal"
          download-size="0"
          install-size="0"
          version="0.0.0"/>
