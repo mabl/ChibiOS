@@ -1,21 +1,17 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006-2013 Giovanni Di Sirio
 
-    This file is part of ChibiOS/RT.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    ChibiOS/RT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 /**
@@ -53,7 +49,7 @@
 SDCDriver SDCD1;
 
 /*===========================================================================*/
-/* Driver local variables.                                                   */
+/* Driver local variables and types.                                         */
 /*===========================================================================*/
 
 #if STM32_SDC_SDIO_UNALIGNED_SUPPORT
@@ -212,40 +208,27 @@ static bool_t sdc_lld_wait_transaction_end(SDCDriver *sdcp, uint32_t n,
  * @brief   Gets SDC errors.
  *
  * @param[in] sdcp      pointer to the @p SDCDriver object
+ * @param[in] sta       value of the STA register
  *
  * @notapi
  */
-static void sdc_lld_collect_errors(SDCDriver *sdcp) {
+static void sdc_lld_collect_errors(SDCDriver *sdcp, uint32_t sta) {
   uint32_t errors = SDC_NO_ERROR;
 
-  if (SDIO->STA & SDIO_STA_CCRCFAIL) {
-    SDIO->ICR |= SDIO_ICR_CCRCFAILC;
+  if (sta & SDIO_STA_CCRCFAIL)
     errors |= SDC_CMD_CRC_ERROR;
-  }
-  if (SDIO->STA & SDIO_STA_DCRCFAIL) {
-    SDIO->ICR |= SDIO_ICR_DCRCFAILC;
+  if (sta & SDIO_STA_DCRCFAIL)
     errors |= SDC_DATA_CRC_ERROR;
-  }
-  if (SDIO->STA & SDIO_STA_CTIMEOUT) {
-    SDIO->ICR |= SDIO_ICR_CTIMEOUTC;
+  if (sta & SDIO_STA_CTIMEOUT)
     errors |= SDC_COMMAND_TIMEOUT;
-  }
-  if (SDIO->STA & SDIO_STA_DTIMEOUT) {
-    SDIO->ICR |= SDIO_ICR_CTIMEOUTC;
+  if (sta & SDIO_STA_DTIMEOUT)
     errors |= SDC_DATA_TIMEOUT;
-  }
-  if (SDIO->STA & SDIO_STA_TXUNDERR) {
-    SDIO->ICR |= SDIO_ICR_TXUNDERRC;
+  if (sta & SDIO_STA_TXUNDERR)
     errors |= SDC_TX_UNDERRUN;
-  }
-  if (SDIO->STA & SDIO_STA_RXOVERR) {
-    SDIO->ICR |= SDIO_ICR_RXOVERRC;
+  if (sta & SDIO_STA_RXOVERR)
     errors |= SDC_RX_OVERRUN;
-  }
-  if (SDIO->STA & SDIO_STA_STBITERR) {
-    SDIO->ICR |= SDIO_ICR_STBITERRC;
+  if (sta & SDIO_STA_STBITERR)
     errors |= SDC_STARTBIT_ERROR;
-  }
 
   sdcp->errors |= errors;
 }
@@ -262,13 +245,14 @@ static void sdc_lld_collect_errors(SDCDriver *sdcp) {
 static void sdc_lld_error_cleanup(SDCDriver *sdcp,
                                   uint32_t n,
                                   uint32_t *resp) {
+  uint32_t sta = SDIO->STA;
 
   dmaStreamClearInterrupt(sdcp->dma);
   dmaStreamDisable(sdcp->dma);
   SDIO->ICR   = STM32_SDIO_ICR_ALL_FLAGS;
   SDIO->MASK  = 0;
   SDIO->DCTRL = 0;
-  sdc_lld_collect_errors(sdcp);
+  sdc_lld_collect_errors(sdcp, sta);
   if (n > 1)
     sdc_lld_send_cmd_short_crc(sdcp, MMCSD_CMD_STOP_TRANSMISSION, 0, resp);
 }
@@ -299,7 +283,8 @@ CH_IRQ_HANDLER(STM32_SDIO_HANDLER) {
 
   if (SDCD1.thread != NULL) {
     chSchReadyI(SDCD1.thread);
-    SDCD1.thread = NULL;  }
+    SDCD1.thread = NULL;
+  }
 
   chSysUnlockFromIsr();
 
@@ -350,7 +335,7 @@ void sdc_lld_start(SDCDriver *sdcp) {
     /* Note, the DMA must be enabled before the IRQs.*/
     bool_t b;
     b = dmaStreamAllocate(sdcp->dma, STM32_SDC_SDIO_IRQ_PRIORITY, NULL, NULL);
-    chDbgAssert(!b, "i2c_lld_start(), #3", "stream already allocated");
+    chDbgAssert(!b, "sdc_lld_start(), #1", "stream already allocated");
     dmaStreamSetPeripheral(sdcp->dma, &SDIO->FIFO);
 #if (defined(STM32F4XX) || defined(STM32F2XX))
     dmaStreamSetFIFO(sdcp->dma, STM32_DMA_FCR_DMDIS | STM32_DMA_FCR_FTH_FULL);
@@ -509,9 +494,9 @@ bool_t sdc_lld_send_cmd_short(SDCDriver *sdcp, uint8_t cmd, uint32_t arg,
   while (((sta = SDIO->STA) & (SDIO_STA_CMDREND | SDIO_STA_CTIMEOUT |
                                SDIO_STA_CCRCFAIL)) == 0)
     ;
-  SDIO->ICR = SDIO_ICR_CMDRENDC | SDIO_ICR_CTIMEOUTC | SDIO_ICR_CCRCFAILC;
+  SDIO->ICR = sta;
   if ((sta & (SDIO_STA_CTIMEOUT)) != 0) {
-    sdc_lld_collect_errors(sdcp);
+    sdc_lld_collect_errors(sdcp, sta);
     return CH_FAILED;
   }
   *resp = SDIO->RESP1;
@@ -543,9 +528,9 @@ bool_t sdc_lld_send_cmd_short_crc(SDCDriver *sdcp, uint8_t cmd, uint32_t arg,
   while (((sta = SDIO->STA) & (SDIO_STA_CMDREND | SDIO_STA_CTIMEOUT |
                                SDIO_STA_CCRCFAIL)) == 0)
     ;
-  SDIO->ICR = SDIO_ICR_CMDRENDC | SDIO_ICR_CTIMEOUTC | SDIO_ICR_CCRCFAILC;
+  SDIO->ICR = sta;
   if ((sta & (SDIO_STA_CTIMEOUT | SDIO_STA_CCRCFAIL)) != 0) {
-    sdc_lld_collect_errors(sdcp);
+    sdc_lld_collect_errors(sdcp, sta);
     return CH_FAILED;
   }
   *resp = SDIO->RESP1;
@@ -578,9 +563,9 @@ bool_t sdc_lld_send_cmd_long_crc(SDCDriver *sdcp, uint8_t cmd, uint32_t arg,
   while (((sta = SDIO->STA) & (SDIO_STA_CMDREND | SDIO_STA_CTIMEOUT |
                                SDIO_STA_CCRCFAIL)) == 0)
     ;
-  SDIO->ICR = SDIO_ICR_CMDRENDC | SDIO_ICR_CTIMEOUTC | SDIO_ICR_CCRCFAILC;
+  SDIO->ICR = sta;
   if ((sta & (STM32_SDIO_STA_ERROR_MASK)) != 0) {
-    sdc_lld_collect_errors(sdcp);
+    sdc_lld_collect_errors(sdcp, sta);
     return CH_FAILED;
   }
   /* Save bytes in reverse order because MSB in response comes first.*/

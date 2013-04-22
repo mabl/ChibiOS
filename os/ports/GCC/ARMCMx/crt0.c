@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -26,12 +26,37 @@
  * @{
  */
 
-#include "ch.h"
+#include <stdint.h>
+
+#if !defined(FALSE)
+#define FALSE       0
+#endif
+
+#if !defined(TRUE)
+#define TRUE        (!FALSE)
+#endif
+
+#define SCB_CPACR               *((uint32_t *)0xE000ED88U)
+#define SCB_FPCCR               *((uint32_t *)0xE000EF34U)
+#define SCB_FPDSCR              *((uint32_t *)0xE000EF3CU)
+#define FPCCR_ASPEN             (0x1U << 31)
+#define FPCCR_LSPEN             (0x1U << 30)
 
 typedef void (*funcp_t)(void);
 typedef funcp_t * funcpp_t;
 
 #define SYMVAL(sym) (uint32_t)(((uint8_t *)&(sym)) - ((uint8_t *)0))
+
+/*
+ * Area fill code, it is a macro because here functions cannot be called
+ * until stacks are initialized.
+ */
+#define fill32(start, end, filler) {                                        \
+  uint32_t *p1 = start;                                                     \
+  uint32_t *p2 = end;                                                       \
+  while (p1 < p2)                                                           \
+    *p1++ = filler;                                                         \
+}
 
 /*===========================================================================*/
 /**
@@ -228,19 +253,6 @@ void _default_exit(void) {
 }
 
 /**
- * @brief   Memory fill.
- *
- * @param[in] start     fill area start
- * @param[in] end       fill area end
- * @param[in] filler    filler pattern
- */
-static void fill32(uint32_t *start, uint32_t *end, uint32_t filler) {
-
-  while (start < end)
-    *start++ = filler;
-}
-
-/**
  * @brief   Reset vector.
  */
 #if !defined(__DOXYGEN__)
@@ -277,9 +289,6 @@ void ResetHandler(void) {
   asm volatile ("msr     CONTROL, %0" : : "r" (reg));
   asm volatile ("isb");
 
-  /* Early initialization hook invocation.*/
-  __early_init();
-
 #if CRT0_INIT_STACKS
   /* Main and Process stacks initialization.*/
   fill32(&__main_stack_base__,
@@ -289,6 +298,9 @@ void ResetHandler(void) {
          &__process_stack_end__,
          CRT0_STACKS_FILL_PATTERN);
 #endif
+
+  /* Early initialization hook invocation.*/
+  __early_init();
 
 #if CRT0_INIT_DATA
   /* DATA segment initialization.*/

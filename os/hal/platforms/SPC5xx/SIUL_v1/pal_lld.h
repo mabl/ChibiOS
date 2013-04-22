@@ -1,26 +1,22 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+    SPC5 HAL - Copyright (C) 2013 STMicroelectronics
 
-    This file is part of ChibiOS/RT.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    ChibiOS/RT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 /**
- * @file    SPC5xx/SIU_v1//pal_lld.h
- * @brief   SPC5xx SIU/SIUL low level driver header.
+ * @file    SPC5xx/SIUL_v1/pal_lld.h
+ * @brief   SPC5xx SIUL low level driver header.
  *
  * @addtogroup PAL
  * @{
@@ -45,7 +41,7 @@
 #undef PAL_MODE_OUTPUT_OPENDRAIN
 
 /**
- * @name    SIU/SIUL-specific PAL modes
+ * @name    SIUL-specific PAL modes
  * @{
  */
 #define PAL_SPC5_SMC                (1U << 14)
@@ -109,8 +105,7 @@
 /**
  * @brief   Alternate "n" output pad.
  */
-#define PAL_MODE_OUTPUT_ALTERNATE(n)    (PAL_SPC5_IBE | PAL_SPC5_OBE |      \
-                                         PAL_SPC5_PA(n))
+#define PAL_MODE_OUTPUT_ALTERNATE(n)    (PAL_SPC5_IBE | PAL_SPC5_PA(n))
 /** @} */
 
 /*===========================================================================*/
@@ -147,13 +142,13 @@ typedef uint16_t iomode_t;
 typedef uint32_t ioportid_t;
 
 /**
- * @brief   SIU/SIUL register initializer type.
+ * @brief   SIUL register initializer type.
  */
 typedef struct {
   uint8_t                   pcr_index;
   uint8_t                   gpdo_value;
   iomode_t                  pcr_value;
-} spc560p_siu_init_t;
+} spc_siu_init_t;
 
 /**
  * @brief   Generic I/O ports static initializer.
@@ -166,7 +161,7 @@ typedef struct {
  */
 typedef struct {
   iomode_t                  default_mode;
-  const spc560p_siu_init_t  *inits;
+  const spc_siu_init_t      *inits;
   const uint8_t             *padsels;
 } PALConfig;
 
@@ -175,24 +170,44 @@ typedef struct {
 /*===========================================================================*/
 
 /**
- * @brief   I/O port 1 identifier.
+ * @brief   I/O port A identifier.
  */
-#define PA              0
+#define PORT_A          0
 
 /**
- * @brief   I/O port 2 identifier.
+ * @brief   I/O port B identifier.
  */
-#define PB              1
+#define PORT_B          1
 
 /**
- * @brief   I/O port 3 identifier.
+ * @brief   I/O port C identifier.
  */
-#define PC              2
+#define PORT_C          2
 
 /**
- * @brief   I/O port 4 identifier.
+ * @brief   I/O port D identifier.
  */
-#define PD              3
+#define PORT_D          3
+
+/**
+ * @brief   I/O port E identifier.
+ */
+#define PORT_E          4
+
+/**
+ * @brief   I/O port F identifier.
+ */
+#define PORT_F          5
+
+/**
+ * @brief   I/O port G identifier.
+ */
+#define PORT_G          6
+
+/**
+ * @brief   I/O port H identifier.
+ */
+#define PORT_H          7
 
 /*===========================================================================*/
 /* Implementation, some of the following macros could be implemented as      */
@@ -218,7 +233,6 @@ typedef struct {
  */
 #define pal_lld_init(config) _pal_lld_init(config)
 
-#if SPC5_SIU_SUPPORTS_PORTS || defined(__DOXYGEN__)
 /**
  * @brief   Reads the physical I/O port states.
  *
@@ -278,8 +292,6 @@ typedef struct {
  */
 #define pal_lld_writegroup(port, mask, offset, bits)                        \
   _pal_lld_writegroup(port, mask, offset, bits)
-
-#endif /* SPC5_SIU_SUPPORTS_PORTS */
 
 /**
  * @brief   Pads group mode setup.
@@ -353,6 +365,20 @@ typedef struct {
  */
 #define pal_lld_clearpad(port, pad)                                         \
     (SIU.GPDO[((port) * 16) + (pad)].R = 0)
+
+/**
+ * @brief   Toggles a pad logical state.
+ * @note    The @ref PAL provides a default software implementation of this
+ *          functionality, implement this function if can optimize it by using
+ *          special hardware functionalities or special coding.
+ *
+ * @param[in] port      port identifier
+ * @param[in] pad       pad number within the port
+ *
+ * @notapi
+ */
+#define pal_lld_togglepad(port, pad)                                        \
+    (SIU.GPDO[((port) * 16) + (pad)].R = ~SIU.GPDO[((port) * 16) + (pad)].R)
 
 /**
  * @brief   Pad mode setup.

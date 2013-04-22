@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -290,11 +290,21 @@ struct context {
 #define port_wait_for_interrupt()
 #endif
 
+/**
+ * @brief   Wrapper of the assembler @p _port_switch() function.
+ */
+#define port_switch(ntp, otp) _port_switch(ntp, otp)
+
+/**
+ * @brief   Wrapper of the assembler @p _port_halt() function.
+ */
+#define port_halt() _port_halt()
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-  void port_switch(Thread *ntp, Thread *otp);
-  void port_halt(void);
+  void _port_switch(Thread *ntp, Thread *otp);
+  void _port_halt(void);
   void _port_thread_start(void);
 #ifdef __cplusplus
 }

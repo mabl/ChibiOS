@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -65,8 +65,8 @@
 /* Derived constants and error checks.                                       */
 /*===========================================================================*/
 
-#if !HAL_USE_SPI || !CH_USE_EVENTS
-#error "MMC_SPI driver requires HAL_USE_SPI and CH_USE_EVENTS"
+#if !HAL_USE_SPI || !SPI_USE_WAIT || !CH_USE_EVENTS
+#error "MMC_SPI driver requires HAL_USE_SPI, SPI_USE_WAIT and CH_USE_EVENTS"
 #endif
 
 /*===========================================================================*/

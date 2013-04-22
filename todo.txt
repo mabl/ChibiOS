@@ -5,27 +5,30 @@ X = In progress, some work done.
 ? = Not sure if worth the effort or useful at all.
 N = Decided against.
 
-Version 2.5.0
-* SDC driver port to STM32F2 and STM32F4.
-* Revision of scheduling strategy for threads at equal priority.
-* Handling of Virtual Timer callbacks out of critical zone.
-* Add normal API (not iclass) variants of the VT functions.
-* MMC_SPI driver speedup.
-* FatFs 0.9x integration.
-* USB driver model revision.
-  * STM32 OTG USB cell support for CL, F2, F4 devices.
-* CAN driver test on STM32F2/F4.
-* STM32F0 support.
-  * Specific ADC driver for STM32F0.
+Version 2.5.2
+* STM32 CAN2 support.
+* Support for ATSAM4L devices.
+* Improve support for STM32F3xx devices.
+* Update C++ wrapper.
+* Support for STM32F37x devices.
+X Restructure and improve documentation.
+X Improve support for SPC560BC devices.
+X Improve support for SPC560P devices.
+X Improve support for SPC563M devices.
+X Improve support for SPC56EL devices.
+- Support for SPC564A devices.
+- Support for SPC560D devices.
+- Support for STM32L1xx MD and HD devices.
+- Support for STM32F427 and STM32F437 devices.
+- Support for STM32F429 and STM32F439 devices.
 
 Within 2.5.x:
-X Revision of the RTCv2 driver implementation.
 X File System infrastructure.
-  - FatFs wrapper.
+  X FatFs wrapper.
+- Recursive mutexes.
+X Revision of the RTCv2 driver implementation.
 X Streaming DAC/I2S driver model and STM32 implementation.
-- Support for STM32F3xx devices.
 - Specific I2C driver for STM32F0 and newer devices.
-- STM32 CAN2 support.
 - Unified LPC1xxx HAL.
   - LPC11xx and LPC13xx HALs merged in the unified one.
   - LPC17xx support.
@@ -43,7 +46,6 @@ X Streaming DAC/I2S driver model and STM32 implementation.
 - Runtime errors manager in HAL.
 - Critical errors manager in HAL (to replace or complement assertions).
 - Add ADC3 support to the STM32F1xx ADC driver.
-- Update C++ wrapper.
 ? Add the RTC service inside the kernel and port, remove from HAL.
 
 Within 2.x.x

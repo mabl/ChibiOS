@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -211,6 +211,18 @@ typedef void (*pwmcallback_t)(PWMDriver *pwmp);
  */
 #define pwmDisableChannelI(pwmp, channel)                                   \
   pwm_lld_disable_channel(pwmp, channel)
+
+/**
+ * @brief   Returns a PWM channel status.
+ * @pre     The PWM unit must have been activated using @p pwmStart().
+ *
+ * @param[in] pwmp      pointer to a @p PWMDriver object
+ * @param[in] channel   PWM channel identifier (0...PWM_CHANNELS-1)
+ *
+ * @iclass
+ */
+#define pwmIsChannelEnabledI(pwmp, channel)                                 \
+  pwm_lld_is_channel_enabled(pwmp, channel)
 /** @} */
 
 /*===========================================================================*/

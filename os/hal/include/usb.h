@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -69,6 +69,7 @@
 #define USB_DESCRIPTOR_DEVICE_QUALIFIER     6
 #define USB_DESCRIPTOR_OTHER_SPEED_CFG      7
 #define USB_DESCRIPTOR_INTERFACE_POWER      8
+#define USB_DESCRIPTOR_INTERFACE_ASSOCIATION 11
 
 #define USB_FEATURE_ENDPOINT_HALT           0
 #define USB_FEATURE_DEVICE_REMOTE_WAKEUP    1
@@ -157,6 +158,22 @@
   USB_DESC_BYTE(bInterfaceClass),                                           \
   USB_DESC_BYTE(bInterfaceSubClass),                                        \
   USB_DESC_BYTE(bInterfaceProtocol),                                        \
+  USB_DESC_INDEX(iInterface)
+
+/**
+ * @brief   Interface Association Descriptor helper macro.
+ */
+#define USB_DESC_INTERFACE_ASSOCIATION(bFirstInterface,                     \
+                           bInterfaceCount, bFunctionClass,                 \
+                           bFunctionSubClass, bFunctionProcotol,            \
+                           iInterface)                                      \
+  USB_DESC_BYTE(8),                                                         \
+  USB_DESC_BYTE(USB_DESCRIPTOR_INTERFACE_ASSOCIATION),                      \
+  USB_DESC_BYTE(bFirstInterface),                                           \
+  USB_DESC_BYTE(bInterfaceCount),                                           \
+  USB_DESC_BYTE(bFunctionClass),                                            \
+  USB_DESC_BYTE(bFunctionSubClass),                                         \
+  USB_DESC_BYTE(bFunctionProcotol),                                         \
   USB_DESC_INDEX(iInterface)
 
 /**

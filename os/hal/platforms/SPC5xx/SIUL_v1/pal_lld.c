@@ -1,26 +1,22 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+    SPC5 HAL - Copyright (C) 2013 STMicroelectronics
 
-    This file is part of ChibiOS/RT.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    ChibiOS/RT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 /**
- * @file    SPC5xx/SIU_v1/pal_lld.c
- * @brief   SPC5xx SIU/SIUL low level driver code.
+ * @file    SPC5xx/SIUL_v1/pal_lld.c
+ * @brief   SPC5xx SIUL low level driver code.
  *
  * @addtogroup PAL
  * @{
@@ -40,8 +36,12 @@
 /*===========================================================================*/
 
 /*===========================================================================*/
-/* Driver local variables.                                                   */
+/* Driver local variables and types.                                         */
 /*===========================================================================*/
+
+#if defined(SPC5_SIUL_SYSTEM_PINS)
+static const unsigned system_pins[] = {SPC5_SIUL_SYSTEM_PINS};
+#endif
 
 /*===========================================================================*/
 /* Driver local functions.                                                   */
@@ -65,12 +65,32 @@
 void _pal_lld_init(const PALConfig *config) {
   unsigned i;
 
+#if defined(SPC5_SIUL_PCTL)
+  /* SIUL clock gating if present.*/
+  halSPCSetPeripheralClockMode(SPC5_SIUL_PCTL,
+                               SPC5_ME_PCTL_RUN(2) | SPC5_ME_PCTL_LP(2));
+#endif
+
   /* Initialize PCR registers for undefined pads.*/
-  for (i = 0; i < SPC5_SIU_NUM_PCRS; i++)
+  for (i = 0; i < SPC5_SIUL_NUM_PCRS; i++) {
+#if defined(SPC5_SIUL_SYSTEM_PINS)
+    /* Handling the case where some SIU pins are not meant to be reprogrammed,
+       for example JTAG pins.*/
+    unsigned j;
+    for (j = 0; j < sizeof system_pins; j++) {
+      if (i == system_pins[j])
+        goto skip;
+    }
     SIU.PCR[i].R = config->default_mode;
+skip:
+    ;
+#else
+    SIU.PCR[i].R = config->default_mode;
+#endif
+  }
 
   /* Initialize PADSEL registers.*/
-  for (i = 0; i < SPC5_SIU_NUM_PADSELS; i++)
+  for (i = 0; i < SPC5_SIUL_NUM_PADSELS; i++)
     SIU.PSMI[i].R = config->padsels[i];
 
   /* Initialize PCR registers for defined pads.*/

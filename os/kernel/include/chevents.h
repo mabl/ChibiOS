@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -49,7 +49,7 @@ struct EventListener {
                                                     by the thread to the Event
                                                     Source.                 */
   flagsmask_t           el_flags;       /**< @brief Flags added to the listener
-                                                    bu the event source.*/
+                                                    by the event source.*/
 };
 
 /**

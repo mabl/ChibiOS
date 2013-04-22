@@ -1,21 +1,17 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006-2013 Giovanni Di Sirio
 
-    This file is part of ChibiOS/RT.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    ChibiOS/RT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 #include "ch.h"
@@ -103,59 +99,59 @@ static msg_t Thread1(void *arg) {
     unsigned i;
 
     for (i = 0; i < 4; i++) {
-      palClearPad(PD, PD_LED1);
+      palClearPad(PORT_D, PD_LED1);
       chThdSleepMilliseconds(100);
-      palClearPad(PD, PD_LED2);
+      palClearPad(PORT_D, PD_LED2);
       chThdSleepMilliseconds(100);
-      palClearPad(PD, PD_LED3);
+      palClearPad(PORT_D, PD_LED3);
       chThdSleepMilliseconds(100);
-      palClearPad(PD, PD_LED4);
+      palClearPad(PORT_D, PD_LED4);
       chThdSleepMilliseconds(100);
-      palSetPad(PD, PD_LED1);
+      palSetPad(PORT_D, PD_LED1);
       chThdSleepMilliseconds(100);
-      palSetPad(PD, PD_LED2);
+      palSetPad(PORT_D, PD_LED2);
       chThdSleepMilliseconds(100);
-      palSetPad(PD, PD_LED3);
+      palSetPad(PORT_D, PD_LED3);
       chThdSleepMilliseconds(100);
-      palSetPad(PD, PD_LED4);
+      palSetPad(PORT_D, PD_LED4);
       chThdSleepMilliseconds(300);
     }
 
     for (i = 0; i < 4; i++) {
-      palTogglePort(PD, PAL_PORT_BIT(PD_LED1) | PAL_PORT_BIT(PD_LED2) |
-                        PAL_PORT_BIT(PD_LED3) | PAL_PORT_BIT(PD_LED4));
+      palTogglePort(PORT_D, PAL_PORT_BIT(PD_LED1) | PAL_PORT_BIT(PD_LED2) |
+                            PAL_PORT_BIT(PD_LED3) | PAL_PORT_BIT(PD_LED4));
       chThdSleepMilliseconds(500);
-      palTogglePort(PD, PAL_PORT_BIT(PD_LED1) | PAL_PORT_BIT(PD_LED2) |
-                        PAL_PORT_BIT(PD_LED3) | PAL_PORT_BIT(PD_LED4));
+      palTogglePort(PORT_D, PAL_PORT_BIT(PD_LED1) | PAL_PORT_BIT(PD_LED2) |
+                            PAL_PORT_BIT(PD_LED3) | PAL_PORT_BIT(PD_LED4));
       chThdSleepMilliseconds(500);
     }
 
     for (i = 0; i < 4; i++) {
-      palTogglePad(PD, PD_LED1);
+      palTogglePad(PORT_D, PD_LED1);
       chThdSleepMilliseconds(250);
-      palTogglePad(PD, PD_LED1);
-      palTogglePad(PD, PD_LED2);
+      palTogglePad(PORT_D, PD_LED1);
+      palTogglePad(PORT_D, PD_LED2);
       chThdSleepMilliseconds(250);
-      palTogglePad(PD, PD_LED2);
-      palTogglePad(PD, PD_LED3);
+      palTogglePad(PORT_D, PD_LED2);
+      palTogglePad(PORT_D, PD_LED3);
       chThdSleepMilliseconds(250);
-      palTogglePad(PD, PD_LED3);
-      palTogglePad(PD, PD_LED4);
+      palTogglePad(PORT_D, PD_LED3);
+      palTogglePad(PORT_D, PD_LED4);
       chThdSleepMilliseconds(250);
-      palTogglePad(PD, PD_LED4);
+      palTogglePad(PORT_D, PD_LED4);
     }
 
     for (i = 0; i < 4; i++) {
-      palClearPort(PD, PAL_PORT_BIT(PD_LED1) | PAL_PORT_BIT(PD_LED3));
-      palSetPort(PD, PAL_PORT_BIT(PD_LED2) | PAL_PORT_BIT(PD_LED4));
+      palClearPort(PORT_D, PAL_PORT_BIT(PD_LED1) | PAL_PORT_BIT(PD_LED3));
+      palSetPort(PORT_D, PAL_PORT_BIT(PD_LED2) | PAL_PORT_BIT(PD_LED4));
       chThdSleepMilliseconds(500);
-      palClearPort(PD, PAL_PORT_BIT(PD_LED2) | PAL_PORT_BIT(PD_LED4));
-      palSetPort(PD, PAL_PORT_BIT(PD_LED1) | PAL_PORT_BIT(PD_LED3));
+      palClearPort(PORT_D, PAL_PORT_BIT(PD_LED2) | PAL_PORT_BIT(PD_LED4));
+      palSetPort(PORT_D, PAL_PORT_BIT(PD_LED1) | PAL_PORT_BIT(PD_LED3));
       chThdSleepMilliseconds(500);
     }
 
-    palSetPort(PD, PAL_PORT_BIT(PD_LED1) | PAL_PORT_BIT(PD_LED2) |
-                   PAL_PORT_BIT(PD_LED3) | PAL_PORT_BIT(PD_LED4));
+    palSetPort(PORT_D, PAL_PORT_BIT(PD_LED1) | PAL_PORT_BIT(PD_LED2) |
+                       PAL_PORT_BIT(PD_LED3) | PAL_PORT_BIT(PD_LED4));
   }
   return 0;
 }
@@ -175,6 +171,11 @@ int main(void) {
    */
   halInit();
   chSysInit();
+
+  /*
+   * Shell manager initialization.
+   */
+  shellInit();
 
   /*
    * Activates the serial driver 1 using the driver default configuration.

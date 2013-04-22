@@ -1,21 +1,17 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006-2013 Giovanni Di Sirio
 
-    This file is part of ChibiOS/RT.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    ChibiOS/RT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 /**
@@ -65,7 +61,7 @@
 MACDriver ETHD1;
 
 /*===========================================================================*/
-/* Driver local variables.                                                   */
+/* Driver local variables and types.                                         */
 /*===========================================================================*/
 
 static const uint8_t default_mac_address[] = {0xAA, 0x55, 0x13,
@@ -272,8 +268,10 @@ void mac_lld_init(void) {
     ;
 #endif
 
+#if STM32_MAC_ETH1_CHANGE_PHY_STATE
   /* PHY in power down mode until the driver will be started.*/
   mii_write(&ETHD1, MII_BMCR, mii_read(&ETHD1, MII_BMCR) | BMCR_PDOWN);
+#endif
 
   /* MAC clocks stopped again.*/
   rccDisableETH(FALSE);
@@ -304,9 +302,10 @@ void mac_lld_start(MACDriver *macp) {
     ;
 
   /* ISR vector enabled.*/
-  nvicEnableVector(ETH_IRQn, CORTEX_PRIORITY_MASK(STM32_ETH1_IRQ_PRIORITY));
+  nvicEnableVector(ETH_IRQn,
+                   CORTEX_PRIORITY_MASK(STM32_MAC_ETH1_IRQ_PRIORITY));
 
-#if STM32_ETH1_CHANGE_PHY_STATE
+#if STM32_MAC_ETH1_CHANGE_PHY_STATE
   /* PHY in power up mode.*/
   mii_write(macp, MII_BMCR, mii_read(macp, MII_BMCR) & ~BMCR_PDOWN);
 #endif
@@ -325,7 +324,7 @@ void mac_lld_start(MACDriver *macp) {
   /* Transmitter and receiver enabled.
      Note that the complete setup of the MAC is performed when the link
      status is detected.*/
-#if STM32_IP_CHECKSUM_OFFLOAD
+#if STM32_MAC_IP_CHECKSUM_OFFLOAD
   ETH->MACCR = ETH_MACCR_IPCO | ETH_MACCR_RE | ETH_MACCR_TE;
 #else
   ETH->MACCR =                  ETH_MACCR_RE | ETH_MACCR_TE;
@@ -363,7 +362,7 @@ void mac_lld_start(MACDriver *macp) {
 void mac_lld_stop(MACDriver *macp) {
 
   if (macp->state != MAC_STOP) {
-#if STM32_ETH1_CHANGE_PHY_STATE
+#if STM32_MAC_ETH1_CHANGE_PHY_STATE
     /* PHY in power down mode until the driver will be restarted.*/
     mii_write(macp, MII_BMCR, mii_read(macp, MII_BMCR) | BMCR_PDOWN);
 #endif
@@ -431,38 +430,6 @@ msg_t mac_lld_get_transmit_descriptor(MACDriver *macp,
 }
 
 /**
- * @brief   Writes to a transmit descriptor's stream.
- *
- * @param[in] tdp       pointer to a @p MACTransmitDescriptor structure
- * @param[in] buf       pointer to the buffer containing the data to be
- *                      written
- * @param[in] size      number of bytes to be written
- * @return              The number of bytes written into the descriptor's
- *                      stream, this value can be less than the amount
- *                      specified in the parameter @p size if the maximum
- *                      frame size is reached.
- *
- * @notapi
- */
-size_t mac_lld_write_transmit_descriptor(MACTransmitDescriptor *tdp,
-                                         uint8_t *buf,
-                                         size_t size) {
-
-  chDbgAssert(!(tdp->physdesc->tdes0 & STM32_TDES0_OWN),
-              "mac_lld_write_transmit_descriptor(), #1",
-              "attempt to write descriptor already owned by DMA");
-
-  if (size > tdp->size - tdp->offset)
-    size = tdp->size - tdp->offset;
-
-  if (size > 0) {
-    memcpy((uint8_t *)(tdp->physdesc->tdes2) + tdp->offset, buf, size);
-    tdp->offset += size;
-  }
-  return size;
-}
-
-/**
  * @brief   Releases a transmit descriptor and starts the transmission of the
  *          enqueued data as a single frame.
  *
@@ -480,7 +447,7 @@ void mac_lld_release_transmit_descriptor(MACTransmitDescriptor *tdp) {
 
   /* Unlocks the descriptor and returns it to the DMA engine.*/
   tdp->physdesc->tdes1 = tdp->offset;
-  tdp->physdesc->tdes0 = STM32_TDES0_CIC(STM32_IP_CHECKSUM_OFFLOAD) |
+  tdp->physdesc->tdes0 = STM32_TDES0_CIC(STM32_MAC_IP_CHECKSUM_OFFLOAD) |
                          STM32_TDES0_IC | STM32_TDES0_LS | STM32_TDES0_FS |
                          STM32_TDES0_TCH | STM32_TDES0_OWN;
 
@@ -517,9 +484,9 @@ msg_t mac_lld_get_receive_descriptor(MACDriver *macp,
      frames are discarded.*/
   while (!(rdes->rdes0 & STM32_RDES0_OWN)) {
     if (!(rdes->rdes0 & (STM32_RDES0_AFM | STM32_RDES0_ES))
-#if STM32_IP_CHECKSUM_OFFLOAD
-        && !(rdes->rdes0 & STM32_RDES0_FT & (STM32_RDES0_IPHCE |
-                                             STM32_RDES0_PCE))
+#if STM32_MAC_IP_CHECKSUM_OFFLOAD
+        && (rdes->rdes0 & STM32_RDES0_FT)
+        && !(rdes->rdes0 & (STM32_RDES0_IPHCE | STM32_RDES0_PCE))
 #endif
         && (rdes->rdes0 & STM32_RDES0_FS) && (rdes->rdes0 & STM32_RDES0_LS)) {
       /* Found a valid one.*/
@@ -533,42 +500,14 @@ msg_t mac_lld_get_receive_descriptor(MACDriver *macp,
     }
     /* Invalid frame found, purging.*/
     rdes->rdes0 = STM32_RDES0_OWN;
-    macp->rxptr = (stm32_eth_rx_descriptor_t *)rdes->rdes3;
+    rdes = (stm32_eth_rx_descriptor_t *)rdes->rdes3;
   }
+
+  /* Next descriptor to check.*/
+  macp->rxptr = rdes;
 
   chSysUnlock();
   return RDY_TIMEOUT;
-}
-
-/**
- * @brief   Reads from a receive descriptor's stream.
- *
- * @param[in] rdp       pointer to a @p MACReceiveDescriptor structure
- * @param[in] buf       pointer to the buffer that will receive the read data
- * @param[in] size      number of bytes to be read
- * @return              The number of bytes read from the descriptor's
- *                      stream, this value can be less than the amount
- *                      specified in the parameter @p size if there are
- *                      no more bytes to read.
- *
- * @notapi
- */
-size_t mac_lld_read_receive_descriptor(MACReceiveDescriptor *rdp,
-                                       uint8_t *buf,
-                                       size_t size) {
-
-  chDbgAssert(!(rdp->physdesc->rdes0 & STM32_RDES0_OWN),
-              "mac_lld_read_receive_descriptor(), #1",
-              "attempt to read descriptor already owned by DMA");
-
-  if (size > rdp->size - rdp->offset)
-    size = rdp->size - rdp->offset;
-
-  if (size > 0) {
-    memcpy(buf, (uint8_t *)(rdp->physdesc->rdes2) + rdp->offset, size);
-    rdp->offset += size;
-  }
-  return size;
 }
 
 /**
@@ -668,6 +607,132 @@ bool_t mac_lld_poll_link_status(MACDriver *macp) {
   /* Returns the link status.*/
   return macp->link_up = TRUE;
 }
+
+/**
+ * @brief   Writes to a transmit descriptor's stream.
+ *
+ * @param[in] tdp       pointer to a @p MACTransmitDescriptor structure
+ * @param[in] buf       pointer to the buffer containing the data to be
+ *                      written
+ * @param[in] size      number of bytes to be written
+ * @return              The number of bytes written into the descriptor's
+ *                      stream, this value can be less than the amount
+ *                      specified in the parameter @p size if the maximum
+ *                      frame size is reached.
+ *
+ * @notapi
+ */
+size_t mac_lld_write_transmit_descriptor(MACTransmitDescriptor *tdp,
+                                         uint8_t *buf,
+                                         size_t size) {
+
+  chDbgAssert(!(tdp->physdesc->tdes0 & STM32_TDES0_OWN),
+              "mac_lld_write_transmit_descriptor(), #1",
+              "attempt to write descriptor already owned by DMA");
+
+  if (size > tdp->size - tdp->offset)
+    size = tdp->size - tdp->offset;
+
+  if (size > 0) {
+    memcpy((uint8_t *)(tdp->physdesc->tdes2) + tdp->offset, buf, size);
+    tdp->offset += size;
+  }
+  return size;
+}
+
+/**
+ * @brief   Reads from a receive descriptor's stream.
+ *
+ * @param[in] rdp       pointer to a @p MACReceiveDescriptor structure
+ * @param[in] buf       pointer to the buffer that will receive the read data
+ * @param[in] size      number of bytes to be read
+ * @return              The number of bytes read from the descriptor's
+ *                      stream, this value can be less than the amount
+ *                      specified in the parameter @p size if there are
+ *                      no more bytes to read.
+ *
+ * @notapi
+ */
+size_t mac_lld_read_receive_descriptor(MACReceiveDescriptor *rdp,
+                                       uint8_t *buf,
+                                       size_t size) {
+
+  chDbgAssert(!(rdp->physdesc->rdes0 & STM32_RDES0_OWN),
+              "mac_lld_read_receive_descriptor(), #1",
+              "attempt to read descriptor already owned by DMA");
+
+  if (size > rdp->size - rdp->offset)
+    size = rdp->size - rdp->offset;
+
+  if (size > 0) {
+    memcpy(buf, (uint8_t *)(rdp->physdesc->rdes2) + rdp->offset, size);
+    rdp->offset += size;
+  }
+  return size;
+}
+
+#if MAC_USE_ZERO_COPY || defined(__DOXYGEN__)
+/**
+ * @brief   Returns a pointer to the next transmit buffer in the descriptor
+ *          chain.
+ * @note    The API guarantees that enough buffers can be requested to fill
+ *          a whole frame.
+ *
+ * @param[in] tdp       pointer to a @p MACTransmitDescriptor structure
+ * @param[in] size      size of the requested buffer. Specify the frame size
+ *                      on the first call then scale the value down subtracting
+ *                      the amount of data already copied into the previous
+ *                      buffers.
+ * @param[out] sizep    pointer to variable receiving the buffer size, it is
+ *                      zero when the last buffer has already been returned.
+ *                      Note that a returned size lower than the amount
+ *                      requested means that more buffers must be requested
+ *                      in order to fill the frame data entirely.
+ * @return              Pointer to the returned buffer.
+ * @retval NULL         if the buffer chain has been entirely scanned.
+ *
+ * @notapi
+ */
+uint8_t *mac_lld_get_next_transmit_buffer(MACTransmitDescriptor *tdp,
+                                          size_t size,
+                                          size_t *sizep) {
+
+  if (tdp->offset == 0) {
+    *sizep      = tdp->size;
+    tdp->offset = size;
+    return (uint8_t *)tdp->physdesc->tdes2;
+  }
+  *sizep = 0;
+  return NULL;
+}
+
+/**
+ * @brief   Returns a pointer to the next receive buffer in the descriptor
+ *          chain.
+ * @note    The API guarantees that the descriptor chain contains a whole
+ *          frame.
+ *
+ * @param[in] rdp       pointer to a @p MACReceiveDescriptor structure
+ * @param[out] sizep    pointer to variable receiving the buffer size, it is
+ *                      zero when the last buffer has already been returned.
+ * @return              Pointer to the returned buffer.
+ * @retval NULL         if the buffer chain has been entirely scanned.
+ *
+ * @notapi
+ */
+const uint8_t *mac_lld_get_next_receive_buffer(MACReceiveDescriptor *rdp,
+                                               size_t *sizep) {
+
+  if (rdp->size > 0) {
+    *sizep      = rdp->size;
+    rdp->offset = rdp->size;
+    rdp->size   = 0;
+    return (uint8_t *)rdp->physdesc->rdes2;
+  }
+  *sizep = 0;
+  return NULL;
+}
+#endif /* MAC_USE_ZERO_COPY */
 
 #endif /* HAL_USE_MAC */
 

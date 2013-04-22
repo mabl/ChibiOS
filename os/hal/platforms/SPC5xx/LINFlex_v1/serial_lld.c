@@ -1,25 +1,21 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+    SPC5 HAL - Copyright (C) 2013 STMicroelectronics
 
-    This file is part of ChibiOS/RT.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    ChibiOS/RT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 /**
- * @file    SPC5xx/serial_lld.c
+ * @file    SPC5xx/LINFlex_v1/serial_lld.c
  * @brief   SPC5xx low level serial driver code.
  *
  * @addtogroup SERIAL
@@ -64,7 +60,7 @@ SerialDriver SD4;
 #endif
 
 /*===========================================================================*/
-/* Driver local variables.                                                   */
+/* Driver local variables and types.                                         */
 /*===========================================================================*/
 
 /**
@@ -97,7 +93,7 @@ static void spc5_linflex_init(SerialDriver *sdp, const SerialConfig *config) {
      parameters.*/
   linflexp->UARTCR.R  = SPC5_UARTCR_UART;       /* UART mode FIRST.         */
   linflexp->UARTCR.R  = SPC5_UARTCR_UART | SPC5_UARTCR_RXEN | config->mode;
-  div = halSPC560PGetSystemClock() / config->speed;
+  div = SPC5_LINFLEX0_CLK / config->speed;
   linflexp->LINFBRR.R = (uint16_t)(div & 15);   /* Fractional divider.      */
   linflexp->LINIBRR.R = (uint16_t)(div >> 4);   /* Integer divider.         */
   linflexp->UARTSR.R  = 0xFFFF;                 /* Clearing UARTSR register.*/
@@ -230,6 +226,9 @@ static void notify2(GenericQueue *qp) {
 /*===========================================================================*/
 
 #if SPC5_SERIAL_USE_LINFLEX0 || defined(__DOXYGEN__)
+#if !defined(SPC5_LINFLEX0_RXI_HANDLER)
+#error "SPC5_LINFLEX0_RXI_HANDLER not defined"
+#endif
 /**
  * @brief   LINFlex-0 RXI interrupt handler.
  *
@@ -244,6 +243,9 @@ CH_IRQ_HANDLER(SPC5_LINFLEX0_RXI_HANDLER) {
   CH_IRQ_EPILOGUE();
 }
 
+#if !defined(SPC5_LINFLEX0_TXI_HANDLER)
+#error "SPC5_LINFLEX0_TXI_HANDLER not defined"
+#endif
 /**
  * @brief   LINFlex-0 TXI interrupt handler.
  *
@@ -258,6 +260,9 @@ CH_IRQ_HANDLER(SPC5_LINFLEX0_TXI_HANDLER) {
   CH_IRQ_EPILOGUE();
 }
 
+#if !defined(SPC5_LINFLEX0_ERR_HANDLER)
+#error "SPC5_LINFLEX0_ERR_HANDLER not defined"
+#endif
 /**
  * @brief   LINFlex-0 ERR interrupt handler.
  *
@@ -274,6 +279,9 @@ CH_IRQ_HANDLER(SPC5_LINFLEX0_ERR_HANDLER) {
 #endif
 
 #if SPC5_SERIAL_USE_LINFLEX1 || defined(__DOXYGEN__)
+#if !defined(SPC5_LINFLEX1_RXI_HANDLER)
+#error "SPC5_LINFLEX1_RXI_HANDLER not defined"
+#endif
 /**
  * @brief   LINFlex-1 RXI interrupt handler.
  *
@@ -288,6 +296,9 @@ CH_IRQ_HANDLER(SPC5_LINFLEX1_RXI_HANDLER) {
   CH_IRQ_EPILOGUE();
 }
 
+#if !defined(SPC5_LINFLEX1_TXI_HANDLER)
+#error "SPC5_LINFLEX1_TXI_HANDLER not defined"
+#endif
 /**
  * @brief   LINFlex-1 TXI interrupt handler.
  *
@@ -302,6 +313,9 @@ CH_IRQ_HANDLER(SPC5_LINFLEX1_TXI_HANDLER) {
   CH_IRQ_EPILOGUE();
 }
 
+#if !defined(SPC5_LINFLEX1_ERR_HANDLER)
+#error "SPC5_LINFLEX1_ERR_HANDLER not defined"
+#endif
 /**
  * @brief   LINFlex-1 ERR interrupt handler.
  *
@@ -363,14 +377,14 @@ void sd_lld_start(SerialDriver *sdp, const SerialConfig *config) {
   if (sdp->state == SD_STOP) {
 #if SPC5_SERIAL_USE_LINFLEX0
     if (&SD1 == sdp) {
-      halSPC560PSetPeripheralClockMode(SPC5_LINFLEX0_PCTL,
-                                       SPC5_SERIAL_LINFLEX0_START_PCTL);
+      halSPCSetPeripheralClockMode(SPC5_LINFLEX0_PCTL,
+                                   SPC5_SERIAL_LINFLEX0_START_PCTL);
     }
 #endif
 #if SPC5_SERIAL_USE_LINFLEX1
     if (&SD2 == sdp) {
-      halSPC560PSetPeripheralClockMode(SPC5_LINFLEX1_PCTL,
-                                       SPC5_SERIAL_LINFLEX1_START_PCTL);
+      halSPCSetPeripheralClockMode(SPC5_LINFLEX1_PCTL,
+                                   SPC5_SERIAL_LINFLEX1_START_PCTL);
     }
 #endif
   }
@@ -391,15 +405,15 @@ void sd_lld_stop(SerialDriver *sdp) {
 
 #if SPC5_SERIAL_USE_LINFLEX0
     if (&SD1 == sdp) {
-      halSPC560PSetPeripheralClockMode(SPC5_LINFLEX0_PCTL,
-                                       SPC5_SERIAL_LINFLEX0_STOP_PCTL);
+      halSPCSetPeripheralClockMode(SPC5_LINFLEX0_PCTL,
+                                   SPC5_SERIAL_LINFLEX0_STOP_PCTL);
       return;
     }
 #endif
 #if SPC5_SERIAL_USE_LINFLEX1
     if (&SD2 == sdp) {
-      halSPC560PSetPeripheralClockMode(SPC5_LINFLEX1_PCTL,
-                                       SPC5_SERIAL_LINFLEX1_STOP_PCTL);
+      halSPCSetPeripheralClockMode(SPC5_LINFLEX1_PCTL,
+                                   SPC5_SERIAL_LINFLEX1_STOP_PCTL);
       return;
     }
 #endif

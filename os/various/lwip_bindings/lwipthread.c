@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -262,7 +262,7 @@ msg_t lwip_thread(void *p) {
   netif_set_up(&thisif);
 
   /* Setup event sources.*/
-  evtInit(&evt, S2ST(5));
+  evtInit(&evt, LWIP_LINK_POLL_INTERVAL);
   evtStart(&evt);
   chEvtRegisterMask(&evt.et_es, &el0, PERIODIC_TIMER_ID);
   chEvtRegisterMask(macGetReceiveEventSource(&ETHD1), &el1, FRAME_RECEIVED_ID);

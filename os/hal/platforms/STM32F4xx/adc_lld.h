@@ -1,26 +1,22 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006-2013 Giovanni Di Sirio
 
-    This file is part of ChibiOS/RT.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    ChibiOS/RT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 /**
  * @file    STM32F4xx/adc_lld.h
- * @brief   STM32F4xx ADC subsystem low level driver header.
+ * @brief   STM32F4xx/STM32F2xx ADC subsystem low level driver header.
  *
  * @addtogroup ADC
  * @{
@@ -47,7 +43,11 @@
 /**
  * @brief   Maximum ADC clock frequency.
  */
+#if defined(STM32F4XX) || defined(__DOXYGEN__)
 #define STM32_ADCCLK_MAX        36000000
+#else
+#define STM32_ADCCLK_MAX        30000000
+#endif
 /** @} */
 
 /**
@@ -120,8 +120,8 @@
 /**
  * @brief   ADC common clock divider.
  * @note    This setting is influenced by the VDDA voltage and other
- *          external conditions, please refer to the STM32F4xx datasheet
- *          for more info.<br>
+ *          external conditions, please refer to the datasheet for more
+ *          info.<br>
  *          See section 5.3.20 "12-bit ADC characteristics".
  */
 #if !defined(STM32_ADC_ADCPRE) || defined(__DOXYGEN__)
@@ -159,21 +159,21 @@
  * @brief   DMA stream used for ADC1 operations.
  */
 #if !defined(STM32_ADC_ADC1_DMA_STREAM) || defined(__DOXYGEN__)
-#define STM32_ADC_ADC1_DMA_STREAM        STM32_DMA_STREAM_ID(2, 4)
+#define STM32_ADC_ADC1_DMA_STREAM           STM32_DMA_STREAM_ID(2, 4)
 #endif
 
 /**
  * @brief   DMA stream used for ADC2 operations.
  */
 #if !defined(STM32_ADC_ADC2_DMA_STREAM) || defined(__DOXYGEN__)
-#define STM32_ADC_ADC2_DMA_STREAM        STM32_DMA_STREAM_ID(2, 2)
+#define STM32_ADC_ADC2_DMA_STREAM           STM32_DMA_STREAM_ID(2, 2)
 #endif
 
 /**
  * @brief   DMA stream used for ADC3 operations.
  */
 #if !defined(STM32_ADC_ADC3_DMA_STREAM) || defined(__DOXYGEN__)
-#define STM32_ADC_ADC3_DMA_STREAM        STM32_DMA_STREAM_ID(2, 1)
+#define STM32_ADC_ADC3_DMA_STREAM           STM32_DMA_STREAM_ID(2, 1)
 #endif
 
 /**
@@ -458,7 +458,7 @@ struct ADCDriver {
    */
   ADC_TypeDef               *adc;
   /**
-   * @brief Pointer to associated SMA channel.
+   * @brief Pointer to associated DMA channel.
    */
   const stm32_dma_stream_t  *dmastp;
   /**

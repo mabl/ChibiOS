@@ -1,21 +1,17 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006-2013 Giovanni Di Sirio
 
-    This file is part of ChibiOS/RT.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    ChibiOS/RT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 /**
@@ -39,8 +35,15 @@
 /* Driver exported variables.                                                */
 /*===========================================================================*/
 
+/**
+ * @brief   UART1 driver identifier.
+ */
+#if PLATFORM_UART_USE_UART1 || defined(__DOXYGEN__)
+UARTDriver UARTD1;
+#endif
+
 /*===========================================================================*/
-/* Driver local variables.                                                   */
+/* Driver local variables and types.                                         */
 /*===========================================================================*/
 
 /*===========================================================================*/
@@ -62,6 +65,10 @@
  */
 void uart_lld_init(void) {
 
+#if PLATFORM_UART_USE_UART1
+  /* Driver initialization.*/
+  uartObjectInit(&UARTD1);
+#endif /* PLATFORM_UART_USE_UART1 */
 }
 
 /**
@@ -73,10 +80,16 @@ void uart_lld_init(void) {
  */
 void uart_lld_start(UARTDriver *uartp) {
 
-  if (uartp->uart_state == UART_STOP) {
-    /* Clock activation.*/
+  if (uartp->state == UART_STOP) {
+    /* Enables the peripheral.*/
+#if PLATFORM_UART_USE_UART1
+    if (&UARTD1 == uartp) {
+
+    }
+#endif /* PLATFORM_UART_USE_UART1 */
   }
-  /* Configuration.*/
+  /* Configures the peripheral.*/
+
 }
 
 /**
@@ -88,6 +101,16 @@ void uart_lld_start(UARTDriver *uartp) {
  */
 void uart_lld_stop(UARTDriver *uartp) {
 
+  if (uartp->state == UART_READY) {
+    /* Resets the peripheral.*/
+
+    /* Disables the peripheral.*/
+#if PLATFORM_UART_USE_UART1
+    if (&UARTD1 == uartp) {
+
+    }
+#endif /* PLATFORM_UART_USE_UART1 */
+  }
 }
 
 /**
@@ -102,6 +125,10 @@ void uart_lld_stop(UARTDriver *uartp) {
  * @notapi
  */
 void uart_lld_start_send(UARTDriver *uartp, size_t n, const void *txbuf) {
+
+  (void)uartp;
+  (void)n;
+  (void)txbuf;
 
 }
 
@@ -118,6 +145,9 @@ void uart_lld_start_send(UARTDriver *uartp, size_t n, const void *txbuf) {
  */
 size_t uart_lld_stop_send(UARTDriver *uartp) {
 
+  (void)uartp;
+
+  return 0;
 }
 
 /**
@@ -132,6 +162,10 @@ size_t uart_lld_stop_send(UARTDriver *uartp) {
  * @notapi
  */
 void uart_lld_start_receive(UARTDriver *uartp, size_t n, void *rxbuf) {
+
+  (void)uartp;
+  (void)n;
+  (void)rxbuf;
 
 }
 
@@ -148,6 +182,9 @@ void uart_lld_start_receive(UARTDriver *uartp, size_t n, void *rxbuf) {
  */
 size_t uart_lld_stop_receive(UARTDriver *uartp) {
 
+  (void)uartp;
+
+  return 0;
 }
 
 #endif /* HAL_USE_UART */

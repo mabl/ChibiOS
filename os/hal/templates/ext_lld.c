@@ -1,21 +1,17 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006-2013 Giovanni Di Sirio
 
-    This file is part of ChibiOS/RT.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    ChibiOS/RT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 /**
@@ -40,12 +36,14 @@
 /*===========================================================================*/
 
 /**
- * @brief   EXTD1 driver identifier.
+ * @brief   EXT1 driver identifier.
  */
+#if PLATFORM_EXT_USE_EXT1 || defined(__DOXYGEN__)
 EXTDriver EXTD1;
+#endif
 
 /*===========================================================================*/
-/* Driver local variables.                                                   */
+/* Driver local variables and types.                                         */
 /*===========================================================================*/
 
 /*===========================================================================*/
@@ -67,8 +65,10 @@ EXTDriver EXTD1;
  */
 void ext_lld_init(void) {
 
+#if PLATFORM_EXT_USE_EXT1
   /* Driver initialization.*/
   extObjectInit(&EXTD1);
+#endif /* PLATFORM_EXT_USE_EXT1 */
 }
 
 /**
@@ -81,9 +81,15 @@ void ext_lld_init(void) {
 void ext_lld_start(EXTDriver *extp) {
 
   if (extp->state == EXT_STOP) {
-    /* Clock activation.*/
+    /* Enables the peripheral.*/
+#if PLATFORM_EXT_USE_EXT1
+    if (&EXTD1 == extp) {
+
+    }
+#endif /* PLATFORM_EXT_USE_EXT1 */
   }
-  /* Configuration.*/
+  /* Configures the peripheral.*/
+
 }
 
 /**
@@ -96,8 +102,14 @@ void ext_lld_start(EXTDriver *extp) {
 void ext_lld_stop(EXTDriver *extp) {
 
   if (extp->state == EXT_ACTIVE) {
-    /* Clock deactivation.*/
+    /* Resets the peripheral.*/
 
+    /* Disables the peripheral.*/
+#if PLATFORM_EXT_USE_EXT1
+    if (&EXTD1 == extp) {
+
+    }
+#endif /* PLATFORM_EXT_USE_EXT1 */
   }
 }
 
@@ -111,6 +123,9 @@ void ext_lld_stop(EXTDriver *extp) {
  */
 void ext_lld_channel_enable(EXTDriver *extp, expchannel_t channel) {
 
+  (void)extp;
+  (void)channel;
+
 }
 
 /**
@@ -122,6 +137,9 @@ void ext_lld_channel_enable(EXTDriver *extp, expchannel_t channel) {
  * @notapi
  */
 void ext_lld_channel_disable(EXTDriver *extp, expchannel_t channel) {
+
+  (void)extp;
+  (void)channel;
 
 }
 

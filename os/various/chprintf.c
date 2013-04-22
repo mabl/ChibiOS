@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -196,6 +196,8 @@ void chprintf(BaseSequentialStream *chp, const char *fmt, ...) {
       break;
     case 'D':
     case 'd':
+    case 'I':
+    case 'i':
       if (is_long)
         l = va_arg(ap, long);
       else
@@ -229,9 +231,9 @@ void chprintf(BaseSequentialStream *chp, const char *fmt, ...) {
       c = 8;
 unsigned_common:
       if (is_long)
-        l = va_arg(ap, long);
+        l = va_arg(ap, unsigned long);
       else
-        l = va_arg(ap, int);
+        l = va_arg(ap, unsigned int);
       p = ltoa(p, l, c);
       break;
     default:

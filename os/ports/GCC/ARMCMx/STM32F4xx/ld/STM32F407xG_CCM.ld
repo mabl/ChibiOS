@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -35,6 +35,8 @@ MEMORY
 __ram_start__           = ORIGIN(ram);
 __ram_size__            = LENGTH(ram);
 __ram_end__             = __ram_start__ + __ram_size__;
+
+ENTRY(ResetHandler)
 
 SECTIONS
 {
@@ -136,7 +138,7 @@ SECTIONS
         . = ALIGN(4);
         *(.bss.default_heap)
         . = ALIGN(4);
-        PROVIDE(_cmmend = .);
+        PROVIDE(_cmm_end = .);
     } > ccmram
 
     .data :

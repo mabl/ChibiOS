@@ -1,21 +1,17 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006-2013 Giovanni Di Sirio
 
-    This file is part of ChibiOS/RT.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    ChibiOS/RT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 /*
    Concepts and parts of this file have been contributed by Uladzimir Pylinsky
@@ -36,6 +32,10 @@
 #if HAL_USE_RTC || defined(__DOXYGEN__)
 
 /*===========================================================================*/
+/* Driver local definitions.                                                 */
+/*===========================================================================*/
+
+/*===========================================================================*/
 /* Driver exported variables.                                                */
 /*===========================================================================*/
 
@@ -45,7 +45,7 @@
 RTCDriver RTCD1;
 
 /*===========================================================================*/
-/* Driver local variables.                                                   */
+/* Driver local variables and types.                                         */
 /*===========================================================================*/
 
 /*===========================================================================*/
@@ -126,35 +126,35 @@ CH_IRQ_HANDLER(RTC_IRQHandler) {
 /*===========================================================================*/
 
 /**
- * @brief   Enable access to registers and initialize RTC if BKP domain
- *          was previously reseted.
- * @note:   Cold start time of LSE oscillator on STM32 platform 
- *          takes about 3 seconds.
+ * @brief   Load value of RTCCLK to prescaler registers.
+ * @note    The pre-scaler must not be set on every reset as RTC clock
+ *          counts are lost when it is set.
+ * @note    This function designed to be called from
+ *          hal_lld_backup_domain_init(). Because there is only place
+ *          where possible to detect BKP domain reset event reliably.
+ *
+ * @notapi
+ */
+void rtc_lld_set_prescaler(void){
+  rtc_lld_acquire();
+  RTC->PRLH = (uint16_t)((STM32_RTCCLK - 1) >> 16) & 0x000F;
+  RTC->PRLL = (uint16_t)(((STM32_RTCCLK - 1))      & 0xFFFF);
+  rtc_lld_release();
+}
+
+/**
+ * @brief   Initialize RTC.
  *
  * @notapi
  */
 void rtc_lld_init(void){
 
+  /* RSF bit must be cleared by software after an APB1 reset or an APB1 clock
+     stop. Otherwise its value will not be actual. */
+  RTC->CRL &= ~RTC_CRL_RSF;
+
   /* Required because access to PRL.*/
   rtc_lld_apb1_sync();
-
-  /*
-   * Writes preload register only if its value is not equal to desired value.
-   *
-   * Ref CD00171190: RM0008 Reference manual Cls 18.4.3 The RTC->PRL registers
-   * are write only. We must store the value for the pre-scaler in BKP->DR1
-   * and BKP->DR1 so we know it has been set.
-   * The pre-scaler must not be set on every reset as RTC clock counts are
-   * lost when it is set.
-   */
-  if ((STM32_RTCCLK - 1) != ((((uint32_t)BKP->DR1) << 16) | BKP->DR2)){
-    rtc_lld_acquire();
-    RTC->PRLH = (uint16_t)((STM32_RTCCLK - 1) >> 16) & 0x000F;
-    BKP->DR1  = (uint16_t)((STM32_RTCCLK - 1) >> 16) & 0x000F;
-    RTC->PRLL = (uint16_t)(((STM32_RTCCLK - 1)) & 0xFFFF);
-    BKP->DR2  = (uint16_t)(((STM32_RTCCLK - 1)) & 0xFFFF);
-    rtc_lld_release();
-  }
 
   /* All interrupts initially disabled.*/
   rtc_lld_wait_write();

@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -40,7 +40,7 @@
 /**
  * @brief   Kernel version string.
  */
-#define CH_KERNEL_VERSION       "2.5.1unstable"
+#define CH_KERNEL_VERSION       "2.5.2unstable"
 
 /**
  * @name    Kernel version
@@ -59,7 +59,7 @@
 /**
  * @brief   Kernel version patch number.
  */
-#define CH_KERNEL_PATCH         1
+#define CH_KERNEL_PATCH         2
 /** @} */
 
 /**
@@ -69,14 +69,14 @@
  * @brief   Generic 'false' boolean constant.
  */
 #if !defined(FALSE) || defined(__DOXYGEN__)
-#define FALSE       0
+#define FALSE       false
 #endif
 
 /**
  * @brief   Generic 'true' boolean constant.
  */
 #if !defined(TRUE) || defined(__DOXYGEN__)
-#define TRUE        (!FALSE)
+#define TRUE        true
 #endif
 
 /**

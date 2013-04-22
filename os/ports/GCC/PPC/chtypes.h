@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -29,13 +29,9 @@
 #ifndef _CHTYPES_H_
 #define _CHTYPES_H_
 
-#define __need_NULL
-#define __need_size_t
 #include <stddef.h>
-
-#if !defined(_STDINT_H) && !defined(__STDINT_H_)
 #include <stdint.h>
-#endif
+#include <stdbool.h>
 
 /*
  * Derived generic types.
@@ -50,7 +46,7 @@ typedef volatile uint32_t   vuint32_t;      /**< Volatile unsigned 32 bits. */
 /*
  * Kernel types.
  */
-typedef int32_t             bool_t;         /**< Fast boolean type.         */
+typedef bool                bool_t;         /**< Fast boolean type.         */
 typedef uint8_t             tmode_t;        /**< Thread flags.              */
 typedef uint8_t             tstate_t;       /**< Thread state.              */
 typedef uint8_t             trefs_t;        /**< Thread references counter. */

@@ -1,21 +1,17 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006-2013 Giovanni Di Sirio
 
-    This file is part of ChibiOS/RT.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    ChibiOS/RT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 /**
@@ -40,6 +36,17 @@
 /*===========================================================================*/
 
 /**
+ * @brief   USB1 driver identifier.
+ */
+#if PLATFORM_USB_USE_USB1 || defined(__DOXYGEN__)
+USBDriver USBD1;
+#endif
+
+/*===========================================================================*/
+/* Driver local variables and types.                                         */
+/*===========================================================================*/
+
+/**
  * @brief   EP0 state.
  * @note    It is an union because IN and OUT endpoints are never used at the
  *          same time for EP0.
@@ -59,7 +66,8 @@ static union {
  * @brief   EP0 initialization structure.
  */
 static const USBEndpointConfig ep0config = {
-  USB_EP_MODE_TYPE_CTRL | USB_EP_MODE_TRANSACTION,
+  USB_EP_MODE_TYPE_CTRL,
+  _usb_ep0setup,
   _usb_ep0in,
   _usb_ep0out,
   0x40,
@@ -69,7 +77,7 @@ static const USBEndpointConfig ep0config = {
 };
 
 /*===========================================================================*/
-/* Driver local variables.                                                   */
+/* Driver local variables and types.                                         */
 /*===========================================================================*/
 
 /*===========================================================================*/
@@ -77,7 +85,7 @@ static const USBEndpointConfig ep0config = {
 /*===========================================================================*/
 
 /*===========================================================================*/
-/* Driver interrupt handlers.                                                */
+/* Driver interrupt handlers and threads.                                    */
 /*===========================================================================*/
 
 /*===========================================================================*/
@@ -91,6 +99,10 @@ static const USBEndpointConfig ep0config = {
  */
 void usb_lld_init(void) {
 
+#if PLATFORM_USB_USE_USB1
+  /* Driver initialization.*/
+  usbObjectInit(&USBD1);
+#endif /* PLATFORM_USB_USE_USB1 */
 }
 
 /**
@@ -103,12 +115,15 @@ void usb_lld_init(void) {
 void usb_lld_start(USBDriver *usbp) {
 
   if (usbp->state == USB_STOP) {
-    /* Clock activation.*/
+    /* Enables the peripheral.*/
+#if PLATFORM_USB_USE_USB1
+    if (&USBD1 == usbp) {
 
-    /* Reset procedure enforced on driver start.*/
-    _usb_reset(usbp);
+    }
+#endif /* PLATFORM_USB_USE_USB1 */
   }
-  /* Configuration.*/
+  /* Configures the peripheral.*/
+
 }
 
 /**
@@ -120,9 +135,15 @@ void usb_lld_start(USBDriver *usbp) {
  */
 void usb_lld_stop(USBDriver *usbp) {
 
-  /* If in ready state then disables the USB clock.*/
-  if (usbp->state == USB_STOP) {
+  if (usbp->state == USB_READY) {
+    /* Resets the peripheral.*/
 
+    /* Disables the peripheral.*/
+#if PLATFORM_USB_USE_USB1
+    if (&USBD1 == usbp) {
+
+    }
+#endif /* PLATFORM_USB_USE_USB1 */
   }
 }
 
@@ -151,6 +172,8 @@ void usb_lld_reset(USBDriver *usbp) {
  */
 void usb_lld_set_address(USBDriver *usbp) {
 
+  (void)usbp;
+
 }
 
 /**
@@ -163,6 +186,9 @@ void usb_lld_set_address(USBDriver *usbp) {
  */
 void usb_lld_init_endpoint(USBDriver *usbp, usbep_t ep) {
 
+  (void)usbp;
+  (void)ep;
+
 }
 
 /**
@@ -173,6 +199,8 @@ void usb_lld_init_endpoint(USBDriver *usbp, usbep_t ep) {
  * @notapi
  */
 void usb_lld_disable_endpoints(USBDriver *usbp) {
+
+  (void)usbp;
 
 }
 
@@ -190,6 +218,10 @@ void usb_lld_disable_endpoints(USBDriver *usbp) {
  */
 usbepstatus_t usb_lld_get_status_out(USBDriver *usbp, usbep_t ep) {
 
+  (void)usbp;
+  (void)ep;
+
+  return EP_STATUS_DISABLED;
 }
 
 /**
@@ -206,6 +238,10 @@ usbepstatus_t usb_lld_get_status_out(USBDriver *usbp, usbep_t ep) {
  */
 usbepstatus_t usb_lld_get_status_in(USBDriver *usbp, usbep_t ep) {
 
+  (void)usbp;
+  (void)ep;
+
+  return EP_STATUS_DISABLED;
 }
 
 /**
@@ -224,46 +260,39 @@ usbepstatus_t usb_lld_get_status_in(USBDriver *usbp, usbep_t ep) {
  */
 void usb_lld_read_setup(USBDriver *usbp, usbep_t ep, uint8_t *buf) {
 
-}
-
-/**
- * @brief   Reads a packet from the dedicated packet buffer.
- * @pre     In order to use this function he endpoint must have been
- *          initialized in packet mode.
- * @post    The endpoint is ready to accept another packet.
- *
- * @param[in] usbp      pointer to the @p USBDriver object
- * @param[in] ep        endpoint number
- * @param[out] buf      buffer where to copy the packet data
- * @param[in] n         maximum number of bytes to copy. This value must
- *                      not exceed the maximum packet size for this endpoint.
- * @return              The received packet size regardless the specified
- *                      @p n parameter.
- * @retval 0            Zero size packet received.
- *
- * @notapi
- */
-size_t usb_lld_read_packet(USBDriver *usbp, usbep_t ep,
-                           uint8_t *buf, size_t n) {
+  (void)usbp;
+  (void)ep;
+  (void)buf;
 
 }
 
 /**
- * @brief   Writes a packet to the dedicated packet buffer.
- * @pre     In order to use this function he endpoint must have been
- *          initialized in packet mode.
- * @post    The endpoint is ready to transmit the packet.
+ * @brief   Prepares for a receive operation.
  *
  * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] ep        endpoint number
- * @param[in] buf       buffer where to fetch the packet data
- * @param[in] n         maximum number of bytes to copy. This value must
- *                      not exceed the maximum packet size for this endpoint.
  *
  * @notapi
  */
-void usb_lld_write_packet(USBDriver *usbp, usbep_t ep,
-                          const uint8_t *buf, size_t n) {
+void usb_lld_prepare_receive(USBDriver *usbp, usbep_t ep) {
+
+  (void)usbp;
+  (void)ep;
+
+}
+
+/**
+ * @brief   Prepares for a transmit operation.
+ *
+ * @param[in] usbp      pointer to the @p USBDriver object
+ * @param[in] ep        endpoint number
+ *
+ * @notapi
+ */
+void usb_lld_prepare_transmit(USBDriver *usbp, usbep_t ep) {
+
+  (void)usbp;
+  (void)ep;
 
 }
 
@@ -272,13 +301,13 @@ void usb_lld_write_packet(USBDriver *usbp, usbep_t ep,
  *
  * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] ep        endpoint number
- * @param[out] buf      buffer where to copy the endpoint data
- * @param[in] n         maximum number of bytes to copy in the buffer
  *
  * @notapi
  */
-void usb_lld_start_out(USBDriver *usbp, usbep_t ep,
-                       uint8_t *buf, size_t n) {
+void usb_lld_start_out(USBDriver *usbp, usbep_t ep) {
+
+  (void)usbp;
+  (void)ep;
 
 }
 
@@ -287,13 +316,13 @@ void usb_lld_start_out(USBDriver *usbp, usbep_t ep,
  *
  * @param[in] usbp      pointer to the @p USBDriver object
  * @param[in] ep        endpoint number
- * @param[in] buf       buffer where to fetch the endpoint data
- * @param[in] n         maximum number of bytes to copy
  *
  * @notapi
  */
-void usb_lld_start_in(USBDriver *usbp, usbep_t ep,
-                      const uint8_t *buf, size_t n) {
+void usb_lld_start_in(USBDriver *usbp, usbep_t ep) {
+
+  (void)usbp;
+  (void)ep;
 
 }
 
@@ -307,6 +336,9 @@ void usb_lld_start_in(USBDriver *usbp, usbep_t ep,
  */
 void usb_lld_stall_out(USBDriver *usbp, usbep_t ep) {
 
+  (void)usbp;
+  (void)ep;
+
 }
 
 /**
@@ -318,6 +350,9 @@ void usb_lld_stall_out(USBDriver *usbp, usbep_t ep) {
  * @notapi
  */
 void usb_lld_stall_in(USBDriver *usbp, usbep_t ep) {
+
+  (void)usbp;
+  (void)ep;
 
 }
 
@@ -331,6 +366,9 @@ void usb_lld_stall_in(USBDriver *usbp, usbep_t ep) {
  */
 void usb_lld_clear_out(USBDriver *usbp, usbep_t ep) {
 
+  (void)usbp;
+  (void)ep;
+
 }
 
 /**
@@ -342,6 +380,9 @@ void usb_lld_clear_out(USBDriver *usbp, usbep_t ep) {
  * @notapi
  */
 void usb_lld_clear_in(USBDriver *usbp, usbep_t ep) {
+
+  (void)usbp;
+  (void)ep;
 
 }
 

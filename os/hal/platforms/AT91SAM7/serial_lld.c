@@ -1,21 +1,17 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006-2013 Giovanni Di Sirio
 
-    This file is part of ChibiOS/RT.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    ChibiOS/RT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 /**
@@ -51,9 +47,19 @@
 #define SAM7_DBGU_RX      AT91C_PA27_DRXD
 #define SAM7_DBGU_TX      AT91C_PA28_DTXD
 
+#elif (SAM7_PLATFORM == SAM7A3)
+#define SAM7_USART0_RX    AT91C_PA2_RXD0
+#define SAM7_USART0_TX    AT91C_PA3_TXD0
+#define SAM7_USART1_RX    AT91C_PA7_RXD1
+#define SAM7_USART1_TX    AT91C_PA8_TXD1
+#define SAM7_USART2_RX    AT91C_PA9_RXD2
+#define SAM7_USART2_TX    AT91C_PA10_TXD2
+#define SAM7_DBGU_RX      AT91C_PA30_DRXD
+#define SAM7_DBGU_TX      AT91C_PA31_DTXD
+
 #else
 #error "serial lines not defined for this SAM7 version"
-#endif
+#endif /* HAL_USE_SERIAL */
 
 /*===========================================================================*/
 /* Driver exported variables.                                                */
@@ -69,13 +75,20 @@ SerialDriver SD1;
 SerialDriver SD2;
 #endif
 
+#if (SAM7_PLATFORM == SAM7A3)
+#if USE_SAM7_USART2 || defined(__DOXYGEN__)
+/** @brief USART2 serial driver identifier.*/
+SerialDriver SD3;
+#endif
+#endif
+
 #if USE_SAM7_DBGU_UART || defined(__DOXYGEN__)
 /** @brief DBGU_UART serial driver identifier.*/
-SerialDriver SD3;
+SerialDriver SDDBG;
 #endif
 
 /*===========================================================================*/
-/* Driver local variables.                                                   */
+/* Driver local variables and types.                                         */
 /*===========================================================================*/
 
 /** @brief Driver default configuration.*/
@@ -212,8 +225,18 @@ static void notify2(GenericQueue *qp) {
 }
 #endif
 
-#if USE_SAM7_DBGU_UART || defined(__DOXYGEN__)
+#if (SAM7_PLATFORM == SAM7A3)
+#if USE_SAM7_USART2 || defined(__DOXYGEN__)
 static void notify3(GenericQueue *qp) {
+
+  (void)qp;
+  AT91C_BASE_US2->US_IER = AT91C_US_TXRDY;
+}
+#endif
+#endif /* (SAM7_PLATFORM == SAM7A3) */
+
+#if USE_SAM7_DBGU_UART || defined(__DOXYGEN__)
+static void notify_dbg(GenericQueue *qp) {
 
   (void)qp;
   AT91C_BASE_DBGU->DBGU_IER = AT91C_US_TXRDY;
@@ -254,6 +277,23 @@ CH_IRQ_HANDLER(USART1IrqHandler) {
 }
 #endif
 
+#if (SAM7_PLATFORM == SAM7A3)
+#if USE_SAM7_USART2 || defined(__DOXYGEN__)
+/**
+ * @brief   USART2 interrupt handler.
+ *
+ * @isr
+ */
+CH_IRQ_HANDLER(USART2IrqHandler) {
+
+  CH_IRQ_PROLOGUE();
+  sd_lld_serve_interrupt(&SD3);
+  AT91C_BASE_AIC->AIC_EOICR = 0;
+  CH_IRQ_EPILOGUE();
+}
+#endif
+#endif /* (SAM7_PLATFORM == SAM7A3) */
+
 /* note - DBGU_UART IRQ is the SysIrq in board.c
    since it's not vectored separately by the AIC.*/
 
@@ -290,12 +330,25 @@ void sd_lld_init(void) {
                   USART1IrqHandler);
 #endif
 
-#if USE_SAM7_DBGU_UART
+#if (SAM7_PLATFORM == SAM7A3)
+#if USE_SAM7_USART2
   sdObjectInit(&SD3, NULL, notify3);
+  SD3.usart = AT91C_BASE_US2;
+  AT91C_BASE_PIOA->PIO_PDR   = SAM7_USART2_RX | SAM7_USART2_TX;
+  AT91C_BASE_PIOA->PIO_ASR   = SAM7_USART2_RX | SAM7_USART2_TX;
+  AT91C_BASE_PIOA->PIO_PPUDR = SAM7_USART2_RX | SAM7_USART2_TX;
+  AIC_ConfigureIT(AT91C_ID_US2,
+                  AT91C_AIC_SRCTYPE_HIGH_LEVEL | SAM7_USART2_PRIORITY,
+                  USART2IrqHandler);
+#endif
+#endif /* (SAM7_PLATFORM == SAM7A3) */
+
+#if USE_SAM7_DBGU_UART
+  sdObjectInit(&SDDBG, NULL, notify_dbg);
   /* this is a little cheap, but OK for now since there's enough overlap
      between dbgu and usart register maps.  it means we can reuse all the
      same usart interrupt handling and config that already exists.*/
-  SD3.usart = (AT91PS_USART)AT91C_BASE_DBGU;
+  SDDBG.usart = (AT91PS_USART)AT91C_BASE_DBGU;
   AT91C_BASE_PIOA->PIO_PDR   = SAM7_DBGU_RX | SAM7_DBGU_TX;
   AT91C_BASE_PIOA->PIO_ASR   = SAM7_DBGU_RX | SAM7_DBGU_TX;
   AT91C_BASE_PIOA->PIO_PPUDR = SAM7_DBGU_RX | SAM7_DBGU_TX;
@@ -334,6 +387,16 @@ void sd_lld_start(SerialDriver *sdp, const SerialConfig *config) {
       AIC_EnableIT(AT91C_ID_US1);
     }
 #endif
+#if (SAM7_PLATFORM == SAM7A3)
+#if USE_SAM7_USART2
+    if (&SD3 == sdp) {
+      /* Starts the clock and clears possible sources of immediate interrupts.*/
+      AT91C_BASE_PMC->PMC_PCER = (1 << AT91C_ID_US2);
+      /* Enables associated interrupt vector.*/
+      AIC_EnableIT(AT91C_ID_US2);
+    }
+#endif
+#endif /* (SAM7_PLATFORM == SAM7A3) */
   /* Note - no explicit start for SD3 (DBGU_UART) since it's not included
      in the AIC or PMC.*/
   }
@@ -368,7 +431,7 @@ void sd_lld_stop(SerialDriver *sdp) {
     }
 #endif
 #if USE_SAM7_DBGU_UART
-    if (&SD3 == sdp) {
+    if (&SDDBG == sdp) {
       AT91C_BASE_DBGU->DBGU_IDR = 0xFFFFFFFF;
       return;
     }

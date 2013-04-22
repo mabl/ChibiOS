@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -215,4 +215,17 @@ void sys_arch_unprotect(sys_prot_t pval) {
 
   (void)pval;
   chSysUnlock();
+}
+
+u32_t sys_now(void) {
+
+#if CH_FREQUENCY == 1000
+  return (u32_t)chTimeNow();
+#elif (CH_FREQUENCY / 1000) >= 1 && (CH_FREQUENCY % 1000) == 0
+  return ((u32_t)chTimeNow() - 1) / (CH_FREQUENCY / 1000) + 1;
+#elif (1000 / CH_FREQUENCY) >= 1 && (1000 % CH_FREQUENCY) == 0
+  return ((u32_t)chTimeNow() - 1) * (1000 / CH_FREQUENCY) + 1;
+#else
+  return (u32_t)(((u64_t)(chTimeNow() - 1) * 1000) / CH_FREQUENCY) + 1;
+#endif
 }

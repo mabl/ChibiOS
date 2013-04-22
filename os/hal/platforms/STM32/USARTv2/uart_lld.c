@@ -1,21 +1,17 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006-2013 Giovanni Di Sirio
 
-    This file is part of ChibiOS/RT.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    ChibiOS/RT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 /**
@@ -79,7 +75,7 @@ UARTDriver UARTD3;
 #endif
 
 /*===========================================================================*/
-/* Driver local variables.                                                   */
+/* Driver local variables and types.                                         */
 /*===========================================================================*/
 
 /*===========================================================================*/
@@ -93,7 +89,7 @@ UARTDriver UARTD3;
  *
  * @return  The error flags.
  */
-static uartflags_t translate_errors(uint16_t isr) {
+static uartflags_t translate_errors(uint32_t isr) {
   uartflags_t sts = 0;
 
   if (isr & USART_ISR_ORE)
@@ -154,7 +150,7 @@ static void usart_stop(UARTDriver *uartp) {
  * @param[in] uartp     pointer to the @p UARTDriver object
  */
 static void usart_start(UARTDriver *uartp) {
-  uint16_t cr1;
+  uint32_t cr1;
   USART_TypeDef *u = uartp->usart;
 
   /* Defensive programming, starting from a clean state.*/
@@ -178,15 +174,15 @@ static void usart_start(UARTDriver *uartp) {
 
   /* Note that some bits are enforced because required for correct driver
      operations.*/
+  u->CR2 = uartp->config->cr2 | USART_CR2_LBDIE;
+  u->CR3 = uartp->config->cr3 | USART_CR3_DMAT | USART_CR3_DMAR |
+                                USART_CR3_EIE;
   if (uartp->config->txend2_cb == NULL)
     cr1 = USART_CR1_UE | USART_CR1_PEIE | USART_CR1_TE | USART_CR1_RE;
   else
     cr1 = USART_CR1_UE | USART_CR1_PEIE | USART_CR1_TE | USART_CR1_RE |
           USART_CR1_TCIE;
   u->CR1 = uartp->config->cr1 | cr1;
-  u->CR2 = uartp->config->cr2 | USART_CR2_LBDIE;
-  u->CR3 = uartp->config->cr3 | USART_CR3_DMAT | USART_CR3_DMAR |
-                                USART_CR3_EIE;
 
   /* Starting the receiver idle loop.*/
   set_rx_idle_loop(uartp);
@@ -268,7 +264,7 @@ static void uart_lld_serve_tx_end_irq(UARTDriver *uartp, uint32_t flags) {
  * @param[in] uartp     pointer to the @p UARTDriver object
  */
 static void serve_usart_irq(UARTDriver *uartp) {
-  uint16_t isr;
+  uint32_t isr;
   USART_TypeDef *u = uartp->usart;
   
   /* Reading and clearing status.*/
@@ -362,6 +358,7 @@ void uart_lld_init(void) {
 #if STM32_UART_USE_USART1
   uartObjectInit(&UARTD1);
   UARTD1.usart   = USART1;
+  UARTD1.dmamode = STM32_DMA_CR_DMEIE | STM32_DMA_CR_TEIE;
   UARTD1.dmarx   = STM32_DMA_STREAM(STM32_UART_USART1_RX_DMA_STREAM);
   UARTD1.dmatx   = STM32_DMA_STREAM(STM32_UART_USART1_TX_DMA_STREAM);
 #endif
@@ -369,6 +366,7 @@ void uart_lld_init(void) {
 #if STM32_UART_USE_USART2
   uartObjectInit(&UARTD2);
   UARTD2.usart   = USART2;
+  UARTD2.dmamode = STM32_DMA_CR_DMEIE | STM32_DMA_CR_TEIE;
   UARTD2.dmarx   = STM32_DMA_STREAM(STM32_UART_USART2_RX_DMA_STREAM);
   UARTD2.dmatx   = STM32_DMA_STREAM(STM32_UART_USART2_TX_DMA_STREAM);
 #endif
@@ -376,6 +374,7 @@ void uart_lld_init(void) {
 #if STM32_UART_USE_USART3
   uartObjectInit(&UARTD3);
   UARTD3.usart   = USART3;
+  UARTD3.dmamode = STM32_DMA_CR_DMEIE | STM32_DMA_CR_TEIE;
   UARTD3.dmarx   = STM32_DMA_STREAM(STM32_UART_USART3_RX_DMA_STREAM);
   UARTD3.dmatx   = STM32_DMA_STREAM(STM32_UART_USART3_TX_DMA_STREAM);
 #endif
@@ -389,8 +388,6 @@ void uart_lld_init(void) {
  * @notapi
  */
 void uart_lld_start(UARTDriver *uartp) {
-
-  uartp->dmamode = STM32_DMA_CR_DMEIE | STM32_DMA_CR_TEIE;
 
   if (uartp->state == UART_STOP) {
 #if STM32_UART_USE_USART1

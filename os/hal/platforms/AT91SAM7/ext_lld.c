@@ -1,21 +1,17 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006-2013 Giovanni Di Sirio
 
-    This file is part of ChibiOS/RT.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    ChibiOS/RT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 /**
@@ -45,7 +41,7 @@
 EXTDriver EXTDA;
 
 #if (SAM7_PLATFORM == SAM7X128) || (SAM7_PLATFORM == SAM7X256) || \
-    (SAM7_PLATFORM == SAM7X512)
+    (SAM7_PLATFORM == SAM7X512) || (SAM7_PLATFORM == SAM7A3)
 /**
  * @brief   EXTDB driver identifier.
  */
@@ -53,7 +49,7 @@ EXTDriver EXTDB;
 #endif
 
 /*===========================================================================*/
-/* Driver local variables.                                                   */
+/* Driver local variables and types.                                         */
 /*===========================================================================*/
 
 /*===========================================================================*/
@@ -75,7 +71,7 @@ static void ext_lld_serveInterrupt(EXTDriver *extp) {
   irqFlags = extp->pio->PIO_ISR;
 
   /* Call callback function for any pending interrupt.*/
-  for(ch = 0; ch < 32; ch++) {
+  for(ch = 0; ch < EXT_MAX_CHANNELS; ch++) {
 
     /* Check if the channel is activated and if its IRQ flag is set.*/
     if((extp->config->channels[ch].mode &
@@ -109,7 +105,7 @@ CH_IRQ_HANDLER(EXTIA_IRQHandler) {
 }
 
 #if (SAM7_PLATFORM == SAM7X128) || (SAM7_PLATFORM == SAM7X256) || \
-    (SAM7_PLATFORM == SAM7X512)
+    (SAM7_PLATFORM == SAM7X512) || (SAM7_PLATFORM == SAM7A3)
 /**
  * @brief   EXTI[1] interrupt handler.
  *
@@ -145,7 +141,7 @@ void ext_lld_init(void) {
   EXTDA.pid = AT91C_ID_PIOA;
 
 #if (SAM7_PLATFORM == SAM7X128) || (SAM7_PLATFORM == SAM7X256) || \
-    (SAM7_PLATFORM == SAM7X512)
+    (SAM7_PLATFORM == SAM7X512) || (SAM7_PLATFORM == SAM7A3)
   /* Same for PIOB.*/
   extObjectInit(&EXTDB);
   EXTDB.pio = AT91C_BASE_PIOB;
@@ -172,7 +168,7 @@ void ext_lld_start(EXTDriver *extp) {
                                                    EXTIA_IRQHandler);
     break;
 #if (SAM7_PLATFORM == SAM7X128) || (SAM7_PLATFORM == SAM7X256) || \
-    (SAM7_PLATFORM == SAM7X512)
+    (SAM7_PLATFORM == SAM7X512) || (SAM7_PLATFORM == SAM7A3)
   case AT91C_ID_PIOB:
     AIC_ConfigureIT(AT91C_ID_PIOB, SAM7_computeSMR(config->mode,
                                                    config->priority),
@@ -214,6 +210,9 @@ void ext_lld_stop(EXTDriver *extp) {
  * @notapi
  */
 void ext_lld_channel_enable(EXTDriver *extp, expchannel_t channel) {
+
+  chDbgCheck((extp->config->channels[channel].cb != NULL),
+      "Call back pointer can not be NULL");
 
   extp->pio->PIO_IER = (1 << channel);
 }

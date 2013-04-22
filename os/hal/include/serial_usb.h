@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -59,7 +59,7 @@
 /* Derived constants and error checks.                                       */
 /*===========================================================================*/
 
-#if !HAL_USE_USB && !CH_USE_QUEUES && !CH_USE_EVENTS
+#if !HAL_USE_USB || !CH_USE_QUEUES || !CH_USE_EVENTS
 #error "Serial over USB Driver requires HAL_USE_USB, CH_USE_QUEUES, "
        "CH_USE_EVENTS"
 #endif

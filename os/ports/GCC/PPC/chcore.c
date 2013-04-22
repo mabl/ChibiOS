@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -34,12 +34,12 @@
  */
 void port_init(void) {
 #if PPC_SUPPORTS_IVORS
-    /* The CPU support IVOR registers, the kernel requires IVOR4 and IVOR10
+    /* The CPU supports IVOR registers, the kernel requires IVOR4 and IVOR10
        and the initialization is performed here.*/
-    asm volatile ("li          %r3, _IVOR4@l        \t\n"
-                  "mtIVOR4     %r3                  \t\n"
-                  "li          %r3, _IVOR10@l       \t\n"
-                  "mtIVOR10    %r3" : : : "memory");
+    asm volatile ("li          %%r3, _IVOR4@l       \t\n"
+                  "mtIVOR4     %%r3                 \t\n"
+                  "li          %%r3, _IVOR10@l      \t\n"
+                  "mtIVOR10    %%r3" : : : "memory");
 #endif
 }
 
@@ -63,15 +63,14 @@ void port_halt(void) {
  *          is responsible for the context switch between 2 threads.
  * @note    The implementation of this code affects <b>directly</b> the context
  *          switch performance so optimize here as much as you can.
- *
- * @param[in] ntp       the thread to be switched in
- * @param[in] otp       the thread to be switched out
  */
-void port_switch(Thread *ntp, Thread *otp) {
+#if !defined(__DOXYGEN__)
+__attribute__((naked))
+#endif
+void port_dummy1(void) {
 
-  (void)otp;
-  (void)ntp;
-
+  asm (".global _port_switch");
+  asm ("_port_switch:");
   asm ("subi        %sp, %sp, 80");     /* Size of the intctx structure.    */
   asm ("mflr        %r0");
   asm ("stw         %r0, 84(%sp)");     /* LR into the caller frame.        */
@@ -88,6 +87,7 @@ void port_switch(Thread *ntp, Thread *otp) {
   asm ("lwz         %r0, 84(%sp)");     /* LR from the caller frame.        */
   asm ("mtlr        %r0");
   asm ("addi        %sp, %sp, 80");     /* Size of the intctx structure.    */
+  asm ("blr");
 }
 
 /**
@@ -95,8 +95,13 @@ void port_switch(Thread *ntp, Thread *otp) {
  * @details If the work function returns @p chThdExit() is automatically
  *          invoked.
  */
-void _port_thread_start(void) {
+#if !defined(__DOXYGEN__)
+__attribute__((naked))
+#endif
+void port_dummy2(void) {
 
+  asm (".global _port_thread_start");
+  asm ("_port_thread_start:");
   chSysUnlock();
   asm ("mr          %r3, %r31");        /* Thread parameter.                */
   asm ("mtctr       %r30");

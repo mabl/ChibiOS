@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -30,6 +30,8 @@ MEMORY
     ram   : org = 0x40000000, len = 94k
 }
 
+ENTRY(_reset_address)
+
 /*
  * Derived constants.
  */
@@ -48,6 +50,7 @@ SECTIONS
     {
         __ivpr_base__ = .;
         KEEP(*(.bam))
+        KEEP(*(.coreinit))
         KEEP(*(.crt0))
         KEEP(*(.handlers))
         . = ALIGN(0x800);

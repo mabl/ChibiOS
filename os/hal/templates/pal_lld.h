@@ -1,21 +1,17 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006-2013 Giovanni Di Sirio
 
-    This file is part of ChibiOS/RT.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    ChibiOS/RT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 /**
@@ -104,7 +100,7 @@ typedef uint32_t ioportid_t;
  *
  * @notapi
  */
-#define pal_lld_init(config)
+#define pal_lld_init(config) _pal_lld_init(config)
 
 /**
  * @brief   Reads the physical I/O port states.
@@ -114,7 +110,7 @@ typedef uint32_t ioportid_t;
  *
  * @notapi
  */
-#define pal_lld_readport(port)
+#define pal_lld_readport(port) 0
 
 /**
  * @brief   Reads the output latch.
@@ -126,7 +122,7 @@ typedef uint32_t ioportid_t;
  *
  * @notapi
  */
-#define pal_lld_readlatch(port)
+#define pal_lld_readlatch(port) 0
 
 /**
  * @brief   Writes a bits mask on a I/O port.
@@ -190,7 +186,7 @@ typedef uint32_t ioportid_t;
  *
  * @notapi
  */
-#define pal_lld_readgroup(port, mask, offset)
+#define pal_lld_readgroup(port, mask, offset) 0
 
 /**
  * @brief   Writes a group of bits.
@@ -206,7 +202,7 @@ typedef uint32_t ioportid_t;
  *
  * @notapi
  */
-#define pal_lld_writegroup(port, mask, offset, bits)
+#define pal_lld_writegroup(port, mask, offset, bits) (void)bits
 
 /**
  * @brief   Pads group mode setup.
@@ -238,7 +234,7 @@ typedef uint32_t ioportid_t;
  *
  * @notapi
  */
-#define pal_lld_readpad(port, pad)
+#define pal_lld_readpad(port, pad) PAL_LOW
 
 /**
  * @brief   Writes a logical state on an output pad.
@@ -311,6 +307,21 @@ typedef uint32_t ioportid_t;
  * @notapi
  */
 #define pal_lld_setpadmode(port, pad, mode)
+
+#if !defined(__DOXYGEN__)
+extern const PALConfig pal_default_config;
+#endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+  void _pal_lld_init(const PALConfig *config);
+  void _pal_lld_setgroupmode(ioportid_t port,
+                             ioportmask_t mask,
+                             iomode_t mode);
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* HAL_USE_PAL */
 

@@ -1,6 +1,6 @@
 /*
     ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+                 2011,2012,2013 Giovanni Di Sirio.
 
     This file is part of ChibiOS/RT.
 
@@ -28,10 +28,19 @@
 
 #if !defined(__DOXYGEN__)
 
-        /* BAM info, SWT off, WTE off, VLE from settings.*/
+        /* BAM record.*/
         .section    .bam, "ax"
         .long       0x015A0000
-        .long       _boot_address
+        .long       _reset_address
+
+        .align      2
+        .globl      _reset_address
+        .type       _reset_address, @function
+_reset_address:
+        bl          _coreinit
+        bl          _ivinit
+
+        b           _boot_address
 
 #endif /* !defined(__DOXYGEN__) */
 

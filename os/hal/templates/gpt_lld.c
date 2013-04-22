@@ -1,21 +1,17 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006-2013 Giovanni Di Sirio
 
-    This file is part of ChibiOS/RT.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    ChibiOS/RT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 /**
@@ -39,8 +35,15 @@
 /* Driver exported variables.                                                */
 /*===========================================================================*/
 
+/**
+ * @brief   GPTD1 driver identifier.
+ */
+#if PLATFORM_GPT_USE_GPT1 || defined(__DOXYGEN__)
+GPTDriver GPTD1;
+#endif
+
 /*===========================================================================*/
-/* Driver local variables.                                                   */
+/* Driver local variables and types.                                         */
 /*===========================================================================*/
 
 /*===========================================================================*/
@@ -62,6 +65,10 @@
  */
 void gpt_lld_init(void) {
 
+#if PLATFORM2_GPT_USE_TIM1
+  /* Driver initialization.*/
+  gptObjectInit(&GPTD1);
+#endif
 }
 
 /**
@@ -72,13 +79,17 @@ void gpt_lld_init(void) {
  * @notapi
  */
 void gpt_lld_start(GPTDriver *gptp) {
-  uint16_t psc;
 
   if (gptp->state == GPT_STOP) {
-    /* Clock activation.*/
+    /* Enables the peripheral.*/
+#if PLATFORM_GPT_USE_GPT1
+    if (&GPTD1 == gptp) {
 
+    }
+#endif /* PLATFORM_GPT_USE_GPT1 */
   }
-  /* Configuration.*/
+  /* Configures the peripheral.*/
+
 }
 
 /**
@@ -91,8 +102,14 @@ void gpt_lld_start(GPTDriver *gptp) {
 void gpt_lld_stop(GPTDriver *gptp) {
 
   if (gptp->state == GPT_READY) {
-    /* Clock de-activation.*/
+    /* Resets the peripheral.*/
 
+    /* Disables the peripheral.*/
+#if PLATFORM_GPT_USE_GPT1
+    if (&GPTD1 == gptp) {
+
+    }
+#endif /* PLATFORM_GPT_USE_GPT1 */
   }
 }
 
@@ -100,11 +117,14 @@ void gpt_lld_stop(GPTDriver *gptp) {
  * @brief   Starts the timer in continuous mode.
  *
  * @param[in] gptp      pointer to the @p GPTDriver object
- * @param[in] period    period in ticks
+ * @param[in] interval  period in ticks
  *
  * @notapi
  */
-void gpt_lld_start_timer(GPTDriver *gptp, gptcnt_t period) {
+void gpt_lld_start_timer(GPTDriver *gptp, gptcnt_t interval) {
+
+  (void)gptp;
+  (void)interval;
 
 }
 
@@ -116,6 +136,8 @@ void gpt_lld_start_timer(GPTDriver *gptp, gptcnt_t period) {
  * @notapi
  */
 void gpt_lld_stop_timer(GPTDriver *gptp) {
+
+  (void)gptp;
 
 }
 
@@ -131,6 +153,9 @@ void gpt_lld_stop_timer(GPTDriver *gptp) {
  * @notapi
  */
 void gpt_lld_polled_delay(GPTDriver *gptp, gptcnt_t interval) {
+
+  (void)gptp;
+  (void)interval;
 
 }
 

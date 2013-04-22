@@ -1,21 +1,17 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+    SPC5 HAL - Copyright (C) 2013 STMicroelectronics
 
-    This file is part of ChibiOS/RT.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    ChibiOS/RT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 /*
@@ -36,12 +32,20 @@
  */
 #define SPC5_NO_INIT                        FALSE
 #define SPC5_ALLOW_OVERCLOCK                FALSE
+#define SPC5_DISABLE_WATCHDOG               TRUE
 #define SPC5_FMPLL0_IDF_VALUE               5
 #define SPC5_FMPLL0_NDIV_VALUE              32
 #define SPC5_FMPLL0_ODF                     SPC5_FMPLL_ODF_DIV4
 #define SPC5_FMPLL1_IDF_VALUE               5
 #define SPC5_FMPLL1_NDIV_VALUE              60
 #define SPC5_FMPLL1_ODF                     SPC5_FMPLL_ODF_DIV4
+#define SPC5_AUX0CLK_SRC                    SPC5_CGM_SS_FMPLL1
+#define SPC5_MCONTROL_DIVIDER_VALUE         2
+#define SPC5_FMPLL1_CLK_DIVIDER_VALUE       2
+#define SPC5_AUX2CLK_SRC                    SPC5_CGM_SS_FMPLL1
+#define SPC5_SP_CLK_DIVIDER_VALUE           2
+#define SPC5_AUX3CLK_SRC                    SPC5_CGM_SS_FMPLL1
+#define SPC5_FR_CLK_DIVIDER_VALUE           2
 #define SPC5_ME_ME_BITS                     (SPC5_ME_ME_RUN1 |              \
                                              SPC5_ME_ME_RUN2 |              \
                                              SPC5_ME_ME_RUN3 |              \
@@ -140,7 +144,8 @@
                                              SPC5_ME_LP_PC_STOP0)
 #define SPC5_ME_LP_PC7_BITS                 (SPC5_ME_LP_PC_HALT0 |          \
                                              SPC5_ME_LP_PC_STOP0)
-#define SPC5_PIT3_IRQ_PRIORITY              4
+#define SPC5_PIT0_IRQ_PRIORITY              4
+#define SPC5_CLOCK_FAILURE_HOOK()           chSysHalt()
 
 /*
  * SERIAL driver system settings.
