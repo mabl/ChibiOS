@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+<!-- All SPC5 Component extension shall have the namespace "com.st.tools.spc5"-->
+   <extension
+         id="org.chibios.spc5.components.osal.chibios.spc5xx"
+         name="ChibiOS/RT SPC5xx OSAL Component"
+         point="com.st.tools.spc5.extension.v1">
+      <component
+            headerName="shell.h"
+            hidden="true"
+            icon="rsc/chibios.ico"
+            initFunction="shellInit"
+            isPlatform="false">
+            <description>
+                ChibiOS/RT OSAL interface layer. This component is required in order to interface ChibiOS/RT with the SPC5-HAL drivers.
+            </description>
+            <categories>
+               <category
+                     id="ChibiOS-RT/Portable Components">
+               </category>
+            </categories>
+            <configuration>
+               <description>
+                  This component does not require any configuration.
+               </description>
+               <image
+                     align="left"
+                     file="rsc/chibios48x48.png">
+                  <text>
+                     ChibiOS/RT is GPL3-licensed free software. A special exception has been added to the GPL3 in order to allow inclusion in closed source applications, details are in the exception.txt document.
+                  </text>
+               </image>
+            </configuration>
+      </component>
+   </extension>
+
+</plugin>
