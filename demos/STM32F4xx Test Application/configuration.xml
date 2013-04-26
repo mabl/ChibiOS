@@ -168,7 +168,7 @@
           <power_voltage_detector_level index="0">2.0</power_voltage_detector_level>
         </initialization_settings>
         <dma_settings>
-          <adc1_stream index="0">DMA 2 Stream 0</adc1_stream>
+          <adc1_stream index="1">DMA 2 Stream 4</adc1_stream>
           <adc2_stream index="0">DMA 2 Stream 2</adc2_stream>
           <adc3_stream index="1">DMA 2 Stream 1</adc3_stream>
           <adc1_stream_priority index="2">Medium-High</adc1_stream_priority>
