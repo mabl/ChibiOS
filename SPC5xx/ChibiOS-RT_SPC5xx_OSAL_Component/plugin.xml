@@ -107,11 +107,6 @@
                      exclusive="false"
                      id="org.chibios.features.osal.spc5xx">
                </exportedFeature>
-               <exportedFeature
-                     brief="This interface declares an OSAL service for SPC563Mxx."
-                     exclusive="false"
-                     id="org.chibios.features.osal.spc563mxx">
-               </exportedFeature>
             </exportedFeatures>
             <requiredFeatures>
                <requiredFeature
