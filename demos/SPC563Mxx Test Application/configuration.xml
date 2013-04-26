@@ -318,7 +318,18 @@
         </hooks>
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.kernel.port.gcc.spc563mxx" />
-      <instance locked="false" id="org.chibios.spc5.components.osal.chibios.spc5xx" />
+      <instance locked="false" id="org.chibios.spc5.components.osal.chibios.spc5xx">
+        <isrs>
+          <enabled_vectors>
+            <vector>
+              <identifier>IDENTIFIER</identifier>
+              <number>0</number>
+              <priority index="7">8</priority>
+              <name_override />
+            </vector>
+          </enabled_vectors>
+        </isrs>
+      </instance>
       <instance locked="false" id="org.chibios.spc5.components.various.chprintf" />
       <instance locked="false" id="org.chibios.spc5.components.various.shell" />
     </instances>

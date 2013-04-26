@@ -224,6 +224,38 @@ void osalIsrWait(void) {
 }
 
 /**
+ * @brief   Enables an interrupt vector.
+ *
+ * @param[in] vector    the vector number
+ * @param[in] priority  the priority level, zero disables the vector
+ *
+ * @special
+ */
+static inline
+void osalIsrEnableVector(unsigned vector, unsigned priority) {
+
+  osalDbgCheck((vector < VECTORS_NUMBER) &&
+               (priority >= 1) && (priority <= 15));
+
+  INTC_PSR(vector) = (uint8_t)priority;
+}
+
+/**
+ * @brief   Disables an interrupt vector.
+ *
+ * @param[in] vector    the vector number
+ *
+ * @special
+ */
+static inline
+void osalIsrDisableVector(unsigned vector) {
+
+  osalDbgCheck(vector < VECTORS_NUMBER);
+
+  INTC_PSR(vector) = (uint8_t)0;
+}
+
+/**
  * @brief   System halt with error message.
  *
  * @param[in] reason    the halt message pointer

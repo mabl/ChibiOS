@@ -31,6 +31,70 @@
                      ChibiOS/RT is GPL3-licensed free software. A special exception has been added to the GPL3 in order to allow inclusion in closed source applications, details are in the exception.txt document.
                   </text>
                </image>
+               <group
+                     columns="1"
+                     expanded="false"
+                     name="ISRs"
+                     style="collapsable">
+                  <description>
+                     Interrupt related options.
+                  </description>
+                  <property
+                        brief="List of the interrupt vectors to be enabled on startup."
+                        editable="true"
+                        length="0"
+                        min="0"
+                        name="Enabled Vectors"
+                        required="true"
+                        type="list"
+                        value="Identifier,Number,Priority,Name Override">
+                     <group
+                           columns="1"
+                           expanded="true"
+                           name="Vector"
+                           style="collapsable">
+                        <description>
+                           Interrupt vector settings.
+                        </description>
+                        <property
+                              brief="Unique symbolic name to be assigned to the vector."
+                              default="IDENTIFIER"
+                              editable="true"
+                              name="Identifier"
+                              regex="^[a-zA-Z_][a-zA-Z0-9_]*$"
+                              required="true"
+                              type="string">
+                        </property>
+                        <property
+                              brief="Number of the interrupt vector to be enabled."
+                              default="0"
+                              editable="true"
+                              max="359"
+                              min="0"
+                              name="Number"
+                              required="true"
+                              type="unsigned">
+                        </property>
+                        <property
+                              brief="Priority to be assigned to the interrupt vector."
+                              default="7"
+                              editable="true"
+                              name="Priority"
+                              required="true"
+                              type="enum"
+                              value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
+                        </property>
+                        <property
+                              brief="This setting, if specified, overrides the default vector name which is in the form &quot;vectorN&quot;."
+                              editable="true"
+                              name="Name Override"
+                              regex="^[a-zA-Z_][a-zA-Z0-9_]*$|^$"
+                              required="false"
+                              type="string">
+                        </property>
+                     </group>
+                  </property>
+               </group>
             </configuration>
             <exportedFeatures>
                <exportedFeature
