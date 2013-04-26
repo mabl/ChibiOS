@@ -26,6 +26,8 @@
  * @{
  */
 
+#if !defined(__DOXYGEN__)
+
         /* Software vectors table. The vectors are accessed from the IVOR4
            handler only. In order to declare an interrupt handler just create
            a function withe the same name of a vector, the symbol will
@@ -580,7 +582,7 @@ vector357:
 vector358:
 vector359:
 
-        .weak      _unhandled_irq
+        .weak       _unhandled_irq
         .type       _unhandled_irq, @function
 _unhandled_irq:
          b          _unhandled_irq

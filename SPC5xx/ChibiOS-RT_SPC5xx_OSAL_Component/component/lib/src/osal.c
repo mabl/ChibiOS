@@ -33,18 +33,6 @@
 /* Module exported variables.                                                */
 /*===========================================================================*/
 
-/**
- * @brief   Pointer to a halt error message.
- * @note    The message is meant to be retrieved by the debugger after the
- *          system halt caused by an unexpected error.
- */
-const char *osal_halt_msg;
-
-/**
- * @brief   Virtual timers delta list header.
- */
-virtual_timers_list_t vtlist;
-
 /*===========================================================================*/
 /* Module local types.                                                       */
 /*===========================================================================*/
@@ -78,7 +66,7 @@ msg_t osalThreadSuspendS(thread_reference_t *trp) {
 
   *trp = (thread_reference_t)chThdSelf();
   chSchGoSleepS(THD_STATE_SUSPENDED);
-  return self.message;
+  return chThdSelf()->p_msg;
 }
 
 /**

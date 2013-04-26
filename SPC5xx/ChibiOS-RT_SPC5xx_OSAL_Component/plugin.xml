@@ -32,6 +32,31 @@
                   </text>
                </image>
             </configuration>
+            <exportedFeatures>
+               <exportedFeature
+                     brief="This interface declares a generic OSAL service."
+                     exclusive="false"
+                     id="org.chibios.features.osal">
+               </exportedFeature>
+               <exportedFeature
+                     brief="This interface declares an OSAL service for SPC5xx."
+                     exclusive="false"
+                     id="org.chibios.features.osal.spc5xx">
+               </exportedFeature>
+               <exportedFeature
+                     brief="This interface declares an OSAL service for SPC563Mxx."
+                     exclusive="false"
+                     id="org.chibios.features.osal.spc563mxx">
+               </exportedFeature>
+            </exportedFeatures>
+            <requiredFeatures>
+               <requiredFeature
+                     id="com.st.tools.spc5.features.platform.spc5xx">
+               </requiredFeature>
+               <requiredFeature
+                     id="org.chibios.spc5.features.kernel">
+               </requiredFeature>
+            </requiredFeatures>
       </component>
    </extension>
 

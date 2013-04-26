@@ -56,9 +56,15 @@
  * @name    Messages
  * @{
  */
-#define MSG_OK              RDY_OK
-#define MSG_RESET           RDY_RESET
-#define MSG_TIMEOUT         RDY_TIMEOUT
+#define MSG_OK                              RDY_OK
+#define MSG_RESET                           RDY_RESET
+#define MSG_TIMEOUT                         RDY_TIMEOUT
+/** @} */
+
+/**
+ * @name    Time related
+ */
+#define OSAL_FREQUENCY                      CH_FREQUENCY
 /** @} */
 
 /*===========================================================================*/
@@ -227,6 +233,8 @@ void osalIsrWait(void) {
 static inline
 void osalSysHalt(const char *reason) {
 
+  (void)reason;
+
   chDbgAssert(0, reason, "");
   chSysHalt();
 }
@@ -388,7 +396,7 @@ void osalVTResetI(virtual_timer_t *vtp) {
  * @api
  */
 static inline
-void chVTReset(virtual_timer_t *vtp) {
+void osalVTReset(virtual_timer_t *vtp) {
 
   chVTReset((VirtualTimer *)vtp);
 }
@@ -445,7 +453,7 @@ systime_t osalVTGetSystemTime(void) {
 static inline
 void osalThreadSleep(systime_t time) {
 
-  chThdSleepSeconds(time)
+  chThdSleepSeconds(time);
 }
 
 /**
@@ -497,7 +505,7 @@ void osalThreadSleep(systime_t time) {
 static inline
 void osalOsRescheduleS(void) {
 
-  chThdRescheduleS();
+  chSchRescheduleS();
 }
 
 /**
@@ -522,10 +530,10 @@ void osalEventInit(eventsource_t *esp) {
  * @iclass
  */
 static inline
-void osalEventBroadcastI(eventsource_t *esp,
-                         eventflags_t flags) {
+void osalEventBroadcastFlagsI(eventsource_t *esp,
+                              eventflags_t flags) {
 
-  chEvtBroadcastI((EventSource *)esp, (flagsmask_t)flags);
+  chEvtBroadcastFlagsI((EventSource *)esp, (flagsmask_t)flags);
 }
 
 /**
@@ -537,10 +545,10 @@ void osalEventBroadcastI(eventsource_t *esp,
  * @api
  */
 static inline
-void osalEventBroadcast(eventsource_t *esp,
-                        eventflags_t flags) {
+void osalEventBroadcastFlags(eventsource_t *esp,
+                             eventflags_t flags) {
 
-  chEvtBroadcast((EventSource *)esp, (flagsmask_t)flags);
+  chEvtBroadcastFlags((EventSource *)esp, (flagsmask_t)flags);
 }
 
 /**
