@@ -40,6 +40,7 @@ cp ${chibios}/os/various/shell.c ./portable/ChibiOS-RT_Portable_Mini_Shell_Compo
 #============================================================================#
 
 # SPC560BCxx Kernel Port.
+echo "SPC560BCxx Kernel Port"
 cp ${chibios}/os/ports/GCC/PPC/*.h                      ./SPC560BCxx/ChibiOS-RT_SPC560BCxx_Kernel_Port_Component/component/lib/include/
 cp ${chibios}/os/ports/GCC/PPC/SPC560BCxx/*.h           ./SPC560BCxx/ChibiOS-RT_SPC560BCxx_Kernel_Port_Component/component/lib/include/
 cp ${chibios}/os/ports/GCC/PPC/*.c                      ./SPC560BCxx/ChibiOS-RT_SPC560BCxx_Kernel_Port_Component/component/lib/src/
@@ -51,6 +52,7 @@ cp ${chibios}/os/ports/GCC/PPC/SPC560BCxx/vectors.s     ./SPC560BCxx/ChibiOS-RT_
 #============================================================================#
 
 # SPC560Pxx Kernel Port.
+echo "SPC560Pxx Kernel Port"
 cp ${chibios}/os/ports/GCC/PPC/*.h                      ./SPC560Pxx/ChibiOS-RT_SPC560Pxx_Kernel_Port_Component/component/lib/include/
 cp ${chibios}/os/ports/GCC/PPC/SPC560Pxx/*.h            ./SPC560Pxx/ChibiOS-RT_SPC560Pxx_Kernel_Port_Component/component/lib/include/
 cp ${chibios}/os/ports/GCC/PPC/*.c                      ./SPC560Pxx/ChibiOS-RT_SPC560Pxx_Kernel_Port_Component/component/lib/src/
@@ -62,6 +64,7 @@ cp ${chibios}/os/ports/GCC/PPC/SPC560Pxx/vectors.s      ./SPC560Pxx/ChibiOS-RT_S
 #============================================================================#
 
 # SPC563Mxx Kernel Port.
+echo "SPC563Mxx Kernel Port"
 cp ${chibios}/os/ports/GCC/PPC/*.h                      ./SPC563Mxx/ChibiOS-RT_SPC563Mxx_Kernel_Port_Component/component/lib/include/
 cp ${chibios}/os/ports/GCC/PPC/SPC563Mxx/*.h            ./SPC563Mxx/ChibiOS-RT_SPC563Mxx_Kernel_Port_Component/component/lib/include/
 cp ${chibios}/os/ports/GCC/PPC/*.c                      ./SPC563Mxx/ChibiOS-RT_SPC563Mxx_Kernel_Port_Component/component/lib/src/
@@ -69,10 +72,23 @@ cp ${chibios}/os/ports/GCC/PPC/ivor.s                   ./SPC563Mxx/ChibiOS-RT_S
 cp ${chibios}/os/ports/GCC/PPC/SPC563Mxx/vectors.s      ./SPC563Mxx/ChibiOS-RT_SPC563Mxx_Kernel_Port_Component/component/lib/src/
 
 #============================================================================#
+# SPC564Axx Components.                                                      #
+#============================================================================#
+
+# SPC564Axx Kernel Port.
+echo "SPC564Axx Kernel Port"
+cp ${chibios}/os/ports/GCC/PPC/*.h                      ./SPC564Axx/ChibiOS-RT_SPC564Axx_Kernel_Port_Component/component/lib/include/
+cp ${chibios}/os/ports/GCC/PPC/SPC564Axx/*.h            ./SPC564Axx/ChibiOS-RT_SPC564Axx_Kernel_Port_Component/component/lib/include/
+cp ${chibios}/os/ports/GCC/PPC/*.c                      ./SPC564Axx/ChibiOS-RT_SPC564Axx_Kernel_Port_Component/component/lib/src/
+cp ${chibios}/os/ports/GCC/PPC/ivor.s                   ./SPC564Axx/ChibiOS-RT_SPC564Axx_Kernel_Port_Component/component/lib/src/
+cp ${chibios}/os/ports/GCC/PPC/SPC564Axx/vectors.s      ./SPC564Axx/ChibiOS-RT_SPC564Axx_Kernel_Port_Component/component/lib/src/
+
+#============================================================================#
 # SPC56ELxx Components.                                                      #
 #============================================================================#
 
 # SPC56ELxx Kernel Port.
+echo "SPC56ELxx Kernel Port"
 cp ${chibios}/os/ports/GCC/PPC/*.h                      ./SPC56ELxx/ChibiOS-RT_SPC56ELxx_Kernel_Port_Component/component/lib/include/
 cp ${chibios}/os/ports/GCC/PPC/SPC56ELxx/*.h            ./SPC56ELxx/ChibiOS-RT_SPC56ELxx_Kernel_Port_Component/component/lib/include/
 cp ${chibios}/os/ports/GCC/PPC/*.c                      ./SPC56ELxx/ChibiOS-RT_SPC56ELxx_Kernel_Port_Component/component/lib/src/

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SPC5-Config version="1.0.0">
-  <application name="SPC563Mxx Test Application" version="1.0.0" standalone="false" locked="false">
-    <description>Test application for the SPC563Mxx created using the SPC5's Application Wizard.</description>
-    <component id="com.st.tools.spc5.components.platform.spc563mxx" version="1.0.0.qualifier">
-      <component id="org.chibios.spc5.components.rtos.spc563mxx" version="2.5.2.qualifier" />
+  <application name="SPC564Axx Test Application" version="1.0.0" standalone="false" locked="false">
+    <description>Test application for the SPC564Axx created using the SPC5's Application Wizard.</description>
+    <component id="com.st.tools.spc5.components.platform.spc564axx" version="1.0.0.qualifier">
+      <component id="org.chibios.spc5.components.rtos.spc564axx" version="2.5.2.qualifier" />
       <component id="org.chibios.spc5.components.various.shell" version="2.5.2.qualifier" />
       <component id="org.chibios.spc5.components.various.chprintf" version="2.5.2.qualifier" />
     </component>
     <instances>
-      <instance locked="false" id="com.st.tools.spc5.components.platform.spc563mxx">
+      <instance locked="false" id="com.st.tools.spc5.components.platform.spc564axx">
         <platform_settings>
-          <specific_model index="2">SPC563M64L5</specific_model>
+          <specific_model index="1">SPC564A70L7</specific_model>
         </platform_settings>
         <runtime_settings>
           <process_stack_size>2048</process_stack_size>
@@ -33,7 +33,7 @@
           <custom_sections />
         </linker_settings>
       </instance>
-      <instance locked="false" id="org.chibios.spc5.components.rtos.spc563mxx" />
+      <instance locked="false" id="org.chibios.spc5.components.rtos.spc564axx" />
       <instance locked="false" id="org.chibios.spc5.components.spc5hal">
         <enabled_drivers>
           <tm>false</tm>
@@ -84,10 +84,10 @@
           <enable_mutual_exclusion_functions>false</enable_mutual_exclusion_functions>
         </spi_driver_settings>
       </instance>
-      <instance locked="false" id="org.chibios.spc5.components.hal.board.spc563mxx">
+      <instance locked="false" id="org.chibios.spc5.components.hal.board.spc564axx">
         <identification>
-          <board_identifier>SPC563MXX_EVB</board_identifier>
-          <board_name>EVB with SPC563Mxx Mini Module</board_name>
+          <board_identifier>SPC564AXX_EVB</board_identifier>
+          <board_name>EVB with SPC564Axx Mini Module</board_name>
         </identification>
         <clock_settings>
           <xosc_clock>8000000</xosc_clock>
@@ -212,15 +212,15 @@
           <board_initialization_code />
         </initialization_code>
       </instance>
-      <instance locked="false" id="org.chibios.spc5.components.hal.platform.spc563mxx">
+      <instance locked="false" id="org.chibios.spc5.components.hal.platform.spc564axx">
         <initialization_settings>
           <do_not_init>false</do_not_init>
           <clock_bypass>false</clock_bypass>
           <allow_overclocking>false</allow_overclocking>
           <fmpll0_settings>
             <prediv_value>2</prediv_value>
-            <mfd_value>80</mfd_value>
-            <rfd_value index="1">SPC5_RFD_DIV4</rfd_value>
+            <mfd_value>75</mfd_value>
+            <rfd_value index="0">SPC5_RFD_DIV2</rfd_value>
           </fmpll0_settings>
         </initialization_settings>
         <irq_priority_settings>
@@ -317,7 +317,7 @@
           <system_halt_hook />
         </hooks>
       </instance>
-      <instance locked="false" id="org.chibios.spc5.components.kernel.port.gcc.spc563mxx" />
+      <instance locked="false" id="org.chibios.spc5.components.kernel.port.gcc.spc564axx" />
       <instance locked="false" id="org.chibios.spc5.components.osal.chibios.spc5xx">
         <isrs>
           <enabled_vectors />

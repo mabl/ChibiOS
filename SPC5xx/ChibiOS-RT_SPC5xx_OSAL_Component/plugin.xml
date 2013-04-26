@@ -33,7 +33,7 @@
                </image>
                <group
                      columns="1"
-                     expanded="false"
+                     expanded="true"
                      name="ISRs"
                      style="collapsable">
                   <description>
@@ -45,7 +45,7 @@
                         length="0"
                         min="0"
                         name="Enabled Vectors"
-                        required="true"
+                        required="false"
                         type="list"
                         value="Identifier,Number,Priority,Name Override">
                      <group
@@ -69,7 +69,7 @@
                               brief="Number of the interrupt vector to be enabled."
                               default="0"
                               editable="true"
-                              max="359"
+                              max="511"
                               min="0"
                               name="Number"
                               required="true"
