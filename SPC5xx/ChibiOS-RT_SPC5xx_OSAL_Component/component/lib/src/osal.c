@@ -49,6 +49,22 @@
 /* Module exported functions.                                                */
 /*===========================================================================*/
 
+/**
+ * @brief   OSAL module initialization.
+ *
+ * @api
+ */
+void osalInit(void) {
+
+  /* Executing configured initialization code.*/
+//  osal_cfg_init();
+
+  /* INTC initialization, software vector mode, 4 bytes vectors, starting
+     at priority 0.*/
+  INTC_BCR      = 0;
+  INTC_CPR      = 0;
+  INTC_IACKR    = (uint32_t)_vectors;
+}
 
 /**
  * @brief   Sends the current thread sleeping and sets a reference variable.

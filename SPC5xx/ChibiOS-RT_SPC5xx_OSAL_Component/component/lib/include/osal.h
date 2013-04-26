@@ -67,6 +67,16 @@
 #define OSAL_FREQUENCY                      CH_FREQUENCY
 /** @} */
 
+/**
+ * @name    INTC registers direct access macros
+ * @{
+ */
+#define INTC_BCR            (*((volatile uint32_t *)0xFFF48000))
+#define INTC_CPR            (*((volatile uint32_t *)0xFFF48008))
+#define INTC_IACKR          (*((volatile uint32_t *)0xFFF48010))
+#define INTC_PSR(n)         (*((volatile uint8_t *)(0xFFF48040 + (n))))
+/** @} */
+
 /*===========================================================================*/
 /* Module pre-compile time settings.                                         */
 /*===========================================================================*/
@@ -123,16 +133,6 @@ typedef uint32_t mutex_t;
 /*===========================================================================*/
 /* Module macros and inline functions.                                       */
 /*===========================================================================*/
-
-/**
- * @brief   OSAL module initialization.
- *
- * @api
- */
-static inline
-void osalInit(void) {
-
-}
 
 /**
  * @brief   Condition assertion.
@@ -621,9 +621,12 @@ void osalMutexUnlock(mutex_t *mp) {
 /* External declarations.                                                    */
 /*===========================================================================*/
 
+extern const uint32_t _vectors[];
+
 #ifdef __cplusplus
 extern "C" {
 #endif
+  void osalInit(void);
   msg_t osalThreadSuspendS(thread_reference_t *trp);
   void osalThreadResumeI(thread_reference_t *trp, msg_t msg);
   void osalThreadResumeS(thread_reference_t *trp, msg_t msg);

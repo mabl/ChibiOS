@@ -7,17 +7,17 @@
          name="ChibiOS/RT SPC5xx OSAL Component"
          point="com.st.tools.spc5.extension.v1">
       <component
-            headerName="shell.h"
-            hidden="true"
+            headerName="osal.h"
+            hidden="false"
             icon="rsc/chibios.ico"
-            initFunction="shellInit"
+            initFunction="osalInit"
             isPlatform="false">
             <description>
                 ChibiOS/RT OSAL interface layer. This component is required in order to interface ChibiOS/RT with the SPC5-HAL drivers.
             </description>
             <categories>
                <category
-                     id="ChibiOS-RT/Portable Components">
+                     id="ChibiOS-RT/Platforms/SPC5xx">
                </category>
             </categories>
             <configuration>
