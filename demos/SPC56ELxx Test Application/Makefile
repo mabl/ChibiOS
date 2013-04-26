@@ -118,27 +118,4 @@ CPPWARN = -Wall -Wextra
 # Compiler settings
 ##############################################################################
 
-##############################################################################
-# Start of default section
-#
-
-# List all default C defines here, like -D_DEBUG=1
-DDEFS   = -DSPC56EL60L3
-
-# List all default ASM defines here, like -D_DEBUG=1
-DADEFS  =
-
-# List all default directories to look for include files here
-DINCDIR =
-
-# List the default directory to look for the libraries here
-DLIBDIR =
-
-# List all default libraries here
-DLIBS   =
-
-#
-# End of default section
-##############################################################################
-
 include C:/ChibiStudio/workspace/SPC5/SPC56ELxx/STMicroelectronics_SPC56ELxx_Platform_Component/component/lib/rsc/rules.mk

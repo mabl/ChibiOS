@@ -6,9 +6,9 @@
          name="ChibiOS/RT free embedded RTOS for SPC56ELxx Component"
          point="com.st.tools.spc5.extension.v1">
       <component
-            headerName="ch.h,hal.h"
+            headerName="ch.h,osal.h,hal.h"
             icon="rsc/chibios.ico"
-            initFunction="halInit,chSysInit"
+            initFunction="halInit,osalInit,chSysInit"
             isPlatform="false">
             <description>
                 This is a meta component that depends on all components required to create a ChibiOS/RT environment for the STMicroelectronics SPC56ELxx automotive microcontrollers family.

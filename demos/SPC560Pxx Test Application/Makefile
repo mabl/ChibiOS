@@ -92,7 +92,6 @@ INCDIR =    $(LIB_INCLUDES) \
 # Compiler settings
 #
 
-#MCU  = e500mc -meabi -msdata=none -mnew-mnemonics -mregnames
 MCU  = e200zx -meabi -msdata=none -mnew-mnemonics -mregnames
 
 TRGT = ppc-vle-
@@ -119,27 +118,4 @@ CPPWARN = -Wall -Wextra
 # Compiler settings
 ##############################################################################
 
-##############################################################################
-# Start of default section
-#
-
-# List all default C defines here, like -D_DEBUG=1
-DDEFS   = -DSPC560P50L5
-
-# List all default ASM defines here, like -D_DEBUG=1
-DADEFS  =
-
-# List all default directories to look for include files here
-DINCDIR =
-
-# List the default directory to look for the libraries here
-DLIBDIR =
-
-# List all default libraries here
-DLIBS   =
-
-#
-# End of default section
-##############################################################################
-
-include C:/ChibiStudio/workspace/SPC5/STMicroelectronics_SPC560Pxx_Platform_Component/component/lib/rsc/rules.mk
+include C:/ChibiStudio/workspace/SPC5/SPC560Pxx/STMicroelectronics_SPC560Pxx_Platform_Component/component/lib/rsc/rules.mk
