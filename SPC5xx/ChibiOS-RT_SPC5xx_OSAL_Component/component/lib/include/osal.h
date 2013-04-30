@@ -222,7 +222,7 @@ void osalIsrDisable(void) {
 static inline
 void osalIsrWait(void) {
 
-  chSysLockFromIsr();
+  asm volatile ("wait" : : : "memory");
 }
 
 /**
