@@ -1,16 +1,18 @@
 /*
- * Licensed under ST Liberty SW License Agreement V2, (the "License");
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at:
- *
- *        http://www.st.com/software_license_agreement_liberty_v2
- *
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+    SPC5 HAL - Copyright (C) 2013 STMicroelectronics
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 
 /**
  * @file    SPC563Mxx/hal_lld.h
@@ -27,7 +29,7 @@
 #ifndef _HAL_LLD_H_
 #define _HAL_LLD_H_
 
-#include "mpc563m.h"
+#include "xpc563m.h"
 #include "spc563m_registry.h"
 
 /*===========================================================================*/
@@ -42,12 +44,17 @@
 /**
  * @brief   Platform name.
  */
-#define PLATFORM_NAME           "SPC563M64"
+#define PLATFORM_NAME           "SPC563Mxx Powertrain"
 
+/**
+ * @name    ESYNCR2 register definitions
+ * @{
+ */
 #define SPC5_RFD_DIV2           0           /**< Divide VCO frequency by 2. */
 #define SPC5_RFD_DIV4           1           /**< Divide VCO frequency by 4. */
 #define SPC5_RFD_DIV8           2           /**< Divide VCO frequency by 8. */
 #define SPC5_RFD_DIV16          3           /**< Divide VCO frequency by 16.*/
+/** @} */
 
 /**
  * @name    BIUCR register definitions
@@ -101,7 +108,7 @@
  * @brief   Disables the clocks initialization in the HAL.
  */
 #if !defined(SPC5_NO_INIT) || defined(__DOXYGEN__)
-#define SPC5_NO_INIT                         FALSE
+#define SPC5_NO_INIT                        FALSE
 #endif
 
 /**
@@ -111,23 +118,22 @@
  *          are ignored.
  */
 #if !defined(SPC5_CLK_BYPASS) || defined(__DOXYGEN__)
-#define SPC5_CLK_BYPASS                      FALSE
+#define SPC5_CLK_BYPASS                     FALSE
 #endif
 
 /**
  * @brief   Disables the overclock checks.
  */
 #if !defined(SPC5_ALLOW_OVERCLOCK) || defined(__DOXYGEN__)
-#define SPC5_ALLOW_OVERCLOCK                 FALSE
+#define SPC5_ALLOW_OVERCLOCK                FALSE
 #endif
 
 /**
  * @brief   External clock pre-divider.
  * @note    Must be in range 1...15.
- * @note    The effective divider factor is this value.
  */
-#if !defined(SPC5_CLK_PREDIV) || defined(__DOXYGEN__)
-#define SPC5_CLK_PREDIV_VALUE                2
+#if !defined(SPC5_CLK_PREDIV_VALUE) || defined(__DOXYGEN__)
+#define SPC5_CLK_PREDIV_VALUE               2
 #endif
 
 /**
@@ -223,12 +229,14 @@
 /**
  * @brief   Flash wait states are a function of the system clock.
  */
-#if (SPC5_SYSCLK <= 30000000) || defined(__DOXYGEN__)
+#if (SPC5_SYSCLK <= 20000000) || defined(__DOXYGEN__)
 #define SPC5_FLASH_WS       (BIUCR_APC_0 | BIUCR_RWSC_0 | BIUCR_WWSC_1)
-#elif SPC5_SYSCLK <= 60000000
+#elif SPC5_SYSCLK <= 40000000
 #define SPC5_FLASH_WS       (BIUCR_APC_1 | BIUCR_RWSC_1 | BIUCR_WWSC_1)
-#else
+#elif SPC5_SYSCLK <= 64000000
 #define SPC5_FLASH_WS       (BIUCR_APC_2 | BIUCR_RWSC_2 | BIUCR_WWSC_1)
+#else
+#define SPC5_FLASH_WS       (BIUCR_APC_3 | BIUCR_RWSC_3 | BIUCR_WWSC_1)
 #endif
 
 /*===========================================================================*/

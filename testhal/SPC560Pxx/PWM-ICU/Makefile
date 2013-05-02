@@ -23,6 +23,11 @@ ifeq ($(USE_LINK_GC),)
   USE_LINK_GC = yes
 endif
 
+# Linker options here.
+ifeq ($(USE_LDOPT),)
+  USE_LDOPT = 
+endif
+
 # If enabled, this option allows to compile the application in VLE mode.
 ifeq ($(USE_VLE),)
   USE_VLE = yes
@@ -46,7 +51,7 @@ PROJECT = ch
 
 # Imported source files
 CHIBIOS = ../../..
-include $(CHIBIOS)/boards/GENERIC_SPC560P/board.mk
+include $(CHIBIOS)/boards/ST_EVB_SPC560P/board.mk
 include $(CHIBIOS)/os/hal/platforms/SPC560Pxx/platform.mk
 include $(CHIBIOS)/os/hal/hal.mk
 include $(CHIBIOS)/os/ports/GCC/PPC/SPC560Pxx/port.mk

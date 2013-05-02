@@ -1,16 +1,18 @@
 /*
- * Licensed under ST Liberty SW License Agreement V2, (the "License");
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at:
- *
- *        http://www.st.com/software_license_agreement_liberty_v2
- *
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+    SPC5 HAL - Copyright (C) 2013 STMicroelectronics
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 
 /**
  * @file    SPC560Pxx/spc560p_registry.h
@@ -31,6 +33,11 @@
  * @name    SPC560Pxx capabilities
  * @{
  */
+/* eDMA attributes.*/
+#define SPC5_HAS_EDMA                       TRUE
+#define SPC5_EDMA_NCHANNELS                 16
+#define SPC5_EDMA_HAS_MUX                   TRUE
+
 /* LINFlex attributes.*/
 #define SPC5_HAS_LINFLEX0                   TRUE
 #define SPC5_LINFLEX0_PCTL                  48
@@ -135,6 +142,9 @@
 #define SPC5_ETIMER1_TC5IR_NUMBER           173
 #define SPC5_ETIMER1_RCF_NUMBER             178
 #define SPC5_ETIMER1_CLK                    SPC5_MCONTROL_CLK
+
+#define SPC5_HAS_ETIMER2                    FALSE
+/** @} */
 
 #endif /* _SPC560P_REGISTRY_H_ */
 

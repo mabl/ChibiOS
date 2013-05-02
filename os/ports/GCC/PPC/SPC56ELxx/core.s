@@ -98,7 +98,7 @@
 #define BUCSR_BPRED_2           0x00000004
 #define BUCSR_BPRED_3           0x00000006
 #define BUCSR_BALLOC_MASK       0x00000030
-#define BUCSR_BALLOC_0          0x00000030
+#define BUCSR_BALLOC_0          0x00000000
 #define BUCSR_BALLOC_1          0x00000010
 #define BUCSR_BALLOC_2          0x00000020
 #define BUCSR_BALLOC_3          0x00000030
@@ -127,7 +127,7 @@
 
 #define TLB1_MAS0               (MAS0_TBLMAS_TBL | MAS0_ESEL(1))
 #define TLB1_MAS1               (MAS1_VALID | MAS1_IPROT | MAS1_TSISE_128K)
-#define TLB1_MAS2               (MAS2_EPN(0x40000000) | MAS2_VLE | MAS2_I)
+#define TLB1_MAS2               (MAS2_EPN(0x40000000) | MAS2_VLE)
 #define TLB1_MAS3               (MAS3_RPN(0x40000000) |                     \
                                  MAS3_UX | MAS3_SX | MAS3_UW | MAS3_SW |    \
                                  MAS3_UR | MAS3_SR)
@@ -214,6 +214,59 @@ _ramcode:
         .type       _coreinit, @function
 _coreinit:
         /*
+         * Invalidating all TLBs except TLB0.
+         */
+        lis         %r3, 0
+        mtspr       625, %r3        /* MAS1 */
+        mtspr       626, %r3        /* MAS2 */
+        mtspr       627, %r3        /* MAS3 */
+        lis         %r3, (MAS0_TBLMAS_TBL | MAS0_ESEL(1))@h
+        mtspr       624, %r3        /* MAS0 */
+        tlbwe
+        lis         %r3, (MAS0_TBLMAS_TBL | MAS0_ESEL(2))@h
+        mtspr       624, %r3        /* MAS0 */
+        tlbwe
+        lis         %r3, (MAS0_TBLMAS_TBL | MAS0_ESEL(3))@h
+        mtspr       624, %r3        /* MAS0 */
+        tlbwe
+        lis         %r3, (MAS0_TBLMAS_TBL | MAS0_ESEL(4))@h
+        mtspr       624, %r3        /* MAS0 */
+        tlbwe
+        lis         %r3, (MAS0_TBLMAS_TBL | MAS0_ESEL(5))@h
+        mtspr       624, %r3        /* MAS0 */
+        tlbwe
+        lis         %r3, (MAS0_TBLMAS_TBL | MAS0_ESEL(6))@h
+        mtspr       624, %r3        /* MAS0 */
+        tlbwe
+        lis         %r3, (MAS0_TBLMAS_TBL | MAS0_ESEL(7))@h
+        mtspr       624, %r3        /* MAS0 */
+        tlbwe
+        lis         %r3, (MAS0_TBLMAS_TBL | MAS0_ESEL(8))@h
+        mtspr       624, %r3        /* MAS0 */
+        tlbwe
+        lis         %r3, (MAS0_TBLMAS_TBL | MAS0_ESEL(9))@h
+        mtspr       624, %r3        /* MAS0 */
+        tlbwe
+        lis         %r3, (MAS0_TBLMAS_TBL | MAS0_ESEL(10))@h
+        mtspr       624, %r3        /* MAS0 */
+        tlbwe
+        lis         %r3, (MAS0_TBLMAS_TBL | MAS0_ESEL(11))@h
+        mtspr       624, %r3        /* MAS0 */
+        tlbwe
+        lis         %r3, (MAS0_TBLMAS_TBL | MAS0_ESEL(12))@h
+        mtspr       624, %r3        /* MAS0 */
+        tlbwe
+        lis         %r3, (MAS0_TBLMAS_TBL | MAS0_ESEL(13))@h
+        mtspr       624, %r3        /* MAS0 */
+        tlbwe
+        lis         %r3, (MAS0_TBLMAS_TBL | MAS0_ESEL(14))@h
+        mtspr       624, %r3        /* MAS0 */
+        tlbwe
+        lis         %r3, (MAS0_TBLMAS_TBL | MAS0_ESEL(15))@h
+        mtspr       624, %r3        /* MAS0 */
+        tlbwe
+
+        /*
          * TLB1 allocated to internal RAM.
          */
         lis         %r3, TLB1_MAS0@h
@@ -291,44 +344,6 @@ _coreinit:
         lis         %r3, TLB5_MAS3@h
         ori         %r3, %r3, TLB5_MAS3@l
         mtspr       627, %r3        /* MAS3 */
-        tlbwe
-
-        /*
-         * Invalidating the remaining TLBs (because debuggers).
-         */
-        lis         %r3, 0
-        mtspr       625, %r3        /* MAS1 */
-        mtspr       626, %r3        /* MAS2 */
-        mtspr       627, %r3        /* MAS3 */
-        lis         %r3, (MAS0_TBLMAS_TBL | MAS0_ESEL(6))@h
-        mtspr       624, %r3        /* MAS0 */
-        tlbwe
-        lis         %r3, (MAS0_TBLMAS_TBL | MAS0_ESEL(7))@h
-        mtspr       624, %r3        /* MAS0 */
-        tlbwe
-        lis         %r3, (MAS0_TBLMAS_TBL | MAS0_ESEL(8))@h
-        mtspr       624, %r3        /* MAS0 */
-        tlbwe
-        lis         %r3, (MAS0_TBLMAS_TBL | MAS0_ESEL(9))@h
-        mtspr       624, %r3        /* MAS0 */
-        tlbwe
-        lis         %r3, (MAS0_TBLMAS_TBL | MAS0_ESEL(10))@h
-        mtspr       624, %r3        /* MAS0 */
-        tlbwe
-        lis         %r3, (MAS0_TBLMAS_TBL | MAS0_ESEL(11))@h
-        mtspr       624, %r3        /* MAS0 */
-        tlbwe
-        lis         %r3, (MAS0_TBLMAS_TBL | MAS0_ESEL(12))@h
-        mtspr       624, %r3        /* MAS0 */
-        tlbwe
-        lis         %r3, (MAS0_TBLMAS_TBL | MAS0_ESEL(13))@h
-        mtspr       624, %r3        /* MAS0 */
-        tlbwe
-        lis         %r3, (MAS0_TBLMAS_TBL | MAS0_ESEL(14))@h
-        mtspr       624, %r3        /* MAS0 */
-        tlbwe
-        lis         %r3, (MAS0_TBLMAS_TBL | MAS0_ESEL(15))@h
-        mtspr       624, %r3        /* MAS0 */
         tlbwe
 
         /*
@@ -483,7 +498,7 @@ _ivinit:
         lis         %r3, _unhandled_exception@h
         ori         %r3, %r3, _unhandled_exception@l
 
-        mtspr       400, %r3    /* IVOR0-15 */
+        mtspr       400, %r3        /* IVOR0-15 */
         mtspr       401, %r3
         mtspr       402, %r3
         mtspr       403, %r3
@@ -510,28 +525,7 @@ _ivinit:
         /*
          * Unhandled exceptions handler.
          */
-        .weak       _IVOR0,  _IVOR1,  _IVOR2,  _IVOR3,  _IVOR4,  _IVOR5
-        .weak       _IVOR6,  _IVOR7,  _IVOR8,  _IVOR9,  _IVOR10, _IVOR11
-        .weak       _IVOR12, _IVOR13, _IVOR14, _IVOR15, _IVOR32, _IVOR33
-        .weak       _IVOR34
         .weak       _unhandled_exception
-_IVOR0:
-_IVOR1:
-_IVOR2:
-_IVOR3:
-_IVOR5:
-_IVOR6:
-_IVOR7:
-_IVOR8:
-_IVOR9:
-_IVOR11:
-_IVOR12:
-_IVOR13:
-_IVOR14:
-_IVOR15:
-_IVOR32:
-_IVOR33:
-_IVOR34:
         .type       _unhandled_exception, @function
 _unhandled_exception:
         b           _unhandled_exception

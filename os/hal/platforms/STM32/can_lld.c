@@ -1,21 +1,17 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012,2013 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006-2013 Giovanni Di Sirio
 
-    This file is part of ChibiOS/RT.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    ChibiOS/RT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 /**
@@ -187,7 +183,7 @@ static void can_lld_rx1_handler(CANDriver *canp) {
     chSysLockFromIsr();
     while (chSemGetCounterI(&canp->rxsem) < 0)
       chSemSignalI(&canp->rxsem);
-    chEvtBroadcastFlagsI(&canp->rxfull_event, CAN_MAILBOX_TO_MASK(1));
+    chEvtBroadcastFlagsI(&canp->rxfull_event, CAN_MAILBOX_TO_MASK(2));
     chSysUnlockFromIsr();
   }
   if ((rf1r & CAN_RF1R_FOVR1) > 0) {
@@ -212,6 +208,7 @@ static void can_lld_sce_handler(CANDriver *canp) {
   msr = canp->can->MSR;
   canp->can->MSR = CAN_MSR_ERRI | CAN_MSR_WKUI | CAN_MSR_SLAKI;
   /* Wakeup event.*/
+#if CAN_USE_SLEEP_MODE
   if (msr & CAN_MSR_WKUI) {
     canp->state = CAN_READY;
     canp->can->MCR &= ~CAN_MCR_SLEEP;
@@ -219,6 +216,7 @@ static void can_lld_sce_handler(CANDriver *canp) {
     chEvtBroadcastI(&canp->wakeup_event);
     chSysUnlockFromIsr();
   }
+#endif /* CAN_USE_SLEEP_MODE */
   /* Error event.*/
   if (msr & CAN_MSR_ERRI) {
     flagsmask_t flags;
@@ -567,7 +565,8 @@ bool_t can_lld_is_rx_nonempty(CANDriver *canp, canmbx_t mailbox) {
 
   switch (mailbox) {
   case CAN_ANY_MAILBOX:
-    return (canp->can->RF0R & (CAN_RF0R_FMP0 | CAN_RF1R_FMP1)) != 0;
+    return ((canp->can->RF0R & CAN_RF0R_FMP0) != 0 ||
+            (canp->can->RF1R & CAN_RF1R_FMP1) != 0);
   case 1:
     return (canp->can->RF0R & CAN_RF0R_FMP0) != 0;
   case 2:

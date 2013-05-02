@@ -1,21 +1,17 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012,2013 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006-2013 Giovanni Di Sirio
 
-    This file is part of ChibiOS/RT.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    ChibiOS/RT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 /**
@@ -89,12 +85,66 @@
 #endif
 
 /**
+ * @brief   GPTD6 driver enable switch.
+ * @details If set to @p TRUE the support for GPTD6 is included.
+ * @note    The default is @p TRUE.
+ */
+#if !defined(STM32_GPT_USE_TIM6) || defined(__DOXYGEN__)
+#define STM32_GPT_USE_TIM6                  FALSE
+#endif
+
+/**
+ * @brief   GPTD7 driver enable switch.
+ * @details If set to @p TRUE the support for GPTD7 is included.
+ * @note    The default is @p TRUE.
+ */
+#if !defined(STM32_GPT_USE_TIM7) || defined(__DOXYGEN__)
+#define STM32_GPT_USE_TIM7                  FALSE
+#endif
+
+/**
  * @brief   GPTD8 driver enable switch.
  * @details If set to @p TRUE the support for GPTD8 is included.
  * @note    The default is @p TRUE.
  */
 #if !defined(STM32_GPT_USE_TIM8) || defined(__DOXYGEN__)
 #define STM32_GPT_USE_TIM8                  FALSE
+#endif
+
+/**
+ * @brief   GPTD9 driver enable switch.
+ * @details If set to @p TRUE the support for GPTD9 is included.
+ * @note    The default is @p TRUE.
+ */
+#if !defined(STM32_GPT_USE_TIM9) || defined(__DOXYGEN__)
+#define STM32_GPT_USE_TIM9                  FALSE
+#endif
+
+/**
+ * @brief   GPTD11 driver enable switch.
+ * @details If set to @p TRUE the support for GPTD11 is included.
+ * @note    The default is @p TRUE.
+ */
+#if !defined(STM32_GPT_USE_TIM11) || defined(__DOXYGEN__)
+#define STM32_GPT_USE_TIM11                 FALSE
+#endif
+
+/**
+ * @brief   GPTD12 driver enable switch.
+ * @details If set to @p TRUE the support for GPTD12 is included.
+ * @note    The default is @p TRUE.
+ */
+#if !defined(STM32_GPT_USE_TIM12) || defined(__DOXYGEN__)
+#define STM32_GPT_USE_TIM12                 FALSE
+#endif
+
+/**
+ * @brief   GPTD14 driver enable switch.
+ * @details If set to @p TRUE the support for GPTD14 is included.
+ * @note    The default is @p TRUE.
+ */
+#if !defined(STM32_GPT_USE_TIM14) || defined(__DOXYGEN__)
+#define STM32_GPT_USE_TIM14                 FALSE
 #endif
 
 /**
@@ -133,10 +183,52 @@
 #endif
 
 /**
- * @brief   GPTD5 interrupt priority level setting.
+ * @brief   GPTD6 interrupt priority level setting.
+ */
+#if !defined(STM32_GPT_TIM6_IRQ_PRIORITY) || defined(__DOXYGEN__)
+#define STM32_GPT_TIM6_IRQ_PRIORITY         7
+#endif
+
+/**
+ * @brief   GPTD7 interrupt priority level setting.
+ */
+#if !defined(STM32_GPT_TIM7_IRQ_PRIORITY) || defined(__DOXYGEN__)
+#define STM32_GPT_TIM7_IRQ_PRIORITY         7
+#endif
+
+/**
+ * @brief   GPTD8 interrupt priority level setting.
  */
 #if !defined(STM32_GPT_TIM8_IRQ_PRIORITY) || defined(__DOXYGEN__)
 #define STM32_GPT_TIM8_IRQ_PRIORITY         7
+#endif
+
+/**
+ * @brief   GPTD9 interrupt priority level setting.
+ */
+#if !defined(STM32_GPT_TIM9_IRQ_PRIORITY) || defined(__DOXYGEN__)
+#define STM32_GPT_TIM9_IRQ_PRIORITY         7
+#endif
+
+/**
+ * @brief   GPTD11 interrupt priority level setting.
+ */
+#if !defined(STM32_GPT_TIM11_IRQ_PRIORITY) || defined(__DOXYGEN__)
+#define STM32_GPT_TIM11_IRQ_PRIORITY        7
+#endif
+
+/**
+ * @brief   GPTD12 interrupt priority level setting.
+ */
+#if !defined(STM32_GPT_TIM12_IRQ_PRIORITY) || defined(__DOXYGEN__)
+#define STM32_GPT_TIM12_IRQ_PRIORITY        7
+#endif
+
+/**
+ * @brief   GPTD14 interrupt priority level setting.
+ */
+#if !defined(STM32_GPT_TIM14_IRQ_PRIORITY) || defined(__DOXYGEN__)
+#define STM32_GPT_TIM14_IRQ_PRIORITY        7
 #endif
 /** @} */
 
@@ -164,13 +256,40 @@
 #error "TIM5 not present in the selected device"
 #endif
 
+#if STM32_GPT_USE_TIM6 && !STM32_HAS_TIM6
+#error "TIM6 not present in the selected device"
+#endif
+
+#if STM32_GPT_USE_TIM7 && !STM32_HAS_TIM7
+#error "TIM7 not present in the selected device"
+#endif
+
 #if STM32_GPT_USE_TIM8 && !STM32_HAS_TIM8
 #error "TIM8 not present in the selected device"
 #endif
 
+#if STM32_GPT_USE_TIM9 && !STM32_HAS_TIM9
+#error "TIM9 not present in the selected device"
+#endif
+
+#if STM32_GPT_USE_TIM11 && !STM32_HAS_TIM11
+#error "TIM11 not present in the selected device"
+#endif
+
+#if STM32_GPT_USE_TIM12 && !STM32_HAS_TIM12
+#error "TIM12 not present in the selected device"
+#endif
+
+#if STM32_GPT_USE_TIM14 && !STM32_HAS_TIM14
+#error "TIM14 not present in the selected device"
+#endif
+
 #if !STM32_GPT_USE_TIM1 && !STM32_GPT_USE_TIM2 &&                           \
-    !STM32_GPT_USE_TIM3 && !STM32_GPT_USE_TIM4 &&                           \
-    !STM32_GPT_USE_TIM5 && !STM32_GPT_USE_TIM8
+    !STM32_GPT_USE_TIM3 && !STM32_GPT_USE_TIM4 &&  \
+    !STM32_GPT_USE_TIM5 && !STM32_GPT_USE_TIM6 &&  \
+    !STM32_GPT_USE_TIM7 && !STM32_GPT_USE_TIM8 &&  \
+    !STM32_GPT_USE_TIM9 && !STM32_GPT_USE_TIM11 && \
+    !STM32_GPT_USE_TIM12 && !STM32_GPT_USE_TIM14
 #error "GPT driver activated but no TIM peripheral assigned"
 #endif
 
@@ -199,9 +318,39 @@
 #error "Invalid IRQ priority assigned to TIM5"
 #endif
 
+#if STM32_GPT_USE_TIM6 &&                                                   \
+    !CORTEX_IS_VALID_KERNEL_PRIORITY(STM32_GPT_TIM6_IRQ_PRIORITY)
+#error "Invalid IRQ priority assigned to TIM6"
+#endif
+
+#if STM32_GPT_USE_TIM7 &&                                                   \
+    !CORTEX_IS_VALID_KERNEL_PRIORITY(STM32_GPT_TIM7_IRQ_PRIORITY)
+#error "Invalid IRQ priority assigned to TIM7"
+#endif
+
 #if STM32_GPT_USE_TIM8 &&                                                   \
     !CORTEX_IS_VALID_KERNEL_PRIORITY(STM32_GPT_TIM8_IRQ_PRIORITY)
 #error "Invalid IRQ priority assigned to TIM8"
+#endif
+
+#if STM32_GPT_USE_TIM9 &&                                                   \
+    !CORTEX_IS_VALID_KERNEL_PRIORITY(STM32_GPT_TIM9_IRQ_PRIORITY)
+#error "Invalid IRQ priority assigned to TIM9"
+#endif
+
+#if STM32_GPT_USE_TIM11 &&                                                   \
+    !CORTEX_IS_VALID_KERNEL_PRIORITY(STM32_GPT_TIM11_IRQ_PRIORITY)
+#error "Invalid IRQ priority assigned to TIM11"
+#endif
+
+#if STM32_GPT_USE_TIM12 &&                                                   \
+    !CORTEX_IS_VALID_KERNEL_PRIORITY(STM32_GPT_TIM12_IRQ_PRIORITY)
+#error "Invalid IRQ priority assigned to TIM12"
+#endif
+
+#if STM32_GPT_USE_TIM14 &&                                                   \
+    !CORTEX_IS_VALID_KERNEL_PRIORITY(STM32_GPT_TIM14_IRQ_PRIORITY)
+#error "Invalid IRQ priority assigned to TIM14"
 #endif
 
 /*===========================================================================*/
@@ -267,6 +416,22 @@ struct GPTDriver {
 /* Driver macros.                                                            */
 /*===========================================================================*/
 
+/**
+ * @brief   Changes the interval of GPT peripheral.
+ * @details This function changes the interval of a running GPT unit.
+ * @pre     The GPT unit must have been activated using @p gptStart().
+ * @pre     The GPT unit must have been running in continuous mode using
+ *          @p gptStartContinuous().
+ * @post    The GPT unit interval is changed to the new value.
+ * @note    The function has effect at the next cycle start.
+ *
+ * @param[in] gptp      pointer to a @p GPTDriver object
+ * @param[in] interval  new cycle time in timer ticks
+ * @notapi
+ */
+#define gpt_lld_change_interval(gptp, interval)                               \
+  ((gptp)->tim->ARR = (uint16_t)((interval) - 1))
+
 /*===========================================================================*/
 /* External declarations.                                                    */
 /*===========================================================================*/
@@ -291,8 +456,32 @@ extern GPTDriver GPTD4;
 extern GPTDriver GPTD5;
 #endif
 
+#if STM32_GPT_USE_TIM6 && !defined(__DOXYGEN__)
+extern GPTDriver GPTD6;
+#endif
+
+#if STM32_GPT_USE_TIM7 && !defined(__DOXYGEN__)
+extern GPTDriver GPTD7;
+#endif
+
 #if STM32_GPT_USE_TIM8 && !defined(__DOXYGEN__)
 extern GPTDriver GPTD8;
+#endif
+
+#if STM32_GPT_USE_TIM9 && !defined(__DOXYGEN__)
+extern GPTDriver GPTD9;
+#endif
+
+#if STM32_GPT_USE_TIM11 && !defined(__DOXYGEN__)
+extern GPTDriver GPTD11;
+#endif
+
+#if STM32_GPT_USE_TIM12 && !defined(__DOXYGEN__)
+extern GPTDriver GPTD12;
+#endif
+
+#if STM32_GPT_USE_TIM14 && !defined(__DOXYGEN__)
+extern GPTDriver GPTD14;
 #endif
 
 #ifdef __cplusplus

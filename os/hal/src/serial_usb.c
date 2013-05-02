@@ -29,8 +29,6 @@
 #include "ch.h"
 #include "hal.h"
 
-#include "usb_cdc.h"
-
 #if HAL_USE_SERIAL_USB || defined(__DOXYGEN__)
 
 /*===========================================================================*/
@@ -117,24 +115,25 @@ static void inotify(GenericQueue *qp) {
 
   /* If the USB driver is not in the appropriate state then transactions
      must not be started.*/
-  if (usbGetDriverStateI(sdup->config->usbp) != USB_ACTIVE)
+  if ((usbGetDriverStateI(sdup->config->usbp) != USB_ACTIVE) ||
+      (sdup->state != SDU_READY))
     return;
 
   /* If there is in the queue enough space to hold at least one packet and
      a transaction is not yet started then a new transaction is started for
      the available space.*/
-  maxsize = sdup->config->usbp->epc[USB_CDC_DATA_AVAILABLE_EP]->out_maxsize;
-  if (!usbGetReceiveStatusI(sdup->config->usbp, USB_CDC_DATA_AVAILABLE_EP) &&
+  maxsize = sdup->config->usbp->epc[sdup->config->bulk_out]->out_maxsize;
+  if (!usbGetReceiveStatusI(sdup->config->usbp, sdup->config->bulk_out) &&
       ((n = chIQGetEmptyI(&sdup->iqueue)) >= maxsize)) {
     chSysUnlock();
 
     n = (n / maxsize) * maxsize;
     usbPrepareQueuedReceive(sdup->config->usbp,
-                            USB_CDC_DATA_AVAILABLE_EP,
+                            sdup->config->bulk_out,
                             &sdup->iqueue, n);
 
     chSysLock();
-    usbStartReceiveI(sdup->config->usbp, USB_CDC_DATA_AVAILABLE_EP);
+    usbStartReceiveI(sdup->config->usbp, sdup->config->bulk_out);
   }
 }
 
@@ -147,21 +146,22 @@ static void onotify(GenericQueue *qp) {
 
   /* If the USB driver is not in the appropriate state then transactions
      must not be started.*/
-  if (usbGetDriverStateI(sdup->config->usbp) != USB_ACTIVE)
+  if ((usbGetDriverStateI(sdup->config->usbp) != USB_ACTIVE) ||
+      (sdup->state != SDU_READY))
     return;
 
   /* If there is not an ongoing transaction and the output queue contains
      data then a new transaction is started.*/
-  if (!usbGetTransmitStatusI(sdup->config->usbp, USB_CDC_DATA_REQUEST_EP) &&
+  if (!usbGetTransmitStatusI(sdup->config->usbp, sdup->config->bulk_in) &&
       ((n = chOQGetFullI(&sdup->oqueue)) > 0)) {
     chSysUnlock();
 
     usbPrepareQueuedTransmit(sdup->config->usbp,
-                             USB_CDC_DATA_REQUEST_EP,
+                             sdup->config->bulk_in,
                              &sdup->oqueue, n);
 
     chSysLock();
-    usbStartTransmitI(sdup->config->usbp, USB_CDC_DATA_REQUEST_EP);
+    usbStartTransmitI(sdup->config->usbp, sdup->config->bulk_in);
   }
 }
 
@@ -206,6 +206,7 @@ void sduObjectInit(SerialUSBDriver *sdup) {
  * @api
  */
 void sduStart(SerialUSBDriver *sdup, const SerialUSBConfig *config) {
+  USBDriver *usbp = config->usbp;
 
   chDbgCheck(sdup != NULL, "sduStart");
 
@@ -213,8 +214,10 @@ void sduStart(SerialUSBDriver *sdup, const SerialUSBConfig *config) {
   chDbgAssert((sdup->state == SDU_STOP) || (sdup->state == SDU_READY),
               "sduStart(), #1",
               "invalid state");
+  usbp->in_params[config->bulk_in - 1]   = sdup;
+  usbp->out_params[config->bulk_out - 1] = sdup;
+  usbp->in_params[config->int_in - 1]    = sdup;
   sdup->config = config;
-  config->usbp->param = sdup;
   sdup->state = SDU_READY;
   chSysUnlock();
 }
@@ -229,35 +232,49 @@ void sduStart(SerialUSBDriver *sdup, const SerialUSBConfig *config) {
  * @api
  */
 void sduStop(SerialUSBDriver *sdup) {
+  USBDriver *usbp = sdup->config->usbp;
 
   chDbgCheck(sdup != NULL, "sdStop");
 
   chSysLock();
+
   chDbgAssert((sdup->state == SDU_STOP) || (sdup->state == SDU_READY),
               "sduStop(), #1",
               "invalid state");
+
+  /* Driver in stopped state.*/
+  usbp->in_params[sdup->config->bulk_in - 1]   = NULL;
+  usbp->out_params[sdup->config->bulk_out - 1] = NULL;
+  usbp->in_params[sdup->config->int_in - 1]    = NULL;
   sdup->state = SDU_STOP;
+
+  /* Queues reset in order to signal the driver stop to the application.*/
+  chnAddFlagsI(sdup, CHN_DISCONNECTED);
+  chIQResetI(&sdup->iqueue);
+  chOQResetI(&sdup->oqueue);
+  chSchRescheduleS();
+
   chSysUnlock();
 }
 
 /**
  * @brief   USB device configured handler.
  *
- * @param[in] usbp      pointer to the @p USBDriver object
+ * @param[in] sdup      pointer to a @p SerialUSBDriver object
  *
  * @iclass
  */
-void sduConfigureHookI(USBDriver *usbp) {
-  SerialUSBDriver *sdup = usbp->param;
+void sduConfigureHookI(SerialUSBDriver *sdup) {
+  USBDriver *usbp = sdup->config->usbp;
 
   chIQResetI(&sdup->iqueue);
   chOQResetI(&sdup->oqueue);
   chnAddFlagsI(sdup, CHN_CONNECTED);
 
   /* Starts the first OUT transaction immediately.*/
-  usbPrepareQueuedReceive(usbp, USB_CDC_DATA_AVAILABLE_EP, &sdup->iqueue,
-                          usbp->epc[USB_CDC_DATA_AVAILABLE_EP]->out_maxsize);
-  usbStartReceiveI(usbp, USB_CDC_DATA_AVAILABLE_EP);
+  usbPrepareQueuedReceive(usbp, sdup->config->bulk_out, &sdup->iqueue,
+                          usbp->epc[sdup->config->bulk_out]->out_maxsize);
+  usbStartReceiveI(usbp, sdup->config->bulk_out);
 }
 
 /**
@@ -306,9 +323,10 @@ bool_t sduRequestsHook(USBDriver *usbp) {
  */
 void sduDataTransmitted(USBDriver *usbp, usbep_t ep) {
   size_t n;
-  SerialUSBDriver *sdup = usbp->param;
+  SerialUSBDriver *sdup = usbp->in_params[ep - 1];
 
-  (void)ep;
+  if (sdup == NULL)
+    return;
 
   chSysLockFromIsr();
   chnAddFlagsI(sdup, CHN_OUTPUT_EMPTY);
@@ -351,16 +369,17 @@ void sduDataTransmitted(USBDriver *usbp, usbep_t ep) {
  */
 void sduDataReceived(USBDriver *usbp, usbep_t ep) {
   size_t n, maxsize;
-  SerialUSBDriver *sdup = usbp->param;
+  SerialUSBDriver *sdup = usbp->out_params[ep - 1];
 
-  (void)ep;
+  if (sdup == NULL)
+    return;
 
   chSysLockFromIsr();
   chnAddFlagsI(sdup, CHN_INPUT_AVAILABLE);
 
   /* Writes to the input queue can only happen when there is enough space
      to hold at least one packet.*/
-  maxsize = usbp->epc[USB_CDC_DATA_AVAILABLE_EP]->out_maxsize;
+  maxsize = usbp->epc[ep]->out_maxsize;
   if ((n = chIQGetEmptyI(&sdup->iqueue)) >= maxsize) {
     /* The endpoint cannot be busy, we are in the context of the callback,
        so a packet is in the buffer for sure.*/

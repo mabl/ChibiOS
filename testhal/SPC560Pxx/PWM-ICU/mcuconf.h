@@ -1,16 +1,18 @@
 /*
- * Licensed under ST Liberty SW License Agreement V2, (the "License");
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at:
- *
- *        http://www.st.com/software_license_agreement_liberty_v2
- *
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+    SPC5 HAL - Copyright (C) 2013 STMicroelectronics
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 
 /*
  * SPC560Pxx drivers configuration.
@@ -164,7 +166,6 @@
 /*
  * PWM driver system settings.
  */
-#define SPC5_PWM_USE_FLEXPWM0               TRUE
 #define SPC5_PWM_USE_SMOD0                  TRUE
 #define SPC5_PWM_USE_SMOD1                  FALSE
 #define SPC5_PWM_USE_SMOD2                  FALSE
@@ -181,24 +182,25 @@
 /*
  * ICU driver system settings.
  */
-#define SPC5_ICU_USE_ETIMER0                TRUE
 #define SPC5_ICU_USE_SMOD0                  TRUE
 #define SPC5_ICU_USE_SMOD1                  FALSE
 #define SPC5_ICU_USE_SMOD2                  FALSE
 #define SPC5_ICU_USE_SMOD3                  FALSE
 #define SPC5_ICU_USE_SMOD4                  FALSE
 #define SPC5_ICU_USE_SMOD5                  FALSE
-#define SPC5_ICU_USE_ETIMER1                FALSE
+#define SPC5_ICU_ETIMER0_PRIORITY           7
+#define SPC5_ICU_ETIMER0_START_PCTL         (SPC5_ME_PCTL_RUN(1) |          \
+                                             SPC5_ME_PCTL_LP(2))
+#define SPC5_ICU_ETIMER0_STOP_PCTL          (SPC5_ME_PCTL_RUN(0) |          \
+                                             SPC5_ME_PCTL_LP(0))
+
 #define SPC5_ICU_USE_SMOD6                  FALSE
 #define SPC5_ICU_USE_SMOD7                  FALSE
 #define SPC5_ICU_USE_SMOD8                  FALSE
 #define SPC5_ICU_USE_SMOD9                  FALSE
 #define SPC5_ICU_USE_SMOD10                 FALSE
 #define SPC5_ICU_USE_SMOD11                 FALSE
-#define SPC5_ICU_ETIMER0_START_PCTL         (SPC5_ME_PCTL_RUN(1) |          \
-                                             SPC5_ME_PCTL_LP(2))
-#define SPC5_ICU_ETIMER0_STOP_PCTL          (SPC5_ME_PCTL_RUN(0) |          \
-                                             SPC5_ME_PCTL_LP(0))
+#define SPC5_ICU_ETIMER1_PRIORITY           7
 #define SPC5_ICU_ETIMER1_START_PCTL         (SPC5_ME_PCTL_RUN(1) |          \
                                              SPC5_ME_PCTL_LP(2))
 #define SPC5_ICU_ETIMER1_STOP_PCTL          (SPC5_ME_PCTL_RUN(0) |          \

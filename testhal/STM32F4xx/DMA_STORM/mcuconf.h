@@ -1,21 +1,17 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012,2013 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006-2013 Giovanni Di Sirio
 
-    This file is part of ChibiOS/RT.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    ChibiOS/RT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 /*
@@ -117,13 +113,25 @@
 #define STM32_GPT_USE_TIM3                  FALSE
 #define STM32_GPT_USE_TIM4                  FALSE
 #define STM32_GPT_USE_TIM5                  FALSE
+#define STM32_GPT_USE_TIM6                  FALSE
+#define STM32_GPT_USE_TIM7                  FALSE
 #define STM32_GPT_USE_TIM8                  FALSE
+#define STM32_GPT_USE_TIM9                  FALSE
+#define STM32_GPT_USE_TIM11                 FALSE
+#define STM32_GPT_USE_TIM12                 FALSE
+#define STM32_GPT_USE_TIM14                 FALSE
 #define STM32_GPT_TIM1_IRQ_PRIORITY         7
 #define STM32_GPT_TIM2_IRQ_PRIORITY         7
 #define STM32_GPT_TIM3_IRQ_PRIORITY         7
 #define STM32_GPT_TIM4_IRQ_PRIORITY         7
 #define STM32_GPT_TIM5_IRQ_PRIORITY         7
+#define STM32_GPT_TIM6_IRQ_PRIORITY         7
+#define STM32_GPT_TIM7_IRQ_PRIORITY         7
 #define STM32_GPT_TIM8_IRQ_PRIORITY         7
+#define STM32_GPT_TIM9_IRQ_PRIORITY         7
+#define STM32_GPT_TIM11_IRQ_PRIORITY        7
+#define STM32_GPT_TIM12_IRQ_PRIORITY        7
+#define STM32_GPT_TIM14_IRQ_PRIORITY        7
 
 /*
  * I2C driver system settings.
@@ -184,12 +192,14 @@
 #define STM32_PWM_USE_TIM4                  FALSE
 #define STM32_PWM_USE_TIM5                  FALSE
 #define STM32_PWM_USE_TIM8                  FALSE
+#define STM32_PWM_USE_TIM9                  FALSE
 #define STM32_PWM_TIM1_IRQ_PRIORITY         7
 #define STM32_PWM_TIM2_IRQ_PRIORITY         7
 #define STM32_PWM_TIM3_IRQ_PRIORITY         7
 #define STM32_PWM_TIM4_IRQ_PRIORITY         7
 #define STM32_PWM_TIM5_IRQ_PRIORITY         7
 #define STM32_PWM_TIM8_IRQ_PRIORITY         7
+#define STM32_PWM_TIM9_IRQ_PRIORITY         7
 
 /*
  * SERIAL driver system settings.

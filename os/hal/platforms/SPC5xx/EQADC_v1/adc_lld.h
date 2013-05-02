@@ -1,16 +1,18 @@
 /*
- * Licensed under ST Liberty SW License Agreement V2, (the "License");
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at:
- *
- *        http://www.st.com/software_license_agreement_liberty_v2
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+    SPC5 HAL - Copyright (C) 2013 STMicroelectronics
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 
 /**
  * @file    SPC5xx/EQADC_v1/adc_lld.c
@@ -28,6 +30,64 @@
 /*===========================================================================*/
 /* Driver constants.                                                         */
 /*===========================================================================*/
+
+/**
+ * @name    Analog channel identifiers
+ * @{
+ */
+#define ADC_CHN_AN0                 0U
+#define ADC_CHN_AN1                 1U
+#define ADC_CHN_AN2                 2U
+#define ADC_CHN_AN3                 3U
+#define ADC_CHN_AN4                 4U
+#define ADC_CHN_AN5                 5U
+#define ADC_CHN_AN6                 6U
+#define ADC_CHN_AN7                 7U
+#define ADC_CHN_AN8                 8U
+#define ADC_CHN_AN9                 9U
+#define ADC_CHN_AN10                10U
+#define ADC_CHN_AN11                11U
+#define ADC_CHN_AN12                12U
+#define ADC_CHN_AN13                13U
+#define ADC_CHN_AN14                14U
+#define ADC_CHN_AN15                15U
+#define ADC_CHN_AN16                16U
+#define ADC_CHN_AN17                17U
+#define ADC_CHN_AN18                18U
+#define ADC_CHN_AN19                19U
+#define ADC_CHN_AN20                20U
+#define ADC_CHN_AN21                21U
+#define ADC_CHN_AN22                22U
+#define ADC_CHN_AN23                23U
+#define ADC_CHN_AN24                24U
+#define ADC_CHN_AN25                25U
+#define ADC_CHN_AN26                26U
+#define ADC_CHN_AN27                27U
+#define ADC_CHN_AN28                28U
+#define ADC_CHN_AN29                29U
+#define ADC_CHN_AN30                30U
+#define ADC_CHN_AN31                31U
+#define ADC_CHN_AN32                32U
+#define ADC_CHN_AN33                33U
+#define ADC_CHN_AN34                34U
+#define ADC_CHN_AN35                35U
+#define ADC_CHN_AN36                36U
+#define ADC_CHN_AN37                37U
+#define ADC_CHN_AN38                38U
+#define ADC_CHN_AN39                39U
+#define ADC_CHN_VRH                 40U
+#define ADC_CHN_VRL                 41U
+#define ADC_CHN_VREF50              42U
+#define ADC_CHN_VREF75              43U
+#define ADC_CHN_VREF25              44U
+#define ADC_CHN_BANDGAP             45U
+#define ADC_CHN_DAN0                96U
+#define ADC_CHN_DAN1                97U
+#define ADC_CHN_DAN2                98U
+#define ADC_CHN_DAN3                99U
+#define ADC_CHN_TEMP_SENSOR         128U
+#define ADC_CHN_SPARE               129U
+/** @} */
 
 /**
  * @name    Internal registers indexes
@@ -59,6 +119,22 @@
 #define ADC_REG_PUDCR5              0x75UL
 #define ADC_REG_PUDCR6              0x76UL
 #define ADC_REG_PUDCR7              0x77UL
+/** @} */
+
+/**
+ * @name    EQADC IDCR registers definitions
+ * @{
+ */
+#define EQADC_IDCR_NCIE             (1U << 15)
+#define EQADC_IDCR_TORIE            (1U << 14)
+#define EQADC_IDCR_PIE              (1U << 13)
+#define EQADC_IDCR_EOQIE            (1U << 12)
+#define EQADC_IDCR_CFUIE            (1U << 11)
+#define EQADC_IDCR_CFFE             (1U << 9)
+#define EQADC_IDCR_CFFS             (1U << 8)
+#define EQADC_IDCR_RFOIE            (1U << 3)
+#define EQADC_IDCR_RFDE             (1U << 1)
+#define EQADC_IDCR_RFDS             (1U << 0)
 /** @} */
 
 /**
@@ -115,6 +191,7 @@
  * @name    EQADC conversion/configuration commands
  * @{
  */
+#define EQADC_CONV_CONFIG_STD   (0U << 0)   /**< @brief Alt.config.1.       */
 #define EQADC_CONV_CONFIG_SEL1  (8U << 0)   /**< @brief Alt.config.1.       */
 #define EQADC_CONV_CONFIG_SEL2  (9U << 0)   /**< @brief Alt.config.2.       */
 #define EQADC_CONV_CONFIG_SEL3  (10U << 0)  /**< @brief Alt.config.3.       */
@@ -190,6 +267,21 @@
 #define ADC_ACR_RESSEL_12BITS   (0U << 6)
 #define ADC_ACR_RESSEL_10BITS   (1U << 6)
 #define ADC_ACR_RESSEL_8BITS    (2U << 6)
+/** @} */
+
+/**
+ * @name    ADC PUDCRx registers definitions
+ * @{
+ */
+#define ADC_PUDCR_NONE          0x0000
+#define ADC_PUDCR_UP_200K       0x1100
+#define ADC_PUDCR_UP_100K       0x1200
+#define ADC_PUDCR_UP_5K         0x1300
+#define ADC_PUDCR_DOWN_200K     0x2100
+#define ADC_PUDCR_DOWN_100K     0x2200
+#define ADC_PUDCR_DOWN_5K       0x2300
+#define ADC_PUDCR_UP_DOWN_200K  0x3100
+#define ADC_PUDCR_UP_DOWN_100K  0x3200
 /** @} */
 
 /*===========================================================================*/
@@ -300,42 +392,42 @@
  * @brief   EQADC CFIFO0 and RFIFO0 DMA IRQ priority.
  */
 #if !defined(SPC5_ADC0_FIFO0_DMA_IRQ_PRIO) || defined(__DOXYGEN__)
-#define SPC5_ADC0_FIFO0_DMA_IRQ_PRIO        12
+#define SPC5_ADC_FIFO0_DMA_IRQ_PRIO         12
 #endif
 
 /**
  * @brief   EQADC CFIFO1 and RFIFO1 DMA IRQ priority.
  */
 #if !defined(SPC5_ADC0_FIFO1_DMA_IRQ_PRIO) || defined(__DOXYGEN__)
-#define SPC5_ADC0_FIFO1_DMA_IRQ_PRIO        12
+#define SPC5_ADC_FIFO1_DMA_IRQ_PRIO         12
 #endif
 
 /**
  * @brief   EQADC CFIFO2 and RFIFO2 DMA IRQ priority.
  */
 #if !defined(SPC5_ADC0_FIFO2_DMA_IRQ_PRIO) || defined(__DOXYGEN__)
-#define SPC5_ADC0_FIFO2_DMA_IRQ_PRIO        12
+#define SPC5_ADC_FIFO2_DMA_IRQ_PRIO         12
 #endif
 
 /**
  * @brief   EQADC CFIFO3 and RFIFO3 DMA IRQ priority.
  */
 #if !defined(SPC5_ADC0_FIFO3_DMA_IRQ_PRIO) || defined(__DOXYGEN__)
-#define SPC5_ADC0_FIFO3_DMA_IRQ_PRIO        12
+#define SPC5_ADC_FIFO3_DMA_IRQ_PRIO         12
 #endif
 
 /**
  * @brief   EQADC CFIFO4 and RFIFO4 DMA IRQ priority.
  */
 #if !defined(SPC5_ADC0_FIFO4_DMA_IRQ_PRIO) || defined(__DOXYGEN__)
-#define SPC5_ADC0_FIFO4_DMA_IRQ_PRIO        12
+#define SPC5_ADC_FIFO4_DMA_IRQ_PRIO         12
 #endif
 
 /**
  * @brief   EQADC CFIFO5 and RFIFO5 DMA IRQ priority.
  */
 #if !defined(SPC5_ADC0_FIFO5_DMA_IRQ_PRIO) || defined(__DOXYGEN__)
-#define SPC5_ADC0_FIFO5_DMA_IRQ_PRIO        12
+#define SPC5_ADC_FIFO5_DMA_IRQ_PRIO         12
 #endif
 
 /**
@@ -349,7 +441,14 @@
  * @brief   Initialization value for PUDCRx registers.
  */
 #if !defined(SPC5_ADC_PUDCR) || defined(__DOXYGEN__)
-#define SPC5_ADC_PUDCR                     {0, 0, 0, 0, 0, 0, 0, 0}
+#define SPC5_ADC_PUDCR                      {ADC_PUDCR_NONE,                \
+                                             ADC_PUDCR_NONE,                \
+                                             ADC_PUDCR_NONE,                \
+                                             ADC_PUDCR_NONE,                \
+                                             ADC_PUDCR_NONE,                \
+                                             ADC_PUDCR_NONE,                \
+                                             ADC_PUDCR_NONE,                \
+                                             ADC_PUDCR_NONE}
 #endif
 /** @} */
 
@@ -358,14 +457,14 @@
 /*===========================================================================*/
 
 #if !SPC5_HAS_EQADC
-#error "EQADC1 not present in the selected device"
+#error "EQADC not present in the selected device"
 #endif
 
-#define SPC5_ADC_USE_ADC0                   (SPC5_ADC_USE_ADC0_Q0 |         \
-                                             SPC5_ADC_USE_ADC0_Q1 |         \
+#define SPC5_ADC_USE_ADC0                   (SPC5_ADC_USE_ADC0_Q0 ||        \
+                                             SPC5_ADC_USE_ADC0_Q1 ||        \
                                              SPC5_ADC_USE_ADC0_Q2)
-#define SPC5_ADC_USE_ADC1                   (SPC5_ADC_USE_ADC1_Q3 |         \
-                                             SPC5_ADC_USE_ADC1_Q4 |         \
+#define SPC5_ADC_USE_ADC1                   (SPC5_ADC_USE_ADC1_Q3 ||        \
+                                             SPC5_ADC_USE_ADC1_Q4 ||        \
                                              SPC5_ADC_USE_ADC1_Q5)
 
 #if !SPC5_ADC_USE_ADC0 && !SPC5_ADC_USE_ADC1
@@ -409,8 +508,7 @@ typedef uint16_t adc_channels_num_t;
  *          upon.
  */
 typedef enum {
-  ADC_ERR_DMAFAILURE = 0,                   /**< DMA operations failure.    */
-  ADC_ERR_OVERFLOW = 1                      /**< ADC overflow condition.    */
+  ADC_ERR_DMAFAILURE = 0                    /**< DMA operations failure.    */
 } adcerror_t;
 
 /**
@@ -463,6 +561,18 @@ typedef struct {
   adcerrorcallback_t        error_cb;
   /* End of the mandatory fields.*/
   /**
+   * @brief   Initialization value for CFCR register.
+   */
+  uint16_t                  cfcr;
+  /**
+   * @brief   SIU ETISR.TSEL value for this queue;
+   */
+  uint8_t                   tsel;
+  /**
+   * @brief   SIU ISEL3.ETSEL value for this queue;
+   */
+  uint8_t                   etsel;
+  /**
    * @brief   Number of command iterations stored in @p commands.
    * @note    The total number of array elements must be @p num_channels *
    *          @p num_iterations.
@@ -480,7 +590,7 @@ typedef struct {
 
 /**
  * @brief   Driver configuration structure.
- * @note    It could be empty on some architectures.
+ * @note    Empty in this implementation can be ignored.
  */
 typedef struct {
   uint32_t                  dummy;

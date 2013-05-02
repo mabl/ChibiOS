@@ -1,21 +1,17 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012,2013 Giovanni Di Sirio.
+    ChibiOS/RT - Copyright (C) 2006-2013 Giovanni Di Sirio
 
-    This file is part of ChibiOS/RT.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    ChibiOS/RT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 /**
@@ -143,6 +139,15 @@
 #endif
 
 /**
+ * @brief   PWMD9 driver enable switch.
+ * @details If set to @p TRUE the support for PWMD9 is included.
+ * @note    The default is @p TRUE.
+ */
+#if !defined(STM32_PWM_USE_TIM9) || defined(__DOXYGEN__)
+#define STM32_PWM_USE_TIM9                  FALSE
+#endif
+
+/**
  * @brief   PWMD1 interrupt priority level setting.
  */
 #if !defined(STM32_PWM_TIM1_IRQ_PRIORITY) || defined(__DOXYGEN__)
@@ -185,6 +190,14 @@
 #endif
 /** @} */
 
+/**
+ * @brief   PWMD9 interrupt priority level setting.
+ */
+#if !defined(STM32_PWM_TIM9_IRQ_PRIORITY) || defined(__DOXYGEN__)
+#define STM32_PWM_TIM9_IRQ_PRIORITY         7
+#endif
+/** @} */
+
 /*===========================================================================*/
 /* Configuration checks.                                                     */
 /*===========================================================================*/
@@ -213,9 +226,14 @@
 #error "TIM8 not present in the selected device"
 #endif
 
+#if STM32_PWM_USE_TIM9 && !STM32_HAS_TIM9
+#error "TIM9 not present in the selected device"
+#endif
+
 #if !STM32_PWM_USE_TIM1 && !STM32_PWM_USE_TIM2 &&                           \
     !STM32_PWM_USE_TIM3 && !STM32_PWM_USE_TIM4 &&                           \
-    !STM32_PWM_USE_TIM5 && !STM32_PWM_USE_TIM8
+    !STM32_PWM_USE_TIM5 && !STM32_PWM_USE_TIM8 &&                           \
+    !STM32_PWM_USE_TIM8
 #error "PWM driver activated but no TIM peripheral assigned"
 #endif
 
@@ -251,6 +269,11 @@
 #if STM32_PWM_USE_TIM8 &&                                                   \
     !CORTEX_IS_VALID_KERNEL_PRIORITY(STM32_PWM_TIM8_IRQ_PRIORITY)
 #error "Invalid IRQ priority assigned to TIM8"
+#endif
+
+#if STM32_PWM_USE_TIM9 &&                                                   \
+    !CORTEX_IS_VALID_KERNEL_PRIORITY(STM32_PWM_TIM9_IRQ_PRIORITY)
+#error "Invalid IRQ priority assigned to TIM9"
 #endif
 
 /*===========================================================================*/
@@ -383,6 +406,19 @@ struct PWMDriver {
 #define pwm_lld_change_period(pwmp, period)                                 \
   ((pwmp)->tim->ARR = (uint16_t)((period) - 1))
 
+/**
+ * @brief   Returns a PWM channel status.
+ * @pre     The PWM unit must have been activated using @p pwmStart().
+ *
+ * @param[in] pwmp      pointer to a @p PWMDriver object
+ * @param[in] channel   PWM channel identifier (0...PWM_CHANNELS-1)
+ *
+ * @notapi
+ */
+#define pwm_lld_is_channel_enabled(pwmp, channel)                           \
+  (((pwmp)->tim->CCR[channel] != 0) ||                                      \
+   (((pwmp)->tim->DIER & (2 << channel)) != 0))
+
 /*===========================================================================*/
 /* External declarations.                                                    */
 /*===========================================================================*/
@@ -409,6 +445,10 @@ extern PWMDriver PWMD5;
 
 #if STM32_PWM_USE_TIM8 && !defined(__DOXYGEN__)
 extern PWMDriver PWMD8;
+#endif
+
+#if STM32_PWM_USE_TIM9 && !defined(__DOXYGEN__)
+extern PWMDriver PWMD9;
 #endif
 
 #ifdef __cplusplus

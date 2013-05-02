@@ -29,15 +29,19 @@
   |  |  |  +--LPC11xx/    - Drivers for LPC11xx platform.
   |  |  |  +--LPC13xx/    - Drivers for LPC13xx platform.
   |  |  |  +--LPC214x/    - Drivers for LPC214x platform.
+  |  |  |  +--LPC8xx/     - Drivers for LPC8xx platform.
   |  |  |  +--MSP430/     - Drivers for MSP430 platform.
   |  |  |  +--SPC5xx/     - Drivers for all SPC5xx platform (common).
-  |  |  |  +--SPC5ELxx/   - Drivers for SPC56ELxx platform.
   |  |  |  +--SPC560BCxx/ - Drivers for SPC560BCxx platform.
   |  |  |  +--SPC560Pxx/  - Drivers for SPC560Pxx platform.
   |  |  |  +--SPC563Mxx/  - Drivers for SPC563Mxx platform.
+  |  |  |  +--SPC564Axx/  - Drivers for SPC564Axx platform.
+  |  |  |  +--SPC5ELxx/   - Drivers for SPC56ELxx platform.
   |  |  |  +--STM32/      - Drivers for STM32 platform (common).
   |  |  |  +--STM32F0xx/  - Drivers for STM32F0xx platform.
   |  |  |  +--STM32F1xx/  - Drivers for STM32F1xx platform.
+  |  |  |  +--STM32F30x/  - Drivers for STM32F30x platform.
+  |  |  |  +--STM32F37x/  - Drivers for STM32F37x platform.
   |  |  |  +--STM32F4xx/  - Drivers for STM32F4xx/STM32F2xx platforms.
   |  |  |  +--STM32L1xx/  - Drivers for STM32L1xx platform.
   |  |  |  +--STM8L/      - Drivers for STM8L platform.
@@ -85,6 +89,31 @@
 *****************************************************************************
 
 *** 2.5.2 ***
+- FIX: Fixed USB driver possible deadlock under certain configurations (bug
+  #406)(backported to 2.4.4).
+- FIX: Fixed USB driver cannot be stopped (bug #405)(backported to 2.4.4).
+- FIX: Fixed several spelling errors (bug #404).
+- FIX: Fixed serial port in STM32F3 discovery test case (bug #402).
+- FIX: Fixed add %i to chprintf (bug #401).
+- FIX: Fixed STM32F051 various (bug #400).
+- FIX: Fixed STM32F103 HSI configuration (bug #399).
+- FIX: Fixed patch to allow simulator to be restarted quicker (bug #398).
+- FIX: Fixed blkDisconnect macro typo (bug #397).
+- FIX: Fixed STM32 SPI (V2) driver hangs (bug 3608241).
+- FIX: Fixed fixed I2C malfunction after fixing bug 3607518 (bug 3607549)
+  (backported to 2.4.4).
+- FIX: Fixed spurious interrupt disabling an STM32 DMA stream (bug 3607518)
+  (backported to 2.4.4).
+- FIX: Fixed start of any ADC disables VREF and VBAT (bug 3607467)
+  (backported to 2.4.4).
+- FIX: Fixed surprising non-CRLF lines in source (bug 3607380).
+- FIX: Fixed no entry point defined at link time (bug 3607319).
+- FIX: Fixed sdc_lld_collect_errors does not collect errors (bug 3606743).
+- FIX: Fixed STM32 CAN broadcast typo (bug 3606675).
+- FIX: Fixed STM32 CAN mailbox receive for second fifo (bug 3606673).
+- FIX: Fixed CAN_USE_SLEEP_MODE compilation problem (bug 3606616)(backported
+  to 2.4.4)(backported to 2.2.10).
+- FIX: Fixed missing HSE bypass option for STM32F103 (bug 3606274).
 - FIX: Fixed misplaced brace in icu_lld.c (bug 3605832)(backported to 2.4.4).
 - FIX: Fixed errors in MMC_SPI driver state machine (bug 3605794).
 - FIX: Fixed deadlock in Serial_USB driver (bug 3605793).
@@ -120,7 +149,19 @@
   (backported to 2.4.3).
 - FIX: Fixed wrong SPI path in platform_f105_f107.mk (bug 3598151).
 - FIX: Fixed PHY powerdown issues not fixed (bug 3596911).
-- NEW: Added preliminary support to the STM32F37x family.
+- NEW: Added new pwmIsChannelEnabledI() API to the PWM driver, implemented
+  in the STM32 driver.
+- NEW: Added support for timers 6, 7, 9, 11, 12, 14 to the STM32 GPT driver.
+- NEW: Added support for timer 9 to the STM32 PWM driver.
+- NEW: Relicensed parts of the distribution tree under the Apache 2.0
+  license in order to make specific parts of the code more accessible
+  to the open source community and adopters.
+- NEW: Added ADC(EQADC), HAL, ICU, PAL, PWM, Serial drivers for SPC5xx
+  platforms, tests to be added on the various sub-families.
+- NEW: Added support for SPC56ELxx, SPC560BCxx, SPC560Pxx, SPC560Mxx and
+  SPC564Axx platforms.
+- NEW: Added ADC/SDADC driver for the STM32F37x family.
+- NEW: Added support for the STM32F37x family.
 - NEW: Now the general documentation includes data extracted from the low
   level driver templates. Per-platform/architecture documents are no more
   required and will be replaced with technical articles and examples for
@@ -132,8 +173,6 @@
   by Andrew Hannam.
 - NEW: Added kernel support for the SAM4L, an Atmel Studio 6 demo for the
   SAM4L-EK board has been added.
-- NEW: Added support for SPC56ELxx, SPC560BCxx, SPC560Pxx and SPC560Mxx
-  platforms.
 - NEW: Added an abstract file system interface written in C++, no
   implementations yet.
   TODO: Create a descendant interface for hierarchical file systems.

@@ -1,16 +1,18 @@
 /*
- * Licensed under ST Liberty SW License Agreement V2, (the "License");
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at:
- *
- *        http://www.st.com/software_license_agreement_liberty_v2
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+    SPC5 HAL - Copyright (C) 2013 STMicroelectronics
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 
 /**
  * @file    SPC5xx/EQADC_v1/adc_lld.c
@@ -27,15 +29,16 @@
 
 /* Some forward declarations.*/
 static void adc_serve_rfifo_irq(edma_channel_t channel, void *p);
-static void adc_serve_rfifo_error_irq(edma_channel_t channel, void *p);
-static void adc_serve_cfifo_error_irq(edma_channel_t channel, void *p);
+static void adc_serve_dma_error_irq(edma_channel_t channel,
+                                    void *p,
+                                    uint32_t esr);
 
 /*===========================================================================*/
 /* Driver local definitions.                                                 */
 /*===========================================================================*/
 
 /**
- * @brief Calibration constant.
+ * @brief   Calibration constant.
  * @details Ideal conversion result for 75%(VRH - VRL) minus 2.
  */
 #define ADC_IDEAL_RES75_2       12286
@@ -90,6 +93,14 @@ ADCDriver ADCD6;
 /* Driver local variables and types.                                         */
 /*===========================================================================*/
 
+/**
+ * @brief   Number of active ADC FIFOs.
+ */
+static uint32_t adc_active_fifos;
+
+/**
+ * @brief   Static setup for input resistors.
+ */
 static const uint16_t pudcrs[8] = SPC5_ADC_PUDCR;
 
 #if SPC5_ADC_USE_ADC0_Q0 || defined(__DOXYGEN__)
@@ -97,40 +108,121 @@ static const uint16_t pudcrs[8] = SPC5_ADC_PUDCR;
  * @brief   DMA configuration for EQADC CFIFO0.
  */
 static const edma_channel_config_t adc_cfifo0_dma_config = {
-  0, SPC5_ADC_FIFO0_DMA_PRIO, SPC5_ADC0_FIFO0_DMA_IRQ_PRIO,
-  NULL, adc_serve_cfifo_error_irq, NULL
+  0, SPC5_ADC_FIFO0_DMA_PRIO, SPC5_ADC_FIFO0_DMA_IRQ_PRIO,
+  NULL, adc_serve_dma_error_irq, &ADCD1
 };
 
 /**
  * @brief   DMA configuration for EQADC RFIFO0.
  */
 static const edma_channel_config_t adc_rfifo0_dma_config = {
-  1, SPC5_ADC_FIFO0_DMA_PRIO, SPC5_ADC0_FIFO0_DMA_IRQ_PRIO,
-  adc_serve_rfifo_irq, adc_serve_rfifo_error_irq, NULL
+  1, SPC5_ADC_FIFO0_DMA_PRIO, SPC5_ADC_FIFO0_DMA_IRQ_PRIO,
+  adc_serve_rfifo_irq, adc_serve_dma_error_irq, &ADCD1
 };
-#endif /* SPC5_ADC_USE_ADC0_Q3 */
+#endif /* SPC5_ADC_USE_ADC0_Q0 */
+
+#if SPC5_ADC_USE_ADC0_Q1 || defined(__DOXYGEN__)
+/**
+ * @brief   DMA configuration for EQADC CFIFO1.
+ */
+static const edma_channel_config_t adc_cfifo1_dma_config = {
+  2, SPC5_ADC_FIFO1_DMA_PRIO, SPC5_ADC_FIFO1_DMA_IRQ_PRIO,
+  NULL, adc_serve_dma_error_irq, &ADCD2
+};
+
+/**
+ * @brief   DMA configuration for EQADC RFIFO1.
+ */
+static const edma_channel_config_t adc_rfifo1_dma_config = {
+  3, SPC5_ADC_FIFO1_DMA_PRIO, SPC5_ADC_FIFO1_DMA_IRQ_PRIO,
+  adc_serve_rfifo_irq, adc_serve_dma_error_irq, &ADCD2
+};
+#endif /* SPC5_ADC_USE_ADC0_Q1 */
+
+#if SPC5_ADC_USE_ADC0_Q2 || defined(__DOXYGEN__)
+/**
+ * @brief   DMA configuration for EQADC CFIFO2.
+ */
+static const edma_channel_config_t adc_cfifo2_dma_config = {
+  4, SPC5_ADC_FIFO2_DMA_PRIO, SPC5_ADC_FIFO2_DMA_IRQ_PRIO,
+  NULL, adc_serve_dma_error_irq, &ADCD3
+};
+
+/**
+ * @brief   DMA configuration for EQADC RFIFO2.
+ */
+static const edma_channel_config_t adc_rfifo2_dma_config = {
+  5, SPC5_ADC_FIFO2_DMA_PRIO, SPC5_ADC_FIFO2_DMA_IRQ_PRIO,
+  adc_serve_rfifo_irq, adc_serve_dma_error_irq, &ADCD3
+};
+#endif /* SPC5_ADC_USE_ADC0_Q2 */
 
 #if SPC5_ADC_USE_ADC1_Q3 || defined(__DOXYGEN__)
 /**
  * @brief   DMA configuration for EQADC CFIFO3.
  */
 static const edma_channel_config_t adc_cfifo3_dma_config = {
-  0, SPC5_ADC_FIFO3_DMA_PRIO, SPC5_ADC0_FIFO3_DMA_IRQ_PRIO,
-  NULL, adc_serve_cfifo_error_irq, NULL
+  6, SPC5_ADC_FIFO3_DMA_PRIO, SPC5_ADC_FIFO3_DMA_IRQ_PRIO,
+  NULL, adc_serve_dma_error_irq, &ADCD4
 };
 
 /**
  * @brief   DMA configuration for EQADC RFIFO3.
  */
 static const edma_channel_config_t adc_rfifo3_dma_config = {
-  1, SPC5_ADC_FIFO3_DMA_PRIO, SPC5_ADC0_FIFO3_DMA_IRQ_PRIO,
-  adc_serve_rfifo_irq, adc_serve_rfifo_error_irq, NULL
+  7, SPC5_ADC_FIFO3_DMA_PRIO, SPC5_ADC_FIFO3_DMA_IRQ_PRIO,
+  adc_serve_rfifo_irq, adc_serve_dma_error_irq, &ADCD4
 };
 #endif /* SPC5_ADC_USE_ADC1_Q3 */
+
+#if SPC5_ADC_USE_ADC1_Q4 || defined(__DOXYGEN__)
+/**
+ * @brief   DMA configuration for EQADC CFIFO4.
+ */
+static const edma_channel_config_t adc_cfifo4_dma_config = {
+  8, SPC5_ADC_FIFO4_DMA_PRIO, SPC5_ADC_FIFO4_DMA_IRQ_PRIO,
+  NULL, adc_serve_dma_error_irq, &ADCD5
+};
+
+/**
+ * @brief   DMA configuration for EQADC RFIFO4.
+ */
+static const edma_channel_config_t adc_rfifo4_dma_config = {
+  9, SPC5_ADC_FIFO4_DMA_PRIO, SPC5_ADC_FIFO4_DMA_IRQ_PRIO,
+  adc_serve_rfifo_irq, adc_serve_dma_error_irq, &ADCD5
+};
+#endif /* SPC5_ADC_USE_ADC1_Q4 */
+
+#if SPC5_ADC_USE_ADC1_Q5 || defined(__DOXYGEN__)
+/**
+ * @brief   DMA configuration for EQADC CFIFO5.
+ */
+static const edma_channel_config_t adc_cfifo5_dma_config = {
+  10, SPC5_ADC_FIFO5_DMA_PRIO, SPC5_ADC_FIFO5_DMA_IRQ_PRIO,
+  NULL, adc_serve_dma_error_irq, &ADCD6
+};
+
+/**
+ * @brief   DMA configuration for EQADC RFIFO5.
+ */
+static const edma_channel_config_t adc_rfifo5_dma_config = {
+  11, SPC5_ADC_FIFO5_DMA_PRIO, SPC5_ADC_FIFO5_DMA_IRQ_PRIO,
+  adc_serve_rfifo_irq, adc_serve_dma_error_irq, &ADCD6
+};
+#endif /* SPC5_ADC_USE_ADC1_Q5 */
 
 /*===========================================================================*/
 /* Driver local functions and macros.                                        */
 /*===========================================================================*/
+
+/**
+ * @brief   Unsigned two's complement.
+ *
+ * @param[in] n         the value to be complemented
+ *
+ * @notapi
+ */
+#define CPL2(n) ((~(uint32_t)(n)) + 1)
 
 /**
  * @brief   Address of a CFIFO push register.
@@ -334,37 +426,45 @@ static void adc_setup_resistors(uint32_t adc) {
  * @notapi
  */
 static void adc_serve_rfifo_irq(edma_channel_t channel, void *p) {
+  ADCDriver *adcp = (ADCDriver *)p;
+  edma_tcd_t *tcdp = edmaGetTCD(channel);
 
-  (void)channel;
-  (void)p;
+  if (adcp->grpp != NULL) {
+    if ((tcdp->word[5] >> 16) != (tcdp->word[7] >> 16)) {
+      /* Half transfer processing.*/
+      _adc_isr_half_code(adcp);
+    }
+    else {
+      /* Re-starting DMA channels if in circular mode.*/
+      if (adcp->grpp->circular) {
+        edmaChannelStart(adcp->rfifo_channel);
+        edmaChannelStart(adcp->cfifo_channel);
+      }
+
+      /* Transfer complete processing.*/
+      _adc_isr_full_code(adcp);
+    }
+  }
 }
 
 /**
- * @brief   Shared ISR for RFIFO DMA error events.
+ * @brief   Shared ISR for CFIFO/RFIFO DMA error events.
  *
  * @param[in] channel   the channel number
  * @param[in] p         parameter for the registered function
+ * @param[in] esr       content of the ESR register
  *
  * @notapi
  */
-static void adc_serve_rfifo_error_irq(edma_channel_t channel, void *p) {
+static void adc_serve_dma_error_irq(edma_channel_t channel,
+                                    void *p,
+                                    uint32_t esr) {
+  ADCDriver *adcp = (ADCDriver *)p;
 
   (void)channel;
-  (void)p;
-}
+  (void)esr;
 
-/**
- * @brief   Shared ISR for CFIFO DMA error events.
- *
- * @param[in] channel   the channel number
- * @param[in] p         parameter for the registered function
- *
- * @notapi
- */
-static void adc_serve_cfifo_error_irq(edma_channel_t channel, void *p) {
-
-  (void)channel;
-  (void)p;
+  _adc_isr_error_code(adcp, ADC_ERR_DMAFAILURE);
 }
 
 /*===========================================================================*/
@@ -382,6 +482,9 @@ static void adc_serve_cfifo_error_irq(edma_channel_t channel, void *p) {
  */
 void adc_lld_init(void) {
 
+  /* FIFOs initially all not in use.*/
+  adc_active_fifos = 0;
+
 #if SPC5_ADC_USE_ADC0_Q0
   /* Driver initialization.*/
   adcObjectInit(&ADCD1);
@@ -390,6 +493,22 @@ void adc_lld_init(void) {
   ADCD1.fifo          = ADC_FIFO_0;
 #endif /* SPC5_ADC_USE_EQADC_Q0 */
 
+#if SPC5_ADC_USE_ADC0_Q1
+  /* Driver initialization.*/
+  adcObjectInit(&ADCD2);
+  ADCD2.cfifo_channel = EDMA_ERROR;
+  ADCD2.rfifo_channel = EDMA_ERROR;
+  ADCD2.fifo          = ADC_FIFO_1;
+#endif /* SPC5_ADC_USE_EQADC_Q1 */
+
+#if SPC5_ADC_USE_ADC0_Q2
+  /* Driver initialization.*/
+  adcObjectInit(&ADCD3);
+  ADCD3.cfifo_channel = EDMA_ERROR;
+  ADCD3.rfifo_channel = EDMA_ERROR;
+  ADCD3.fifo          = ADC_FIFO_2;
+#endif /* SPC5_ADC_USE_EQADC_Q2 */
+
 #if SPC5_ADC_USE_ADC1_Q3
   /* Driver initialization.*/
   adcObjectInit(&ADCD4);
@@ -397,6 +516,22 @@ void adc_lld_init(void) {
   ADCD4.rfifo_channel = EDMA_ERROR;
   ADCD4.fifo          = ADC_FIFO_3;
 #endif /* SPC5_ADC_USE_ADC1_Q3 */
+
+#if SPC5_ADC_USE_ADC1_Q4
+  /* Driver initialization.*/
+  adcObjectInit(&ADCD5);
+  ADCD5.cfifo_channel = EDMA_ERROR;
+  ADCD5.rfifo_channel = EDMA_ERROR;
+  ADCD5.fifo          = ADC_FIFO_4;
+#endif /* SPC5_ADC_USE_ADC1_Q4 */
+
+#if SPC5_ADC_USE_ADC1_Q5
+  /* Driver initialization.*/
+  adcObjectInit(&ADCD6);
+  ADCD6.cfifo_channel = EDMA_ERROR;
+  ADCD6.rfifo_channel = EDMA_ERROR;
+  ADCD6.fifo          = ADC_FIFO_5;
+#endif /* SPC5_ADC_USE_ADC1_Q5 */
 
   /* Temporarily enables CFIFO0 for calibration and initialization.*/
   cfifo_enable(ADC_FIFO_0, EQADC_CFCR_SSE | EQADC_CFCR_MODE_SWCS, 0);
@@ -432,53 +567,66 @@ void adc_lld_init(void) {
  */
 void adc_lld_start(ADCDriver *adcp) {
 
+  chDbgAssert(adc_active_fifos < 6, "adc_lld_start(), #1", "too many FIFOs");
+
   if (adcp->state == ADC_STOP) {
     /* Enables the peripheral.*/
 #if SPC5_ADC_USE_ADC0_Q0
     if (&ADCD1 == adcp) {
       adcp->cfifo_channel = edmaChannelAllocate(&adc_cfifo0_dma_config);
       adcp->rfifo_channel = edmaChannelAllocate(&adc_rfifo0_dma_config);
+      adc_active_fifos++;
     }
-#endif /* SPC5_ADC_USE_EQADC_Q0 */
+#endif /* SPC5_ADC_USE_ADC0_Q0 */
+
+#if SPC5_ADC_USE_ADC0_Q1
+    if (&ADCD2 == adcp) {
+      adcp->cfifo_channel = edmaChannelAllocate(&adc_cfifo1_dma_config);
+      adcp->rfifo_channel = edmaChannelAllocate(&adc_rfifo1_dma_config);
+      adc_active_fifos++;
+    }
+#endif /* SPC5_ADC_USE_ADC0_Q1 */
+
+#if SPC5_ADC_USE_ADC0_Q2
+    if (&ADCD3 == adcp) {
+      adcp->cfifo_channel = edmaChannelAllocate(&adc_cfifo2_dma_config);
+      adcp->rfifo_channel = edmaChannelAllocate(&adc_rfifo2_dma_config);
+      adc_active_fifos++;
+    }
+#endif /* SPC5_ADC_USE_ADC0_Q2 */
+
 #if SPC5_ADC_USE_ADC1_Q3
     if (&ADCD4 == adcp) {
       adcp->cfifo_channel = edmaChannelAllocate(&adc_cfifo3_dma_config);
       adcp->rfifo_channel = edmaChannelAllocate(&adc_rfifo3_dma_config);
+      adc_active_fifos++;
     }
 #endif /* SPC5_ADC_USE_ADC1_Q3 */
+
+#if SPC5_ADC_USE_ADC1_Q4
+    if (&ADCD5 == adcp) {
+      adcp->cfifo_channel = edmaChannelAllocate(&adc_cfifo4_dma_config);
+      adcp->rfifo_channel = edmaChannelAllocate(&adc_rfifo4_dma_config);
+      adc_active_fifos++;
+    }
+#endif /* SPC5_ADC_USE_ADC1_Q4 */
+
+#if SPC5_ADC_USE_ADC1_Q5
+    if (&ADCD6 == adcp) {
+      adcp->cfifo_channel = edmaChannelAllocate(&adc_cfifo5_dma_config);
+      adcp->rfifo_channel = edmaChannelAllocate(&adc_rfifo5_dma_config);
+      adc_active_fifos++;
+    }
+#endif /* SPC5_ADC_USE_ADC1_Q5 */
+
+    /* If this is the first FIFO activated then the ADC is enabled.*/
+    if (adc_active_fifos == 1)
+      adc_enable();
   }
 
   chDbgAssert((adcp->cfifo_channel != EDMA_ERROR) &&
               (adcp->rfifo_channel != EDMA_ERROR),
-              "adc_lld_start(), #1", "channel cannot be allocated");
-
-  /* Setting up TCD parameters that will not change during operations,
-     other parameters are set to a temporary value and will be changed
-     when starting a conversion.*/
-  edmaChannelSetup(adcp->cfifo_channel,         /* channel.                 */
-                   NULL,                        /* source, temporary.       */
-                   CFIFO_PUSH_ADDR(adcp->fifo), /* destination.             */
-                   4,                           /* soff, advance by 4.      */
-                   0,                           /* doff, do not advance.    */
-                   2,                           /* ssize, 32 bits transfers.*/
-                   2,                           /* dsize, 32 bits transfers.*/
-                   4,                           /* nbytes, always four.     */
-                   0,                           /* iter, temporary.         */
-                   0,                           /* slast, temporary.        */
-                   0,                           /* dlast, no dest.adjust.   */
-                   0);                          /* mode, temporary.         */
-  edmaChannelSetup(adcp->rfifo_channel,         /* channel.                 */
-                   RFIFO_POP_ADDR(adcp->fifo),  /* source.                  */
-                   NULL,                        /* destination, temporary.  */
-                   0,                           /* soff, do not advance.    */
-                   2,                           /* doff, advance by two.    */
-                   1,                           /* ssize, 16 bits transfers.*/
-                   1,                           /* dsize, 16 bits transfers.*/
-                   2,                           /* nbytes, always two.      */
-                   0,                           /* iter, temporary.         */
-                   0,                           /* slast, no source adjust. */
-                   0,                           /* dlast, temporary.        */
-                   0);                          /* mode, temporary.         */
+              "adc_lld_start(), #2", "channel cannot be allocated");
 }
 
 /**
@@ -490,6 +638,8 @@ void adc_lld_start(ADCDriver *adcp) {
  */
 void adc_lld_stop(ADCDriver *adcp) {
 
+  chDbgAssert(adc_active_fifos < 6, "adc_lld_stop(), #1", "too many FIFOs");
+
   if (adcp->state == ADC_READY) {
     /* Resets the peripheral.*/
 
@@ -497,28 +647,79 @@ void adc_lld_stop(ADCDriver *adcp) {
     edmaChannelRelease(adcp->cfifo_channel);
     edmaChannelRelease(adcp->rfifo_channel);
 
-    /* Disables the peripheral.*/
-#if SPC5_ADC_USE_ADC0_Q0
-    if (&ADCD1 == adcp) {
-    }
-#endif /* SPC5_ADC_USE_ADC0_Q0 */
-#if SPC5_ADC_USE_ADC1_Q3
-    if (&ADCD1 == adcp) {
-    }
-#endif /* SPC5_ADC_USE_ADC1_Q3 */
+    /* If it is the last active FIFO then the ADC is disable too.*/
+    if (--adc_active_fifos == 0)
+      adc_disable();
   }
 }
 
 /**
  * @brief   Starts an ADC conversion.
+ * @note    Because an HW constraint the number of rows in the samples
+ *          array must not be greater than the preconfigured value in
+ *          the conversion group.
  *
  * @param[in] adcp      pointer to the @p ADCDriver object
  *
  * @notapi
  */
 void adc_lld_start_conversion(ADCDriver *adcp) {
+  uint32_t bitoff;
 
-  /* TODO: ISEL0, ISEL3 setup for HW triggers.*/
+  chDbgAssert(adcp->grpp->num_iterations >= adcp->depth,
+              "adc_lld_start_conversion(), #1", "too many elements");
+
+  /* Setting up CFIFO TCD parameters.*/
+  edmaChannelSetup(adcp->cfifo_channel,         /* channel.                 */
+                   adcp->grpp->commands,        /* src.                     */
+                   CFIFO_PUSH_ADDR(adcp->fifo), /* dst.                     */
+                   4,                           /* soff, advance by 4.      */
+                   0,                           /* doff, do not advance.    */
+                   2,                           /* ssize, 32 bits transfers.*/
+                   2,                           /* dsize, 32 bits transfers.*/
+                   4,                           /* nbytes, always four.     */
+                   (uint32_t)adcp->grpp->num_channels *
+                   (uint32_t)adcp->depth,       /* iter.                    */
+                   CPL2((uint32_t)adcp->grpp->num_channels *
+                        (uint32_t)adcp->depth *
+                        sizeof(adccommand_t)),  /* slast.                   */
+                   0,                           /* dlast, no dest.adjust.   */
+                   EDMA_TCD_MODE_DREQ);         /* mode.                    */
+
+  /* Setting up RFIFO TCD parameters.*/
+  edmaChannelSetup(adcp->rfifo_channel,         /* channel.                 */
+                   RFIFO_POP_ADDR(adcp->fifo),  /* src.                     */
+                   adcp->samples,               /* dst.                     */
+                   0,                           /* soff, do not advance.    */
+                   2,                           /* doff, advance by two.    */
+                   1,                           /* ssize, 16 bits transfers.*/
+                   1,                           /* dsize, 16 bits transfers.*/
+                   2,                           /* nbytes, always two.      */
+                   (uint32_t)adcp->grpp->num_channels *
+                   (uint32_t)adcp->depth,       /* iter.                    */
+                   0,                           /* slast, no source adjust. */
+                   CPL2((uint32_t)adcp->grpp->num_channels *
+                        (uint32_t)adcp->depth *
+                        sizeof(adcsample_t)),   /* dlast.                   */
+                   EDMA_TCD_MODE_DREQ | EDMA_TCD_MODE_INT_END |
+                   ((adcp->depth > 1) ? EDMA_TCD_MODE_INT_HALF: 0));/* mode.*/
+
+  /* HW triggers setup.*/
+  bitoff = 20 + ((uint32_t)adcp->fifo * 2);
+  SIU.ETISR.R = (SIU.ETISR.R & ~(3U << bitoff)) |
+                (adcp->grpp->tsel << bitoff);
+  bitoff = (uint32_t)adcp->fifo * 5;
+  SIU.ISEL3.R = (SIU.ISEL3.R & ~(31U << bitoff)) |
+                (adcp->grpp->etsel << bitoff);
+
+  /* Starting DMA channels.*/
+  edmaChannelStart(adcp->rfifo_channel);
+  edmaChannelStart(adcp->cfifo_channel);
+
+  /* Enabling CFIFO, conversion starts.*/
+  cfifo_enable(adcp->fifo, adcp->grpp->cfcr,
+               EQADC_IDCR_CFFE | EQADC_IDCR_CFFS |
+               EQADC_IDCR_RFDE | EQADC_IDCR_RFDS);
 }
 
 /**
@@ -530,7 +731,12 @@ void adc_lld_start_conversion(ADCDriver *adcp) {
  */
 void adc_lld_stop_conversion(ADCDriver *adcp) {
 
-  (void)adcp;
+  /* Stopping DMA channels.*/
+  edmaChannelStop(adcp->cfifo_channel);
+  edmaChannelStop(adcp->rfifo_channel);
+
+  /* Disabling CFIFO.*/
+  cfifo_disable(adcp->fifo);
 }
 
 #endif /* HAL_USE_ADC */

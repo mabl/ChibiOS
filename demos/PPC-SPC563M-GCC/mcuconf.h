@@ -1,16 +1,18 @@
 /*
- * Licensed under ST Liberty SW License Agreement V2, (the "License");
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at:
- *
- *        http://www.st.com/software_license_agreement_liberty_v2
- *
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+    SPC5 HAL - Copyright (C) 2013 STMicroelectronics
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 
 /*
  * SPC563Mxx drivers configuration.
@@ -45,10 +47,10 @@
 /*
  * ADC driver settings.
  */
-#define SPC5_ADC_USE_ADC0_Q0                TRUE
+#define SPC5_ADC_USE_ADC0_Q0                FALSE
 #define SPC5_ADC_USE_ADC0_Q1                FALSE
 #define SPC5_ADC_USE_ADC0_Q2                FALSE
-#define SPC5_ADC_USE_ADC1_Q3                TRUE
+#define SPC5_ADC_USE_ADC1_Q3                FALSE
 #define SPC5_ADC_USE_ADC1_Q4                FALSE
 #define SPC5_ADC_USE_ADC1_Q5                FALSE
 #define SPC5_ADC_CR_CLK_PS                  ADC_CR_CLK_PS(5)

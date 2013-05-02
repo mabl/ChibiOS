@@ -1,16 +1,18 @@
 /*
- * Licensed under ST Liberty SW License Agreement V2, (the "License");
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at:
- *
- *        http://www.st.com/software_license_agreement_liberty_v2
- *
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+    SPC5 HAL - Copyright (C) 2013 STMicroelectronics
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 
 /**
  * @file    SPC56ELxx/hal_lld.c
@@ -49,7 +51,6 @@
  * @notapi
  */
 void hal_lld_init(void) {
-  extern void _vectors(void);
   uint32_t n;
 
   /* The system is switched to the RUN0 mode, the default for normal
@@ -58,16 +59,20 @@ void hal_lld_init(void) {
     SPC5_CLOCK_FAILURE_HOOK();
   }
 
-  /* Down-counter timer initialized for system tick use, TB enabled for debug
-     and measurements.*/
+  /* Decrementer timer initialized for system tick use, note, it is
+     initialized here because in the OSAL layer the system clock frequency
+     is not yet known.*/
   n = halSPCGetSystemClock() / CH_FREQUENCY;
   asm volatile ("mtspr   22, %[n]           \t\n"   /* Init. DEC register.  */
                 "mtspr   54, %[n]           \t\n"   /* Init. DECAR register.*/
-                "li      %%r3, 0x4000       \t\n"   /* TBEN bit.            */
-                "mtspr   1008, %%r3         \t\n"   /* HID0 register.       */
                 "lis     %%r3, 0x0440       \t\n"   /* DIE ARE bits.        */
                 "mtspr   340, %%r3"                 /* TCR register.        */
                 : : [n] "r" (n) : "r3");
+
+  /* TB counter enabled for debug and measurements.*/
+  asm volatile ("li      %%r3, 0x4000       \t\n"   /* TBEN bit.            */
+                "mtspr   1008, %%r3"                /* HID0 register.       */
+                : : : "r3");
 
   /* INTC initialization, software vector mode, 4 bytes vectors, starting
      at priority 0.*/
