@@ -363,6 +363,9 @@
           <flexpwm1_sm1>false</flexpwm1_sm1>
           <flexpwm1_sm2>false</flexpwm1_sm2>
           <flexpwm1_sm3>false</flexpwm1_sm3>
+          <pwm_configurations>
+            <configs />
+          </pwm_configurations>
         </flexpwm_settings>
         <linflex_settings>
           <linflex0 index="1">Serial</linflex0>
