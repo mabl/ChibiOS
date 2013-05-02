@@ -24,6 +24,8 @@
 #include "usb_msd.h"
 
 
+
+
 /*
  * USB Device Descriptor.
  */
@@ -191,7 +193,7 @@ static const USBEndpointConfig epDataConfig = {
  * Handles the USB driver global events.
  */
 static void usb_event(USBDriver *usbp, usbevent_t event) {
-    USBMassStorageDriver *msdp = (USBMassStorageDriver *)usbp->USBD_PARAM_NAME;
+    USBMassStorageDriver *msdp = (USBMassStorageDriver *)usbp->in_params[USB_MS_DATA_EP - 1];
   switch (event) {
   case USB_EVENT_RESET:
     msdp->reconfigured_or_reset_event = TRUE;

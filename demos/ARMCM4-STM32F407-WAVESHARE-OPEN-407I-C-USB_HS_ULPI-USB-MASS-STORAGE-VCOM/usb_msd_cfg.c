@@ -22,7 +22,6 @@
 #include "hal.h"
 #include "usb_msd_cfg.h"
 #include "usb_msd.h"
-#include "usb_cdc.h"
 
 
 
@@ -33,6 +32,10 @@
 #define USB_MAX_PACKET_SIZE         64
 #define USB_CDC_INTERUPT_INTERVAL   0xFF
 #endif
+
+extern SerialUSBDriver SDU1;
+
+
 
 
 /*see www.usb.org/developers/whitepapers/iadclasscode_r10.pdf*/
@@ -357,7 +360,7 @@ static const USBEndpointConfig epCDC2config = {
  * Handles the USB driver global events.
  */
 static void usb_event(USBDriver *usbp, usbevent_t event) {
-    USBMassStorageDriver *msdp = (USBMassStorageDriver *)usbp->USBD_PARAM_NAME;
+    USBMassStorageDriver *msdp = (USBMassStorageDriver *)usbp->in_params[USB_MS_DATA_EP - 1];
   switch (event) {
   case USB_EVENT_RESET:
     msdp->reconfigured_or_reset_event = TRUE;
@@ -375,7 +378,7 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
     usbInitEndpointI(usbp, USB_CDC_DATA_REQUEST_EP, &epCDC1config);
     usbInitEndpointI(usbp, USB_CDC_INTERRUPT_REQUEST_EP, &epCDC2config);
     /* Resetting the state of the CDC subsystem.*/
-    sduConfigureHookI(usbp);
+    sduConfigureHookI(&SDU1);
 
     /* Initialize the thread */
     chBSemSignalI(&msdp->bsem);

@@ -42,15 +42,6 @@
 #endif
 
 
-#ifdef MSD_USB_DRIVER_EXT_FIELDS_NAME
-#  define   USBD_PARAM_NAME     MSD_USB_DRIVER_EXT_FIELDS_NAME
-#else
-#  define   USBD_PARAM_NAME     param
-#endif
-
-
-
-
 #define MSD_REQ_RESET		0xFF
 #define MSD_GET_MAX_LUN		0xFE
 #define MSD_CBW_SIGNATURE                               0x43425355

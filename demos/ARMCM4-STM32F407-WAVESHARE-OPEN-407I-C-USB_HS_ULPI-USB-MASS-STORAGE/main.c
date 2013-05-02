@@ -25,7 +25,6 @@
 #include "hal.h"
 #include "test.h"
 
-#include "usb_cdc.h"
 #include "chprintf.h"
 #include "shell.h"
 #include "usb_msd.h"
@@ -113,7 +112,7 @@ int main(void) {
 
   BaseBlockDevice *bbdp = (BaseBlockDevice*) &SDCD1;
   chprintf(chp, "setting up MSD\r\n");
-  USBMassStorageDriver UMSD1;
+  static USBMassStorageDriver UMSD1;
 
   msdInit(usb_driver, bbdp, &UMSD1, USB_MS_DATA_EP);
 

@@ -28,7 +28,7 @@
 #include "usbcfg.h"
 
 /* Virtual serial port over USB.*/
-static SerialUSBDriver SDU2;
+SerialUSBDriver SDU2;
 
 /*===========================================================================*/
 /* Command line related.                                                     */

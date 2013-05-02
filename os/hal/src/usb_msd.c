@@ -45,16 +45,6 @@
 
 
 
-#if HAL_USE_SERIAL_USB
-#  ifndef MSD_USB_DRIVER_EXT_FIELDS_NAME
-#    error "The serial usb driver and the mass storage driver both use the \
-            USBD->param variable and they conflict, you must define \
-            MSD_USB_DRIVER_EXT_FIELDS_NAME for these to work concurrently."
-#  endif
-#endif
-
-
-
 #if !defined(MSD_RW_LED_ON)
 #define MSD_RW_LED_ON()
 #endif
@@ -130,7 +120,7 @@ inline uint32_t swap_uint32( uint32_t val ) {
  * @param[in] ms_ep_number    USB Endpoint Number to be used by the mass storage endpoint
  */
 void msdInit(USBDriver *usbp, BaseBlockDevice *bbdp, USBMassStorageDriver *msdp,
-             const usbep_t  ms_ep_number)
+             const usbep_t ms_ep_number)
 {
     uint8_t i;
 
@@ -169,7 +159,7 @@ void msdInit(USBDriver *usbp, BaseBlockDevice *bbdp, USBMassStorageDriver *msdp,
 
     blkGetInfo(bbdp, &msdp->block_dev_info);
 
-    usbp->USBD_PARAM_NAME = (void *)msdp;
+    usbp->in_params[ms_ep_number - 1] = (void *)msdp;
 }
 
 /**
@@ -207,9 +197,11 @@ void msdUsbEvent(USBDriver *usbp, usbep_t ep) {
     (void)usbp;
     (void)ep;
 
-    chSysLockFromIsr();
-    chBSemSignalI(&((USBMassStorageDriver *)usbp->USBD_PARAM_NAME)->bsem);
-    chSysUnlockFromIsr();
+    if( ep > 0 && usbp->in_params[ep - 1] != NULL ) {
+      chSysLockFromIsr();
+      chBSemSignalI(&((USBMassStorageDriver *)usbp->in_params[ep - 1])->bsem);
+      chSysUnlockFromIsr();
+    }
 }
 
 

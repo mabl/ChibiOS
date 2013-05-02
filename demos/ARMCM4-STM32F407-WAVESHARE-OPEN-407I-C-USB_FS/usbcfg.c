@@ -20,7 +20,13 @@
 
 #include "ch.h"
 #include "hal.h"
-#include "usb_cdc.h"
+
+
+extern SerialUSBDriver SDU1;
+
+#define USB_CDC_DATA_REQUEST_EP         1
+#define USB_CDC_DATA_AVAILABLE_EP       1
+#define USB_CDC_INTERRUPT_REQUEST_EP    2
 
 /*
  * USB Device Descriptor.
@@ -276,7 +282,7 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
     usbInitEndpointI(usbp, USB_CDC_INTERRUPT_REQUEST_EP, &ep2config);
 
     /* Resetting the state of the CDC subsystem.*/
-    sduConfigureHookI(usbp);
+    sduConfigureHookI(&SDU1);
 
     chSysUnlockFromIsr();
     return;
@@ -304,5 +310,8 @@ const USBConfig usbcfg = {
  * Serial over USB driver configuration.
  */
 const SerialUSBConfig serusbcfg = {
-  &USBD1
+  &USBD1,
+  USB_CDC_DATA_REQUEST_EP,
+  USB_CDC_DATA_AVAILABLE_EP,
+  USB_CDC_INTERRUPT_REQUEST_EP
 };

@@ -20,7 +20,6 @@
 
 #include "ch.h"
 #include "hal.h"
-#include "usb_cdc.h"
 
 
 #if STM32_USB_USE_OTG2 && STM32_USE_USB_OTG2_HS
@@ -28,6 +27,13 @@
 #else
 #define MAX_USB_PACKET_SIZE   64
 #endif
+
+extern SerialUSBDriver SDU2;
+
+#define USB_CDC_DATA_REQUEST_EP         1
+#define USB_CDC_DATA_AVAILABLE_EP       1
+#define USB_CDC_INTERRUPT_REQUEST_EP    2
+
 
 /*
  * USB Device Descriptor.
@@ -283,7 +289,7 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
     usbInitEndpointI(usbp, USB_CDC_INTERRUPT_REQUEST_EP, &ep2config);
 
     /* Resetting the state of the CDC subsystem.*/
-    sduConfigureHookI(usbp);
+    sduConfigureHookI(&SDU2);
 
     chSysUnlockFromIsr();
     return;
@@ -311,5 +317,8 @@ const USBConfig usbcfg = {
  * Serial over USB driver configuration.
  */
 const SerialUSBConfig serusbcfg = {
-  &USBD2
+  &USBD2,
+  USB_CDC_DATA_REQUEST_EP,
+  USB_CDC_DATA_AVAILABLE_EP,
+  USB_CDC_INTERRUPT_REQUEST_EP,
 };

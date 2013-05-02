@@ -35,19 +35,6 @@
 #include "mcuconf.h"
 
 
-/*
- * This is to allow for concurrent use of VCOM driver and MSD driver
- * on the same USB peripheral. This is important for USB composite devices
- * that have both a mass storage drier and a VCOM driver
- */
-#define MSD_USB_DRIVER_EXT_FIELDS_NAME    msd_param
-#ifdef MSD_USB_DRIVER_EXT_FIELDS_NAME
-#  define USB_DRIVER_EXT_FIELDS     void *MSD_USB_DRIVER_EXT_FIELDS_NAME;
-#endif
-
-
-
-
 /**
  * @brief   Enables the TM subsystem.
  */

@@ -23,4 +23,9 @@
 
 #define USB_MS_DATA_EP     3
 
+#define USB_CDC_DATA_REQUEST_EP         1
+#define USB_CDC_DATA_AVAILABLE_EP       1
+#define USB_CDC_INTERRUPT_REQUEST_EP    2
+
+
 #endif /* USB_MSD_CFG_H_ */

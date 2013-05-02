@@ -25,7 +25,6 @@
 #include "hal.h"
 #include "test.h"
 
-#include "usb_cdc.h"
 #include "chprintf.h"
 #include "shell.h"
 #include "usb_msd.h"
@@ -35,7 +34,12 @@
 
 /*Serial over USB Driver structure.*/
 SerialUSBDriver SDU1;
-SerialUSBConfig serusbcfg = { NULL };
+SerialUSBConfig serusbcfg = {
+  NULL,
+  USB_CDC_DATA_REQUEST_EP,
+  USB_CDC_DATA_AVAILABLE_EP,
+  USB_CDC_INTERRUPT_REQUEST_EP
+};
 
 USBMassStorageDriver UMSD1;
 
