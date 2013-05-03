@@ -3,25 +3,25 @@
    <description name="ChibiOS/RT Eclipse Update Site" url="http://www.chibios.org/eclipse">
       ChibiOS/RT Eclipse Update Site.
    </description>
-   <feature url="features/org.chibios.spc5.components.rtos.spc560bcxx.feature_1.0.0.201305031059.jar" id="org.chibios.spc5.components.rtos.spc560bcxx.feature" version="1.0.0.201305031059">
+   <feature url="features/org.chibios.spc5.components.rtos.spc560bcxx.feature_1.0.0.qualifier.jar" id="org.chibios.spc5.components.rtos.spc560bcxx.feature" version="1.0.0.qualifier">
       <category name="ChibiOS/RT"/>
    </feature>
-   <feature url="features/org.chibios.spc5.components.rtos.spc560pxx.feature_1.0.0.201305031059.jar" id="org.chibios.spc5.components.rtos.spc560pxx.feature" version="1.0.0.201305031059">
+   <feature url="features/org.chibios.spc5.components.rtos.spc560pxx.feature_1.0.0.qualifier.jar" id="org.chibios.spc5.components.rtos.spc560pxx.feature" version="1.0.0.qualifier">
       <category name="ChibiOS/RT"/>
    </feature>
-   <feature url="features/org.chibios.spc5.components.rtos.spc563mxx.feature_1.0.0.201305031059.jar" id="org.chibios.spc5.components.rtos.spc563mxx.feature" version="1.0.0.201305031059">
+   <feature url="features/org.chibios.spc5.components.rtos.spc563mxx.feature_1.0.0.qualifier.jar" id="org.chibios.spc5.components.rtos.spc563mxx.feature" version="1.0.0.qualifier">
       <category name="ChibiOS/RT"/>
    </feature>
-   <feature url="features/org.chibios.spc5.components.rtos.stm32f4xx.feature_1.0.0.201305031059.jar" id="org.chibios.spc5.components.rtos.stm32f4xx.feature" version="1.0.0.201305031059">
+   <feature url="features/org.chibios.spc5.components.rtos.stm32f4xx.feature_1.0.0.qualifier.jar" id="org.chibios.spc5.components.rtos.stm32f4xx.feature" version="1.0.0.qualifier">
       <category name="ChibiOS/RT"/>
    </feature>
-   <feature url="features/org.chibios.spc5.components.portable.feature_1.0.0.201305031059.jar" id="org.chibios.spc5.components.portable.feature" version="1.0.0.201305031059">
+   <feature url="features/org.chibios.spc5.components.portable.feature_1.0.0.qualifier.jar" id="org.chibios.spc5.components.portable.feature" version="1.0.0.qualifier">
       <category name="ChibiOS/RT"/>
    </feature>
-   <feature url="features/org.chibios.spc5.components.rtos.spc56elxx.feature_1.0.0.201305031059.jar" id="org.chibios.spc5.components.rtos.spc56elxx.feature" version="1.0.0.201305031059">
+   <feature url="features/org.chibios.spc5.components.rtos.spc56elxx.feature_1.0.0.qualifier.jar" id="org.chibios.spc5.components.rtos.spc56elxx.feature" version="1.0.0.qualifier">
       <category name="ChibiOS/RT"/>
    </feature>
-   <feature url="features/org.chibios.spc5.components.rtos.spc564axx.feature_1.0.0.201305031059.jar" id="org.chibios.spc5.components.rtos.spc564axx.feature" version="1.0.0.201305031059">
+   <feature url="features/org.chibios.spc5.components.rtos.spc564axx.feature_1.0.0.qualifier.jar" id="org.chibios.spc5.components.rtos.spc564axx.feature" version="1.0.0.qualifier">
       <category name="ChibiOS/RT"/>
    </feature>
    <category-def name="ChibiOS/RT" label="ChibiOS/RT">
