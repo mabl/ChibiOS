@@ -70,7 +70,6 @@ along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
          id="org.chibios.spc5.components.osal.chibios.spc5xx"
          download-size="0"
          install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
 </feature>
