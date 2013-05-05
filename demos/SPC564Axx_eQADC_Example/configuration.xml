@@ -3,7 +3,7 @@
   <application name="Monaco eQADC Example Application" version="1.0.0" standalone="false" locked="false">
     <description>This application shows how to use the eQADC unit found on the SPC564Axx platform.</description>
     <component id="com.st.tools.spc5.components.platform.spc564axx" version="1.0.0.qualifier">
-      <component id="org.chibios.spc5.components.rtos.spc564axx" version="2.5.2.qualifier" />
+      <component id="org.chibios.spc5.components.rtos.spc564axx" version="2.6.0.qualifier" />
     </component>
     <instances>
       <instance locked="false" id="com.st.tools.spc5.components.platform.spc564axx">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<SPC5-Component-Instance version="2.5.2.qualifier">
+<SPC5-Component-Instance version="2.6.0">
   <instance locked="false" id="org.chibios.spc5.components.board.stm32f4xx">
     <identification>
       <board_identifier>ST_STM32F4_DISCOVERY</board_identifier>

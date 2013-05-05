@@ -3,9 +3,9 @@
   <application name="SPC560Pxx Test Application" version="1.0.0" standalone="false" locked="false">
     <description>Test application for the SPC560Pxx created using the SPC5's Application Wizard.</description>
     <component id="com.st.tools.spc5.components.platform.spc560pxx" version="1.0.0.qualifier">
-      <component id="org.chibios.spc5.components.rtos.spc560pxx" version="2.5.2.qualifier" />
-      <component id="org.chibios.spc5.components.various.shell" version="2.5.2.qualifier" />
-      <component id="org.chibios.spc5.components.various.chprintf" version="2.5.2.qualifier" />
+      <component id="org.chibios.spc5.components.rtos.spc560pxx" version="2.6.0.qualifier" />
+      <component id="org.chibios.spc5.components.various.shell" version="2.6.0.qualifier" />
+      <component id="org.chibios.spc5.components.various.chprintf" version="2.6.0.qualifier" />
     </component>
     <instances>
       <instance locked="false" id="com.st.tools.spc5.components.platform.spc560pxx">
