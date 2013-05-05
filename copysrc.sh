@@ -1,6 +1,7 @@
 #!/bin/bash
 #chibios=/cygdrive/d/Progetti/ChibiOS-RT
-chibios=../../chibios
+chibios=/cygdrive/d/Progetti/ChibiOS-RT-stable-2.6.x
+#chibios=../../chibios
 #do_templates=yes
 
 #============================================================================#
@@ -94,3 +95,24 @@ cp ${chibios}/os/ports/GCC/PPC/SPC56ELxx/*.h            ./SPC56ELxx/ChibiOS-RT_S
 cp ${chibios}/os/ports/GCC/PPC/*.c                      ./SPC56ELxx/ChibiOS-RT_SPC56ELxx_Kernel_Port_Component/component/lib/src/
 cp ${chibios}/os/ports/GCC/PPC/ivor.s                   ./SPC56ELxx/ChibiOS-RT_SPC56ELxx_Kernel_Port_Component/component/lib/src/
 cp ${chibios}/os/ports/GCC/PPC/SPC56ELxx/vectors.s      ./SPC56ELxx/ChibiOS-RT_SPC56ELxx_Kernel_Port_Component/component/lib/src/
+
+#============================================================================#
+# STM32F4xx Components.                                                      #
+#============================================================================#
+
+# STM32F4xx Kernel Port.
+echo "STM32F4xx Kernel Port"
+cp ${chibios}/os/ports/common/ARMCMx/nvic.h             ./STM32F4xx/ChibiOS-RT_STM32F4xx_Kernel_Port_Component/component/lib/include/
+cp ${chibios}/os/ports/common/ARMCMx/nvic.c             ./STM32F4xx/ChibiOS-RT_STM32F4xx_Kernel_Port_Component/component/lib/src/
+cp ${chibios}/os/ports/GCC/ARMCMx/chcore.h              ./STM32F4xx/ChibiOS-RT_STM32F4xx_Kernel_Port_Component/component/lib/include/
+cp ${chibios}/os/ports/GCC/ARMCMx/chcore_v7m.h          ./STM32F4xx/ChibiOS-RT_STM32F4xx_Kernel_Port_Component/component/lib/include/
+cp ${chibios}/os/ports/GCC/ARMCMx/chtypes.h.h           ./STM32F4xx/ChibiOS-RT_STM32F4xx_Kernel_Port_Component/component/lib/include/
+cp ${chibios}/os/ports/GCC/ARMCMx/STM32F4xx/*.h         ./STM32F4xx/ChibiOS-RT_STM32F4xx_Kernel_Port_Component/component/lib/include/
+cp ${chibios}/os/ports/GCC/ARMCMx/chcore.c              ./STM32F4xx/ChibiOS-RT_STM32F4xx_Kernel_Port_Component/component/lib/src/
+cp ${chibios}/os/ports/GCC/ARMCMx/chcore_v7m.c          ./STM32F4xx/ChibiOS-RT_STM32F4xx_Kernel_Port_Component/component/lib/src/
+cp ${chibios}/os/ports/GCC/ARMCMx/STM32F4xx/*.c         ./STM32F4xx/ChibiOS-RT_STM32F4xx_Kernel_Port_Component/component/lib/src/
+
+# STM32F4xx HAL Platform.
+echo "STM32F4xx HAL Platform"
+cp ${chibios}/os/hal/platforms/STM32F4xx/*.h            ./STM32F4xx/ChibiOS-RT_STM32F4xx_HAL_Platform_Component/component/lib/include/
+cp ${chibios}/os/hal/platforms/STM32F4xx/*.c            ./STM32F4xx/ChibiOS-RT_STM32F4xx_HAL_Platform_Component/component/lib/src/
