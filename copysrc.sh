@@ -1,6 +1,7 @@
 #!/bin/bash
 #chibios=/cygdrive/d/Progetti/ChibiOS-RT
-chibios=/cygdrive/d/Progetti/ChibiOS-RT-stable-2.6.x
+#chibios=/cygdrive/d/Progetti/ChibiOS-RT-stable-2.6.x
+chibios=/cygdrive/c/Projects/ChibiOS-RT-stable-2.6.x
 #chibios=../../chibios
 #do_templates=yes
 
