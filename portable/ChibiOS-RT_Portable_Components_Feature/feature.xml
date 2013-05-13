@@ -8,19 +8,31 @@
       exclusive="true">
 
    <description url="http://www.example.com/description">
-      [Enter Feature Description here.]
+      ChibiOS/RT free embedded RTOS Portable Components.
    </description>
 
    <copyright url="http://www.example.com/copyright">
-      [Enter Copyright Description here.]
+      ChibiOS/RT - Copyright (C) 2007...2013 Giovanni Di Sirio.
    </copyright>
 
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
+   <license url="http://www.chibios.org/dokuwiki/doku.php?id=chibios:license">
+      ChibiOS/RT is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
+
+ChibiOS/RT is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
    </license>
 
    <url>
       <update label="ChibiOS/RT Eclipse update site" url="http://www.chibios.org/eclipse"/>
+      <discovery label="ChibiOS/RT free embedded RTOS homepage" url="http://www.chibios.org"/>
    </url>
 
    <requires>
