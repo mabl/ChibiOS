@@ -28,17 +28,14 @@
 #ifndef _NILTYPES_H_
 #define _NILTYPES_H_
 
-#define __need_NULL
-#define __need_size_t
-#define __need_ptrdiff_t
 #include <stddef.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 /**
  * @name Kernel types
  * @{
  */
-typedef int8_t          bool_t;     /**< @brief Fast boolean type.          */
 typedef int16_t         msg_t;      /**< @brief Inter-thread message.       */
 typedef uint16_t        systime_t;  /**< @brief System time.                */
 typedef int8_t          cnt_t;      /**< @brief Signed resources counter.   */

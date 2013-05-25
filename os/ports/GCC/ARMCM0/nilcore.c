@@ -146,7 +146,7 @@ void _port_switch_from_isr(void) {
 #endif
   /* The following loop should never be executed, the exception will kick in
      immediately.*/
-  while (TRUE)
+  while (true)
     ;
 }
 
@@ -163,7 +163,7 @@ void _port_switch_from_isr(void) {
 #if !defined(__DOXYGEN__)
 __attribute__((naked))
 #endif
-void _port_switch(Thread *ntp, Thread *otp) {
+void _port_switch(thread_t *ntp, thread_t *otp) {
   register struct port_intctx *r13 asm ("r13");
 
   asm volatile ("push    {r4, r5, r6, r7, lr}                   \n\t"
@@ -195,7 +195,7 @@ void _port_thread_start(void) {
   nilSysUnlock();
   asm volatile ("mov     r0, r5                                 \n\t"
                 "blx     r4");
-  nilDbgAssert(TRUE, "_port_thread_start(), #1", "thread returned");
+  nilDbgAssert(true, "_port_thread_start(), #1", "thread returned");
 }
 
 /**
@@ -209,7 +209,7 @@ __attribute__((naked, weak))
 void port_halt(void) {
 
   port_disable();
-  while (TRUE) {
+  while (true) {
   }
 }
 

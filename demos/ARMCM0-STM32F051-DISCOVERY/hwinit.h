@@ -233,14 +233,14 @@
  * @brief   Disables the PWR/RCC initialization in the HAL.
  */
 #if !defined(STM32_NO_INIT) || defined(__DOXYGEN__)
-#define STM32_NO_INIT               FALSE
+#define STM32_NO_INIT               false
 #endif
 
 /**
  * @brief   Enables or disables the programmable voltage detector.
  */
 #if !defined(STM32_PVD_ENABLE) || defined(__DOXYGEN__)
-#define STM32_PVD_ENABLE            FALSE
+#define STM32_PVD_ENABLE            false
 #endif
 
 /**
@@ -254,35 +254,35 @@
  * @brief   Enables or disables the HSI clock source.
  */
 #if !defined(STM32_HSI_ENABLED) || defined(__DOXYGEN__)
-#define STM32_HSI_ENABLED           TRUE
+#define STM32_HSI_ENABLED           true
 #endif
 
 /**
  * @brief   Enables or disables the HSI14 clock source.
  */
 #if !defined(STM32_HSI14_ENABLED) || defined(__DOXYGEN__)
-#define STM32_HSI14_ENABLED         TRUE
+#define STM32_HSI14_ENABLED         true
 #endif
 
 /**
  * @brief   Enables or disables the LSI clock source.
  */
 #if !defined(STM32_LSI_ENABLED) || defined(__DOXYGEN__)
-#define STM32_LSI_ENABLED           TRUE
+#define STM32_LSI_ENABLED           true
 #endif
 
 /**
  * @brief   Enables or disables the HSE clock source.
  */
 #if !defined(STM32_HSE_ENABLED) || defined(__DOXYGEN__)
-#define STM32_HSE_ENABLED           FALSE
+#define STM32_HSE_ENABLED           false
 #endif
 
 /**
  * @brief   Enables or disables the LSE clock source.
  */
 #if !defined(STM32_LSE_ENABLED) || defined(__DOXYGEN__)
-#define STM32_LSE_ENABLED           FALSE
+#define STM32_LSE_ENABLED           false
 #endif
 /**
  * @brief   Main clock source selection.
@@ -518,9 +518,9 @@
 /**
  * @brief   PLL activation flag.
  */
-#define STM32_ACTIVATE_PLL          TRUE
+#define STM32_ACTIVATE_PLL          true
 #else
-#define STM32_ACTIVATE_PLL          FALSE
+#define STM32_ACTIVATE_PLL          false
 #endif
 
 /* HSE prescaler setting check.*/

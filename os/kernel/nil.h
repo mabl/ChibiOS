@@ -51,25 +51,13 @@
 /** @} */
 
 /**
- * @name    Common constants
- */
-#if !defined(FALSE) || defined(__DOXYGEN__)
-#define FALSE               0       /**< @brief Generic 'false' constant.   */
-#endif
-
-#if !defined(TRUE) || defined(__DOXYGEN__)
-#define TRUE                (!FALSE)/**< @brief Generic 'true' constant.    */
-#endif
-/** @} */
-
-/**
  * @name    Wakeup status codes
  * @{
  */
-#define NIL_MSG_OK          0       /**< @brief Normal wakeup message.      */
-#define NIL_MSG_TMO         -1      /**< @brief Wake-up caused by a timeout
+#define MSG_OK              0       /**< @brief Normal wakeup message.      */
+#define MSG_TMO             -1      /**< @brief Wake-up caused by a timeout
                                          condition.                         */
-#define NIL_MSG_RST         -2      /**< @brief Wake-up caused by a reset
+#define MSG_RST             -2      /**< @brief Wake-up caused by a reset
                                          condition.                         */
 /** @} */
 
@@ -116,7 +104,7 @@
  * @brief   System assertions.
  */
 #if !defined(NIL_CFG_ENABLE_ASSERTS) || defined(__DOXYGEN__)
-#define NIL_CFG_ENABLE_ASSERTS          TRUE
+#define NIL_CFG_ENABLE_ASSERTS          true
 #endif
 
 /*===========================================================================*/
@@ -137,7 +125,7 @@
 #endif
 
 #if NIL_CFG_ENABLE_ASSERTS
-#define NIL_DBG_ENABLED                 TRUE
+#define NIL_DBG_ENABLED                 true
 #else
 #define NIL_DBG_ENABLED                 FALSE
 #endif
@@ -156,7 +144,7 @@ typedef struct port_intctx intctx;
  */
 typedef struct {
   volatile cnt_t    cnt;        /**< @brief Semaphore counter.              */
-} Semaphore;
+} semaphore_t;
 
 /**
  * @brief Thread function.
@@ -166,12 +154,12 @@ typedef void (*tfunc_t)(void *);
 /**
  * @brief   Type of a structure representing a thread static configuration.
  */
-typedef struct nil_thread_cfg ThreadConfig;
+typedef struct nil_thread_cfg thread_config_t;
 
 /**
  * @brief   Type of a structure representing a thread.
  */
-typedef struct nil_thread Thread;
+typedef struct nil_thread thread_t;
 
 /**
  * @brief   Structure representing a thread static configuration.
@@ -189,11 +177,11 @@ struct nil_thread_cfg {
  */
 struct nil_thread {
   intctx            *ctxp;      /**< @brief Pointer to internal context.    */
-  bool_t            timeout;    /**< @brief Timeout flags.                  */
+  bool              timeout;    /**< @brief Timeout flags.                  */
   union {
     void            *p;         /**< @brief Generic pointer to object.      */
-    Semaphore       *semp;      /**< @brief Pointer to semaphore.           */
-    Thread          *thdp;      /**< @brief Pointer to thread.              */
+    semaphore_t     *semp;      /**< @brief Pointer to semaphore.           */
+    thread_t        *thdp;      /**< @brief Pointer to thread.              */
   } waitobj;                    /**< @brief Pointer to the wake-up object.  */
   union {
     systime_t       time;       /**< @brief Timeout deadline, if enabled.   */
@@ -210,13 +198,13 @@ typedef struct {
   /**
    * @brief   Pointer to the running thread.
    */
-  Thread            *currp;
+  thread_t          *currp;
   /**
    * @brief   Pointer to the next thread to be executed.
    * @note    This pointer must point at the same thread pointed by @p currp
    *          or to an higher priority thread in a switch is required.
    */
-  Thread            *nextp;
+  thread_t          *nextp;
   /**
    * @brief   System time.
    */
@@ -224,7 +212,7 @@ typedef struct {
   /**
    * @brief   Thread structures for all the defined threads.
    */
-  Thread            threads[NIL_CFG_NUM_THREADS + 1];
+  thread_t          threads[NIL_CFG_NUM_THREADS + 1];
 #if NIL_DBG_ENABLED || defined(__DOXYGEN__)
   /**
    * @brief   Panic message.
@@ -247,7 +235,7 @@ typedef struct {
  * @brief   Start of user threads table.
  */
 #define NIL_THREADS_TABLE_BEGIN()                                           \
-  const ThreadConfig nil_thd_configs[NIL_CFG_NUM_THREADS + 1] = {
+  const thread_config_t nil_thd_configs[NIL_CFG_NUM_THREADS + 1] = {
 
 /**
  * @brief   Entry of user threads table
@@ -376,7 +364,7 @@ typedef struct {
  * @sclass
  */
 #define nilThdSleepS(time)                                                  \
-  nilSchGoSleepTimeoutS(nil.currp, TRUE, nilTimeNow() - time)
+  nilSchGoSleepTimeoutS(nil.currp, true, nilTimeNow() - time)
 
 /**
  * @brief   Suspends the invoking thread until the system time arrives to the
@@ -387,12 +375,12 @@ typedef struct {
  * @sclass
  */
 #define nilThdSleepUntilS(time)                                             \
-  nilSchGoSleepTimeoutS(nil.currp, TRUE, (time))
+  nilSchGoSleepTimeoutS(nil.currp, true, (time))
 
 /**
  * @brief   Initializes a semaphore with the specified counter value.
  *
- * @param[out] sp       pointer to a @p Semaphore structure
+ * @param[out] sp       pointer to a @p semaphore_t structure
  * @param[in] n         initial value of the semaphore counter. Must be
  *                      non-negative.
  *
@@ -403,12 +391,12 @@ typedef struct {
 /**
  * @brief   Performs a wait operation on a semaphore.
  *
- * @param[in] sp        pointer to a @p Semaphore structure
+ * @param[in] sp        pointer to a @p semaphore_t structure
  * @return              A message specifying how the invoking thread has been
  *                      released from the semaphore.
- * @retval NIL_MSG_OK   if the thread has not stopped on the semaphore or the
+ * @retval MSG_OK       if the thread has not stopped on the semaphore or the
  *                      semaphore has been signaled.
- * @retval NIL_MSG_RST  if the semaphore has been reset using @p nilSemReset().
+ * @retval MSG_RST      if the semaphore has been reset using @p nilSemReset().
  *
  * @api
  */
@@ -417,12 +405,12 @@ typedef struct {
 /**
  * @brief   Performs a wait operation on a semaphore.
  *
- * @param[in] sp        pointer to a @p Semaphore structure
+ * @param[in] sp        pointer to a @p semaphore_t structure
  * @return              A message specifying how the invoking thread has been
  *                      released from the semaphore.
- * @retval NIL_MSG_OK   if the thread has not stopped on the semaphore or the
+ * @retval MSG_OK       if the thread has not stopped on the semaphore or the
  *                      semaphore has been signaled.
- * @retval NIL_MSG_RST  if the semaphore has been reset using @p nilSemReset().
+ * @retval MSG_RST      if the semaphore has been reset using @p nilSemReset().
  *
  * @sclass
  */
@@ -578,7 +566,7 @@ typedef struct {
 
 #if !defined(__DOXYGEN__)
 extern NilSystem nil;
-extern const ThreadConfig nil_thd_configs[NIL_CFG_NUM_THREADS + 1];
+extern const thread_config_t nil_thd_configs[NIL_CFG_NUM_THREADS + 1];
 #endif
 
 #ifdef __cplusplus
@@ -586,18 +574,18 @@ extern "C" {
 #endif
   void nilSysInit(void);
   void nilSysTimerHandler(void);
-  Thread *nilSchReadyI(Thread *tp);
-  msg_t nilSchGoSleepTimeoutS(void *waitobj, bool_t timeout, systime_t time);
+  thread_t *nilSchReadyI(thread_t *tp);
+  msg_t nilSchGoSleepTimeoutS(void *waitobj, bool timeout, systime_t time);
   void nilSchRescheduleS(void);
   void nilThdSleep(systime_t time);
   void nilThdSleepUntil(systime_t time);
-  bool_t nilTimeIsWithin(systime_t start, systime_t end);
-  msg_t nilSemWaitTimeout(Semaphore *sp, systime_t time);
-  msg_t nilSemWaitTimeoutS(Semaphore *sp, systime_t time);
-  void nilSemSignal(Semaphore *sp);
-  void nilSemSignalI(Semaphore *sp);
-  void nilSemReset(Semaphore *sp, cnt_t n);
-  void nilSemResetI(Semaphore *sp, cnt_t n);
+  bool nilTimeIsWithin(systime_t start, systime_t end);
+  msg_t nilSemWaitTimeout(semaphore_t *sp, systime_t time);
+  msg_t nilSemWaitTimeoutS(semaphore_t *sp, systime_t time);
+  void nilSemSignal(semaphore_t *sp);
+  void nilSemSignalI(semaphore_t *sp);
+  void nilSemReset(semaphore_t *sp, cnt_t n);
+  void nilSemResetI(semaphore_t *sp, cnt_t n);
 #ifdef __cplusplus
 }
 #endif

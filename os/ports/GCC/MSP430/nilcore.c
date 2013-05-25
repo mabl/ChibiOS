@@ -64,7 +64,7 @@
 #if !defined(__DOXYGEN__)
 __attribute__((naked))
 #endif
-void _port_switch(Thread *ntp, Thread *otp) {
+void _port_switch(thread_t *ntp, thread_t *otp) {
   register struct intctx *sp asm("r1");
 
   asm volatile ("push    r11                                    \n\t"
@@ -104,7 +104,7 @@ void _port_thread_start(void) {
   asm volatile ("mov     r11, r15                               \n\t"
                 "call    r10");
 
-  nilDbgAssert(TRUE, "_port_thread_start(), #1", "thread returned");
+  nilDbgAssert(true, "_port_thread_start(), #1", "thread returned");
 }
 
 /**
@@ -122,7 +122,7 @@ __attribute__((naked, weak))
 void port_halt(void) {
 
   port_disable();
-  while (TRUE) {
+  while (true) {
   }
 }
 

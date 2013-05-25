@@ -343,7 +343,7 @@ extern "C" {
    void _port_irq_epilogue(regarm_t lr);
    void _port_switch_from_isr(void);
    void _port_exit_from_isr(void);
-   void _port_switch(Thread *ntp, Thread *otp);
+   void _port_switch(thread_t *ntp, thread_t *otp);
    void _port_thread_start(void);
    void port_halt(void);
 #ifdef __cplusplus

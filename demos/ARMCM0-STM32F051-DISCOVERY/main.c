@@ -28,7 +28,7 @@ NIL_THREAD(Thread1, arg) {
 
   (void)arg;
 
-  while (TRUE) {
+  while (true) {
     gpioSetPad(GPIOC, GPIOC_LED4);
     nilThdSleepMilliseconds(500);
     gpioClearPad(GPIOC, GPIOC_LED4);
@@ -44,7 +44,7 @@ NIL_THREAD(Thread2, arg) {
 
   (void)arg;
 
-  while (TRUE) {
+  while (true) {
     gpioSetPad(GPIOC, GPIOC_LED3);
     nilThdSleepMilliseconds(250);
     gpioClearPad(GPIOC, GPIOC_LED3);
@@ -76,6 +76,6 @@ int main(void) {
 
   /* This is now the idle thread loop, you may perform here a low priority
      task but you must never try to sleep or wait in this loop.*/
-  while (TRUE) {
+  while (true) {
   }
 }
