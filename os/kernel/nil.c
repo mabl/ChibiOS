@@ -106,7 +106,7 @@ void nilSysTimerHandler(void) {
   do {
     nilSysLockFromIsr();
     if (tp->timeout && (tp->wakeup.time == time)) {
-      nilDbgAssert(tp->waitobj.p == NULL,
+      nilDbgAssert(tp->waitobj.p != NULL,
                    "nilSysTimerHandlerI(), #1", "");
       tp->wakeup.msg = MSG_TMO;
       nilSchReadyI(tp);
@@ -297,13 +297,15 @@ msg_t nilSemWaitTimeoutS(semaphore_t *sp, systime_t time) {
   /* Note, the semaphore counter is a volatile variable so accesses are
      manually optimized.*/
   cnt_t cnt = sp->cnt;
-  if ((cnt <= 0) && (TIME_IMMEDIATE != time)) {
+  if (cnt <= 0) {
+    if (TIME_IMMEDIATE == time)
+      return MSG_TMO;
     sp->cnt = cnt - 1;
     return nilSchGoSleepTimeoutS((void *)sp,
                                  time != TIME_INFINITE,
                                  nilTimeNow() - time);
   }
-  return MSG_TMO;
+  return MSG_OK;
 }
 
 /**

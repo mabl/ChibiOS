@@ -364,7 +364,7 @@ typedef struct {
  * @sclass
  */
 #define nilThdSleepS(time)                                                  \
-  nilSchGoSleepTimeoutS(nil.currp, true, nilTimeNow() - time)
+  nilSchGoSleepTimeoutS(nil.currp, true, nilTimeNow() + time)
 
 /**
  * @brief   Suspends the invoking thread until the system time arrives to the
