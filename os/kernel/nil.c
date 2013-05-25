@@ -108,6 +108,7 @@ void nilSysTimerHandler(void) {
     if (tp->timeout && (tp->wakeup.time == time)) {
       nilDbgAssert(tp->waitobj.p == NULL,
                    "nilSysTimerHandlerI(), #1", "");
+      tp->wakeup.msg = NIL_MSG_TMO;
       nilSchReadyI(tp);
     }
     nilSysUnlockFromIsr();
@@ -184,7 +185,7 @@ msg_t nilSchGoSleepTimeoutS(void *waitobj, bool_t timeout, systime_t time) {
     if (ntp->waitobj.p == NULL) {
       nil.currp = nil.nextp = ntp;
       port_switch(ntp, otp);
-      return ntp->wakeup.msg;
+      return nil.currp->wakeup.msg;
     }
 
     /* Points to the next thread in lowering priority order.*/
