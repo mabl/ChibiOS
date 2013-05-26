@@ -72,10 +72,10 @@
  * @name    Wakeup status codes
  * @{
  */
-#define MSG_OK              0       /**< @brief Normal wakeup message.      */
-#define MSG_TMO             -1      /**< @brief Wake-up caused by a timeout
+#define NIL_MSG_OK              0   /**< @brief Normal wakeup message.      */
+#define NIL_MSG_TMO             -1  /**< @brief Wake-up caused by a timeout
                                          condition.                         */
-#define MSG_RST             -2      /**< @brief Wake-up caused by a reset
+#define NIL_MSG_RST             -2  /**< @brief Wake-up caused by a reset
                                          condition.                         */
 /** @} */
 
@@ -411,9 +411,9 @@ typedef struct {
  * @param[in] sp        pointer to a @p semaphore_t structure
  * @return              A message specifying how the invoking thread has been
  *                      released from the semaphore.
- * @retval MSG_OK       if the thread has not stopped on the semaphore or the
+ * @retval NIL_MSG_OK   if the thread has not stopped on the semaphore or the
  *                      semaphore has been signaled.
- * @retval MSG_RST      if the semaphore has been reset using @p nilSemReset().
+ * @retval NIL_MSG_RST  if the semaphore has been reset using @p nilSemReset().
  *
  * @api
  */
@@ -425,9 +425,9 @@ typedef struct {
  * @param[in] sp        pointer to a @p semaphore_t structure
  * @return              A message specifying how the invoking thread has been
  *                      released from the semaphore.
- * @retval MSG_OK       if the thread has not stopped on the semaphore or the
+ * @retval NIL_MSG_OK   if the thread has not stopped on the semaphore or the
  *                      semaphore has been signaled.
- * @retval MSG_RST      if the semaphore has been reset using @p nilSemReset().
+ * @retval NIL_MSG_RST  if the semaphore has been reset using @p nilSemReset().
  *
  * @sclass
  */

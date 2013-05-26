@@ -107,7 +107,7 @@ void nilSysTimerHandlerI(void) {
       if (--tp->wakeup.timeout == 0) {
         nilDbgAssert(tp->waitobj.p != NULL,
                      "nilSysTimerHandlerI(), #1", "");
-        tp->wakeup.msg = MSG_TMO;
+        tp->wakeup.msg = NIL_MSG_TMO;
         nilSchReadyI(tp);
       }
     }
@@ -161,12 +161,12 @@ void nilSchRescheduleS() {
  *          timeout specification.
  * @details The thread goes into a sleeping state, if it is not awakened
  *          explicitly within the specified system time then it is forcibly
- *          awakened with a @p MSG_TMO low level message.
+ *          awakened with a @p NIL_MSG_TMO low level message.
  *
  * @param[in] newstate  the new thread state
  * @param[in] timeout   timeout in system ticks
  * @return              The wakeup message.
- * @retval MSG_TMO      if a timeout occurred.
+ * @retval NIL_MSG_TMO  if a timeout occurred.
  *
  * @sclass
  */
@@ -257,10 +257,10 @@ bool nilTimeIsWithin(systime_t start, systime_t end) {
  *                      .
  * @return              A message specifying how the invoking thread has been
  *                      released from the semaphore.
- * @retval MSG_OK       if the thread has not stopped on the semaphore or the
+ * @retval NIL_MSG_OK   if the thread has not stopped on the semaphore or the
  *                      semaphore has been signaled.
- * @retval MSG_RST      if the semaphore has been reset using @p nilSemReset().
- * @retval MSG_TMO      if the semaphore has not been signaled or reset within
+ * @retval NIL_MSG_RST  if the semaphore has been reset using @p nilSemReset().
+ * @retval NIL_MSG_TMO  if the semaphore has not been signaled or reset within
  *                      the specified timeout.
  *
  * @api
@@ -285,10 +285,10 @@ msg_t nilSemWaitTimeout(semaphore_t *sp, systime_t timeout) {
  *                      .
  * @return              A message specifying how the invoking thread has been
  *                      released from the semaphore.
- * @retval MSG_OK       if the thread has not stopped on the semaphore or the
+ * @retval NIL_MSG_OK   if the thread has not stopped on the semaphore or the
  *                      semaphore has been signaled.
- * @retval MSG_RST      if the semaphore has been reset using @p nilSemReset().
- * @retval MSG_TMO      if the semaphore has not been signaled or reset within
+ * @retval NIL_MSG_RST  if the semaphore has been reset using @p nilSemReset().
+ * @retval NIL_MSG_TMO  if the semaphore has not been signaled or reset within
  *                      the specified timeout.
  *
  * @sclass
@@ -300,11 +300,11 @@ msg_t nilSemWaitTimeoutS(semaphore_t *sp, systime_t timeout) {
   cnt_t cnt = sp->cnt;
   if (cnt <= 0) {
     if (TIME_IMMEDIATE == timeout)
-      return MSG_TMO;
+      return NIL_MSG_TMO;
     sp->cnt = cnt - 1;
     return nilSchGoSleepTimeoutS((void *)sp, timeout);
   }
-  return MSG_OK;
+  return NIL_MSG_OK;
 }
 
 /**
@@ -344,7 +344,7 @@ void nilSemSignalI(semaphore_t *sp) {
     while (true) {
       /* Is this thread waiting on this semaphore?*/
       if (tp->waitobj.semp == sp) {
-        tp->wakeup.msg = MSG_OK;
+        tp->wakeup.msg = NIL_MSG_OK;
         nilSchReadyI(tp);
         return;
       }
@@ -404,7 +404,7 @@ void nilSemResetI(semaphore_t *sp, cnt_t n) {
     /* Is this thread waiting on this semaphore?*/
     if (tp->waitobj.semp == sp) {
       cnt++;
-      tp->wakeup.msg = MSG_RST;
+      tp->wakeup.msg = NIL_MSG_RST;
       nilSchReadyI(tp);
     }
     tp++;
