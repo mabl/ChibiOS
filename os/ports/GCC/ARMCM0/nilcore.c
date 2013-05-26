@@ -56,7 +56,9 @@ NIL_IRQ_HANDLER(SysTickVector) {
 
   NIL_IRQ_PROLOGUE();
 
-  nilSysTimerHandler();
+  nilSysLockFromISR();
+  nilSysTimerHandlerI();
+  nilSysUnlockFromISR();
 
   NIL_IRQ_EPILOGUE();
 }

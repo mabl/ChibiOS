@@ -51,6 +51,24 @@
 /** @} */
 
 /**
+ * @name    Common constants
+ */
+/**
+ * @brief   Generic 'false' boolean constant.
+ */
+#if !defined(FALSE) || defined(__DOXYGEN__)
+#define FALSE                   0
+#endif
+
+/**
+ * @brief   Generic 'true' boolean constant.
+ */
+#if !defined(TRUE) || defined(__DOXYGEN__)
+#define TRUE                    !FALSE
+#endif
+/** @} */
+
+/**
  * @name    Wakeup status codes
  * @{
  */
@@ -71,13 +89,13 @@
  * @note    Not all functions accept @p TIME_IMMEDIATE as timeout parameter,
  *          see the specific function documentation.
  */
-#define TIME_IMMEDIATE  ((systime_t)0)
+#define TIME_IMMEDIATE  ((systime_t)-1)
 
 /**
  * @brief   Infinite time specification for all functions with a timeout
  *          specification.
  */
-#define TIME_INFINITE   ((systime_t)-1)
+#define TIME_INFINITE   ((systime_t)0)
 /** @} */
 
 /*===========================================================================*/
@@ -104,7 +122,7 @@
  * @brief   System assertions.
  */
 #if !defined(NIL_CFG_ENABLE_ASSERTS) || defined(__DOXYGEN__)
-#define NIL_CFG_ENABLE_ASSERTS          true
+#define NIL_CFG_ENABLE_ASSERTS          TRUE
 #endif
 
 /*===========================================================================*/
@@ -125,7 +143,7 @@
 #endif
 
 #if NIL_CFG_ENABLE_ASSERTS
-#define NIL_DBG_ENABLED                 true
+#define NIL_DBG_ENABLED                 TRUE
 #else
 #define NIL_DBG_ENABLED                 FALSE
 #endif
@@ -177,14 +195,14 @@ struct nil_thread_cfg {
  */
 struct nil_thread {
   intctx            *ctxp;      /**< @brief Pointer to internal context.    */
-  bool              timeout;    /**< @brief Timeout flags.                  */
   union {
     void            *p;         /**< @brief Generic pointer to object.      */
     semaphore_t     *semp;      /**< @brief Pointer to semaphore.           */
     thread_t        *thdp;      /**< @brief Pointer to thread.              */
   } waitobj;                    /**< @brief Pointer to the wake-up object.  */
   union {
-    systime_t       time;       /**< @brief Timeout deadline, if enabled.   */
+    systime_t       timeout;    /**< @brief Timeout counter, zero
+                                     if disabled.                           */
     msg_t           msg;        /**< @brief Wake-up message.                */
   } wakeup;                     /**< @brief Wake-up related info.           */
 };
@@ -221,7 +239,7 @@ typedef struct {
    */
   const char        *dbg_msg;
 #endif
-} NilSystem;
+} nil_system_t;
 
 /*===========================================================================*/
 /* Module macros.                                                            */
@@ -301,7 +319,7 @@ typedef struct {
  *
  * @special
  */
-#define nilSysLockFromIsr() port_lock_from_isr()
+#define nilSysLockFromISR() port_lock_from_isr()
 
 /**
  * @brief   Leaves the kernel lock mode from within an interrupt handler.
@@ -316,7 +334,7 @@ typedef struct {
  *
  * @special
  */
-#define nilSysUnlockFromIsr() port_unlock_from_isr()
+#define nilSysUnlockFromISR() port_unlock_from_isr()
 
 /**
  * @brief   Delays the invoking thread for the specified number of seconds.
@@ -359,12 +377,11 @@ typedef struct {
 /**
  * @brief   Suspends the invoking thread for the specified time.
  *
- * @param[in] time      the delay in system ticks
+ * @param[in] timeout   the delay in system ticks
  *
  * @sclass
  */
-#define nilThdSleepS(time)                                                  \
-  nilSchGoSleepTimeoutS(nil.currp, true, nilTimeNow() + time)
+#define nilThdSleepS(timeout) nilSchGoSleepTimeoutS(nil.currp, timeout)
 
 /**
  * @brief   Suspends the invoking thread until the system time arrives to the
@@ -375,7 +392,7 @@ typedef struct {
  * @sclass
  */
 #define nilThdSleepUntilS(time)                                             \
-  nilSchGoSleepTimeoutS(nil.currp, true, (time))
+  nilSchGoSleepTimeoutS(nil.currp, nilTimeNow() + (time))
 
 /**
  * @brief   Initializes a semaphore with the specified counter value.
@@ -565,7 +582,7 @@ typedef struct {
 #include "nilcore.h"
 
 #if !defined(__DOXYGEN__)
-extern NilSystem nil;
+extern nil_system_t nil;
 extern const thread_config_t nil_thd_configs[NIL_CFG_NUM_THREADS + 1];
 #endif
 
@@ -573,9 +590,9 @@ extern const thread_config_t nil_thd_configs[NIL_CFG_NUM_THREADS + 1];
 extern "C" {
 #endif
   void nilSysInit(void);
-  void nilSysTimerHandler(void);
+  void nilSysTimerHandlerI(void);
   thread_t *nilSchReadyI(thread_t *tp);
-  msg_t nilSchGoSleepTimeoutS(void *waitobj, bool timeout, systime_t time);
+  msg_t nilSchGoSleepTimeoutS(void *waitobj, systime_t timeout);
   void nilSchRescheduleS(void);
   void nilThdSleep(systime_t time);
   void nilThdSleepUntil(systime_t time);

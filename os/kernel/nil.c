@@ -39,7 +39,7 @@
 /**
  * @brief   System variables.
  */
-NilSystem nil;
+nil_system_t nil;
 
 /*===========================================================================*/
 /* Module local variables.                                                   */
@@ -95,24 +95,27 @@ void nilSysInit(void) {
  * @note    This handler has to be invoked by a periodic ISR in order to
  *          reschedule the waiting threads.
  *
- * @special
+ * @iclass
  */
-void nilSysTimerHandler(void) {
+void nilSysTimerHandlerI(void) {
   thread_t *tp;
-  systime_t time;
 
-  time = ++nil.systime;
+  nil.systime++;
   tp = &nil.threads[0];
   do {
-    nilSysLockFromIsr();
-    if (tp->timeout && (tp->wakeup.time == time)) {
-      nilDbgAssert(tp->waitobj.p != NULL,
-                   "nilSysTimerHandlerI(), #1", "");
-      tp->wakeup.msg = MSG_TMO;
-      nilSchReadyI(tp);
+    if (tp->wakeup.timeout > 0) {
+      if (--tp->wakeup.timeout == 0) {
+        nilDbgAssert(tp->waitobj.p != NULL,
+                     "nilSysTimerHandlerI(), #1", "");
+        tp->wakeup.msg = MSG_TMO;
+        nilSchReadyI(tp);
+      }
     }
-    nilSysUnlockFromIsr();
+    /* Lock released in order to give a preemption chance on those
+       architectures supporting IRQ preemption.*/
+    nilSysUnlockFromISR();
     tp++;
+    nilSysLockFromISR();
   } while (tp < &nil.threads[NIL_CFG_NUM_THREADS]);
 }
 
@@ -131,7 +134,7 @@ thread_t *nilSchReadyI(thread_t *tp) {
   nilDbgAssert(tp->waitobj.p != NULL, "nilSchReadyI(), #2", "");
   nilDbgAssert(nil.nextp <= nil.currp, "nilSchReadyI(), #3", "");
 
-  tp->timeout = false;
+  tp->wakeup.timeout = 0;
   tp->waitobj.p = NULL;
   if (tp < nil.nextp)
     nil.nextp = tp;
@@ -161,19 +164,17 @@ void nilSchRescheduleS() {
  *          awakened with a @p MSG_TMO low level message.
  *
  * @param[in] newstate  the new thread state
- * @param[in] timeout   timeout flag
- * @param[in] time      absolute system time, only used if @p timeout is true
+ * @param[in] timeout   timeout in system ticks
  * @return              The wakeup message.
  * @retval MSG_TMO      if a timeout occurred.
  *
  * @sclass
  */
-msg_t nilSchGoSleepTimeoutS(void *waitobj, bool timeout, systime_t time) {
+msg_t nilSchGoSleepTimeoutS(void *waitobj, systime_t timeout) {
   thread_t *ntp, *otp = nil.currp;
 
   /* Timeout settings.*/
-  otp->timeout = timeout;
-  otp->wakeup.time = time;
+  otp->wakeup.timeout = timeout;
 
   /* Storing the wait object for the current thread.*/
   otp->waitobj.p = waitobj;
@@ -249,7 +250,7 @@ bool nilTimeIsWithin(systime_t start, systime_t end) {
  * @brief   Performs a wait operation on a semaphore with timeout specification.
  *
  * @param[in] sp        pointer to a @p semaphore_t structure
- * @param[in] time      the number of ticks before the operation timeouts,
+ * @param[in] timeout   the number of ticks before the operation timeouts,
  *                      the following special values are allowed:
  *                      - @a TIME_IMMEDIATE immediate timeout.
  *                      - @a TIME_INFINITE no timeout.
@@ -264,11 +265,11 @@ bool nilTimeIsWithin(systime_t start, systime_t end) {
  *
  * @api
  */
-msg_t nilSemWaitTimeout(semaphore_t *sp, systime_t time) {
+msg_t nilSemWaitTimeout(semaphore_t *sp, systime_t timeout) {
   msg_t msg;
 
   nilSysLock();
-  msg = nilSemWaitTimeoutS(sp, time);
+  msg = nilSemWaitTimeoutS(sp, timeout);
   nilSysUnlock();
   return msg;
 }
@@ -277,7 +278,7 @@ msg_t nilSemWaitTimeout(semaphore_t *sp, systime_t time) {
  * @brief   Performs a wait operation on a semaphore with timeout specification.
  *
  * @param[in] sp        pointer to a @p semaphore_t structure
- * @param[in] time      the number of ticks before the operation timeouts,
+ * @param[in] timeout   the number of ticks before the operation timeouts,
  *                      the following special values are allowed:
  *                      - @a TIME_IMMEDIATE immediate timeout.
  *                      - @a TIME_INFINITE no timeout.
@@ -292,18 +293,16 @@ msg_t nilSemWaitTimeout(semaphore_t *sp, systime_t time) {
  *
  * @sclass
  */
-msg_t nilSemWaitTimeoutS(semaphore_t *sp, systime_t time) {
+msg_t nilSemWaitTimeoutS(semaphore_t *sp, systime_t timeout) {
 
   /* Note, the semaphore counter is a volatile variable so accesses are
      manually optimized.*/
   cnt_t cnt = sp->cnt;
   if (cnt <= 0) {
-    if (TIME_IMMEDIATE == time)
+    if (TIME_IMMEDIATE == timeout)
       return MSG_TMO;
     sp->cnt = cnt - 1;
-    return nilSchGoSleepTimeoutS((void *)sp,
-                                 time != TIME_INFINITE,
-                                 nilTimeNow() - time);
+    return nilSchGoSleepTimeoutS((void *)sp, timeout);
   }
   return MSG_OK;
 }
