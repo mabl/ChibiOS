@@ -178,11 +178,11 @@ void nilSchRescheduleS() {
 msg_t nilSchGoSleepTimeoutS(thread_state_t state, systime_t timeout) {
   thread_t *ntp, *otp = nil.currp;
 
-  /* Timeout settings.*/
-  otp->u2.timeout = timeout;
-
   /* Storing the wait object for the current thread.*/
   otp->u1.state = state;
+
+  /* Timeout settings.*/
+  otp->u2.timeout = timeout;
 
   /* Scanning the whole threads array.*/
   ntp = nil.threads;
