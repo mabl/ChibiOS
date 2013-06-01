@@ -175,7 +175,7 @@ void nilSchRescheduleS() {
  *
  * @sclass
  */
-msg_t nilSchGoSleepTimeoutS(void *state, systime_t timeout) {
+msg_t nilSchGoSleepTimeoutS(thread_state_t state, systime_t timeout) {
   thread_t *ntp, *otp = nil.currp;
 
   /* Timeout settings.*/

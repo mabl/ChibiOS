@@ -630,7 +630,7 @@ extern "C" {
   void nilSysInit(void);
   void nilSysTimerHandlerI(void);
   thread_t *nilSchReadyI(thread_t *tp);
-  msg_t nilSchGoSleepTimeoutS(void *state, systime_t timeout);
+  msg_t nilSchGoSleepTimeoutS(thread_state_t state, systime_t timeout);
   void nilSchRescheduleS(void);
   void nilThdSleep(systime_t time);
   void nilThdSleepUntil(systime_t time);
