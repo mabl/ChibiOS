@@ -392,7 +392,7 @@ typedef struct {
  * @sclass
  */
 #define nilThdSleepUntilS(time)                                             \
-  nilSchGoSleepTimeoutS(nil.currp, nilTimeNow() + (time))
+  nilSchGoSleepTimeoutS(nil.currp, (time) - nilTimeNow())
 
 /**
  * @brief   Initializes a semaphore with the specified counter value.
