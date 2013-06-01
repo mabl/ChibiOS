@@ -41,13 +41,13 @@
  * @name    Nil RTOS identification
  * @{
  */
-#define _NIL_                       /**< @brief Nil RTOS identification.    */
+#define _NIL_                           /**< @brief Nil RTOS identification.*/
 
-#define NIL_KERNEL_VERSION  "0.0.1" /**< @brief Kernel version string.      */
+#define NIL_KERNEL_VERSION      "0.0.1" /**< @brief Kernel version string.  */
 
-#define NIL_KERNEL_MAJOR    0       /**< @brief Kernel version major number.*/
-#define NIL_KERNEL_MINOR    0       /**< @brief Kernel version minor number.*/
-#define NIL_KERNEL_PATCH    1       /**< @brief Kernel version patch number.*/
+#define NIL_KERNEL_MAJOR        0       /**< @brief Version major number.   */
+#define NIL_KERNEL_MINOR        0       /**< @brief Version minor number.   */
+#define NIL_KERNEL_PATCH        1       /**< @brief Version patch number.   */
 /** @} */
 
 /**
@@ -89,13 +89,43 @@
  * @note    Not all functions accept @p TIME_IMMEDIATE as timeout parameter,
  *          see the specific function documentation.
  */
-#define TIME_IMMEDIATE  ((systime_t)-1)
+#define TIME_IMMEDIATE          ((systime_t)-1)
 
 /**
  * @brief   Infinite time specification for all functions with a timeout
  *          specification.
  */
-#define TIME_INFINITE   ((systime_t)0)
+#define TIME_INFINITE           ((systime_t)0)
+/** @} */
+
+/**
+ * @name    Thread state related macros
+ * @{
+ */
+/**
+ * @brief   Thread ready to be executed or executing.
+ */
+#define NIL_THD_READY           ((void *)0)
+
+/**
+ * @brief   Thread sleeping.
+ */
+#define NIL_THD_SLEEPING        ((void *)1)
+
+/**
+ * @brief   Evaluates to TRUE if the thread is ready.
+ */
+#define NIL_THD_IS_READY(tp)    ((tp)->u1.state == NIL_THD_READY)
+
+/**
+ * @brief   Evaluates to TRUE if the thread is sleeping.
+ */
+#define NIL_THD_IS_SLEEPING(tp) ((tp)->u1.state == NIL_THD_SLEEPING)
+
+/**
+ * @brief   Evaluates to TRUE if the thread is waiting on a semaphore.
+ */
+#define NIL_THD_IS_ON_SEM(tp)   ((tp)->u1.state >= (void *)2)
 /** @} */
 
 /*===========================================================================*/
@@ -180,6 +210,11 @@ typedef struct nil_thread_cfg thread_config_t;
 typedef struct nil_thread thread_t;
 
 /**
+ * @brief   Type of a thread state.
+ */
+typedef void * thread_state_t;
+
+/**
  * @brief   Structure representing a thread static configuration.
  */
 struct nil_thread_cfg {
@@ -195,16 +230,19 @@ struct nil_thread_cfg {
  */
 struct nil_thread {
   intctx            *ctxp;      /**< @brief Pointer to internal context.    */
+  /* Note, the semaphore pointers are supposed to have numeric ranges
+     above the numeric values of thread states.*/
   union {
-    void            *p;         /**< @brief Generic pointer to object.      */
+    thread_state_t  state;      /**< @brief Thread state.                   */
     semaphore_t     *semp;      /**< @brief Pointer to semaphore.           */
-    thread_t        *thdp;      /**< @brief Pointer to thread.              */
-  } waitobj;                    /**< @brief Pointer to the wake-up object.  */
+  } u1;
+  /* Note, the following union contains a timeout counter value while the
+     thread is not ready else contains the wake-up message.*/
   union {
     systime_t       timeout;    /**< @brief Timeout counter, zero
-                                     if disabled.                           */
+                                            if disabled.                    */
     msg_t           msg;        /**< @brief Wake-up message.                */
-  } wakeup;                     /**< @brief Wake-up related info.           */
+  } u2;
 };
 
 /**
@@ -381,7 +419,7 @@ typedef struct {
  *
  * @sclass
  */
-#define nilThdSleepS(timeout) nilSchGoSleepTimeoutS(nil.currp, timeout)
+#define nilThdSleepS(timeout) nilSchGoSleepTimeoutS(NIL_THD_SLEEPING, timeout)
 
 /**
  * @brief   Suspends the invoking thread until the system time arrives to the
@@ -392,7 +430,7 @@ typedef struct {
  * @sclass
  */
 #define nilThdSleepUntilS(time)                                             \
-  nilSchGoSleepTimeoutS(nil.currp, (time) - nilTimeNow())
+  nilSchGoSleepTimeoutS(NIL_THD_SLEEPING, (time) - nilTimeNow())
 
 /**
  * @brief   Initializes a semaphore with the specified counter value.
@@ -592,7 +630,7 @@ extern "C" {
   void nilSysInit(void);
   void nilSysTimerHandlerI(void);
   thread_t *nilSchReadyI(thread_t *tp);
-  msg_t nilSchGoSleepTimeoutS(void *waitobj, systime_t timeout);
+  msg_t nilSchGoSleepTimeoutS(void *state, systime_t timeout);
   void nilSchRescheduleS(void);
   void nilThdSleep(systime_t time);
   void nilThdSleepUntil(systime_t time);

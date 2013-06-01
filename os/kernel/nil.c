@@ -103,11 +103,16 @@ void nilSysTimerHandlerI(void) {
   nil.systime++;
   tp = &nil.threads[0];
   do {
-    if (tp->wakeup.timeout > 0) {
-      if (--tp->wakeup.timeout == 0) {
-        nilDbgAssert(tp->waitobj.p != NULL,
-                     "nilSysTimerHandlerI(), #1", "");
-        tp->wakeup.msg = NIL_MSG_TMO;
+    /* If a thread is not ready and its timeout counter is greater than
+       zero then the timeout handling must be performed.*/
+    if (!NIL_THD_IS_READY(tp) && (tp->u2.timeout > 0)) {
+      /* Did the timer reach zero?*/
+      if (--tp->u2.timeout == 0) {
+        /* Timeout on semaphores requires a special handling because the
+           semaphore counter must be incremented.*/
+        if (NIL_THD_IS_ON_SEM(tp))
+          tp->u1.semp->cnt++;
+        tp->u2.msg = NIL_MSG_TMO;
         nilSchReadyI(tp);
       }
     }
@@ -131,11 +136,11 @@ thread_t *nilSchReadyI(thread_t *tp) {
   nilDbgAssert((tp >= nil.threads) &&
                (tp < &nil.threads[NIL_CFG_NUM_THREADS]),
                "nilSchReadyI(), #1", "");
-  nilDbgAssert(tp->waitobj.p != NULL, "nilSchReadyI(), #2", "");
+  nilDbgAssert(!NIL_THD_IS_READY(tp), "nilSchReadyI(), #2", "");
   nilDbgAssert(nil.nextp <= nil.currp, "nilSchReadyI(), #3", "");
 
-  tp->wakeup.timeout = 0;
-  tp->waitobj.p = NULL;
+  tp->u2.timeout = 0;
+  tp->u1.state = NIL_THD_READY;
   if (tp < nil.nextp)
     nil.nextp = tp;
   return tp;
@@ -163,30 +168,30 @@ void nilSchRescheduleS() {
  *          explicitly within the specified system time then it is forcibly
  *          awakened with a @p NIL_MSG_TMO low level message.
  *
- * @param[in] newstate  the new thread state
+ * @param[in] state     the new thread state or a semaphore pointer
  * @param[in] timeout   timeout in system ticks
  * @return              The wakeup message.
  * @retval NIL_MSG_TMO  if a timeout occurred.
  *
  * @sclass
  */
-msg_t nilSchGoSleepTimeoutS(void *waitobj, systime_t timeout) {
+msg_t nilSchGoSleepTimeoutS(void *state, systime_t timeout) {
   thread_t *ntp, *otp = nil.currp;
 
   /* Timeout settings.*/
-  otp->wakeup.timeout = timeout;
+  otp->u2.timeout = timeout;
 
   /* Storing the wait object for the current thread.*/
-  otp->waitobj.p = waitobj;
+  otp->u1.state = state;
 
   /* Scanning the whole threads array.*/
   ntp = nil.threads;
   while (true) {
     /* Is this thread ready to execute?*/
-    if (ntp->waitobj.p == NULL) {
+    if (NIL_THD_IS_READY(ntp)) {
       nil.currp = nil.nextp = ntp;
       port_switch(ntp, otp);
-      return nil.currp->wakeup.msg;
+      return nil.currp->u2.msg;
     }
 
     /* Points to the next thread in lowering priority order.*/
@@ -343,8 +348,8 @@ void nilSemSignalI(semaphore_t *sp) {
     thread_t *tp = nil.threads;
     while (true) {
       /* Is this thread waiting on this semaphore?*/
-      if (tp->waitobj.semp == sp) {
-        tp->wakeup.msg = NIL_MSG_OK;
+      if (tp->u1.semp == sp) {
+        tp->u2.msg = NIL_MSG_OK;
         nilSchReadyI(tp);
         return;
       }
@@ -402,9 +407,9 @@ void nilSemResetI(semaphore_t *sp, cnt_t n) {
   tp = nil.threads;
   while (cnt < 0) {
     /* Is this thread waiting on this semaphore?*/
-    if (tp->waitobj.semp == sp) {
+    if (tp->u1.semp == sp) {
       cnt++;
-      tp->wakeup.msg = NIL_MSG_RST;
+      tp->u2.msg = NIL_MSG_RST;
       nilSchReadyI(tp);
     }
     tp++;
