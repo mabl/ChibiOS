@@ -258,7 +258,7 @@ typedef struct {
   /**
    * @brief   Pointer to the next thread to be executed.
    * @note    This pointer must point at the same thread pointed by @p currp
-   *          or to an higher priority thread in a switch is required.
+   *          or to an higher priority thread if a switch is required.
    */
   thread_t          *nextp;
   /**

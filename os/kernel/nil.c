@@ -135,12 +135,14 @@ thread_t *nilSchReadyI(thread_t *tp) {
 
   nilDbgAssert((tp >= nil.threads) &&
                (tp < &nil.threads[NIL_CFG_NUM_THREADS]),
-               "nilSchReadyI(), #1", "");
-  nilDbgAssert(!NIL_THD_IS_READY(tp), "nilSchReadyI(), #2", "");
-  nilDbgAssert(nil.nextp <= nil.currp, "nilSchReadyI(), #3", "");
+               "nilSchReadyI(), #1", "pointer out of range");
+  nilDbgAssert(!NIL_THD_IS_READY(tp),
+               "nilSchReadyI(), #2", "already ready");
+  nilDbgAssert(nil.nextp <= nil.currp,
+               "nilSchReadyI(), #3", "priority ordering");
 
-  tp->u2.timeout = 0;
   tp->u1.state = NIL_THD_READY;
+  tp->u2.timeout = 0;
   if (tp < nil.nextp)
     nil.nextp = tp;
   return tp;
@@ -197,7 +199,7 @@ msg_t nilSchGoSleepTimeoutS(thread_state_t state, systime_t timeout) {
     /* Points to the next thread in lowering priority order.*/
     ntp++;
     nilDbgAssert(ntp <= &nil.threads[NIL_CFG_NUM_THREADS],
-                 "nilSchGoSleepTimeoutS(), #1", "");
+                 "nilSchGoSleepTimeoutS(), #1", "pointer out of range");
   }
 }
 
