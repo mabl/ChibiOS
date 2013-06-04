@@ -37,25 +37,28 @@
 #define _CHVT_H_
 
 /**
- * @brief   Time conversion utility.
+ * @brief   Seconds to system ticks.
  * @details Converts from seconds to system ticks number.
  * @note    The result is rounded upward to the next tick boundary.
  */
-#define S2ST(sec)   ((systime_t)((sec) * CH_FREQUENCY))
+#define S2ST(sec)                                                           \
+  ((systime_t)((sec) * CH_FREQUENCY))
 
 /**
- * @brief   Time conversion utility.
+ * @brief   Milliseconds to system ticks.
  * @details Converts from milliseconds to system ticks number.
  * @note    The result is rounded upward to the next tick boundary.
  */
-#define MS2ST(msec) ((systime_t)(((((msec) - 1L) * CH_FREQUENCY) / 1000L) + 1L))
+#define MS2ST(msec)                                                         \
+  ((systime_t)((((msec) * CH_FREQUENCY - 1L) / 1000L) + 1L))
 
 /**
- * @brief   Time conversion utility.
+ * @brief   Microseconds to system ticks.
  * @details Converts from microseconds to system ticks number.
  * @note    The result is rounded upward to the next tick boundary.
  */
-#define US2ST(usec) ((systime_t)(((((usec) - 1L) * CH_FREQUENCY) / 1000000L) + 1L))
+#define US2ST(usec)                                                         \
+  ((systime_t)((((usec) * CH_FREQUENCY - 1L) / 1000000L) + 1L))
 
 /**
  * @brief   Virtual Timer callback function.
