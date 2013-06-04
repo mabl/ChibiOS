@@ -584,7 +584,8 @@ typedef struct {
  *
  * @api
  */
-#define S2ST(sec)   ((systime_t)((sec) * NIL_CFG_FREQUENCY))
+#define S2ST(sec)                                                           \
+  ((systime_t)((sec) * NIL_CFG_FREQUENCY))
 
 /**
  * @brief   Milliseconds to system ticks.
@@ -596,8 +597,8 @@ typedef struct {
  *
  * @api
  */
-#define MS2ST(msec) ((systime_t)(((((msec) - 1L) * NIL_CFG_FREQUENCY) /     \
-                                  1000L) + 1L))
+#define MS2ST(msec)                                                         \
+  ((systime_t)((((msec) * NIL_CFG_FREQUENCY - 1L) / 1000L) + 1L))
 
 /**
  * @brief   Microseconds to system ticks.
@@ -609,8 +610,8 @@ typedef struct {
  *
  * @api
  */
-#define US2ST(usec) ((systime_t)(((((usec) - 1L) * NIL_CFG_FREQUENCY) /     \
-                                  1000000L) + 1L))
+#define US2ST(usec)                                                         \
+  ((systime_t)((((usec) * NIL_CFG_FREQUENCY - 1L) / 1000000L) + 1L))
 /** @} */
 
 /*===========================================================================*/
