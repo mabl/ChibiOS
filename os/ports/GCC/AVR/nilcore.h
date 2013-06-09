@@ -128,15 +128,15 @@ struct port_intctx {
  * @details This code usually setup the context switching frame represented
  *          by an @p intctx structure.
  */
-#define SETUP_CONTEXT(workspace, wsize, pf, arg) {                          \
-  tp->p_ctx.sp = (struct port_intctx *)((uint8_t *)workspace + wsize  -     \
-                                        sizeof(struct port_intctx));        \
-  tp->p_ctx.sp->r2  = (uint8_t)pf;                                          \
-  tp->p_ctx.sp->r3  = (uint8_t)((unsigned)pf >> 8);                         \
-  tp->p_ctx.sp->r4  = (uint8_t)arg;                                         \
-  tp->p_ctx.sp->r5  = (uint8_t)((unsigned)arg >> 8);                        \
-  tp->p_ctx.sp->pcl = (uint8_t)((unsigned)_port_thread_start >> 8);         \
-  tp->p_ctx.sp->pch = (uint8_t)_port_thread_start;                          \
+#define SETUP_CONTEXT(tp, workspace, wsize, pf, arg) {                      \
+  (tp)->p_ctx.sp = (struct port_intctx *)((uint8_t *)workspace + wsize  -   \
+                                          sizeof(struct port_intctx));      \
+  (tp)->p_ctx.sp->r2  = (uint8_t)pf;                                        \
+  (tp)->p_ctx.sp->r3  = (uint8_t)((unsigned)pf >> 8);                       \
+  (tp)->p_ctx.sp->r4  = (uint8_t)arg;                                       \
+  (tp)->p_ctx.sp->r5  = (uint8_t)((unsigned)arg >> 8);                      \
+  (tp)->p_ctx.sp->pcl = (uint8_t)((unsigned)_port_thread_start >> 8);       \
+  (tp)->p_ctx.sp->pch = (uint8_t)_port_thread_start;                        \
 }
 
 /**

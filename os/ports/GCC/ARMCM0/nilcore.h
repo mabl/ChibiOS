@@ -189,12 +189,13 @@ struct port_intctx {
  * @details This code usually setup the context switching frame represented
  *          by an @p intctx structure.
  */
-#define SETUP_CONTEXT(workspace, wsize, pf, arg) {                          \
-  tp->ctxp = (struct port_intctx *)((uint8_t *)workspace + (size_t)wsize -  \
-                                    sizeof(struct port_intctx));            \
-  tp->ctxp->r4 = (void *)(pf);                                              \
-  tp->ctxp->r5 = (void *)(arg);                                             \
-  tp->ctxp->lr = (void *)(_port_thread_start);                              \
+#define SETUP_CONTEXT(tp, workspace, wsize, pf, arg) {                      \
+  (tp)->ctxp = (struct port_intctx *)((uint8_t *)workspace +                \
+                                      (size_t)wsize -                       \
+                                      sizeof(struct port_intctx));          \
+  (tp)->ctxp->r4 = (void *)(pf);                                            \
+  (tp)->ctxp->r5 = (void *)(arg);                                           \
+  (tp)->ctxp->lr = (void *)(_port_thread_start);                            \
 }
 
 /**

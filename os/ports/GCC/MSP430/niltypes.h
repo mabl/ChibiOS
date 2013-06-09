@@ -36,9 +36,10 @@
  * @name Kernel types
  * @{
  */
-typedef int16_t         msg_t;      /**< @brief Inter-thread message.       */
-typedef uint16_t        systime_t;  /**< @brief System time.                */
-typedef int16_t         cnt_t;      /**< @brief Signed resources counter.   */
+typedef uint8_t         tstate_t;   /**< @brief Type of a thread state.     */
+typedef int16_t         msg_t;      /**< @brief Type of a message.          */
+typedef uint16_t        systime_t;  /**< @brief Type of system time.        */
+typedef int16_t         cnt_t;      /**< @brief Type of signed counter.     */
 /** @} */
 
 #endif /* _NILTYPES_H_ */

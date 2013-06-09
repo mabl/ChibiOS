@@ -102,30 +102,14 @@
  * @name    Thread state related macros
  * @{
  */
-/**
- * @brief   Thread ready to be executed or executing.
- */
-#define NIL_THD_READY           ((void *)0)
-
-/**
- * @brief   Thread sleeping.
- */
-#define NIL_THD_SLEEPING        ((void *)1)
-
-/**
- * @brief   Evaluates to TRUE if the thread is ready.
- */
-#define NIL_THD_IS_READY(tp)    ((tp)->u1.state == NIL_THD_READY)
-
-/**
- * @brief   Evaluates to TRUE if the thread is sleeping.
- */
-#define NIL_THD_IS_SLEEPING(tp) ((tp)->u1.state == NIL_THD_SLEEPING)
-
-/**
- * @brief   Evaluates to TRUE if the thread is waiting on a semaphore.
- */
-#define NIL_THD_IS_ON_SEM(tp)   ((tp)->u1.state >= (void *)2)
+#define NIL_THD_READY           0   /**< @brief Thread ready or executing.  */
+#define NIL_THD_SLEEPING        1   /**< @brief Thread sleeping.            */
+#define NIL_THD_SUSP            2   /**< @brief Thread suspended.           */
+#define NIL_THD_WTSEM           3   /**< @brief Thread waiting on semaphore.*/
+#define NIL_THD_IS_READY(tr)    ((tr)->state == NIL_THD_READY)
+#define NIL_THD_IS_SLEEPING(tr) ((tr)->state == NIL_THD_SLEEPING)
+#define NIL_THD_IS_SUSP(tr)     ((tr)->state == NIL_THD_SUSP)
+#define NIL_THD_IS_WTSEM(tr)    ((tr)->state == NIL_THD_WTSEM)
 /** @} */
 
 /*===========================================================================*/
@@ -135,7 +119,7 @@
 /**
  * @brief   Number of threads in the application.
  * @note    This number is not inclusive of the idle thread which is
- *          implicitely handled.
+ *          implicitly handled.
  */
 #if !defined(NIL_CFG_NUM_THREADS) || defined(__DOXYGEN__)
 #define NIL_CFG_NUM_THREADS             2
@@ -210,11 +194,6 @@ typedef struct nil_thread_cfg thread_config_t;
 typedef struct nil_thread thread_t;
 
 /**
- * @brief   Type of a thread state.
- */
-typedef void * thread_state_t;
-
-/**
  * @brief   Structure representing a thread static configuration.
  */
 struct nil_thread_cfg {
@@ -226,23 +205,26 @@ struct nil_thread_cfg {
 };
 
 /**
+ * @brief   Type of a thread reference.
+ */
+typedef thread_t * thread_ref_t;
+
+/**
  * @brief   Structure representing a thread.
  */
 struct nil_thread {
   intctx            *ctxp;      /**< @brief Pointer to internal context.    */
-  /* Note, the semaphore pointers are supposed to have numeric ranges
-     above the numeric values of thread states.*/
+  tstate_t          state;      /**< @brief Thread state.                   */
+  /* Note, the following union contains a pointer while the thread is in a
+     sleeping state (!NIL_THD_IS_READY()) else contains the wake-up message.*/
   union {
-    thread_state_t  state;      /**< @brief Thread state.                   */
+    msg_t           msg;        /**< @brief Wake-up message.                */
+    void            *p;         /**< @brief Generic pointer.                */
+    thread_ref_t    *trp;       /**< @brief Pointer to thread reference.    */
     semaphore_t     *semp;      /**< @brief Pointer to semaphore.           */
   } u1;
-  /* Note, the following union contains a timeout counter value while the
-     thread is not ready else contains the wake-up message.*/
-  union {
-    systime_t       timeout;    /**< @brief Timeout counter, zero
+  systime_t         timeout;    /**< @brief Timeout counter, zero
                                             if disabled.                    */
-    msg_t           msg;        /**< @brief Wake-up message.                */
-  } u2;
 };
 
 /**
@@ -254,28 +236,28 @@ typedef struct {
   /**
    * @brief   Pointer to the running thread.
    */
-  thread_t          *currp;
+  thread_ref_t          current;
   /**
    * @brief   Pointer to the next thread to be executed.
    * @note    This pointer must point at the same thread pointed by @p currp
    *          or to an higher priority thread if a switch is required.
    */
-  thread_t          *nextp;
+  thread_ref_t          next;
   /**
    * @brief   System time.
    */
-  systime_t         systime;
+  systime_t             systime;
   /**
    * @brief   Thread structures for all the defined threads.
    */
-  thread_t          threads[NIL_CFG_NUM_THREADS + 1];
+  thread_t              threads[NIL_CFG_NUM_THREADS + 1];
 #if NIL_DBG_ENABLED || defined(__DOXYGEN__)
   /**
    * @brief   Panic message.
    * @note    This field is only present if some debug option has been
    *          activated.
    */
-  const char        *dbg_msg;
+  const char            *dbg_msg;
 #endif
 } nil_system_t;
 
@@ -630,9 +612,11 @@ extern "C" {
 #endif
   void nilSysInit(void);
   void nilSysTimerHandlerI(void);
-  thread_t *nilSchReadyI(thread_t *tp);
-  msg_t nilSchGoSleepTimeoutS(thread_state_t state, systime_t timeout);
+  thread_ref_t nilSchReadyI(thread_ref_t trp);
+  msg_t nilSchGoSleepTimeoutS(tstate_t newstate, systime_t timeout);
   void nilSchRescheduleS(void);
+  msg_t nilThdSuspendTimeoutS(thread_ref_t *trp, systime_t timeout);
+  void nilThdResumeI(thread_ref_t *trp, msg_t msg);
   void nilThdSleep(systime_t time);
   void nilThdSleepUntil(systime_t time);
   bool nilTimeIsWithin(systime_t start, systime_t end);

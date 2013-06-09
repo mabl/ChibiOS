@@ -66,24 +66,25 @@ nil_system_t nil;
  * @special
  */
 void nilSysInit(void) {
-  thread_t *tp;
+  thread_ref_t tr;
   const thread_config_t *tcp;
 
   /* Port layer initialization.*/
   port_init();
 
   /* Iterates through the list of defined threads.*/
-  for (tp = &nil.threads[0], tcp = nil_thd_configs;
-       tp < &nil.threads[NIL_CFG_NUM_THREADS];
-       tp++, tcp++) {
+  for (tr = &nil.threads[0], tcp = nil_thd_configs;
+       tr < &nil.threads[NIL_CFG_NUM_THREADS];
+       tr++, tcp++) {
+    tr->state = NIL_THD_READY;
 
     /* Port dependent thread initialization.*/
-    SETUP_CONTEXT(tcp->wap, tcp->size, tcp->funcp, tcp->arg);
+    SETUP_CONTEXT(tr, tcp->wap, tcp->size, tcp->funcp, tcp->arg);
   }
 
   /* Runs the highest priority thread, the current one becomes the null
      thread.*/
-  nil.currp = nil.nextp = nil.threads;
+  nil.current = nil.next = nil.threads;
   port_switch(nil.threads, &nil.threads[NIL_CFG_NUM_THREADS]);
 
   /* Interrupts enabled for the idle thread.*/
@@ -98,54 +99,56 @@ void nilSysInit(void) {
  * @iclass
  */
 void nilSysTimerHandlerI(void) {
-  thread_t *tp;
+  thread_ref_t tr;
 
   nil.systime++;
-  tp = &nil.threads[0];
+  tr = &nil.threads[0];
   do {
     /* If a thread is not ready and its timeout counter is greater than
        zero then the timeout handling must be performed.*/
-    if (!NIL_THD_IS_READY(tp) && (tp->u2.timeout > 0)) {
+    if (!NIL_THD_IS_READY(tr) && (tr->timeout > 0)) {
       /* Did the timer reach zero?*/
-      if (--tp->u2.timeout == 0) {
+      if (--tr->timeout == 0) {
         /* Timeout on semaphores requires a special handling because the
            semaphore counter must be incremented.*/
-        if (NIL_THD_IS_ON_SEM(tp))
-          tp->u1.semp->cnt++;
-        tp->u2.msg = NIL_MSG_TMO;
-        nilSchReadyI(tp);
+        if (NIL_THD_IS_WTSEM(tr))
+          tr->u1.semp->cnt++;
+        else if (NIL_THD_IS_SUSP(tr))
+          tr->u1.trp = NULL;
+        tr->u1.msg = NIL_MSG_TMO;
+        nilSchReadyI(tr);
       }
     }
     /* Lock released in order to give a preemption chance on those
        architectures supporting IRQ preemption.*/
     nilSysUnlockFromISR();
-    tp++;
+    tr++;
     nilSysLockFromISR();
-  } while (tp < &nil.threads[NIL_CFG_NUM_THREADS]);
+  } while (tr < &nil.threads[NIL_CFG_NUM_THREADS]);
 }
 
 /**
  * @brief   Makes the specified thread ready for execution.
  *
- * @param[in] tp        pointer to the @p thread_t object
+ * @param[in] tr        reference to the @p thread_t object
  *
- * @return              The same pointer passed as parameter.
+ * @return              The same reference passed as parameter.
  */
-thread_t *nilSchReadyI(thread_t *tp) {
+thread_ref_t nilSchReadyI(thread_ref_t tr) {
 
-  nilDbgAssert((tp >= nil.threads) &&
-               (tp < &nil.threads[NIL_CFG_NUM_THREADS]),
+  nilDbgAssert((tr >= nil.threads) &&
+               (tr < &nil.threads[NIL_CFG_NUM_THREADS]),
                "nilSchReadyI(), #1", "pointer out of range");
-  nilDbgAssert(!NIL_THD_IS_READY(tp),
+  nilDbgAssert(!NIL_THD_IS_READY(tr),
                "nilSchReadyI(), #2", "already ready");
-  nilDbgAssert(nil.nextp <= nil.currp,
+  nilDbgAssert(nil.next <= nil.current,
                "nilSchReadyI(), #3", "priority ordering");
 
-  tp->u1.state = NIL_THD_READY;
-  tp->u2.timeout = 0;
-  if (tp < nil.nextp)
-    nil.nextp = tp;
-  return tp;
+  tr->state = NIL_THD_READY;
+  tr->timeout = 0;
+  if (tr < nil.next)
+    nil.next = tr;
+  return tr;
 }
 
 /**
@@ -154,12 +157,12 @@ thread_t *nilSchReadyI(thread_t *tp) {
  * @sclass
  */
 void nilSchRescheduleS() {
-  thread_t *otp = nil.currp;
-  thread_t *ntp = nil.nextp;
+  thread_ref_t otr = nil.current;
+  thread_ref_t ntr = nil.next;
 
-  if (ntp != otp) {
-    nil.currp = ntp;
-    port_switch(ntp, otp);
+  if (ntr != otr) {
+    nil.current = ntr;
+    port_switch(ntr, otr);
   }
 }
 
@@ -170,36 +173,85 @@ void nilSchRescheduleS() {
  *          explicitly within the specified system time then it is forcibly
  *          awakened with a @p NIL_MSG_TMO low level message.
  *
- * @param[in] state     the new thread state or a semaphore pointer
- * @param[in] timeout   timeout in system ticks
+ * @param[in] newstate  the new thread state or a semaphore pointer
+ * @param[in] timeout   the number of ticks before the operation timeouts,
+ *                      the following special values are allowed:
+ *                      - @a TIME_INFINITE no timeout.
+ *                      .
  * @return              The wakeup message.
  * @retval NIL_MSG_TMO  if a timeout occurred.
  *
  * @sclass
  */
-msg_t nilSchGoSleepTimeoutS(thread_state_t state, systime_t timeout) {
-  thread_t *ntp, *otp = nil.currp;
+msg_t nilSchGoSleepTimeoutS(tstate_t newstate, systime_t timeout) {
+  thread_ref_t ntr, otr = nil.current;
 
   /* Storing the wait object for the current thread.*/
-  otp->u1.state = state;
+  otr->state = newstate;
 
   /* Timeout settings.*/
-  otp->u2.timeout = timeout;
+  otr->timeout = timeout;
 
   /* Scanning the whole threads array.*/
-  ntp = nil.threads;
+  ntr = nil.threads;
   while (true) {
     /* Is this thread ready to execute?*/
-    if (NIL_THD_IS_READY(ntp)) {
-      nil.currp = nil.nextp = ntp;
-      port_switch(ntp, otp);
-      return nil.currp->u2.msg;
+    if (NIL_THD_IS_READY(ntr)) {
+      nil.current = nil.next = ntr;
+      port_switch(ntr, otr);
+      return nil.current->u1.msg;
     }
 
     /* Points to the next thread in lowering priority order.*/
-    ntp++;
-    nilDbgAssert(ntp <= &nil.threads[NIL_CFG_NUM_THREADS],
+    ntr++;
+    nilDbgAssert(ntr <= &nil.threads[NIL_CFG_NUM_THREADS],
                  "nilSchGoSleepTimeoutS(), #1", "pointer out of range");
+  }
+}
+
+/**
+ * @brief   Sends the current thread sleeping and sets a reference variable.
+ * @note    This function must reschedule, it can only be called from thread
+ *          context.
+ *
+ * @param[in] trp       a pointer to a thread reference object
+ * @param[in] timeout   the number of ticks before the operation timeouts,
+ *                      the following special values are allowed:
+ *                      - @a TIME_INFINITE no timeout.
+ *                      .
+ * @return              The wake up message.
+ *
+ * @sclass
+ */
+msg_t nilThdSuspendTimeoutS(thread_ref_t *trp, systime_t timeout) {
+
+  nilDbgAssert(*trp == NULL, "nilThdSuspendTimeoutS(), #1", "not NULL");
+
+  *trp = nil.current;
+  nil.current->u1.trp = trp;
+  return nilSchGoSleepTimeoutS(NIL_THD_SUSP, timeout);
+}
+
+/**
+ * @brief   Wakes up a thread waiting on a thread reference object.
+ * @note    This function must not reschedule because it can be called from
+ *          ISR context.
+ *
+ * @param[in] trp       a pointer to a thread reference object
+ * @param[in] msg       the message code
+ *
+ * @iclass
+ */
+void nilThdResumeI(thread_ref_t *trp, msg_t msg) {
+
+  if (*trp != NULL) {
+    thread_ref_t tr = *trp;
+
+    nilDbgAssert(NIL_THD_IS_SUSP(tr), "nilThdResumeI(), #1", "not suspended");
+
+    *trp = NULL;
+    tr->u1.msg = msg;
+    nilSchReadyI(tr);
   }
 }
 
@@ -309,7 +361,8 @@ msg_t nilSemWaitTimeoutS(semaphore_t *sp, systime_t timeout) {
     if (TIME_IMMEDIATE == timeout)
       return NIL_MSG_TMO;
     sp->cnt = cnt - 1;
-    return nilSchGoSleepTimeoutS((void *)sp, timeout);
+    nil.current->u1.semp = sp;
+    return nilSchGoSleepTimeoutS(NIL_THD_WTSEM, timeout);
   }
   return NIL_MSG_OK;
 }
@@ -347,15 +400,19 @@ void nilSemSignal(semaphore_t *sp) {
 void nilSemSignalI(semaphore_t *sp) {
 
   if (++sp->cnt <= 0) {
-    thread_t *tp = nil.threads;
+    thread_ref_t tr = nil.threads;
     while (true) {
       /* Is this thread waiting on this semaphore?*/
-      if (tp->u1.semp == sp) {
-        tp->u2.msg = NIL_MSG_OK;
-        nilSchReadyI(tp);
+      if (tr->u1.semp == sp) {
+
+        nilDbgAssert(NIL_THD_IS_WTSEM(tr),
+                     "nilSemSignalI(), #1", "not waiting");
+
+        tr->u1.msg = NIL_MSG_OK;
+        nilSchReadyI(tr);
         return;
       }
-      tp++;
+      tr++;
     }
   }
 }
@@ -401,20 +458,24 @@ void nilSemReset(semaphore_t *sp, cnt_t n) {
  * @iclass
  */
 void nilSemResetI(semaphore_t *sp, cnt_t n) {
-  thread_t *tp;
+  thread_ref_t tr;
   cnt_t cnt;
 
   cnt = sp->cnt;
   sp->cnt = n;
-  tp = nil.threads;
+  tr = nil.threads;
   while (cnt < 0) {
     /* Is this thread waiting on this semaphore?*/
-    if (tp->u1.semp == sp) {
+    if (tr->u1.semp == sp) {
+
+      nilDbgAssert(NIL_THD_IS_WTSEM(tr),
+                   "nilSemResetI(), #1", "not waiting");
+
       cnt++;
-      tp->u2.msg = NIL_MSG_RST;
-      nilSchReadyI(tp);
+      tr->u1.msg = NIL_MSG_RST;
+      nilSchReadyI(tr);
     }
-    tp++;
+    tr++;
   }
 }
 
