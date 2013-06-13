@@ -208,78 +208,42 @@
             </pin_settings>
           </pins_list>
           <alternate_inputs>
-            <psmi_register_settings>
-              <padsel_fields>
-                <padsel0 index="0">0</padsel0>
-                <padsel1 index="0">0</padsel1>
-                <padsel2 index="0">0</padsel2>
-                <padsel3 index="0">0</padsel3>
-              </padsel_fields>
-            </psmi_register_settings>
-            <psmi_register_settings>
-              <padsel_fields>
-                <padsel0 index="0">0</padsel0>
-                <padsel1 index="0">0</padsel1>
-                <padsel2 index="0">0</padsel2>
-                <padsel3 index="0">0</padsel3>
-              </padsel_fields>
-            </psmi_register_settings>
-            <psmi_register_settings>
-              <padsel_fields>
-                <padsel0 index="0">0</padsel0>
-                <padsel1 index="0">0</padsel1>
-                <padsel2 index="0">0</padsel2>
-                <padsel3 index="0">0</padsel3>
-              </padsel_fields>
-            </psmi_register_settings>
-            <psmi_register_settings>
-              <padsel_fields>
-                <padsel0 index="0">0</padsel0>
-                <padsel1 index="0">0</padsel1>
-                <padsel2 index="0">0</padsel2>
-                <padsel3 index="0">0</padsel3>
-              </padsel_fields>
-            </psmi_register_settings>
-            <psmi_register_settings>
-              <padsel_fields>
-                <padsel0 index="0">0</padsel0>
-                <padsel1 index="0">0</padsel1>
-                <padsel2 index="0">0</padsel2>
-                <padsel3 index="0">0</padsel3>
-              </padsel_fields>
-            </psmi_register_settings>
-            <psmi_register_settings>
-              <padsel_fields>
-                <padsel0 index="0">0</padsel0>
-                <padsel1 index="0">0</padsel1>
-                <padsel2 index="0">0</padsel2>
-                <padsel3 index="0">0</padsel3>
-              </padsel_fields>
-            </psmi_register_settings>
-            <psmi_register_settings>
-              <padsel_fields>
-                <padsel0 index="0">0</padsel0>
-                <padsel1 index="0">0</padsel1>
-                <padsel2 index="0">0</padsel2>
-                <padsel3 index="0">0</padsel3>
-              </padsel_fields>
-            </psmi_register_settings>
-            <psmi_register_settings>
-              <padsel_fields>
-                <padsel0 index="0">0</padsel0>
-                <padsel1 index="0">0</padsel1>
-                <padsel2 index="0">0</padsel2>
-                <padsel3 index="0">0</padsel3>
-              </padsel_fields>
-            </psmi_register_settings>
-            <psmi_register_settings>
-              <padsel_fields>
-                <padsel0 index="0">0</padsel0>
-                <padsel1 index="0">0</padsel1>
-                <padsel2 index="0">0</padsel2>
-                <padsel3 index="0">0</padsel3>
-              </padsel_fields>
-            </psmi_register_settings>
+            <ps0 index="0">0</ps0>
+            <ps1 index="0">0</ps1>
+            <ps2 index="0">0</ps2>
+            <ps3 index="0">0</ps3>
+            <ps4 index="0">0</ps4>
+            <ps5 index="0">0</ps5>
+            <ps6 index="0">0</ps6>
+            <ps7 index="0">0</ps7>
+            <ps8 index="0">0</ps8>
+            <ps9 index="0">0</ps9>
+            <ps10 index="0">0</ps10>
+            <ps11 index="0">0</ps11>
+            <ps12 index="0">0</ps12>
+            <ps13 index="0">0</ps13>
+            <ps14 index="0">0</ps14>
+            <ps15 index="0">0</ps15>
+            <ps16 index="0">0</ps16>
+            <ps17 index="0">0</ps17>
+            <ps18 index="0">0</ps18>
+            <ps19 index="0">0</ps19>
+            <ps20 index="0">0</ps20>
+            <ps21 index="0">0</ps21>
+            <ps22 index="0">0</ps22>
+            <ps23 index="0">0</ps23>
+            <ps24 index="0">0</ps24>
+            <ps25 index="0">0</ps25>
+            <ps26 index="0">0</ps26>
+            <ps27 index="0">0</ps27>
+            <ps28 index="0">0</ps28>
+            <ps29 index="0">0</ps29>
+            <ps30 index="0">0</ps30>
+            <ps31 index="0">0</ps31>
+            <ps32 index="0">0</ps32>
+            <ps33 index="0">0</ps33>
+            <ps34 index="0">0</ps34>
+            <ps35 index="0">0</ps35>
           </alternate_inputs>
         </i_o_settings>
         <initialization_code>
@@ -316,6 +280,11 @@
           </clocks>
         </initialization_settings>
         <irq_priority_settings>
+          <dspi_0 index="9">10</dspi_0>
+          <dspi_1 index="9">10</dspi_1>
+          <dspi_2 index="9">10</dspi_2>
+          <dspi_3 index="9">10</dspi_3>
+          <dspi_4 index="9">10</dspi_4>
           <etimer0 index="6">7</etimer0>
           <etimer1 index="6">7</etimer1>
           <etimer2 index="6">7</etimer2>
@@ -330,7 +299,54 @@
           <linflex0 index="7">8</linflex0>
           <linflex1 index="7">8</linflex1>
         </irq_priority_settings>
-        <edma_settings />
+        <dspi_settings>
+          <dspi_0>false</dspi_0>
+          <dspi_1>false</dspi_1>
+          <dspi_2>false</dspi_2>
+          <dspi_3>false</dspi_3>
+          <dspi_4>false</dspi_4>
+          <dma_error_hook>osalSysHalt("DSPI DMA failure")</dma_error_hook>
+          <inactive_states>
+            <dspi_0___pcs0 index="1">Inactive High</dspi_0___pcs0>
+            <dspi_0___pcs1 index="1">Inactive High</dspi_0___pcs1>
+            <dspi_0___pcs2 index="1">Inactive High</dspi_0___pcs2>
+            <dspi_0___pcs3 index="1">Inactive High</dspi_0___pcs3>
+            <dspi_0___pcs4 index="1">Inactive High</dspi_0___pcs4>
+            <dspi_0___pcs5 index="1">Inactive High</dspi_0___pcs5>
+            <dspi_0___pcs6 index="1">Inactive High</dspi_0___pcs6>
+            <dspi_0___pcs7 index="1">Inactive High</dspi_0___pcs7>
+            <dspi_1___pcs0 index="1">Inactive High</dspi_1___pcs0>
+            <dspi_1___pcs1 index="1">Inactive High</dspi_1___pcs1>
+            <dspi_1___pcs2 index="1">Inactive High</dspi_1___pcs2>
+            <dspi_1___pcs3 index="1">Inactive High</dspi_1___pcs3>
+            <dspi_1___pcs4 index="1">Inactive High</dspi_1___pcs4>
+            <dspi_1___pcs5 index="1">Inactive High</dspi_1___pcs5>
+            <dspi_1___pcs6 index="1">Inactive High</dspi_1___pcs6>
+            <dspi_1___pcs7 index="1">Inactive High</dspi_1___pcs7>
+            <dspi_2___pcs0 index="1">Inactive High</dspi_2___pcs0>
+            <dspi_2___pcs1 index="1">Inactive High</dspi_2___pcs1>
+            <dspi_2___pcs2 index="1">Inactive High</dspi_2___pcs2>
+            <dspi_2___pcs3 index="1">Inactive High</dspi_2___pcs3>
+            <dspi_3___pcs0 index="1">Inactive High</dspi_3___pcs0>
+            <dspi_3___pcs1 index="1">Inactive High</dspi_3___pcs1>
+            <dspi_3___pcs2 index="1">Inactive High</dspi_3___pcs2>
+            <dspi_3___pcs3 index="1">Inactive High</dspi_3___pcs3>
+            <dspi_4___pcs0 index="1">Inactive High</dspi_4___pcs0>
+            <dspi_4___pcs1 index="1">Inactive High</dspi_4___pcs1>
+            <dspi_4___pcs2 index="1">Inactive High</dspi_4___pcs2>
+            <dspi_4___pcs3 index="1">Inactive High</dspi_4___pcs3>
+          </inactive_states>
+          <spi_configurations>
+            <configs />
+          </spi_configurations>
+        </dspi_settings>
+        <edma_settings>
+          <dspi_0 index="10">10</dspi_0>
+          <dspi_1 index="10">10</dspi_1>
+          <dspi_2 index="10">10</dspi_2>
+          <dspi_3 index="10">10</dspi_3>
+          <dspi_4 index="10">10</dspi_4>
+        </edma_settings>
         <etimer_settings>
           <etimer0_ch0>false</etimer0_ch0>
           <etimer0_ch1>false</etimer0_ch1>
@@ -344,12 +360,6 @@
           <etimer1_ch3>false</etimer1_ch3>
           <etimer1_ch4>false</etimer1_ch4>
           <etimer1_ch5>false</etimer1_ch5>
-          <etimer2_ch0>false</etimer2_ch0>
-          <etimer2_ch1>false</etimer2_ch1>
-          <etimer2_ch2>false</etimer2_ch2>
-          <etimer2_ch3>false</etimer2_ch3>
-          <etimer2_ch4>false</etimer2_ch4>
-          <etimer2_ch5>false</etimer2_ch5>
           <icu_configurations>
             <configs />
           </icu_configurations>

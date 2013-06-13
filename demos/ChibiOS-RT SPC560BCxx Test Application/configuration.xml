@@ -208,70 +208,38 @@
             </pin_settings>
           </pins_list>
           <alternate_inputs>
-            <psmi_register_settings>
-              <padsel_fields>
-                <padsel0 index="0">0</padsel0>
-                <padsel1 index="0">0</padsel1>
-                <padsel2 index="0">0</padsel2>
-                <padsel3 index="0">0</padsel3>
-              </padsel_fields>
-            </psmi_register_settings>
-            <psmi_register_settings>
-              <padsel_fields>
-                <padsel0 index="0">0</padsel0>
-                <padsel1 index="0">0</padsel1>
-                <padsel2 index="0">0</padsel2>
-                <padsel3 index="0">0</padsel3>
-              </padsel_fields>
-            </psmi_register_settings>
-            <psmi_register_settings>
-              <padsel_fields>
-                <padsel0 index="0">0</padsel0>
-                <padsel1 index="0">0</padsel1>
-                <padsel2 index="0">0</padsel2>
-                <padsel3 index="0">0</padsel3>
-              </padsel_fields>
-            </psmi_register_settings>
-            <psmi_register_settings>
-              <padsel_fields>
-                <padsel0 index="0">0</padsel0>
-                <padsel1 index="0">0</padsel1>
-                <padsel2 index="0">0</padsel2>
-                <padsel3 index="0">0</padsel3>
-              </padsel_fields>
-            </psmi_register_settings>
-            <psmi_register_settings>
-              <padsel_fields>
-                <padsel0 index="0">0</padsel0>
-                <padsel1 index="0">0</padsel1>
-                <padsel2 index="0">0</padsel2>
-                <padsel3 index="0">0</padsel3>
-              </padsel_fields>
-            </psmi_register_settings>
-            <psmi_register_settings>
-              <padsel_fields>
-                <padsel0 index="0">0</padsel0>
-                <padsel1 index="0">0</padsel1>
-                <padsel2 index="0">0</padsel2>
-                <padsel3 index="0">0</padsel3>
-              </padsel_fields>
-            </psmi_register_settings>
-            <psmi_register_settings>
-              <padsel_fields>
-                <padsel0 index="0">0</padsel0>
-                <padsel1 index="0">0</padsel1>
-                <padsel2 index="0">0</padsel2>
-                <padsel3 index="0">0</padsel3>
-              </padsel_fields>
-            </psmi_register_settings>
-            <psmi_register_settings>
-              <padsel_fields>
-                <padsel0 index="0">0</padsel0>
-                <padsel1 index="0">0</padsel1>
-                <padsel2 index="0">0</padsel2>
-                <padsel3 index="0">0</padsel3>
-              </padsel_fields>
-            </psmi_register_settings>
+            <ps0 index="0">0</ps0>
+            <ps1 index="0">0</ps1>
+            <ps2 index="0">0</ps2>
+            <ps3 index="0">0</ps3>
+            <ps4 index="0">0</ps4>
+            <ps5 index="0">0</ps5>
+            <ps6 index="0">0</ps6>
+            <ps7 index="0">0</ps7>
+            <ps8 index="0">0</ps8>
+            <ps9 index="0">0</ps9>
+            <ps10 index="0">0</ps10>
+            <ps11 index="0">0</ps11>
+            <ps12 index="0">0</ps12>
+            <ps13 index="0">0</ps13>
+            <ps14 index="0">0</ps14>
+            <ps15 index="0">0</ps15>
+            <ps16 index="0">0</ps16>
+            <ps17 index="0">0</ps17>
+            <ps18 index="0">0</ps18>
+            <ps19 index="0">0</ps19>
+            <ps20 index="0">0</ps20>
+            <ps21 index="0">0</ps21>
+            <ps22 index="0">0</ps22>
+            <ps23 index="0">0</ps23>
+            <ps24 index="0">0</ps24>
+            <ps25 index="0">0</ps25>
+            <ps26 index="0">0</ps26>
+            <ps27 index="0">0</ps27>
+            <ps28 index="0">0</ps28>
+            <ps29 index="0">0</ps29>
+            <ps30 index="0">0</ps30>
+            <ps31 index="0">0</ps31>
           </alternate_inputs>
         </i_o_settings>
         <initialization_code>
