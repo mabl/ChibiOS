@@ -61,7 +61,7 @@ Program:
     - Priority masking vs global interrupts disable.
     - Segmented interrupts.
 
-5) Synchronization primitives
+5) 16:00 Synchronization primitives
   a) Event flags.
   b) Semaphores and Mutexes, what is the difference?
   c) Mailboxes.
@@ -69,3 +69,5 @@ Program:
     - Priority Ceiling.
     - Priority Inheritance.
     - Designing out resource conflicts.
+
+6) Q/A.
