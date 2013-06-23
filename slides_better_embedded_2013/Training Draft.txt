@@ -1,0 +1,55 @@
+Available 3 hours
+14:00-17:00
+
+Marked with [*] means that a slide is required.
+
+Program:
+
+1) 14:00 - People Introduction (15 minutes).
+  a) Introduction about myself (2 minutes).
+    - Mention ST.
+    - Mention ChibiOS/RT.
+  b) Attending people introduction (remaining time).
+  c) Rules: feel free to interrupt me and ask questions.
+
+2) 14:15 - Introduction to RTOS technology.
+  a) Definition of a Realtime System.
+    - Non realtime.
+    - Soft realtime.
+    - Hard realtime.
+    - Boundary between hard realtime and soft realtime, time scale.
+  b) The importance of the worst case.
+  c) What an RTOS is not.
+  d) What is an RTOS.
+    - Defining the requirements for an RTOS.
+
+3) 14:45 Approaches to realtime.
+  a) Event Driven or superloop.
+    - Single stack.
+    - Easy to program.
+    - The worst code path is also the worst case, always.
+  b) State machines.
+    - Single stack.
+    - Long tasks can be split in several arcs by increasing the
+      number of states.
+    - Hard to program.
+    - It becomes harder as the number of states increases.
+  c) Non-preemptive multi tasking.
+    - Multiple stacks.
+    - The execution time of the longer task is also the worst case,
+      ultimately not better than the superloop.
+  d) Preemptive multi tasking.
+    - Multiple stacks.
+    - There is no intrinsic restriction in the tasks duration.
+    - The response time is only dictated by the task duration of
+      tasks at higher priority.
+    - Tasks at lower priority have no impact on tasks at higher priority.
+
+4) xx:xx Tasks and Interrupts
+  a) Are tasks and interrupts really different? not as far response time
+     estimation is concerned.
+  b) Importance of interrupts architecture:
+    - Single interrupt source.
+    - Multiple sources with priority.
+    - Priority masking vs global interrupts disable.
+    - Segmented interrupts.
