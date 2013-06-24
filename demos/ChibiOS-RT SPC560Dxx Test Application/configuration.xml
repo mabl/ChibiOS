@@ -412,7 +412,7 @@
           <use_messages>true</use_messages>
           <use_messages_priority>false</use_messages_priority>
           <use_mailboxes>true</use_mailboxes>
-          <use_queues>false</use_queues>
+          <use_queues>true</use_queues>
           <use_memory_core_allocator>true</use_memory_core_allocator>
           <use_heap_allocator>true</use_heap_allocator>
           <use_heap_allocator>true</use_heap_allocator>
