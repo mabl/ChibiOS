@@ -153,3 +153,6 @@ cp ${chibios}/os/hal/platforms/STM32/USARTv1/*.h        ./STM32F4xx/ChibiOS-RT_S
 cp ${chibios}/os/hal/platforms/STM32/USARTv1/*.c        ./STM32F4xx/ChibiOS-RT_STM32F4xx_HAL_Platform_Component/component/lib/src/
 cp ${chibios}/os/hal/platforms/STM32F4xx/*.h            ./STM32F4xx/ChibiOS-RT_STM32F4xx_HAL_Platform_Component/component/lib/include/
 cp ${chibios}/os/hal/platforms/STM32F4xx/*.c            ./STM32F4xx/ChibiOS-RT_STM32F4xx_HAL_Platform_Component/component/lib/src/
+
+echo ""
+echo "Done!"
