@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="org.chibios.spc5.components.kernel.port.gcc.spc560dxx"
+         name="ChibiOS-RT SPC560Dxx Kernel Port Component"
+         point="com.st.tools.spc5.extension.v1">
+      <component
+            hidden="true"
+            icon="rsc/chibios.ico"
+            isPlatform="false">
+            <description>
+                Kernel GCC port layer for Power Architecture core on the SPC560Dxx.
+            </description>
+            <categories>
+               <category
+                     id="ChibiOS-RT/Platforms/SPC560Dxx">
+               </category>
+            </categories>
+            <configuration>
+               <description>
+                  Power Architecture GCC port options and settings.
+               </description>
+               <image
+                     align="left"
+                     file="rsc/chibios48x48.png">
+                  <text>
+                     ChibiOS/RT is GPL3-licensed free software. A special exception has been added to the GPL3 in order to allow inclusion in closed source applications, details are in the exception.txt document.
+                  </text>
+               </image>
+            </configuration>
+            <exportedFeatures>
+               <exportedFeature
+                     brief="Generic ChibiOS/RT port interface."
+                     exclusive="false"
+                     id="org.chibios.spc5.features.kernel.port">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.kernel.port.gcc">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.kernel.port.gcc.ppc">
+               </exportedFeature>
+               <exportedFeature
+                     exclusive="false"
+                     id="org.chibios.spc5.features.kernel.port.gcc.ppc.spc560dxx">
+               </exportedFeature>
+            </exportedFeatures>
+            <requiredFeatures>
+               <requiredFeature
+                     id="com.st.tools.spc5.features.platform.spc560dxx">
+               </requiredFeature>
+            </requiredFeatures>
+      </component>
+   </extension>
+
+</plugin>

@@ -1,8 +1,8 @@
 #!/bin/bash
 #chibios=/cygdrive/d/Progetti/ChibiOS-RT
 #chibios=/cygdrive/d/Progetti/ChibiOS-RT-stable-2.6.x
-chibios=/cygdrive/c/Projects/ChibiOS-RT-stable-2.6.x
 #chibios=../../chibios
+chibios=../../chibios-stable-2.6.x
 #do_templates=yes
 
 #============================================================================#
@@ -53,6 +53,18 @@ cp ${chibios}/os/ports/GCC/PPC/SPC560BCxx/*.h           ./SPC560BCxx/ChibiOS-RT_
 cp ${chibios}/os/ports/GCC/PPC/*.c                      ./SPC560BCxx/ChibiOS-RT_SPC560BCxx_Kernel_Port_Component/component/lib/src/
 cp ${chibios}/os/ports/GCC/PPC/ivor.s                   ./SPC560BCxx/ChibiOS-RT_SPC560BCxx_Kernel_Port_Component/component/lib/src/
 cp ${chibios}/os/ports/GCC/PPC/SPC560BCxx/vectors.s     ./SPC560BCxx/ChibiOS-RT_SPC560BCxx_Kernel_Port_Component/component/lib/src/
+
+#============================================================================#
+# SPC560Dxx Components.                                                      #
+#============================================================================#
+
+# SPC560Dxx Kernel Port.
+echo "SPC560Dxx Kernel Port"
+cp ${chibios}/os/ports/GCC/PPC/*.h                      ./SPC560Dxx/ChibiOS-RT_SPC560Dxx_Kernel_Port_Component/component/lib/include/
+cp ${chibios}/os/ports/GCC/PPC/SPC560Dxx/*.h            ./SPC560Dxx/ChibiOS-RT_SPC560Dxx_Kernel_Port_Component/component/lib/include/
+cp ${chibios}/os/ports/GCC/PPC/*.c                      ./SPC560Dxx/ChibiOS-RT_SPC560Dxx_Kernel_Port_Component/component/lib/src/
+cp ${chibios}/os/ports/GCC/PPC/ivor.s                   ./SPC560Dxx/ChibiOS-RT_SPC560Dxx_Kernel_Port_Component/component/lib/src/
+cp ${chibios}/os/ports/GCC/PPC/SPC560Dxx/vectors.s      ./SPC560Dxx/ChibiOS-RT_SPC560Dxx_Kernel_Port_Component/component/lib/src/
 
 #============================================================================#
 # SPC560Pxx Components.                                                      #
