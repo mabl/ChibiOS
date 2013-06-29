@@ -115,8 +115,7 @@ void nilSysTimerHandlerI(void) {
           tr->u1.semp->cnt++;
         else if (NIL_THD_IS_SUSP(tr))
           tr->u1.trp = NULL;
-        tr->u1.msg = NIL_MSG_TMO;
-        nilSchReadyI(tr);
+        nilSchReadyI(tr, NIL_MSG_TMO);
       }
     }
     /* Lock released in order to give a preemption chance on those
@@ -131,10 +130,11 @@ void nilSysTimerHandlerI(void) {
  * @brief   Makes the specified thread ready for execution.
  *
  * @param[in] tr        reference to the @p thread_t object
+ * @param[in] msg       the wakeup message
  *
  * @return              The same reference passed as parameter.
  */
-thread_ref_t nilSchReadyI(thread_ref_t tr) {
+thread_ref_t nilSchReadyI(thread_ref_t tr, msg_t msg) {
 
   nilDbgAssert((tr >= nil.threads) &&
                (tr < &nil.threads[NIL_CFG_NUM_THREADS]),
@@ -144,6 +144,7 @@ thread_ref_t nilSchReadyI(thread_ref_t tr) {
   nilDbgAssert(nil.next <= nil.current,
                "nilSchReadyI(), #3", "priority ordering");
 
+  tr->u1.msg = msg;
   tr->state = NIL_THD_READY;
   tr->timeout = 0;
   if (tr < nil.next)
@@ -250,8 +251,7 @@ void nilThdResumeI(thread_ref_t *trp, msg_t msg) {
     nilDbgAssert(NIL_THD_IS_SUSP(tr), "nilThdResumeI(), #1", "not suspended");
 
     *trp = NULL;
-    tr->u1.msg = msg;
-    nilSchReadyI(tr);
+    nilSchReadyI(tr, msg);
   }
 }
 
@@ -408,8 +408,7 @@ void nilSemSignalI(semaphore_t *sp) {
         nilDbgAssert(NIL_THD_IS_WTSEM(tr),
                      "nilSemSignalI(), #1", "not waiting");
 
-        tr->u1.msg = NIL_MSG_OK;
-        nilSchReadyI(tr);
+        nilSchReadyI(tr, NIL_MSG_OK);
         return;
       }
       tr++;
@@ -472,8 +471,7 @@ void nilSemResetI(semaphore_t *sp, cnt_t n) {
                    "nilSemResetI(), #1", "not waiting");
 
       cnt++;
-      tr->u1.msg = NIL_MSG_RST;
-      nilSchReadyI(tr);
+      nilSchReadyI(tr, NIL_MSG_RST);
     }
     tr++;
   }
