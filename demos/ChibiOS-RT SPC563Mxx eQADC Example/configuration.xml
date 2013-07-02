@@ -205,7 +205,8 @@
           </pins_list>
         </i_o_settings>
         <initialization_code>
-          <early_initialization_code />
+          <pre_clock_initialization_code />
+          <post_clock_initialization_code />
           <late_initialization_code />
           <board_initialization_code />
         </initialization_code>

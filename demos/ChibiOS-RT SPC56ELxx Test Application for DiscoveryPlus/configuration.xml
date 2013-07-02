@@ -212,9 +212,10 @@
           </alternate_inputs>
         </i_o_settings>
         <initialization_code>
-          <early_initialization_code><![CDATA[/* Early Initialization Code.*/]]></early_initialization_code>
-          <late_initialization_code><![CDATA[/* Late Initialization Code.*/]]></late_initialization_code>
-          <board_initialization_code><![CDATA[/* Board Initialization Code.*/]]></board_initialization_code>
+          <pre_clock_initialization_code />
+          <post_clock_initialization_code />
+          <late_initialization_code />
+          <board_initialization_code />
         </initialization_code>
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.hal.platform.spc56elxx">
