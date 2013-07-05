@@ -131,4 +131,89 @@ void osalThreadResumeS(thread_reference_t *trp, msg_t msg) {
   }
 }
 
+/**
+ * @brief   Enqueues the caller thread.
+ * @details The caller thread is enqueued and put to sleep until it is
+ *          dequeued or the specified timeouts expires.
+ *
+ * @param[in] tqp       pointer to the threads queue object
+ * @param[in] time      the timeout in system ticks, the special values are
+ *                      handled as follow:
+ *                      - @a TIME_INFINITE the thread enters an infinite sleep
+ *                        state.
+ *                      - @a TIME_IMMEDIATE the thread is not enqueued and
+ *                        the function returns @p MSG_TIMEOUT as if a timeout
+ *                        occurred.
+ *                      .
+ * @return              The message from @p osalQueueWakeupOneI() or
+ *                      @p osalQueueWakeupAllI() functions.
+ * @retval RDY_TIMEOUT  if the thread has not been dequeued within the
+ *                      specified timeout or if the function has been
+ *                      invoked with @p TIME_IMMEDIATE as timeout
+ *                      specification.
+ *
+ * @sclass
+ */
+msg_t osalQueueGoSleepTimeoutS(threads_queue_t *tqp, systime_t time) {
+
+  void wakeup(void *p) {
+    Thread *tp = (Thread *)p;
+
+    chSysUnlockFromIsr();
+    tp->p_u.rdymsg = RDY_TIMEOUT;
+    chSchReadyI(dequeue(tp));
+    chSysUnlockFromIsr();
+  }
+
+  if (TIME_IMMEDIATE == time)
+    return MSG_TIMEOUT;
+
+  queue_insert(currp, tqp);
+  if (TIME_INFINITE == time)
+    chSchGoSleepS(THD_STATE_SUSPENDED);
+  else {
+    VirtualTimer vt;
+
+    chVTSetI(&vt, time, wakeup, currp);
+    chSchGoSleepS(THD_STATE_SUSPENDED);
+    if (chVTIsArmedI(&vt))
+      chVTResetI(&vt);
+  }
+  return currp->p_u.rdymsg;
+}
+
+/**
+ * @brief   Dequeues and wakes up one thread from the queue, if any.
+ *
+ * @param[in] tqp       pointer to the threads queue object
+ * @param[in] msg       the message code
+ *
+ * @iclass
+ */
+void osalQueueWakeupOneI(threads_queue_t *tqp, msg_t msg) {
+
+  if (notempty(tqp)) {
+    Thread *tp = fifo_remove(tqp);
+    tp->p_u.rdymsg = msg;
+    chSchReadyI(tp);
+  }
+}
+
+/**
+ * @brief   Dequeues and wakes up all threads from the queue.
+ *
+ * @param[in] tqp       pointer to the threads queue object
+ * @param[in] msg       the message code
+ *
+ * @iclass
+ */
+void osalQueueWakeupAllI(threads_queue_t *tqp, msg_t msg) {
+
+  while (notempty(tqp)) {
+    Thread *tp = fifo_remove(tqp);
+    tp->p_u.rdymsg = msg;
+    chSchReadyI(tp);
+  }
+}
+
 /** @} */

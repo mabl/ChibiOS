@@ -132,8 +132,15 @@ typedef Semaphore mutex_t;
 typedef uint32_t mutex_t;
 #endif
 
+/**
+ * @brief   Type of a thread queue.
+ * @detail  A thread queue is a queue of sleeping threads, queued threads
+ *          can be dequeued one at time or all together.
+ */
+typedef ThreadsQueue threads_queue_t;
+
 /*===========================================================================*/
-/* Module macros and inline functions.                                       */
+/* Module macros.                                                            */
 /*===========================================================================*/
 
 /**
@@ -147,6 +154,7 @@ typedef uint32_t mutex_t;
  * @api
  */
 #define osalDbgAssert(c, msg, remark) chDbgAssert(c, msg, remark)
+
 /**
  * @brief   Function parameters check.
  * @note 	Mapped on ChibiOS/RT's own checks.
@@ -190,32 +198,92 @@ typedef uint32_t mutex_t;
 #define OSAL_IRQ_HANDLER(id) CH_IRQ_HANDLER(id)
 
 /**
+ * @brief   Delays the invoking thread for the specified number of seconds.
+ * @note    The specified time is rounded up to a value allowed by the real
+ *          system tick clock.
+ * @note    The maximum specifiable value is implementation dependent.
+ *
+ * @param[in] sec       time in seconds, must be different from zero
+ *
+ * @api
+ */
+#define osalThreadSleepSeconds(sec) chThdSleepSeconds(sec)
+
+/**
+ * @brief   Delays the invoking thread for the specified number of
+ *          milliseconds.
+ * @note    The specified time is rounded up to a value allowed by the real
+ *          system tick clock.
+ * @note    The maximum specifiable value is implementation dependent.
+ *
+ * @param[in] msec      time in milliseconds, must be different from zero
+ *
+ * @api
+ */
+#define osalThreadSleepMilliseconds(msec) chThdSleepMilliseconds(msec)
+
+/**
+ * @brief   Delays the invoking thread for the specified number of
+ *          microseconds.
+ * @note    The specified time is rounded up to a value allowed by the real
+ *          system tick clock.
+ * @note    The maximum specifiable value is implementation dependent.
+ *
+ * @param[in] usec      time in microseconds, must be different from zero
+ *
+ * @api
+ */
+#define osalThreadSleepMicroseconds(usec) chThdSleepMicroseconds(usec)
+
+/*===========================================================================*/
+/* External declarations.                                                    */
+/*===========================================================================*/
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+  void osalInit(void);
+  msg_t osalThreadSuspendS(thread_reference_t *trp);
+  void osalThreadResumeI(thread_reference_t *trp, msg_t msg);
+  void osalThreadResumeS(thread_reference_t *trp, msg_t msg);
+  msg_t osalQueueGoSleepTimeoutS(threads_queue_t *tqp, systime_t time);
+  void osalQueueWakeupOneI(threads_queue_t *tqp, msg_t msg);
+  void osalQueueWakeupAllI(threads_queue_t *tqp, msg_t msg);
+#ifdef __cplusplus
+}
+#endif
+
+/*===========================================================================*/
+/* Module inline functions.                                                  */
+/*===========================================================================*/
+
+/**
  * @brief   Globally enables interrupts.
- * @note 	Mapped on ChibiOS/RT's own ISR primitives.
+ * @note    Mapped on ChibiOS/RT's own ISR primitives.
  *
  * @special
  */
 static inline
 void osalIsrEnable(void) {
 
-	chSysEnable();
+    chSysEnable();
 }
 
 /**
  * @brief   Globally disables interrupts.
- * @note 	Mapped on ChibiOS/RT's own ISR primitives.
+ * @note    Mapped on ChibiOS/RT's own ISR primitives.
  *
  * @special
  */
 static inline
 void osalIsrDisable(void) {
 
-	chSysDisable();
+    chSysDisable();
 }
 
 /**
  * @brief   Waits for an interrupt to occur.
- * @note 	Mapped on ChibiOS/RT's own ISR primitives.
+ * @note    Mapped on ChibiOS/RT's own ISR primitives.
  *
  * @special
  */
@@ -288,7 +356,7 @@ void osalSysTimerHandlerI(void) {
 /**
  * @brief   Enters a critical zone from thread context.
  * @note    This function cannot be used for reentrant critical zones.
- * @note 	Mapped on ChibiOS/RT's own lock primitives.
+ * @note    Mapped on ChibiOS/RT's own lock primitives.
  *
  * @special
  */
@@ -301,7 +369,7 @@ void osalSysLock(void) {
 /**
  * @brief   Leaves a critical zone from thread context.
  * @note    This function cannot be used for reentrant critical zones.
- * @note 	Mapped on ChibiOS/RT's own lock primitives.
+ * @note    Mapped on ChibiOS/RT's own lock primitives.
  *
  * @special
  */
@@ -314,7 +382,7 @@ void osalSysUnlock(void) {
 /**
  * @brief   Enters a critical zone from ISR context.
  * @note    This function cannot be used for reentrant critical zones.
- * @note 	Mapped on ChibiOS/RT's own lock primitives.
+ * @note    Mapped on ChibiOS/RT's own lock primitives.
  *
  * @special
  */
@@ -327,7 +395,7 @@ void osalSysLockFromISR(void) {
 /**
  * @brief   Leaves a critical zone from ISR context.
  * @note    This function cannot be used for reentrant critical zones.
- * @note 	Mapped on ChibiOS/RT's own lock primitives.
+ * @note    Mapped on ChibiOS/RT's own lock primitives.
  *
  * @special
  */
@@ -339,7 +407,7 @@ void osalSysUnlockFromISR(void) {
 
 /**
  * @brief   Returns @p TRUE if the specified timer is armed.
- * @note 	Mapped on ChibiOS/RT's own virtual timers.
+ * @note    Mapped on ChibiOS/RT's own virtual timers.
  *
  * @param[out] vtp      the @p virtual_timer_t structure pointer
  *
@@ -460,7 +528,7 @@ bool osalVTIsSystemTimeWithin(systime_t start, systime_t end) {
  * @details Returns the number of system ticks since the @p osalInit()
  *          invocation.
  * @note    The counter can reach its maximum and then restart from zero.
- * @note 	Mapped on ChibiOS/RT's own virtual timers.
+ * @note    Mapped on ChibiOS/RT's own virtual timers.
  *
  * @return              The system time in ticks.
  *
@@ -489,44 +557,6 @@ void osalThreadSleep(systime_t time) {
 
   chThdSleepSeconds(time);
 }
-
-/**
- * @brief   Delays the invoking thread for the specified number of seconds.
- * @note    The specified time is rounded up to a value allowed by the real
- *          system tick clock.
- * @note    The maximum specifiable value is implementation dependent.
- *
- * @param[in] sec       time in seconds, must be different from zero
- *
- * @api
- */
-#define osalThreadSleepSeconds(sec) chThdSleepSeconds(sec)
-
-/**
- * @brief   Delays the invoking thread for the specified number of
- *          milliseconds.
- * @note    The specified time is rounded up to a value allowed by the real
- *          system tick clock.
- * @note    The maximum specifiable value is implementation dependent.
- *
- * @param[in] msec      time in milliseconds, must be different from zero
- *
- * @api
- */
-#define osalThreadSleepMilliseconds(msec) chThdSleepMilliseconds(msec)
-
-/**
- * @brief   Delays the invoking thread for the specified number of
- *          microseconds.
- * @note    The specified time is rounded up to a value allowed by the real
- *          system tick clock.
- * @note    The maximum specifiable value is implementation dependent.
- *
- * @param[in] usec      time in microseconds, must be different from zero
- *
- * @api
- */
-#define osalThreadSleepMicroseconds(usec) chThdSleepMicroseconds(usec)
 
 /**
  * @brief   Checks if a reschedule is required and performs it.
@@ -651,20 +681,18 @@ void osalMutexUnlock(mutex_t *mp) {
 #endif
 }
 
-/*===========================================================================*/
-/* External declarations.                                                    */
-/*===========================================================================*/
+/**
+ * @brief   Initializes a threads queue object.
+ *
+ * @param[out] tqp      pointer to the threads queue object
+ *
+ * @init
+ */
+static inline
+void osalQueueInit(threads_queue_t *tqp) {
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-  void osalInit(void);
-  msg_t osalThreadSuspendS(thread_reference_t *trp);
-  void osalThreadResumeI(thread_reference_t *trp, msg_t msg);
-  void osalThreadResumeS(thread_reference_t *trp, msg_t msg);
-#ifdef __cplusplus
+  queue_init(tqp);
 }
-#endif
 
 #endif /* _OSAL_H_ */
 
