@@ -15,7 +15,7 @@
 */
 
 /**
- * @file    SPC5xx/edma.c
+ * @file    SPC5xx/spc5_edma.c
  * @brief   EDMA helper driver code.
  *
  * @addtogroup SPC5xx_EDMA
@@ -30,6 +30,15 @@
 /*===========================================================================*/
 /* Driver local definitions.                                                 */
 /*===========================================================================*/
+
+static const uint8_t g0[16] = {SPC5_EDMA_GROUP0_PRIORITIES};
+#if (SPC5_EDMA_NCHANNELS > 16) || defined(__DOXYGEN__)
+static const uint8_t g1[16] = {SPC5_EDMA_GROUP1_PRIORITIES};
+#endif
+#if (SPC5_EDMA_NCHANNELS > 32) || defined(__DOXYGEN__)
+static const uint8_t g2[16] = {SPC5_EDMA_GROUP2_PRIORITIES};
+static const uint8_t g3[16] = {SPC5_EDMA_GROUP3_PRIORITIES};
+#endif
 
 /*===========================================================================*/
 /* Driver exported variables.                                                */
@@ -1290,54 +1299,74 @@ void edmaInit(void) {
   SPC5_EDMA.EEIRL.R = 0x00000000;
   SPC5_EDMA.IRQRL.R = 0xFFFFFFFF;
   SPC5_EDMA.ERL.R =   0xFFFFFFFF;
-  for (i = 0; i < SPC5_EDMA_NCHANNELS; i++)
-    SPC5_EDMA.CPR[i].R = 0;
+#if SPC5_EDMA_NCHANNELS > 32
+  SPC5_EDMA.ERQRH.R = 0x00000000;
+  SPC5_EDMA.EEIRH.R = 0x00000000;
+  SPC5_EDMA.IRQRH.R = 0xFFFFFFFF;
+  SPC5_EDMA.ERH.R =   0xFFFFFFFF;
+#endif
+  /* Initializing all the channels with a different priority withing the
+     channels group.*/
+  for (i = 0; i < 16; i++) {
+    SPC5_EDMA.CPR[i].R = g0[i];
+#if SPC5_EDMA_NCHANNELS > 16
+    SPC5_EDMA.CPR[i + 16].R = g1[i];
+#endif
+#if SPC5_EDMA_NCHANNELS > 32
+    SPC5_EDMA.CPR[i + 32].R = g2[i];
+    SPC5_EDMA.CPR[i + 48].R = g3[i];
+#endif
+  }
 
   /* Error interrupt source.*/
   INTC.PSR[10].R = SPC5_EDMA_ERROR_IRQ_PRIO;
+
+#if defined(SPC5_EDMA_MUX_PCTL)
+  /* DMA MUX PCTL setup, only if required.*/
+  halSPCSetPeripheralClockMode(SPC5_EDMA_MUX_PCTL, SPC5_EDMA_MUX_START_PCTL);
+#endif
 }
 
 /**
  * @brief   EDMA channel allocation.
  *
  * @param[in] ccfg      channel configuration
- * @return              The channel TCD pointer.
+ * @return              The channel number.
  * @retval EDMA_ERROR   if the channel cannot be allocated.
  *
  * @special
  */
 edma_channel_t edmaChannelAllocate(const edma_channel_config_t *ccfg) {
-  edma_channel_t channel;
 
-  chDbgCheck((ccfg != NULL) && ((ccfg->dma_prio & 15) < 16) &&
-             (ccfg->dma_irq_prio < 16),
+  chDbgCheck((ccfg != NULL) && (ccfg->dma_irq_prio < 16),
              "edmaChannelAllocate");
 
+  /* If the channel is already taken then an error is returned.*/
+  if (channels[ccfg->dma_channel] != NULL)
+    return EDMA_ERROR;                          /* Already taken.           */
+
 #if SPC5_EDMA_HAS_MUX
-  /* TODO: MUX handling.*/
-  channel = 0;
-#else /* !SPC5_EDMA_HAS_MUX */
-  channel = (edma_channel_t)ccfg->dma_periph;
-  if (channels[channel] != NULL)
-    return EDMA_ERROR;  /* Already taken.*/
+  /* Programming the MUX.*/
+  SPC5_DMAMUX.CHCONFIG[ccfg->dma_channel].R = (uint8_t)(0x80 |
+                                                        ccfg->dma_periph);
 #endif /* !SPC5_EDMA_HAS_MUX */
 
   /* Associating the configuration to the channel.*/
-  channels[channel] = ccfg;
+  channels[ccfg->dma_channel] = ccfg;
 
   /* If an error callback is defined then the error interrupt source is
      enabled for the channel.*/
   if (ccfg->dma_error_func != NULL)
-    SPC5_EDMA.SEEIR.R = channel;
+    SPC5_EDMA.SEEIR.R = (uint32_t)ccfg->dma_channel;
 
   /* Setting up IRQ priority for the selected channel.*/
-  INTC.PSR[11 + channel].R = ccfg->dma_irq_prio;
+  INTC.PSR[11 + ccfg->dma_channel].R = ccfg->dma_irq_prio;
 
-  return channel;
+  return ccfg->dma_channel;
 }
 
 /**
- * @brief   EDMA channel allocation.
+ * @brief   EDMA channel release.
  *
  * @param[in] channel   the channel number
  *
@@ -1345,7 +1374,7 @@ edma_channel_t edmaChannelAllocate(const edma_channel_config_t *ccfg) {
  */
 void edmaChannelRelease(edma_channel_t channel) {
 
-  chDbgCheck((channel < 0) && (channel >= SPC5_EDMA_NCHANNELS),
+  chDbgCheck((channel >= 0) && (channel < SPC5_EDMA_NCHANNELS),
              "edmaChannelAllocate");
   chDbgAssert(channels[channel] != NULL,
               "edmaChannelRelease(), #1",
@@ -1354,6 +1383,11 @@ void edmaChannelRelease(edma_channel_t channel) {
   /* Enforcing a stop.*/
   edmaChannelStop(channel);
 
+#if SPC5_EDMA_HAS_MUX
+  /* Disabling the MUX slot.*/
+  SPC5_DMAMUX.CHCONFIG[channel].R = 0;
+#endif
+
   /* Clearing ISR sources for the channel.*/
   SPC5_EDMA.CIRQR.R = channel;
   SPC5_EDMA.CEEIR.R = channel;
@@ -1361,48 +1395,6 @@ void edmaChannelRelease(edma_channel_t channel) {
 
   /* The channels is flagged as available.*/
   channels[channel] = NULL;
-}
-
-/**
- * @brief   EDMA channel setup.
- *
- * @param[in] channel   eDMA channel number
- * @param[in] src       source address
- * @param[in] dst       destination address
- * @param[in] soff      source address offset
- * @param[in] doff      destination address offset
- * @param[in] ssize     source transfer size
- * @param[in] dsize     destination transfer size
- * @param[in] nbytes    minor loop count
- * @param[in] iter      major loop count
- * @param[in] dlast_sga Last Destination Address Adjustment or
- *                      Scatter Gather Address
- * @param[in] slast     last source address adjustment
- * @param[in] mode      LSW of TCD register 7
- */
-void edmaChannelSetupx(edma_channel_t channel,
-                      void *src,
-                      void *dst,
-                      uint32_t soff,
-                      uint32_t doff,
-                      uint32_t ssize,
-                      uint32_t dsize,
-                      uint32_t nbytes,
-                      uint32_t iter,
-                      uint32_t slast,
-                      uint32_t dlast,
-                      uint32_t mode) {
-
-  edma_tcd_t *tcdp = edmaGetTCD(channel);
-
-  tcdp->word[0] = (uint32_t)src;
-  tcdp->word[1] = (ssize << 24) | (dsize << 16) | soff;
-  tcdp->word[2] = nbytes;
-  tcdp->word[3] = slast;
-  tcdp->word[0] = (uint32_t)dst;
-  tcdp->word[5] = (iter << 16) | doff;
-  tcdp->word[6] = dlast;
-  tcdp->word[7] = (iter << 16) | mode;
 }
 
 #endif /* SPC5_HAS_EDMA */

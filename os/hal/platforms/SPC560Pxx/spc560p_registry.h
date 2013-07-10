@@ -26,6 +26,32 @@
 #define _SPC560P_REGISTRY_H_
 
 /*===========================================================================*/
+/* Derived constants and error checks.                                       */
+/*===========================================================================*/
+
+#if defined(_SPC560P34L1_) || defined(_SPC560P34L3_)
+#define _SPC560P34_
+#define _SPC560PXX_SMALL_
+#elif defined(_SPC560P40L1_) || defined(_SPC560P40L3_)
+#define _SPC560P40_
+#define _SPC560PXX_SMALL_
+#elif defined(_SPC560P44L3_) || defined(_SPC560P44L5_)
+#define _SPC560P44_
+#define _SPC560PXX_MEDIUM_
+#elif defined(_SPC560P50L3_) || defined(_SPC560P50L5_)
+#define _SPC560P50_
+#define _SPC560PXX_MEDIUM_
+#elif defined(_SPC560P54L5_) || defined(_SPC56AP54L3_) || defined(_SPC56AP54L5_)
+#define _SPC560P54_
+#define _SPC560PXX_LARGE_
+#elif defined(_SPC560P60L5_) || defined(_SPC56AP60L3_) || defined(_SPC56AP60L5_)
+#define _SPC560P60_
+#define _SPC560PXX_LARGE_
+#else
+#error "SPC56xPxx platform not defined"
+#endif
+
+/*===========================================================================*/
 /* Platform capabilities.                                                    */
 /*===========================================================================*/
 
@@ -33,6 +59,100 @@
  * @name    SPC560Pxx capabilities
  * @{
  */
+/* Clock attributes.*/
+#if defined(_SPC560PXX_SMALL_)
+#define SPC5_HAS_FMPLL1                     FALSE
+#define SPC5_HAS_CLOCKOUT                   TRUE
+#define SPC5_HAS_AC0                        FALSE
+#define SPC5_HAS_AC1                        FALSE
+#define SPC5_HAS_AC2                        FALSE
+#define SPC5_HAS_AC3                        FALSE
+
+#elif defined(_SPC560PXX_MEDIUM_)
+#define SPC5_HAS_FMPLL1                     TRUE
+#define SPC5_HAS_CLOCKOUT                   TRUE
+#define SPC5_HAS_AC0                        TRUE
+#define SPC5_HAS_AC1                        TRUE
+#define SPC5_HAS_AC2                        TRUE
+#define SPC5_HAS_AC3                        TRUE
+
+#else /* defined(_SPC560PXX_LARGE_) */
+#define SPC5_HAS_FMPLL1                     FALSE
+#define SPC5_HAS_CLOCKOUT                   TRUE
+#define SPC5_HAS_AC0                        FALSE
+#define SPC5_HAS_AC1                        FALSE
+#define SPC5_HAS_AC2                        FALSE
+#define SPC5_HAS_AC3                        TRUE
+#endif
+
+/* DSPI attribures.*/
+#define SPC5_HAS_DSPI0                      TRUE
+#define SPC5_HAS_DSPI1                      TRUE
+#define SPC5_HAS_DSPI2                      TRUE
+#define SPC5_DSPI_FIFO_DEPTH                5
+#define SPC5_DSPI0_PCTL                     4
+#define SPC5_DSPI1_PCTL                     5
+#define SPC5_DSPI2_PCTL                     6
+#define SPC5_DSPI0_TX1_DMA_DEV_ID           1
+#define SPC5_DSPI0_TX2_DMA_DEV_ID           0
+#define SPC5_DSPI0_RX_DMA_DEV_ID            2
+#define SPC5_DSPI1_TX1_DMA_DEV_ID           3
+#define SPC5_DSPI1_TX2_DMA_DEV_ID           0
+#define SPC5_DSPI1_RX_DMA_DEV_ID            4
+#define SPC5_DSPI2_TX1_DMA_DEV_ID           5
+#define SPC5_DSPI2_TX2_DMA_DEV_ID           0
+#define SPC5_DSPI2_RX_DMA_DEV_ID            6
+#define SPC5_DSPI0_TFFF_HANDLER             vector76
+#define SPC5_DSPI0_TFFF_NUMBER              76
+#define SPC5_DSPI1_TFFF_HANDLER             vector96
+#define SPC5_DSPI1_TFFF_NUMBER              96
+#define SPC5_DSPI2_TFFF_HANDLER             vector116
+#define SPC5_DSPI2_TFFF_NUMBER              116
+#define SPC5_DSPI0_ENABLE_CLOCK()                                           \
+  halSPCSetPeripheralClockMode(SPC5_DSPI0_PCTL, SPC5_SPI_DSPI0_START_PCTL)
+#define SPC5_DSPI0_DISABLE_CLOCK()                                          \
+  halSPCSetPeripheralClockMode(SPC5_DSPI0_PCTL, SPC5_SPI_DSPI0_STOP_PCTL)
+#define SPC5_DSPI1_ENABLE_CLOCK()                                           \
+  halSPCSetPeripheralClockMode(SPC5_DSPI1_PCTL, SPC5_SPI_DSPI1_START_PCTL)
+#define SPC5_DSPI1_DISABLE_CLOCK()                                          \
+  halSPCSetPeripheralClockMode(SPC5_DSPI1_PCTL, SPC5_SPI_DSPI1_STOP_PCTL)
+#define SPC5_DSPI2_ENABLE_CLOCK()                                           \
+  halSPCSetPeripheralClockMode(SPC5_DSPI2_PCTL, SPC5_SPI_DSPI2_START_PCTL)
+#define SPC5_DSPI2_DISABLE_CLOCK()                                          \
+  halSPCSetPeripheralClockMode(SPC5_DSPI2_PCTL, SPC5_SPI_DSPI2_STOP_PCTL)
+
+#if defined(_SPC560PXX_MEDIUM_) || defined(_SPC560PXX_LARGE_)
+#define SPC5_HAS_DSPI3                      TRUE
+#define SPC5_DSPI3_PCTL                     7
+#define SPC5_DSPI3_TX1_DMA_DEV_ID           7
+#define SPC5_DSPI3_TX2_DMA_DEV_ID           0
+#define SPC5_DSPI3_RX_DMA_DEV_ID            8
+#define SPC5_DSPI3_TFFF_HANDLER             vector219
+#define SPC5_DSPI3_TFFF_NUMBER              219
+#define SPC5_DSPI3_ENABLE_CLOCK()                                           \
+  halSPCSetPeripheralClockMode(SPC5_DSPI3_PCTL, SPC5_SPI_DSPI3_START_PCTL)
+#define SPC5_DSPI3_DISABLE_CLOCK()                                          \
+  halSPCSetPeripheralClockMode(SPC5_DSPI3_PCTL, SPC5_SPI_DSPI3_STOP_PCTL)
+#else
+#define SPC5_HAS_DSPI3                      FALSE
+#endif
+
+#if defined(_SPC560PXX_LARGE_)
+#define SPC5_HAS_DSPI4                      TRUE
+#define SPC5_DSPI4_PCTL                     8
+#define SPC5_DSPI4_TX1_DMA_DEV_ID           15
+#define SPC5_DSPI4_TX2_DMA_DEV_ID           0
+#define SPC5_DSPI4_RX_DMA_DEV_ID            21
+#define SPC5_DSPI4_TFFF_HANDLER             vector258
+#define SPC5_DSPI4_TFFF_NUMBER              258
+#define SPC5_DSPI4_ENABLE_CLOCK()                                           \
+  halSPCSetPeripheralClockMode(SPC5_DSPI4_PCTL, SPC5_SPI_DSPI4_START_PCTL)
+#define SPC5_DSPI4_DISABLE_CLOCK()                                          \
+  halSPCSetPeripheralClockMode(SPC5_DSPI0_PCTL, SPC5_SPI_DSPI4_STOP_PCTL)
+#else
+#define SPC5_HAS_DSPI4                      FALSE
+#endif
+
 /* eDMA attributes.*/
 #define SPC5_HAS_EDMA                       TRUE
 #define SPC5_EDMA_NCHANNELS                 16
@@ -66,10 +186,15 @@
 /* SIUL attributes.*/
 #define SPC5_HAS_SIUL                       TRUE
 #define SPC5_SIUL_NUM_PORTS                 8
+#if defined(_SPC560PXX_SMALL_)
+#define SPC5_SIUL_NUM_PCRS                  72
+#else
 #define SPC5_SIUL_NUM_PCRS                  108
+#endif
 #define SPC5_SIUL_NUM_PADSELS               36
 
 /* FlexPWM attributes.*/
+#if defined(_SPC560PXX_SMALL_) || defined(_SPC560PXX_MEDIUM_)
 #define SPC5_HAS_FLEXPWM0                   TRUE
 #define SPC5_FLEXPWM0_PCTL                  41
 #define SPC5_FLEXPWM0_RF0_HANDLER           vector179
@@ -101,6 +226,9 @@
 #define SPC5_FLEXPWM0_FFLAG_NUMBER          191
 #define SPC5_FLEXPWM0_REF_NUMBER            192
 #define SPC5_FLEXPWM0_CLK                   SPC5_MCONTROL_CLK
+#else /* defined(_SPC560PXX_LARGE_) */
+#define SPC5_HAS_FLEXPWM0                   FALSE
+#endif /* defined(_SPC560PXX_LARGE_) */
 
 #define SPC5_HAS_FLEXPWM1                   FALSE
 
@@ -125,6 +253,7 @@
 #define SPC5_ETIMER0_RCF_NUMBER             167
 #define SPC5_ETIMER0_CLK                    SPC5_MCONTROL_CLK
 
+#if defined(_SPC560PXX_MEDIUM_) || defined(_SPC560PXX_LARGE_)
 #define SPC5_HAS_ETIMER1                    TRUE
 #define SPC5_ETIMER1_PCTL                   39
 #define SPC5_ETIMER1_TC0IR_HANDLER          vector168
@@ -143,7 +272,36 @@
 #define SPC5_ETIMER1_RCF_NUMBER             178
 #define SPC5_ETIMER1_CLK                    SPC5_MCONTROL_CLK
 
+#else /* !(defined(_SPC560PXX_MEDIUM_) || defined(_SPC560PXX_LARGE_)) */
+#define SPC5_HAS_ETIMER1                    FALSE
+#endif /* !(defined(_SPC560PXX_MEDIUM_) || defined(_SPC560PXX_LARGE_)) */
+
 #define SPC5_HAS_ETIMER2                    FALSE
+
+/* FlexCAN attributes.*/
+#define SPC5_HAS_FLEXCAN0                                   TRUE
+#define SPC5_FLEXCAN0_PCTL                                  16
+#define SPC5_FLEXCAN0_MB                                    32
+#define SPC5_FLEXCAN0_FLEXCAN_ESR_ERR_INT_HANDLER           vector65
+#define SPC5_FLEXCAN0_FLEXCAN_ESR_BOFF_HANDLER              vector66
+#define SPC5_FLEXCAN0_FLEXCAN_ESR_WAK_HANDLER               vector67
+#define SPC5_FLEXCAN0_FLEXCAN_BUF_00_03_HANDLER             vector68
+#define SPC5_FLEXCAN0_FLEXCAN_BUF_04_07_HANDLER             vector69
+#define SPC5_FLEXCAN0_FLEXCAN_BUF_08_11_HANDLER             vector70
+#define SPC5_FLEXCAN0_FLEXCAN_BUF_12_15_HANDLER             vector71
+#define SPC5_FLEXCAN0_FLEXCAN_BUF_16_31_HANDLER             vector72
+#define SPC5_FLEXCAN0_FLEXCAN_ESR_ERR_INT_NUMBER            65
+#define SPC5_FLEXCAN0_FLEXCAN_ESR_BOFF_NUMBER               66
+#define SPC5_FLEXCAN0_FLEXCAN_ESR_WAK_NUMBER                67
+#define SPC5_FLEXCAN0_FLEXCAN_BUF_00_03_NUMBER              68
+#define SPC5_FLEXCAN0_FLEXCAN_BUF_04_07_NUMBER              69
+#define SPC5_FLEXCAN0_FLEXCAN_BUF_08_11_NUMBER              70
+#define SPC5_FLEXCAN0_FLEXCAN_BUF_12_15_NUMBER              71
+#define SPC5_FLEXCAN0_FLEXCAN_BUF_16_31_NUMBER              72
+#define SPC5_FLEXCAN0_ENABLE_CLOCK()                                        \
+  halSPCSetPeripheralClockMode(SPC5_FLEXCAN0_PCTL, SPC5_CAN_FLEXCAN0_START_PCTL)
+#define SPC5_FLEXCAN0_DISABLE_CLOCK()                                       \
+  halSPCSetPeripheralClockMode(SPC5_FLEXCAN0_PCTL, SPC5_CAN_FLEXCAN0_STOP_PCTL)
 /** @} */
 
 #endif /* _SPC560P_REGISTRY_H_ */

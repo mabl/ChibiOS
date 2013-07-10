@@ -88,7 +88,30 @@
 *** Releases                                                              ***
 *****************************************************************************
 
+*** 2.7.0 ***
+- FIX: Fixed missing casts in time-conversion macros (bug #418)(backported
+  to 2.6.1, 2.4.4 and 2.2.10).
+- FIX: Fixed STM32 Serial (v2) driver invalid CR registers size (bug #416)
+  (backported to 2.6.0).
+- FIX: Fixed MS2ST() and US2ST() macros error (bug #415)(backported to 2.6.0,
+  2.4.4, 2.2.10, NilRTOS).
+- NEW: Added DAC driver high level files and low level files templates.
+- NEW: Added support of UART4 and UART5 (STM32F4x and STM32F2x platforms)
+  (feature request #28).
+- NEW: SPI driver for SPC560Pxx, SPC563Mxx, SPC564Axx, SPC56ELAxx, SPC560Dxx.
+- NEW: Support for SPC560Dxx devices.
+- NEW: DMA-MUX support for SPC5xx devices.
+
 *** 2.5.2 ***
+- FIX: Fixed lwipthread.h should explicitly include lwip/opts.h (bug #414).
+- FIX: Fixed STM32_PLLI2SCLKOUT miscalculated (bug #413)(backported to 2.4.4).
+- FIX: Fixed wrong RTC vector name in STM32F1/F4/L1 EXT drivers (bug #412).
+- FIX: Fixed fill character error in chprintf (bug #411).
+- FIX: Fixed wrong STM32 USBv1 driver behavior (bug #410).
+- FIX: Fixed STM32 wrong peripherals reset procedure (bug #409)(backported
+  to 2.4.4).
+- FIX: Fixed STM32 SPIv2 polled exchange (bug #372).
+- FIX: Fixed wrong macro in PWM driver (bug #407)(backported to 2.4.4).
 - FIX: Fixed USB driver possible deadlock under certain configurations (bug
   #406)(backported to 2.4.4).
 - FIX: Fixed USB driver cannot be stopped (bug #405)(backported to 2.4.4).
@@ -152,7 +175,7 @@
 - NEW: Added new pwmIsChannelEnabledI() API to the PWM driver, implemented
   in the STM32 driver.
 - NEW: Added support for timers 6, 7, 9, 11, 12, 14 to the STM32 GPT driver.
-- NEW: Added support for timer 9 to the STM32 PWM driver.
+- NEW: Added support for timer 9 to the STM32 PWM and ICU drivers.
 - NEW: Relicensed parts of the distribution tree under the Apache 2.0
   license in order to make specific parts of the code more accessible
   to the open source community and adopters.

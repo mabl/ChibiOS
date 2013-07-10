@@ -15,8 +15,8 @@
 */
 
 /**
- * @file    templates/spi_lld.h
- * @brief   SPI Driver subsystem low level driver header template.
+ * @file    SPC5xx/DSPI_v1/spi_lld.h
+ * @brief   SPC5xx SPI subsystem low level driver header.
  *
  * @addtogroup SPI
  * @{
@@ -32,173 +32,6 @@
 /*===========================================================================*/
 /* Driver constants.                                                         */
 /*===========================================================================*/
-
-/**
- * @name    MCR register definitions
- * @{
- */
-#define SPC5_MCR_MSTR                       (1U << 31)
-#define SPC5_MCR_CONT_SCKE                  (1U << 30)
-#define SPC5_MCR_DCONF_MASK                 (3U << 28)
-#define SPC5_MCR_FRZ                        (1U << 27)
-#define SPC5_MCR_MTFE                       (1U << 26)
-#define SPC5_MCR_PCSSE                      (1U << 25)
-#define SPC5_MCR_ROOE                       (1U << 24)
-#define SPC5_MCR_PCSIS7                     (1U << 23)
-#define SPC5_MCR_PCSIS6                     (1U << 22)
-#define SPC5_MCR_PCSIS5                     (1U << 21)
-#define SPC5_MCR_PCSIS4                     (1U << 20)
-#define SPC5_MCR_PCSIS3                     (1U << 19)
-#define SPC5_MCR_PCSIS2                     (1U << 18)
-#define SPC5_MCR_PCSIS1                     (1U << 17)
-#define SPC5_MCR_PCSIS0                     (1U << 16)
-#define SPC5_MCR_DOZE                       (1U << 15)
-#define SPC5_MCR_MDIS                       (1U << 14)
-#define SPC5_MCR_DIS_TXF                    (1U << 13)
-#define SPC5_MCR_DIS_RXF                    (1U << 12)
-#define SPC5_MCR_CLR_TXF                    (1U << 11)
-#define SPC5_MCR_CLR_RXF                    (1U << 10)
-#define SPC5_MCR_SMPL_PT_MASK               (3U << 8)
-#define SPC5_MCR_SMPL_PT(n)                 ((n) << 8)
-#define SPC5_MCR_FCPCS                      (1U << 2)
-#define SPC5_MCR_PES                        (1U << 1)
-#define SPC5_MCR_HALT                       (1U << 0)
-/** @} */
-
-/**
- * @name    RSER register definitions
- * @{
- */
-#define SPC5_RSER_TCF_RE                    (1U << 31)
-#define SPC5_RSER_DSITCF_RE                 (1U << 29)
-#define SPC5_RSER_EOQF_RE                   (1U << 28)
-#define SPC5_RSER_TFUF_RE                   (1U << 27)
-#define SPC5_RSER_SPITCF_RE                 (1U << 26)
-#define SPC5_RSER_TFFF_RE                   (1U << 25)
-#define SPC5_RSER_TFFF_DIRS                 (1U << 24)
-#define SPC5_RSER_DPEF_RE                   (1U << 22)
-#define SPC5_RSER_SPEF_RE                   (1U << 21)
-#define SPC5_RSER_DDIF_RE                   (1U << 20)
-#define SPC5_RSER_RFOF_RE                   (1U << 19)
-#define SPC5_RSER_RFDF_RE                   (1U << 17)
-#define SPC5_RSER_RFDF_DIRS                 (1U << 16)
-/** @} */
-
-/**
- * @name    CTAR registers definitions
- * @{
- */
-#define SPC5_CTAR_DBR                       (1U << 31)
-#define SPC5_CTAR_FMSZ_MASK                 (15U << 27)
-#define SPC5_CTAR_FMSZ(n)                   (((n) - 1) << 27)
-#define SPC5_CTAR_CPOL                      (1U << 26)
-#define SPC5_CTAR_CPHA                      (1U << 25)
-#define SPC5_CTAR_LSBFE                     (1U << 24)
-#define SPC5_CTAR_PCSSCK_MASK               (3U << 22)
-#define SPC5_CTAR_PCSSCK_PRE1               (0U << 22)
-#define SPC5_CTAR_PCSSCK_PRE3               (1U << 22)
-#define SPC5_CTAR_PCSSCK_PRE5               (2U << 22)
-#define SPC5_CTAR_PCSSCK_PRE7               (3U << 22)
-#define SPC5_CTAR_PASC_MASK                 (3U << 20)
-#define SPC5_CTAR_PASC_PRE1                 (0U << 20)
-#define SPC5_CTAR_PASC_PRE3                 (1U << 20)
-#define SPC5_CTAR_PASC_PRE5                 (2U << 20)
-#define SPC5_CTAR_PASC_PRE7                 (3U << 20)
-#define SPC5_CTAR_PDT_MASK                  (3U << 18)
-#define SPC5_CTAR_PDT_PRE1                  (0U << 18)
-#define SPC5_CTAR_PDT_PRE3                  (1U << 18)
-#define SPC5_CTAR_PDT_PRE5                  (2U << 18)
-#define SPC5_CTAR_PDT_PRE7                  (3U << 18)
-#define SPC5_CTAR_PBR_MASK                  (3U << 16)
-#define SPC5_CTAR_PBR_PRE2                  (0U << 16)
-#define SPC5_CTAR_PBR_PRE3                  (1U << 16)
-#define SPC5_CTAR_PBR_PRE5                  (2U << 16)
-#define SPC5_CTAR_PBR_PRE7                  (3U << 16)
-#define SPC5_CTAR_CSSCK_MASK                (15U << 12)
-#define SPC5_CTAR_CSSCK_DIV2                (0U << 12)
-#define SPC5_CTAR_CSSCK_DIV4                (1U << 12)
-#define SPC5_CTAR_CSSCK_DIV6                (2U << 12)
-#define SPC5_CTAR_CSSCK_DIV8                (3U << 12)
-#define SPC5_CTAR_CSSCK_DIV16               (4U << 12)
-#define SPC5_CTAR_CSSCK_DIV32               (5U << 12)
-#define SPC5_CTAR_CSSCK_DIV64               (6U << 12)
-#define SPC5_CTAR_CSSCK_DIV128              (7U << 12)
-#define SPC5_CTAR_CSSCK_DIV256              (8U << 12)
-#define SPC5_CTAR_CSSCK_DIV512              (9U << 12)
-#define SPC5_CTAR_CSSCK_DIV1024             (10U << 12)
-#define SPC5_CTAR_CSSCK_DIV2048             (11U << 12)
-#define SPC5_CTAR_CSSCK_DIV4096             (12U << 12)
-#define SPC5_CTAR_CSSCK_DIV8192             (13U << 12)
-#define SPC5_CTAR_CSSCK_DIV16384            (14U << 12)
-#define SPC5_CTAR_CSSCK_DIV32768            (15U << 12)
-#define SPC5_CTAR_ASC_MASK                  (15U << 8)
-#define SPC5_CTAR_ASC_DIV2                  (0U << 8)
-#define SPC5_CTAR_ASC_DIV4                  (1U << 8)
-#define SPC5_CTAR_ASC_DIV6                  (2U << 8)
-#define SPC5_CTAR_ASC_DIV8                  (3U << 8)
-#define SPC5_CTAR_ASC_DIV16                 (4U << 8)
-#define SPC5_CTAR_ASC_DIV32                 (5U << 8)
-#define SPC5_CTAR_ASC_DIV64                 (6U << 8)
-#define SPC5_CTAR_ASC_DIV128                (7U << 8)
-#define SPC5_CTAR_ASC_DIV256                (8U << 8)
-#define SPC5_CTAR_ASC_DIV512                (9U << 8)
-#define SPC5_CTAR_ASC_DIV1024               (10U << 8)
-#define SPC5_CTAR_ASC_DIV2048               (11U << 8)
-#define SPC5_CTAR_ASC_DIV4096               (12U << 8)
-#define SPC5_CTAR_ASC_DIV8192               (13U << 8)
-#define SPC5_CTAR_ASC_DIV16384              (14U << 8)
-#define SPC5_CTAR_ASC_DIV32768              (15U << 8)
-#define SPC5_CTAR_DT_MASK                   (15U << 4)
-#define SPC5_CTAR_DT_DIV2                   (0U << 4)
-#define SPC5_CTAR_DT_DIV4                   (1U << 4)
-#define SPC5_CTAR_DT_DIV6                   (2U << 4)
-#define SPC5_CTAR_DT_DIV8                   (3U << 4)
-#define SPC5_CTAR_DT_DIV16                  (4U << 4)
-#define SPC5_CTAR_DT_DIV32                  (5U << 4)
-#define SPC5_CTAR_DT_DIV64                  (6U << 4)
-#define SPC5_CTAR_DT_DIV128                 (7U << 4)
-#define SPC5_CTAR_DT_DIV256                 (8U << 4)
-#define SPC5_CTAR_DT_DIV512                 (9U << 4)
-#define SPC5_CTAR_DT_DIV1024                (10U << 4)
-#define SPC5_CTAR_DT_DIV2048                (11U << 4)
-#define SPC5_CTAR_DT_DIV4096                (12U << 4)
-#define SPC5_CTAR_DT_DIV8192                (13U << 4)
-#define SPC5_CTAR_DT_DIV16384               (14U << 4)
-#define SPC5_CTAR_DT_DIV32768               (15U << 4)
-#define SPC5_CTAR_BR_MASK                   (15U << 0)
-#define SPC5_CTAR_BR_DIV2                   (0U << 0)
-#define SPC5_CTAR_BR_DIV4                   (1U << 0)
-#define SPC5_CTAR_BR_DIV6                   (2U << 0)
-#define SPC5_CTAR_BR_DIV8                   (3U << 0)
-#define SPC5_CTAR_BR_DIV16                  (4U << 0)
-#define SPC5_CTAR_BR_DIV32                  (5U << 0)
-#define SPC5_CTAR_BR_DIV64                  (6U << 0)
-#define SPC5_CTAR_BR_DIV128                 (7U << 0)
-#define SPC5_CTAR_BR_DIV256                 (8U << 0)
-#define SPC5_CTAR_BR_DIV512                 (9U << 0)
-#define SPC5_CTAR_BR_DIV1024                (10U << 0)
-#define SPC5_CTAR_BR_DIV2048                (11U << 0)
-#define SPC5_CTAR_BR_DIV4096                (12U << 0)
-#define SPC5_CTAR_BR_DIV8192                (13U << 0)
-#define SPC5_CTAR_BR_DIV16384               (14U << 0)
-#define SPC5_CTAR_BR_DIV32768               (15U << 0)
-/** @} */
-
-/**
- * @name    PUSHR register definitions
- * @{
- */
-#define SPC5_PUSHR_CONT                     (1U << 31)
-#define SPC5_PUSHR_CTAS_MASK                (3U << 28)
-#define SPC5_PUSHR_CTAS(n)                  ((n) << 29)
-#define SPC5_PUSHR_EOQ                      (1U << 27)
-#define SPC5_PUSHR_CTCNT                    (1U << 26)
-#define SPC5_PUSHR_MASC                     (1U << 25)
-#define SPC5_PUSHR_MCSC                     (1U << 24)
-#define SPC5_PUSHR_PCS_MASK                 (255U << 16)
-#define SPC5_PUSHR_PCS(n)                   ((1U << (n)) << 16)
-#define SPC5_PUSHR_TXDATA_MASK              (0xFFFFU << 0)
-/** @} */
 
 /*===========================================================================*/
 /* Driver pre-compile time settings.                                         */
@@ -223,6 +56,7 @@
 #if !defined(SPC5_SPI_USE_DSPI1) || defined(__DOXYGEN__)
 #define SPC5_SPI_USE_DSPI1                  FALSE
 #endif
+
 /**
  * @brief   SPID3 driver enable switch.
  * @details If set to @p TRUE the support for DSPI2 is included.
@@ -240,31 +74,81 @@
 #endif
 
 /**
- * @brief   DSPI0 DMA priority.
+ * @brief   SPID5 driver enable switch.
+ * @details If set to @p TRUE the support for DSPI4 is included.
  */
-#if !defined(SPC5_SPI_DSPI0_DMA_PRIO) || defined(__DOXYGEN__)
-#define SPC5_SPI_DSPI0_DMA_PRIO             10
+#if !defined(SPC5_SPI_USE_DSPI4) || defined(__DOXYGEN__)
+#define SPC5_SPI_USE_DSPI4                  FALSE
 #endif
 
 /**
- * @brief   DSPI1 DMA priority.
+ * @brief   DSPI0 MCR PCS defaults.
  */
-#if !defined(SPC5_SPI_DSPI1_DMA_PRIO) || defined(__DOXYGEN__)
-#define SPC5_SPI_DSPI1_DMA_PRIO             10
+#if !defined(SPC5_SPI_DSPI0_MCR) || defined(__DOXYGEN__)
+#define SPC5_SPI_DSPI0_MCR                  (SPC5_MCR_PCSIS0 |              \
+                                             SPC5_MCR_PCSIS1 |              \
+                                             SPC5_MCR_PCSIS2 |              \
+                                             SPC5_MCR_PCSIS3 |              \
+                                             SPC5_MCR_PCSIS4 |              \
+                                             SPC5_MCR_PCSIS5 |              \
+                                             SPC5_MCR_PCSIS6 |              \
+                                             SPC5_MCR_PCSIS7)
 #endif
 
 /**
- * @brief   DSPI2 DMA priority.
+ * @brief   DSPI1 MCR PCS defaults.
  */
-#if !defined(SPC5_SPI_DSPI2_DMA_PRIO) || defined(__DOXYGEN__)
-#define SPC5_SPI_DSPI2_DMA_PRIO             10
+#if !defined(SPC5_SPI_DSPI1_MCR) || defined(__DOXYGEN__)
+#define SPC5_SPI_DSPI1_MCR                  (SPC5_MCR_PCSIS0 |              \
+                                             SPC5_MCR_PCSIS1 |              \
+                                             SPC5_MCR_PCSIS2 |              \
+                                             SPC5_MCR_PCSIS3 |              \
+                                             SPC5_MCR_PCSIS4 |              \
+                                             SPC5_MCR_PCSIS5 |              \
+                                             SPC5_MCR_PCSIS6 |              \
+                                             SPC5_MCR_PCSIS7)
 #endif
 
 /**
- * @brief   DSPI3 DMA priority.
+ * @brief   DSP2 MCR PCS defaults.
  */
-#if !defined(SPC5_SPI_DSPI3_DMA_PRIO) || defined(__DOXYGEN__)
-#define SPC5_SPI_DSPI3_DMA_PRIO             10
+#if !defined(SPC5_SPI_DSPI2_MCR) || defined(__DOXYGEN__)
+#define SPC5_SPI_DSPI2_MCR                  (SPC5_MCR_PCSIS0 |              \
+                                             SPC5_MCR_PCSIS1 |              \
+                                             SPC5_MCR_PCSIS2 |              \
+                                             SPC5_MCR_PCSIS3 |              \
+                                             SPC5_MCR_PCSIS4 |              \
+                                             SPC5_MCR_PCSIS5 |              \
+                                             SPC5_MCR_PCSIS6 |              \
+                                             SPC5_MCR_PCSIS7)
+#endif
+
+/**
+ * @brief   DSPI3 MCR PCS defaults.
+ */
+#if !defined(SPC5_SPI_DSPI3_MCR) || defined(__DOXYGEN__)
+#define SPC5_SPI_DSPI3_MCR                  (SPC5_MCR_PCSIS0 |              \
+                                             SPC5_MCR_PCSIS1 |              \
+                                             SPC5_MCR_PCSIS2 |              \
+                                             SPC5_MCR_PCSIS3 |              \
+                                             SPC5_MCR_PCSIS4 |              \
+                                             SPC5_MCR_PCSIS5 |              \
+                                             SPC5_MCR_PCSIS6 |              \
+                                             SPC5_MCR_PCSIS7)
+#endif
+
+/**
+ * @brief   DSPI4 MCR PCS defaults.
+ */
+#if !defined(SPC5_SPI_DSPI4_MCR) || defined(__DOXYGEN__)
+#define SPC5_SPI_DSPI4_MCR                  (SPC5_MCR_PCSIS0 |              \
+                                             SPC5_MCR_PCSIS1 |              \
+                                             SPC5_MCR_PCSIS2 |              \
+                                             SPC5_MCR_PCSIS3 |              \
+                                             SPC5_MCR_PCSIS4 |              \
+                                             SPC5_MCR_PCSIS5 |              \
+                                             SPC5_MCR_PCSIS6 |              \
+                                             SPC5_MCR_PCSIS7)
 #endif
 
 /**
@@ -296,10 +180,162 @@
 #endif
 
 /**
+ * @brief   DSPI4 DMA IRQ priority.
+ */
+#if !defined(SPC5_SPI_DSPI4_DMA_IRQ_PRIO) || defined(__DOXYGEN__)
+#define SPC5_SPI_DSPI4_DMA_IRQ_PRIO         10
+#endif
+
+/**
  * @brief   SPI DMA error hook.
  */
 #if !defined(SPC5_SPI_DMA_ERROR_HOOK) || defined(__DOXYGEN__)
 #define SPC5_SPI_DMA_ERROR_HOOK(spip)       chSysHalt()
+#endif
+
+/**
+ * @brief   DSPI0 DMA priority.
+ */
+#if !defined(SPC5_SPI_DSPI0_IRQ_PRIO) || defined(__DOXYGEN__)
+#define SPC5_SPI_DSPI0_IRQ_PRIO             10
+#endif
+
+/**
+ * @brief   DSPI1 DMA priority.
+ */
+#if !defined(SPC5_SPI_DSPI1_IRQ_PRIO) || defined(__DOXYGEN__)
+#define SPC5_SPI_DSPI1_IRQ_PRIO             10
+#endif
+
+/**
+ * @brief   DSPI2 DMA priority.
+ */
+#if !defined(SPC5_SPI_DSPI2_IRQ_PRIO) || defined(__DOXYGEN__)
+#define SPC5_SPI_DSPI2_IRQ_PRIO             10
+#endif
+
+/**
+ * @brief   DSPI3 DMA priority.
+ */
+#if !defined(SPC5_SPI_DSPI3_IRQ_PRIO) || defined(__DOXYGEN__)
+#define SPC5_SPI_DSPI3_IRQ_PRIO             10
+#endif
+
+/**
+ * @brief   DSPI4 DMA priority.
+ */
+#if !defined(SPC5_SPI_DSPI4_IRQ_PRIO) || defined(__DOXYGEN__)
+#define SPC5_SPI_DSPI4_IRQ_PRIO             10
+#endif
+
+/**
+ * @brief   DSPI0 peripheral configuration when started.
+ * @note    The default configuration is 1 (always run) in run mode and
+ *          2 (only halt) in low power mode. The defaults of the run modes
+ *          are defined in @p hal_lld.h.
+ */
+#if !defined(SPC5_SPI_DSPI0_START_PCTL) || defined(__DOXYGEN__)
+#define SPC5_SPI_DSPI0_START_PCTL           (SPC5_ME_PCTL_RUN(1) |          \
+                                             SPC5_ME_PCTL_LP(2))
+#endif
+
+/**
+ * @brief   DSPI0 peripheral configuration when stopped.
+ * @note    The default configuration is 0 (never run) in run mode and
+ *          0 (never run) in low power mode. The defaults of the run modes
+ *          are defined in @p hal_lld.h.
+ */
+#if !defined(SPC5_SPI_DSPI0_STOP_PCTL) || defined(__DOXYGEN__)
+#define SPC5_SPI_DSPI0_STOP_PCTL            (SPC5_ME_PCTL_RUN(0) |          \
+                                             SPC5_ME_PCTL_LP(0))
+#endif
+
+/**
+ * @brief   DSPI1 peripheral configuration when started.
+ * @note    The default configuration is 1 (always run) in run mode and
+ *          2 (only halt) in low power mode. The defaults of the run modes
+ *          are defined in @p hal_lld.h.
+ */
+#if !defined(SPC5_SPI_DSPI1_START_PCTL) || defined(__DOXYGEN__)
+#define SPC5_SPI_DSPI1_START_PCTL           (SPC5_ME_PCTL_RUN(1) |          \
+                                             SPC5_ME_PCTL_LP(2))
+#endif
+
+/**
+ * @brief   DSPI1 peripheral configuration when stopped.
+ * @note    The default configuration is 0 (never run) in run mode and
+ *          0 (never run) in low power mode. The defaults of the run modes
+ *          are defined in @p hal_lld.h.
+ */
+#if !defined(SPC5_SPI_DSPI1_STOP_PCTL) || defined(__DOXYGEN__)
+#define SPC5_SPI_DSPI1_STOP_PCTL            (SPC5_ME_PCTL_RUN(0) |          \
+                                             SPC5_ME_PCTL_LP(0))
+#endif
+
+/**
+ * @brief   DSPI2 peripheral configuration when started.
+ * @note    The default configuration is 1 (always run) in run mode and
+ *          2 (only halt) in low power mode. The defaults of the run modes
+ *          are defined in @p hal_lld.h.
+ */
+#if !defined(SPC5_SPI_DSPI2_START_PCTL) || defined(__DOXYGEN__)
+#define SPC5_SPI_DSPI2_START_PCTL           (SPC5_ME_PCTL_RUN(1) |          \
+                                             SPC5_ME_PCTL_LP(2))
+#endif
+
+/**
+ * @brief   DSPI2 peripheral configuration when stopped.
+ * @note    The default configuration is 0 (never run) in run mode and
+ *          0 (never run) in low power mode. The defaults of the run modes
+ *          are defined in @p hal_lld.h.
+ */
+#if !defined(SPC5_SPI_DSPI2_STOP_PCTL) || defined(__DOXYGEN__)
+#define SPC5_SPI_DSPI2_STOP_PCTL            (SPC5_ME_PCTL_RUN(0) |          \
+                                             SPC5_ME_PCTL_LP(0))
+#endif
+
+/**
+ * @brief   DSPI3 peripheral configuration when started.
+ * @note    The default configuration is 1 (always run) in run mode and
+ *          2 (only halt) in low power mode. The defaults of the run modes
+ *          are defined in @p hal_lld.h.
+ */
+#if !defined(SPC5_SPI_DSPI3_START_PCTL) || defined(__DOXYGEN__)
+#define SPC5_SPI_DSPI3_START_PCTL           (SPC5_ME_PCTL_RUN(1) |          \
+                                             SPC5_ME_PCTL_LP(2))
+#endif
+
+/**
+ * @brief   DSPI3 peripheral configuration when stopped.
+ * @note    The default configuration is 0 (never run) in run mode and
+ *          0 (never run) in low power mode. The defaults of the run modes
+ *          are defined in @p hal_lld.h.
+ */
+#if !defined(SPC5_SPI_DSPI3_STOP_PCTL) || defined(__DOXYGEN__)
+#define SPC5_SPI_DSPI3_STOP_PCTL            (SPC5_ME_PCTL_RUN(0) |          \
+                                             SPC5_ME_PCTL_LP(0))
+#endif
+
+/**
+ * @brief   DSPI4 peripheral configuration when started.
+ * @note    The default configuration is 1 (always run) in run mode and
+ *          2 (only halt) in low power mode. The defaults of the run modes
+ *          are defined in @p hal_lld.h.
+ */
+#if !defined(SPC5_SPI_DSPI4_START_PCTL) || defined(__DOXYGEN__)
+#define SPC5_SPI_DSPI4_START_PCTL           (SPC5_ME_PCTL_RUN(1) |          \
+                                             SPC5_ME_PCTL_LP(2))
+#endif
+
+/**
+ * @brief   DSPI4 peripheral configuration when stopped.
+ * @note    The default configuration is 0 (never run) in run mode and
+ *          0 (never run) in low power mode. The defaults of the run modes
+ *          are defined in @p hal_lld.h.
+ */
+#if !defined(SPC5_SPI_DSPI4_STOP_PCTL) || defined(__DOXYGEN__)
+#define SPC5_SPI_DSPI4_STOP_PCTL            (SPC5_ME_PCTL_RUN(0) |          \
+                                             SPC5_ME_PCTL_LP(0))
 #endif
 /** @} */
 
@@ -323,9 +359,44 @@
 #error "DSPI3 not present in the selected device"
 #endif
 
+#if SPC5_SPI_USE_DSPI4 && !SPC5_HAS_DSPI4
+#error "DSPI4 not present in the selected device"
+#endif
+
 #if !SPC5_SPI_USE_DSPI0 && !SPC5_SPI_USE_DSPI1 &&                           \
-    !SPC5_SPI_USE_DSPI2 && !SPC5_SPI_USE_DSPI3
+    !SPC5_SPI_USE_DSPI2 && !SPC5_SPI_USE_DSPI3 &&                           \
+    !SPC5_SPI_USE_DSPI4
 #error "SPI driver activated but no DSPI peripheral assigned"
+#endif
+
+#if SPC5_SPI_USE_DSPI0 && (!defined(SPC5_SPI_DSPI0_TX1_DMA_CH_ID) ||        \
+                           !defined(SPC5_SPI_DSPI0_TX2_DMA_CH_ID) ||        \
+                           !defined(SPC5_SPI_DSPI0_RX_DMA_CH_ID))
+#error "DMA channels not defined for DSPI0, check mcuconf.h"
+#endif
+
+#if SPC5_SPI_USE_DSPI1 && (!defined(SPC5_SPI_DSPI1_TX1_DMA_CH_ID) ||        \
+                           !defined(SPC5_SPI_DSPI1_TX2_DMA_CH_ID) ||        \
+                           !defined(SPC5_SPI_DSPI1_RX_DMA_CH_ID))
+#error "DMA channels not defined for DSPI1, check mcuconf.h"
+#endif
+
+#if SPC5_SPI_USE_DSPI2 && (!defined(SPC5_SPI_DSPI2_TX1_DMA_CH_ID) ||        \
+                           !defined(SPC5_SPI_DSPI2_TX2_DMA_CH_ID) ||        \
+                           !defined(SPC5_SPI_DSPI2_RX_DMA_CH_ID))
+#error "DMA channels not defined for DSPI2, check mcuconf.h"
+#endif
+
+#if SPC5_SPI_USE_DSPI3 && (!defined(SPC5_SPI_DSPI3_TX1_DMA_CH_ID) ||        \
+                           !defined(SPC5_SPI_DSPI3_TX2_DMA_CH_ID) ||        \
+                           !defined(SPC5_SPI_DSPI3_RX_DMA_CH_ID))
+#error "DMA channels not defined for DSPI3, check mcuconf.h"
+#endif
+
+#if SPC5_SPI_USE_DSPI4 && (!defined(SPC5_SPI_DSPI4_TX1_DMA_CH_ID) ||        \
+                           !defined(SPC5_SPI_DSPI4_TX2_DMA_CH_ID) ||        \
+                           !defined(SPC5_SPI_DSPI4_RX_DMA_CH_ID))
+#error "DMA channels not defined for DSPI4, check mcuconf.h"
 #endif
 
 /*===========================================================================*/
@@ -352,24 +423,18 @@ typedef void (*spicallback_t)(SPIDriver *spip);
  */
 typedef struct {
   /**
-   * @brief Operation complete callback.
+   * @brief   Operation complete callback.
    */
   spicallback_t         end_cb;
   /* End of the mandatory fields.*/
   /**
-   * @brief The chip select line port.
+   * @brief   The chip select line port.
    */
   ioportid_t            ssport;
   /**
-   * @brief The chip select line pad number.
+   * @brief   The chip select line pad number.
    */
   uint16_t              sspad;
-  /**
-   * @brief   DSPI MCR value for this session.
-   * @note    Some bits are ignored: CONT_SCKE, DCONF, ROOE, MDIS, DIS_TXF,
-   *          DIS_RXF, CLR_TXF, CLR_RXF, HALT.
-   */
-  uint32_t              mcr;
   /**
    * @brief   DSPI CTAR0 value for this session.
    */
@@ -389,23 +454,23 @@ typedef struct {
  */
 struct SPIDriver {
   /**
-   * @brief Driver state.
+   * @brief   Driver state.
    */
   spistate_t            state;
   /**
-   * @brief Current configuration data.
+   * @brief   Current configuration data.
    */
   const SPIConfig       *config;
 #if SPI_USE_WAIT || defined(__DOXYGEN__)
   /**
-   * @brief Waiting thread.
+   * @brief   Waiting thread.
    */
   Thread                *thread;
 #endif /* SPI_USE_WAIT */
 #if SPI_USE_MUTUAL_EXCLUSION || defined(__DOXYGEN__)
 #if CH_USE_MUTEXES || defined(__DOXYGEN__)
   /**
-   * @brief Mutex protecting the bus.
+   * @brief   Mutex protecting the bus.
    */
   Mutex                 mutex;
 #elif CH_USE_SEMAPHORES
@@ -421,13 +486,27 @@ struct SPIDriver {
    */
   struct spc5_dspi          *dspi;
   /**
+   * @brief   EDMA channel used for data memory to memory copy.
+   */
+  edma_channel_t            tx1_channel;
+  /**
    * @brief   EDMA channel used for transmit.
    */
-  edma_channel_t            tx_channel;
+  edma_channel_t            tx2_channel;
   /**
    * @brief   EDMA channel used for receive.
    */
   edma_channel_t            rx_channel;
+  /**
+   * @brief   Last frame of a transmission sequence.
+   */
+  uint32_t                  tx_last;
+  /**
+   * @brief   TX intermediate buffer.
+   * @note    This field is written by the TX1 DMA channel and read by the
+   *          TX2 DMA channel.
+   */
+  uint32_t                  tx_intbuf;
 };
 
 /*===========================================================================*/
@@ -452,6 +531,10 @@ extern SPIDriver SPID3;
 
 #if SPC5_SPI_USE_DSPI3 && !defined(__DOXYGEN__)
 extern SPIDriver SPID4;
+#endif
+
+#if SPC5_SPI_USE_DSPI4 && !defined(__DOXYGEN__)
+extern SPIDriver SPID5;
 #endif
 
 #ifdef __cplusplus

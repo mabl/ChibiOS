@@ -25,6 +25,7 @@
 /*
  * ADC driver system settings.
  */
+#define AVR_ADC_USE_ADC1                   FALSE
 
 /*
  * CAN driver system settings.
@@ -37,13 +38,42 @@
 /*
  * PWM driver system settings.
  */
+#define AVR_PWM_USE_TIM1                   FALSE
+#define AVR_PWM_USE_TIM2                   FALSE
+#define AVR_PWM_USE_TIM3                   FALSE
+#define AVR_PWM_USE_TIM4                   FALSE
+#define AVR_PWM_USE_TIM5                   FALSE
+
+/*
+ * ICU driver system settings.
+ */
+#define AVR_ICU_USE_TIM1                   FALSE
+#define AVR_ICU_USE_TIM3                   FALSE
+#define AVR_ICU_USE_TIM4                   FALSE
+#define AVR_ICU_USE_TIM5                   FALSE
+
+/*
+ * GPT driver system settings.
+ */
+#define AVR_GPT_USE_TIM1                   FALSE
+#define AVR_GPT_USE_TIM2                   FALSE
+#define AVR_GPT_USE_TIM3                   FALSE
+#define AVR_GPT_USE_TIM4                   FALSE
+#define AVR_GPT_USE_TIM5                   FALSE
 
 /*
  * SERIAL driver system settings.
  */
-#define USE_AVR_USART0              FALSE
-#define USE_AVR_USART1              TRUE
+#define AVR_SERIAL_USE_USART0              FALSE
+#define AVR_SERIAL_USE_USART1              TRUE
+
+/*
+ * I2C driver system settings.
+ */
+#define AVR_I2C_USE_I2C1                   FALSE
 
 /*
  * SPI driver system settings.
  */
+#define AVR_SPI_USE_SPI1                   FALSE
+#define AVR_SPI_USE_16BIT_POLLED_EXCHANGE  FALSE

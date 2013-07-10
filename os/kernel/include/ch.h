@@ -40,7 +40,7 @@
 /**
  * @brief   Kernel version string.
  */
-#define CH_KERNEL_VERSION       "2.5.2unstable"
+#define CH_KERNEL_VERSION       "2.7.0unstable"
 
 /**
  * @name    Kernel version
@@ -54,12 +54,12 @@
 /**
  * @brief   Kernel version minor number.
  */
-#define CH_KERNEL_MINOR         5
+#define CH_KERNEL_MINOR         7
 
 /**
  * @brief   Kernel version patch number.
  */
-#define CH_KERNEL_PATCH         2
+#define CH_KERNEL_PATCH         0
 /** @} */
 
 /**
@@ -69,14 +69,14 @@
  * @brief   Generic 'false' boolean constant.
  */
 #if !defined(FALSE) || defined(__DOXYGEN__)
-#define FALSE                   false
+#define FALSE                   0
 #endif
 
 /**
  * @brief   Generic 'true' boolean constant.
  */
 #if !defined(TRUE) || defined(__DOXYGEN__)
-#define TRUE                    true
+#define TRUE                    (!FALSE)
 #endif
 
 /**
@@ -86,7 +86,7 @@
  *          returning a @p bool_t as a status indicator.
  */
 #if !defined(CH_SUCCESS) || defined(__DOXYGEN__)
-#define CH_SUCCESS  FALSE
+#define CH_SUCCESS              FALSE
 #endif
 
 /**
@@ -96,7 +96,7 @@
  *          returning a @p bool_t as a status indicator.
  */
 #if !defined(CH_FAILED) || defined(__DOXYGEN__)
-#define CH_FAILED   TRUE
+#define CH_FAILED               TRUE
 #endif
 /** @} */
 

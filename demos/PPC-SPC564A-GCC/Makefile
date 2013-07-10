@@ -59,7 +59,7 @@ include $(CHIBIOS)/os/kernel/kernel.mk
 include $(CHIBIOS)/test/test.mk
 
 # Define linker script file here
-LDSCRIPT= $(PORTLD)/SPC564A80.ld
+LDSCRIPT= $(PORTLD)/SPC564A70.ld
 
 # C sources here.
 CSRC = $(PORTSRC) \
@@ -147,7 +147,7 @@ DLIBS =
 #
 
 # List all user C define here, like -D_DEBUG=1
-UDEFS =
+UDEFS = -D_SPC564A70L7_
 
 # Define ASM defines here
 UADEFS =

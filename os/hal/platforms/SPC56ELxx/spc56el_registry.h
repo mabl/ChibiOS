@@ -38,6 +38,44 @@
 #define SPC5_EDMA_NCHANNELS                 16
 #define SPC5_EDMA_HAS_MUX                   TRUE
 
+/* DSPI attribures.*/
+#define SPC5_HAS_DSPI0                      TRUE
+#define SPC5_HAS_DSPI1                      TRUE
+#define SPC5_HAS_DSPI2                      TRUE
+#define SPC5_HAS_DSPI3                      FALSE
+#define SPC5_HAS_DSPI4                      FALSE
+#define SPC5_DSPI_FIFO_DEPTH                5
+#define SPC5_DSPI0_PCTL                     4
+#define SPC5_DSPI1_PCTL                     5
+#define SPC5_DSPI2_PCTL                     6
+#define SPC5_DSPI0_TX1_DMA_DEV_ID           1
+#define SPC5_DSPI0_TX2_DMA_DEV_ID           0
+#define SPC5_DSPI0_RX_DMA_DEV_ID            2
+#define SPC5_DSPI1_TX1_DMA_DEV_ID           3
+#define SPC5_DSPI1_TX2_DMA_DEV_ID           0
+#define SPC5_DSPI1_RX_DMA_DEV_ID            4
+#define SPC5_DSPI2_TX1_DMA_DEV_ID           5
+#define SPC5_DSPI2_TX2_DMA_DEV_ID           0
+#define SPC5_DSPI2_RX_DMA_DEV_ID            6
+#define SPC5_DSPI0_TFFF_HANDLER             vector76
+#define SPC5_DSPI0_TFFF_NUMBER              76
+#define SPC5_DSPI1_TFFF_HANDLER             vector96
+#define SPC5_DSPI1_TFFF_NUMBER              96
+#define SPC5_DSPI2_TFFF_HANDLER             vector116
+#define SPC5_DSPI2_TFFF_NUMBER              116
+#define SPC5_DSPI0_ENABLE_CLOCK()                                           \
+  halSPCSetPeripheralClockMode(SPC5_DSPI0_PCTL, SPC5_SPI_DSPI0_START_PCTL)
+#define SPC5_DSPI0_DISABLE_CLOCK()                                          \
+  halSPCSetPeripheralClockMode(SPC5_DSPI0_PCTL, SPC5_SPI_DSPI0_STOP_PCTL)
+#define SPC5_DSPI1_ENABLE_CLOCK()                                           \
+  halSPCSetPeripheralClockMode(SPC5_DSPI1_PCTL, SPC5_SPI_DSPI1_START_PCTL)
+#define SPC5_DSPI1_DISABLE_CLOCK()                                          \
+  halSPCSetPeripheralClockMode(SPC5_DSPI1_PCTL, SPC5_SPI_DSPI1_STOP_PCTL)
+#define SPC5_DSPI2_ENABLE_CLOCK()                                           \
+  halSPCSetPeripheralClockMode(SPC5_DSPI2_PCTL, SPC5_SPI_DSPI2_START_PCTL)
+#define SPC5_DSPI2_DISABLE_CLOCK()                                          \
+  halSPCSetPeripheralClockMode(SPC5_DSPI2_PCTL, SPC5_SPI_DSPI2_STOP_PCTL)
+
 /* LINFlex attributes.*/
 #define SPC5_HAS_LINFLEX0                   TRUE
 #define SPC5_LINFLEX0_PCTL                  48
@@ -193,6 +231,51 @@
 #define SPC5_ETIMER2_TC5IR_NUMBER           227
 #define SPC5_ETIMER2_RCF_NUMBER             232
 #define SPC5_ETIMER2_CLK                    SPC5_MCONTROL_CLK
+
+/* FlexCAN attributes.*/
+#define SPC5_HAS_FLEXCAN0                                   TRUE
+#define SPC5_FLEXCAN0_PCTL                                  16
+#define SPC5_FLEXCAN0_MB                                    32
+#define SPC5_FLEXCAN0_FLEXCAN_ESR_ERR_INT_HANDLER           vector65
+#define SPC5_FLEXCAN0_FLEXCAN_ESR_BOFF_HANDLER              vector66
+#define SPC5_FLEXCAN0_FLEXCAN_ESR_WAK_HANDLER               vector67
+#define SPC5_FLEXCAN0_FLEXCAN_BUF_00_03_HANDLER             vector68
+#define SPC5_FLEXCAN0_FLEXCAN_BUF_04_07_HANDLER             vector69
+#define SPC5_FLEXCAN0_FLEXCAN_BUF_08_11_HANDLER             vector70
+#define SPC5_FLEXCAN0_FLEXCAN_BUF_12_15_HANDLER             vector71
+#define SPC5_FLEXCAN0_FLEXCAN_BUF_16_31_HANDLER             vector72
+#define SPC5_FLEXCAN0_FLEXCAN_ESR_ERR_INT_NUMBER            65
+#define SPC5_FLEXCAN0_FLEXCAN_ESR_BOFF_NUMBER               66
+#define SPC5_FLEXCAN0_FLEXCAN_ESR_WAK_NUMBER                67
+#define SPC5_FLEXCAN0_FLEXCAN_BUF_00_03_NUMBER              68
+#define SPC5_FLEXCAN0_FLEXCAN_BUF_04_07_NUMBER              69
+#define SPC5_FLEXCAN0_FLEXCAN_BUF_08_11_NUMBER              70
+#define SPC5_FLEXCAN0_FLEXCAN_BUF_12_15_NUMBER              71
+#define SPC5_FLEXCAN0_FLEXCAN_BUF_16_31_NUMBER              72
+#define SPC5_FLEXCAN0_ENABLE_CLOCK()                        halSPCSetPeripheralClockMode(SPC5_FLEXCAN0_PCTL, SPC5_CAN_FLEXCAN0_START_PCTL);
+#define SPC5_FLEXCAN0_DISABLE_CLOCK()                       halSPCSetPeripheralClockMode(SPC5_FLEXCAN0_PCTL, SPC5_CAN_FLEXCAN0_STOP_PCTL);
+
+#define SPC5_HAS_FLEXCAN1                                   TRUE
+#define SPC5_FLEXCAN1_PCTL                                  17
+#define SPC5_FLEXCAN1_MB                                    32
+#define SPC5_FLEXCAN1_FLEXCAN_ESR_ERR_INT_HANDLER           vector85
+#define SPC5_FLEXCAN1_FLEXCAN_ESR_BOFF_HANDLER              vector86
+#define SPC5_FLEXCAN1_FLEXCAN_ESR_WAK_HANDLER               vector87
+#define SPC5_FLEXCAN1_FLEXCAN_BUF_00_03_HANDLER             vector88
+#define SPC5_FLEXCAN1_FLEXCAN_BUF_04_07_HANDLER             vector89
+#define SPC5_FLEXCAN1_FLEXCAN_BUF_08_11_HANDLER             vector90
+#define SPC5_FLEXCAN1_FLEXCAN_BUF_12_15_HANDLER             vector91
+#define SPC5_FLEXCAN1_FLEXCAN_BUF_16_31_HANDLER             vector92
+#define SPC5_FLEXCAN1_FLEXCAN_ESR_ERR_INT_NUMBER            85
+#define SPC5_FLEXCAN1_FLEXCAN_ESR_BOFF_NUMBER               86
+#define SPC5_FLEXCAN1_FLEXCAN_ESR_WAK_NUMBER                87
+#define SPC5_FLEXCAN1_FLEXCAN_BUF_00_03_NUMBER              88
+#define SPC5_FLEXCAN1_FLEXCAN_BUF_04_07_NUMBER              89
+#define SPC5_FLEXCAN1_FLEXCAN_BUF_08_11_NUMBER              90
+#define SPC5_FLEXCAN1_FLEXCAN_BUF_12_15_NUMBER              91
+#define SPC5_FLEXCAN1_FLEXCAN_BUF_16_31_NUMBER              92
+#define SPC5_FLEXCAN1_ENABLE_CLOCK()                        halSPCSetPeripheralClockMode(SPC5_FLEXCAN1_PCTL, SPC5_CAN_FLEXCAN1_START_PCTL);
+#define SPC5_FLEXCAN1_DISABLE_CLOCK()                       halSPCSetPeripheralClockMode(SPC5_FLEXCAN1_PCTL, SPC5_CAN_FLEXCAN1_STOP_PCTL);
 /** @} */
 
 #endif /* _SPC56EL_REGISTRY_H_ */
