@@ -10,7 +10,7 @@
     <instances>
       <instance locked="false" id="com.st.tools.spc5.components.platform.spc56elxx">
         <platform_settings>
-          <specific_model index="6">SPC56EL60L3</specific_model>
+          <specific_model index="9">SPC56EL70L5</specific_model>
         </platform_settings>
         <runtime_settings>
           <process_stack_size>2048</process_stack_size>
