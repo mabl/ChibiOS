@@ -71,6 +71,7 @@
 *****************************************************************************
 
 *** 2.2.10 ***
+- FIX: Fixed missing casts in time-conversion macros (bug #418).
 - FIX: Fixed MS2ST() and US2ST() macros error (bug #415).
 - FIX: Fixed CAN_USE_SLEEP_MODE compilation problem (bug 3606616).
 - FIX: Fixed typo in chOQGetEmptyI() macro (bug 3595910).
