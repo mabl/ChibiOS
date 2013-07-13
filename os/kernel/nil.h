@@ -117,7 +117,7 @@
 /*===========================================================================*/
 
 /**
- * @brief   Number of threads in the application.
+ * @brief   Number of user threads in the application.
  * @note    This number is not inclusive of the idle thread which is
  *          implicitly handled.
  */
@@ -137,6 +137,21 @@
  */
 #if !defined(NIL_CFG_ENABLE_ASSERTS) || defined(__DOXYGEN__)
 #define NIL_CFG_ENABLE_ASSERTS          TRUE
+#endif
+
+/**
+ * @brief   Threads descriptor structure extension.
+ * @details User fields added to the end of the @p thread_t structure.
+ */
+#if !defined(NIL_CFG_THREAD_EXT_FIELDS) || defined(__DOXYGEN__)
+#define NIL_CFG_THREAD_EXT_FIELDS
+#endif
+
+/**
+ * @brief   Threads initialization hook.
+ */
+#if !defined(NIL_CFG_THREAD_EXT_INIT_HOOK) || defined(__DOXYGEN__)
+#define NIL_CFG_THREAD_EXT_INIT_HOOK(tr)
 #endif
 
 /*===========================================================================*/
@@ -225,6 +240,8 @@ struct nil_thread {
   } u1;
   systime_t         timeout;    /**< @brief Timeout counter, zero
                                             if disabled.                    */
+  /* Optional extra fields.*/
+  NIL_CFG_THREAD_EXT_FIELDS
 };
 
 /**
@@ -236,28 +253,28 @@ typedef struct {
   /**
    * @brief   Pointer to the running thread.
    */
-  thread_ref_t          current;
+  thread_ref_t      current;
   /**
    * @brief   Pointer to the next thread to be executed.
    * @note    This pointer must point at the same thread pointed by @p currp
    *          or to an higher priority thread if a switch is required.
    */
-  thread_ref_t          next;
+  thread_ref_t      next;
   /**
    * @brief   System time.
    */
-  systime_t             systime;
+  systime_t         systime;
   /**
    * @brief   Thread structures for all the defined threads.
    */
-  thread_t              threads[NIL_CFG_NUM_THREADS + 1];
+  thread_t          threads[NIL_CFG_NUM_THREADS + 1];
 #if NIL_DBG_ENABLED || defined(__DOXYGEN__)
   /**
    * @brief   Panic message.
    * @note    This field is only present if some debug option has been
    *          activated.
    */
-  const char            *dbg_msg;
+  const char        *dbg_msg;
 #endif
 } nil_system_t;
 
@@ -580,7 +597,8 @@ typedef struct {
  * @api
  */
 #define MS2ST(msec)                                                         \
-  ((systime_t)((((msec) * NIL_CFG_FREQUENCY - 1L) / 1000L) + 1L))
+  ((systime_t)(((((uint32_t)(msec)) * ((uint32_t)NIL_CFG_FREQUENCY) - 1UL) /\
+                1000UL) + 1UL))
 
 /**
  * @brief   Microseconds to system ticks.
@@ -593,7 +611,8 @@ typedef struct {
  * @api
  */
 #define US2ST(usec)                                                         \
-  ((systime_t)((((usec) * NIL_CFG_FREQUENCY - 1L) / 1000000L) + 1L))
+  ((systime_t)(((((uint32_t)(usec)) * ((uint32_t)NIL_CFG_FREQUENCY) - 1UL) /\
+                1000000UL) + 1UL))
 /** @} */
 
 /*===========================================================================*/

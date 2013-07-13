@@ -80,6 +80,9 @@ void nilSysInit(void) {
 
     /* Port dependent thread initialization.*/
     SETUP_CONTEXT(tr, tcp->wap, tcp->size, tcp->funcp, tcp->arg);
+
+    /* Initialization hook.*/
+    NIL_CFG_THREAD_EXT_INIT_HOOK(tr);
   }
 
   /* Runs the highest priority thread, the current one becomes the null

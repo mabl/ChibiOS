@@ -32,27 +32,35 @@
 #define _NILCONF_H_
 
 /**
- * @brief   Number of threads in the application.
+ * @brief   Number of user threads in the application.
  * @note    This number is not inclusive of the idle thread which is
  *          implicitely handled.
  */
-#if !defined(NIL_CFG_NUM_THREADS) || defined(__DOXYGEN__)
 #define NIL_CFG_NUM_THREADS             2
-#endif
 
 /**
  * @brief   System tick frequency.
  */
-#if !defined(NIL_FREQUENCY) || defined(__DOXYGEN__)
 #define NIL_CFG_FREQUENCY               100
-#endif
 
 /**
  * @brief   System assertions.
  */
-#if !defined(NIL_CFG_ENABLE_ASSERTS) || defined(__DOXYGEN__)
 #define NIL_CFG_ENABLE_ASSERTS          FALSE
-#endif
+
+/**
+ * @brief   Threads descriptor structure extension.
+ * @details User fields added to the end of the @p thread_t structure.
+ */
+#define NIL_CFG_THREAD_EXT_FIELDS                                           \
+  /* Add threads custom fields here.*/
+
+/**
+ * @brief   Threads initialization hook.
+ */
+#define NIL_CFG_THREAD_EXT_INIT_HOOK(tr) {                                  \
+  /* Add custom threads initialization code here.*/                         \
+}
 
 /*===========================================================================*/
 /* Port-specific settings (override port settings defaulted in nilcore.h).   */
