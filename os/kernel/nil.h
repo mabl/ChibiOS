@@ -21,7 +21,7 @@
  * @file    nil.h
  * @brief   Nil RTOS main header file.
  * @details This header includes all the required kernel headers so it is the
- *          only kernel header you usually want to include in your application.
+ *          only header you usually need to include in your application.
  *
  * @addtogroup nil
  * @{
