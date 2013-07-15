@@ -46,7 +46,10 @@
 /**
  * @brief   Time delta constant for the tick-less mode.
  * @note    If this value is zero then the system uses the classic
- *          periodic tick.
+ *          periodic tick. This value represents the minimum number
+ *          of ticks that is safe to specify in a timeout directive.
+ *          The value one is not valid, timeouts are rounder up to
+ *          this value.
  */
 #define NIL_CFG_TIMEDELTA                   2
 
