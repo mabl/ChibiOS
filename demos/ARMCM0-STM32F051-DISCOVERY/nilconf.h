@@ -34,7 +34,7 @@
 /**
  * @brief   Number of user threads in the application.
  * @note    This number is not inclusive of the idle thread which is
- *          implicitely handled.
+ *          Implicitly handled.
  */
 #define NIL_CFG_NUM_THREADS                 2
 
