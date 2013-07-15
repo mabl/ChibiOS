@@ -122,14 +122,14 @@
  *          implicitly handled.
  */
 #if !defined(NIL_CFG_NUM_THREADS) || defined(__DOXYGEN__)
-#define NIL_CFG_NUM_THREADS             2
+#define NIL_CFG_NUM_THREADS                 2
 #endif
 
 /**
  * @brief   System timer resolution in Hz.
  */
 #if !defined(NIL_CFG_FREQUENCY) || defined(__DOXYGEN__)
-#define NIL_CFG_FREQUENCY               100
+#define NIL_CFG_FREQUENCY                   100
 #endif
 
 /**
@@ -138,14 +138,14 @@
  *          periodic tick.
  */
 #if !defined(NIL_CFG_TIMEDELTA) || defined(__DOXYGEN__)
-#define NIL_CFG_TIMEDELTA               0
+#define NIL_CFG_TIMEDELTA                   0
 #endif
 
 /**
  * @brief   System assertions.
  */
 #if !defined(NIL_CFG_ENABLE_ASSERTS) || defined(__DOXYGEN__)
-#define NIL_CFG_ENABLE_ASSERTS          FALSE
+#define NIL_CFG_ENABLE_ASSERTS              FALSE
 #endif
 
 /**
@@ -154,13 +154,6 @@
  */
 #if !defined(NIL_CFG_THREAD_EXT_FIELDS) || defined(__DOXYGEN__)
 #define NIL_CFG_THREAD_EXT_FIELDS
-#endif
-
-/**
- * @brief   Threads initialization hook.
- */
-#if !defined(NIL_CFG_THREAD_EXT_INIT_HOOK) || defined(__DOXYGEN__)
-#define NIL_CFG_THREAD_EXT_INIT_HOOK(tr)
 #endif
 
 /*===========================================================================*/

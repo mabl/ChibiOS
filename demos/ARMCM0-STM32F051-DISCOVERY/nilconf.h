@@ -36,24 +36,24 @@
  * @note    This number is not inclusive of the idle thread which is
  *          implicitely handled.
  */
-#define NIL_CFG_NUM_THREADS             2
+#define NIL_CFG_NUM_THREADS                 2
 
 /**
  * @brief   System tick frequency.
  */
-#define NIL_CFG_FREQUENCY               50000
+#define NIL_CFG_FREQUENCY                   50000
 
 /**
  * @brief   Time delta constant for the tick-less mode.
  * @note    If this value is zero then the system uses the classic
  *          periodic tick.
  */
-#define NIL_CFG_TIMEDELTA               2
+#define NIL_CFG_TIMEDELTA                   2
 
 /**
  * @brief   System assertions.
  */
-#define NIL_CFG_ENABLE_ASSERTS          TRUE
+#define NIL_CFG_ENABLE_ASSERTS              FALSE
 
 /**
  * @brief   Threads descriptor structure extension.
@@ -67,6 +67,24 @@
  */
 #define NIL_CFG_THREAD_EXT_INIT_HOOK(tr) {                                  \
   /* Add custom threads initialization code here.*/                         \
+}
+
+/**
+ * @brief   Idle thread enter hook.
+ * @note    This hook is invoked within a critical zone, no OS functions
+ *          should be invoked from here.
+ * @note    This macro can be used to activate a power saving mode.
+ */
+#define NIL_CFG_IDLE_ENTER_HOOK() {                                         \
+}
+
+/**
+ * @brief   Idle thread leave hook.
+ * @note    This hook is invoked within a critical zone, no OS functions
+ *          should be invoked from here.
+ * @note    This macro can be used to deactivate a power saving mode.
+ */
+#define NIL_CFG_IDLE_LEAVE_HOOK() {                                         \
 }
 
 /*===========================================================================*/

@@ -83,7 +83,9 @@ void nilSysInit(void) {
     SETUP_CONTEXT(tr, tcp->wap, tcp->size, tcp->funcp, tcp->arg);
 
     /* Initialization hook.*/
+#if defined(NIL_CFG_THREAD_EXT_INIT_HOOK)
     NIL_CFG_THREAD_EXT_INIT_HOOK(tr);
+#endif
   }
 
   /* Runs the highest priority thread, the current one becomes the null
@@ -217,6 +219,11 @@ void nilSchRescheduleS() {
 
   if (ntr != otr) {
     nil.current = ntr;
+#if defined(NIL_CFG_IDLE_LEAVE_HOOK)
+    if (otr == &nil.threads[NIL_CFG_NUM_THREADS]) {
+      NIL_CFG_IDLE_LEAVE_HOOK();
+    }
+#endif
     port_switch(ntr, otr);
   }
 }
@@ -240,6 +247,9 @@ void nilSchRescheduleS() {
  */
 msg_t nilSchGoSleepTimeoutS(tstate_t newstate, systime_t timeout) {
   thread_ref_t ntr, otr = nil.current;
+
+  nilDbgAssert(otr == &nil.threads[NIL_CFG_NUM_THREADS],
+               "nilSchGoSleepTimeoutS(), #1", "idle cannot sleep");
 
   /* Storing the wait object for the current thread.*/
   otr->state = newstate;
@@ -274,6 +284,11 @@ msg_t nilSchGoSleepTimeoutS(tstate_t newstate, systime_t timeout) {
     /* Is this thread ready to execute?*/
     if (NIL_THD_IS_READY(ntr)) {
       nil.current = nil.next = ntr;
+#if defined(NIL_CFG_IDLE_ENTER_HOOK)
+      if (ntr == &nil.threads[NIL_CFG_NUM_THREADS]) {
+        NIL_CFG_IDLE_ENTER_HOOK();
+      }
+#endif
       port_switch(ntr, otr);
       return nil.current->u1.msg;
     }
@@ -281,7 +296,7 @@ msg_t nilSchGoSleepTimeoutS(tstate_t newstate, systime_t timeout) {
     /* Points to the next thread in lowering priority order.*/
     ntr++;
     nilDbgAssert(ntr <= &nil.threads[NIL_CFG_NUM_THREADS],
-                 "nilSchGoSleepTimeoutS(), #1", "pointer out of range");
+                 "nilSchGoSleepTimeoutS(), #2", "pointer out of range");
   }
 }
 
