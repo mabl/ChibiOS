@@ -2,6 +2,7 @@
 PORTSRC = $(NILRTOS)/os/ports/common/ARMCMx/nvic.c \
           $(NILRTOS)/os/ports/GCC/ARMCM0/crt0.c \
           $(NILRTOS)/os/ports/GCC/ARMCM0/STM32F0xx/vectors.c \
+          $(NILRTOS)/os/ports/GCC/ARMCM0/STM32F0xx/niltimer.c \
           $(NILRTOS)/os/ports/GCC/ARMCM0/STM32F0xx/nilcore.c
 
 PORTASM =

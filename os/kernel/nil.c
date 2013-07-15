@@ -77,6 +77,7 @@ void nilSysInit(void) {
        tr < &nil.threads[NIL_CFG_NUM_THREADS];
        tr++, tcp++) {
     tr->state = NIL_THD_READY;
+    tr->timeout = 0;
 
     /* Port dependent thread initialization.*/
     SETUP_CONTEXT(tr, tcp->wap, tcp->size, tcp->funcp, tcp->arg);
@@ -102,15 +103,18 @@ void nilSysInit(void) {
  * @iclass
  */
 void nilSysTimerHandlerI(void) {
-  thread_ref_t tr;
 
+#if NIL_CFG_TIMEDELTA == 0
+  thread_ref_t tr = &nil.threads[0];
   nil.systime++;
-  tr = &nil.threads[0];
   do {
-    /* If a thread is not ready and its timeout counter is greater than
-       zero then the timeout handling must be performed.*/
-    if (!NIL_THD_IS_READY(tr) && (tr->timeout > 0)) {
-      /* Did the timer reach zero?*/
+    /* Is the thread in a wait state with timeout?.*/
+    if (tr->timeout > 0) {
+
+      nilDbgAssert(!NIL_THD_IS_READY(tr),
+                   "nilSysTimerHandlerI(), #1", "is ready");
+
+     /* Did the timer reach zero?*/
       if (--tr->timeout == 0) {
         /* Timeout on semaphores requires a special handling because the
            semaphore counter must be incremented.*/
@@ -127,6 +131,53 @@ void nilSysTimerHandlerI(void) {
     tr++;
     nilSysLockFromISR();
   } while (tr < &nil.threads[NIL_CFG_NUM_THREADS]);
+#else
+  thread_ref_t tr = &nil.threads[0];
+  systime_t next = 0;
+
+  nilDbgAssert(nil.nexttime == port_timer_get_alarm(),
+               "nilSysTimerHandlerI(), #1", "time mismatch");
+
+  do {
+    /* Is the thread in a wait state with timeout?.*/
+    if (tr->timeout > 0) {
+
+      nilDbgAssert(!NIL_THD_IS_READY(tr),
+                   "nilSysTimerHandlerI(), #2", "is ready");
+      nilDbgAssert(tr->timeout >= nil.nexttime - nil.lasttime,
+                   "nilSysTimerHandlerI(), #3", "skipped one");
+
+      tr->timeout -= nil.nexttime - nil.lasttime;
+      if (tr->timeout == 0) {
+        /* Timeout on semaphores requires a special handling because the
+           semaphore counter must be incremented.*/
+        if (NIL_THD_IS_WTSEM(tr))
+          tr->u1.semp->cnt++;
+        else if (NIL_THD_IS_SUSP(tr))
+          tr->u1.trp = NULL;
+        nilSchReadyI(tr, NIL_MSG_TMO);
+      }
+      else {
+        if (tr->timeout <= next - 1)
+          next = tr->timeout;
+      }
+    }
+    /* Lock released in order to give a preemption chance on those
+       architectures supporting IRQ preemption.*/
+    nilSysUnlockFromISR();
+    tr++;
+    nilSysLockFromISR();
+  } while (tr < &nil.threads[NIL_CFG_NUM_THREADS]);
+  nil.lasttime = nil.nexttime;
+  if (next > 0) {
+    nil.nexttime += next;
+    port_timer_set_alarm(nil.nexttime);
+  }
+  else {
+    /* No tick event needed.*/
+    port_timer_reset_alarm();
+  }
+#endif
 }
 
 /**
@@ -178,7 +229,7 @@ void nilSchRescheduleS() {
  *          awakened with a @p NIL_MSG_TMO low level message.
  *
  * @param[in] newstate  the new thread state or a semaphore pointer
- * @param[in] timeout   the number of ticks before the operation timeouts,
+ * @param[in] timeout   the number of ticks before the operation timeouts.
  *                      the following special values are allowed:
  *                      - @a TIME_INFINITE no timeout.
  *                      .
@@ -193,8 +244,29 @@ msg_t nilSchGoSleepTimeoutS(tstate_t newstate, systime_t timeout) {
   /* Storing the wait object for the current thread.*/
   otr->state = newstate;
 
+#if NIL_CFG_TIMEDELTA > 0
+  if (timeout != TIME_INFINITE) {
+    systime_t time;
+
+    /* TIMEDELTA makes sure to have enough time to reprogram the timer
+       before the free-running timer counter reaches the selected timeout.*/
+    if (timeout < NIL_CFG_TIMEDELTA)
+      timeout = NIL_CFG_TIMEDELTA;
+
+    time = nilTimeNow() + timeout;
+    if (nilTimeIsWithin(time, nil.lasttime, nil.nexttime)) {
+      port_timer_set_alarm(time);
+      nil.nexttime = time;
+    }
+
+    /* Timeout settings.*/
+    otr->timeout = time - nil.lasttime;
+  }
+#else
+
   /* Timeout settings.*/
   otr->timeout = timeout;
+#endif
 
   /* Scanning the whole threads array.*/
   ntr = nil.threads;
@@ -301,11 +373,10 @@ void nilThdSleepUntil(systime_t time) {
  *
  * @api
  */
-bool nilTimeIsWithin(systime_t start, systime_t end) {
+bool nilTimeNowIsWithin(systime_t start, systime_t end) {
 
   systime_t time = nilTimeNow();
-  return end > start ? (time >= start) && (time < end) :
-                       (time >= start) || (time < end);
+  return nilTimeIsWithin(time, start, end);
 }
 
 /**

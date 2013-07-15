@@ -41,12 +41,19 @@
 /**
  * @brief   System tick frequency.
  */
-#define NIL_CFG_FREQUENCY               100
+#define NIL_CFG_FREQUENCY               50000
+
+/**
+ * @brief   Time delta constant for the tick-less mode.
+ * @note    If this value is zero then the system uses the classic
+ *          periodic tick.
+ */
+#define NIL_CFG_TIMEDELTA               2
 
 /**
  * @brief   System assertions.
  */
-#define NIL_CFG_ENABLE_ASSERTS          FALSE
+#define NIL_CFG_ENABLE_ASSERTS          TRUE
 
 /**
  * @brief   Threads descriptor structure extension.

@@ -126,17 +126,26 @@
 #endif
 
 /**
- * @brief   System tick frequency.
+ * @brief   System timer resolution in Hz.
  */
 #if !defined(NIL_CFG_FREQUENCY) || defined(__DOXYGEN__)
 #define NIL_CFG_FREQUENCY               100
 #endif
 
 /**
+ * @brief   Time delta constant for the tick-less mode.
+ * @note    If this value is zero then the system uses the classic
+ *          periodic tick.
+ */
+#if !defined(NIL_CFG_TIMEDELTA) || defined(__DOXYGEN__)
+#define NIL_CFG_TIMEDELTA               0
+#endif
+
+/**
  * @brief   System assertions.
  */
 #if !defined(NIL_CFG_ENABLE_ASSERTS) || defined(__DOXYGEN__)
-#define NIL_CFG_ENABLE_ASSERTS          TRUE
+#define NIL_CFG_ENABLE_ASSERTS          FALSE
 #endif
 
 /**
@@ -163,12 +172,16 @@
 #endif
 
 #if NIL_CFG_NUM_THREADS > 12
-#error "nil is not recommended for thread-intensive applications, consider" \
+#error "Nil is not recommended for thread-intensive applications, consider" \
        "ChibiOS/RT instead"
 #endif
 
 #if NIL_CFG_FREQUENCY <= 0
 #error "invalid NIL_CFG_FREQUENCY specified"
+#endif
+
+#if (NIL_CFG_TIMEDELTA < 0) || (NIL_CFG_TIMEDELTA == 1)
+#error "invalid NIL_CFG_TIMEDELTA specified"
 #endif
 
 #if NIL_CFG_ENABLE_ASSERTS
@@ -184,7 +197,7 @@
 /**
  * @brief   Type of internal context structure.
  */
-typedef struct port_intctx intctx;
+typedef struct port_intctx intctx_t;
 
 /**
  * @brief   Type of a structure representing a counting semaphore.
@@ -228,7 +241,7 @@ typedef thread_t * thread_ref_t;
  * @brief   Structure representing a thread.
  */
 struct nil_thread {
-  intctx            *ctxp;      /**< @brief Pointer to internal context.    */
+  intctx_t          *ctxp;      /**< @brief Pointer to internal context.    */
   tstate_t          state;      /**< @brief Thread state.                   */
   /* Note, the following union contains a pointer while the thread is in a
      sleeping state (!NIL_THD_IS_READY()) else contains the wake-up message.*/
@@ -260,10 +273,22 @@ typedef struct {
    *          or to an higher priority thread if a switch is required.
    */
   thread_ref_t      next;
+#if NIL_CFG_TIMEDELTA == 0 || defined(__DOXYGEN__)
   /**
    * @brief   System time.
    */
   systime_t         systime;
+#endif
+#if NIL_CFG_TIMEDELTA > 0 || defined(__DOXYGEN__)
+  /**
+   * @brief   System time of the last tick event.
+   */
+  systime_t         lasttime;
+  /**
+   * @brief   Time of the next scheduled tick event.
+   */
+  systime_t         nexttime;
+#endif
   /**
    * @brief   Thread structures for all the defined threads.
    */
@@ -271,7 +296,7 @@ typedef struct {
 #if NIL_DBG_ENABLED || defined(__DOXYGEN__)
   /**
    * @brief   Panic message.
-   * @note    This field is only present if some debug option has been
+   * @note    This field is only present if some debug options have been
    *          activated.
    */
   const char        *dbg_msg;
@@ -481,7 +506,29 @@ typedef struct {
  *
  * @api
  */
+#if NIL_CFG_TIMEDELTA == 0 || defined(__DOXYGEN__)
 #define nilTimeNow() (nil.systime)
+#else
+#define nilTimeNow() port_timer_get_time()
+#endif
+
+/**
+ * @brief   Checks if the specified time is within the specified time window.
+ * @note    When start==end then the function returns always true because the
+ *          whole time range is specified.
+ *
+ * @param[in] time      the time to be verified
+ * @param[in] start     the start of the time window (inclusive)
+ * @param[in] end       the end of the time window (non inclusive)
+ *
+ * @retval true         current time within the specified time window.
+ * @retval false        current time not within the specified time window.
+ *
+ * @api
+ */
+#define nilTimeIsWithin(time, start, end)                                   \
+  ((end) > (start) ? ((time) >= (start)) && ((time) < (end)) :              \
+                     ((time) >= (start)) || ((time) < (end)))
 /** @} */
 
 /**
@@ -638,7 +685,7 @@ extern "C" {
   void nilThdResumeI(thread_ref_t *trp, msg_t msg);
   void nilThdSleep(systime_t time);
   void nilThdSleepUntil(systime_t time);
-  bool nilTimeIsWithin(systime_t start, systime_t end);
+  bool nilTimeNowIsWithin(systime_t start, systime_t end);
   msg_t nilSemWaitTimeout(semaphore_t *sp, systime_t time);
   msg_t nilSemWaitTimeoutS(semaphore_t *sp, systime_t time);
   void nilSemSignal(semaphore_t *sp);

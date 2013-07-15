@@ -31,6 +31,10 @@
 #include "cmparams.h"
 #include "nvic.h"
 
+#if NIL_CFG_TIMEDELTA > 0
+#include "niltimer.h"
+#endif
+
 /*===========================================================================*/
 /* Module constants.                                                         */
 /*===========================================================================*/
@@ -69,10 +73,6 @@
  * @brief   Per-thread stack overhead for interrupts servicing.
  * @details This constant is used in the calculation of the correct working
  *          area size.
- * @note    In this port this value is conservatively set to 32 because the
- *          function @p chSchDoReschedule() can have a stack frame, especially
- *          with compiler optimizations disabled. The value can be reduced
- *          when compiler optimizations are enabled.
  */
 #if !defined(PORT_INT_REQUIRED_STACK)
 #define PORT_INT_REQUIRED_STACK         32
@@ -126,11 +126,6 @@
  */
 #define CORTEX_PRIORITY_MASK(n)                                             \
   ((n) << (8 - CORTEX_PRIORITY_BITS))
-
-#if !CORTEX_IS_VALID_PRIORITY(CORTEX_PRIORITY_SYSTICK)
-/* If it is externally redefined then better perform a validity check on it.*/
-#error "invalid priority level specified for CORTEX_PRIORITY_SYSTICK"
-#endif
 
 /*===========================================================================*/
 /* Module data structures and types.                                         */
@@ -255,17 +250,6 @@ struct port_intctx {
 #define PORT_FAST_IRQ_HANDLER(id) void id(void)
 
 /**
- * @brief   Port-related initialization code.
- */
-#define port_init() {                                                       \
-  SCB_AIRCR = AIRCR_VECTKEY | AIRCR_PRIGROUP(0);                            \
-  nvicSetSystemHandlerPriority(HANDLER_PENDSV,                              \
-    CORTEX_PRIORITY_MASK(CORTEX_PRIORITY_PENDSV));                          \
-  nvicSetSystemHandlerPriority(HANDLER_SYSTICK,                             \
-    CORTEX_PRIORITY_MASK(CORTEX_PRIORITY_SYSTICK));                         \
-}
-
-/**
  * @brief   Kernel-lock action.
  * @details Usually this function just disables interrupts but may perform
  *          more actions.
@@ -350,6 +334,25 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
+
+/*===========================================================================*/
+/* Module inline functions.                                                  */
+/*===========================================================================*/
+
+/**
+ * @brief   Port-related initialization code.
+ */
+static inline void port_init(void) {
+
+  nvicSetSystemHandlerPriority(HANDLER_PENDSV,
+    CORTEX_PRIORITY_MASK(CORTEX_PRIORITY_PENDSV));
+#if NIL_CFG_TIMEDELTA == 0
+  nvicSetSystemHandlerPriority(HANDLER_SYSTICK,
+    CORTEX_PRIORITY_MASK(CORTEX_PRIORITY_SYSTICK));
+#else
+  port_timer_init();
+#endif
+}
 
 #endif /* _NILCORE_H_ */
 

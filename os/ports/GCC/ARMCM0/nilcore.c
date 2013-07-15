@@ -47,6 +47,7 @@
 /* Module interrupt handlers.                                                */
 /*===========================================================================*/
 
+#if NIL_CFG_TIMEDELTA == 0 || defined(__DOXYGEN__)
 /**
  * @brief   System Timer vector.
  * @details This interrupt is used as system tick.
@@ -62,6 +63,7 @@ NIL_IRQ_HANDLER(SysTickVector) {
 
   NIL_IRQ_EPILOGUE();
 }
+#endif /* NIL_CFG_TIMEDELTA == 0 */
 
 #if !CORTEX_ALTERNATE_SWITCH || defined(__DOXYGEN__)
 /**

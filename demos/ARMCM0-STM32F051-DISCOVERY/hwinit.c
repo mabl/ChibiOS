@@ -150,10 +150,16 @@ void hwInit(void) {
 
 #endif /* !STM32_NO_INIT */
 
+#if NIL_CFG_TIMEDELTA == 0
   /* SysTick initialization using the system clock.*/
   SysTick->LOAD = STM32_HCLK / NIL_CFG_FREQUENCY - 1;
   SysTick->VAL = 0;
   SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk |
                   SysTick_CTRL_ENABLE_Msk |
                   SysTick_CTRL_TICKINT_Msk;
+#else
+  rccEnableAPB1(RCC_APB1ENR_TIM2EN, TRUE);
+  nvicEnableVector(15, CORTEX_PRIORITY_MASK(CORTEX_PRIORITY_SYSTICK));
+  TIM2->PSC = STM32_TIMCLK2 / NIL_CFG_FREQUENCY - 1;
+#endif
 }
