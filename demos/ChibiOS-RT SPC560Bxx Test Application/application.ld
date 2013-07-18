@@ -27,9 +27,9 @@ __process_stack_size__  = 2048;
 
 MEMORY
 {
-    flash     : org = 0x00000000, len = 256k
+    flash     : org = 0x00000000, len = 1536k
     dataflash : org = 0x00800000, len = 64k
-    ram       : org = 0x40000000, len = 16k
+    ram       : org = 0x40000000, len = 96k
 }
 
 ENTRY(_reset_address)

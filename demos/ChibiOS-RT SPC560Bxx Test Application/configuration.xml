@@ -10,7 +10,7 @@
     <instances>
       <instance locked="false" id="com.st.tools.spc5.components.platform.spc560bxx">
         <platform_settings>
-          <specific_model index="3">SPC560B64L7</specific_model>
+          <specific_model index="6">SPC560B64L7</specific_model>
         </platform_settings>
         <runtime_settings>
           <process_stack_size>2048</process_stack_size>
@@ -86,7 +86,7 @@
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.hal.board.spc560bxx">
         <identification>
-          <board_identifier>SPC560DXX_EVB</board_identifier>
+          <board_identifier>SPC560BXX_EVB</board_identifier>
           <board_name>EVB with SPC560Bxx Mini Module</board_name>
         </identification>
         <clock_settings>
@@ -271,6 +271,7 @@
             <ps60 index="0">0</ps60>
             <ps61 index="0">0</ps61>
             <ps62 index="0">0</ps62>
+            <ps63 index="0">0</ps63>
           </alternate_inputs>
         </i_o_settings>
         <initialization_code>
@@ -287,8 +288,8 @@
           <disable_watchdog>true</disable_watchdog>
           <fmpll0_settings>
             <idf_value>1</idf_value>
-            <ndiv_value>48</ndiv_value>
-            <odf_value index="2">SPC5_FMPLL_ODF_DIV8</odf_value>
+            <ndiv_value>32</ndiv_value>
+            <odf_value index="1">SPC5_FMPLL_ODF_DIV4</odf_value>
           </fmpll0_settings>
           <clocks>
             <fxosc_divider index="0">1</fxosc_divider>
@@ -302,9 +303,20 @@
         <irq_priority_settings>
           <dspi_0 index="9">10</dspi_0>
           <dspi_1 index="9">10</dspi_1>
+          <dspi_2 index="9">10</dspi_2>
+          <dspi_3 index="9">10</dspi_3>
+          <dspi_4 index="9">10</dspi_4>
+          <dspi_5 index="9">10</dspi_5>
           <linflex0 index="7">8</linflex0>
           <linflex1 index="7">8</linflex1>
           <linflex2 index="7">8</linflex2>
+          <linflex3 index="7">8</linflex3>
+          <linflex4 index="7">8</linflex4>
+          <linflex5 index="7">8</linflex5>
+          <linflex6 index="7">8</linflex6>
+          <linflex7 index="7">8</linflex7>
+          <linflex8 index="7">8</linflex8>
+          <linflex9 index="7">8</linflex9>
         </irq_priority_settings>
         <edma_settings>
           <group_0_channels_priorities>
@@ -343,11 +355,18 @@
             <dspi4_tx1 index="1">1</dspi4_tx1>
             <dspi4_tx2 index="2">2</dspi4_tx2>
             <dspi4_rx index="3">3</dspi4_rx>
+            <dspi5_tx1 index="4">4</dspi5_tx1>
+            <dspi5_tx2 index="5">5</dspi5_tx2>
+            <dspi5_rx index="6">6</dspi5_rx>
           </dspi_channels>
         </edma_mux_settings>
         <dspi_settings>
           <dspi_0>false</dspi_0>
           <dspi_1>false</dspi_1>
+          <dspi_2>false</dspi_2>
+          <dspi_3>false</dspi_3>
+          <dspi_4>false</dspi_4>
+          <dspi_5>false</dspi_5>
           <dma_error_hook>osalSysHalt("DSPI DMA failure")</dma_error_hook>
           <inactive_states>
             <dspi_0___pcs0 index="1">Inactive High</dspi_0___pcs0>
@@ -356,28 +375,21 @@
             <dspi_0___pcs3 index="1">Inactive High</dspi_0___pcs3>
             <dspi_0___pcs4 index="1">Inactive High</dspi_0___pcs4>
             <dspi_0___pcs5 index="1">Inactive High</dspi_0___pcs5>
-            <dspi_0___pcs6 index="1">Inactive High</dspi_0___pcs6>
-            <dspi_0___pcs7 index="1">Inactive High</dspi_0___pcs7>
             <dspi_1___pcs0 index="1">Inactive High</dspi_1___pcs0>
             <dspi_1___pcs1 index="1">Inactive High</dspi_1___pcs1>
             <dspi_1___pcs2 index="1">Inactive High</dspi_1___pcs2>
             <dspi_1___pcs3 index="1">Inactive High</dspi_1___pcs3>
             <dspi_1___pcs4 index="1">Inactive High</dspi_1___pcs4>
-            <dspi_1___pcs5 index="1">Inactive High</dspi_1___pcs5>
-            <dspi_1___pcs6 index="1">Inactive High</dspi_1___pcs6>
-            <dspi_1___pcs7 index="1">Inactive High</dspi_1___pcs7>
             <dspi_2___pcs0 index="1">Inactive High</dspi_2___pcs0>
             <dspi_2___pcs1 index="1">Inactive High</dspi_2___pcs1>
             <dspi_2___pcs2 index="1">Inactive High</dspi_2___pcs2>
             <dspi_2___pcs3 index="1">Inactive High</dspi_2___pcs3>
             <dspi_3___pcs0 index="1">Inactive High</dspi_3___pcs0>
             <dspi_3___pcs1 index="1">Inactive High</dspi_3___pcs1>
-            <dspi_3___pcs2 index="1">Inactive High</dspi_3___pcs2>
-            <dspi_3___pcs3 index="1">Inactive High</dspi_3___pcs3>
             <dspi_4___pcs0 index="1">Inactive High</dspi_4___pcs0>
             <dspi_4___pcs1 index="1">Inactive High</dspi_4___pcs1>
-            <dspi_4___pcs2 index="1">Inactive High</dspi_4___pcs2>
-            <dspi_4___pcs3 index="1">Inactive High</dspi_4___pcs3>
+            <dspi_5___pcs0 index="1">Inactive High</dspi_5___pcs0>
+            <dspi_5___pcs1 index="1">Inactive High</dspi_5___pcs1>
           </inactive_states>
           <spi_configurations>
             <configs />
@@ -387,6 +399,13 @@
           <linflex0 index="1">Serial</linflex0>
           <linflex1 index="0">None</linflex1>
           <linflex2 index="0">None</linflex2>
+          <linflex3 index="0">None</linflex3>
+          <linflex4 index="0">None</linflex4>
+          <linflex5 index="0">None</linflex5>
+          <linflex6 index="0">None</linflex6>
+          <linflex7 index="0">None</linflex7>
+          <linflex8 index="0">None</linflex8>
+          <linflex9 index="0">None</linflex9>
         </linflex_settings>
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.kernel">
