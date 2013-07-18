@@ -27,6 +27,9 @@
    <feature url="features/org.chibios.spc5.components.rtos.spc560dxx.feature_1.0.0.qualifier.jar" id="org.chibios.spc5.components.rtos.spc560dxx.feature" version="1.0.0.qualifier">
       <category name="ChibiOS/RT"/>
    </feature>
+   <feature url="features/org.chibios.spc5.components.rtos.spc560bxx.feature_1.0.0.qualifier.jar" id="org.chibios.spc5.components.rtos.spc560bxx.feature" version="1.0.0.qualifier">
+      <category name="ChibiOS/RT"/>
+   </feature>
    <category-def name="ChibiOS/RT" label="ChibiOS/RT">
       <description>
          ChibiOS/RT Components and Plugnis.
