@@ -248,7 +248,7 @@ void nilSchRescheduleS() {
 msg_t nilSchGoSleepTimeoutS(tstate_t newstate, systime_t timeout) {
   thread_ref_t ntr, otr = nil.current;
 
-  nilDbgAssert(otr == &nil.threads[NIL_CFG_NUM_THREADS],
+  nilDbgAssert(otr != &nil.threads[NIL_CFG_NUM_THREADS],
                "nilSchGoSleepTimeoutS(), #1", "idle cannot sleep");
 
   /* Storing the wait object for the current thread.*/
@@ -263,7 +263,7 @@ msg_t nilSchGoSleepTimeoutS(tstate_t newstate, systime_t timeout) {
     if (timeout < NIL_CFG_TIMEDELTA)
       timeout = NIL_CFG_TIMEDELTA;
 
-    time = nilTimeNow() + timeout;
+    time = nilTimeNowI() + timeout;
     if (nilTimeIsWithin(time, nil.lasttime, nil.nexttime)) {
       port_timer_set_alarm(time);
       nil.nexttime = time;
@@ -375,6 +375,26 @@ void nilThdSleepUntil(systime_t time) {
 }
 
 /**
+ * @brief   Current system time.
+ * @details Returns the number of system ticks since the @p nilSysInit()
+ *          invocation.
+ * @note    The counter can reach its maximum and then restart from zero.
+ * @note    This function is designed to work with the @p nilThdSleepUntil().
+ *
+ * @return              The system time in ticks.
+ *
+ * @api
+ */
+systime_t nilTimeNow(void) {
+  systime_t time;
+
+  nilSysLock();
+  time = nilTimeNowI();
+  nilSysUnlock();
+  return time;
+}
+
+/**
  * @brief   Checks if the current system time is within the specified time
  *          window.
  * @note    When start==end then the function returns always true because the
@@ -453,6 +473,7 @@ msg_t nilSemWaitTimeoutS(semaphore_t *sp, systime_t timeout) {
     nil.current->u1.semp = sp;
     return nilSchGoSleepTimeoutS(NIL_THD_WTSEM, timeout);
   }
+  sp->cnt = cnt - 1;
   return NIL_MSG_OK;
 }
 

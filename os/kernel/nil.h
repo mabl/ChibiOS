@@ -237,17 +237,17 @@ typedef thread_t * thread_ref_t;
  * @brief   Structure representing a thread.
  */
 struct nil_thread {
-  intctx_t          *ctxp;      /**< @brief Pointer to internal context.    */
-  tstate_t          state;      /**< @brief Thread state.                   */
+  intctx_t              *ctxp;  /**< @brief Pointer to internal context.    */
+  tstate_t              state;  /**< @brief Thread state.                   */
   /* Note, the following union contains a pointer while the thread is in a
      sleeping state (!NIL_THD_IS_READY()) else contains the wake-up message.*/
   union {
-    msg_t           msg;        /**< @brief Wake-up message.                */
-    void            *p;         /**< @brief Generic pointer.                */
-    thread_ref_t    *trp;       /**< @brief Pointer to thread reference.    */
-    semaphore_t     *semp;      /**< @brief Pointer to semaphore.           */
+    msg_t               msg;    /**< @brief Wake-up message.                */
+    void                *p;     /**< @brief Generic pointer.                */
+    thread_ref_t        *trp;   /**< @brief Pointer to thread reference.    */
+    semaphore_t         *semp;  /**< @brief Pointer to semaphore.           */
   } u1;
-  systime_t         timeout;    /**< @brief Timeout counter, zero
+  volatile systime_t    timeout;/**< @brief Timeout counter, zero
                                             if disabled.                    */
   /* Optional extra fields.*/
   NIL_CFG_THREAD_EXT_FIELDS
@@ -500,12 +500,12 @@ typedef struct {
  *
  * @return              The system time in ticks.
  *
- * @api
+ * @iclass
  */
 #if NIL_CFG_TIMEDELTA == 0 || defined(__DOXYGEN__)
-#define nilTimeNow() (nil.systime)
+#define nilTimeNowI() (nil.systime)
 #else
-#define nilTimeNow() port_timer_get_time()
+#define nilTimeNowI() port_timer_get_time()
 #endif
 
 /**
@@ -681,6 +681,7 @@ extern "C" {
   void nilThdResumeI(thread_ref_t *trp, msg_t msg);
   void nilThdSleep(systime_t time);
   void nilThdSleepUntil(systime_t time);
+  systime_t nilTimeNow(void);
   bool nilTimeNowIsWithin(systime_t start, systime_t end);
   msg_t nilSemWaitTimeout(semaphore_t *sp, systime_t time);
   msg_t nilSemWaitTimeoutS(semaphore_t *sp, systime_t time);
