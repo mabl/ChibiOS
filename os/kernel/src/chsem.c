@@ -351,7 +351,7 @@ void chSemSetCounterI(Semaphore *sp, cnt_t n) {
     chSchReadyI(lifo_remove(&sp->s_queue))->p_u.rdymsg = RDY_OK;
 }
 
-#if CH_USE_SEMSW
+#if CH_USE_SEMSW || defined(__DOXYGEN__)
 /**
  * @brief   Performs atomic signal and wait operations on two semaphores.
  * @pre     The configuration option @p CH_USE_SEMSW must be enabled in order
