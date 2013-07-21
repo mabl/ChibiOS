@@ -177,7 +177,7 @@ void nilSysTimerHandlerI(void) {
   }
   else {
     /* No tick event needed.*/
-    port_timer_reset_alarm();
+    port_timer_stop_alarm();
   }
 #endif
 }
@@ -256,17 +256,25 @@ msg_t nilSchGoSleepTimeoutS(tstate_t newstate, systime_t timeout) {
 
 #if NIL_CFG_TIMEDELTA > 0
   if (timeout != TIME_INFINITE) {
-    systime_t time;
+    systime_t time = nilTimeNowI() + timeout;
 
     /* TIMEDELTA makes sure to have enough time to reprogram the timer
        before the free-running timer counter reaches the selected timeout.*/
     if (timeout < NIL_CFG_TIMEDELTA)
       timeout = NIL_CFG_TIMEDELTA;
 
-    time = nilTimeNowI() + timeout;
-    if (nilTimeIsWithin(time, nil.lasttime, nil.nexttime)) {
-      port_timer_set_alarm(time);
+    if (nil.lasttime == nil.nexttime) {
+      /* Special case, first thread asking for a timeout.*/
+      port_timer_start_alarm(time);
       nil.nexttime = time;
+    }
+    else {
+      /* Special case, there are already other threads with a timeout
+         activated, evaluating the order.*/
+      if (nilTimeIsWithin(time, nil.lasttime, nil.nexttime)) {
+        port_timer_set_alarm(time);
+        nil.nexttime = time;
+      }
     }
 
     /* Timeout settings.*/

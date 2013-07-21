@@ -123,13 +123,53 @@ static inline systime_t port_timer_get_time(void) {
 }
 
 /**
+ * @brief   Starts the alarm.
+ * @note    Makes sure that no spurious alarms are triggered after
+ *          this call.
+ *
+ * @param[in] time      the time to be set for the first alarm
+ *
+ * @notapi
+ */
+static inline void port_timer_start_alarm(systime_t time) {
+
+  nilDbgAssert((STM32F0_TIM2->DIER & 2) == 0,
+               "port_timer_start_alarm(), #1",
+               "already started");
+
+  STM32F0_TIM2->CCR[0]  = time;
+  STM32F0_TIM2->SR      = 0;
+  STM32F0_TIM2->DIER    = 2;            /* CC1IE */
+}
+
+/**
  * @brief   Stops the alarm interrupt.
  *
  * @notapi
  */
-static inline void port_timer_reset_alarm(void) {
+static inline void port_timer_stop_alarm(void) {
+
+  nilDbgAssert((STM32F0_TIM2->DIER & 2) != 0,
+               "port_timer_stop_alarm(), #1",
+               "not started");
 
   STM32F0_TIM2->DIER    = 0;
+}
+
+/**
+ * @brief   Sets the alarm time.
+ *
+ * @param[in] time      the time to be set for the next alarm
+ *
+ * @notapi
+ */
+static inline void port_timer_set_alarm(systime_t time) {
+
+  nilDbgAssert((STM32F0_TIM2->DIER & 2) != 0,
+               "port_timer_set_alarm(), #1",
+               "not started");
+
+  STM32F0_TIM2->CCR[0]  = time;
 }
 
 /**
@@ -141,20 +181,11 @@ static inline void port_timer_reset_alarm(void) {
  */
 static inline systime_t port_timer_get_alarm(void) {
 
+  nilDbgAssert((STM32F0_TIM2->DIER & 2) != 0,
+               "port_timer_get_alarm(), #1",
+               "not started");
+
   return STM32F0_TIM2->CCR[0];
-}
-
-/**
- * @brief   Sets the alarm time.
- *
- * @param[in] time      the time to be set for alarm
- *
- * @notapi
- */
-static inline void port_timer_set_alarm(systime_t time) {
-
-  STM32F0_TIM2->CCR[0]  = time;
-  STM32F0_TIM2->DIER    = 2;            /* CC1IE */
 }
 
 #endif /* _NILTIMER_H_ */

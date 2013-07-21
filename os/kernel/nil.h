@@ -662,8 +662,6 @@ typedef struct {
 /* External declarations.                                                    */
 /*===========================================================================*/
 
-#include "nilcore.h"
-
 #if !defined(__DOXYGEN__)
 extern nil_system_t nil;
 extern const thread_config_t nil_thd_configs[NIL_CFG_NUM_THREADS + 1];
@@ -692,6 +690,10 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
+
+/* Late inclusion, this is done in order to let the port layer access
+   the OS services like assertions.*/
+#include "nilcore.h"
 
 #endif /* _NIL_H_ */
 

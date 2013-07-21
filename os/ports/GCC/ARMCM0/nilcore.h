@@ -31,10 +31,6 @@
 #include "cmparams.h"
 #include "nvic.h"
 
-#if NIL_CFG_TIMEDELTA > 0
-#include "niltimer.h"
-#endif
-
 /*===========================================================================*/
 /* Module constants.                                                         */
 /*===========================================================================*/
@@ -333,6 +329,10 @@ extern "C" {
    void port_halt(void);
 #ifdef __cplusplus
 }
+#endif
+
+#if NIL_CFG_TIMEDELTA > 0
+#include "niltimer.h"
 #endif
 
 /*===========================================================================*/
