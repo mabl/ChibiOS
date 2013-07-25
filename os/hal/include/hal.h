@@ -64,6 +64,7 @@
 /* Complex drivers.*/
 #include "mmc_spi.h"
 #include "serial_usb.h"
+#include "usb_msd.h"
 
 /*===========================================================================*/
 /* Driver constants.                                                         */

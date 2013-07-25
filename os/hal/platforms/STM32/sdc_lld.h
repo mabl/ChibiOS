@@ -134,7 +134,21 @@
  */
 #if (defined(STM32F4XX) || defined(STM32F2XX))
 #define STM32_SDIO_DIV_HS                   0
-#define STM32_SDIO_DIV_LS                   120
+
+#  if STM32_HCLK == 168000000
+#    define STM32_SDIO_DIV_LS                   120
+#  else
+#    if STM32_HCLK == 84000000
+#      define STM32_SDIO_DIV_LS                   61
+#    else
+#      if STM32_HCLK == 42000000
+#        define STM32_SDIO_DIV_LS                   32
+#      else
+#        error "This make brake SDIO"
+#      endif
+#    endif
+#  endif
+
 
 #elif STM32_HCLK > 48000000
 #define STM32_SDIO_DIV_HS                   1

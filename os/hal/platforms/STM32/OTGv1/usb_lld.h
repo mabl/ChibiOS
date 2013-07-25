@@ -70,6 +70,16 @@
 #endif
 
 /**
+ * @brief   Enables or disables OTG2 high speed in full speed mode.
+ * @details If set to @p TRUE run in full speed mode.
+ * @note    The default is @p FALSE.
+ */
+#if !defined(STM32_USE_USB_OTG2_HS_FS) || defined(__DOXYGEN__)
+#define STM32_USE_USB_OTG2_HS_FS                  FALSE
+#endif
+
+
+/**
  * @brief   OTG1 interrupt priority level setting.
  */
 #if !defined(STM32_USB_OTG1_IRQ_PRIORITY) || defined(__DOXYGEN__)
