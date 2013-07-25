@@ -276,6 +276,7 @@ static const USBDescriptor *get_descriptor(USBDriver *usbp,
   case USB_DESCRIPTOR_STRING:
     if (dindex < 4)
       return &msd_strings[dindex];
+    break;
   }
   return NULL;
 }

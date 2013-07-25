@@ -222,31 +222,10 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
   return;
 }
 
-
-
 const USBConfig msd_usb_config = {
     usb_event,
     get_descriptor,
     msdRequestsHook,
     NULL
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
