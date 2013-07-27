@@ -210,7 +210,7 @@ void adc_lld_start_conversion(ADCDriver *adcp) {
   else
     n = (uint32_t)grpp->acg_num_channels;
   dmaChannelSetup(adcp->ad_dmachp, n, adcp->ad_samples, ccr);
-  dmaChannelEnable(adcp->dmastp);
+  dmaChannelEnable(adcp->ad_dmachp);
 
   /* ADC setup.*/
   adcp->ad_adc->CR1   = grpp->acg_cr1 | ADC_CR1_SCAN;
