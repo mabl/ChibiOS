@@ -11,9 +11,9 @@
       <view
             category="org.chibios.tools.eclipse.debug"
             class="org.chibios.tools.eclipse.debug.views.ChibiView"
-            icon="icons/sample.gif"
+            icon="rsc/chibios.ico"
             id="org.chibios.tools.eclipse.debug.views.ChibiView"
-            name="ChibiOS/RT">
+            name="ChibiOS/RT 2.x.x">
       </view>
    </extension>
    <extension
