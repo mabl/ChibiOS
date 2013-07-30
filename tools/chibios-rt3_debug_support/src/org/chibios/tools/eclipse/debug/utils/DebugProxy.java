@@ -389,7 +389,7 @@ public class DebugProxy {
     while (true) {
       
       // Fetching next timer in the delta list (vt_next link).
-      current = evaluateExpression("(uint32_t)((VirtualTimer *)" + current + ")->vt_next");
+      current = evaluateExpression("(uint32_t)((virtual_timer_t *)" + current + ")->vt_next");
 
       // This can happen if the kernel is not initialized yet or if the
       // delta list is corrupted.
@@ -399,7 +399,7 @@ public class DebugProxy {
       // TODO: integrity check on the pointer value (alignment, range).
 
       // The previous timer in the delta list is fetched as a integrity check.
-      String prev = evaluateExpression("(uint32_t)((VirtualTimer *)" + current + ")->vt_prev");
+      String prev = evaluateExpression("(uint32_t)((virtual_timer_t *)" + current + ")->vt_prev");
       if (prev.compareTo("0") == 0)
         throw new DebugProxyException("ChibiOS/RT delta list integrity check failed, NULL pointer");
       if (previous.compareTo(prev) != 0)
@@ -414,13 +414,13 @@ public class DebugProxy {
 
       // Fetch of the various fields in the thread_t structure. Some fields
       // are optional so are placed within try-catch.
-      long n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((VirtualTimer *)" + current + ")->vt_time"));
+      long n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((virtual_timer_t *)" + current + ")->vt_time"));
       map.put("delta", Long.toString(n));
 
-      n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((VirtualTimer *)" + current + ")->vt_func"));
+      n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((virtual_timer_t *)" + current + ")->vt_func"));
       map.put("func", Long.toString(n));
 
-      n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((VirtualTimer *)" + current + ")->vt_par"));
+      n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((virtual_timer_t *)" + current + ")->vt_par"));
       map.put("par", Long.toString(n));
 
       // Inserting the new thread map into the threads list.
@@ -530,15 +530,29 @@ public class DebugProxy {
     LinkedHashMap<String, String> map = new LinkedHashMap<String, String>(16);
     
     try {
-      String vt_systime = evaluateExpression("(uint32_t)vtlist.vt_systime");
-      if (vt_systime == null)
-        return null;
-      map.put("vt_systime", vt_systime);
-    } catch (DebugProxyException e) {
+        String vt_lasttime = evaluateExpression("(uint32_t)vtlist.vt_delta");
+        if (vt_lasttime == null)
+          return null;
+        map.put("vt_lasttime", vt_lasttime);
+    } catch (DebugProxyException e1) {
       throw new DebugProxyException("ChibiOS/RT not found on target");
     } catch (Exception e) {
       return null;
     }
+
+    try {
+      String vt_systime = evaluateExpression("(uint32_t)vtlist.vt_systime");
+      if (vt_systime == null)
+        return null;
+      map.put("vt_systime", vt_systime);
+    } catch (DebugProxyException e) {}
+    
+    try {
+        String vt_lasttime = evaluateExpression("(uint32_t)vtlist.vt_lasttime");
+        if (vt_lasttime == null)
+          return null;
+        map.put("vt_lasttime", vt_lasttime);
+    } catch (DebugProxyException e) {}
 
     try {
       long r_current = HexUtils.parseNumber(evaluateExpression("(uint32_t)rlist.r_current"));

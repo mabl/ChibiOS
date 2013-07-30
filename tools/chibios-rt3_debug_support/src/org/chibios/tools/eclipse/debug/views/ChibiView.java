@@ -322,7 +322,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     tableColumn.setText("");
     
     TableColumn tblclmnMeasuredSection = new TableColumn(statisticsTable, SWT.LEFT);
-    tblclmnMeasuredSection.setWidth(150);
+    tblclmnMeasuredSection.setWidth(200);
     tblclmnMeasuredSection.setText("Measured Section");
     
     TableColumn tableBestCase = new TableColumn(statisticsTable, SWT.LEFT);
@@ -579,7 +579,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
 
 
   private void fillStatisticsTable() {
-	  LinkedHashMap<String, HashMap<String, String>> lhm;
+      LinkedHashMap<String, HashMap<String, String>> lhm;
 
     // If the debugger is not yet present then do nothing.
     if (debugger == null)
@@ -600,7 +600,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     
     Set<Entry<String, HashMap<String, String>>> set = lhm.entrySet();
     for (Entry<String, HashMap<String, String>> entry : set) {
-      TableItem tableItem = new TableItem(globalTable, SWT.NONE);
+      TableItem tableItem = new TableItem(statisticsTable, SWT.NONE);
       tableItem.setText(new String[] {
         "",
         entry.getKey(),
@@ -626,9 +626,9 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
         else if (tabitem == tbtmTimers)
           fillTimersTable();
         else if (tabitem == tbtmTraceBuffer)
-            fillTraceBufferTable();
+          fillTraceBufferTable();
         else if (tabitem == tbtmStatistics)
-        	fillStatisticsTable();
+          fillStatisticsTable();
       }
     };
     refreshAction.setDisabledImageDescriptor(ResourceManager.getPluginImageDescriptor("org.eclipse.cdt.ui", "/icons/dlcl16/refresh_nav.gif"));
