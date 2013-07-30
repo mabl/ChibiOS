@@ -414,7 +414,7 @@ public class DebugProxy {
 
       // Fetch of the various fields in the thread_t structure. Some fields
       // are optional so are placed within try-catch.
-      long n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((virtual_timer_t *)" + current + ")->vt_time"));
+      long n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((virtual_timer_t *)" + current + ")->vt_delta"));
       map.put("delta", Long.toString(n));
 
       n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((virtual_timer_t *)" + current + ")->vt_func"));
@@ -654,8 +654,7 @@ public class DebugProxy {
         map.put("worst", "");
         map.put("cumulative", Long.toString(n_irq));
         lhm.put("Number of IRQs", map);
-    } catch (DebugProxyException e) {
-    }
+    } catch (DebugProxyException e) {}
 
     try {
         long n_ctxswc = HexUtils.parseNumber(evaluateExpression("(uint32_t)kernel_stats.n_ctxswc"));
@@ -664,44 +663,29 @@ public class DebugProxy {
         map.put("worst", "");
         map.put("cumulative", Long.toString(n_ctxswc));
         lhm.put("Number of Context Switches", map);
-    } catch (DebugProxyException e) {
-    }
+    } catch (DebugProxyException e) {}
 
     try {
 		long m_crit_thd_best = HexUtils.parseNumber(evaluateExpression("(uint32_t)kernel_stats.m_crit_thd.best"));
 		long m_crit_thd_worst = HexUtils.parseNumber(evaluateExpression("(uint32_t)kernel_stats.m_crit_thd.worst"));
 		long m_crit_thd_cumulative = HexUtils.parseNumber(evaluateExpression("(uint32_t)kernel_stats.m_crit_thd.cumulative"));
-		HashMap<String, String> map3 = new HashMap<String, String>(4);
-		map3.put("best", Long.toString(m_crit_thd_best));
-		map3.put("worst", Long.toString(m_crit_thd_worst));
-		map3.put("cumulative", Long.toString(m_crit_thd_cumulative));
-		lhm.put("Theads Critical Zones", map3);
-	} catch (DebugProxyException e) {
-	}
+		HashMap<String, String> map = new HashMap<String, String>(4);
+		map.put("best", Long.toString(m_crit_thd_best));
+		map.put("worst", Long.toString(m_crit_thd_worst));
+		map.put("cumulative", Long.toString(m_crit_thd_cumulative));
+		lhm.put("Threads Critical Zones", map);
+	} catch (DebugProxyException e) {}
 
     try {
 		long m_crit_isr_best = HexUtils.parseNumber(evaluateExpression("(uint32_t)kernel_stats.m_crit_isr.best"));
 		long m_crit_isr_worst = HexUtils.parseNumber(evaluateExpression("(uint32_t)kernel_stats.m_crit_isr.worst"));
 		long m_crit_isr_cumulative = HexUtils.parseNumber(evaluateExpression("(uint32_t)kernel_stats.m_crit_isr.cumulative"));
-		HashMap<String, String> map4 = new HashMap<String, String>(4);
-		map4.put("best", Long.toString(m_crit_isr_best));
-		map4.put("worst", Long.toString(m_crit_isr_worst));
-		map4.put("cumulative", Long.toString(m_crit_isr_cumulative));
-		lhm.put("ISRs Critical Zones", map4);
-	} catch (DebugProxyException e) {
-	}
-
-    try {
-		long m_isr_best = HexUtils.parseNumber(evaluateExpression("(uint32_t)kernel_stats.m_isr.best"));
-		long m_isr_worst = HexUtils.parseNumber(evaluateExpression("(uint32_t)kernel_stats.m_isr.worst"));
-		long m_isr_cumulative = HexUtils.parseNumber(evaluateExpression("(uint32_t)kernel_stats.m_isr.cumulative"));
-		HashMap<String, String> map5 = new HashMap<String, String>(4);
-		map5.put("best", Long.toString(m_isr_best));
-		map5.put("worst", Long.toString(m_isr_worst));
-		map5.put("cumulative", Long.toString(m_isr_cumulative));
-		lhm.put("ISRs Duration", map5);
-	} catch (DebugProxyException e) {
-	}
+		HashMap<String, String> map = new HashMap<String, String>(4);
+		map.put("best", Long.toString(m_crit_isr_best));
+		map.put("worst", Long.toString(m_crit_isr_worst));
+		map.put("cumulative", Long.toString(m_crit_isr_cumulative));
+		lhm.put("ISRs Critical Zones", map);
+	} catch (DebugProxyException e) {}
 
     return lhm;
   }

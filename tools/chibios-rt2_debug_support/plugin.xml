@@ -21,7 +21,7 @@
       <perspectiveExtension
             targetID="org.eclipse.jdt.ui.JavaPerspective">
          <view
-               id="org.chibios.tools.eclipse.debug.views.ChibiView"
+               id="org.chibios.tools.eclipse.debug.views.chibiosrt2"
                ratio="0.5"
                relationship="right"
                relative="org.eclipse.ui.views.TaskList">
