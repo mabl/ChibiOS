@@ -67,11 +67,18 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../boards/RENESAS_RPBRX62N/board.h" />
+		<Unit filename="../../os/hal/include/hal.h" />
+		<Unit filename="../../os/hal/include/pal.h" />
+		<Unit filename="../../os/hal/include/serial.h" />
 		<Unit filename="../../os/hal/platforms/Rx62n/hal_lld.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../os/hal/platforms/Rx62n/hal_lld.h" />
 		<Unit filename="../../os/hal/platforms/Rx62n/iodefine_gcc62n.h" />
+		<Unit filename="../../os/hal/platforms/Rx62n/pal_lld.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../os/hal/platforms/Rx62n/pal_lld.h" />
 		<Unit filename="../../os/hal/platforms/Rx62n/serial_lld.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -242,6 +249,15 @@
 			<envvars />
 			<debugger />
 			<lib_finder disable_auto="1" />
+			<DoxyBlocks>
+				<comment_style block="0" line="0" />
+				<doxyfile_project />
+				<doxyfile_build />
+				<doxyfile_warnings />
+				<doxyfile_output />
+				<doxyfile_dot />
+				<general />
+			</DoxyBlocks>
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

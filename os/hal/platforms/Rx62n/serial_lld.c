@@ -119,6 +119,7 @@ static void serve_interrupt_eri(SerialDriver *sdp) {
   volatile struct st_sci *u = sdp->uart;
 
   set_error(sdp, u->SSR.BYTE);
+  u->SSR.BYTE &= ~((1<<3)|(1<<4)|(1<<5)); /* clear error flags */
 }
 
 /**

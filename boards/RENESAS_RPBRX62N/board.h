@@ -34,21 +34,109 @@
 #define SUBCLK                  32768
 
 /*
+ * MCU type, supported types are defined in ./os/hal/platforms/hal_lld.h.
+ */
+#define RX62NXBDFP
+
+
+/*
+ * PORT 0 initial setup.
+ */
+#define VAL_PORT0DIR            0x00
+#define VAL_PORT0DATA           0x00
+#define VAL_PORT0ICR            0x00
+#define VAL_PORT0ODR            0x00
+
+/*
+ * PORT 1 initial setup.
+ */
+#define VAL_PORT1DIR            0x00
+#define VAL_PORT1DATA           0x00
+#define VAL_PORT1ICR            0x00
+#define VAL_PORT1ODR            0x00
+
+/*
+ * PORT 2 initial setup.
+ */
+#define VAL_PORT2DIR            0x00
+#define VAL_PORT2DATA           0x00
+#define VAL_PORT2ICR            0x00
+#define VAL_PORT2ODR            0x00
+
+/*
+ * PORT 3 initial setup.
+ */
+#define VAL_PORT3DIR            0x00
+#define VAL_PORT3DATA           0x00
+#define VAL_PORT3ICR            0x00
+#define VAL_PORT3ODR            0x00
+
+/*
+ * PORT 4 initial setup.
+ */
+#define VAL_PORT4DIR            0x00
+#define VAL_PORT4DATA           0x00
+#define VAL_PORT4ICR            0x00
+
+/*
+ * PORT 5 initial setup.
+ */
+#define VAL_PORT5DIR            0x00
+#define VAL_PORT5DATA           0x00
+#define VAL_PORT5ICR            0x00
+
+/*
  * GPIO A initial setup.
  */
-#define VAL_GPIOADIR            PAL_PORT_BIT(GPIOA_LED0) |                  \
-                                PAL_PORT_BIT(GPIOA_LED1) |                  \
-                                PAL_PORT_BIT(GPIOA_LED2)
-#define VAL_GPIOADATA           PAL_PORT_BIT(GPIOA_LED0) |                  \
-                                PAL_PORT_BIT(GPIOA_LED1) |                  \
-                                PAL_PORT_BIT(GPIOA_LED2)
+#define VAL_PORTADIR            PAL_PORT_BIT(PORTA_LED0) |                  \
+                                PAL_PORT_BIT(PORTA_LED1) |                  \
+                                PAL_PORT_BIT(PORTA_LED2)
+#define VAL_PORTADATA           PAL_PORT_BIT(PORTA_LED0) |                  \
+                                PAL_PORT_BIT(PORTA_LED1) |                  \
+                                PAL_PORT_BIT(PORTA_LED2)
+#define VAL_PORTAICR            0x00
+#define VAL_PORTAPCR            0x00
+
+/*
+ * PORT B initial setup.
+ */
+#define VAL_PORTBDIR            0x00
+#define VAL_PORTBDATA           0x00
+#define VAL_PORTBICR            0x00
+#define VAL_PORTBPCR            0x00
+
+/*
+ * PORT C initial setup.
+ */
+#define VAL_PORTCDIR            0x00
+#define VAL_PORTCDATA           0x00
+#define VAL_PORTCICR            0x00
+#define VAL_PORTCODR            0x00
+#define VAL_PORTCPCR            0x00
+
+/*
+ * PORT D initial setup.
+ */
+#define VAL_PORTDDIR            0x00
+#define VAL_PORTDDATA           0x00
+#define VAL_PORTDICR            0x00
+#define VAL_PORTDPCR            0x00
+
+/*
+ * PORT E initial setup.
+ */
+#define VAL_PORTEDIR            0x00
+#define VAL_PORTEDATA           0x00
+#define VAL_PORTEICR            0x00
+#define VAL_PORTEPCR            0x00
+
 
 /*
  * Pin definitions.
  */
-#define GPIOA_LED0              2
-#define GPIOA_LED1              1
-#define GPIO0_LED2              0
+#define PORTA_LED0              2
+#define PORTA_LED1              1
+#define PORTA_LED2              0
 
 #if !defined(_FROM_ASM_)
 #ifdef __cplusplus

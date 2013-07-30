@@ -24,16 +24,16 @@ static WORKING_AREA(waThread1, 128);
 static msg_t Thread1(void *arg) {
 
   while (TRUE) {
-    PORTA.DR.BIT.B2 = 0;
+    palClearPad(GPIO10, PORTA_LED0);
     chThdSleepMilliseconds(50);
-    PORTA.DR.BIT.B1 = 0;
+    palClearPad(GPIO10, PORTA_LED1);
     chThdSleepMilliseconds(50);
-    PORTA.DR.BIT.B0 = 0;
-    PORTA.DR.BIT.B2 = 1;
+    palClearPad(GPIO10, PORTA_LED2);
+    palSetPad(GPIO10, PORTA_LED0);
     chThdSleepMilliseconds(50);
-    PORTA.DR.BIT.B1 = 1;
+    palSetPad(GPIO10, PORTA_LED1);
     chThdSleepMilliseconds(50);
-    PORTA.DR.BIT.B0 = 1;
+    palSetPad(GPIO10, PORTA_LED2);
     chThdSleepMilliseconds(50);
     chThdSleepMilliseconds(400);
   }
@@ -134,10 +134,12 @@ int main(void) {
   /*
    * Leds initialization.
    */
+/*
   PORTA.DDR.BYTE = 0x07;
   PORTA.DR.BIT.B0 = 1;
   PORTA.DR.BIT.B1 = 1;
   PORTA.DR.BIT.B2 = 0;
+*/
 
   /*
    * Activates the serial driver 1 using the driver default configuration.

@@ -34,14 +34,9 @@
 /**
  * @brief   Defines the support for realtime counters in the HAL.
  */
-#define HAL_IMPLEMENTS_COUNTERS FALSE
+#define HAL_IMPLEMENTS_COUNTERS           FALSE
 
-/**
- * @brief   Platform name.
- */
-#define PLATFORM_NAME             "RX62N"
-
-#define IWDTCLK                   125000      /**< Watchdog internal clock.   */
+#define IWDTCLK                           125000 /**< Watchdog internal clock */
 
 /*===========================================================================*/
 /* Driver pre-compile time settings.                                         */
@@ -59,9 +54,11 @@
  * @brief   System PLL divider.
  * @note    The value must be chosen between (1, 2, 4, 8).
  */
+/*
 #if defined(__DOXYGEN__)
 #define RX62N_SYSPLL_DIV                  1
 #endif
+*/
 
 /**
  * @brief   Enables or disables the SDCLK clock output.
@@ -169,6 +166,174 @@ IWDTCLK: 125kHz
 ICLK >= PCLK
 ICLK >= BCLK
 */
+
+#if defined(__DOXYGEN__)
+/**
+ * @name    Platform identification
+ * @{
+ */
+#define PLATFORM_NAME           "RX62N"
+/** @} */
+
+#elif defined(RX62NXADBG) || defined(RX62NXBDBG) ||               \
+      defined(RX62NXADLE) || defined(RX62NXBDLE) ||               \
+      defined(RX62NXADFB) || defined(RX62NXBDFB) ||               \
+      defined(RX62NXADFP) || defined(RX62NXBDFP) ||               \
+      defined(RX62NXADLD) || defined(RX62NXBDLD) ||               \
+      defined(__DOXYGEN__)
+
+#else
+#error "unspecified, unsupported or invalid RX62N platform"
+#endif
+
+/*===========================================================================*/
+/* Platform capabilities.                                                    */
+/*===========================================================================*/
+
+#if defined(RX62NXADBG) || defined (RX62NXBDBG) || defined(__DOXYGEN__)
+/**
+ * @name    RX62NXXDBG capabilities (LFBGA176)
+ * @{
+ */
+
+#error "unsupported RX62N platform"
+
+/** @} */
+#endif /* defined(RX62NXADBG) || defined(RX62NXBDBG) */
+
+#if defined(RX62NXADLE) || defined (RX62NXBDLE) || defined(__DOXYGEN__)
+/**
+ * @name    RX62NXXDLE capabilities (TFLGA145)
+ * @{
+ */
+
+#error "unsupported RX62N platform"
+
+/** @} */
+#endif /* defined(RX62NXADLE) || defined(RX62NXBDLE) */
+
+#if defined(RX62NXADFB) || defined (RX62NXBDFB) || defined(__DOXYGEN__)
+/**
+ * @name    RX62NXXDLE capabilities (LQFP144)
+ * @{
+ */
+
+#error "unsupported RX62N platform"
+
+/** @} */
+#endif /* defined(RX62NXADFB) || defined(RX62NXBDFB) */
+
+#if defined(RX62NXADFP) || defined (RX62NXBDFP) || defined(__DOXYGEN__)
+/**
+ * @name    RX62NXXDFP capabilities (LQFP100)
+ * @{
+ */
+/* ADC attributes.*/
+#define RX62N_HAS_ADC1          TRUE
+
+/* CAN attributes.*/
+#if defined (RX62NXADFP)
+#define RX62N_HAS_CAN           FALSE
+#else
+#define RX62N_HAS_CAN           TRUE
+#endif
+
+/* DAC attributes.*/
+#define RX62N_HAS_DAC           TRUE
+
+/* DMA attributes.*/
+
+/* ETH attributes.*/
+#define RX62N_HAS_ETH           TRUE
+
+/* EXTI attributes.*/
+//#define RX62N_EXTI_NUM_CHANNELS 18
+
+/* GPIO attributes.*/
+#define RX62N_HAS_PORT0         TRUE
+#define RX62N_HAS_PORT0_OD      TRUE /* Open Drain */
+#define RX62N_HAS_PORT1         TRUE
+#define RX62N_HAS_PORT1_OD      TRUE /* Open Drain */
+#define RX62N_HAS_PORT2         TRUE
+#define RX62N_HAS_PORT2_OD      TRUE /* Open Drain */
+#define RX62N_HAS_PORT3         TRUE
+#define RX62N_HAS_PORT3_OD      TRUE /* Open Drain (P30 to P34) */
+#define RX62N_HAS_PORT4         TRUE
+#define RX62N_HAS_PORT5         TRUE
+#define RX62N_HAS_PORT6         FALSE
+#undef PORT6
+#define RX62N_HAS_PORT7         FALSE
+#undef PORT7
+#define RX62N_HAS_PORT8         FALSE
+#undef PORT8
+#define RX62N_HAS_PORT9         FALSE
+#undef PORT9
+#define RX62N_HAS_PORTA         TRUE
+#define RX62N_HAS_PORTA_PU      TRUE /* pull-up */
+#define RX62N_HAS_PORTB         TRUE
+#define RX62N_HAS_PORTB_PU      TRUE /* pull-up */
+#define RX62N_HAS_PORTC         TRUE
+#define RX62N_HAS_PORTC_OD      TRUE /* Open Drain */
+#define RX62N_HAS_PORTC_PU      TRUE /* Pull-up */
+#define RX62N_HAS_PORTD         TRUE
+#define RX62N_HAS_PORTD_PU      TRUE /* pull-up */
+#define RX62N_HAS_PORTE         TRUE
+#define RX62N_HAS_PORTE_PU      TRUE /* pull-up */
+#define RX62N_HAS_PORTF         FALSE
+#undef PORTF
+#define RX62N_HAS_PORTG         FALSE
+#undef PORTG
+
+/* I2C attributes.*/
+#define RX62N_HAS_I2C1          TRUE
+#define RX62N_HAS_I2C2          TRUE
+
+/* SDIO attributes.*/
+//#define RX62N_HAS_SDIO          FALSE
+
+/* SPI attributes.*/
+#define RX62N_HAS_SPI1          TRUE
+#define RX62N_HAS_SPI2          TRUE
+
+/* TIM attributes.*/
+#define RX62N_HAS_TIM1          TRUE
+#define RX62N_HAS_TIM2          TRUE
+#define RX62N_HAS_TIM3          TRUE
+#define RX62N_HAS_TIM4          TRUE
+#define RX62N_HAS_TIM5          TRUE
+#define RX62N_HAS_TIM6          TRUE
+#define RX62N_HAS_TIM7          TRUE
+#define RX62N_HAS_TIM8          TRUE
+#define RX62N_HAS_TIM9          TRUE
+#define RX62N_HAS_TIM10         TRUE
+#define RX62N_HAS_TIM11         TRUE
+#define RX62N_HAS_TIM12         TRUE
+
+/* USART attributes.*/
+#define RX62N_HAS_USART1        TRUE
+#define RX62N_HAS_USART2        TRUE
+#define RX62N_HAS_USART3        TRUE
+#define RX62N_HAS_USART4        TRUE
+#define RX62N_HAS_USART6        TRUE
+#define RX62N_HAS_USART7        TRUE
+
+/* USB attributes.*/
+/*#define RX62N_HAS_USB           TRUE*/
+/*#define RX62N_HAS_OTG1          TRUE*/
+
+/** @} */
+#endif /* defined(RX62NXADFP) || defined(RX62NXBDFP) */
+
+#if defined(RX62NXADLD) || defined (RX62NXBDLD) || defined(__DOXYGEN__)
+/**
+ * @name    RX62NXXDLD capabilities (TFLGA85)
+ * @{
+ */
+
+#error "unsupported RX62N platform"
+
+/** @} */
+#endif /* defined(RX62NXADLD) || defined(RX62NXBDLD) */
 
 /*===========================================================================*/
 /* Driver data structures and types.                                         */
