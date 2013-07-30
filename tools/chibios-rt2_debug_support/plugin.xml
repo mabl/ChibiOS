@@ -13,7 +13,7 @@
             class="org.chibios.tools.eclipse.debug.views.ChibiView"
             icon="rsc/chibios.ico"
             id="org.chibios.tools.eclipse.debug.views.ChibiView"
-            name="ChibiOS/RT 2.x.x">
+            name="ChibiOS/RT 2.x.x Debug View">
       </view>
    </extension>
    <extension
