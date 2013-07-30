@@ -55,7 +55,7 @@ public class NewApplicationProjectWizard extends Wizard implements INewWizard {
 
   private String projectName;
   private String finalProjectPath;
-  private String platform;
+//  private String platform;
 
   /**
    * Constructor for ConfigurationNewWizard.
@@ -83,7 +83,7 @@ public class NewApplicationProjectWizard extends Wizard implements INewWizard {
 
     projectName = page.getProjectName();
     finalProjectPath = page.getFinalProjectPath();
-    platform = page.getPlatform();
+//    platform = page.getPlatform();
 
     IRunnableWithProgress op = new IRunnableWithProgress() {
       public void run(IProgressMonitor monitor)
