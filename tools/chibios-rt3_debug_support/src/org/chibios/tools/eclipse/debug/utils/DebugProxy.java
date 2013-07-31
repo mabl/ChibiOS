@@ -199,6 +199,9 @@ public class DebugProxy {
    *          - refs
    *          - time
    *          - wtobjp
+   *          - stats_n
+   *          - stats_worst
+   *          - stats_cumulative
    *          .
    *          Missing fields are set to "-".
    * @retval null                   If the debugger encountered an error or
@@ -338,6 +341,27 @@ public class DebugProxy {
         map.put("wtobjp", Long.toString(n));
       } catch (DebugProxyException e) {
         map.put("wtobjp", "-");
+      }
+
+      try {
+        n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((thread_t *)" + current + ")->p_stats.n"));
+        map.put("stats_n", Long.toString(n));
+      } catch (DebugProxyException e) {
+        map.put("stats_n", "-");
+      }
+
+      try {
+        n = HexUtils.parseNumber(evaluateExpression("(uint32_t)((thread_t *)" + current + ")->p_stats.worst"));
+        map.put("stats_worst", Long.toString(n));
+      } catch (DebugProxyException e) {
+        map.put("stats_worst", "-");
+      }
+
+      try {
+        n = HexUtils.parseNumber(evaluateExpression("(uint64_t)((thread_t *)" + current + ")->p_stats.cumulative"));
+        map.put("stats_cumulative", Long.toString(n));
+      } catch (DebugProxyException e) {
+        map.put("stats_cumulative", "-");
       }
 
       // Inserting the new thread map into the threads list.

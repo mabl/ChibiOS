@@ -234,6 +234,18 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     TableColumn tblclmnThreadShared = new TableColumn(threadsTable, SWT.LEFT);
     tblclmnThreadShared.setWidth(72);
     tblclmnThreadShared.setText("Obj/Msg");
+    
+    TableColumn tblclmnThreadContextSwitches = new TableColumn(threadsTable, SWT.RIGHT);
+    tblclmnThreadContextSwitches.setWidth(96);
+    tblclmnThreadContextSwitches.setText("Switches");
+    
+    TableColumn tblclmnThreadLongestCodePath = new TableColumn(threadsTable, SWT.RIGHT);
+    tblclmnThreadLongestCodePath.setWidth(96);
+    tblclmnThreadLongestCodePath.setText("Worst Code Path");
+    
+    TableColumn tblclmnThreadCumulativeTime = new TableColumn(threadsTable, SWT.RIGHT);
+    tblclmnThreadCumulativeTime.setWidth(192);
+    tblclmnThreadCumulativeTime.setText("Cumulative Time");
 
     tbtmTimers = new CTabItem(tabFolder, SWT.NONE);
     tbtmTimers.setText("Timers");
@@ -317,29 +329,29 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     statisticsTable.setFont(SWTResourceManager.getFont("Courier New", 8, SWT.NORMAL));
     tbtmStatistics.setControl(statisticsTable);
     
-    TableColumn tableColumn = new TableColumn(statisticsTable, SWT.RIGHT);
-    tableColumn.setWidth(0);
-    tableColumn.setText("");
+    TableColumn tblclmnStatsHidden = new TableColumn(statisticsTable, SWT.RIGHT);
+    tblclmnStatsHidden.setWidth(0);
+    tblclmnStatsHidden.setText("");
     
-    TableColumn tblclmnMeasuredSection = new TableColumn(statisticsTable, SWT.LEFT);
-    tblclmnMeasuredSection.setWidth(200);
-    tblclmnMeasuredSection.setText("Measured Section");
+    TableColumn tblclmnStatsMeasuredSection = new TableColumn(statisticsTable, SWT.LEFT);
+    tblclmnStatsMeasuredSection.setWidth(200);
+    tblclmnStatsMeasuredSection.setText("Measured Section");
     
-    TableColumn tblclmnBestCase = new TableColumn(statisticsTable, SWT.RIGHT);
-    tblclmnBestCase.setWidth(96);
-    tblclmnBestCase.setText("Best Case");
+    TableColumn tblclmnStatsBestCase = new TableColumn(statisticsTable, SWT.RIGHT);
+    tblclmnStatsBestCase.setWidth(96);
+    tblclmnStatsBestCase.setText("Best Case");
     
-    TableColumn tblclmnWorstCase = new TableColumn(statisticsTable, SWT.RIGHT);
-    tblclmnWorstCase.setWidth(96);
-    tblclmnWorstCase.setText("Worst Case");
+    TableColumn tblclmnStatsWorstCase = new TableColumn(statisticsTable, SWT.RIGHT);
+    tblclmnStatsWorstCase.setWidth(96);
+    tblclmnStatsWorstCase.setText("Worst Case");
     
-    TableColumn tblclmnN = new TableColumn(statisticsTable, SWT.RIGHT);
-    tblclmnN.setWidth(96);
-    tblclmnN.setText("Iterations");
+    TableColumn tblclmnStatsIterations = new TableColumn(statisticsTable, SWT.RIGHT);
+    tblclmnStatsIterations.setWidth(96);
+    tblclmnStatsIterations.setText("Iterations");
     
-    TableColumn tblclmnCumulative = new TableColumn(statisticsTable, SWT.RIGHT);
-    tblclmnCumulative.setWidth(192);
-    tblclmnCumulative.setText("Cumulative Time");
+    TableColumn tblclmnStatsCumulative = new TableColumn(statisticsTable, SWT.RIGHT);
+    tblclmnStatsCumulative.setWidth(192);
+    tblclmnStatsCumulative.setText("Cumulative Time");
 
     makeActions();
     hookContextMenu();
@@ -478,7 +490,10 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
         map.get("prio"),
         map.get("refs"),
         map.get("time"),
-        makeHex(map.get("wtobjp"))
+        makeHex(map.get("wtobjp")),
+        map.get("stats_n"),
+        map.get("stats_worst"),
+        map.get("stats_cumulative")
       });
     }
   }
