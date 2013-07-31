@@ -239,9 +239,9 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     tblclmnThreadContextSwitches.setWidth(96);
     tblclmnThreadContextSwitches.setText("Switches");
     
-    TableColumn tblclmnThreadLongestCodePath = new TableColumn(threadsTable, SWT.RIGHT);
-    tblclmnThreadLongestCodePath.setWidth(96);
-    tblclmnThreadLongestCodePath.setText("Worst Code Path");
+    TableColumn tblclmnThreadWorstPath = new TableColumn(threadsTable, SWT.RIGHT);
+    tblclmnThreadWorstPath.setWidth(96);
+    tblclmnThreadWorstPath.setText("Worst Path");
     
     TableColumn tblclmnThreadCumulativeTime = new TableColumn(threadsTable, SWT.RIGHT);
     tblclmnThreadCumulativeTime.setWidth(192);
