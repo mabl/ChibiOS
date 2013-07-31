@@ -1,0 +1,8 @@
+To use this functions you need:
+
+1) #include "stm32_dbg_aid.h" in your chconf.h
+2) #define STM32_DBGUART_USE_USART2 TRUE in your mcuconf.h (or any other UART)
+3) #define STM32_SOFTRESET_ON_PANIC TRUE in your mcuconf.h (if needed)
+4) #define HAL_USE_DBGUART TRUE in your chconf.h
+5) #define DBGUART_BITRATE 38400 in your chconf.h
+6) properly configure pins of selected uart

@@ -20,6 +20,7 @@ HALSRC = ${CHIBIOS}/os/hal/src/hal.c \
          ${CHIBIOS}/os/hal/src/spi.c \
          ${CHIBIOS}/os/hal/src/tm.c \
          ${CHIBIOS}/os/hal/src/uart.c \
+         ${CHIBIOS}/os/hal/src/dbguart.c \
          ${CHIBIOS}/os/hal/src/usb.c
 
 # Required include directories

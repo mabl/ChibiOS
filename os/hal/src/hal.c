@@ -104,6 +104,9 @@ void halInit(void) {
 #if HAL_USE_UART || defined(__DOXYGEN__)
   uartInit();
 #endif
+#if HAL_USE_DBGUART || defined(__DOXYGEN__)
+  dbguartInit();
+#endif
 #if HAL_USE_USB || defined(__DOXYGEN__)
   usbInit();
 #endif
