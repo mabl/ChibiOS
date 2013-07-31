@@ -652,7 +652,8 @@ public class DebugProxy {
         HashMap<String, String> map = new HashMap<String, String>(4);
         map.put("best", "");
         map.put("worst", "");
-        map.put("cumulative", Long.toString(n_irq));
+        map.put("n", Long.toString(n_irq));
+        map.put("cumulative", "");
         lhm.put("Number of IRQs", map);
     } catch (DebugProxyException e) {}
 
@@ -661,29 +662,34 @@ public class DebugProxy {
         HashMap<String, String> map = new HashMap<String, String>(4);
         map.put("best", "");
         map.put("worst", "");
-        map.put("cumulative", Long.toString(n_ctxswc));
+        map.put("n", Long.toString(n_ctxswc));
+        map.put("cumulative", "");
         lhm.put("Number of Context Switches", map);
     } catch (DebugProxyException e) {}
 
     try {
 		long m_crit_thd_best = HexUtils.parseNumber(evaluateExpression("(uint32_t)kernel_stats.m_crit_thd.best"));
 		long m_crit_thd_worst = HexUtils.parseNumber(evaluateExpression("(uint32_t)kernel_stats.m_crit_thd.worst"));
-		long m_crit_thd_cumulative = HexUtils.parseNumber(evaluateExpression("(uint32_t)kernel_stats.m_crit_thd.cumulative"));
+        long m_crit_thd_n = HexUtils.parseNumber(evaluateExpression("(uint32_t)kernel_stats.m_crit_thd.n"));
+        String m_crit_thd_cumulative = evaluateExpression("(uint64_t)kernel_stats.m_crit_thd.cumulative");
 		HashMap<String, String> map = new HashMap<String, String>(4);
 		map.put("best", Long.toString(m_crit_thd_best));
 		map.put("worst", Long.toString(m_crit_thd_worst));
-		map.put("cumulative", Long.toString(m_crit_thd_cumulative));
+        map.put("n", Long.toString(m_crit_thd_n));
+		map.put("cumulative", m_crit_thd_cumulative);
 		lhm.put("Threads Critical Zones", map);
 	} catch (DebugProxyException e) {}
 
     try {
 		long m_crit_isr_best = HexUtils.parseNumber(evaluateExpression("(uint32_t)kernel_stats.m_crit_isr.best"));
 		long m_crit_isr_worst = HexUtils.parseNumber(evaluateExpression("(uint32_t)kernel_stats.m_crit_isr.worst"));
-		long m_crit_isr_cumulative = HexUtils.parseNumber(evaluateExpression("(uint32_t)kernel_stats.m_crit_isr.cumulative"));
+        long m_crit_isr_n = HexUtils.parseNumber(evaluateExpression("(uint32_t)kernel_stats.m_crit_isr.n"));
+		String m_crit_isr_cumulative = evaluateExpression("(uint64_t)kernel_stats.m_crit_isr.cumulative");
 		HashMap<String, String> map = new HashMap<String, String>(4);
 		map.put("best", Long.toString(m_crit_isr_best));
 		map.put("worst", Long.toString(m_crit_isr_worst));
-		map.put("cumulative", Long.toString(m_crit_isr_cumulative));
+        map.put("n", Long.toString(m_crit_isr_n));
+		map.put("cumulative", m_crit_isr_cumulative);
 		lhm.put("ISRs Critical Zones", map);
 	} catch (DebugProxyException e) {}
 

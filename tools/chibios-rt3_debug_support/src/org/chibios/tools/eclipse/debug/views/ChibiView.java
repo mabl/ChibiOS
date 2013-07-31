@@ -325,17 +325,21 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     tblclmnMeasuredSection.setWidth(200);
     tblclmnMeasuredSection.setText("Measured Section");
     
-    TableColumn tableBestCase = new TableColumn(statisticsTable, SWT.LEFT);
-    tableBestCase.setWidth(96);
-    tableBestCase.setText("Best Case");
+    TableColumn tblclmnBestCase = new TableColumn(statisticsTable, SWT.RIGHT);
+    tblclmnBestCase.setWidth(96);
+    tblclmnBestCase.setText("Best Case");
     
-    TableColumn tableWorstCase = new TableColumn(statisticsTable, SWT.LEFT);
-    tableWorstCase.setWidth(96);
-    tableWorstCase.setText("Worst Case");
+    TableColumn tblclmnWorstCase = new TableColumn(statisticsTable, SWT.RIGHT);
+    tblclmnWorstCase.setWidth(96);
+    tblclmnWorstCase.setText("Worst Case");
     
-    TableColumn tableCumulative = new TableColumn(statisticsTable, SWT.LEFT);
-    tableCumulative.setWidth(96);
-    tableCumulative.setText("Cumulative");
+    TableColumn tblclmnN = new TableColumn(statisticsTable, SWT.RIGHT);
+    tblclmnN.setWidth(96);
+    tblclmnN.setText("Iterations");
+    
+    TableColumn tblclmnCumulative = new TableColumn(statisticsTable, SWT.RIGHT);
+    tblclmnCumulative.setWidth(192);
+    tblclmnCumulative.setText("Cumulative Time");
 
     makeActions();
     hookContextMenu();
@@ -606,6 +610,7 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
         entry.getKey(),
         entry.getValue().get("best"),
         entry.getValue().get("worst"),
+        entry.getValue().get("n"),
         entry.getValue().get("cumulative")
       });
     }
