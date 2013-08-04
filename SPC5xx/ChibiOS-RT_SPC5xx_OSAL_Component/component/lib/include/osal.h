@@ -555,7 +555,7 @@ systime_t osalVTGetSystemTime(void) {
 static inline
 void osalThreadSleep(systime_t time) {
 
-  chThdSleepSeconds(time);
+  chThdSleep(time);
 }
 
 /**
