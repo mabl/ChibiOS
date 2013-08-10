@@ -37,7 +37,7 @@
 /*===========================================================================*/
 
 /**
- * @brief   System variables.
+ * @brief   System data structures.
  */
 nil_system_t nil;
 
