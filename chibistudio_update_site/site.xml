@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <description name="ChibiStudio update site" url="http://www.chibios.org/eclipse/chibistudio">
-      ChibiStudio plugins update site.
+   <description name="ChibiStudio Update Site" url="http://www.chibios.org/eclipse/chibistudio">
+      ChibiStudio Eclipse Update Site.
    </description>
-   <feature url="features/org.chibios.eclipse.tools.feature_1.0.0.qualifier.jar" id="org.chibios.eclipse.tools.feature" version="1.0.0.qualifier"/>
+   <feature url="features/org.chibios.eclipse.tools.feature_1.0.0.qualifier.jar" id="org.chibios.eclipse.tools.feature" version="1.0.0.qualifier">
+      <category name="ChibiStudio"/>
+   </feature>
+   <category-def name="ChibiStudio" label="ChibiStudio">
+      <description>
+         ChibiStudio Components and Plugins.
+      </description>
+   </category-def>
 </site>
