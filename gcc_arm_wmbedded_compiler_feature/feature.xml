@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.chibios.tools.spc5.tools.gnuarm.feature"
-      label="GCC ARM Embedded Compiler"
+      label="GCC ARM Embedded Compiler for SPC5Studio"
       version="1.0.0.qualifier"
       provider-name="launchpad.net/gcc-arm-embedded"
       plugin="org.chibios.chibistudio.branding"

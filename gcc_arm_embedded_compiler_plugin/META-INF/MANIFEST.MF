@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: ChibiStudio GNU ARM Compiler Tool Plugin
+Bundle-Name: GNU ARM Compiler plugin for SPC5Studio
 Bundle-SymbolicName: org.chibios.tools.spc5.tools.gnuarm;singleton:=true
 Bundle-Version: 4.7.3.qualifier
 Bundle-Vendor: launchpad.net/gcc-arm-embedded
