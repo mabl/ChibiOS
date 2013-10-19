@@ -14,6 +14,7 @@
     <identifier>MII_KS8721_ID</identifier>
     <bus_type>RMII</bus_type>
   </ethernet_phy>
+  <subtype>STM32F40_41xxx</subtype>
   <clocks
     HSEFrequency="8000000"
     HSEBypass="false"

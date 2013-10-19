@@ -10,9 +10,28 @@
 		<xs:complexContent>
             <xs:extension base="AbstractBoardType">
 				<xs:sequence>
-					<xs:element name="clocks" maxOccurs="1" minOccurs="1">
+                    <xs:element name="subtype">
+                    	<xs:simpleType>
+                    		<xs:restriction base="xs:string">
+                    			<xs:whiteSpace value="collapse"></xs:whiteSpace>
+                    			<xs:enumeration value="STM32F401xx"></xs:enumeration>
+                    			<xs:enumeration
+                    				value="STM32F40_41xxx">
+                    			</xs:enumeration>
+                    			<xs:enumeration
+                    				value="STM32F427_437xx">
+                    			</xs:enumeration>
+                    			<xs:enumeration
+                    				value="STM32F429_439xx">
+                    			</xs:enumeration>
+                    		</xs:restriction>
+                    	</xs:simpleType>
+                    </xs:element>
+                    <xs:element name="clocks" maxOccurs="1"
+						minOccurs="1">
 						<xs:complexType>
-							<xs:attribute name="HSEBypass" use="required">
+							<xs:attribute name="HSEBypass"
+								use="required">
 								<xs:simpleType>
 									<xs:restriction base="xs:string">
 										<xs:whiteSpace
@@ -34,18 +53,19 @@
 									</xs:restriction>
 								</xs:simpleType>
 							</xs:attribute>
-                            <xs:attribute name="LSEBypass" use="required">
-                                <xs:simpleType>
-                                    <xs:restriction base="xs:string">
-                                        <xs:whiteSpace
-                                            value="collapse">
-                                        </xs:whiteSpace>
-                                        <xs:enumeration value="false"></xs:enumeration>
-                                        <xs:enumeration value="true"></xs:enumeration>
-                                    </xs:restriction>
-                                </xs:simpleType>
+							<xs:attribute name="LSEBypass"
+								use="required">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:whiteSpace
+											value="collapse">
+										</xs:whiteSpace>
+										<xs:enumeration value="false"></xs:enumeration>
+										<xs:enumeration value="true"></xs:enumeration>
+									</xs:restriction>
+								</xs:simpleType>
 							</xs:attribute>
-                            <xs:attribute name="LSEFrequency"
+							<xs:attribute name="LSEFrequency"
 								use="required">
 								<xs:simpleType>
 									<xs:restriction base="xs:int">
@@ -69,14 +89,16 @@
 										<xs:maxInclusive value="360"></xs:maxInclusive>
 									</xs:restriction>
 								</xs:simpleType>
-							</xs:attribute>
+							</xs:attribute>
+
 						</xs:complexType>
 					</xs:element>
-					<xs:element name="ports" type="portsType" maxOccurs="1" minOccurs="1">
-					</xs:element>
+					<xs:element name="ports" type="portsType"
+						maxOccurs="1" minOccurs="1">
+					</xs:element>
 				</xs:sequence>
 
-			</xs:extension>
+            </xs:extension>
     </xs:complexContent>
   </xs:complexType>
 

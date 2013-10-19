@@ -4,7 +4,7 @@
       label="ChibiOS/RT Eclipse Tools"
       version="1.0.0.qualifier"
       provider-name="www.chibios.org"
-      plugin="org.chibios.spc5.branding"
+      plugin="org.chibios.chibistudio.branding"
       exclusive="true">
 
    <description>
@@ -54,14 +54,21 @@ along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
          unpack="false"/>
 
    <plugin
-         id="org.chibios.tools.eclipse.debug"
+         id="org.chibios.chibistudio.branding"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="org.chibios.spc5.branding"
+         id="org.chibios.tools.eclipse.debug.chibiosrt2"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.chibios.tools.eclipse.debug.chibiosrt3"
          download-size="0"
          install-size="0"
          version="0.0.0"
