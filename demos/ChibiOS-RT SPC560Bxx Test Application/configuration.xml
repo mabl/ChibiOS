@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SPC5-Config version="1.0.0">
   <application name="SPC560Bxx Test Application" version="1.0.0" standalone="false" locked="false">
-    <description>Test application for the SPC560Bxx created using the SPC5's Application Wizard.Test application for the SPC560Bxx created using he SPC5's Application Wizard.</description>
-    <component id="com.st.tools.spc5.components.platform.spc560bxx" version="1.0.0.qualifier">
-      <component id="org.chibios.spc5.components.rtos.spc560bxx" version="2.6.0.qualifier" />
-      <component id="org.chibios.spc5.components.various.shell" version="2.6.0.qualifier" />
-      <component id="org.chibios.spc5.components.various.chprintf" version="2.6.0.qualifier" />
+    <description>Test application for the SPC560Bxx created using the SPC5's Application Wizard.</description>
+    <component id="com.st.tools.spc5.components.platform.spc560bxx" version="1.0.0">
+      <component id="org.chibios.spc5.components.rtos.spc560bxx" version="2.6.0" />
+      <component id="org.chibios.spc5.components.various.shell" version="2.6.0" />
+      <component id="org.chibios.spc5.components.various.chprintf" />
     </component>
     <instances>
       <instance locked="false" id="com.st.tools.spc5.components.platform.spc560bxx">
@@ -47,13 +47,9 @@
           <mac>false</mac>
           <mmc_spi>false</mmc_spi>
           <pwm>false</pwm>
-          <rtc>false</rtc>
-          <sdc>false</sdc>
           <serial>true</serial>
           <spi>false</spi>
-          <serial_usb>false</serial_usb>
           <uart>false</uart>
-          <usb>false</usb>
         </enabled_drivers>
         <serial_driver_settings>
           <default_bit_rate>38400</default_bit_rate>
@@ -75,10 +71,6 @@
         <mmc_spi_driver_settings>
           <nice_waiting>true</nice_waiting>
         </mmc_spi_driver_settings>
-        <sdc_driver_settings>
-          <init_retry>1</init_retry>
-          <nice_waiting>true</nice_waiting>
-        </sdc_driver_settings>
         <spi_driver_settings>
           <enable_synchronous_functions>true</enable_synchronous_functions>
           <enable_mutual_exclusion_functions>false</enable_mutual_exclusion_functions>
@@ -298,6 +290,8 @@
             <peripheral_set_2_clock_divider index="2">2</peripheral_set_2_clock_divider>
             <peripheral_set_3_clock_divider index="2">2</peripheral_set_3_clock_divider>
             <clock_failure_hook>osalSysHalt("clock failure")</clock_failure_hook>
+            <emios0_global_prescaler>20</emios0_global_prescaler>
+            <emios1_global_prescaler>20</emios1_global_prescaler>
           </clocks>
         </initialization_settings>
         <irq_priority_settings>
@@ -317,6 +311,38 @@
           <linflex7 index="7">8</linflex7>
           <linflex8 index="7">8</linflex8>
           <linflex9 index="7">8</linflex9>
+          <emios0_uc0 index="7">8</emios0_uc0>
+          <emios0_uc1 index="7">8</emios0_uc1>
+          <emios0_uc2 index="7">8</emios0_uc2>
+          <emios0_uc3 index="7">8</emios0_uc3>
+          <emios0_uc4 index="7">8</emios0_uc4>
+          <emios0_uc5 index="7">8</emios0_uc5>
+          <emios0_uc6 index="7">8</emios0_uc6>
+          <emios0_uc7 index="7">8</emios0_uc7>
+          <emios0_uc8 index="7">8</emios0_uc8>
+          <emios0_uc9 index="7">8</emios0_uc9>
+          <emios0_uc10 index="7">8</emios0_uc10>
+          <emios0_uc11 index="7">8</emios0_uc11>
+          <emios0_uc12 index="7">8</emios0_uc12>
+          <emios1_uc0 index="7">8</emios1_uc0>
+          <emios1_uc1 index="7">8</emios1_uc1>
+          <emios1_uc2 index="7">8</emios1_uc2>
+          <emios1_uc3 index="7">8</emios1_uc3>
+          <emios1_uc4 index="7">8</emios1_uc4>
+          <emios1_uc5 index="7">8</emios1_uc5>
+          <emios1_uc6 index="7">8</emios1_uc6>
+          <emios1_uc7 index="7">8</emios1_uc7>
+          <emios1_uc8 index="7">8</emios1_uc8>
+          <emios1_uc9 index="7">8</emios1_uc9>
+          <emios1_uc10 index="7">8</emios1_uc10>
+          <emios1_uc11 index="7">8</emios1_uc11>
+          <emios1_uc12 index="7">8</emios1_uc12>
+          <flexcan0 index="10">11</flexcan0>
+          <flexcan1 index="10">11</flexcan1>
+          <flexcan2 index="10">11</flexcan2>
+          <flexcan3 index="10">11</flexcan3>
+          <flexcan4 index="10">11</flexcan4>
+          <flexcan5 index="10">11</flexcan5>
         </irq_priority_settings>
         <edma_settings>
           <group_0_channels_priorities>
@@ -367,6 +393,7 @@
           <dspi_3>false</dspi_3>
           <dspi_4>false</dspi_4>
           <dspi_5>false</dspi_5>
+          <dma_mode index="1">RX only</dma_mode>
           <dma_error_hook>osalSysHalt("DSPI DMA failure")</dma_error_hook>
           <inactive_states>
             <dspi_0___pcs0 index="1">Inactive High</dspi_0___pcs0>
@@ -395,6 +422,41 @@
             <configs />
           </spi_configurations>
         </dspi_settings>
+        <emios_settings>
+          <emios0_ch0>false</emios0_ch0>
+          <emios0_ch1>false</emios0_ch1>
+          <emios0_ch2>false</emios0_ch2>
+          <emios0_ch3>false</emios0_ch3>
+          <emios0_ch4>false</emios0_ch4>
+          <emios0_ch5>false</emios0_ch5>
+          <emios0_ch6>false</emios0_ch6>
+          <emios0_ch7>false</emios0_ch7>
+          <emios0_ch24>false</emios0_ch24>
+          <emios1_ch24>false</emios1_ch24>
+          <emios0_group0>false</emios0_group0>
+          <emios0_group1>false</emios0_group1>
+          <emios1_group0>false</emios1_group0>
+          <emios1_group1>false</emios1_group1>
+          <emios1_group2>false</emios1_group2>
+          <icu_configurations>
+            <configs />
+          </icu_configurations>
+          <pwm_configurations>
+            <configs />
+          </pwm_configurations>
+        </emios_settings>
+        <flexcan_settings>
+          <flexcan0>false</flexcan0>
+          <flexcan1>false</flexcan1>
+          <flexcan2>false</flexcan2>
+          <flexcan3>false</flexcan3>
+          <flexcan4>false</flexcan4>
+          <flexcan5>false</flexcan5>
+          <flexcan_enable_filters>false</flexcan_enable_filters>
+          <can_configurations>
+            <configs />
+          </can_configurations>
+        </flexcan_settings>
         <linflex_settings>
           <linflex0 index="1">Serial</linflex0>
           <linflex1 index="0">None</linflex1>
