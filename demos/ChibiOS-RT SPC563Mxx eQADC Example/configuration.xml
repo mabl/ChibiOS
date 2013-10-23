@@ -2,8 +2,8 @@
 <SPC5-Config version="1.0.0">
   <application name="Monaco eQADC Example Application" version="1.0.0" standalone="false" locked="false">
     <description>This application shows how to use the eQADC unit found on the SPC563Mxx platform.</description>
-    <component id="com.st.tools.spc5.components.platform.spc563mxx" version="1.0.0.qualifier">
-      <component id="org.chibios.spc5.components.rtos.spc563mxx" version="2.6.0.qualifier" />
+    <component id="com.st.tools.spc5.components.platform.spc563mxx" version="1.0.0">
+      <component id="org.chibios.spc5.components.rtos.spc563mxx" version="2.6.0" />
     </component>
     <instances>
       <instance locked="false" id="com.st.tools.spc5.components.platform.spc563mxx">
@@ -13,6 +13,8 @@
         <runtime_settings>
           <process_stack_size>2048</process_stack_size>
           <irq_stack_size>0</irq_stack_size>
+          <boot_mode index="0">Execute from Flash</boot_mode>
+          <load_address index="0">0x00000000</load_address>
         </runtime_settings>
         <build_settings>
           <application_name>out</application_name>
@@ -45,13 +47,9 @@
           <mac>false</mac>
           <mmc_spi>false</mmc_spi>
           <pwm>false</pwm>
-          <rtc>false</rtc>
-          <sdc>false</sdc>
           <serial>false</serial>
           <spi>false</spi>
-          <serial_usb>false</serial_usb>
           <uart>false</uart>
-          <usb>false</usb>
         </enabled_drivers>
         <serial_driver_settings>
           <default_bit_rate>38400</default_bit_rate>
@@ -73,10 +71,6 @@
         <mmc_spi_driver_settings>
           <nice_waiting>true</nice_waiting>
         </mmc_spi_driver_settings>
-        <sdc_driver_settings>
-          <init_retry>1</init_retry>
-          <nice_waiting>true</nice_waiting>
-        </sdc_driver_settings>
         <spi_driver_settings>
           <enable_synchronous_functions>true</enable_synchronous_functions>
           <enable_mutual_exclusion_functions>false</enable_mutual_exclusion_functions>
@@ -252,6 +246,8 @@
           <eqadc_fifo5 index="11">12</eqadc_fifo5>
           <esci0 index="7">8</esci0>
           <esci1 index="7">8</esci1>
+          <flexcan0 index="10">11</flexcan0>
+          <flexcan1 index="10">11</flexcan1>
         </irq_priority_settings>
         <edma_settings>
           <group_0_channels_priorities>
@@ -294,6 +290,7 @@
         <dspi_settings>
           <dspi_b>false</dspi_b>
           <dspi_c>false</dspi_c>
+          <dma_mode index="1">RX only</dma_mode>
           <dma_error_hook>osalSysHalt("DSPI DMA failure")</dma_error_hook>
           <inactive_states>
             <dspi_b___pcs0 index="1">Inactive High</dspi_b___pcs0>
@@ -302,16 +299,12 @@
             <dspi_b___pcs3 index="1">Inactive High</dspi_b___pcs3>
             <dspi_b___pcs4 index="1">Inactive High</dspi_b___pcs4>
             <dspi_b___pcs5 index="1">Inactive High</dspi_b___pcs5>
-            <dspi_b___pcs6 index="1">Inactive High</dspi_b___pcs6>
-            <dspi_b___pcs7 index="1">Inactive High</dspi_b___pcs7>
             <dspi_c___pcs0 index="1">Inactive High</dspi_c___pcs0>
             <dspi_c___pcs1 index="1">Inactive High</dspi_c___pcs1>
             <dspi_c___pcs2 index="1">Inactive High</dspi_c___pcs2>
             <dspi_c___pcs3 index="1">Inactive High</dspi_c___pcs3>
             <dspi_c___pcs4 index="1">Inactive High</dspi_c___pcs4>
             <dspi_c___pcs5 index="1">Inactive High</dspi_c___pcs5>
-            <dspi_c___pcs6 index="1">Inactive High</dspi_c___pcs6>
-            <dspi_c___pcs7 index="1">Inactive High</dspi_c___pcs7>
           </inactive_states>
           <spi_configurations>
             <configs />
@@ -495,6 +488,14 @@
           <esci0 index="0">None</esci0>
           <esci1 index="0">None</esci1>
         </esci_settings>
+        <flexcan_settings>
+          <flexcan0>false</flexcan0>
+          <flexcan1>false</flexcan1>
+          <flexcan_enable_filters>false</flexcan_enable_filters>
+          <can_configurations>
+            <configs />
+          </can_configurations>
+        </flexcan_settings>
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.kernel">
         <kernel_options>
