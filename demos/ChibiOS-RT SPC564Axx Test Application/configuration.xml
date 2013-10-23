@@ -10,11 +10,13 @@
     <instances>
       <instance locked="false" id="com.st.tools.spc5.components.platform.spc564axx">
         <platform_settings>
-          <specific_model index="1">SPC564A70L7</specific_model>
+          <specific_model index="5">SPC564A80L7</specific_model>
         </platform_settings>
         <runtime_settings>
           <process_stack_size>2048</process_stack_size>
           <irq_stack_size>0</irq_stack_size>
+          <boot_mode index="0">Execute from Flash</boot_mode>
+          <load_address index="0">0x00000000</load_address>
         </runtime_settings>
         <build_settings>
           <application_name>out</application_name>
