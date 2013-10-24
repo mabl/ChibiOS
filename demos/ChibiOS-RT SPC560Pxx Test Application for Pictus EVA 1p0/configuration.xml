@@ -2,10 +2,10 @@
 <SPC5-Config version="1.0.0">
   <application name="SPC560Pxx Test Application" version="1.0.0" standalone="false" locked="false">
     <description>Test application for the SPC560Pxx created using the SPC5's Application Wizard.</description>
-    <component id="com.st.tools.spc5.components.platform.spc560pxx" version="1.0.0.qualifier">
-      <component id="org.chibios.spc5.components.rtos.spc560pxx" version="2.6.0.qualifier" />
-      <component id="org.chibios.spc5.components.various.shell" version="2.6.0.qualifier" />
-      <component id="org.chibios.spc5.components.various.chprintf" version="2.6.0.qualifier" />
+    <component id="com.st.tools.spc5.components.platform.spc560pxx" version="1.0.0">
+      <component id="org.chibios.spc5.components.rtos.spc560pxx" version="2.6.0" />
+      <component id="org.chibios.spc5.components.various.shell" version="2.6.0" />
+      <component id="org.chibios.spc5.components.various.chprintf" />
     </component>
     <instances>
       <instance locked="false" id="com.st.tools.spc5.components.platform.spc560pxx">
@@ -15,6 +15,8 @@
         <runtime_settings>
           <process_stack_size>2048</process_stack_size>
           <irq_stack_size>0</irq_stack_size>
+          <boot_mode index="0">Execute from Flash</boot_mode>
+          <load_address index="0">0x00000000</load_address>
         </runtime_settings>
         <build_settings>
           <application_name>out</application_name>
@@ -47,13 +49,9 @@
           <mac>false</mac>
           <mmc_spi>false</mmc_spi>
           <pwm>false</pwm>
-          <rtc>false</rtc>
-          <sdc>false</sdc>
           <serial>true</serial>
           <spi>false</spi>
-          <serial_usb>false</serial_usb>
           <uart>false</uart>
-          <usb>false</usb>
         </enabled_drivers>
         <serial_driver_settings>
           <default_bit_rate>38400</default_bit_rate>
@@ -75,10 +73,6 @@
         <mmc_spi_driver_settings>
           <nice_waiting>true</nice_waiting>
         </mmc_spi_driver_settings>
-        <sdc_driver_settings>
-          <init_retry>1</init_retry>
-          <nice_waiting>true</nice_waiting>
-        </sdc_driver_settings>
         <spi_driver_settings>
           <enable_synchronous_functions>true</enable_synchronous_functions>
           <enable_mutual_exclusion_functions>false</enable_mutual_exclusion_functions>
@@ -234,6 +228,7 @@
           <etimer0 index="6">7</etimer0>
           <etimer1 index="6">7</etimer1>
           <etimer2 index="6">7</etimer2>
+          <flexcan0 index="11">12</flexcan0>
           <flexpwm0_sm0 index="6">7</flexpwm0_sm0>
           <flexpwm0_sm1 index="6">7</flexpwm0_sm1>
           <flexpwm0_sm2 index="6">7</flexpwm0_sm2>
@@ -290,6 +285,7 @@
           <dspi_2>false</dspi_2>
           <dspi_3>false</dspi_3>
           <dspi_4>false</dspi_4>
+          <dma_mode index="1">RX only</dma_mode>
           <dma_error_hook>osalSysHalt("DSPI DMA failure")</dma_error_hook>
           <inactive_states>
             <dspi_0___pcs0 index="1">Inactive High</dspi_0___pcs0>
@@ -342,6 +338,13 @@
             <configs />
           </icu_configurations>
         </etimer_settings>
+        <flexcan_settings>
+          <flexcan0>false</flexcan0>
+          <flexcan_enable_filters>false</flexcan_enable_filters>
+          <can_configurations>
+            <configs />
+          </can_configurations>
+        </flexcan_settings>
         <flexpwm_settings>
           <flexpwm0_sm0>false</flexpwm0_sm0>
           <flexpwm0_sm1>false</flexpwm0_sm1>
