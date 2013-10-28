@@ -118,7 +118,7 @@ typedef flagsmask_t eventflags_t;
  * @brief   Type of an event flags object.
  * @note 	Mapped on ChibiOS/RT's own event source object.
  */
-typedef EventSource eventsource_t;
+typedef EventSource event_source_t;
 
 /**
  * @brief   Type of a mutex.
@@ -196,6 +196,54 @@ typedef ThreadsQueue threads_queue_t;
  * @param[in] id        a vector name as defined in @p vectors.s
  */
 #define OSAL_IRQ_HANDLER(id) CH_IRQ_HANDLER(id)
+
+/**
+ * @brief   Seconds to system ticks.
+ * @details Converts from seconds to system ticks number.
+ * @note    The result is rounded upward to the next tick boundary.
+ *
+ * @param[in] sec       number of seconds
+ * @return              The number of ticks.
+ *
+ * @api
+ */
+#define OSAL_S2ST(sec) S2ST(sec)
+
+/**
+ * @brief   Milliseconds to system ticks.
+ * @details Converts from milliseconds to system ticks number.
+ * @note    The result is rounded upward to the next tick boundary.
+ *
+ * @param[in] msec      number of milliseconds
+ * @return              The number of ticks.
+ *
+ * @api
+ */
+#define OSAL_MS2ST(msec) MS2ST(msec)
+
+/**
+ * @brief   Microseconds to system ticks.
+ * @details Converts from microseconds to system ticks number.
+ * @note    The result is rounded upward to the next tick boundary.
+ *
+ * @param[in] usec      number of microseconds
+ * @return              The number of ticks.
+ *
+ * @api
+ */
+#define OSAL_US2ST(usec) US2ST(usec)
+
+/**
+ * @brief   Delays the invoking thread for the specified number of seconds.
+ * @note    The specified time is rounded up to a value allowed by the real
+ *          system tick clock.
+ * @note    The maximum specifiable value is implementation dependent.
+ *
+ * @param[in] sec       time in seconds, must be different from zero
+ *
+ * @api
+ */
+#define osalThreadSleepSeconds(sec) osalThreadSleep(OSAL_S2ST(sec))
 
 /**
  * @brief   Delays the invoking thread for the specified number of seconds.
