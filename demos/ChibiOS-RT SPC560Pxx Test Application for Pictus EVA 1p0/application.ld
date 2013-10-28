@@ -48,19 +48,21 @@ __ram_end__             = ORIGIN(ram) + LENGTH(ram);
 SECTIONS
 {
     . = ORIGIN(flash);
-    .boot : ALIGN(16) SUBALIGN(16)
+    .boot0 : ALIGN(16) SUBALIGN(16)
     {
-        KEEP(*(.bam))
-        KEEP(*(.coreinit))
+        . += 0x00000000;
+        KEEP(*(.boot))
         KEEP(*(.handlers))
         KEEP(*(.crt0))
-        . = ALIGN(0x00000800);
+    } > flash
+
+    .boot1 : ALIGN(16) SUBALIGN(16)
+    {
+        /* The vectors table requires a 2kB alignment.*/
+        . = ALIGN(0x800);
         KEEP(*(.vectors))
-        /* Note, have to waste the first 4KB because the IVPR register
-           requires an alignment of 4KB and the first 4KB cannot be used,
-           IVOR0 would conflict with the BAM word. Applications could
-           allocate code or data in the first 4KB by using special sections.*/
-        . = ALIGN(0x00001000);
+        /* The IVPR register requires a 4kB alignment.*/
+        . = ALIGN(0x1000);
         __ivpr_base__ = .;
         KEEP(*(.ivors))
     } > flash
@@ -131,7 +133,7 @@ SECTIONS
         __romdata_start__ = .;
     } > flash
 
-    .stacks :
+    .stacks : ALIGN(16) SUBALIGN(16)
     {
         . = ALIGN(8);
         __irq_stack_base__ = .;

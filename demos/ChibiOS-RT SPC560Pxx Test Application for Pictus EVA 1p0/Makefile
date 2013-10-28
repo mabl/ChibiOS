@@ -61,27 +61,38 @@ ifneq ($(wildcard user.mak),)
 endif
 
 # Define linker script file here
-LDSCRIPT= application.ld
+LDSCRIPT = application.ld
+
+# Source files located under ./source are automatically added.
+rwildcard = $(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
+AUTO_C_SRC = $(call rwildcard,./source/,*.c)
+AUTO_CPP_SRC = $(call rwildcard,./source/,*.cpp)
+AUTO_ASM_SRC = $(call rwildcard,./source/,*.s)
+AUTO_INCLUDES = $(sort $(dir $(call rwildcard,./source/,*)))
 
 # C sources here.
 CSRC =      $(LIB_C_SRC) \
             $(APP_C_SRC) \
             $(U_C_SRC) \
-            ./components/components.c \
-            ./main.c
+            $(AUTO_C_SRC) \
+            ./components/components.c
 
 # C++ sources here.
 CPPSRC =    $(LIB_CPP_SRC) \
             $(APP_CPP_SRC) \
-            $(U_CPP_SRC)
+            $(U_CPP_SRC) \
+            $(AUTO_CPP_SRC)
 
-# List ASM source files here
+# List ASM source files here.
 ASMSRC =    $(LIB_ASM_SRC) \
             $(APP_ASM_SRC) \
-            $(U_ASM_SRC)
+            $(U_ASM_SRC) \
+            $(AUTO_ASM_SRC)
 
+# Inclusion paths.
 INCDIR =    $(LIB_INCLUDES) \
             $(APP_INCLUDES) \
+            $(AUTO_INCLUDES) \
             ./components
 
 #
@@ -105,7 +116,9 @@ LD   = $(TRGT)gcc
 CP   = $(TRGT)objcopy
 AS   = $(TRGT)gcc -x assembler-with-cpp
 OD   = $(TRGT)objdump
+SZ   = $(TRGT)size
 HEX  = $(CP) -O ihex
+MOT  = $(CP) -O srec
 BIN  = $(CP) -O binary
 
 # Define C warning options here

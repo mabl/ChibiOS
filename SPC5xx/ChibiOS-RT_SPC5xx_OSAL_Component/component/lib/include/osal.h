@@ -148,12 +148,11 @@ typedef ThreadsQueue threads_queue_t;
  * @note 	Mapped on ChibiOS/RT's own assertions.
  *
  * @param[in] c         the condition to be verified to be true
- * @param[in] msg       the text message
- * @param[in] remark    a remark string
+ * @param[in] r         a remark string
  *
  * @api
  */
-#define osalDbgAssert(c, msg, remark) chDbgAssert(c, msg, remark)
+#define osalDbgAssert(c, r) chDbgAssert(c, __func__, remark)
 
 /**
  * @brief   Function parameters check.
@@ -163,7 +162,7 @@ typedef ThreadsQueue threads_queue_t;
  *
  * @api
  */
-#define osalDbgCheck(c) chDbgCheck(c, __FUNCTION__)
+#define osalDbgCheck(c) chDbgCheck(c, __func__)
 
 /**
  * @brief   I-Class state check.
@@ -232,18 +231,6 @@ typedef ThreadsQueue threads_queue_t;
  * @api
  */
 #define OSAL_US2ST(usec) US2ST(usec)
-
-/**
- * @brief   Delays the invoking thread for the specified number of seconds.
- * @note    The specified time is rounded up to a value allowed by the real
- *          system tick clock.
- * @note    The maximum specifiable value is implementation dependent.
- *
- * @param[in] sec       time in seconds, must be different from zero
- *
- * @api
- */
-#define osalThreadSleepSeconds(sec) osalThreadSleep(OSAL_S2ST(sec))
 
 /**
  * @brief   Delays the invoking thread for the specified number of seconds.
@@ -628,7 +615,7 @@ void osalOsRescheduleS(void) {
  * @init
  */
 static inline
-void osalEventInit(eventsource_t *esp) {
+void osalEventInit(event_source_t *esp) {
 
   chEvtInit((EventSource *)esp);
 }
@@ -642,7 +629,7 @@ void osalEventInit(eventsource_t *esp) {
  * @iclass
  */
 static inline
-void osalEventBroadcastFlagsI(eventsource_t *esp,
+void osalEventBroadcastFlagsI(event_source_t *esp,
                               eventflags_t flags) {
 
   chEvtBroadcastFlagsI((EventSource *)esp, (flagsmask_t)flags);
@@ -657,7 +644,7 @@ void osalEventBroadcastFlagsI(eventsource_t *esp,
  * @api
  */
 static inline
-void osalEventBroadcastFlags(eventsource_t *esp,
+void osalEventBroadcastFlags(event_source_t *esp,
                              eventflags_t flags) {
 
   chEvtBroadcastFlags((EventSource *)esp, (flagsmask_t)flags);
