@@ -539,6 +539,37 @@ void osalVTReset(virtual_timer_t *vtp) {
 }
 
 /**
+ * @brief   Current system time.
+ * @details Returns the number of system ticks since the @p osalInit()
+ *          invocation.
+ * @note    The counter can reach its maximum and then restart from zero.
+ * @note    Mapped on ChibiOS/RT's own virtual timers.
+ *
+ * @return              The system time in ticks.
+ *
+ * @api
+ */
+static inline
+systime_t osalVTGetSystemTime(void) {
+
+  return chTimeNow();
+}
+
+/**
+ * @brief   Returns the elapsed time since the specified start time.
+ *
+ * @param[in] start     start time
+ * @return              The elapsed time.
+ *
+ * @api
+ */
+static inline
+systime_t osalVTTimeElapsedSince(systime_t start) {
+
+  return osalVTGetSystemTime() - start;
+}
+
+/**
  * @brief   Checks if the current system time is within the specified time
  *          window.
  * @note    When start==end then the function returns always true because the
@@ -555,24 +586,7 @@ void osalVTReset(virtual_timer_t *vtp) {
 static inline
 bool osalVTIsSystemTimeWithin(systime_t start, systime_t end) {
 
-  return (bool)chTimeIsWithin(start, end);
-}
-
-/**
- * @brief   Current system time.
- * @details Returns the number of system ticks since the @p osalInit()
- *          invocation.
- * @note    The counter can reach its maximum and then restart from zero.
- * @note    Mapped on ChibiOS/RT's own virtual timers.
- *
- * @return              The system time in ticks.
- *
- * @api
- */
-static inline
-systime_t osalVTGetSystemTime(void) {
-
-  return chTimeNow();
+  return (bool)(osalVTTimeElapsedSince(start) < end - start);
 }
 
 /**
