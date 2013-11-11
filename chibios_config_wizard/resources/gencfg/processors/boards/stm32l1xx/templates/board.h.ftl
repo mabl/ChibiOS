@@ -72,8 +72,8 @@
 
 [#if doc1.board.clocks.@HSEBypass[0]?string == "true"]
 #define STM32_HSE_BYPASS
-[/#if]
 
+[/#if]
 /*
  * MCU type as defined in the ST header file stm32l1xx.h.
  */

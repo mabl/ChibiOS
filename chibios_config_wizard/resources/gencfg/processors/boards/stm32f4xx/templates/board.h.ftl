@@ -72,8 +72,8 @@
 
 [#if doc1.board.clocks.@HSEBypass[0]?string == "true"]
 #define STM32_HSE_BYPASS
-[/#if]
 
+[/#if]
 /*
  * Board voltages.
  * Required for performance limits calculation.
