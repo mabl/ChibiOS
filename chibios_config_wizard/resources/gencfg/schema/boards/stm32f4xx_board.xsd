@@ -12,19 +12,17 @@
 				<xs:sequence>
                     <xs:element name="subtype">
                     	<xs:simpleType>
-                    		<xs:restriction base="xs:string">
-                    			<xs:whiteSpace value="collapse"></xs:whiteSpace>
-                    			<xs:enumeration value="STM32F401xx"></xs:enumeration>
-                    			<xs:enumeration
-                    				value="STM32F40_41xxx">
-                    			</xs:enumeration>
-                    			<xs:enumeration
-                    				value="STM32F427_437xx">
-                    			</xs:enumeration>
-                    			<xs:enumeration
-                    				value="STM32F429_439xx">
-                    			</xs:enumeration>
-                    		</xs:restriction>
+                    	   <xs:restriction base="xs:string">
+                    	      <xs:whiteSpace value="collapse"></xs:whiteSpace>
+                    	      <xs:enumeration value="STM32F401xx"></xs:enumeration>
+                    	      <xs:enumeration value="STM32F40_41xxx">
+                    	      </xs:enumeration>
+                    	      <xs:enumeration value="STM32F427_437xx">
+                    	      </xs:enumeration>
+                    	      <xs:enumeration value="STM32F429_439xx">
+                    	      </xs:enumeration>
+                    	      <xs:enumeration value="STM32F2XX"></xs:enumeration>
+                    	   </xs:restriction>
                     	</xs:simpleType>
                     </xs:element>
                     <xs:element name="clocks" maxOccurs="1"

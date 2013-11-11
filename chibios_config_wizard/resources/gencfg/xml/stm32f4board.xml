@@ -19,6 +19,7 @@
     HSEFrequency="8000000"
     HSEBypass="false"
     LSEFrequency="32768"
+    LSEBypass="false"
     VDD="300" />
   <ports>
     <GPIOA>

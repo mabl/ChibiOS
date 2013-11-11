@@ -10,10 +10,12 @@
   <board_name>-----human readable board name-----</board_name>
   <board_id>BOARD_IDENTIFIER</board_id>
   <board_functions></board_functions>
+  <subtype>STM32L1XX_MD</subtype>
   <clocks
     HSEFrequency="8000000"
     HSEBypass="false"
-    LSEFrequency="32768" />
+    LSEFrequency="32768"
+    LSEBypass="false" />
   <ports>
     <GPIOA>
       <pin0

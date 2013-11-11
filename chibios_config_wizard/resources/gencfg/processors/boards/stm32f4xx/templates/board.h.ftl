@@ -62,6 +62,10 @@
 #define STM32_LSECLK                ${doc1.board.clocks.@LSEFrequency[0]}
 #endif
 
+[#if doc1.board.clocks.@LSEBypass[0]?string == "true"]
+#define STM32_LSE_BYPASS
+
+[/#if]
 #if !defined(STM32_HSECLK)
 #define STM32_HSECLK                ${doc1.board.clocks.@HSEFrequency[0]}
 #endif
