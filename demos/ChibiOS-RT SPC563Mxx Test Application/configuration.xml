@@ -3,8 +3,8 @@
   <application name="SPC563Mxx Test Application" version="1.0.0" standalone="false" locked="false">
     <description>Test application for the SPC563Mxx created using the SPC5's Application Wizard.</description>
     <component id="com.st.tools.spc5.components.platform.spc563mxx" version="1.0.0">
-      <component id="org.chibios.spc5.components.rtos.spc563mxx" version="2.6.0" />
-      <component id="org.chibios.spc5.components.various.shell" version="2.6.0" />
+      <component id="org.chibios.spc5.components.rtos.spc563mxx" version="2.6.1" />
+      <component id="org.chibios.spc5.components.various.shell" version="2.6.1" />
       <component id="org.chibios.spc5.components.various.chprintf" />
     </component>
     <instances>

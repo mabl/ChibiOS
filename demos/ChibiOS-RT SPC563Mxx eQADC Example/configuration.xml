@@ -3,7 +3,7 @@
   <application name="Monaco eQADC Example Application" version="1.0.0" standalone="false" locked="false">
     <description>This application shows how to use the eQADC unit found on the SPC563Mxx platform.</description>
     <component id="com.st.tools.spc5.components.platform.spc563mxx" version="1.0.0">
-      <component id="org.chibios.spc5.components.rtos.spc563mxx" version="2.6.0" />
+      <component id="org.chibios.spc5.components.rtos.spc563mxx" version="2.6.1" />
     </component>
     <instances>
       <instance locked="false" id="com.st.tools.spc5.components.platform.spc563mxx">
