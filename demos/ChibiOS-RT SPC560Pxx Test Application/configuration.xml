@@ -275,6 +275,8 @@
           </clocks>
         </initialization_settings>
         <irq_priority_settings>
+          <adc0 index="11">12</adc0>
+          <adc1 index="11">12</adc1>
           <dspi_0 index="9">10</dspi_0>
           <dspi_1 index="9">10</dspi_1>
           <dspi_2 index="9">10</dspi_2>
@@ -295,6 +297,20 @@
           <linflex0 index="7">8</linflex0>
           <linflex1 index="7">8</linflex1>
         </irq_priority_settings>
+        <adc_settings>
+          <adc0>false</adc0>
+          <adc0_clock_divider index="1">Half peripheral clock frequency</adc0_clock_divider>
+          <adc0_auto_clock_off_mode>false</adc0_auto_clock_off_mode>
+          <adc1>false</adc1>
+          <adc1_clock_divider index="1">Half peripheral clock frequency</adc1_clock_divider>
+          <adc1_auto_clock_off_mode>false</adc1_auto_clock_off_mode>
+          <adc0_conversion_groups>
+            <configs />
+          </adc0_conversion_groups>
+          <adc1_conversion_groups>
+            <configs />
+          </adc1_conversion_groups>
+        </adc_settings>
         <edma_settings>
           <group_0_channels_priorities>
             <ch0 index="0">0</ch0>
@@ -333,6 +349,10 @@
             <dspi4_tx2 index="2">2</dspi4_tx2>
             <dspi4_rx index="3">3</dspi4_rx>
           </dspi_channels>
+          <adc_channels>
+            <adc0 index="1">1</adc0>
+            <adc1 index="2">2</adc1>
+          </adc_channels>
         </edma_mux_settings>
         <dspi_settings>
           <dspi_0>false</dspi_0>

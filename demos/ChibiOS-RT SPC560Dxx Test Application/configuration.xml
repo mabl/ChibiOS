@@ -295,6 +295,7 @@
           </clocks>
         </initialization_settings>
         <irq_priority_settings>
+          <adc1 index="11">12</adc1>
           <dspi_0 index="9">10</dspi_0>
           <dspi_1 index="9">10</dspi_1>
           <emios0_uc0 index="7">8</emios0_uc0>
@@ -315,6 +316,14 @@
           <linflex0 index="7">8</linflex0>
           <linflex2 index="7">8</linflex2>
         </irq_priority_settings>
+        <adc_settings>
+          <adc1>false</adc1>
+          <adc1_clock_divider index="1">Half peripheral clock frequency</adc1_clock_divider>
+          <adc1_auto_clock_off_mode>false</adc1_auto_clock_off_mode>
+          <adc1_conversion_groups>
+            <configs />
+          </adc1_conversion_groups>
+        </adc_settings>
         <edma_settings>
           <group_0_channels_priorities>
             <ch0 index="0">0</ch0>
@@ -335,6 +344,28 @@
             <ch15 index="15">15</ch15>
           </group_0_channels_priorities>
         </edma_settings>
+        <edma_mux_settings>
+          <dspi_channels>
+            <dspi0_tx1 index="4">4</dspi0_tx1>
+            <dspi0_tx2 index="5">5</dspi0_tx2>
+            <dspi0_rx index="6">6</dspi0_rx>
+            <dspi1_tx1 index="7">7</dspi1_tx1>
+            <dspi1_tx2 index="8">8</dspi1_tx2>
+            <dspi1_rx index="9">9</dspi1_rx>
+            <dspi2_tx1 index="10">10</dspi2_tx1>
+            <dspi2_tx2 index="11">11</dspi2_tx2>
+            <dspi2_rx index="12">12</dspi2_rx>
+            <dspi3_tx1 index="13">13</dspi3_tx1>
+            <dspi3_tx2 index="14">14</dspi3_tx2>
+            <dspi3_rx index="15">15</dspi3_rx>
+            <dspi4_tx1 index="1">1</dspi4_tx1>
+            <dspi4_tx2 index="2">2</dspi4_tx2>
+            <dspi4_rx index="3">3</dspi4_rx>
+          </dspi_channels>
+          <adc_channels>
+            <adc1 index="2">2</adc1>
+          </adc_channels>
+        </edma_mux_settings>
         <dspi_settings>
           <dspi_0>false</dspi_0>
           <dspi_1>false</dspi_1>
@@ -357,25 +388,6 @@
             <configs />
           </spi_configurations>
         </dspi_settings>
-        <edma_mux_settings>
-          <dspi_channels>
-            <dspi0_tx1 index="4">4</dspi0_tx1>
-            <dspi0_tx2 index="5">5</dspi0_tx2>
-            <dspi0_rx index="6">6</dspi0_rx>
-            <dspi1_tx1 index="7">7</dspi1_tx1>
-            <dspi1_tx2 index="8">8</dspi1_tx2>
-            <dspi1_rx index="9">9</dspi1_rx>
-            <dspi2_tx1 index="10">10</dspi2_tx1>
-            <dspi2_tx2 index="11">11</dspi2_tx2>
-            <dspi2_rx index="12">12</dspi2_rx>
-            <dspi3_tx1 index="13">13</dspi3_tx1>
-            <dspi3_tx2 index="14">14</dspi3_tx2>
-            <dspi3_rx index="15">15</dspi3_rx>
-            <dspi4_tx1 index="1">1</dspi4_tx1>
-            <dspi4_tx2 index="2">2</dspi4_tx2>
-            <dspi4_rx index="3">3</dspi4_rx>
-          </dspi_channels>
-        </edma_mux_settings>
         <emios_settings>
           <emios0_ch0>false</emios0_ch0>
           <emios0_ch1>false</emios0_ch1>
