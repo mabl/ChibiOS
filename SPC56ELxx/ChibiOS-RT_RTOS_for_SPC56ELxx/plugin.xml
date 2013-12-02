@@ -40,6 +40,11 @@
             </requiredFeatures>
             <exportedFeatures>
                <exportedFeature
+                     brief="ChibiOS/RT"
+                     exclusive="false"
+                     id="com.st.tools.spc5.services.rtos">
+               </exportedFeature>
+               <exportedFeature
                      brief="Generic ChibiOS/RT environment."
                      exclusive="false"
                      id="org.chibios.spc5.components.chibios">
