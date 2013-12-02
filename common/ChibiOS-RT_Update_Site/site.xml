@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <description name="ChibiOS/RT Eclipse Update Site" url="http://www.chibios.org/eclipse">
+   <description name="ChibiOS/RT Eclipse Update Site" url="http://www.chibios.org/eclipse/SPC5-ChibiOS">
       ChibiOS/RT Eclipse Update Site.
    </description>
    <feature url="features/org.chibios.spc5.components.rtos.spc560bcxx.feature_1.0.0.qualifier.jar" id="org.chibios.spc5.components.rtos.spc560bcxx.feature" version="1.0.0.qualifier">
@@ -10,9 +10,6 @@
       <category name="ChibiOS/RT"/>
    </feature>
    <feature url="features/org.chibios.spc5.components.rtos.spc563mxx.feature_1.0.0.qualifier.jar" id="org.chibios.spc5.components.rtos.spc563mxx.feature" version="1.0.0.qualifier">
-      <category name="ChibiOS/RT"/>
-   </feature>
-   <feature url="features/org.chibios.spc5.components.rtos.stm32f4xx.feature_1.0.0.qualifier.jar" id="org.chibios.spc5.components.rtos.stm32f4xx.feature" version="1.0.0.qualifier">
       <category name="ChibiOS/RT"/>
    </feature>
    <feature url="features/org.chibios.spc5.components.portable.feature_1.0.0.qualifier.jar" id="org.chibios.spc5.components.portable.feature" version="1.0.0.qualifier">

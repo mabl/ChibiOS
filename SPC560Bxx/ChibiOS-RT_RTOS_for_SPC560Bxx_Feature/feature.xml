@@ -31,7 +31,7 @@ along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
    </license>
 
    <url>
-      <update label="ChibiOS/RT Eclipse update site" url="http://www.chibios.org/eclipse"/>
+      <update label="ChibiOS/RT Eclipse Update Site" url="http://www.chibios.org/eclipse/SPC5-ChibiOS"/>
       <discovery label="ChibiOS/RT free embedded RTOS homepage" url="http://www.chibios.org"/>
    </url>
 
