@@ -2,7 +2,8 @@
 [@pp.dropOutputFile /]
 [@pp.changeOutputFile name="component.mak" /]
 # List of library files exported by the component.
-LIB_C_SRC       += ${global.component_path}/lib/src/chprintf.c
+LIB_C_SRC       += ${global.component_path}/lib/src/memstreams.c \
+                   ${global.component_path}/lib/src/chprintf.c
 
 LIB_CPP_SRC     +=
 

@@ -469,11 +469,17 @@
         </emios_settings>
         <flexcan_settings>
           <flexcan0>false</flexcan0>
+          <flexcan0_use_external_clock>false</flexcan0_use_external_clock>
           <flexcan1>false</flexcan1>
+          <flexcan1_use_external_clock>false</flexcan1_use_external_clock>
           <flexcan2>false</flexcan2>
+          <flexcan2_use_external_clock>false</flexcan2_use_external_clock>
           <flexcan3>false</flexcan3>
+          <flexcan3_use_external_clock>false</flexcan3_use_external_clock>
           <flexcan4>false</flexcan4>
+          <flexcan4_use_external_clock>false</flexcan4_use_external_clock>
           <flexcan5>false</flexcan5>
+          <flexcan5_use_external_clock>false</flexcan5_use_external_clock>
           <flexcan_enable_filters>false</flexcan_enable_filters>
           <can_configurations>
             <configs />

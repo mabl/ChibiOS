@@ -36,6 +36,8 @@ cp ${chibios}/test/*.c ./portable/ChibiOS-RT_Portable_Kernel_Test_Suite_Componen
 echo "Portable Output Formatter"
 cp ${chibios}/os/various/chprintf.h ./portable/ChibiOS-RT_Portable_Output_Formatter_Component/component/lib/include/
 cp ${chibios}/os/various/chprintf.c ./portable/ChibiOS-RT_Portable_Output_Formatter_Component/component/lib/src/
+cp ${chibios}/os/various/memstreams.h ./portable/ChibiOS-RT_Portable_Output_Formatter_Component/component/lib/include/
+cp ${chibios}/os/various/memstreams.c ./portable/ChibiOS-RT_Portable_Output_Formatter_Component/component/lib/src/
 
 # Portable Shell.
 echo "Portable Shell"

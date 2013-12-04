@@ -409,6 +409,7 @@
         </emios_settings>
         <flexcan_settings>
           <flexcan0>false</flexcan0>
+          <flexcan0_use_external_clock>false</flexcan0_use_external_clock>
           <flexcan_enable_filters>false</flexcan_enable_filters>
           <can_configurations>
             <configs />
