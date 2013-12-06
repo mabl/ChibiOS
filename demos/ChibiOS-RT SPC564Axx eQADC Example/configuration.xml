@@ -78,7 +78,7 @@
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.hal.board.spc564axx">
         <identification>
-          <board_identifier>SPC564MXX_EVB</board_identifier>
+          <board_identifier>SPC564AXX_EVB</board_identifier>
           <board_name>EVB with SPC564Axx Mini Module</board_name>
         </identification>
         <clock_settings>
