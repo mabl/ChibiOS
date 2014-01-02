@@ -26,7 +26,9 @@
 [@license.EmitLicenseAsText /]
 */
 
-#include "ch.h"
+[#list doc1.board.headers.header as header]
+#include "${header[0]?string?trim}"
+[/#list]
 #include "hal.h"
 
 #if HAL_USE_PAL || defined(__DOXYGEN__)

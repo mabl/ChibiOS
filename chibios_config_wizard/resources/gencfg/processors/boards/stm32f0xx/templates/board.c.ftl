@@ -26,7 +26,9 @@
 [@license.EmitLicenseAsText /]
 */
 
-#include "ch.h"
+[#list doc1.board.headers.header as header]
+#include "${header[0]?string?trim}"
+[/#list]
 #include "hal.h"
 
 #if HAL_USE_PAL || defined(__DOXYGEN__)
@@ -43,8 +45,10 @@ const PALConfig pal_default_config =
    VAL_GPIOB_ODR,   VAL_GPIOB_AFRL,   VAL_GPIOB_AFRH},
   {VAL_GPIOC_MODER, VAL_GPIOC_OTYPER, VAL_GPIOC_OSPEEDR, VAL_GPIOC_PUPDR,
    VAL_GPIOC_ODR,   VAL_GPIOC_AFRL,   VAL_GPIOC_AFRH},
+[#if doc1.board.subtype[0] != "STM32F0XX_LD"]
   {VAL_GPIOD_MODER, VAL_GPIOD_OTYPER, VAL_GPIOD_OSPEEDR, VAL_GPIOD_PUPDR,
    VAL_GPIOD_ODR,   VAL_GPIOD_AFRL,   VAL_GPIOD_AFRH},
+[/#if]
   {VAL_GPIOF_MODER, VAL_GPIOF_OTYPER, VAL_GPIOF_OSPEEDR, VAL_GPIOF_PUPDR,
    VAL_GPIOF_ODR,   VAL_GPIOF_AFRL,   VAL_GPIOF_AFRH}
 };
