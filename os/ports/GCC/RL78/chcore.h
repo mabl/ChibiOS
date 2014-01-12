@@ -130,9 +130,8 @@ struct intctx {
     uint16_t    de_2;
     uint16_t    bc_2;
     uint16_t    ax_2;
-#ifndef CH_CURRP_REGISTER_CACHE
-#else
-#warning CH_CURRP_REGISTER_CACHE feature is not tested.
+#ifdef CH_CURRP_REGISTER_CACHE
+#error CH_CURRP_REGISTER_CACHE feature is not supported.
 #endif
     uint32_t    pc;
 };
@@ -155,8 +154,9 @@ struct context {
  */
 #define SETUP_CONTEXT(workspace, wsize, pf, arg) {                      \
   uint8_t *sp = (uint8_t *)workspace + wsize;                           \
-  APUSH(sp, pf);                                                        \
   APUSH(sp, arg);                                                       \
+  APUSH(sp, pf);                                                        \
+  APUSH(sp, 0);                                                         \
   APUSH(sp, 0);                                                         \
   sp -= sizeof(struct intctx);                                          \
   ((struct intctx *)sp)->pc = (uint16_t)_port_thread_start;             \
@@ -237,7 +237,9 @@ struct context {
 #define PORT_IRQ_EPILOGUE() {                                                 \
     dbg_check_lock();                                                         \
     if (chSchIsPreemptionRequired()) {                                        \
-      asm volatile (";mvtipl  #0                                     \n\t");   \
+      asm volatile ("mov   a,PSW                                    \n\t");   \
+      asm volatile ("or    a,#6                                     \n\t");   \
+      asm volatile ("mov   PSW,a                                    \n\t");   \
       chSchDoReschedule();                                                    \
     }                                                                         \
     dbg_check_unlock();                                                       \

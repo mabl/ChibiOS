@@ -29,7 +29,6 @@
 		</Build>
 		<Compiler>
 			<Add option="-fomit-frame-pointer" />
-			<Add option="-O2" />
 			<Add option="-Wall" />
 			<Add option="-std=gnu99" />
 			<Add option="-funsigned-char" />
@@ -59,13 +58,25 @@
 		</Unit>
 		<Unit filename="../../boards/RENESAS_YRPBRL78G13/board.h" />
 		<Unit filename="../../os/hal/include/hal.h" />
+		<Unit filename="../../os/hal/include/pal.h" />
+		<Unit filename="../../os/hal/include/serial.h" />
 		<Unit filename="../../os/hal/platforms/RL78/hal_lld.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../os/hal/platforms/RL78/hal_lld.h" />
 		<Unit filename="../../os/hal/platforms/RL78/iodefine.h" />
 		<Unit filename="../../os/hal/platforms/RL78/iodefine_ext.h" />
+		<Unit filename="../../os/hal/platforms/RL78/serial_lld.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../os/hal/platforms/RL78/serial_lld.h" />
 		<Unit filename="../../os/hal/src/hal.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../os/hal/src/pal.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../os/hal/src/serial.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="../../os/kernel/include/ch.h" />
@@ -155,6 +166,62 @@
 		<Unit filename="../../os/ports/GCC/RL78/vectors.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="../../os/various/chprintf.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../os/various/chprintf.h" />
+		<Unit filename="../../os/various/shell.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../os/various/shell.h" />
+		<Unit filename="../../test/test.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../test/test.h" />
+		<Unit filename="../../test/testbmk.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../test/testbmk.h" />
+		<Unit filename="../../test/testdyn.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../test/testdyn.h" />
+		<Unit filename="../../test/testevt.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../test/testevt.h" />
+		<Unit filename="../../test/testheap.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../test/testheap.h" />
+		<Unit filename="../../test/testmbox.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../test/testmbox.h" />
+		<Unit filename="../../test/testmsg.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../test/testmsg.h" />
+		<Unit filename="../../test/testmtx.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../test/testmtx.h" />
+		<Unit filename="../../test/testpools.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../test/testpools.h" />
+		<Unit filename="../../test/testqueues.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../test/testqueues.h" />
+		<Unit filename="../../test/testsem.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../test/testsem.h" />
+		<Unit filename="../../test/testthd.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../test/testthd.h" />
 		<Unit filename="chconf.h" />
 		<Unit filename="halconf.h" />
 		<Unit filename="main.c">

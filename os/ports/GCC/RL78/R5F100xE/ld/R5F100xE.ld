@@ -52,60 +52,64 @@ SECTIONS
           KEEP(*(.option))
 	} > option
 
-    constructors : ALIGN(4) SUBALIGN(4)
+    .text : ALIGN(2) SUBALIGN(2)
     {
-        PROVIDE(__init_array_start = .);
-        KEEP(*(SORT(.init_array.*)))
-        KEEP(*(.init_array))
-        PROVIDE(__init_array_end = .);
-    } > flash
+        *(.text P .stub .text.* .gnu.linkonce.t.*)
+        KEEP (*(.text.*personality*))
+        /* .gnu.warning sections are handled specially by elf32.em.  */
+        *(.gnu.warning)
+        *(.interp .hash .dynsym .dynstr .gnu.version*)
+	} > flash
 
-    destructors : ALIGN(4) SUBALIGN(4)
-    {
-        PROVIDE(__fini_array_start = .);
-        KEEP(*(.fini_array))
-        KEEP(*(SORT(.fini_array.*)))
-        PROVIDE(__fini_array_end = .);
-    } > flash
+    /* mirrored code area in data space */
+	.rodata (MAX(__romdatastart + __romdatacopysize, 0x2000)) : {
+     . = ALIGN(2);
+     *(.plt)
+     *(.rodata C C_2 C_1 .rodata.* .gnu.linkonce.r.*)
+     *(.rodata1)
+     *(.eh_frame_hdr)
+     KEEP (*(.eh_frame))
+     KEEP (*(.gcc_except_table)) *(.gcc_except_table.*)
+     PROVIDE (__preinit_array_start = .);
+     KEEP (*(.preinit_array))
+     PROVIDE (__preinit_array_end = .);
+     PROVIDE (__init_array_start = .);
+     KEEP (*(SORT(.init_array.*)))
+     KEEP (*(.init_array))
+     PROVIDE (__init_array_end = .);
+     PROVIDE (__fini_array_start = .);
+     KEEP (*(.fini_array))
+     KEEP (*(SORT(.fini_array.*)))
+     PROVIDE (__fini_array_end = .);
+     LONG(0); /* Sentinel.  */
 
-    .text : ALIGN(4) SUBALIGN(4)
-    {
-        KEEP(*(.text.startup.*))
-        *(.text)
-        *(.text.*)
-        *(.rodata)
-        *(.rodata.*)
-        *(.glue_7t)
-        *(.glue_7)
-        *(.gcc*)
-    } > flash
+     /* gcc uses crtbegin.o to find the start of the constructors, so
+        we make sure it is first.  Because this is a wildcard, it
+        doesn't matter if the user does not actually link against
+        crtbegin.o; the linker won't look for a file to match a
+        wildcard.  The wildcard also means that it doesn't matter which
+        directory crtbegin.o is in.  */
+     KEEP (*crtbegin*.o(.ctors))
 
-    .ARM.extab :
-    {
-        *(.ARM.extab* .gnu.linkonce.armextab.*)
-    } > flash
+     /* We don't want to include the .ctor section from from the
+        crtend.o file until after the sorted ctors.  The .ctor section
+        from the crtend file contains the end of ctors marker and it
+        must be last */
+     KEEP (*(EXCLUDE_FILE (*crtend*.o ) .ctors))
+     KEEP (*(SORT(.ctors.*)))
+     KEEP (*(.ctors))
 
-    .ARM.exidx : {
-        PROVIDE(__exidx_start = .);
-        *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-        PROVIDE(__exidx_end = .);
-     } > flash
-
-    .eh_frame_hdr :
-    {
-        *(.eh_frame_hdr)
-    } > flash
-
-    .eh_frame : ONLY_IF_RO
-    {
-        *(.eh_frame)
-    } > flash
-
+     KEEP (*crtbegin*.o(.dtors))
+     KEEP (*(EXCLUDE_FILE (*crtend*.o ) .dtors))
+     KEEP (*(SORT(.dtors.*)))
+     KEEP (*(.dtors))
+   } > flash
+/*
     .textalign : ONLY_IF_RO
     {
         . = ALIGN(8);
     } > flash
-
+*/
     _etext = .;
     _textdata = _etext;
 
@@ -115,36 +119,52 @@ SECTIONS
 
     .stacks :
     {
-        . = ALIGN(4);
+        . = ALIGN(2);
         __main_thread_stack_base__ = .;
         . += __main_stack_size__;
-        . = ALIGN(4);
+        . = ALIGN(2);
         __main_thread_stack_end__ = .;
     } > ram
 
     .data :
     {
-        . = ALIGN(4);
+        . = ALIGN(2);
         PROVIDE(_data = .);
-        *(.data)
-        . = ALIGN(4);
-        *(.data.*)
-        . = ALIGN(4);
-        *(.ramtext)
-        . = ALIGN(4);
+
+        KEEP (*(.jcr))
+        *(.data.rel.ro.local) *(.data.rel.ro*)
+        *(.dynamic)
+
+        *(.data D .data.* .gnu.linkonce.d.*)
+        KEEP (*(.gnu.linkonce.d.*personality*))
+        SORT(CONSTRUCTORS)
+        *(.data1)
+        *(.got.plt) *(.got)
+
+        /* We want the small data sections together, so single-instruction offsets
+           can access them all, and initialized data all before uninitialized, so
+           we can shorten the on-disk segment size.  */
+        . = ALIGN(2);
+        *(.sdata .sdata.* .gnu.linkonce.s.* D_2 D_1)
+
+        . = ALIGN(2);
+
         PROVIDE(_edata = .);
     } > ram AT > flash
 
-    .bss :
+    PROVIDE(__romdatastart = LOADADDR(.data));
+    PROVIDE (__romdatacopysize = SIZEOF(.data));
+
+	.bss :
     {
-        . = ALIGN(4);
+        . = ALIGN(2);
         PROVIDE(_bss_start = .);
-        *(.bss)
-        . = ALIGN(4);
-        *(.bss.*)
-        . = ALIGN(4);
+        *(.dynbss)
+        *(.sbss .sbss.*)
+        *(.bss B B_2 B_1 .bss.* .gnu.linkonce.b.*)
+        . = ALIGN(2);
         *(COMMON)
-        . = ALIGN(4);
+        . = ALIGN(2);
         PROVIDE(_bss_end = .);
     } > ram
 }

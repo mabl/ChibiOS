@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2013 Giovanni Di Sirio
+    ChibiOS/RT - Copyright (C) 2006-2014 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 */
 
 /*
- * RX62N drivers configuration.
+ * RL78 drivers configuration.
  * The following settings override the default settings present in
  * the various device driver implementation headers.
  * Note that the settings for each driver only have effect if the driver
@@ -45,9 +45,10 @@
 /*
  * SERIAL driver system settings.
  */
-#define RL78_SERIAL_USE_UART0              TRUE
+#define RL78_SERIAL_USE_UART0              FALSE
 #define RL78_SERIAL_UART0_IRQ_PRIORITY     3
-#define RL78_SERIAL_USE_UART1              FALSE
+#define RL78_SERIAL_USE_UART1              TRUE
+#define RL78_SERIAL_UART1_IRQ_PRIORITY     3
 
 /*
  * SPI driver system settings.

@@ -56,7 +56,6 @@ CH_IRQ_HANDLER(INT_TM00) {
   chSysLockFromIsr();
   chSysTimerHandlerI();
   chSysUnlockFromIsr();
-  TMIF00 = 0;
 
   CH_IRQ_EPILOGUE();
 }

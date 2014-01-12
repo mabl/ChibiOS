@@ -104,12 +104,10 @@ void port_halt(void) {
 __attribute__((naked, weak))
 #endif
 void port_switch(Thread *ntp, Thread *otp) {
-#if !defined(CH_CURRP_REGISTER_CACHE)
 /*
   de - ntp
   hl - otp
 */
-/*  register struct intctx *sp asm ("sp"); */
   asm volatile ("movw    ax,[sp+4]                                  \n\t"
                 "movw    de,ax                                      \n\t"
                 "movw    ax,[sp+6]                                  \n\t"
@@ -126,7 +124,6 @@ void port_switch(Thread *ntp, Thread *otp) {
   asm volatile ("sel     rb0                                        \n\t"
                 "movw    ax,sp                                      \n\t"
                 "movw    [hl+6],ax                                  \n\t"
-                "nop                                                \n\t"
                 "movw    ax,[de+6]                                  \n\t"
                 "movw    sp,ax                                      \n\t"
                 "sel     rb2                                        \n\t");
@@ -135,9 +132,6 @@ void port_switch(Thread *ntp, Thread *otp) {
                 "pop     bc                                         \n\t"
                 "pop     ax                                         \n\t"
                 "sel     rb0                                        \n\t");
-#else
-#error "CH_CURRP_REGISTER_CACHE not supported"
-#endif
   asm volatile ("ret                                                \n\t");
 }
 
@@ -146,6 +140,7 @@ void port_switch(Thread *ntp, Thread *otp) {
  * @details If the work function returns @p chThdExit() is automatically
  *          invoked.
  */
+__attribute__((noreturn))
 void _port_thread_start(msg_t (*pf)(void *), void *p) {
 
   chSysUnlock();

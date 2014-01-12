@@ -16,6 +16,7 @@
 
 #include "ch.h"
 #include "hal.h"
+#include "test.h"
 
 /*
 To summarize, user can use following set of options (command line) to achieve,
@@ -90,6 +91,8 @@ int main(void) {
   halInit();
   chSysInit();
 
+  sdStart(&SD2, NULL);
+
   /*
    * Leds initialization.
    */
@@ -101,9 +104,9 @@ int main(void) {
    * Normal main() thread activity, in this demo it does nothing except
    * sleeping in a loop.
    */
+  TestThread(&SD2);
   while (TRUE) {
     chThdSleepMilliseconds(100);
   }
   return 0;
 }
-
