@@ -31,7 +31,7 @@
 #include <stdbool.h>
 
 #include "ch.h"
-
+#include "platform.h"
 #include "osal_cfg.h"
 
 /*===========================================================================*/
