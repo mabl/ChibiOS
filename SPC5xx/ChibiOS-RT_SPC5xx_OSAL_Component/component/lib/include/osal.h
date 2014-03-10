@@ -66,7 +66,7 @@
 /**
  * @name    Time related
  */
-#define OSAL_FREQUENCY                      CH_FREQUENCY
+#define OSAL_ST_FREQUENCY                   CH_FREQUENCY
 /** @} */
 
 /**
@@ -383,7 +383,7 @@ void osalSysHalt(const char *reason) {
  * @iclass
  */
 static inline
-void osalSysTimerHandlerI(void) {
+void osalOsTimerHandlerI(void) {
 
   chSysTimerHandlerI();
 }
@@ -605,6 +605,24 @@ static inline
 void osalThreadSleep(systime_t time) {
 
   chThdSleep(time);
+}
+
+/**
+ * @brief   Suspends the invoking thread for the specified time.
+ *
+ * @param[in] time      the delay in system ticks, the special values are
+ *                      handled as follow:
+ *                      - @a TIME_INFINITE is allowed but interpreted as a
+ *                        normal time specification.
+ *                      - @a TIME_IMMEDIATE this value is not allowed.
+ *                      .
+ *
+ * @sclass
+ */
+static inline
+void osalThreadSleepS(systime_t time) {
+
+  chThdSleepS(time);
 }
 
 /**
