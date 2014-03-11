@@ -95,7 +95,7 @@
                 <bit index="9">9</bit>
               </pin_identification>
               <settings>
-                <pin_mode index="9">MODE_OUTPUT_ALTERNATE(1)</pin_mode>
+                <pin_mode index="11">MODE_OUTPUT_ALTERNATE_PRIMARY</pin_mode>
                 <latched_state index="1">HIGH</latched_state>
               </settings>
             </pin_settings>
@@ -106,7 +106,7 @@
                 <bit index="10">10</bit>
               </pin_identification>
               <settings>
-                <pin_mode index="9">MODE_OUTPUT_ALTERNATE(1)</pin_mode>
+                <pin_mode index="7">MODE_INPUT_ALTERNATE_PRIMARY</pin_mode>
                 <latched_state index="1">HIGH</latched_state>
               </settings>
             </pin_settings>
@@ -161,7 +161,7 @@
                 <bit index="12">12</bit>
               </pin_identification>
               <settings>
-                <pin_mode index="6">MODE_OUTPUT_PUSHPULL</pin_mode>
+                <pin_mode index="5">MODE_OUTPUT_PUSHPULL</pin_mode>
                 <latched_state index="1">HIGH</latched_state>
               </settings>
             </pin_settings>
@@ -172,7 +172,7 @@
                 <bit index="13">13</bit>
               </pin_identification>
               <settings>
-                <pin_mode index="6">MODE_OUTPUT_PUSHPULL</pin_mode>
+                <pin_mode index="5">MODE_OUTPUT_PUSHPULL</pin_mode>
                 <latched_state index="1">HIGH</latched_state>
               </settings>
             </pin_settings>
@@ -183,7 +183,7 @@
                 <bit index="14">14</bit>
               </pin_identification>
               <settings>
-                <pin_mode index="6">MODE_OUTPUT_PUSHPULL</pin_mode>
+                <pin_mode index="5">MODE_OUTPUT_PUSHPULL</pin_mode>
                 <latched_state index="1">HIGH</latched_state>
               </settings>
             </pin_settings>
@@ -194,7 +194,7 @@
                 <bit index="15">15</bit>
               </pin_identification>
               <settings>
-                <pin_mode index="6">MODE_OUTPUT_PUSHPULL</pin_mode>
+                <pin_mode index="5">MODE_OUTPUT_PUSHPULL</pin_mode>
                 <latched_state index="1">HIGH</latched_state>
               </settings>
             </pin_settings>
