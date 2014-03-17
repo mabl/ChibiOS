@@ -100,6 +100,17 @@
                 <pin_mode index="9">MODE_OUTPUT_ALTERNATE(1)</pin_mode>
                 <latched_state index="1">HIGH</latched_state>
               </settings>
+              <advanced>
+                <pa index="0">GPIO Mode</pa>
+                <smc>false</smc>
+                <apc>false</apc>
+                <obe>false</obe>
+                <ibe>false</ibe>
+                <ode index="0">Push-Pull</ode>
+                <src index="0">Slow</src>
+                <wpe index="0">Disabled</wpe>
+                <wps index="0">Pull-Down</wps>
+              </advanced>
             </pin_settings>
             <pin_settings>
               <pin_identification>
@@ -108,9 +119,20 @@
                 <bit index="3">3</bit>
               </pin_identification>
               <settings>
-                <pin_mode index="2">MODE_INPUT</pin_mode>
+                <pin_mode index="3">MODE_INPUT</pin_mode>
                 <latched_state index="1">HIGH</latched_state>
               </settings>
+              <advanced>
+                <pa index="0">GPIO Mode</pa>
+                <smc>false</smc>
+                <apc>false</apc>
+                <obe>false</obe>
+                <ibe>false</ibe>
+                <ode index="0">Push-Pull</ode>
+                <src index="0">Slow</src>
+                <wpe index="0">Disabled</wpe>
+                <wps index="0">Pull-Down</wps>
+              </advanced>
             </pin_settings>
             <pin_settings>
               <pin_identification>
@@ -119,9 +141,20 @@
                 <bit index="0">0</bit>
               </pin_identification>
               <settings>
-                <pin_mode index="2">MODE_INPUT</pin_mode>
+                <pin_mode index="3">MODE_INPUT</pin_mode>
                 <latched_state index="0">LOW</latched_state>
               </settings>
+              <advanced>
+                <pa index="0">GPIO Mode</pa>
+                <smc>false</smc>
+                <apc>false</apc>
+                <obe>false</obe>
+                <ibe>false</ibe>
+                <ode index="0">Push-Pull</ode>
+                <src index="0">Slow</src>
+                <wpe index="0">Disabled</wpe>
+                <wps index="0">Pull-Down</wps>
+              </advanced>
             </pin_settings>
             <pin_settings>
               <pin_identification>
@@ -130,9 +163,20 @@
                 <bit index="1">1</bit>
               </pin_identification>
               <settings>
-                <pin_mode index="2">MODE_INPUT</pin_mode>
+                <pin_mode index="3">MODE_INPUT</pin_mode>
                 <latched_state index="0">LOW</latched_state>
               </settings>
+              <advanced>
+                <pa index="0">GPIO Mode</pa>
+                <smc>false</smc>
+                <apc>false</apc>
+                <obe>false</obe>
+                <ibe>false</ibe>
+                <ode index="0">Push-Pull</ode>
+                <src index="0">Slow</src>
+                <wpe index="0">Disabled</wpe>
+                <wps index="0">Pull-Down</wps>
+              </advanced>
             </pin_settings>
             <pin_settings>
               <pin_identification>
@@ -141,9 +185,20 @@
                 <bit index="2">2</bit>
               </pin_identification>
               <settings>
-                <pin_mode index="2">MODE_INPUT</pin_mode>
+                <pin_mode index="3">MODE_INPUT</pin_mode>
                 <latched_state index="0">LOW</latched_state>
               </settings>
+              <advanced>
+                <pa index="0">GPIO Mode</pa>
+                <smc>false</smc>
+                <apc>false</apc>
+                <obe>false</obe>
+                <ibe>false</ibe>
+                <ode index="0">Push-Pull</ode>
+                <src index="0">Slow</src>
+                <wpe index="0">Disabled</wpe>
+                <wps index="0">Pull-Down</wps>
+              </advanced>
             </pin_settings>
             <pin_settings>
               <pin_identification>
@@ -152,9 +207,20 @@
                 <bit index="3">3</bit>
               </pin_identification>
               <settings>
-                <pin_mode index="2">MODE_INPUT</pin_mode>
+                <pin_mode index="3">MODE_INPUT</pin_mode>
                 <latched_state index="0">LOW</latched_state>
               </settings>
+              <advanced>
+                <pa index="0">GPIO Mode</pa>
+                <smc>false</smc>
+                <apc>false</apc>
+                <obe>false</obe>
+                <ibe>false</ibe>
+                <ode index="0">Push-Pull</ode>
+                <src index="0">Slow</src>
+                <wpe index="0">Disabled</wpe>
+                <wps index="0">Pull-Down</wps>
+              </advanced>
             </pin_settings>
             <pin_settings>
               <pin_identification>
@@ -163,9 +229,20 @@
                 <bit index="4">4</bit>
               </pin_identification>
               <settings>
-                <pin_mode index="6">MODE_OUTPUT_PUSHPULL</pin_mode>
+                <pin_mode index="7">MODE_OUTPUT_PUSHPULL</pin_mode>
                 <latched_state index="1">HIGH</latched_state>
               </settings>
+              <advanced>
+                <pa index="0">GPIO Mode</pa>
+                <smc>false</smc>
+                <apc>false</apc>
+                <obe>false</obe>
+                <ibe>false</ibe>
+                <ode index="0">Push-Pull</ode>
+                <src index="0">Slow</src>
+                <wpe index="0">Disabled</wpe>
+                <wps index="0">Pull-Down</wps>
+              </advanced>
             </pin_settings>
             <pin_settings>
               <pin_identification>
@@ -174,9 +251,20 @@
                 <bit index="5">5</bit>
               </pin_identification>
               <settings>
-                <pin_mode index="6">MODE_OUTPUT_PUSHPULL</pin_mode>
+                <pin_mode index="7">MODE_OUTPUT_PUSHPULL</pin_mode>
                 <latched_state index="1">HIGH</latched_state>
               </settings>
+              <advanced>
+                <pa index="0">GPIO Mode</pa>
+                <smc>false</smc>
+                <apc>false</apc>
+                <obe>false</obe>
+                <ibe>false</ibe>
+                <ode index="0">Push-Pull</ode>
+                <src index="0">Slow</src>
+                <wpe index="0">Disabled</wpe>
+                <wps index="0">Pull-Down</wps>
+              </advanced>
             </pin_settings>
             <pin_settings>
               <pin_identification>
@@ -185,9 +273,20 @@
                 <bit index="6">6</bit>
               </pin_identification>
               <settings>
-                <pin_mode index="6">MODE_OUTPUT_PUSHPULL</pin_mode>
+                <pin_mode index="7">MODE_OUTPUT_PUSHPULL</pin_mode>
                 <latched_state index="1">HIGH</latched_state>
               </settings>
+              <advanced>
+                <pa index="0">GPIO Mode</pa>
+                <smc>false</smc>
+                <apc>false</apc>
+                <obe>false</obe>
+                <ibe>false</ibe>
+                <ode index="0">Push-Pull</ode>
+                <src index="0">Slow</src>
+                <wpe index="0">Disabled</wpe>
+                <wps index="0">Pull-Down</wps>
+              </advanced>
             </pin_settings>
             <pin_settings>
               <pin_identification>
@@ -196,48 +295,59 @@
                 <bit index="7">7</bit>
               </pin_identification>
               <settings>
-                <pin_mode index="6">MODE_OUTPUT_PUSHPULL</pin_mode>
+                <pin_mode index="7">MODE_OUTPUT_PUSHPULL</pin_mode>
                 <latched_state index="1">HIGH</latched_state>
               </settings>
+              <advanced>
+                <pa index="0">GPIO Mode</pa>
+                <smc>false</smc>
+                <apc>false</apc>
+                <obe>false</obe>
+                <ibe>false</ibe>
+                <ode index="0">Push-Pull</ode>
+                <src index="0">Slow</src>
+                <wpe index="0">Disabled</wpe>
+                <wps index="0">Pull-Down</wps>
+              </advanced>
             </pin_settings>
           </pins_list>
           <alternate_inputs>
-            <ps0 index="0">0</ps0>
-            <ps1 index="0">0</ps1>
-            <ps2 index="0">0</ps2>
-            <ps3 index="0">0</ps3>
-            <ps4 index="0">0</ps4>
-            <ps5 index="0">0</ps5>
-            <ps6 index="0">0</ps6>
-            <ps7 index="0">0</ps7>
-            <ps8 index="0">0</ps8>
-            <ps9 index="0">0</ps9>
-            <ps10 index="0">0</ps10>
-            <ps11 index="0">0</ps11>
-            <ps12 index="0">0</ps12>
-            <ps13 index="0">0</ps13>
-            <ps14 index="0">0</ps14>
-            <ps15 index="0">0</ps15>
-            <ps16 index="0">0</ps16>
-            <ps17 index="0">0</ps17>
-            <ps18 index="0">0</ps18>
-            <ps19 index="0">0</ps19>
-            <ps20 index="0">0</ps20>
-            <ps21 index="0">0</ps21>
-            <ps22 index="0">0</ps22>
-            <ps23 index="0">0</ps23>
-            <ps24 index="0">0</ps24>
-            <ps25 index="0">0</ps25>
-            <ps26 index="0">0</ps26>
-            <ps27 index="0">0</ps27>
-            <ps28 index="0">0</ps28>
-            <ps29 index="0">0</ps29>
-            <ps30 index="0">0</ps30>
-            <ps31 index="0">0</ps31>
-            <ps32 index="0">0</ps32>
-            <ps33 index="0">0</ps33>
-            <ps34 index="0">0</ps34>
-            <ps35 index="0">0</ps35>
+            <ps0 index="0">GPIO</ps0>
+            <ps1 index="0">GPIO</ps1>
+            <ps2 index="0">GPIO</ps2>
+            <ps3 index="0">GPIO</ps3>
+            <ps4 index="0">GPIO</ps4>
+            <ps5 index="0">GPIO</ps5>
+            <ps6 index="0">GPIO</ps6>
+            <ps7 index="0">GPIO</ps7>
+            <ps8 index="0">GPIO</ps8>
+            <ps9 index="0">GPIO</ps9>
+            <ps10 index="0">GPIO</ps10>
+            <ps11 index="0">GPIO</ps11>
+            <ps12 index="0">GPIO</ps12>
+            <ps13 index="0">GPIO</ps13>
+            <ps14 index="0">GPIO</ps14>
+            <ps15 index="0">GPIO</ps15>
+            <ps16 index="0">GPIO</ps16>
+            <ps17 index="0">GPIO</ps17>
+            <ps18 index="0">GPIO</ps18>
+            <ps19 index="0">GPIO</ps19>
+            <ps20 index="0">GPIO</ps20>
+            <ps21 index="0">GPIO</ps21>
+            <ps22 index="0">GPIO</ps22>
+            <ps23 index="0">GPIO</ps23>
+            <ps24 index="0">GPIO</ps24>
+            <ps25 index="0">GPIO</ps25>
+            <ps26 index="0">GPIO</ps26>
+            <ps27 index="0">GPIO</ps27>
+            <ps28 index="0">GPIO</ps28>
+            <ps29 index="0">GPIO</ps29>
+            <ps30 index="0">GPIO</ps30>
+            <ps31 index="1">S0</ps31>
+            <ps32 index="0">GPIO</ps32>
+            <ps33 index="0">GPIO</ps33>
+            <ps34 index="0">GPIO</ps34>
+            <ps35 index="0">GPIO</ps35>
           </alternate_inputs>
         </i_o_settings>
         <initialization_code>
@@ -304,6 +414,7 @@
           <adc1>false</adc1>
           <adc1_clock_divider index="1">Half peripheral clock frequency</adc1_clock_divider>
           <adc1_auto_clock_off_mode>false</adc1_auto_clock_off_mode>
+          <dma_mode>true</dma_mode>
           <adc0_conversion_groups>
             <configs />
           </adc0_conversion_groups>
