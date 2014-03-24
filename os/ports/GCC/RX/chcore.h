@@ -115,8 +115,8 @@ struct extctx {
 #if defined(RX_USE_FPU)
     regrx_t     fpsw;
 #endif
-    regrx_t        acc_hi;
-    regrx_t        acc_lo;
+    regrx_t     acc_hi;
+    regrx_t     acc_lo;
     regrx_t     r1;
     regrx_t     r2;
     regrx_t     r3;
@@ -191,7 +191,8 @@ struct context {
  *          @p extctx is known to be zero.
  */
 #ifndef PORT_INT_REQUIRED_STACK
-#define PORT_INT_REQUIRED_STACK 64
+/*#define PORT_INT_REQUIRED_STACK 64*/
+#define PORT_INT_REQUIRED_STACK 256
 #endif
 
 /**
@@ -285,7 +286,6 @@ struct context {
  * @note @p id can be a function name or a vector number depending on the
  *       port implementation.
  */
-/* #define PORT_IRQ_HANDLER(id) void __attribute__((interrupt_handler)) id(void) */
 #define PORT_IRQ_HANDLER(id) void __attribute__((naked)) id(void)
 
 /**
@@ -294,7 +294,6 @@ struct context {
  * actions.
  */
 #define port_lock() asm volatile ("clrpsw    I                      \n\t")
-/* #define port_lock() asm volatile ("mvtipl    #15                    \n\t") */
 
 /**
  * @brief Kernel-unlock action.
@@ -302,7 +301,6 @@ struct context {
  * actions.
  */
 #define port_unlock() asm volatile ("setpsw  I                      \n\t")
-/* #define port_unlock() asm volatile ("mvtipl  #0                     \n\t") */
 
 /**
  * @brief Kernel-lock action from an interrupt handler.
@@ -345,6 +343,7 @@ extern "C" {
   void port_disable(void);
   void port_suspend(void);
   void port_enable(void);
+  bool_t port_enabled(void);
   void port_halt(void);
   void port_switch(Thread *ntp, Thread *otp);
   void _port_thread_start(void);

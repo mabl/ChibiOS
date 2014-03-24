@@ -69,6 +69,16 @@ void port_enable(void) {
   asm volatile ("setpsw  I                                          \n\t");
 }
 
+/**
+ * @brief Check if interrupts are enabled.
+ */
+bool_t port_enabled(void) {
+  uint32_t psw;
+
+  asm volatile("mvfc     PSW,%0                                     \n\t"
+    : "=r" (psw) : : );
+  return psw & (1<<16) ? true : false;
+}
 
 /**
  * @brief   Halts the system.
