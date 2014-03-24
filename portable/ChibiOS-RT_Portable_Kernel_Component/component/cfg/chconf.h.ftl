@@ -55,7 +55,7 @@
  *          setting also defines the system tick time unit.
  */
 #if !defined(CH_FREQUENCY) || defined(__DOXYGEN__)
-#define CH_FREQUENCY                    ${conf.instance.kernel_options.system_tick_clock_frequency[0]}
+#define CH_FREQUENCY                    ${conf.instance.kernel_options.system_tick_clock_frequency.value[0]}
 #endif
 
 /**
@@ -70,7 +70,7 @@
  *          and generally faster.
  */
 #if !defined(CH_TIME_QUANTUM) || defined(__DOXYGEN__)
-#define CH_TIME_QUANTUM                 ${conf.instance.kernel_options.time_quantum[0]}
+#define CH_TIME_QUANTUM                 ${conf.instance.kernel_options.time_quantum.value[0]}
 #endif
 
 /**
@@ -85,7 +85,7 @@
  * @note    Requires @p CH_USE_MEMCORE.
  */
 #if !defined(CH_MEMCORE_SIZE) || defined(__DOXYGEN__)
-#define CH_MEMCORE_SIZE                 ${conf.instance.kernel_options.memory_core_size[0]}
+#define CH_MEMCORE_SIZE                 ${conf.instance.kernel_options.memory_core_size.value[0]}
 #endif
 
 /**
@@ -102,7 +102,7 @@
  *          enter a sleep state.
  */
 #if !defined(CH_NO_IDLE_THREAD) || defined(__DOXYGEN__)
-#define CH_NO_IDLE_THREAD               ${conf.instance.kernel_options.no_internal_idle_thread[0]?upper_case}
+#define CH_NO_IDLE_THREAD               ${conf.instance.kernel_options.no_internal_idle_thread.value[0]?upper_case}
 #endif
 
 /** @} */
@@ -123,7 +123,7 @@
  * @note    The default is @p TRUE.
  */
 #if !defined(CH_OPTIMIZE_SPEED) || defined(__DOXYGEN__)
-#define CH_OPTIMIZE_SPEED               ${conf.instance.performance_options.optimize_for_speed[0]?upper_case}
+#define CH_OPTIMIZE_SPEED               ${conf.instance.performance_options.optimize_for_speed.value[0]?upper_case}
 #endif
 
 /** @} */
@@ -142,7 +142,7 @@
  * @note    The default is @p TRUE.
  */
 #if !defined(CH_USE_REGISTRY) || defined(__DOXYGEN__)
-#define CH_USE_REGISTRY                 ${conf.instance.subsystem_options.use_registry[0]?upper_case}
+#define CH_USE_REGISTRY                 ${conf.instance.subsystem_options.use_registry.value[0]?upper_case}
 #endif
 
 /**
@@ -153,7 +153,7 @@
  * @note    The default is @p TRUE.
  */
 #if !defined(CH_USE_WAITEXIT) || defined(__DOXYGEN__)
-#define CH_USE_WAITEXIT                 ${conf.instance.subsystem_options.use_wait_exit[0]?upper_case}
+#define CH_USE_WAITEXIT                 ${conf.instance.subsystem_options.use_wait_exit.value[0]?upper_case}
 #endif
 
 /**
@@ -163,7 +163,7 @@
  * @note    The default is @p TRUE.
  */
 #if !defined(CH_USE_SEMAPHORES) || defined(__DOXYGEN__)
-#define CH_USE_SEMAPHORES               ${conf.instance.subsystem_options.use_semaphores[0]?upper_case}
+#define CH_USE_SEMAPHORES               ${conf.instance.subsystem_options.use_semaphores.value[0]?upper_case}
 #endif
 
 /**
@@ -175,7 +175,7 @@
  * @note    Requires @p CH_USE_SEMAPHORES.
  */
 #if !defined(CH_USE_SEMAPHORES_PRIORITY) || defined(__DOXYGEN__)
-#define CH_USE_SEMAPHORES_PRIORITY      ${conf.instance.subsystem_options.use_semaphores_priority[0]?upper_case}
+#define CH_USE_SEMAPHORES_PRIORITY      ${conf.instance.subsystem_options.use_semaphores_priority.value[0]?upper_case}
 #endif
 
 /**
@@ -187,7 +187,7 @@
  * @note    Requires @p CH_USE_SEMAPHORES.
  */
 #if !defined(CH_USE_SEMSW) || defined(__DOXYGEN__)
-#define CH_USE_SEMSW                    ${conf.instance.subsystem_options.use_semaphores_atomic_wait_signal[0]?upper_case}
+#define CH_USE_SEMSW                    ${conf.instance.subsystem_options.use_semaphores_atomic_wait_signal.value[0]?upper_case}
 #endif
 
 /**
@@ -197,7 +197,7 @@
  * @note    The default is @p TRUE.
  */
 #if !defined(CH_USE_MUTEXES) || defined(__DOXYGEN__)
-#define CH_USE_MUTEXES                  ${conf.instance.subsystem_options.use_mutexes[0]?upper_case}
+#define CH_USE_MUTEXES                  ${conf.instance.subsystem_options.use_mutexes.value[0]?upper_case}
 #endif
 
 /**
@@ -209,7 +209,7 @@
  * @note    Requires @p CH_USE_MUTEXES.
  */
 #if !defined(CH_USE_CONDVARS) || defined(__DOXYGEN__)
-#define CH_USE_CONDVARS                 ${conf.instance.subsystem_options.use_condition_variables[0]?upper_case}
+#define CH_USE_CONDVARS                 ${conf.instance.subsystem_options.use_condition_variables.value[0]?upper_case}
 #endif
 
 /**
@@ -221,7 +221,7 @@
  * @note    Requires @p CH_USE_CONDVARS.
  */
 #if !defined(CH_USE_CONDVARS_TIMEOUT) || defined(__DOXYGEN__)
-#define CH_USE_CONDVARS_TIMEOUT         ${conf.instance.subsystem_options.use_condition_variables_with_timeout[0]?upper_case}
+#define CH_USE_CONDVARS_TIMEOUT         ${conf.instance.subsystem_options.use_condition_variables_with_timeout.value[0]?upper_case}
 #endif
 
 /**
@@ -231,7 +231,7 @@
  * @note    The default is @p TRUE.
  */
 #if !defined(CH_USE_EVENTS) || defined(__DOXYGEN__)
-#define CH_USE_EVENTS                   ${conf.instance.subsystem_options.use_events[0]?upper_case}
+#define CH_USE_EVENTS                   ${conf.instance.subsystem_options.use_events.value[0]?upper_case}
 #endif
 
 /**
@@ -243,7 +243,7 @@
  * @note    Requires @p CH_USE_EVENTS.
  */
 #if !defined(CH_USE_EVENTS_TIMEOUT) || defined(__DOXYGEN__)
-#define CH_USE_EVENTS_TIMEOUT           ${conf.instance.subsystem_options.use_events_with_timeout[0]?upper_case}
+#define CH_USE_EVENTS_TIMEOUT           ${conf.instance.subsystem_options.use_events_with_timeout.value[0]?upper_case}
 #endif
 
 /**
@@ -254,7 +254,7 @@
  * @note    The default is @p TRUE.
  */
 #if !defined(CH_USE_MESSAGES) || defined(__DOXYGEN__)
-#define CH_USE_MESSAGES                 ${conf.instance.subsystem_options.use_messages[0]?upper_case}
+#define CH_USE_MESSAGES                 ${conf.instance.subsystem_options.use_messages.value[0]?upper_case}
 #endif
 
 /**
@@ -266,7 +266,7 @@
  * @note    Requires @p CH_USE_MESSAGES.
  */
 #if !defined(CH_USE_MESSAGES_PRIORITY) || defined(__DOXYGEN__)
-#define CH_USE_MESSAGES_PRIORITY        ${conf.instance.subsystem_options.use_messages_priority[0]?upper_case}
+#define CH_USE_MESSAGES_PRIORITY        ${conf.instance.subsystem_options.use_messages_priority.value[0]?upper_case}
 #endif
 
 /**
@@ -278,7 +278,7 @@
  * @note    Requires @p CH_USE_SEMAPHORES.
  */
 #if !defined(CH_USE_MAILBOXES) || defined(__DOXYGEN__)
-#define CH_USE_MAILBOXES                ${conf.instance.subsystem_options.use_mailboxes[0]?upper_case}
+#define CH_USE_MAILBOXES                ${conf.instance.subsystem_options.use_mailboxes.value[0]?upper_case}
 #endif
 
 /**
@@ -288,7 +288,7 @@
  * @note    The default is @p TRUE.
  */
 #if !defined(CH_USE_QUEUES) || defined(__DOXYGEN__)
-#define CH_USE_QUEUES                   ${conf.instance.subsystem_options.use_queues[0]?upper_case}
+#define CH_USE_QUEUES                   ${conf.instance.subsystem_options.use_queues.value[0]?upper_case}
 #endif
 
 /**
@@ -299,7 +299,7 @@
  * @note    The default is @p TRUE.
  */
 #if !defined(CH_USE_MEMCORE) || defined(__DOXYGEN__)
-#define CH_USE_MEMCORE                  ${conf.instance.subsystem_options.use_memory_core_allocator[0]?upper_case}
+#define CH_USE_MEMCORE                  ${conf.instance.subsystem_options.use_memory_core_allocator.value[0]?upper_case}
 #endif
 
 /**
@@ -313,7 +313,7 @@
  * @note    Mutexes are recommended.
  */
 #if !defined(CH_USE_HEAP) || defined(__DOXYGEN__)
-#define CH_USE_HEAP                     ${conf.instance.subsystem_options.use_heap_allocator[0]?upper_case}
+#define CH_USE_HEAP                     ${conf.instance.subsystem_options.use_heap_allocator.value[0]?upper_case}
 #endif
 
 /**
@@ -327,7 +327,7 @@
  *          appropriate documentation.
  */
 #if !defined(CH_USE_MALLOC_HEAP) || defined(__DOXYGEN__)
-#define CH_USE_MALLOC_HEAP              ${conf.instance.subsystem_options.use_malloc_for_heap[0]?upper_case}
+#define CH_USE_MALLOC_HEAP              ${conf.instance.subsystem_options.use_malloc_for_heap.value[0]?upper_case}
 #endif
 
 /**
@@ -338,7 +338,7 @@
  * @note    The default is @p TRUE.
  */
 #if !defined(CH_USE_MEMPOOLS) || defined(__DOXYGEN__)
-#define CH_USE_MEMPOOLS                 ${conf.instance.subsystem_options.use_memory_pools_allocator[0]?upper_case}
+#define CH_USE_MEMPOOLS                 ${conf.instance.subsystem_options.use_memory_pools_allocator.value[0]?upper_case}
 #endif
 
 /**
@@ -351,7 +351,7 @@
  * @note    Requires @p CH_USE_HEAP and/or @p CH_USE_MEMPOOLS.
  */
 #if !defined(CH_USE_DYNAMIC) || defined(__DOXYGEN__)
-#define CH_USE_DYNAMIC                  ${conf.instance.subsystem_options.use_dynamic_extensions[0]?upper_case}
+#define CH_USE_DYNAMIC                  ${conf.instance.subsystem_options.use_dynamic_extensions.value[0]?upper_case}
 #endif
 
 /** @} */
@@ -371,7 +371,7 @@
  * @note    The default is @p FALSE.
  */
 #if !defined(CH_DBG_SYSTEM_STATE_CHECK) || defined(__DOXYGEN__)
-#define CH_DBG_SYSTEM_STATE_CHECK       ${conf.instance.debug_options.enable_system_state_checker[0]?upper_case}
+#define CH_DBG_SYSTEM_STATE_CHECK       ${conf.instance.debug_options.enable_system_state_checker.value[0]?upper_case}
 #endif
 
 /**
@@ -382,7 +382,7 @@
  * @note    The default is @p FALSE.
  */
 #if !defined(CH_DBG_ENABLE_CHECKS) || defined(__DOXYGEN__)
-#define CH_DBG_ENABLE_CHECKS            ${conf.instance.debug_options.enable_function_parameters_checks[0]?upper_case}
+#define CH_DBG_ENABLE_CHECKS            ${conf.instance.debug_options.enable_function_parameters_checks.value[0]?upper_case}
 #endif
 
 /**
@@ -394,7 +394,7 @@
  * @note    The default is @p FALSE.
  */
 #if !defined(CH_DBG_ENABLE_ASSERTS) || defined(__DOXYGEN__)
-#define CH_DBG_ENABLE_ASSERTS           ${conf.instance.debug_options.enable_assertions[0]?upper_case}
+#define CH_DBG_ENABLE_ASSERTS           ${conf.instance.debug_options.enable_assertions.value[0]?upper_case}
 #endif
 
 /**
@@ -405,7 +405,7 @@
  * @note    The default is @p FALSE.
  */
 #if !defined(CH_DBG_ENABLE_TRACE) || defined(__DOXYGEN__)
-#define CH_DBG_ENABLE_TRACE             ${conf.instance.debug_options.enable_trace_buffer[0]?upper_case}
+#define CH_DBG_ENABLE_TRACE             ${conf.instance.debug_options.enable_trace_buffer.value[0]?upper_case}
 #endif
 
 /**
@@ -419,7 +419,7 @@
  *          @p panic_msg variable set to @p NULL.
  */
 #if !defined(CH_DBG_ENABLE_STACK_CHECK) || defined(__DOXYGEN__)
-#define CH_DBG_ENABLE_STACK_CHECK       ${conf.instance.debug_options.enable_stack_check[0]?upper_case}
+#define CH_DBG_ENABLE_STACK_CHECK       ${conf.instance.debug_options.enable_stack_check.value[0]?upper_case}
 #endif
 
 /**
@@ -431,7 +431,7 @@
  * @note    The default is @p FALSE.
  */
 #if !defined(CH_DBG_FILL_THREADS) || defined(__DOXYGEN__)
-#define CH_DBG_FILL_THREADS             ${conf.instance.debug_options.enable_fill_threads[0]?upper_case}
+#define CH_DBG_FILL_THREADS             ${conf.instance.debug_options.enable_fill_threads.value[0]?upper_case}
 #endif
 
 /**
@@ -444,7 +444,7 @@
  *          some test cases into the test suite.
  */
 #if !defined(CH_DBG_THREADS_PROFILING) || defined(__DOXYGEN__)
-#define CH_DBG_THREADS_PROFILING        ${conf.instance.debug_options.enable_threads_profiling[0]?upper_case}
+#define CH_DBG_THREADS_PROFILING        ${conf.instance.debug_options.enable_threads_profiling.value[0]?upper_case}
 #endif
 
 /** @} */
@@ -462,7 +462,7 @@
  */
 #if !defined(THREAD_EXT_FIELDS) || defined(__DOXYGEN__)
 #define THREAD_EXT_FIELDS                                                   \
-${conf.instance.hooks.thread_extra_fields_hook[0]}
+${conf.instance.hooks.thread_extra_fields_hook.value[0]}
 #endif
 
 /**
@@ -474,7 +474,7 @@ ${conf.instance.hooks.thread_extra_fields_hook[0]}
  */
 #if !defined(THREAD_EXT_INIT_HOOK) || defined(__DOXYGEN__)
 #define THREAD_EXT_INIT_HOOK(tp) {                                          \
-${conf.instance.hooks.thread_initialization_hook[0]}[#rt]
+${conf.instance.hooks.thread_initialization_hook.value[0]}[#rt]
 }
 #endif
 
@@ -488,7 +488,7 @@ ${conf.instance.hooks.thread_initialization_hook[0]}[#rt]
  */
 #if !defined(THREAD_EXT_EXIT_HOOK) || defined(__DOXYGEN__)
 #define THREAD_EXT_EXIT_HOOK(tp) {                                          \
-${conf.instance.hooks.thread_finalization_hook[0]}[#rt]
+${conf.instance.hooks.thread_finalization_hook.value[0]}[#rt]
 }
 #endif
 
@@ -498,7 +498,7 @@ ${conf.instance.hooks.thread_finalization_hook[0]}[#rt]
  */
 #if !defined(THREAD_CONTEXT_SWITCH_HOOK) || defined(__DOXYGEN__)
 #define THREAD_CONTEXT_SWITCH_HOOK(ntp, otp) {                              \
-${conf.instance.hooks.thread_context_switch_hook[0]}[#rt]
+${conf.instance.hooks.thread_context_switch_hook.value[0]}[#rt]
 }
 #endif
 
@@ -508,7 +508,7 @@ ${conf.instance.hooks.thread_context_switch_hook[0]}[#rt]
  */
 #if !defined(IDLE_LOOP_HOOK) || defined(__DOXYGEN__)
 #define IDLE_LOOP_HOOK() {                                                  \
-${conf.instance.hooks.idle_loop_hook[0]}[#rt]
+${conf.instance.hooks.idle_loop_hook.value[0]}[#rt]
 }
 #endif
 
@@ -519,7 +519,7 @@ ${conf.instance.hooks.idle_loop_hook[0]}[#rt]
  */
 #if !defined(SYSTEM_TICK_EVENT_HOOK) || defined(__DOXYGEN__)
 #define SYSTEM_TICK_EVENT_HOOK() {                                          \
-${conf.instance.hooks.system_tick_hook[0]}[#rt]
+${conf.instance.hooks.system_tick_hook.value[0]}[#rt]
 }
 #endif
 
@@ -530,7 +530,7 @@ ${conf.instance.hooks.system_tick_hook[0]}[#rt]
  */
 #if !defined(SYSTEM_HALT_HOOK) || defined(__DOXYGEN__)
 #define SYSTEM_HALT_HOOK() {                                                \
-${conf.instance.hooks.system_halt_hook[0]}[#rt]
+${conf.instance.hooks.system_halt_hook.value[0]}[#rt]
 }
 #endif
 

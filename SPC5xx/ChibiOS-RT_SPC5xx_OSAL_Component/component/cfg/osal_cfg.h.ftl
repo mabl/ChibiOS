@@ -40,12 +40,12 @@
 [#assign ids = [] /]
 [#assign numbers = [] /]
 [#list conf.instance.isrs.enabled_vectors.vector as vector]
-  [#assign id = vector.identifier[0]?trim /]
+  [#assign id = vector.identifier.value[0]?trim /]
   [#if ids?seq_contains(id)]
     [#stop "Multiple definitions of ISR Vector Identifier: " + id /]
   [/#if]
   [#assign ids = ids + [id] /]
-  [#assign number = vector.number[0]?trim /]
+  [#assign number = vector.number.value[0]?trim /]
   [#if numbers?seq_contains(number)]
     [#stop "Multiple definitions of ISR Vector Number: " + number /]
   [/#if]
@@ -61,13 +61,13 @@ ${def} ${number}
  */
 [#assign names = [] /]
 [#list conf.instance.isrs.enabled_vectors.vector as vector]
-  [#assign name = vector.name_override[0]?trim /]
+  [#assign name = vector.name_override.value[0]?trim /]
   [#if name != ""]
     [#if names?seq_contains(name)]
       [#stop "Multiple definitions of ISR Vector Name Override: " + name /]
     [/#if]
     [#assign names = names + [name] /]
-    [#assign def = ("#define vector" + vector.number[0]?trim)?right_pad(43) /]
+    [#assign def = ("#define vector" + vector.number.value[0]?trim)?right_pad(43) /]
 ${def} ${name}
   [/#if]
 [/#list]
@@ -93,7 +93,7 @@ ${def} ${name}
 /* External declarations.                                                    */
 /*===========================================================================*/
 
-#if !defined(_FROM_ASM_) 
+#if !defined(_FROM_ASM_)
 #ifdef __cplusplus
 extern "C" {
 #endif

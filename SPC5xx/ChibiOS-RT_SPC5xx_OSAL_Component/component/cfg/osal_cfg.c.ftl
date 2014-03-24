@@ -60,8 +60,8 @@
 void osal_cfg_init(void) {
 
 [#list conf.instance.isrs.enabled_vectors.vector as vector]
-  [#assign id = vector.identifier[0]?trim /]
-  osalIsrEnableVector(OSAL_VECTOR_${id}, ${vector.priority[0]});
+  [#assign id = vector.identifier.value[0]?trim /]
+  osalIsrEnableVector(OSAL_VECTOR_${id}, ${vector.priority.value[0]});
 [/#list]
 }
 
