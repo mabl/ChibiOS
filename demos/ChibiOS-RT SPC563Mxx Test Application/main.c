@@ -78,7 +78,7 @@ static msg_t Thread1(void *arg) {
     }
 
     palSetPort(PORT11,
-    		   PAL_PORT_BIT(P11_LED1) | PAL_PORT_BIT(P11_LED2) |
+               PAL_PORT_BIT(P11_LED1) | PAL_PORT_BIT(P11_LED2) |
                PAL_PORT_BIT(P11_LED3) | PAL_PORT_BIT(P11_LED4));
   }
   return 0;

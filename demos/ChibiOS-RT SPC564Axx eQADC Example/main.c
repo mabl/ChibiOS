@@ -105,7 +105,7 @@ int main(void) {
      ADC conversion is stopped.*/
   while (TRUE) {
     if (palReadPad(PORT11, P11_BUTTON1)) {
-	  adcStopConversion(&ADCD4);
+      adcStopConversion(&ADCD4);
     }
     chThdSleepMilliseconds(500);
   }

@@ -110,13 +110,11 @@ void adc_error_callback(ADCDriver *adcp, adcerror_t err) {
  * Display the buffer in the shell
  */
 void adc_print_buffer(BaseSequentialStream *chp) {
+  int i;
 
-  int i=0;
   chprintf(chp, "Result ADC CONVERSION \r\n");
 
-  for(i=0;i<ADC1_GROUP_CFG0_NUM_CHANNELS *
-                           ADC1_GROUP_CFG0_BUF_DEPTH;i++)
-  {
+  for (i=0; i<ADC1_GROUP_CFG0_NUM_CHANNELS * ADC1_GROUP_CFG0_BUF_DEPTH; i++) {
     chprintf(chp, "Item: %d ==> %d\r\n",i,samples[i]);
   }
 }
@@ -142,7 +140,7 @@ int main(void) {
 
   /* Starts an ADC continuous conversion.*/
   adcStartConversion(&ADCD2, &adc1_group_cfg0,
-                       samples, ADC1_GROUP_CFG0_BUF_DEPTH);
+                     samples, ADC1_GROUP_CFG0_BUF_DEPTH);
 
   /*
    * Creates the blinker thread.
