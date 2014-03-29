@@ -38,6 +38,14 @@
  */
 #define RX62NXBDFP
 
+/* TODO: move this to hal/include/mii.h */
+#define MII_LAN8700_ID          0x0007C0C4
+
+/*
+ * Ethernet PHY type.
+ */
+#define BOARD_PHY_ID            MII_LAN8700_ID
+#define BOARD_PHY_RMII
 
 /*
  * PORT 0 initial setup.
@@ -90,27 +98,46 @@
  */
 #define VAL_PORTADIR            PAL_PORT_BIT(PORTA_LED0) |                  \
                                 PAL_PORT_BIT(PORTA_LED1) |                  \
-                                PAL_PORT_BIT(PORTA_LED2)
+                                PAL_PORT_BIT(PORTA_LED2) |                  \
+                                PAL_PORT_BIT(PORTA_MII_MDIO) |              \
+                                PAL_PORT_BIT(PORTA_MII_MDC) |               \
+                                PAL_PORT_BIT(PORTA_ETH_LINKSTA) |           \
+                                PAL_PORT_BIT(PORTA_ETH_RESETOUT)
 #define VAL_PORTADATA           PAL_PORT_BIT(PORTA_LED0) |                  \
                                 PAL_PORT_BIT(PORTA_LED1) |                  \
-                                PAL_PORT_BIT(PORTA_LED2)
-#define VAL_PORTAICR            0x00
+                                PAL_PORT_BIT(PORTA_LED2) |                  \
+                                PAL_PORT_BIT(PORTA_ETH_RESETOUT)
+#define VAL_PORTAICR            PAL_PORT_BIT(PORTA_MII_MDIO) |              \
+                                PAL_PORT_BIT(PORTA_ETH_LINKSTA)
 #define VAL_PORTAPCR            0x00
 
 /*
  * PORT B initial setup.
  */
-#define VAL_PORTBDIR            0x00
+#define VAL_PORTBDIR            PAL_PORT_BIT(PORTB_MII_TXD1) |              \
+                                PAL_PORT_BIT(PORTB_MII_TXD0) |              \
+                                PAL_PORT_BIT(PORTB_MII_TXEN)
 #define VAL_PORTBDATA           0x00
-#define VAL_PORTBICR            0x00
+#define VAL_PORTBICR            PAL_PORT_BIT(PORTB_MII_CRS) |               \
+                                PAL_PORT_BIT(PORTB_MII_RXER) |              \
+                                PAL_PORT_BIT(PORTB_MII_RXCLK) |             \
+                                PAL_PORT_BIT(PORTB_MII_RXD0) |              \
+                                PAL_PORT_BIT(PORTB_MII_RXD1)
 #define VAL_PORTBPCR            0x00
 
 /*
  * PORT C initial setup.
  */
-#define VAL_PORTCDIR            0x00
+#define VAL_PORTCDIR            PAL_PORT_BIT(PORTC_MII_TXD3) |              \
+                                PAL_PORT_BIT(PORTC_MII_TXD2) |              \
+                                PAL_PORT_BIT(PORTC_MII_TXER)
 #define VAL_PORTCDATA           0x00
-#define VAL_PORTCICR            0x00
+#define VAL_PORTCICR            PAL_PORT_BIT(PORTC_MII_COL) |               \
+                                PAL_PORT_BIT(PORTC_MII_TXCLK) |             \
+                                PAL_PORT_BIT(PORTC_MII_TXER) |              \
+                                PAL_PORT_BIT(PORTC_MII_RXDV) |              \
+                                PAL_PORT_BIT(PORTC_MII_RXD2) |              \
+                                PAL_PORT_BIT(PORTC_MII_RXD3)
 #define VAL_PORTCODR            0x00
 #define VAL_PORTCPCR            0x00
 
@@ -134,9 +161,31 @@
 /*
  * Pin definitions.
  */
+#define PORTA_ETH_RESETOUT      7
+#define PORTA_ETH_LINKSTA       5
+#define PORTA_MII_MDC           4
+#define PORTA_MII_MDIO          3
 #define PORTA_LED0              2
 #define PORTA_LED1              1
 #define PORTA_LED2              0
+
+#define PORTB_MII_CRS           7
+#define PORTB_MII_TXD1          6
+#define PORTB_MII_TXD0          5
+#define PORTB_MII_TXEN          4
+#define PORTB_MII_RXER          3
+#define PORTB_MII_RXCLK         2
+#define PORTB_MII_RXD0          1
+#define PORTB_MII_RXD1          0
+
+#define PORTC_MII_COL           7
+#define PORTC_MII_TXD3          6
+#define PORTC_MII_TXD2          5
+#define PORTC_MII_TXCLK         4
+#define PORTC_MII_TXER          3
+#define PORTC_MII_RXDV          2
+#define PORTC_MII_RXD2          1
+#define PORTC_MII_RXD3          0
 
 #if !defined(_FROM_ASM_)
 #ifdef __cplusplus
