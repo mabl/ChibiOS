@@ -45,7 +45,31 @@
  * Ethernet PHY type.
  */
 #define BOARD_PHY_ID            MII_LAN8700_ID
-#define BOARD_PHY_RMII
+
+/*
+ * Ethernet PHY address.
+ */
+#define BOARD_PHY_ADDRESS       31
+
+#define RX62N_MAC_PHY_TIMEOUT   0
+
+/*
+ * Use ethernet PHY RMII interface (if defined).
+ */
+/*#define BOARD_PHY_RMII*/
+
+/*
+ * Ethernet PHY hardware reset
+ * PORTA_ETH_RESETOUT must be held low for at least 100us.
+ */
+#define BOARD_PHY_RESET()       do {                                          \
+  palClearPad(GPIO10, PORTA_ETH_RESETOUT);                                    \
+  asm volatile ("mov.l   #2640,r2                                   \n\t"     \
+                "1:                                                 \n\t"     \
+                "sub     #1,r2                                      \n\t"     \
+                "bne.b   1b                                         \n\t");   \
+  palSetPad(GPIO10, PORTA_ETH_RESETOUT);                                      \
+} while(0)
 
 /*
  * PORT 0 initial setup.

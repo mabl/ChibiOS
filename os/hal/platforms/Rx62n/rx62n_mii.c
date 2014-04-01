@@ -139,7 +139,7 @@ static phyreg_t smi_read(uint8_t len) {
   return value;
 }
 
-static phyreg_t mii_read_reg(phyaddr_t reg) {
+static phyreg_t mii_read_reg(uint8_t phyaddr, phyaddr_t regaddr) {
   phyreg_t value;
 
   /* preamble */
@@ -149,9 +149,9 @@ static phyreg_t mii_read_reg(phyaddr_t reg) {
   /* opcode (read) */
   smi_write(2, 2);
   /* phy address */
-  smi_write(31, 5);
+  smi_write(phyaddr, 5);
   /* phy register */
-  smi_write(reg, 5);
+  smi_write(regaddr, 5);
   /* turn around */
   smi_z0();
   /* phy register */
@@ -161,7 +161,7 @@ static phyreg_t mii_read_reg(phyaddr_t reg) {
   return value;
 }
 
-static void mii_write_reg(phyaddr_t reg, phyreg_t value) {
+static void mii_write_reg(uint8_t phyaddr, phyaddr_t regaddr, phyreg_t value) {
 
   /* preamble */
   smi_write(0xFFFFFFFF, 32);
@@ -170,9 +170,9 @@ static void mii_write_reg(phyaddr_t reg, phyreg_t value) {
   /* opcode (write) */
   smi_write(1, 2);
   /* phy address */
-  smi_write(31, 5);
+  smi_write(phyaddr, 5);
   /* phy register */
-  smi_write(reg, 5);
+  smi_write(regaddr, 5);
   /* turn around */
   smi_write(1, 2);
   /* phy register */
@@ -233,10 +233,10 @@ void miiReset(MACDriver *macp) {
  *
  * @notapi
  */
-phyreg_t miiGet(MACDriver *macp, phyaddr_t addr) {
+phyreg_t miiGet(MACDriver *macp, phyaddr_t regaddr) {
 
   (void)macp;
-  return mii_read_reg(addr);
+  return mii_read_reg(macp->phyaddr, regaddr);
 }
 
 /**
@@ -248,10 +248,10 @@ phyreg_t miiGet(MACDriver *macp, phyaddr_t addr) {
  *
  * @notapi
  */
-void miiPut(MACDriver *macp, phyaddr_t addr, phyreg_t value) {
+void miiPut(MACDriver *macp, phyaddr_t regaddr, phyreg_t value) {
 
   (void)macp;
-  mii_write_reg(addr, value);
+  mii_write_reg(macp->phyaddr, regaddr, value);
 }
 
 #endif /* HAL_USE_MAC */
