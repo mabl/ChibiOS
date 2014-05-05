@@ -193,18 +193,28 @@
                 <bit index="2">
                   <value>2</value>
                 </bit>
+                <metadatas>
+                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                    <value>NONE</value>
+                  </metadata>
+                </metadatas>
               </pin_identification>
               <settings>
                 <pin_mode index="9">
                   <value>MODE_OUTPUT_ALTERNATE(1)</value>
+                  <metadatas>
+                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                      <value>O</value>
+                    </metadata>
+                  </metadatas>
                 </pin_mode>
                 <latched_state index="1">
                   <value>HIGH</value>
                 </latched_state>
               </settings>
               <advanced>
-                <pa index="0">
-                  <value>GPIO Mode</value>
+                <pa index="1">
+                  <value>Alternate 1</value>
                 </pa>
                 <smc>
                   <value>false</value>
@@ -243,10 +253,20 @@
                 <bit index="3">
                   <value>3</value>
                 </bit>
+                <metadatas>
+                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                    <value>NONE</value>
+                  </metadata>
+                </metadatas>
               </pin_identification>
               <settings>
                 <pin_mode index="3">
                   <value>MODE_INPUT</value>
+                  <metadatas>
+                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                      <value>I</value>
+                    </metadata>
+                  </metadatas>
                 </pin_mode>
                 <latched_state index="1">
                   <value>HIGH</value>
@@ -266,7 +286,7 @@
                   <value>false</value>
                 </obe>
                 <ibe>
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode index="0">
                   <value>Push-Pull</value>
@@ -293,10 +313,20 @@
                 <bit index="0">
                   <value>0</value>
                 </bit>
+                <metadatas>
+                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                    <value>NONE</value>
+                  </metadata>
+                </metadatas>
               </pin_identification>
               <settings>
                 <pin_mode index="3">
                   <value>MODE_INPUT</value>
+                  <metadatas>
+                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                      <value>I</value>
+                    </metadata>
+                  </metadatas>
                 </pin_mode>
                 <latched_state index="0">
                   <value>LOW</value>
@@ -316,7 +346,7 @@
                   <value>false</value>
                 </obe>
                 <ibe>
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode index="0">
                   <value>Push-Pull</value>
@@ -343,10 +373,20 @@
                 <bit index="1">
                   <value>1</value>
                 </bit>
+                <metadatas>
+                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                    <value>NONE</value>
+                  </metadata>
+                </metadatas>
               </pin_identification>
               <settings>
                 <pin_mode index="3">
                   <value>MODE_INPUT</value>
+                  <metadatas>
+                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                      <value>I</value>
+                    </metadata>
+                  </metadatas>
                 </pin_mode>
                 <latched_state index="0">
                   <value>LOW</value>
@@ -366,7 +406,7 @@
                   <value>false</value>
                 </obe>
                 <ibe>
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode index="0">
                   <value>Push-Pull</value>
@@ -393,10 +433,20 @@
                 <bit index="2">
                   <value>2</value>
                 </bit>
+                <metadatas>
+                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                    <value>NONE</value>
+                  </metadata>
+                </metadatas>
               </pin_identification>
               <settings>
                 <pin_mode index="3">
                   <value>MODE_INPUT</value>
+                  <metadatas>
+                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                      <value>I</value>
+                    </metadata>
+                  </metadatas>
                 </pin_mode>
                 <latched_state index="0">
                   <value>LOW</value>
@@ -416,7 +466,7 @@
                   <value>false</value>
                 </obe>
                 <ibe>
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode index="0">
                   <value>Push-Pull</value>
@@ -443,10 +493,20 @@
                 <bit index="3">
                   <value>3</value>
                 </bit>
+                <metadatas>
+                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                    <value>NONE</value>
+                  </metadata>
+                </metadatas>
               </pin_identification>
               <settings>
                 <pin_mode index="3">
                   <value>MODE_INPUT</value>
+                  <metadatas>
+                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                      <value>I</value>
+                    </metadata>
+                  </metadatas>
                 </pin_mode>
                 <latched_state index="0">
                   <value>LOW</value>
@@ -466,7 +526,7 @@
                   <value>false</value>
                 </obe>
                 <ibe>
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode index="0">
                   <value>Push-Pull</value>
@@ -493,10 +553,20 @@
                 <bit index="4">
                   <value>4</value>
                 </bit>
+                <metadatas>
+                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                    <value>NONE</value>
+                  </metadata>
+                </metadatas>
               </pin_identification>
               <settings>
                 <pin_mode index="7">
                   <value>MODE_OUTPUT_PUSHPULL</value>
+                  <metadatas>
+                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                      <value>O</value>
+                    </metadata>
+                  </metadatas>
                 </pin_mode>
                 <latched_state index="1">
                   <value>HIGH</value>
@@ -513,10 +583,10 @@
                   <value>false</value>
                 </apc>
                 <obe>
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe>
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode index="0">
                   <value>Push-Pull</value>
@@ -543,10 +613,20 @@
                 <bit index="5">
                   <value>5</value>
                 </bit>
+                <metadatas>
+                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                    <value>NONE</value>
+                  </metadata>
+                </metadatas>
               </pin_identification>
               <settings>
                 <pin_mode index="7">
                   <value>MODE_OUTPUT_PUSHPULL</value>
+                  <metadatas>
+                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                      <value>O</value>
+                    </metadata>
+                  </metadatas>
                 </pin_mode>
                 <latched_state index="1">
                   <value>HIGH</value>
@@ -563,10 +643,10 @@
                   <value>false</value>
                 </apc>
                 <obe>
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe>
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode index="0">
                   <value>Push-Pull</value>
@@ -593,10 +673,20 @@
                 <bit index="6">
                   <value>6</value>
                 </bit>
+                <metadatas>
+                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                    <value>NONE</value>
+                  </metadata>
+                </metadatas>
               </pin_identification>
               <settings>
                 <pin_mode index="7">
                   <value>MODE_OUTPUT_PUSHPULL</value>
+                  <metadatas>
+                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                      <value>O</value>
+                    </metadata>
+                  </metadatas>
                 </pin_mode>
                 <latched_state index="1">
                   <value>HIGH</value>
@@ -613,10 +703,10 @@
                   <value>false</value>
                 </apc>
                 <obe>
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe>
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode index="0">
                   <value>Push-Pull</value>
@@ -643,10 +733,20 @@
                 <bit index="7">
                   <value>7</value>
                 </bit>
+                <metadatas>
+                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                    <value>NONE</value>
+                  </metadata>
+                </metadatas>
               </pin_identification>
               <settings>
                 <pin_mode index="7">
                   <value>MODE_OUTPUT_PUSHPULL</value>
+                  <metadatas>
+                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                      <value>O</value>
+                    </metadata>
+                  </metadatas>
                 </pin_mode>
                 <latched_state index="1">
                   <value>HIGH</value>
@@ -663,10 +763,10 @@
                   <value>false</value>
                 </apc>
                 <obe>
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe>
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode index="0">
                   <value>Push-Pull</value>
@@ -877,6 +977,11 @@
               <value>-</value>
             </ps63>
           </alternate_inputs>
+          <metadatas>
+            <metadata name="refID" source="com.st.tools.spc5.wizard.pinmap">
+              <value>SPC560B64L7</value>
+            </metadata>
+          </metadatas>
         </i_o_settings>
         <initialization_code>
           <pre_clock_initialization_code>
