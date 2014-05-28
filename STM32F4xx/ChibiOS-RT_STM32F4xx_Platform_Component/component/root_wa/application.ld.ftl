@@ -31,12 +31,12 @@
 /*
  * ST32F4xx memory setup.
  */
-__main_stack_size__     = ${conf.instance.runtime_settings.irq_stack_size[0]};
-__process_stack_size__  = ${conf.instance.runtime_settings.c_stack_size[0]};
+__main_stack_size__     = ${conf.instance.runtime_settings.irq_stack_size.value[0]};
+__process_stack_size__  = ${conf.instance.runtime_settings.c_stack_size.value[0]};
 
 MEMORY
 {
-[#if conf.instance.platform_settings.specific_model[0] == "STM32F4xxyE"]
+[#if conf.instance.platform_settings.specific_model.value[0] == "STM32F4xxyE"]
     flash : org = 0x08000000, len = 512k
 [#if conf.instance.memory_layout_settings.ram_areas_organization[0].@index[0]?string == "0"]
     ram : org = 0x20000000, len = 128k
@@ -45,7 +45,7 @@ MEMORY
     ethram : org = 0x2001C000, len = 16k
 [/#if]
     ccmram : org = 0x10000000, len = 64k
-[#elseif conf.instance.platform_settings.specific_model[0] == "STM32F4xxyG"]
+[#elseif conf.instance.platform_settings.specific_model.value[0] == "STM32F4xxyG"]
     flash : org = 0x08000000, len = 1M
 [#if conf.instance.memory_layout_settings.ram_areas_organization[0].@index[0]?string == "0"]
     ram : org = 0x20000000, len = 128k
@@ -54,7 +54,7 @@ MEMORY
     ethram : org = 0x2001C000, len = 16k
 [/#if]
     ccmram : org = 0x10000000, len = 64k
-[#elseif conf.instance.platform_settings.specific_model[0] == "STM32F4xxyI"]
+[#elseif conf.instance.platform_settings.specific_model.value[0] == "STM32F4xxyI"]
     flash : org = 0x08000000, len = 2M
 [#if conf.instance.memory_layout_settings.ram_areas_organization[0].@index[0]?string == "0"]
     ram : org = 0x20000000, len = 128k

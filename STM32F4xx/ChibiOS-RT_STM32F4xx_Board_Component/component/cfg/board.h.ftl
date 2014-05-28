@@ -42,36 +42,36 @@
 /*
  * Board identifier.
  */
-#define BOARD_${conf.instance.identification.board_identifier[0]}
-#define BOARD_NAME                  "${conf.instance.identification.board_name[0]}"
+#define BOARD_${conf.instance.identification.board_identifier.value[0]}
+#define BOARD_NAME                  "${conf.instance.identification.board_name.value[0]}"
 
-[#if conf.instance.phy_settings.address[0]?string?trim?lower_case != "none"]
+[#if conf.instance.phy_settings.address.value[0]?string?trim?lower_case != "none"]
 /*
  * Ethernet PHY type.
  */
-#define BOARD_PHY_ID                ${conf.instance.phy_settings.id[0]}
-[#if conf.instance.phy_settings.mode[0]?string?trim?lower_case == "rmii"]
+#define BOARD_PHY_ID                ${conf.instance.phy_settings.id.value[0]}
+[#if conf.instance.phy_settings.mode.value[0]?string?trim?lower_case == "rmii"]
 #define BOARD_PHY_RMII
 [/#if]
-[#if conf.instance.phy_settings.address[0]?string?trim?lower_case != "autoscan"]
-#define BOARD_PHY_ADDRESS           ${conf.instance.phy_settings.address[0]}
+[#if conf.instance.phy_settings.address.value[0]?string?trim?lower_case != "autoscan"]
+#define BOARD_PHY_ADDRESS           ${conf.instance.phy_settings.address.value[0]}
 [/#if]
 
 [/#if]
 /*
  * Board oscillators-related settings.
  */
-[#if conf.instance.clock_settings.lse_oscillator_mode[0]?string?trim?lower_case != "none"]
-#define STM32_LSECLK                ${conf.instance.clock_settings.lse_frequency[0]}
-[#if conf.instance.clock_settings.lse_oscillator_mode[0]?string?trim?lower_case == "bypass"]
+[#if conf.instance.clock_settings.lse_oscillator_mode.value[0]?string?trim?lower_case != "none"]
+#define STM32_LSECLK                ${conf.instance.clock_settings.lse_frequency.value[0]}
+[#if conf.instance.clock_settings.lse_oscillator_mode.value[0]?string?trim?lower_case == "bypass"]
 #define STM32_LSECLK_BYPASS
 [/#if]
 [#else]
 #define STM32_LSECLK                0
 [/#if]
-[#if conf.instance.clock_settings.hse_oscillator_mode[0]?string?trim?lower_case != "none"]
-#define STM32_HSECLK                ${conf.instance.clock_settings.hse_frequency[0]}
-[#if conf.instance.clock_settings.hse_oscillator_mode[0]?string?trim?lower_case == "bypass"]
+[#if conf.instance.clock_settings.hse_oscillator_mode.value[0]?string?trim?lower_case != "none"]
+#define STM32_HSECLK                ${conf.instance.clock_settings.hse_frequency.value[0]}
+[#if conf.instance.clock_settings.hse_oscillator_mode.value[0]?string?trim?lower_case == "bypass"]
 #define STM32_HSECLK_BYPASS
 [/#if]
 [#else]
@@ -82,7 +82,7 @@
  * Board voltages.
  * Required for performance limits calculation.
  */
-#define STM32_VDD                   ${conf.instance.clock_settings.vdd[0]}
+#define STM32_VDD                   ${conf.instance.clock_settings.vdd.value[0]}
 
 /*
  * MCU type as defined in the ST header file stm32f4xx.h.
@@ -93,17 +93,17 @@
 [#assign pins = {} /]
 [#assign identifiers = {}]
 [#list conf.instance.i_o_settings.pins_list.pin_settings as pin_settings]
-  [#assign pin_port         = pin_settings.pin_identification.port[0] /]
-  [#assign pin_bit          = pin_settings.pin_identification.bit[0]?number /]
-  [#assign pin_ids          = pin_settings.pin_identification.identifiers[0] /]
+  [#assign pin_port         = pin_settings.pin_identification.port.value[0] /]
+  [#assign pin_bit          = pin_settings.pin_identification.bit.value[0]?number /]
+  [#assign pin_ids          = pin_settings.pin_identification.identifiers.value[0] /]
   [#if pin_ids == ""]
     [#assign pin_ids = "PIN" + pin_bit /]
   [/#if]
-  [#assign pin_mode         = pin_settings.settings.pin_mode[0] /]
+  [#assign pin_mode         = pin_settings.settings.pin_mode.value[0] /]
   [#assign pin_level        = pin_settings.settings.latched_state[0].@index?number /]
-  [#assign pin_type         = pin_settings.settings.output_type[0] /]
-  [#assign pin_speed        = pin_settings.settings.output_speed[0] /]
-  [#assign pin_resistor     = pin_settings.settings.input_resistor[0] /]
+  [#assign pin_type         = pin_settings.settings.output_type.value[0] /]
+  [#assign pin_speed        = pin_settings.settings.output_speed.value[0] /]
+  [#assign pin_resistor     = pin_settings.settings.input_resistor.value[0] /]
   [#assign pin_mode_idx     = pin_settings.settings.pin_mode[0].@index?number /]
   [#assign pin_state_idx    = pin_settings.settings.latched_state[0].@index?number /]
   [#assign pin_type_idx     = pin_settings.settings.output_type[0].@index?number /]
