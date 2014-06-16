@@ -187,13 +187,42 @@
                 </bit>
               </pin_identification>
               <settings>
-                <pin_mode index="11">
+                <pin_mode index="12">
                   <value>MODE_OUTPUT_ALTERNATE_PRIMARY</value>
                 </pin_mode>
                 <latched_state index="1">
                   <value>HIGH</value>
                 </latched_state>
               </settings>
+              <advanced>
+                <pa index="0">
+                  <value>GPIO Mode</value>
+                </pa>
+                <obe>
+                  <value>false</value>
+                </obe>
+                <ibe>
+                  <value>false</value>
+                </ibe>
+                <hys>
+                  <value>false</value>
+                </hys>
+                <dsc index="0">
+                  <value>Drive 10pF</value>
+                </dsc>
+                <ode index="0">
+                  <value>Push-Pull</value>
+                </ode>
+                <src index="0">
+                  <value>Minimum</value>
+                </src>
+                <wpe index="0">
+                  <value>Disabled</value>
+                </wpe>
+                <wps index="0">
+                  <value>Pull-Down</value>
+                </wps>
+              </advanced>
             </pin_settings>
             <pin_settings>
               <pin_identification>
@@ -208,13 +237,42 @@
                 </bit>
               </pin_identification>
               <settings>
-                <pin_mode index="7">
+                <pin_mode index="8">
                   <value>MODE_INPUT_ALTERNATE_PRIMARY</value>
                 </pin_mode>
                 <latched_state index="1">
                   <value>HIGH</value>
                 </latched_state>
               </settings>
+              <advanced>
+                <pa index="0">
+                  <value>GPIO Mode</value>
+                </pa>
+                <obe>
+                  <value>false</value>
+                </obe>
+                <ibe>
+                  <value>false</value>
+                </ibe>
+                <hys>
+                  <value>false</value>
+                </hys>
+                <dsc index="0">
+                  <value>Drive 10pF</value>
+                </dsc>
+                <ode index="0">
+                  <value>Push-Pull</value>
+                </ode>
+                <src index="0">
+                  <value>Minimum</value>
+                </src>
+                <wpe index="0">
+                  <value>Disabled</value>
+                </wpe>
+                <wps index="0">
+                  <value>Pull-Down</value>
+                </wps>
+              </advanced>
             </pin_settings>
             <pin_settings>
               <pin_identification>
@@ -229,13 +287,42 @@
                 </bit>
               </pin_identification>
               <settings>
-                <pin_mode index="2">
+                <pin_mode index="3">
                   <value>MODE_INPUT</value>
                 </pin_mode>
                 <latched_state index="0">
                   <value>LOW</value>
                 </latched_state>
               </settings>
+              <advanced>
+                <pa index="0">
+                  <value>GPIO Mode</value>
+                </pa>
+                <obe>
+                  <value>false</value>
+                </obe>
+                <ibe>
+                  <value>false</value>
+                </ibe>
+                <hys>
+                  <value>false</value>
+                </hys>
+                <dsc index="0">
+                  <value>Drive 10pF</value>
+                </dsc>
+                <ode index="0">
+                  <value>Push-Pull</value>
+                </ode>
+                <src index="0">
+                  <value>Minimum</value>
+                </src>
+                <wpe index="0">
+                  <value>Disabled</value>
+                </wpe>
+                <wps index="0">
+                  <value>Pull-Down</value>
+                </wps>
+              </advanced>
             </pin_settings>
             <pin_settings>
               <pin_identification>
@@ -250,13 +337,42 @@
                 </bit>
               </pin_identification>
               <settings>
-                <pin_mode index="2">
+                <pin_mode index="3">
                   <value>MODE_INPUT</value>
                 </pin_mode>
                 <latched_state index="0">
                   <value>LOW</value>
                 </latched_state>
               </settings>
+              <advanced>
+                <pa index="0">
+                  <value>GPIO Mode</value>
+                </pa>
+                <obe>
+                  <value>false</value>
+                </obe>
+                <ibe>
+                  <value>false</value>
+                </ibe>
+                <hys>
+                  <value>false</value>
+                </hys>
+                <dsc index="0">
+                  <value>Drive 10pF</value>
+                </dsc>
+                <ode index="0">
+                  <value>Push-Pull</value>
+                </ode>
+                <src index="0">
+                  <value>Minimum</value>
+                </src>
+                <wpe index="0">
+                  <value>Disabled</value>
+                </wpe>
+                <wps index="0">
+                  <value>Pull-Down</value>
+                </wps>
+              </advanced>
             </pin_settings>
             <pin_settings>
               <pin_identification>
@@ -271,13 +387,42 @@
                 </bit>
               </pin_identification>
               <settings>
-                <pin_mode index="2">
+                <pin_mode index="3">
                   <value>MODE_INPUT</value>
                 </pin_mode>
                 <latched_state index="0">
                   <value>LOW</value>
                 </latched_state>
               </settings>
+              <advanced>
+                <pa index="0">
+                  <value>GPIO Mode</value>
+                </pa>
+                <obe>
+                  <value>false</value>
+                </obe>
+                <ibe>
+                  <value>false</value>
+                </ibe>
+                <hys>
+                  <value>false</value>
+                </hys>
+                <dsc index="0">
+                  <value>Drive 10pF</value>
+                </dsc>
+                <ode index="0">
+                  <value>Push-Pull</value>
+                </ode>
+                <src index="0">
+                  <value>Minimum</value>
+                </src>
+                <wpe index="0">
+                  <value>Disabled</value>
+                </wpe>
+                <wps index="0">
+                  <value>Pull-Down</value>
+                </wps>
+              </advanced>
             </pin_settings>
             <pin_settings>
               <pin_identification>
@@ -292,13 +437,42 @@
                 </bit>
               </pin_identification>
               <settings>
-                <pin_mode index="2">
+                <pin_mode index="3">
                   <value>MODE_INPUT</value>
                 </pin_mode>
                 <latched_state index="0">
                   <value>LOW</value>
                 </latched_state>
               </settings>
+              <advanced>
+                <pa index="0">
+                  <value>GPIO Mode</value>
+                </pa>
+                <obe>
+                  <value>false</value>
+                </obe>
+                <ibe>
+                  <value>false</value>
+                </ibe>
+                <hys>
+                  <value>false</value>
+                </hys>
+                <dsc index="0">
+                  <value>Drive 10pF</value>
+                </dsc>
+                <ode index="0">
+                  <value>Push-Pull</value>
+                </ode>
+                <src index="0">
+                  <value>Minimum</value>
+                </src>
+                <wpe index="0">
+                  <value>Disabled</value>
+                </wpe>
+                <wps index="0">
+                  <value>Pull-Down</value>
+                </wps>
+              </advanced>
             </pin_settings>
             <pin_settings>
               <pin_identification>
@@ -313,13 +487,42 @@
                 </bit>
               </pin_identification>
               <settings>
-                <pin_mode index="5">
+                <pin_mode index="6">
                   <value>MODE_OUTPUT_PUSHPULL</value>
                 </pin_mode>
                 <latched_state index="1">
                   <value>HIGH</value>
                 </latched_state>
               </settings>
+              <advanced>
+                <pa index="0">
+                  <value>GPIO Mode</value>
+                </pa>
+                <obe>
+                  <value>false</value>
+                </obe>
+                <ibe>
+                  <value>false</value>
+                </ibe>
+                <hys>
+                  <value>false</value>
+                </hys>
+                <dsc index="0">
+                  <value>Drive 10pF</value>
+                </dsc>
+                <ode index="0">
+                  <value>Push-Pull</value>
+                </ode>
+                <src index="0">
+                  <value>Minimum</value>
+                </src>
+                <wpe index="0">
+                  <value>Disabled</value>
+                </wpe>
+                <wps index="0">
+                  <value>Pull-Down</value>
+                </wps>
+              </advanced>
             </pin_settings>
             <pin_settings>
               <pin_identification>
@@ -334,13 +537,42 @@
                 </bit>
               </pin_identification>
               <settings>
-                <pin_mode index="5">
+                <pin_mode index="6">
                   <value>MODE_OUTPUT_PUSHPULL</value>
                 </pin_mode>
                 <latched_state index="1">
                   <value>HIGH</value>
                 </latched_state>
               </settings>
+              <advanced>
+                <pa index="0">
+                  <value>GPIO Mode</value>
+                </pa>
+                <obe>
+                  <value>false</value>
+                </obe>
+                <ibe>
+                  <value>false</value>
+                </ibe>
+                <hys>
+                  <value>false</value>
+                </hys>
+                <dsc index="0">
+                  <value>Drive 10pF</value>
+                </dsc>
+                <ode index="0">
+                  <value>Push-Pull</value>
+                </ode>
+                <src index="0">
+                  <value>Minimum</value>
+                </src>
+                <wpe index="0">
+                  <value>Disabled</value>
+                </wpe>
+                <wps index="0">
+                  <value>Pull-Down</value>
+                </wps>
+              </advanced>
             </pin_settings>
             <pin_settings>
               <pin_identification>
@@ -355,13 +587,42 @@
                 </bit>
               </pin_identification>
               <settings>
-                <pin_mode index="5">
+                <pin_mode index="6">
                   <value>MODE_OUTPUT_PUSHPULL</value>
                 </pin_mode>
                 <latched_state index="1">
                   <value>HIGH</value>
                 </latched_state>
               </settings>
+              <advanced>
+                <pa index="0">
+                  <value>GPIO Mode</value>
+                </pa>
+                <obe>
+                  <value>false</value>
+                </obe>
+                <ibe>
+                  <value>false</value>
+                </ibe>
+                <hys>
+                  <value>false</value>
+                </hys>
+                <dsc index="0">
+                  <value>Drive 10pF</value>
+                </dsc>
+                <ode index="0">
+                  <value>Push-Pull</value>
+                </ode>
+                <src index="0">
+                  <value>Minimum</value>
+                </src>
+                <wpe index="0">
+                  <value>Disabled</value>
+                </wpe>
+                <wps index="0">
+                  <value>Pull-Down</value>
+                </wps>
+              </advanced>
             </pin_settings>
             <pin_settings>
               <pin_identification>
@@ -376,13 +637,42 @@
                 </bit>
               </pin_identification>
               <settings>
-                <pin_mode index="5">
+                <pin_mode index="6">
                   <value>MODE_OUTPUT_PUSHPULL</value>
                 </pin_mode>
                 <latched_state index="1">
                   <value>HIGH</value>
                 </latched_state>
               </settings>
+              <advanced>
+                <pa index="0">
+                  <value>GPIO Mode</value>
+                </pa>
+                <obe>
+                  <value>false</value>
+                </obe>
+                <ibe>
+                  <value>false</value>
+                </ibe>
+                <hys>
+                  <value>false</value>
+                </hys>
+                <dsc index="0">
+                  <value>Drive 10pF</value>
+                </dsc>
+                <ode index="0">
+                  <value>Push-Pull</value>
+                </ode>
+                <src index="0">
+                  <value>Minimum</value>
+                </src>
+                <wpe index="0">
+                  <value>Disabled</value>
+                </wpe>
+                <wps index="0">
+                  <value>Pull-Down</value>
+                </wps>
+              </advanced>
             </pin_settings>
           </pins_list>
         </i_o_settings>
