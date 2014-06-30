@@ -2,7 +2,7 @@
 #chibios=/cygdrive/d/Progetti/ChibiOS-RT
 #chibios=/cygdrive/d/Progetti/ChibiOS-RT-stable-2.6.x
 #chibios=../../chibios
-chibios=../../chibios-stable-2.6.x
+chibios=../stable_2.6.x
 #do_templates=yes
 
 #============================================================================#
@@ -115,6 +115,18 @@ cp ${chibios}/os/ports/GCC/PPC/SPC564Axx/*.h            ./SPC564Axx/ChibiOS-RT_S
 cp ${chibios}/os/ports/GCC/PPC/*.c                      ./SPC564Axx/ChibiOS-RT_SPC564Axx_Kernel_Port_Component/component/lib/src/
 cp ${chibios}/os/ports/GCC/PPC/ivor.s                   ./SPC564Axx/ChibiOS-RT_SPC564Axx_Kernel_Port_Component/component/lib/src/
 cp ${chibios}/os/ports/GCC/PPC/SPC564Axx/vectors.s      ./SPC564Axx/ChibiOS-RT_SPC564Axx_Kernel_Port_Component/component/lib/src/
+
+#============================================================================#
+# SPC56ECxx Components.                                                      #
+#============================================================================#
+
+# SPC56ECxx Kernel Port.
+echo "SPC56ECxx Kernel Port"
+cp ${chibios}/os/ports/GCC/PPC/*.h                      ./SPC56ECxx/ChibiOS-RT_SPC56ECxx_Kernel_Port_Component/component/lib/include/
+cp ${chibios}/os/ports/GCC/PPC/SPC56ECxx/*.h            ./SPC56ECxx/ChibiOS-RT_SPC56ECxx_Kernel_Port_Component/component/lib/include/
+cp ${chibios}/os/ports/GCC/PPC/*.c                      ./SPC56ECxx/ChibiOS-RT_SPC56ECxx_Kernel_Port_Component/component/lib/src/
+cp ${chibios}/os/ports/GCC/PPC/ivor.s                   ./SPC56ECxx/ChibiOS-RT_SPC56ECxx_Kernel_Port_Component/component/lib/src/
+cp ${chibios}/os/ports/GCC/PPC/SPC56ECxx/vectors.s      ./SPC56ECxx/ChibiOS-RT_SPC56ECxx_Kernel_Port_Component/component/lib/src/
 
 #============================================================================#
 # SPC56ELxx Components.                                                      #

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="org.chibios.spc5.components.rtos.spc56ecxx"
+         name="ChibiOS/RT free embedded RTOS for SPC56E/Cxx Component"
+         point="com.st.tools.spc5.extension.v1">
+      <component
+            headerName="ch.h,osal.h,hal.h"
+            icon="rsc/chibios.ico"
+            initFunction="halInit,osalInit,chSysInit"
+            isPlatform="false">
+            <description>
+                This is a meta component that depends on all components required to create a ChibiOS/RT environment for the STMicroelectronics SPC560E/Cxx automotive microcontrollers family.
+            </description>
+            <categories>
+               <category
+                     id="ChibiOS-RT/Platforms/SPC56ECxx">
+               </category>
+            </categories>
+            <configuration>
+               <description>
+                  This is a meta components with no settings.
+               </description>
+               <image
+                     align="left"
+                     file="rsc/chibios48x48.png">
+                  <text>
+                     ChibiOS/RT is GPL3-licensed free software. A special exception has been added to the GPL3 in order to allow inclusion in closed source applications, details are in the exception.txt document.
+                  </text>
+               </image>
+            </configuration>
+            <requiredFeatures>
+               <requiredFeature
+                     id="com.st.tools.spc5.features.build.gccenv">
+               </requiredFeature>
+               <requiredFeature
+                     id="com.st.tools.spc5.features.platform.spc56ecxx">
+               </requiredFeature>
+            </requiredFeatures>
+            <exportedFeatures>
+               <exportedFeature
+                     brief="ChibiOS/RT"
+                     exclusive="false"
+                     id="com.st.tools.spc5.services.rtos">
+               </exportedFeature>
+               <exportedFeature
+                     brief="Generic ChibiOS/RT environment."
+                     exclusive="false"
+                     id="org.chibios.spc5.components.chibios">
+               </exportedFeature>
+               <exportedFeature
+                     brief="SPC560B/Cxx ChibiOS/RT environment."
+                     exclusive="false"
+                     id="org.chibios.spc5.components.chibios.spc560ecxx">
+               </exportedFeature>
+            </exportedFeatures>
+      </component>
+   </extension>
+
+</plugin>
