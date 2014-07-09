@@ -226,14 +226,6 @@
                         type="boolean">
                   </property>
                   <property
-                        brief="Kernel option CH_USE_HEAP"
-                        default="true"
-                        editable="true"
-                        name="Use Heap Allocator"
-                        required="true"
-                        type="boolean">
-                  </property>
-                  <property
                         brief="Kernel option CH_USE_MALLOC_HEAP"
                         default="false"
                         editable="true"
