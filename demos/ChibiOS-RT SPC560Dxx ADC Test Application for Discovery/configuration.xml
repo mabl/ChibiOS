@@ -47,7 +47,7 @@
           <cpp_options>
             <value>-fno-rtti</value>
           </cpp_options>
-          <use_vle index="0">
+          <use_vle index="0" disabled="true">
             <value>yes</value>
           </use_vle>
           <use_verbose_compile index="1">
@@ -137,17 +137,17 @@
           </enable_sleep_mode_functions>
         </can_driver_settings>
         <i2c_driver_settings>
-          <enable_mutual_exclusion_functions>
+          <enable_mutual_exclusion_functions disabled="true">
             <value>false</value>
           </enable_mutual_exclusion_functions>
         </i2c_driver_settings>
         <mac_driver_settings>
-          <enable_events>
+          <enable_events disabled="true">
             <value>true</value>
           </enable_events>
         </mac_driver_settings>
         <mmc_spi_driver_settings>
-          <nice_waiting>
+          <nice_waiting disabled="true">
             <value>true</value>
           </nice_waiting>
         </mmc_spi_driver_settings>
@@ -194,7 +194,7 @@
                   <value>11</value>
                 </bit>
                 <metadatas>
-                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                  <metadata name="active" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                     <value>NONE</value>
                   </metadata>
                 </metadatas>
@@ -203,7 +203,7 @@
                 <pin_mode index="3">
                   <value>MODE_INPUT</value>
                   <metadatas>
-                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                    <metadata name="direction" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                       <value>I</value>
                     </metadata>
                   </metadatas>
@@ -254,7 +254,7 @@
                   <value>2</value>
                 </bit>
                 <metadatas>
-                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                  <metadata name="active" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                     <value>NONE</value>
                   </metadata>
                 </metadatas>
@@ -263,7 +263,7 @@
                 <pin_mode index="9">
                   <value>MODE_OUTPUT_ALTERNATE(1)</value>
                   <metadatas>
-                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                    <metadata name="direction" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                       <value>O</value>
                     </metadata>
                   </metadatas>
@@ -314,7 +314,7 @@
                   <value>3</value>
                 </bit>
                 <metadatas>
-                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                  <metadata name="active" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                     <value>NONE</value>
                   </metadata>
                 </metadatas>
@@ -323,7 +323,7 @@
                 <pin_mode index="3">
                   <value>MODE_INPUT</value>
                   <metadatas>
-                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                    <metadata name="direction" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                       <value>I</value>
                     </metadata>
                   </metadatas>
@@ -374,7 +374,7 @@
                   <value>8</value>
                 </bit>
                 <metadatas>
-                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                  <metadata name="active" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                     <value>NONE</value>
                   </metadata>
                 </metadatas>
@@ -383,7 +383,7 @@
                 <pin_mode index="6">
                   <value>MODE_INPUT_ANALOG</value>
                   <metadatas>
-                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                    <metadata name="direction" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                       <value>I_A</value>
                     </metadata>
                   </metadatas>
@@ -434,7 +434,7 @@
                   <value>2</value>
                 </bit>
                 <metadatas>
-                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                  <metadata name="active" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                     <value>NONE</value>
                   </metadata>
                 </metadatas>
@@ -443,7 +443,7 @@
                 <pin_mode index="7">
                   <value>MODE_OUTPUT_PUSHPULL</value>
                   <metadatas>
-                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                    <metadata name="direction" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                       <value>O</value>
                     </metadata>
                   </metadatas>
@@ -494,7 +494,7 @@
                   <value>3</value>
                 </bit>
                 <metadatas>
-                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                  <metadata name="active" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                     <value>NONE</value>
                   </metadata>
                 </metadatas>
@@ -503,7 +503,7 @@
                 <pin_mode index="7">
                   <value>MODE_OUTPUT_PUSHPULL</value>
                   <metadatas>
-                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                    <metadata name="direction" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                       <value>O</value>
                     </metadata>
                   </metadatas>
@@ -735,7 +735,7 @@
             </ps62>
           </alternate_inputs>
           <metadatas>
-            <metadata name="refID" source="com.st.tools.spc5.wizard.pinmap">
+            <metadata name="refID" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
               <value>SPC560D40L1</value>
             </metadata>
           </metadatas>
@@ -1281,9 +1281,6 @@
           <use_memory_core_allocator>
             <value>true</value>
           </use_memory_core_allocator>
-          <use_heap_allocator>
-            <value>true</value>
-          </use_heap_allocator>
           <use_heap_allocator>
             <value>true</value>
           </use_heap_allocator>

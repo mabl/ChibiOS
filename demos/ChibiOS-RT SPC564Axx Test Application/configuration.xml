@@ -137,17 +137,17 @@
           </enable_sleep_mode_functions>
         </can_driver_settings>
         <i2c_driver_settings>
-          <enable_mutual_exclusion_functions>
+          <enable_mutual_exclusion_functions disabled="true">
             <value>false</value>
           </enable_mutual_exclusion_functions>
         </i2c_driver_settings>
         <mac_driver_settings>
-          <enable_events>
+          <enable_events disabled="true">
             <value>true</value>
           </enable_events>
         </mac_driver_settings>
         <mmc_spi_driver_settings>
-          <nice_waiting>
+          <nice_waiting disabled="true">
             <value>true</value>
           </nice_waiting>
         </mmc_spi_driver_settings>
@@ -1370,9 +1370,6 @@
           <use_memory_core_allocator>
             <value>true</value>
           </use_memory_core_allocator>
-          <use_heap_allocator>
-            <value>true</value>
-          </use_heap_allocator>
           <use_heap_allocator>
             <value>true</value>
           </use_heap_allocator>

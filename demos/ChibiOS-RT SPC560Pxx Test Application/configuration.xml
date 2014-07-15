@@ -47,7 +47,7 @@
           <cpp_options>
             <value>-fno-rtti</value>
           </cpp_options>
-          <use_vle index="0">
+          <use_vle index="0" disabled="true">
             <value>yes</value>
           </use_vle>
           <use_verbose_compile index="1">
@@ -137,17 +137,17 @@
           </enable_sleep_mode_functions>
         </can_driver_settings>
         <i2c_driver_settings>
-          <enable_mutual_exclusion_functions>
+          <enable_mutual_exclusion_functions disabled="true">
             <value>false</value>
           </enable_mutual_exclusion_functions>
         </i2c_driver_settings>
         <mac_driver_settings>
-          <enable_events>
+          <enable_events disabled="true">
             <value>true</value>
           </enable_events>
         </mac_driver_settings>
         <mmc_spi_driver_settings>
-          <nice_waiting>
+          <nice_waiting disabled="true">
             <value>true</value>
           </nice_waiting>
         </mmc_spi_driver_settings>
@@ -194,7 +194,7 @@
                   <value>2</value>
                 </bit>
                 <metadatas>
-                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                  <metadata name="active" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                     <value>NONE</value>
                   </metadata>
                 </metadatas>
@@ -203,7 +203,7 @@
                 <pin_mode index="9">
                   <value>MODE_OUTPUT_ALTERNATE(1)</value>
                   <metadatas>
-                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                    <metadata name="direction" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                       <value>O</value>
                     </metadata>
                   </metadatas>
@@ -254,7 +254,7 @@
                   <value>3</value>
                 </bit>
                 <metadatas>
-                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                  <metadata name="active" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                     <value>NONE</value>
                   </metadata>
                 </metadatas>
@@ -263,7 +263,7 @@
                 <pin_mode index="3">
                   <value>MODE_INPUT</value>
                   <metadatas>
-                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                    <metadata name="direction" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                       <value>I</value>
                     </metadata>
                   </metadatas>
@@ -314,7 +314,7 @@
                   <value>0</value>
                 </bit>
                 <metadatas>
-                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                  <metadata name="active" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                     <value>NONE</value>
                   </metadata>
                 </metadatas>
@@ -323,7 +323,7 @@
                 <pin_mode index="3">
                   <value>MODE_INPUT</value>
                   <metadatas>
-                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                    <metadata name="direction" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                       <value>I</value>
                     </metadata>
                   </metadatas>
@@ -374,7 +374,7 @@
                   <value>1</value>
                 </bit>
                 <metadatas>
-                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                  <metadata name="active" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                     <value>NONE</value>
                   </metadata>
                 </metadatas>
@@ -383,7 +383,7 @@
                 <pin_mode index="3">
                   <value>MODE_INPUT</value>
                   <metadatas>
-                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                    <metadata name="direction" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                       <value>I</value>
                     </metadata>
                   </metadatas>
@@ -434,7 +434,7 @@
                   <value>2</value>
                 </bit>
                 <metadatas>
-                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                  <metadata name="active" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                     <value>NONE</value>
                   </metadata>
                 </metadatas>
@@ -443,7 +443,7 @@
                 <pin_mode index="3">
                   <value>MODE_INPUT</value>
                   <metadatas>
-                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                    <metadata name="direction" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                       <value>I</value>
                     </metadata>
                   </metadatas>
@@ -494,7 +494,7 @@
                   <value>3</value>
                 </bit>
                 <metadatas>
-                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                  <metadata name="active" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                     <value>NONE</value>
                   </metadata>
                 </metadatas>
@@ -503,7 +503,7 @@
                 <pin_mode index="3">
                   <value>MODE_INPUT</value>
                   <metadatas>
-                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                    <metadata name="direction" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                       <value>I</value>
                     </metadata>
                   </metadatas>
@@ -554,7 +554,7 @@
                   <value>4</value>
                 </bit>
                 <metadatas>
-                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                  <metadata name="active" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                     <value>NONE</value>
                   </metadata>
                 </metadatas>
@@ -563,7 +563,7 @@
                 <pin_mode index="7">
                   <value>MODE_OUTPUT_PUSHPULL</value>
                   <metadatas>
-                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                    <metadata name="direction" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                       <value>O</value>
                     </metadata>
                   </metadatas>
@@ -614,7 +614,7 @@
                   <value>5</value>
                 </bit>
                 <metadatas>
-                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                  <metadata name="active" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                     <value>NONE</value>
                   </metadata>
                 </metadatas>
@@ -623,7 +623,7 @@
                 <pin_mode index="7">
                   <value>MODE_OUTPUT_PUSHPULL</value>
                   <metadatas>
-                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                    <metadata name="direction" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                       <value>O</value>
                     </metadata>
                   </metadatas>
@@ -674,7 +674,7 @@
                   <value>6</value>
                 </bit>
                 <metadatas>
-                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                  <metadata name="active" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                     <value>NONE</value>
                   </metadata>
                 </metadatas>
@@ -683,7 +683,7 @@
                 <pin_mode index="7">
                   <value>MODE_OUTPUT_PUSHPULL</value>
                   <metadatas>
-                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                    <metadata name="direction" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                       <value>O</value>
                     </metadata>
                   </metadatas>
@@ -734,7 +734,7 @@
                   <value>7</value>
                 </bit>
                 <metadatas>
-                  <metadata name="active" source="com.st.tools.spc5.wizard.pinmap">
+                  <metadata name="active" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                     <value>NONE</value>
                   </metadata>
                 </metadatas>
@@ -743,7 +743,7 @@
                 <pin_mode index="7">
                   <value>MODE_OUTPUT_PUSHPULL</value>
                   <metadatas>
-                    <metadata name="direction" source="com.st.tools.spc5.wizard.pinmap">
+                    <metadata name="direction" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
                       <value>O</value>
                     </metadata>
                   </metadatas>
@@ -894,7 +894,7 @@
             </ps35>
           </alternate_inputs>
           <metadatas>
-            <metadata name="refID" source="com.st.tools.spc5.wizard.pinmap">
+            <metadata name="refID" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
               <value>SPC560P50L5</value>
             </metadata>
           </metadatas>
@@ -935,6 +935,24 @@
             <odf_value index="1">
               <value>SPC5_FMPLL_ODF_DIV4</value>
             </odf_value>
+            <progressive_clock_switching>
+              <value>false</value>
+            </progressive_clock_switching>
+            <mask_fail_output>
+              <value>false</value>
+            </mask_fail_output>
+            <fm_enable>
+              <value>false</value>
+            </fm_enable>
+            <spread_type index="0">
+              <value>Center Spread</value>
+            </spread_type>
+            <modulation_period>
+              <value>0</value>
+            </modulation_period>
+            <increment_step>
+              <value>0</value>
+            </increment_step>
           </fmpll0_settings>
           <fmpll1_settings>
             <idf_value>
@@ -946,7 +964,53 @@
             <odf_value index="1">
               <value>SPC5_FMPLL_ODF_DIV4</value>
             </odf_value>
+            <progressive_clock_switching>
+              <value>false</value>
+            </progressive_clock_switching>
+            <mask_fail_output>
+              <value>false</value>
+            </mask_fail_output>
+            <fm_enable>
+              <value>false</value>
+            </fm_enable>
+            <spread_type index="0">
+              <value>Center Spread</value>
+            </spread_type>
+            <modulation_period>
+              <value>0</value>
+            </modulation_period>
+            <increment_step>
+              <value>0</value>
+            </increment_step>
           </fmpll1_settings>
+          <cmu0_settings>
+            <cme0>
+              <value>false</value>
+            </cme0>
+            <rcdiv index="0">
+              <value>No Division</value>
+            </rcdiv>
+            <hfref>
+              <value>4095</value>
+            </hfref>
+            <lfref>
+              <value>0</value>
+            </lfref>
+            <md>
+              <value>0</value>
+            </md>
+          </cmu0_settings>
+          <cmu1_settings>
+            <cme1>
+              <value>false</value>
+            </cme1>
+            <hfref>
+              <value>4095</value>
+            </hfref>
+            <lfref>
+              <value>0</value>
+            </lfref>
+          </cmu1_settings>
           <clocks>
             <aux0_clock_source index="3">
               <value>FMPLL1</value>
@@ -954,7 +1018,7 @@
             <motor_control_clock_divider index="2">
               <value>2</value>
             </motor_control_clock_divider>
-            <aux1_clock_source index="0">
+            <aux1_clock_source index="0" disabled="true">
               <value>FMPLL1</value>
             </aux1_clock_source>
             <fmpll1_div_clock_divider index="2">
@@ -976,6 +1040,425 @@
               <value>chSysHalt()</value>
             </clock_failure_hook>
           </clocks>
+          <module_entry>
+            <run_modes>
+              <reset disabled="true">
+                <value>true</value>
+              </reset>
+              <safe disabled="true">
+                <value>true</value>
+              </safe>
+              <drun disabled="true">
+                <value>true</value>
+              </drun>
+              <run0 disabled="true">
+                <value>true</value>
+              </run0>
+              <run1>
+                <value>true</value>
+              </run1>
+              <run2>
+                <value>true</value>
+              </run2>
+              <run3>
+                <value>true</value>
+              </run3>
+              <halt0>
+                <value>true</value>
+              </halt0>
+              <stop0>
+                <value>true</value>
+              </stop0>
+              <safe_state_settings>
+                <pdo>
+                  <value>true</value>
+                </pdo>
+                <mvron disabled="true">
+                  <value>true</value>
+                </mvron>
+                <dflaon index="0" disabled="true">
+                  <value>Normal</value>
+                </dflaon>
+                <cflaon index="0" disabled="true">
+                  <value>Normal</value>
+                </cflaon>
+                <pll1on disabled="true">
+                  <value>false</value>
+                </pll1on>
+                <pll0on disabled="true">
+                  <value>false</value>
+                </pll0on>
+                <xosc0on disabled="true">
+                  <value>false</value>
+                </xosc0on>
+                <ircon disabled="true">
+                  <value>true</value>
+                </ircon>
+                <sysclk index="0" disabled="true">
+                  <value>IRC</value>
+                </sysclk>
+              </safe_state_settings>
+              <drun_state_settings>
+                <pdo disabled="true">
+                  <value>false</value>
+                </pdo>
+                <mvron disabled="true">
+                  <value>true</value>
+                </mvron>
+                <dflaon index="0">
+                  <value>Normal</value>
+                </dflaon>
+                <cflaon index="0">
+                  <value>Normal</value>
+                </cflaon>
+                <pll1on>
+                  <value>false</value>
+                </pll1on>
+                <pll0on>
+                  <value>true</value>
+                </pll0on>
+                <xosc0on>
+                  <value>false</value>
+                </xosc0on>
+                <ircon disabled="true">
+                  <value>true</value>
+                </ircon>
+                <sysclk index="2">
+                  <value>System PLL</value>
+                </sysclk>
+              </drun_state_settings>
+              <run0_state_settings>
+                <pdo disabled="true">
+                  <value>false</value>
+                </pdo>
+                <mvron disabled="true">
+                  <value>true</value>
+                </mvron>
+                <dflaon index="0">
+                  <value>Normal</value>
+                </dflaon>
+                <cflaon index="0">
+                  <value>Normal</value>
+                </cflaon>
+                <pll1on>
+                  <value>false</value>
+                </pll1on>
+                <pll0on>
+                  <value>true</value>
+                </pll0on>
+                <xosc0on>
+                  <value>false</value>
+                </xosc0on>
+                <ircon disabled="true">
+                  <value>true</value>
+                </ircon>
+                <sysclk index="2">
+                  <value>System PLL</value>
+                </sysclk>
+              </run0_state_settings>
+              <run1_state_settings>
+                <pdo disabled="true">
+                  <value>false</value>
+                </pdo>
+                <mvron disabled="true">
+                  <value>true</value>
+                </mvron>
+                <dflaon index="0">
+                  <value>Normal</value>
+                </dflaon>
+                <cflaon index="0">
+                  <value>Normal</value>
+                </cflaon>
+                <pll1on>
+                  <value>false</value>
+                </pll1on>
+                <pll0on>
+                  <value>false</value>
+                </pll0on>
+                <xosc0on>
+                  <value>false</value>
+                </xosc0on>
+                <ircon disabled="true">
+                  <value>true</value>
+                </ircon>
+                <sysclk index="0">
+                  <value>IRC</value>
+                </sysclk>
+              </run1_state_settings>
+              <run2_state_settings>
+                <pdo disabled="true">
+                  <value>false</value>
+                </pdo>
+                <mvron disabled="true">
+                  <value>true</value>
+                </mvron>
+                <dflaon index="0">
+                  <value>Normal</value>
+                </dflaon>
+                <cflaon index="0">
+                  <value>Normal</value>
+                </cflaon>
+                <pll1on>
+                  <value>false</value>
+                </pll1on>
+                <pll0on>
+                  <value>false</value>
+                </pll0on>
+                <xosc0on>
+                  <value>false</value>
+                </xosc0on>
+                <ircon disabled="true">
+                  <value>true</value>
+                </ircon>
+                <sysclk index="0">
+                  <value>IRC</value>
+                </sysclk>
+              </run2_state_settings>
+              <run3_state_settings>
+                <pdo disabled="true">
+                  <value>false</value>
+                </pdo>
+                <mvron disabled="true">
+                  <value>true</value>
+                </mvron>
+                <dflaon index="0">
+                  <value>Normal</value>
+                </dflaon>
+                <cflaon index="0">
+                  <value>Normal</value>
+                </cflaon>
+                <pll1on>
+                  <value>false</value>
+                </pll1on>
+                <pll0on>
+                  <value>false</value>
+                </pll0on>
+                <xosc0on>
+                  <value>false</value>
+                </xosc0on>
+                <ircon disabled="true">
+                  <value>true</value>
+                </ircon>
+                <sysclk index="0">
+                  <value>IRC</value>
+                </sysclk>
+              </run3_state_settings>
+              <halt0_state_settings>
+                <pdo disabled="true">
+                  <value>false</value>
+                </pdo>
+                <mvron disabled="true">
+                  <value>true</value>
+                </mvron>
+                <dflaon index="1">
+                  <value>Low Power</value>
+                </dflaon>
+                <cflaon index="1">
+                  <value>Low Power</value>
+                </cflaon>
+                <pll1on>
+                  <value>false</value>
+                </pll1on>
+                <pll0on>
+                  <value>false</value>
+                </pll0on>
+                <xosc0on>
+                  <value>false</value>
+                </xosc0on>
+                <ircon>
+                  <value>true</value>
+                </ircon>
+                <sysclk index="0">
+                  <value>IRC</value>
+                </sysclk>
+              </halt0_state_settings>
+              <stop0_state_settings>
+                <pdo>
+                  <value>false</value>
+                </pdo>
+                <mvron disabled="true">
+                  <value>true</value>
+                </mvron>
+                <dflaon index="2">
+                  <value>Power Down</value>
+                </dflaon>
+                <cflaon index="2">
+                  <value>Power Down</value>
+                </cflaon>
+                <pll1on>
+                  <value>false</value>
+                </pll1on>
+                <pll0on disabled="true">
+                  <value>false</value>
+                </pll0on>
+                <xosc0on>
+                  <value>false</value>
+                </xosc0on>
+                <ircon disabled="true">
+                  <value>true</value>
+                </ircon>
+                <sysclk index="0">
+                  <value>IRC</value>
+                </sysclk>
+              </stop0_state_settings>
+            </run_modes>
+            <peripherals_control__run_>
+              <pc2>
+                <safe>
+                  <value>false</value>
+                </safe>
+                <drun>
+                  <value>false</value>
+                </drun>
+                <run0>
+                  <value>false</value>
+                </run0>
+                <run1>
+                  <value>false</value>
+                </run1>
+                <run2>
+                  <value>false</value>
+                </run2>
+                <run3>
+                  <value>false</value>
+                </run3>
+              </pc2>
+              <pc3>
+                <safe>
+                  <value>false</value>
+                </safe>
+                <drun>
+                  <value>false</value>
+                </drun>
+                <run0>
+                  <value>false</value>
+                </run0>
+                <run1>
+                  <value>false</value>
+                </run1>
+                <run2>
+                  <value>false</value>
+                </run2>
+                <run3>
+                  <value>false</value>
+                </run3>
+              </pc3>
+              <pc4>
+                <safe>
+                  <value>false</value>
+                </safe>
+                <drun>
+                  <value>false</value>
+                </drun>
+                <run0>
+                  <value>false</value>
+                </run0>
+                <run1>
+                  <value>false</value>
+                </run1>
+                <run2>
+                  <value>false</value>
+                </run2>
+                <run3>
+                  <value>false</value>
+                </run3>
+              </pc4>
+              <pc5>
+                <safe>
+                  <value>false</value>
+                </safe>
+                <drun>
+                  <value>false</value>
+                </drun>
+                <run0>
+                  <value>false</value>
+                </run0>
+                <run1>
+                  <value>false</value>
+                </run1>
+                <run2>
+                  <value>false</value>
+                </run2>
+                <run3>
+                  <value>false</value>
+                </run3>
+              </pc5>
+              <pc6>
+                <safe>
+                  <value>false</value>
+                </safe>
+                <drun>
+                  <value>false</value>
+                </drun>
+                <run0>
+                  <value>false</value>
+                </run0>
+                <run1>
+                  <value>false</value>
+                </run1>
+                <run2>
+                  <value>false</value>
+                </run2>
+                <run3>
+                  <value>false</value>
+                </run3>
+              </pc6>
+              <pc7>
+                <safe>
+                  <value>false</value>
+                </safe>
+                <drun>
+                  <value>false</value>
+                </drun>
+                <run0>
+                  <value>false</value>
+                </run0>
+                <run1>
+                  <value>false</value>
+                </run1>
+                <run2>
+                  <value>false</value>
+                </run2>
+                <run3>
+                  <value>false</value>
+                </run3>
+              </pc7>
+            </peripherals_control__run_>
+            <peripherals_control__low_power_>
+              <pc4>
+                <halt0>
+                  <value>false</value>
+                </halt0>
+                <stop0>
+                  <value>false</value>
+                </stop0>
+              </pc4>
+              <pc5>
+                <halt0>
+                  <value>false</value>
+                </halt0>
+                <stop0>
+                  <value>false</value>
+                </stop0>
+              </pc5>
+              <pc6>
+                <halt0>
+                  <value>false</value>
+                </halt0>
+                <stop0>
+                  <value>false</value>
+                </stop0>
+              </pc6>
+              <pc7>
+                <halt0>
+                  <value>false</value>
+                </halt0>
+                <stop0>
+                  <value>false</value>
+                </stop0>
+              </pc7>
+            </peripherals_control__low_power_>
+          </module_entry>
         </initialization_settings>
         <irq_priority_settings>
           <adc0 index="11">
@@ -1451,9 +1934,6 @@
           <use_memory_core_allocator>
             <value>true</value>
           </use_memory_core_allocator>
-          <use_heap_allocator>
-            <value>true</value>
-          </use_heap_allocator>
           <use_heap_allocator>
             <value>true</value>
           </use_heap_allocator>
