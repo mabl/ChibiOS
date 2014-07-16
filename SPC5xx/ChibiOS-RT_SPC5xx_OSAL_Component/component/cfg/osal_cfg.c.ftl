@@ -28,6 +28,15 @@
 
 #include "osal.h"
 
+[#if conf.instance.isrs.headers.value[0]??]
+  [#assign s = conf.instance.isrs.headers.value[0]?trim /]
+  [#if s?length != 0]
+    [#list s?split(",") as header]
+#include "${header}"
+    [/#list]
+
+  [/#if]
+[/#if]
 /*===========================================================================*/
 /* Module local definitions.                                                 */
 /*===========================================================================*/
@@ -49,6 +58,16 @@
 /*===========================================================================*/
 
 /*===========================================================================*/
+/* Module ISRs.                                                              */
+/*===========================================================================*/
+
+[#list conf.instance.isrs.enabled_vectors.vector as vector]
+  [#if vector.isr_code.value[0]?trim?length != 0]
+${vector.isr_code.value[0]?trim}
+  [/#if]
+
+[/#list]
+/*===========================================================================*/
 /* Module exported functions.                                                */
 /*===========================================================================*/
 
@@ -61,7 +80,14 @@ void osal_cfg_init(void) {
 
 [#list conf.instance.isrs.enabled_vectors.vector as vector]
   [#assign id = vector.identifier.value[0]?trim /]
-  osalIsrEnableVector(OSAL_VECTOR_${id}, ${vector.priority.value[0]});
+  [#if vector.cores.value[0]??]
+    [#assign cores = vector.cores.value[0]?replace(" ","")?replace("-","")?upper_case /]
+    [#assign psr = "INTC_PSR_ENABLE(INTC_PSR_" + cores + ", " + vector.priority.value[0] + ")" /]
+  [#else]
+    [#assign psr = "INTC_PSR_ENABLE(INTC_PSR_CORE0, " + vector.priority.value[0] + ")"/]
+  [/#if]
+  osalIsrEnableVector(OSAL_VECTOR_${id},
+                      ${psr});
 [/#list]
 }
 

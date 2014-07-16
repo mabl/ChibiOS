@@ -92,7 +92,34 @@
                               required="false"
                               type="string">
                         </property>
+                        <property
+                              brief="ISR code, if empty then the ISR must be written by the user."
+                              editable="true"
+                              name="ISR Code"
+                              required="false"
+                              type="formatted">
+                           <text>
+                              The ISR must be written as follow:
+
+OSAL_IRQ_HANDLER(name) {
+
+  OSAL_IRQ_PROLOGUE();
+
+  /* ISR code here.*/
+
+  OSAL_IRQ_EPILOGUE();
+}
+                           </text>
+                        </property>
                      </group>
+                  </property>
+                  <property
+                        brief="Comma separated list of headers to be included in the ISRs module other than components.h."
+                        editable="true"
+                        name="Headers"
+                        regex="^([a-zA-Z_]([a-zA-Z0-9_\-/]*(|\.h,[a-zA-Z_]))*\.h)*$"
+                        required="false"
+                        type="string">
                   </property>
                </group>
             </configuration>
