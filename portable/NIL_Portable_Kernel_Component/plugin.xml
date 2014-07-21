@@ -34,7 +34,7 @@
                <group
                      columns="1"
                      expanded="false"
-                     name="Kernel Options"
+                     name="General Options"
                      style="collapsable">
                   <description>
                      Miscellaneous kernel parameters.
@@ -46,23 +46,6 @@
                         name="System Tick Clock Frequency"
                         required="true"
                         type="unsigned">
-                  </property>
-               </group>
-               <group
-                     columns="1"
-                     expanded="false"
-                     name="Performance Options"
-                     style="collapsable">
-                  <description>
-                     Options regarding performance.
-                  </description>
-                  <property
-                        brief="Kernel option CH_OPTIMIZE_SPEED"
-                        default="true"
-                        editable="true"
-                        name="Optimize for Speed"
-                        required="true"
-                        type="boolean">
                   </property>
                </group>
                <group
@@ -111,7 +94,7 @@
                      columns="1"
                      expanded="false"
                      name="Hooks"
-                     style="collapsable">
+                     style="button">
                   <description>
                      The kernel functionality can be extended by using the hooks mechanisms. Hooks allow to insert user-defined code in specific kernel code paths. Note that hook code is inserted into a macro definition so lines must be terminated by a \.
                   </description>
