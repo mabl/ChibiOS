@@ -15,6 +15,11 @@ fi
 cp -R ${chibios}/os/nil/include                             ./portable/NIL_Portable_Kernel_Component/component/lib
 cp -R ${chibios}/os/nil/src                                 ./portable/NIL_Portable_Kernel_Component/component/lib
 
+# Portable OSAL.
+echo "Portable OSAL"
+cp ${chibios}/os/hal/osal/nil/*.h                           ./portable/NIL_Portable_OSAL_Component/component/lib/include
+cp ${chibios}/os/hal/osal/nil/*.c                           ./portable/NIL_Portable_OSAL_Component/component/lib/src
+
 #============================================================================#
 # SPC560Dxx Components.                                                      #
 #============================================================================#

@@ -23,7 +23,7 @@
           <boot_mode index="0">
             <value>Execute from Flash</value>
           </boot_mode>
-          <load_address index="0" disabled="true">
+          <load_address index="0">
             <value>0x00000000</value>
           </load_address>
         </runtime_settings>
@@ -69,16 +69,11 @@
         </linker_settings>
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.nil.kernel">
-        <kernel_options>
+        <general_options>
           <system_tick_clock_frequency>
             <value>1000</value>
           </system_tick_clock_frequency>
-        </kernel_options>
-        <performance_options>
-          <optimize_for_speed>
-            <value>true</value>
-          </optimize_for_speed>
-        </performance_options>
+        </general_options>
         <subsystem_options>
           <use_events>
             <value>true</value>

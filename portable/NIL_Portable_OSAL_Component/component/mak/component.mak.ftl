@@ -10,10 +10,10 @@ LIB_ASM_SRC     +=
 
 LIB_INCLUDES    += ${global.component_path}/lib/include
 
-APP_C_SRC       += ${global.local_component_path}/cfg/osal_cfg.c
+APP_C_SRC       +=
 
 APP_CPP_SRC     +=
 
 APP_ASM_SRC     +=
 
-APP_INCLUDES    += ${global.local_component_path}/cfg
+APP_INCLUDES    +=
