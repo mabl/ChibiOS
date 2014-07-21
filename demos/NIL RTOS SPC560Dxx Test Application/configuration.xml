@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SPC5-Config version="1.0.0">
+  <application name="SPC560Dxx Test Application with NIL RTOS" version="1.0.0" standalone="false" locked="false">
+    <description>Test application for the SPC560Dxx using NIL RTOS.</description>
+    <component id="com.st.tools.spc5.components.platform.spc560dxx">
+      <component id="org.chibios.spc5.components.nil.kernel" />
+      <component id="org.chibios.spc5.components.nil.kernel.port.gcc.spc560dxx" />
+    </component>
+    <instances>
+      <instance locked="false" id="com.st.tools.spc5.components.platform.spc560dxx">
+        <platform_settings>
+          <specific_model index="3">
+            <value>SPC560D40L3</value>
+          </specific_model>
+        </platform_settings>
+        <runtime_settings>
+          <process_stack_size>
+            <value>2048</value>
+          </process_stack_size>
+          <irq_stack_size>
+            <value>0</value>
+          </irq_stack_size>
+          <boot_mode index="0">
+            <value>Execute from Flash</value>
+          </boot_mode>
+          <load_address index="0" disabled="true">
+            <value>0x00000000</value>
+          </load_address>
+        </runtime_settings>
+        <build_settings>
+          <application_name>
+            <value>out</value>
+          </application_name>
+          <compiler_variant index="0">
+            <value>ppc-vle-</value>
+          </compiler_variant>
+          <optimization_level index="3">
+            <value>-O2</value>
+          </optimization_level>
+          <common_options>
+            <value>-ggdb -fomit-frame-pointer -falign-functions=16 -mno-spe -msoft-float</value>
+          </common_options>
+          <c_options>
+            <value />
+          </c_options>
+          <cpp_options>
+            <value>-fno-rtti -fno-exceptions</value>
+          </cpp_options>
+          <use_vle index="0" disabled="true">
+            <value>yes</value>
+          </use_vle>
+          <use_verbose_compile index="1">
+            <value>no</value>
+          </use_verbose_compile>
+        </build_settings>
+        <linker_settings>
+          <use_linker_gc index="0">
+            <value>yes</value>
+          </use_linker_gc>
+          <linker_options>
+            <value />
+          </linker_options>
+          <entry_point>
+            <value>_reset_address</value>
+          </entry_point>
+          <custom_sections>
+            <value />
+          </custom_sections>
+        </linker_settings>
+      </instance>
+      <instance locked="false" id="org.chibios.spc5.components.nil.kernel">
+        <kernel_options>
+          <system_tick_clock_frequency>
+            <value>1000</value>
+          </system_tick_clock_frequency>
+        </kernel_options>
+        <performance_options>
+          <optimize_for_speed>
+            <value>true</value>
+          </optimize_for_speed>
+        </performance_options>
+        <subsystem_options>
+          <use_events>
+            <value>true</value>
+          </use_events>
+        </subsystem_options>
+        <debug_options>
+          <enable_assertions>
+            <value>false</value>
+          </enable_assertions>
+          <enable_stack_check>
+            <value>false</value>
+          </enable_stack_check>
+        </debug_options>
+        <hooks>
+          <thread_extra_fields_hook>
+            <value />
+          </thread_extra_fields_hook>
+          <thread_initialization_hook>
+            <value />
+          </thread_initialization_hook>
+          <idle_enter_hook>
+            <value />
+          </idle_enter_hook>
+          <idle_leave_hook>
+            <value />
+          </idle_leave_hook>
+          <system_halt_hook>
+            <value />
+          </system_halt_hook>
+        </hooks>
+      </instance>
+      <instance locked="false" id="org.chibios.spc5.components.nil.kernel.port.gcc.spc560dxx" />
+    </instances>
+    <exportedFeatures />
+  </application>
+</SPC5-Config>
