@@ -43,7 +43,7 @@
  * @note    This number is not inclusive of the idle thread which is
  *          Implicitly handled.
  */
-#define NIL_CFG_NUM_THREADS                 1
+#define NIL_CFG_NUM_THREADS                 ${conf.instance.tasks_configuration.tasks.*?size}
 
 /** @} */
 

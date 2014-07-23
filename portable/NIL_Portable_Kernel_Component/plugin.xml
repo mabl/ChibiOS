@@ -175,7 +175,7 @@ If such a timer is not available then select the periodic system tick mode.
                      name="Tasks Configuration"
                      style="button">
                   <description>
-                     Definition of the tasks handled by NIL RTOS.
+                     Tasks definition.
                   </description>
                   <text>
                      Tasks are defined as a priority reverse-ordered list, the first element is the highest priority task in the system. Priorities are fixed and cannot change at runtime.
