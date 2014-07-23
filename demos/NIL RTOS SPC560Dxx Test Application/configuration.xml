@@ -117,10 +117,10 @@
           <tasks>
             <task_settings>
               <readable_name>
-                <value>task name</value>
+                <value>readable name</value>
               </readable_name>
               <symbolic_name>
-                <value>task_name</value>
+                <value>symbolic_name</value>
               </symbolic_name>
               <stack_size>
                 <value>128</value>
@@ -128,8 +128,29 @@
               <argument>
                 <value>NULL</value>
               </argument>
+              <task_code>
+                <value><![CDATA[/*
+ * Task working area declaration.
+ */
+THD_WORKING_AREA(TASK_WA_NAME, TASK_STACK_SIZE);
+
+/*
+ * Task function.
+ */
+THD_FUNCTION(TASK_NAME, arg) {
+
+  (void)arg;
+
+  while (true) {
+
+  }
+}]]></value>
+              </task_code>
             </task_settings>
           </tasks>
+          <shared_code>
+            <value />
+          </shared_code>
         </tasks_configuration>
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.nil.kernel.port.gcc.spc560dxx" />

@@ -179,7 +179,9 @@ If such a timer is not available then select the periodic system tick mode.
                   </description>
                   <text>
                      Tasks are defined as a priority reverse-ordered list, the first element is the highest priority task in the system. Priorities are fixed and cannot change at runtime.
-Each task will be placed in its own .c file placed under ./source/tasks and named as lower-case of the task symbolic name prefixed by &quot;task_&quot;, a global tasks.c file shall also be generated containing the tasks table.
+                  </text>
+                  <text>
+                     Each task will be placed in its own .c file placed under ./source/tasks and named as lower-case of the task symbolic name prefixed by &quot;task_&quot;, a global tasks.c file shall also be generated containing the tasks table and shared code.
                   </text>
                   <property
                         brief="List of the tasks to be created on startup."
@@ -216,7 +218,7 @@ Each task will be placed in its own .c file placed under ./source/tasks and name
                               required="true"
                               type="string">
                            <text>
-                              A task function will be created using this name. A working area will be defined for the task by prefixing "wa" to this name.
+                              A task function will be created using this name. A working area will also be statically allocated for the task with &quot;_wa&quot; suffix to this name.
                            </text>
                         </property>
                         <property
@@ -237,7 +239,45 @@ Each task will be placed in its own .c file placed under ./source/tasks and name
                               required="true"
                               type="string">
                         </property>
+                        <text>
+                           Task code to be generated into the output file under ./source/tasks.
+                        </text>
+                        <property
+                              brief="Task C module code."
+                              editable="true"
+                              name="Task Code"
+                              required="false"
+                              type="formatted">
+                           <default>
+                              /*
+ * Task working area declaration.
+ */
+THD_WORKING_AREA(TASK_WA_NAME, TASK_STACK_SIZE);
+
+/*
+ * Task function.
+ */
+THD_FUNCTION(TASK_NAME, arg) {
+
+  (void)arg;
+
+  while (true) {
+
+  }
+}
+                           </default>
+                        </property>
                      </group>
+                  </property>
+                  <text>
+                     Code to be placed in ./source/tasks/tasks.c before the generated taks table.
+                  </text>
+                  <property
+                        brief="Shared code to be placed in ./source/tasks.c (if any)."
+                        editable="true"
+                        name="Shared Code"
+                        required="false"
+                        type="formatted">
                   </property>
                </group>
            </configuration>
