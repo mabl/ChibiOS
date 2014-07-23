@@ -139,7 +139,7 @@ ${conf.instance.hooks.thread_extra_fields_hook.value[0]}
  * @brief   Threads initialization hook.
  */
 #define NIL_CFG_THREAD_EXT_INIT_HOOK(tr) {                                  \
-${conf.instance.hooks.thread_initialization_hook.value[0]}[#rt]
+${conf.instance.hooks.thread_initialization_hook.value[0]}[#rt/]
 }
 
 /**
@@ -149,7 +149,7 @@ ${conf.instance.hooks.thread_initialization_hook.value[0]}[#rt]
  * @note    This macro can be used to activate a power saving mode.
  */
 #define NIL_CFG_IDLE_ENTER_HOOK() {                                         \
-${conf.instance.hooks.idle_enter_hook.value[0]}[#rt]
+${conf.instance.hooks.idle_enter_hook.value[0]}[#rt/]
 }
 
 /**
@@ -159,7 +159,7 @@ ${conf.instance.hooks.idle_enter_hook.value[0]}[#rt]
  * @note    This macro can be used to deactivate a power saving mode.
  */
 #define NIL_CFG_IDLE_LEAVE_HOOK() {                                         \
-${conf.instance.hooks.idle_leave_hook.value[0]}[#rt]
+${conf.instance.hooks.idle_leave_hook.value[0]}[#rt/]
 }
 
 /**
@@ -167,7 +167,7 @@ ${conf.instance.hooks.idle_leave_hook.value[0]}[#rt]
  */
 #if !defined(NIL_CFG_SYSTEM_HALT_HOOK) || defined(__DOXYGEN__)
 #define NIL_CFG_SYSTEM_HALT_HOOK(reason) {                                  \
-${conf.instance.hooks.system_halt_hook.value[0]}[#rt]
+${conf.instance.hooks.system_halt_hook.value[0]}[#rt/]
 }
 #endif
 

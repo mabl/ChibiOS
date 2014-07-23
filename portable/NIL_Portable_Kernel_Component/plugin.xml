@@ -170,6 +170,76 @@ If such a timer is not available then select the periodic system tick mode.
                         type="formatted">
                   </property>
                </group>
+               <group
+                     expanded="true"
+                     name="Tasks Configuration"
+                     style="button">
+                  <description>
+                     Definition of the tasks handled by NIL RTOS.
+                  </description>
+                  <text>
+                     Tasks are defined as a priority reverse-ordered list, the first element is the highest priority task in the system. Priorities are fixed and cannot change at runtime.
+Each task will be placed in its own .c file placed under ./source/tasks and named as lower-case of the task symbolic name prefixed by &quot;task_&quot;, a global tasks.c file shall also be generated containing the tasks table.
+                  </text>
+                  <property
+                        brief="List of the tasks to be created on startup."
+                        editable="true"
+                        max="16"
+                        min="1"
+                        name="Tasks"
+                        required="true"
+                        type="list"
+                        value="Readable Name,Symbolic Name,Stack Size,Argument">
+                     <group
+                           expanded="true"
+                           name="Task Settings"
+                           style="collapsable">
+                        <description>
+                           Task settings.
+                        </description>
+                        <property
+                              brief="This is the readable name of the task as shown into NIL-aware debuggers."
+                              default="readable name"
+                              editable="true"
+                              name="Readable Name"
+                              required="true"
+                              type="string">
+                        </property>
+                        <property
+                              brief="C name used for the task, the name must be a valid C identifier."
+                              default="symbolic_name"
+                              editable="true"
+                              max="32"
+                              min="1"
+                              name="Symbolic Name"
+                              regex="^[a-zA-Z_][a-zA-Z0-9_]*$|^$"
+                              required="true"
+                              type="string">
+                           <text>
+                              A task function will be created using this name. A working area will be defined for the task by prefixing "wa" to this name.
+                           </text>
+                        </property>
+                        <property
+                              brief="Size of the stack to be statically allocated for the task."
+                              default="128"
+                              editable="true"
+                              length="8"
+                              min="128"
+                              name="Stack Size"
+                              required="true"
+                              type="unsigned">
+                        </property>
+                        <property
+                              brief="Argument to be passed to the task, the argument is expected to be a valid C expression compatible with (void *)."
+                              default="NULL"
+                              editable="true"
+                              name="Argument"
+                              required="true"
+                              type="string">
+                        </property>
+                     </group>
+                  </property>
+               </group>
            </configuration>
             <exportedFeatures>
                <exportedFeature
