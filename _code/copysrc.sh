@@ -1,5 +1,5 @@
 #!/bin/bash
-chibios=../../ChibiOS-RT
+chibios=../../../chibios
 #do_templates=yes
 
 #============================================================================#

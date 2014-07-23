@@ -7,7 +7,7 @@
          name="NIL RTOS Portable Kernel Component"
          point="com.st.tools.spc5.extension.v1">
       <component
-            headerName="ch.h"
+            headerName="nil.h"
             hidden="true"
             initFunction="chSysInit"
             icon="rsc/chibios.ico"
@@ -40,12 +40,48 @@
                      Miscellaneous kernel parameters.
                   </description>
                   <property
-                        brief="Kernel parameter NIL_CFG_ST_FREQUENCY"
+                        brief="Size, in bits, of the system tick counter."
+                        default="1"
+                        editable="true"
+                        name="System Tick Counter Resolution"
+                        required="true"
+                        type="enum"
+                        value="16,32">
+                  </property>
+                  <property
+                        brief="System Tick frequency in Hz."
                         default="1000"
                         editable="true"
                         name="System Tick Clock Frequency"
                         required="true"
                         type="unsigned">
+                  </property>
+                  <property
+                        brief="System Tick mode, tickless mode enables a more power-efficient mode."
+                        default="0"
+                        editable="true"
+                        name="System Tick Mode"
+                        required="true"
+                        type="enum"
+                        value="Periodic Tick Mode,Tickless Mode">
+                     <text>
+                        Tickless mode requires support of a special dedicated timer and the implementation of the "ST" driver at HAL level.
+If such a timer is not available then select the periodic system tick mode.
+                     </text>
+                  </property>
+                  <property
+                        brief="Minimum number of ticks in sleep/timeout directives."
+                        default="0"
+                        editable="true"
+                        name="System Tick Delta"
+                        required="true"
+                        type="enum"
+                        value="2,3,4,5,6,7,8,9,10,11,12,13,14,15,16">
+                     <override
+                           editable="test:../system_tick_mode/value/text()=&apos;Tickless Mode&apos;"></override>
+                     <text>
+                        This values is the minimum number of ticks specifiable in a sleep/timeout directive. Usually 2 is fine unless trying extreme system tick frequencies.
+                     </text>
                   </property>
                </group>
                <group
@@ -94,7 +130,7 @@
                      columns="1"
                      expanded="false"
                      name="Hooks"
-                     style="button">
+                     style="collapsable">
                   <description>
                      The kernel functionality can be extended by using the hooks mechanisms. Hooks allow to insert user-defined code in specific kernel code paths. Note that hook code is inserted into a macro definition so lines must be terminated by a \.
                   </description>

@@ -2,7 +2,7 @@
 [@pp.dropOutputFile /]
 [@pp.changeOutputFile name="component.mak" /]
 # List of library files exported by the component.
-LIB_C_SRC       += ${global.component_path}/lib/src/chcore.c
+LIB_C_SRC       += ${global.component_path}/lib/src/nilcore.c
 
 LIB_CPP_SRC     +=
 
