@@ -10,12 +10,27 @@
 [#if conf.instance.isrs_configuration.isrs.isr_settings?size > 0]
 
 /*
- * Vector numbers definitions.
+ * IRQ vector numbers definitions.
  */
+  [#assign overrides = [] /]
   [#list conf.instance.isrs_configuration.isrs.isr_settings as settings]
     [#assign id = settings.identifier.value[0]?trim /]
     [#assign number = settings.number.value[0]?trim /]
+    [#assign name_override = settings.name_override.value[0]?trim /]
+    [#if name_override != ""]
+      [#assign overrides = overrides + [[number, name_override]] /]
+    [/#if]
     [#assign name = ("IRQ_VECTOR_" + id)?right_pad(35) /]
 #define ${name} ${number}
   [/#list]
+  [#if overrides?size > 0]
+
+/*
+ * IRQ vector names override.
+ */
+    [#list overrides as ovr]
+      [#assign name = ("vector" + ovr[0])?right_pad(35) /]
+#define ${name} ${ovr[1]}
+    [/#list]
+  [/#if]
 [/#if]
