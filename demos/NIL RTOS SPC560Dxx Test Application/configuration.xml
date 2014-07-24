@@ -5,6 +5,7 @@
     <component id="com.st.tools.spc5.components.platform.spc560dxx">
       <component id="org.chibios.spc5.components.nil.kernel" />
       <component id="org.chibios.spc5.components.nil.kernel.port.gcc.spc560dxx" />
+      <component id="org.chibios.spc5.components.hal.osal.nil" />
     </component>
     <instances>
       <instance locked="false" id="com.st.tools.spc5.components.platform.spc560dxx">
@@ -158,6 +159,7 @@ THD_FUNCTION(TASK_NAME, arg) {
           <isrs />
         </isrs_configuration>
       </instance>
+      <instance locked="false" id="org.chibios.spc5.components.hal.osal.nil" />
     </instances>
     <exportedFeatures />
   </application>

@@ -49,7 +49,7 @@
                      id="com.st.tools.spc5.features.platform.spc5xx">
                </requiredFeature>
                <requiredFeature
-                     id="org.chibios.spc5.features.kernel">
+                     id="org.chibios.spc5.features.nil.kernel">
                </requiredFeature>
             </requiredFeatures>
       </component>
