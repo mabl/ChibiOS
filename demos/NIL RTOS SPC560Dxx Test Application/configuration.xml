@@ -6,6 +6,9 @@
       <component id="org.chibios.spc5.components.nil.kernel" />
       <component id="org.chibios.spc5.components.nil.kernel.port.gcc.spc560dxx" />
       <component id="org.chibios.spc5.components.hal.osal.nil" />
+      <component id="org.chibios.spc5.components.spc5hal" />
+      <component id="org.chibios.spc5.components.hal.board.spc560dxx" />
+      <component id="org.chibios.spc5.components.hal.platform.spc560dxx" />
     </component>
     <instances>
       <instance locked="false" id="com.st.tools.spc5.components.platform.spc560dxx">
@@ -80,7 +83,7 @@
           <system_tick_mode index="0">
             <value>Periodic Tick Mode</value>
           </system_tick_mode>
-          <system_tick_delta index="0" disabled="true">
+          <system_tick_delta index="0">
             <value>2</value>
           </system_tick_delta>
         </general_options>
@@ -160,6 +163,675 @@ THD_FUNCTION(TASK_NAME, arg) {
         </isrs_configuration>
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.hal.osal.nil" />
+      <instance locked="false" id="org.chibios.spc5.components.spc5hal">
+        <enabled_drivers>
+          <tm>
+            <value>false</value>
+          </tm>
+          <pal>
+            <value>true</value>
+          </pal>
+          <adc>
+            <value>false</value>
+          </adc>
+          <can>
+            <value>false</value>
+          </can>
+          <ext>
+            <value>false</value>
+          </ext>
+          <gpt>
+            <value>false</value>
+          </gpt>
+          <i2c>
+            <value>false</value>
+          </i2c>
+          <icu>
+            <value>false</value>
+          </icu>
+          <mac>
+            <value>false</value>
+          </mac>
+          <mmc_spi>
+            <value>false</value>
+          </mmc_spi>
+          <pwm>
+            <value>false</value>
+          </pwm>
+          <serial>
+            <value>false</value>
+          </serial>
+          <spi>
+            <value>false</value>
+          </spi>
+          <uart>
+            <value>false</value>
+          </uart>
+        </enabled_drivers>
+        <serial_driver_settings>
+          <default_bit_rate>
+            <value>38400</value>
+          </default_bit_rate>
+          <buffers_size>
+            <value>16</value>
+          </buffers_size>
+        </serial_driver_settings>
+        <adc_driver_settings>
+          <enable_synchronous_functions>
+            <value>true</value>
+          </enable_synchronous_functions>
+          <enable_mutual_exclusion_functions>
+            <value>false</value>
+          </enable_mutual_exclusion_functions>
+        </adc_driver_settings>
+        <can_driver_settings>
+          <enable_sleep_mode_functions>
+            <value>true</value>
+          </enable_sleep_mode_functions>
+        </can_driver_settings>
+        <i2c_driver_settings>
+          <enable_mutual_exclusion_functions disabled="true">
+            <value>false</value>
+          </enable_mutual_exclusion_functions>
+        </i2c_driver_settings>
+        <mac_driver_settings>
+          <enable_events disabled="true">
+            <value>true</value>
+          </enable_events>
+        </mac_driver_settings>
+        <mmc_spi_driver_settings>
+          <nice_waiting disabled="true">
+            <value>true</value>
+          </nice_waiting>
+        </mmc_spi_driver_settings>
+        <spi_driver_settings>
+          <enable_synchronous_functions>
+            <value>true</value>
+          </enable_synchronous_functions>
+          <enable_mutual_exclusion_functions>
+            <value>false</value>
+          </enable_mutual_exclusion_functions>
+        </spi_driver_settings>
+      </instance>
+      <instance locked="false" id="org.chibios.spc5.components.hal.board.spc560dxx">
+        <identification>
+          <board_identifier>
+            <value>GENERIC_SPC560DXX</value>
+          </board_identifier>
+          <board_name>
+            <value>Generic SPC560Dxx</value>
+          </board_name>
+        </identification>
+        <clock_settings>
+          <xosc_clock>
+            <value>8000000</value>
+          </xosc_clock>
+          <oscillator_bypass>
+            <value>false</value>
+          </oscillator_bypass>
+        </clock_settings>
+        <i_o_settings>
+          <unused_pins_mode index="1">
+            <value>MODE_UNCONNECTED</value>
+          </unused_pins_mode>
+          <pins_list />
+          <alternate_inputs>
+            <ps0 index="0">
+              <value>-</value>
+            </ps0>
+            <ps1 index="0">
+              <value>-</value>
+            </ps1>
+            <ps2 index="0">
+              <value>-</value>
+            </ps2>
+            <ps3 index="0">
+              <value>-</value>
+            </ps3>
+            <ps4 index="0">
+              <value>-</value>
+            </ps4>
+            <ps5 index="0">
+              <value>-</value>
+            </ps5>
+            <ps6 index="0">
+              <value>-</value>
+            </ps6>
+            <ps7 index="0">
+              <value>-</value>
+            </ps7>
+            <ps8 index="0">
+              <value>-</value>
+            </ps8>
+            <ps9 index="0">
+              <value>-</value>
+            </ps9>
+            <ps10 index="0">
+              <value>-</value>
+            </ps10>
+            <ps11 index="0">
+              <value>-</value>
+            </ps11>
+            <ps12 index="0">
+              <value>-</value>
+            </ps12>
+            <ps13 index="0">
+              <value>-</value>
+            </ps13>
+            <ps14 index="0">
+              <value>-</value>
+            </ps14>
+            <ps15 index="0">
+              <value>-</value>
+            </ps15>
+            <ps16 index="0">
+              <value>-</value>
+            </ps16>
+            <ps17 index="0">
+              <value>-</value>
+            </ps17>
+            <ps18 index="0">
+              <value>-</value>
+            </ps18>
+            <ps19 index="0">
+              <value>-</value>
+            </ps19>
+            <ps20 index="0">
+              <value>-</value>
+            </ps20>
+            <ps21 index="0">
+              <value>-</value>
+            </ps21>
+            <ps22 index="0">
+              <value>-</value>
+            </ps22>
+            <ps23 index="0">
+              <value>-</value>
+            </ps23>
+            <ps24 index="0">
+              <value>-</value>
+            </ps24>
+            <ps25 index="0">
+              <value>-</value>
+            </ps25>
+            <ps26 index="0">
+              <value>-</value>
+            </ps26>
+            <ps27 index="0">
+              <value>-</value>
+            </ps27>
+            <ps28 index="0">
+              <value>-</value>
+            </ps28>
+            <ps29 index="0">
+              <value>-</value>
+            </ps29>
+            <ps30 index="0">
+              <value>-</value>
+            </ps30>
+            <ps31 index="0">
+              <value>-</value>
+            </ps31>
+            <ps32 index="0">
+              <value>-</value>
+            </ps32>
+            <ps33 index="0">
+              <value>-</value>
+            </ps33>
+            <ps34 index="0">
+              <value>-</value>
+            </ps34>
+            <ps35 index="0">
+              <value>-</value>
+            </ps35>
+            <ps36 index="0">
+              <value>-</value>
+            </ps36>
+            <ps37 index="0">
+              <value>-</value>
+            </ps37>
+            <ps38 index="0">
+              <value>-</value>
+            </ps38>
+            <ps39 index="0">
+              <value>-</value>
+            </ps39>
+            <ps40 index="0">
+              <value>-</value>
+            </ps40>
+            <ps41 index="0">
+              <value>-</value>
+            </ps41>
+            <ps42 index="0">
+              <value>-</value>
+            </ps42>
+            <ps43 index="0">
+              <value>-</value>
+            </ps43>
+            <ps44 index="0">
+              <value>-</value>
+            </ps44>
+            <ps45 index="0">
+              <value>-</value>
+            </ps45>
+            <ps46 index="0">
+              <value>-</value>
+            </ps46>
+            <ps47 index="0">
+              <value>-</value>
+            </ps47>
+            <ps48 index="0">
+              <value>-</value>
+            </ps48>
+            <ps49 index="0">
+              <value>-</value>
+            </ps49>
+            <ps50 index="0">
+              <value>-</value>
+            </ps50>
+            <ps51 index="0">
+              <value>-</value>
+            </ps51>
+            <ps52 index="0">
+              <value>-</value>
+            </ps52>
+            <ps53 index="0">
+              <value>-</value>
+            </ps53>
+            <ps54 index="0">
+              <value>-</value>
+            </ps54>
+            <ps55 index="0">
+              <value>-</value>
+            </ps55>
+            <ps56 index="0">
+              <value>-</value>
+            </ps56>
+            <ps57 index="0">
+              <value>-</value>
+            </ps57>
+            <ps58 index="0">
+              <value>-</value>
+            </ps58>
+            <ps59 index="0">
+              <value>-</value>
+            </ps59>
+            <ps60 index="0">
+              <value>-</value>
+            </ps60>
+            <ps61 index="0">
+              <value>-</value>
+            </ps61>
+            <ps62 index="0">
+              <value>-</value>
+            </ps62>
+          </alternate_inputs>
+        </i_o_settings>
+        <initialization_code>
+          <pre_clock_initialization_code>
+            <value />
+          </pre_clock_initialization_code>
+          <post_clock_initialization_code>
+            <value />
+          </post_clock_initialization_code>
+          <late_initialization_code>
+            <value />
+          </late_initialization_code>
+          <board_initialization_code>
+            <value />
+          </board_initialization_code>
+        </initialization_code>
+      </instance>
+      <instance locked="false" id="org.chibios.spc5.components.hal.platform.spc560dxx">
+        <initialization_settings>
+          <do_not_init>
+            <value>false</value>
+          </do_not_init>
+          <allow_overclocking>
+            <value>false</value>
+          </allow_overclocking>
+          <disable_watchdog>
+            <value>true</value>
+          </disable_watchdog>
+          <fmpll0_settings>
+            <idf_value>
+              <value>1</value>
+            </idf_value>
+            <ndiv_value>
+              <value>48</value>
+            </ndiv_value>
+            <odf_value index="2">
+              <value>SPC5_FMPLL_ODF_DIV8</value>
+            </odf_value>
+          </fmpll0_settings>
+          <clocks>
+            <fxosc_divider index="0">
+              <value>1</value>
+            </fxosc_divider>
+            <firc_divider index="0">
+              <value>1</value>
+            </firc_divider>
+            <peripheral_set_1_clock_divider index="2">
+              <value>2</value>
+            </peripheral_set_1_clock_divider>
+            <peripheral_set_2_clock_divider index="2">
+              <value>2</value>
+            </peripheral_set_2_clock_divider>
+            <peripheral_set_3_clock_divider index="2">
+              <value>2</value>
+            </peripheral_set_3_clock_divider>
+            <clock_failure_hook>
+              <value>osalSysHalt("clock failure")</value>
+            </clock_failure_hook>
+            <emios0_global_prescaler>
+              <value>20</value>
+            </emios0_global_prescaler>
+          </clocks>
+        </initialization_settings>
+        <irq_priority_settings>
+          <adc1 index="11">
+            <value>12</value>
+          </adc1>
+          <dspi_0 index="9">
+            <value>10</value>
+          </dspi_0>
+          <dspi_1 index="9">
+            <value>10</value>
+          </dspi_1>
+          <emios0_uc0 index="7">
+            <value>8</value>
+          </emios0_uc0>
+          <emios0_uc1 index="7">
+            <value>8</value>
+          </emios0_uc1>
+          <emios0_uc2 index="7">
+            <value>8</value>
+          </emios0_uc2>
+          <emios0_uc3 index="7">
+            <value>8</value>
+          </emios0_uc3>
+          <emios0_uc4 index="7">
+            <value>8</value>
+          </emios0_uc4>
+          <emios0_uc5 index="7">
+            <value>8</value>
+          </emios0_uc5>
+          <emios0_uc6 index="7">
+            <value>8</value>
+          </emios0_uc6>
+          <emios0_uc7 index="7">
+            <value>8</value>
+          </emios0_uc7>
+          <emios0_uc8 index="7">
+            <value>8</value>
+          </emios0_uc8>
+          <emios0_uc9 index="7">
+            <value>8</value>
+          </emios0_uc9>
+          <emios0_uc10 index="7">
+            <value>8</value>
+          </emios0_uc10>
+          <emios0_uc11 index="7">
+            <value>8</value>
+          </emios0_uc11>
+          <emios0_uc12 index="7">
+            <value>8</value>
+          </emios0_uc12>
+          <flexcan0 index="11">
+            <value>12</value>
+          </flexcan0>
+          <linflex1 index="7">
+            <value>8</value>
+          </linflex1>
+          <linflex0 index="7">
+            <value>8</value>
+          </linflex0>
+          <linflex2 index="7">
+            <value>8</value>
+          </linflex2>
+        </irq_priority_settings>
+        <edma_settings>
+          <group_0_channels_priorities>
+            <ch0 index="0">
+              <value>0</value>
+            </ch0>
+            <ch1 index="1">
+              <value>1</value>
+            </ch1>
+            <ch2 index="2">
+              <value>2</value>
+            </ch2>
+            <ch3 index="3">
+              <value>3</value>
+            </ch3>
+            <ch4 index="4">
+              <value>4</value>
+            </ch4>
+            <ch5 index="5">
+              <value>5</value>
+            </ch5>
+            <ch6 index="6">
+              <value>6</value>
+            </ch6>
+            <ch7 index="7">
+              <value>7</value>
+            </ch7>
+            <ch8 index="8">
+              <value>8</value>
+            </ch8>
+            <ch9 index="9">
+              <value>9</value>
+            </ch9>
+            <ch10 index="10">
+              <value>10</value>
+            </ch10>
+            <ch11 index="11">
+              <value>11</value>
+            </ch11>
+            <ch12 index="12">
+              <value>12</value>
+            </ch12>
+            <ch13 index="13">
+              <value>13</value>
+            </ch13>
+            <ch14 index="14">
+              <value>14</value>
+            </ch14>
+            <ch15 index="15">
+              <value>15</value>
+            </ch15>
+          </group_0_channels_priorities>
+        </edma_settings>
+        <edma_mux_settings>
+          <dspi_channels>
+            <dspi0_tx1 index="4">
+              <value>4</value>
+            </dspi0_tx1>
+            <dspi0_tx2 index="5">
+              <value>5</value>
+            </dspi0_tx2>
+            <dspi0_rx index="6">
+              <value>6</value>
+            </dspi0_rx>
+            <dspi1_tx1 index="7">
+              <value>7</value>
+            </dspi1_tx1>
+            <dspi1_tx2 index="8">
+              <value>8</value>
+            </dspi1_tx2>
+            <dspi1_rx index="9">
+              <value>9</value>
+            </dspi1_rx>
+            <dspi2_tx1 index="10">
+              <value>10</value>
+            </dspi2_tx1>
+            <dspi2_tx2 index="11">
+              <value>11</value>
+            </dspi2_tx2>
+            <dspi2_rx index="12">
+              <value>12</value>
+            </dspi2_rx>
+            <dspi3_tx1 index="13">
+              <value>13</value>
+            </dspi3_tx1>
+            <dspi3_tx2 index="14">
+              <value>14</value>
+            </dspi3_tx2>
+            <dspi3_rx index="15">
+              <value>15</value>
+            </dspi3_rx>
+            <dspi4_tx1 index="1">
+              <value>1</value>
+            </dspi4_tx1>
+            <dspi4_tx2 index="2">
+              <value>2</value>
+            </dspi4_tx2>
+            <dspi4_rx index="3">
+              <value>3</value>
+            </dspi4_rx>
+          </dspi_channels>
+          <adc_channels>
+            <adc1 index="2">
+              <value>2</value>
+            </adc1>
+          </adc_channels>
+        </edma_mux_settings>
+        <adc_settings>
+          <adc1>
+            <value>false</value>
+          </adc1>
+          <adc1_clock_divider index="1">
+            <value>Half peripheral clock frequency</value>
+          </adc1_clock_divider>
+          <adc1_auto_clock_off_mode>
+            <value>false</value>
+          </adc1_auto_clock_off_mode>
+          <dma_mode>
+            <value>true</value>
+          </dma_mode>
+          <adc1_conversion_groups>
+            <configs />
+          </adc1_conversion_groups>
+        </adc_settings>
+        <dspi_settings>
+          <dspi_0>
+            <value>false</value>
+          </dspi_0>
+          <dspi_1>
+            <value>false</value>
+          </dspi_1>
+          <dma_mode index="1">
+            <value>RX only</value>
+          </dma_mode>
+          <dma_error_hook>
+            <value>osalSysHalt("DSPI DMA failure")</value>
+          </dma_error_hook>
+          <inactive_states>
+            <dspi_0___pcs0 index="1">
+              <value>Inactive High</value>
+            </dspi_0___pcs0>
+            <dspi_0___pcs1 index="1">
+              <value>Inactive High</value>
+            </dspi_0___pcs1>
+            <dspi_0___pcs2 index="1">
+              <value>Inactive High</value>
+            </dspi_0___pcs2>
+            <dspi_0___pcs3 index="1">
+              <value>Inactive High</value>
+            </dspi_0___pcs3>
+            <dspi_0___pcs4 index="1">
+              <value>Inactive High</value>
+            </dspi_0___pcs4>
+            <dspi_0___pcs5 index="1">
+              <value>Inactive High</value>
+            </dspi_0___pcs5>
+            <dspi_1___pcs0 index="1">
+              <value>Inactive High</value>
+            </dspi_1___pcs0>
+            <dspi_1___pcs1 index="1">
+              <value>Inactive High</value>
+            </dspi_1___pcs1>
+            <dspi_1___pcs2 index="1">
+              <value>Inactive High</value>
+            </dspi_1___pcs2>
+            <dspi_1___pcs3 index="1">
+              <value>Inactive High</value>
+            </dspi_1___pcs3>
+            <dspi_1___pcs4 index="1">
+              <value>Inactive High</value>
+            </dspi_1___pcs4>
+          </inactive_states>
+          <spi_configurations>
+            <configs />
+          </spi_configurations>
+        </dspi_settings>
+        <emios_settings>
+          <emios0_ch0>
+            <value>false</value>
+          </emios0_ch0>
+          <emios0_ch1>
+            <value>false</value>
+          </emios0_ch1>
+          <emios0_ch2>
+            <value>false</value>
+          </emios0_ch2>
+          <emios0_ch3>
+            <value>false</value>
+          </emios0_ch3>
+          <emios0_ch4>
+            <value>false</value>
+          </emios0_ch4>
+          <emios0_ch5>
+            <value>false</value>
+          </emios0_ch5>
+          <emios0_ch6>
+            <value>false</value>
+          </emios0_ch6>
+          <emios0_ch7>
+            <value>false</value>
+          </emios0_ch7>
+          <emios0_ch24>
+            <value>false</value>
+          </emios0_ch24>
+          <emios0_group0>
+            <value>false</value>
+          </emios0_group0>
+          <emios0_group1>
+            <value>false</value>
+          </emios0_group1>
+          <icu_configurations>
+            <configs />
+          </icu_configurations>
+          <pwm_configurations>
+            <configs />
+          </pwm_configurations>
+        </emios_settings>
+        <flexcan_settings>
+          <flexcan0>
+            <value>false</value>
+          </flexcan0>
+          <flexcan0_use_external_clock>
+            <value>false</value>
+          </flexcan0_use_external_clock>
+          <flexcan_enable_filters>
+            <value>false</value>
+          </flexcan_enable_filters>
+          <can_configurations>
+            <configs />
+          </can_configurations>
+        </flexcan_settings>
+        <linflex_settings>
+          <linflex0 index="0">
+            <value>None</value>
+          </linflex0>
+          <linflex1 index="0">
+            <value>None</value>
+          </linflex1>
+          <linflex2 index="0">
+            <value>None</value>
+          </linflex2>
+        </linflex_settings>
+      </instance>
     </instances>
     <exportedFeatures />
   </application>
