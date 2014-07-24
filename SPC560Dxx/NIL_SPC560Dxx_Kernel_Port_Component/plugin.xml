@@ -29,7 +29,7 @@
                   </text>
                </image>
                <group
-                     expanded="false"
+                     expanded="true"
                      name="ISRs Configuration"
                      style="collapsable">
                   <description>
@@ -95,7 +95,10 @@
                               required="false"
                               type="formatted">
                            <default>
-                              CH_IRQ_HANDLER(ISR_NAME) {
+                              /*
+ * ISR function.
+ */
+CH_IRQ_HANDLER(ISR_NAME) {
 
   CH_IRQ_PROLOGUE();
 

@@ -79,7 +79,7 @@
           <system_tick_mode index="0">
             <value>Periodic Tick Mode</value>
           </system_tick_mode>
-          <system_tick_delta index="0">
+          <system_tick_delta index="0" disabled="true">
             <value>2</value>
           </system_tick_delta>
         </general_options>
@@ -155,56 +155,7 @@ THD_FUNCTION(TASK_NAME, arg) {
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.nil.kernel.port.gcc.spc560dxx">
         <isrs_configuration>
-          <isrs>
-            <isr_settings>
-              <identifier>
-                <value>IDENTIFIER</value>
-              </identifier>
-              <number>
-                <value>0</value>
-              </number>
-              <priority index="7">
-                <value>8</value>
-              </priority>
-              <name_override>
-                <value />
-              </name_override>
-              <isr_code>
-                <value><![CDATA[CH_IRQ_HANDLER(ISR_NAME) {
-
-  CH_IRQ_PROLOGUE();
-
-  /* ISR code here.*/
-
-  CH_IRQ_EPILOGUE();
-}]]></value>
-              </isr_code>
-            </isr_settings>
-            <isr_settings>
-              <identifier>
-                <value>ABCD</value>
-              </identifier>
-              <number>
-                <value>1</value>
-              </number>
-              <priority index="7">
-                <value>8</value>
-              </priority>
-              <name_override>
-                <value>foo</value>
-              </name_override>
-              <isr_code>
-                <value><![CDATA[CH_IRQ_HANDLER(ISR_NAME) {
-
-  CH_IRQ_PROLOGUE();
-
-  /* ISR code here.*/
-
-  CH_IRQ_EPILOGUE();
-}]]></value>
-              </isr_code>
-            </isr_settings>
-          </isrs>
+          <isrs />
         </isrs_configuration>
       </instance>
     </instances>

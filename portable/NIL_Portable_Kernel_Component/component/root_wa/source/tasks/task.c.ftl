@@ -17,6 +17,9 @@
 
 #include "components.h"
 
+/*
+ * Task parameters from the configuration.
+ */
 #define TASK_NAME           ${sname}
 #define TASK_WA_NAME        ${sname}_wa
 #define TASK_STACK_SIZE     ${settings.stack_size.value[0]?trim}
