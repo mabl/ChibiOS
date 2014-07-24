@@ -32,6 +32,7 @@ cp ${chibios}/os/nil/ports/e200/compilers/GCC/*.h           ../SPC560Dxx/NIL_SPC
 cp ${chibios}/os/nil/ports/e200/compilers/GCC/ivor.s        ../SPC560Dxx/NIL_SPC560Dxx_Kernel_Port_Component/component/lib/src/
 cp ${chibios}/os/common/ports/e200/compilers/GCC/*.h        ../SPC560Dxx/NIL_SPC560Dxx_Kernel_Port_Component/component/lib/include/
 cp ${chibios}/os/common/ports/e200/compilers/GCC/vectors.s  ../SPC560Dxx/NIL_SPC560Dxx_Kernel_Port_Component/component/lib/src/
+cp ${chibios}/os/common/ports/e200/devices/SPC560Dxx/intc.h ../SPC560Dxx/NIL_SPC560Dxx_Kernel_Port_Component/component/lib/include/
 cp ${chibios}/os/common/ports/e200/devices/SPC560Dxx/ppcparams.h ../SPC560Dxx/NIL_SPC560Dxx_Kernel_Port_Component/component/lib/include/
 
 echo ""

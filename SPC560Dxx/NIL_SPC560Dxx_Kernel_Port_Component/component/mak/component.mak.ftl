@@ -18,3 +18,5 @@ APP_CPP_SRC     +=
 APP_ASM_SRC     +=
 
 APP_INCLUDES    +=
+
+DDEFS           += -DVECTORS_RENAMING
