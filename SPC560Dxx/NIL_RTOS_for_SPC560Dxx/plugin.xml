@@ -2,11 +2,11 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         id="org.chibios.spc5.components.rtos.nil.spc560dxx"
+         id="org.chibios.spc5.components.nil.rtos.spc560dxx"
          name="NIL RTOS for SPC560Dxx Component"
          point="com.st.tools.spc5.extension.v1">
       <component
-            headerName="ch.h,osal.h,hal.h"
+            headerName="nil.h,osal.h,hal.h"
             icon="rsc/chibios.ico"
             initFunction="halInit,osalInit,chSysInit"
             isPlatform="false">

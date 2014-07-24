@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.chibios.spc5.components.rtos.nil.spc560dxx.feature"
+      id="org.chibios.spc5.components.nil.rtos.spc560dxx.feature"
       label="NIL RTOS for SPC560Dxx Components"
       version="1.0.0.qualifier"
       provider-name="www.chibios.org"
@@ -66,7 +66,7 @@ along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
          version="0.0.0"/>
 
    <plugin
-         id="org.chibios.spc5.components.osal.nil.spc5xx"
+         id="org.chibios.spc5.components.osal.nil"
          download-size="0"
          install-size="0"
          version="0.0.0"/>

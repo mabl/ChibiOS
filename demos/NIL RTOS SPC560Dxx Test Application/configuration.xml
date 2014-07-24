@@ -3,12 +3,7 @@
   <application name="SPC560Dxx Test Application with NIL RTOS" version="1.0.0" standalone="false" locked="false">
     <description>Test application for the SPC560Dxx using NIL RTOS.</description>
     <component id="com.st.tools.spc5.components.platform.spc560dxx">
-      <component id="org.chibios.spc5.components.nil.kernel" />
-      <component id="org.chibios.spc5.components.nil.kernel.port.gcc.spc560dxx" />
-      <component id="org.chibios.spc5.components.hal.osal.nil" />
-      <component id="org.chibios.spc5.components.spc5hal" />
-      <component id="org.chibios.spc5.components.hal.board.spc560dxx" />
-      <component id="org.chibios.spc5.components.hal.platform.spc560dxx" />
+      <component id="org.chibios.spc5.components.nil.rtos.spc560dxx" />
     </component>
     <instances>
       <instance locked="false" id="com.st.tools.spc5.components.platform.spc560dxx">
@@ -72,100 +67,10 @@
           </custom_sections>
         </linker_settings>
       </instance>
-      <instance locked="false" id="org.chibios.spc5.components.nil.kernel">
-        <general_options>
-          <system_tick_counter_resolution index="1">
-            <value>32</value>
-          </system_tick_counter_resolution>
-          <system_tick_clock_frequency>
-            <value>1000</value>
-          </system_tick_clock_frequency>
-          <system_tick_mode index="0">
-            <value>Periodic Tick Mode</value>
-          </system_tick_mode>
-          <system_tick_delta index="0">
-            <value>2</value>
-          </system_tick_delta>
-        </general_options>
-        <subsystem_options>
-          <use_events>
-            <value>true</value>
-          </use_events>
-        </subsystem_options>
-        <debug_options>
-          <enable_assertions>
-            <value>false</value>
-          </enable_assertions>
-          <enable_stack_check>
-            <value>false</value>
-          </enable_stack_check>
-        </debug_options>
-        <hooks>
-          <thread_extra_fields_hook>
-            <value />
-          </thread_extra_fields_hook>
-          <thread_initialization_hook>
-            <value />
-          </thread_initialization_hook>
-          <idle_enter_hook>
-            <value />
-          </idle_enter_hook>
-          <idle_leave_hook>
-            <value />
-          </idle_leave_hook>
-          <system_halt_hook>
-            <value />
-          </system_halt_hook>
-        </hooks>
-        <tasks_configuration>
-          <tasks>
-            <task_settings>
-              <readable_name>
-                <value>readable name</value>
-              </readable_name>
-              <symbolic_name>
-                <value>symbolic_name</value>
-              </symbolic_name>
-              <stack_size>
-                <value>128</value>
-              </stack_size>
-              <argument>
-                <value>NULL</value>
-              </argument>
-              <task_code>
-                <value><![CDATA[/*
- * Task working area declaration.
- */
-THD_WORKING_AREA(TASK_WA_NAME, TASK_STACK_SIZE);
-
-/*
- * Task function.
- */
-THD_FUNCTION(TASK_NAME, arg) {
-
-  (void)arg;
-
-  while (true) {
-
-  }
-}]]></value>
-              </task_code>
-            </task_settings>
-          </tasks>
-          <shared_code>
-            <value />
-          </shared_code>
-        </tasks_configuration>
-      </instance>
-      <instance locked="false" id="org.chibios.spc5.components.nil.kernel.port.gcc.spc560dxx">
-        <isrs_configuration>
-          <isrs />
-        </isrs_configuration>
-      </instance>
-      <instance locked="false" id="org.chibios.spc5.components.hal.osal.nil" />
+      <instance locked="false" id="org.chibios.spc5.components.nil.rtos.spc560dxx" />
       <instance locked="false" id="org.chibios.spc5.components.spc5hal">
         <enabled_drivers>
-          <tm>
+          <tm disabled="true">
             <value>false</value>
           </tm>
           <pal>
@@ -177,22 +82,22 @@ THD_FUNCTION(TASK_NAME, arg) {
           <can>
             <value>false</value>
           </can>
-          <ext>
+          <ext disabled="true">
             <value>false</value>
           </ext>
-          <gpt>
+          <gpt disabled="true">
             <value>false</value>
           </gpt>
-          <i2c>
+          <i2c disabled="true">
             <value>false</value>
           </i2c>
           <icu>
             <value>false</value>
           </icu>
-          <mac>
+          <mac disabled="true">
             <value>false</value>
           </mac>
-          <mmc_spi>
+          <mmc_spi disabled="true">
             <value>false</value>
           </mmc_spi>
           <pwm>
@@ -204,51 +109,51 @@ THD_FUNCTION(TASK_NAME, arg) {
           <spi>
             <value>false</value>
           </spi>
-          <uart>
+          <uart disabled="true">
             <value>false</value>
           </uart>
         </enabled_drivers>
-        <serial_driver_settings>
-          <default_bit_rate>
+        <serial_driver_settings disabled="true">
+          <default_bit_rate disabled="true">
             <value>38400</value>
           </default_bit_rate>
-          <buffers_size>
+          <buffers_size disabled="true">
             <value>16</value>
           </buffers_size>
         </serial_driver_settings>
-        <adc_driver_settings>
-          <enable_synchronous_functions>
+        <adc_driver_settings disabled="true">
+          <enable_synchronous_functions disabled="true">
             <value>true</value>
           </enable_synchronous_functions>
-          <enable_mutual_exclusion_functions>
+          <enable_mutual_exclusion_functions disabled="true">
             <value>false</value>
           </enable_mutual_exclusion_functions>
         </adc_driver_settings>
-        <can_driver_settings>
-          <enable_sleep_mode_functions>
+        <can_driver_settings disabled="true">
+          <enable_sleep_mode_functions disabled="true">
             <value>true</value>
           </enable_sleep_mode_functions>
         </can_driver_settings>
-        <i2c_driver_settings>
+        <i2c_driver_settings disabled="true">
           <enable_mutual_exclusion_functions disabled="true">
             <value>false</value>
           </enable_mutual_exclusion_functions>
         </i2c_driver_settings>
-        <mac_driver_settings>
+        <mac_driver_settings disabled="true">
           <enable_events disabled="true">
             <value>true</value>
           </enable_events>
         </mac_driver_settings>
-        <mmc_spi_driver_settings>
+        <mmc_spi_driver_settings disabled="true">
           <nice_waiting disabled="true">
             <value>true</value>
           </nice_waiting>
         </mmc_spi_driver_settings>
-        <spi_driver_settings>
-          <enable_synchronous_functions>
+        <spi_driver_settings disabled="true">
+          <enable_synchronous_functions disabled="true">
             <value>true</value>
           </enable_synchronous_functions>
-          <enable_mutual_exclusion_functions>
+          <enable_mutual_exclusion_functions disabled="true">
             <value>false</value>
           </enable_mutual_exclusion_functions>
         </spi_driver_settings>
@@ -832,6 +737,97 @@ THD_FUNCTION(TASK_NAME, arg) {
           </linflex2>
         </linflex_settings>
       </instance>
+      <instance locked="false" id="org.chibios.spc5.components.nil.kernel">
+        <general_options>
+          <system_tick_counter_resolution index="1">
+            <value>32</value>
+          </system_tick_counter_resolution>
+          <system_tick_clock_frequency>
+            <value>1000</value>
+          </system_tick_clock_frequency>
+          <system_tick_mode index="0">
+            <value>Periodic Tick Mode</value>
+          </system_tick_mode>
+          <system_tick_delta index="0" disabled="true">
+            <value>2</value>
+          </system_tick_delta>
+        </general_options>
+        <subsystem_options>
+          <use_events>
+            <value>true</value>
+          </use_events>
+        </subsystem_options>
+        <debug_options>
+          <enable_assertions>
+            <value>false</value>
+          </enable_assertions>
+          <enable_stack_check>
+            <value>false</value>
+          </enable_stack_check>
+        </debug_options>
+        <hooks>
+          <thread_extra_fields_hook>
+            <value />
+          </thread_extra_fields_hook>
+          <thread_initialization_hook>
+            <value />
+          </thread_initialization_hook>
+          <idle_enter_hook>
+            <value />
+          </idle_enter_hook>
+          <idle_leave_hook>
+            <value />
+          </idle_leave_hook>
+          <system_halt_hook>
+            <value />
+          </system_halt_hook>
+        </hooks>
+        <tasks_configuration>
+          <tasks>
+            <task_settings>
+              <readable_name>
+                <value>readable name</value>
+              </readable_name>
+              <symbolic_name>
+                <value>symbolic_name</value>
+              </symbolic_name>
+              <stack_size>
+                <value>128</value>
+              </stack_size>
+              <argument>
+                <value>NULL</value>
+              </argument>
+              <task_code>
+                <value><![CDATA[/*
+ * Task working area declaration.
+ */
+THD_WORKING_AREA(TASK_WA_NAME, TASK_STACK_SIZE);
+
+/*
+ * Task function.
+ */
+THD_FUNCTION(TASK_NAME, arg) {
+
+  (void)arg;
+
+  while (true) {
+
+  }
+}]]></value>
+              </task_code>
+            </task_settings>
+          </tasks>
+          <shared_code>
+            <value />
+          </shared_code>
+        </tasks_configuration>
+      </instance>
+      <instance locked="false" id="org.chibios.spc5.components.nil.kernel.port.gcc.spc560dxx">
+        <isrs_configuration>
+          <isrs />
+        </isrs_configuration>
+      </instance>
+      <instance locked="false" id="org.chibios.spc5.components.hal.osal.nil" />
     </instances>
     <exportedFeatures />
   </application>
