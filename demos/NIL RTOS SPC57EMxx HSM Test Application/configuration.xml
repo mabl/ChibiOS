@@ -210,7 +210,9 @@ THD_FUNCTION(TASK_NAME, arg) {
                 <value>PIT_HSM_ISR</value>
               </name_override>
               <isr_code>
-                <value><![CDATA[/*
+                <value><![CDATA[#include "xpc57em_hsm.h"
+
+/*
  * ISR function.
  */
 CH_IRQ_HANDLER(ISR_NAME) {
@@ -220,6 +222,9 @@ CH_IRQ_HANDLER(ISR_NAME) {
   chSysLockFromISR();
   chSysTimerHandlerI();
   chSysUnlockFromISR();
+
+  /* Resets the PIT channel 0 IRQ flag.*/
+  PIT_HSM.TIMER[0].TFLG.R = 1;
 
   CH_IRQ_EPILOGUE();
 }]]></value>
