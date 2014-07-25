@@ -70,7 +70,7 @@
       <instance locked="false" id="org.chibios.spc5.components.nil.rtos.spc560dxx" />
       <instance locked="false" id="org.chibios.spc5.components.spc5hal">
         <enabled_drivers>
-          <tm disabled="true">
+          <tm>
             <value>false</value>
           </tm>
           <pal>
@@ -82,22 +82,22 @@
           <can>
             <value>false</value>
           </can>
-          <ext disabled="true">
+          <ext>
             <value>false</value>
           </ext>
-          <gpt disabled="true">
+          <gpt>
             <value>false</value>
           </gpt>
-          <i2c disabled="true">
+          <i2c>
             <value>false</value>
           </i2c>
           <icu>
             <value>false</value>
           </icu>
-          <mac disabled="true">
+          <mac>
             <value>false</value>
           </mac>
-          <mmc_spi disabled="true">
+          <mmc_spi>
             <value>false</value>
           </mmc_spi>
           <pwm>
@@ -109,7 +109,7 @@
           <spi>
             <value>false</value>
           </spi>
-          <uart disabled="true">
+          <uart>
             <value>false</value>
           </uart>
         </enabled_drivers>
@@ -121,39 +121,39 @@
             <value>16</value>
           </buffers_size>
         </serial_driver_settings>
-        <adc_driver_settings disabled="true">
-          <enable_synchronous_functions disabled="true">
+        <adc_driver_settings>
+          <enable_synchronous_functions>
             <value>true</value>
           </enable_synchronous_functions>
-          <enable_mutual_exclusion_functions disabled="true">
+          <enable_mutual_exclusion_functions>
             <value>false</value>
           </enable_mutual_exclusion_functions>
         </adc_driver_settings>
-        <can_driver_settings disabled="true">
-          <enable_sleep_mode_functions disabled="true">
+        <can_driver_settings>
+          <enable_sleep_mode_functions>
             <value>true</value>
           </enable_sleep_mode_functions>
         </can_driver_settings>
-        <i2c_driver_settings disabled="true">
+        <i2c_driver_settings>
           <enable_mutual_exclusion_functions disabled="true">
             <value>false</value>
           </enable_mutual_exclusion_functions>
         </i2c_driver_settings>
-        <mac_driver_settings disabled="true">
+        <mac_driver_settings>
           <enable_events disabled="true">
             <value>true</value>
           </enable_events>
         </mac_driver_settings>
-        <mmc_spi_driver_settings disabled="true">
+        <mmc_spi_driver_settings>
           <nice_waiting disabled="true">
             <value>true</value>
           </nice_waiting>
         </mmc_spi_driver_settings>
-        <spi_driver_settings disabled="true">
-          <enable_synchronous_functions disabled="true">
+        <spi_driver_settings>
+          <enable_synchronous_functions>
             <value>true</value>
           </enable_synchronous_functions>
-          <enable_mutual_exclusion_functions disabled="true">
+          <enable_mutual_exclusion_functions>
             <value>false</value>
           </enable_mutual_exclusion_functions>
         </spi_driver_settings>
@@ -1354,7 +1354,7 @@
           <system_tick_mode index="0">
             <value>Periodic Tick Mode</value>
           </system_tick_mode>
-          <system_tick_delta index="0" disabled="true">
+          <system_tick_delta index="0">
             <value>2</value>
           </system_tick_delta>
         </general_options>
@@ -1372,6 +1372,9 @@
           </enable_stack_check>
         </debug_options>
         <hooks>
+          <system_initialization_hook>
+            <value />
+          </system_initialization_hook>
           <thread_extra_fields_hook>
             <value />
           </thread_extra_fields_hook>

@@ -6,9 +6,9 @@
          name="NIL RTOS for SPC560Dxx Component"
          point="com.st.tools.spc5.extension.v1">
       <component
-            headerName="nil.h,osal.h,hal.h"
+            headerName="nil.h,osal.h,isrs.h,hal.h"
             icon="rsc/chibios.ico"
-            initFunction="halInit,osalInit,chSysInit"
+            initFunction="halInit,osalInit,isrInit,chSysInit"
             isPlatform="false">
             <description>
                 This is a meta component that depends on all components required to create a NIL RTOS environment for the STMicroelectronics SPC560Dxx automotive microcontrollers family.

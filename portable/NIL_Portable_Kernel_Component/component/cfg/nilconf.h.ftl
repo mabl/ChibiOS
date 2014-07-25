@@ -125,6 +125,15 @@
 /*===========================================================================*/
 
 /**
+ * @brief   System initialization hook.
+ */
+#if !defined(NIL_CFG_SYSTEM_INIT_HOOK) || defined(__DOXYGEN__)
+#define NIL_CFG_SYSTEM_INIT_HOOK() {                                        \
+${conf.instance.hooks.system_initialization_hook.value[0]}[#rt/]
+}
+#endif
+
+/**
  * @brief   Threads descriptor structure extension.
  * @details User fields added to the end of the @p thread_t structure.
  */

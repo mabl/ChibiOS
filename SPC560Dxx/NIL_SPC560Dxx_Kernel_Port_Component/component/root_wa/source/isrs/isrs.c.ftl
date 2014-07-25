@@ -16,7 +16,7 @@
  *
  * @special
  */
-void isrs_cfg_init(void) {
+void isrInit(void) {
 
 [#list conf.instance.isrs_configuration.isrs.isr_settings as settings]
   [#assign id = settings.identifier.value[0]?trim /]
