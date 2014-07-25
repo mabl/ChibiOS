@@ -48,8 +48,8 @@
           <use_vle index="0" disabled="true">
             <value>yes</value>
           </use_vle>
-          <use_verbose_compile index="0">
-            <value>yes</value>
+          <use_verbose_compile index="1">
+            <value>no</value>
           </use_verbose_compile>
         </build_settings>
         <linker_settings>
