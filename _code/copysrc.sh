@@ -1,4 +1,5 @@
 #!/bin/bash
+code=./
 chibios=../../../chibios
 #do_templates=yes
 
@@ -26,6 +27,7 @@ cp ${chibios}/os/hal/osal/nil/*.c                           ../portable/NIL_Port
 
 # SPC560Dxx Kernel Port.
 echo "SPC560Dxx Kernel Port"
+cp ${code}/common/ports/e200/*.h                            ../SPC560Dxx/NIL_SPC560Dxx_Kernel_Port_Component/component/root_wa/source/isrs/
 cp ${chibios}/os/nil/ports/e200/*.h                         ../SPC560Dxx/NIL_SPC560Dxx_Kernel_Port_Component/component/lib/include/
 cp ${chibios}/os/nil/ports/e200/*.c                         ../SPC560Dxx/NIL_SPC560Dxx_Kernel_Port_Component/component/lib/src/
 cp ${chibios}/os/nil/ports/e200/compilers/GCC/*.h           ../SPC560Dxx/NIL_SPC560Dxx_Kernel_Port_Component/component/lib/include/
