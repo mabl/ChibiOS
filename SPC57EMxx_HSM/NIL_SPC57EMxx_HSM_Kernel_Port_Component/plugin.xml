@@ -74,6 +74,15 @@
                               type="unsigned">
                         </property>
                         <property
+                              brief="Cores where the ISR is routed."
+                              default="0"
+                              editable="false"
+                              name="Cores"
+                              required="true"
+                              type="enum"
+                              value="Core 4">
+                        </property>
+                        <property
                               brief="Priority to be assigned to the interrupt vector."
                               default="7"
                               editable="true"
@@ -138,7 +147,7 @@ CH_IRQ_HANDLER(ISR_NAME) {
             </exportedFeatures>
             <requiredFeatures>
                <requiredFeature
-                     id="com.st.tools.spc5.features.platform.spc57emxx_hsm">
+                     id="com.st.tools.spc5.features.platform.spc57emxx.z0">
                </requiredFeature>
             </requiredFeatures>
       </component>

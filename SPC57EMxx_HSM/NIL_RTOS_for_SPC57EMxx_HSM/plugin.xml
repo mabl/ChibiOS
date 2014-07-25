@@ -6,9 +6,10 @@
          name="NIL RTOS for SPC57EMxx HSM Component"
          point="com.st.tools.spc5.extension.v1">
       <component
-            headerName="nil.h,osal.h,isrs.h,hal.h"
+            headerName="nil.h,isrs.h"
+            hidden="false"
             icon="rsc/chibios.ico"
-            initFunction="halInit,osalInit,isrInit,chSysInit"
+            initFunction="isrInit,chSysInit"
             isPlatform="false">
             <description>
                 This is a meta component that depends on all components required to create a NIL RTOS environment for the STMicroelectronics SPC57EMxx HSM automotive microcontrollers family.
@@ -35,7 +36,7 @@
                      id="com.st.tools.spc5.features.build.gccenv">
                </requiredFeature>
                <requiredFeature
-                     id="com.st.tools.spc5.features.platform.spc57emxx_hsm">
+                     id="com.st.tools.spc5.features.platform.spc57emxx.z0">
                </requiredFeature>
             </requiredFeatures>
             <exportedFeatures>
