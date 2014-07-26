@@ -2,7 +2,7 @@
 [@pp.dropOutputFile /]
 [@pp.changeOutputFile name="nilconf.h" /]
 /*
-    ChibiOS/NIL - Copyright (C) 2013 Giovanni Di Sirio
+    ChibiOS/NIL - Copyright (C) 2013,2014 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -62,6 +62,9 @@
 
 /**
  * @brief   System tick frequency.
+ * @note    This value together with the @p NIL_CFG_ST_RESOLUTION
+ *          option defines the maximum amount of time allowed for
+ *          timeouts.
  */
 #define NIL_CFG_ST_FREQUENCY                ${conf.instance.general_options.system_tick_clock_frequency.value[0]}
 
