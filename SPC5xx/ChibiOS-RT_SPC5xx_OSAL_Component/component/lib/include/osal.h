@@ -281,9 +281,9 @@ extern "C" {
   msg_t osalThreadSuspendS(thread_reference_t *trp);
   void osalThreadResumeI(thread_reference_t *trp, msg_t msg);
   void osalThreadResumeS(thread_reference_t *trp, msg_t msg);
-  msg_t osalQueueGoSleepTimeoutS(threads_queue_t *tqp, systime_t time);
-  void osalQueueWakeupOneI(threads_queue_t *tqp, msg_t msg);
-  void osalQueueWakeupAllI(threads_queue_t *tqp, msg_t msg);
+  msg_t osalThreadEnqueueTimeoutS(threads_queue_t *tqp, systime_t time);
+  void osalThreadDequeueNextI(threads_queue_t *tqp, msg_t msg);
+  void osalThreadDequeueAllI(threads_queue_t *tqp, msg_t msg);
 #ifdef __cplusplus
 }
 #endif
@@ -756,7 +756,7 @@ void osalMutexUnlock(mutex_t *mp) {
  * @init
  */
 static inline
-void osalQueueInit(threads_queue_t *tqp) {
+void osalThreadQueueObjectInit(threads_queue_t *tqp) {
 
   queue_init(tqp);
 }

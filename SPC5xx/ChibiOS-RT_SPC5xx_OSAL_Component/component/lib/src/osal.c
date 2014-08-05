@@ -154,7 +154,7 @@ void osalThreadResumeS(thread_reference_t *trp, msg_t msg) {
  *
  * @sclass
  */
-msg_t osalQueueGoSleepTimeoutS(threads_queue_t *tqp, systime_t time) {
+msg_t osalThreadEnqueueTimeoutS(threads_queue_t *tqp, systime_t time) {
 
   void wakeup(void *p) {
     Thread *tp = (Thread *)p;
@@ -190,7 +190,7 @@ msg_t osalQueueGoSleepTimeoutS(threads_queue_t *tqp, systime_t time) {
  *
  * @iclass
  */
-void osalQueueWakeupOneI(threads_queue_t *tqp, msg_t msg) {
+void osalThreadDequeueNextI(threads_queue_t *tqp, msg_t msg) {
 
   if (notempty(tqp)) {
     Thread *tp = fifo_remove(tqp);
@@ -207,7 +207,7 @@ void osalQueueWakeupOneI(threads_queue_t *tqp, msg_t msg) {
  *
  * @iclass
  */
-void osalQueueWakeupAllI(threads_queue_t *tqp, msg_t msg) {
+void osalThreadDequeueAllI(threads_queue_t *tqp, msg_t msg) {
 
   while (notempty(tqp)) {
     Thread *tp = fifo_remove(tqp);
