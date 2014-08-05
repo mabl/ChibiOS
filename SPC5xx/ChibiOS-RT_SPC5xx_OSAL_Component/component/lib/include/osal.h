@@ -70,6 +70,15 @@
 /** @} */
 
 /**
+ * @name    Systick modes.
+ * @{
+ */
+#define OSAL_ST_MODE_NONE                   0
+#define OSAL_ST_MODE_PERIODIC               1
+#define OSAL_ST_MODE_FREERUNNING            2
+/** @} */
+
+/**
  * @name    INTC registers direct access macros
  * @{
  */
