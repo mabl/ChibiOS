@@ -656,7 +656,7 @@ void osalOsRescheduleS(void) {
  * @init
  */
 static inline
-void osalEventInit(event_source_t *esp) {
+void osalEventObjectInit(event_source_t *esp) {
 
   chEvtInit((EventSource *)esp);
 }
