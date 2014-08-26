@@ -944,13 +944,13 @@
             <fm_enable>
               <value>false</value>
             </fm_enable>
-            <spread_type index="0">
+            <spread_type index="0" disabled="true">
               <value>Center Spread</value>
             </spread_type>
-            <modulation_period>
+            <modulation_period disabled="true">
               <value>0</value>
             </modulation_period>
-            <increment_step>
+            <increment_step disabled="true">
               <value>0</value>
             </increment_step>
           </fmpll0_settings>
@@ -973,13 +973,13 @@
             <fm_enable>
               <value>false</value>
             </fm_enable>
-            <spread_type index="0">
+            <spread_type index="0" disabled="true">
               <value>Center Spread</value>
             </spread_type>
-            <modulation_period>
+            <modulation_period disabled="true">
               <value>0</value>
             </modulation_period>
-            <increment_step>
+            <increment_step disabled="true">
               <value>0</value>
             </increment_step>
           </fmpll1_settings>
@@ -1118,7 +1118,7 @@
                   <value>true</value>
                 </pll0on>
                 <xosc0on>
-                  <value>false</value>
+                  <value>true</value>
                 </xosc0on>
                 <ircon disabled="true">
                   <value>true</value>
@@ -1141,13 +1141,13 @@
                   <value>Normal</value>
                 </cflaon>
                 <pll1on>
-                  <value>false</value>
+                  <value>true</value>
                 </pll1on>
                 <pll0on>
                   <value>true</value>
                 </pll0on>
                 <xosc0on>
-                  <value>false</value>
+                  <value>true</value>
                 </xosc0on>
                 <ircon disabled="true">
                   <value>true</value>
@@ -1303,26 +1303,6 @@
               </stop0_state_settings>
             </run_modes>
             <peripherals_control__run_>
-              <pc2>
-                <safe>
-                  <value>false</value>
-                </safe>
-                <drun>
-                  <value>false</value>
-                </drun>
-                <run0>
-                  <value>false</value>
-                </run0>
-                <run1>
-                  <value>false</value>
-                </run1>
-                <run2>
-                  <value>false</value>
-                </run2>
-                <run3>
-                  <value>false</value>
-                </run3>
-              </pc2>
               <pc3>
                 <safe>
                   <value>false</value>
@@ -1998,10 +1978,13 @@
       <instance locked="false" id="org.chibios.spc5.components.osal.chibios.spc5xx">
         <isrs>
           <enabled_vectors />
+          <headers>
+            <value />
+          </headers>
         </isrs>
       </instance>
-      <instance locked="false" id="org.chibios.spc5.components.various.chprintf" />
       <instance locked="false" id="org.chibios.spc5.components.various.shell" />
+      <instance locked="false" id="org.chibios.spc5.components.various.chprintf" />
     </instances>
     <exportedFeatures />
   </application>
