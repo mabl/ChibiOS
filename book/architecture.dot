@@ -1,0 +1,35 @@
+  digraph example {
+    ranksep=0.3;
+
+    node [shape=rect, fontname=Sans Serif, fontsize=8, fixedsize="true", width="1.2", height="0.3"];
+    edge [fontname=Sans Serif, fontsize=8, ranksep=0.3];
+
+    startup [label="Startup Code", penwidth=2.0];
+    application [label="Application", width="2.0", height="0.3"];
+    hal_hld [label="HAL API Layer"];
+    hal_board [label="HAL Board Layer"];
+    hal_lld [label="HAL Port Layer"];
+    hal_osal [label="HAL OSAL Layer"];
+    rt_kernel [label="RT Portable Kernel"];
+    rt_port [label="RT Port Layer"];
+    hw [label="Hardware", width="3.0", height="0.3", style=filled, fillcolor=lightgray];
+
+
+    startup -> hw;
+
+    application-> startup [dir=back];
+    application -> rt_kernel [label="\n API"];
+    application -> hal_hld [label="\n API"];
+
+    rt_kernel -> rt_port;
+    rt_port -> hw;
+
+    hal_hld -> hal_lld;
+    hal_hld -> hal_board;
+    hal_hld -> hal_osal;
+    hal_lld -> hal_osal;
+    hal_board -> hal_osal;
+    hal_lld -> hw;
+    hal_board -> hw;
+    hal_osal -> rt_kernel;
+  }
