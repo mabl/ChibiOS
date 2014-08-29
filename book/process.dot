@@ -1,0 +1,15 @@
+  digraph example {
+    rankdir="LR";
+
+    node [shape=rectangle, fontname=Sans, fontsize=8, fixedsize="true", width="1.2", height="0.6"];
+    edge [fontname=Sans, fontsize=8];
+
+    aaa [label="", width="0.1", height="0.1"];
+    process [label="Process"];
+    state [shape=circle label="Local\nState", width="0.6", height="0.6"];
+    zzz [label="", width="0.1", height="0.1"];
+
+    aaa -> process [label="event"];
+    process -> zzz [label="reaction"];
+    process -> state [label="use", dir=none, style=dotted];
+  }

@@ -1,0 +1,61 @@
+  digraph G {
+    rankdir="LR";
+
+    node [shape=rectangle, fontname=Sans, fontsize=8, fixedsize="true", width="0.5", height="0.5"];
+    edge [fontname=Sans, fontsize=8];
+
+    i1 [label="I1"];
+    i2 [label="I2"];
+    i3 [label="I3"];
+    o1 [label="O1"];
+    o2 [label="O2"];
+    o3 [label="O3"];
+
+    subgraph cluster_0 {
+      label = "System";
+      color = blue;
+      node [shape=rectangle, fontname=Sans, fontsize=8, fixedsize="true", width="1.2", height="0.6"];
+      edge [fontname=Sans, fontsize=8];
+
+      state [shape=circle label="Global\nState", width="0.6", height="0.6"];
+      s1 [label="", width="0.1", height="0.1"];
+      s2 [label="", width="0.1", height="0.1"];
+      s3 [label="", width="0.1", height="0.1"];
+      s4 [label="", width="0.1", height="0.1"];
+      s5 [label="", width="0.1", height="0.1"];
+      p1 [label="Process 1"];
+      p2 [label="Process 2"];
+      p3 [label="Process 3"];
+      p4 [label="Process 4"];
+      p5 [label="Process 5"];
+      r1 [label="", width="0.1", height="0.1"];
+      r2 [label="", width="0.1", height="0.1"];
+      r3 [label="", width="0.1", height="0.1"];
+      r4 [label="", width="0.1", height="0.1"];
+      r5 [label="", width="0.1", height="0.1"];
+
+      s1 -> p1 [label="e"];
+      s2 -> p2 [label="e"];
+      s3 -> p3 [label="e"];
+      s4 -> p4 [label="e"];
+      s5 -> p5 [label="e"];
+      p1 -> r1 [label="r"];
+      p2 -> r2 [label="r"];
+      p3 -> r3 [label="r"];
+      p4 -> r4 [label="r"];
+      p5 -> r5 [label="r"];
+      r1 -> s5 [label=""];
+      r2 -> s3 [label=""];
+      r4 -> s3 [label=""];
+      p1 -> state [label="use", dir=none, style=dotted];
+      p2 -> state [label="use", dir=none, style=dotted];
+    }
+
+    i1 -> s1 [label=""];
+    i2 -> s1 [label=""];
+    i2 -> s2 [label=""];
+    i3 -> s4 [label="", constraint=false];
+    r3 -> o1 [label=""];
+    r4 -> o2 [label=""];
+    r5 -> o3 [label=""];
+  }
