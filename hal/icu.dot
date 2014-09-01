@@ -1,0 +1,24 @@
+  digraph example {
+    rankdir="LR";
+
+    node [shape=circle, fontname=Sans, fontsize=8, fixedsize="true", width="0.9", height="0.9"];
+    edge [fontname=Sans, fontsize=8];
+
+    stop  [label="ICU_STOP\nLow Power"];
+    uninit [label="ICU_UNINIT", style="bold"];
+    ready [label="ICU_READY\nClock Enabled"];
+    waiting [label="ICU_WAITING"];
+    active [label="ICU_ACTIVE"];
+
+    uninit -> stop [label=" icuInit()", constraint=false];
+    stop -> stop [label="\nicuStop()"];
+    stop -> ready [label="\nicuStart()"];
+    ready -> stop [label="\nicuStop()"];
+    ready -> ready [label="\nicuStart()\nicuStopCapture()"];
+    ready -> waiting [label="\nicuStartCapture()"];
+    waiting -> active [label="\nFirst Activation Edge\nicuWaitCapture()"];
+    waiting -> ready [label="\nicuStopCapture()"];
+    active -> ready [label="\nicuStopCapture()"];
+    active -> active [label="\nActivation Edge\n>period_cb<"];
+    active -> active [label="\nDe-activation Edge\n>width_cb<"];
+  }
