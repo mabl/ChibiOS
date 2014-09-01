@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="250"
+   height="300"
+   id="svg2160"
+   sodipodi:version="0.32"
+   inkscape:version="0.48.5 r10040"
+   version="1.0"
+   sodipodi:docname="workspace.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   inkscape:export-filename="C:\ChibiStudio\artwork\book\workspace.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs2162">
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Mend"
+       style="overflow:visible">
+      <path
+         id="path3299"
+         d="M 0,0 L 5,-5 L -12.5,0 L 5,5 L 0,0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)" />
+    </marker>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient3224">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop3226" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0"
+         offset="1"
+         id="stop3228" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3224"
+       id="linearGradient3230"
+       x1="199.30756"
+       y1="341.00253"
+       x2="348.78439"
+       y2="341.00253"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3224"
+       id="linearGradient2357"
+       gradientUnits="userSpaceOnUse"
+       x1="199.30756"
+       y1="341.00253"
+       x2="348.78439"
+       y2="341.00253" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.6725"
+     inkscape:cx="125"
+     inkscape:cy="128.25112"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     width="250px"
+     height="300px"
+     inkscape:grid-points="false"
+     inkscape:grid-bbox="true"
+     gridtolerance="10"
+     inkscape:object-paths="true"
+     objecttolerance="1"
+     guidetolerance="1"
+     inkscape:window-width="993"
+     inkscape:window-height="871"
+     inkscape:window-x="1943"
+     inkscape:window-y="39"
+     inkscape:window-maximized="0">
+    <inkscape:grid
+       id="GridFromPre046Settings"
+       type="xygrid"
+       originx="0px"
+       originy="0px"
+       spacingx="5px"
+       spacingy="5px"
+       color="#3f3fff"
+       empcolor="#3f3fff"
+       opacity="0.15"
+       empopacity="0.38"
+       empspacing="5" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata2165">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Livello 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#ffffff;stroke:#000000;stroke-width:1.05413222;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect2196"
+       width="154.53595"
+       height="279.0719"
+       x="95"
+       y="10.464057" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3180"
+       transform="translate(1.8535156,-54.849147)"><flowRegion
+         id="flowRegion3182"><rect
+           id="rect3184"
+           width="97.01046"
+           height="17.563538"
+           x="2.9895365"
+           y="332.43646" /></flowRegion><flowPara
+         id="flowPara3186">WA base</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3188"
+       transform="translate(1.8535156,-329.84915)"><flowRegion
+         id="flowRegion3190"><rect
+           id="rect3192"
+           width="97.01046"
+           height="17.563538"
+           x="2.9895365"
+           y="332.43646" /></flowRegion><flowPara
+         id="flowPara3196">WA top</flowPara></flowRoot>    <path
+       style="fill:none;stroke:#000000;stroke-width:1.05218911;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1.05218909, 1.05218909;stroke-dashoffset:0"
+       d="m 95,260.4823 c 154.5177,0 154.5177,0 154.5177,0"
+       id="path3243"
+       inkscape:export-filename="C:\Progetti\ChibiOS\homepage\workspace.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.05425441;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1.05425442, 1.05425442;stroke-dashoffset:0;marker-start:none"
+       d="m 95,74.5 c 154.57284,0 154.57284,0 154.57284,0"
+       id="path3245"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.05425441;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1.05425442, 1.05425442;stroke-dashoffset:0"
+       d="m 95,149.5 c 154.57284,0 154.57284,0 154.57284,0"
+       id="path3247"
+       inkscape:connector-curvature="0" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3249"
+       transform="translate(122,-62.464382)"><flowRegion
+         id="flowRegion3251"><rect
+           id="rect3253"
+           width="107.01046"
+           height="12.563538"
+           x="2.9895365"
+           y="332.43646" /></flowRegion><flowPara
+         id="flowPara3255">thread_t structure</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3257"
+       transform="translate(117,-202.46438)"><flowRegion
+         id="flowRegion3259"><rect
+           id="rect3261"
+           width="213.42648"
+           height="30.371658"
+           x="2.9895365"
+           y="332.43646" /></flowRegion><flowPara
+         id="flowPara3045">port_intctx structure</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3265"
+       transform="translate(132,-292.46438)"><flowRegion
+         id="flowRegion3267"><rect
+           id="rect3269"
+           width="97.01046"
+           height="17.563538"
+           x="2.9895365"
+           y="332.43646" /></flowRegion><flowPara
+         id="flowPara3273">Thread Stack</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3277"
+       transform="translate(1.2089844,-187.09523)"><flowRegion
+         id="flowRegion3279"><rect
+           id="rect3281"
+           width="97.01046"
+           height="17.563538"
+           x="2.9895365"
+           y="332.43646" /></flowRegion><flowPara
+         id="flowPara3283">Stack Pointer</flowPara></flowRoot>    <path
+       style="fill:none;stroke:#000000;stroke-width:0.6978516px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
+       d="M 81.03408,290 C 90,290 90,290 90,290"
+       id="path3487"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.6978516px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
+       d="m 80,150 c 8.96592,0 8.96592,0 8.96592,0"
+       id="path3489"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.6978516px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
+       d="m 80,10 c 8.96592,0 8.96592,0 8.96592,0"
+       id="path3491"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.6978516px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
+       d="m 80,260 c 8.96592,0 8.96592,0 8.96592,0"
+       id="path2216"
+       inkscape:connector-curvature="0" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot2209"
+       transform="translate(2,-77.464382)"><flowRegion
+         id="flowRegion2211"><rect
+           id="rect2213"
+           width="97.01046"
+           height="17.563538"
+           x="2.9895365"
+           y="332.43646" /></flowRegion><flowPara
+         id="flowPara2215">Stack Limit</flowPara></flowRoot>    <path
+       style="fill:none;stroke:#000000;stroke-width:1.05400598;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1.05400599, 1.05400599;stroke-dashoffset:0"
+       d="m 95,125.5 c 154.5,0 154.5,0 154.5,0"
+       id="path2221"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1.05400598;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:1.05400599, 1.05400599;stroke-dashoffset:0"
+       d="m 95,100.5 c 154.5,0 154.5,0 154.5,0"
+       id="path2223"
+       inkscape:connector-curvature="0" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot2225"
+       transform="translate(117,-252.46438)"><flowRegion
+         id="flowRegion2227"><rect
+           id="rect2229"
+           width="111.96555"
+           height="15.582587"
+           x="2.9895365"
+           y="332.43646" /></flowRegion><flowPara
+         id="flowPara2231">port_extctx structure</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot2235"
+       transform="translate(97,-225.79323)"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Sans;-inkscape-font-specification:Sans"><flowRegion
+         id="flowRegion2237"><rect
+           id="rect2239"
+           width="150.01047"
+           height="13.356768"
+           x="2.9895365"
+           y="332.43646"
+           style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Sans;-inkscape-font-specification:Sans" /></flowRegion><flowPara
+         id="flowPara2241">PORT_INT_REQUIRED_STACK</flowPara></flowRoot>  </g>
+</svg>
