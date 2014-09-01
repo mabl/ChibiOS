@@ -1,0 +1,33 @@
+  digraph example {
+    rankdir="LR";
+    ranksep=0.2;
+
+    node [shape=circle, fontname=Helvetica, fontsize=8, fixedsize="true", width="0.75", height="0.75"];
+    edge [fontname=Helvetica, fontsize=8];
+
+    init [label="Init", style="bold"];
+    thread [label="Thread", shape=doublecircle];
+    susp [label="IRQ\nSuspended"];
+    disab [label="IRQ\nDisabled"];
+    slock [label="S-Locked", shape=doublecircle];
+    ilock [label="I-Locked", shape=doublecircle];
+    sleep [label="IRQ WAIT"];
+    isr [label="ISR"];
+
+    init -> thread [label="chSysInit()"];
+    thread -> slock [label="chSysLock()", constraint=false];
+    slock -> thread [label="\n\nchSysUnlock()"];
+    thread -> susp [label="chSysSuspend()"];
+    susp -> disab [label="chSysDisable()"];
+    thread -> disab [label="chSysDisable()"];
+    susp -> thread [label="chSysEnable()"];
+    disab -> thread [label="chSysEnable()"];
+    disab -> susp [label="chSysSuspend()"];
+    slock -> ilock [label="                Context Switch", dir=both, style="dashed"];
+    thread -> isr [label="IRQ", style="dotted"];
+    isr -> thread [label="ISR return", fontname=Helvetica, fontsize=8];
+    isr -> ilock [label="chSysLockFromISR()", constraint=false];
+    ilock -> isr [label="chSysUnlockFromISR()", fontsize=8];
+    thread -> sleep [label="Idle Thread"];
+    sleep -> isr [label="IRQ", style="dotted"];
+  }
