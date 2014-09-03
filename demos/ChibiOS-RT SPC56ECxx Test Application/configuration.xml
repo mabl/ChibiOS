@@ -24,13 +24,13 @@
           <boot_mode index="0">
             <value>Execute from Flash</value>
           </boot_mode>
-          <load_address index="0" disabled="true">
+          <load_address index="0">
             <value>0x00000000</value>
           </load_address>
-          <reserve_ram_for_z0_core disabled="true">
+          <reserve_ram_for_z0_core>
             <value>false</value>
           </reserve_ram_for_z0_core>
-          <reserved_ram_size disabled="true">
+          <reserved_ram_size>
             <value>8192</value>
           </reserved_ram_size>
         </runtime_settings>
@@ -1729,10 +1729,13 @@
       <instance locked="false" id="org.chibios.spc5.components.osal.chibios.spc5xx">
         <isrs>
           <enabled_vectors />
+          <headers>
+            <value />
+          </headers>
         </isrs>
       </instance>
-      <instance locked="false" id="org.chibios.spc5.components.various.chprintf" />
       <instance locked="false" id="org.chibios.spc5.components.various.shell" />
+      <instance locked="false" id="org.chibios.spc5.components.various.chprintf" />
     </instances>
     <exportedFeatures />
   </application>

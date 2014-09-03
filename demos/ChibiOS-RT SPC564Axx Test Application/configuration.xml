@@ -1434,10 +1434,13 @@
       <instance locked="false" id="org.chibios.spc5.components.osal.chibios.spc5xx">
         <isrs>
           <enabled_vectors />
+          <headers>
+            <value />
+          </headers>
         </isrs>
       </instance>
-      <instance locked="false" id="org.chibios.spc5.components.various.chprintf" />
       <instance locked="false" id="org.chibios.spc5.components.various.shell" />
+      <instance locked="false" id="org.chibios.spc5.components.various.chprintf" />
     </instances>
     <exportedFeatures />
   </application>
