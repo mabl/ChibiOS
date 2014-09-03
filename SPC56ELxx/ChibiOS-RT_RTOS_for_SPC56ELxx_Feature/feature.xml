@@ -2,7 +2,7 @@
 <feature
       id="org.chibios.spc5.components.rtos.spc56elxx.feature"
       label="ChibiOS/RT free embedded RTOS for SPC56ELxx Components"
-      version="1.0.0.qualifier"
+      version="1.1.0.qualifier"
       provider-name="www.chibios.org"
       plugin="org.chibios.spc5.branding"
       exclusive="true">
