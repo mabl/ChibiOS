@@ -23,7 +23,7 @@
     susp -> thread [label="chSysEnable()"];
     disab -> thread [label="chSysEnable()"];
     disab -> susp [label="chSysSuspend()"];
-    slock -> ilock [label="                Context Switch", dir=both, style="dashed"];
+    slock -> ilock [label="                          \n                          \n                          chSysSwitch()", dir=both, style="dashed"];
     thread -> isr [label="IRQ", style="dotted"];
     isr -> thread [label="ISR return", fontname=Helvetica, fontsize=8];
     isr -> ilock [label="chSysLockFromISR()", constraint=false];
