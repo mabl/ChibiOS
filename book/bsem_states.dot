@@ -1,5 +1,6 @@
   digraph example {
     rankdir="LR";
+    ranksep=0.2;
 
     node [shape=circle, fontname=Sans Serif, fontsize=8, fixedsize="true", width="0.8", height="0.8"];
     edge [fontname=Sans Serif, fontsize=8];
@@ -15,8 +16,9 @@
     taken -> qtaken [label="\nchBSemWait()"];
     qtaken -> qtaken [label="\nchBSemSignal()\n(not last)"];
     qtaken -> qtaken [label="\nchBSemWait()"];
-    qtaken -> taken [label="\nchBSemSignal()\n(last thread)"];
+    qtaken -> taken [label="\nchBSemReset(true)\nchBSemSignal()\n(last thread)"];
     taken -> ntaken [label="\nchBSemSignal()\nchBSemReset(false)"];
     ntaken -> ntaken [label="\nchBSemSignal()\nchBSemReset(false)"];
+    qtaken -> ntaken [label="\nchBSemReset(false)"];
     taken -> taken [label="\nchBSemReset(true)"];
   }
