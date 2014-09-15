@@ -1,0 +1,30 @@
+  digraph example {
+    rankdir="LR";
+
+    node [shape=circle, fontname=Sans Serif, fontsize=8, fixedsize="true", width="0.8", height="0.8"];
+    edge [fontname=Sans Serif, fontsize=8];
+
+    any [label="CNT = ANY\n(initialized)"];
+    zp [label="CNT = N"];
+
+    any -> zp [label="chSemReset(N)\n(N >= 0)"];
+
+    init [label="Semaphore\nnot\nInitialized"];
+    nn [label="CNT = -N\n(N Threads\nQueued)"];
+    n1 [label="CNT = -1\n(1 Thread\nQueued)"];
+    zero [label="CNT = 0"];
+    p1 [label="CNT = 1"];
+    pn [label="CNT = N"];
+
+    init -> zero [label="\nchSemObjectInit(0)\nSEMAPHORE_DECL(0)"];
+    init -> p1 [label="\nchSemObjectInit(1)\nSEMAPHORE_DECL(1)"];
+    init -> pn [label="\nchSemObjectInit(N)\nSEMAPHORE_DECL(N)"];
+    nn -> n1 [label="chSemSignal()\n(wakeup next)" style=dotted];
+    n1 -> nn [label="chSemWait()\n(queued)" style=dotted];
+    n1 -> zero [label="chSemSignal()\n(wakeup next)"];
+    zero -> n1 [label="chSemWait()\n(queued)"];
+    p1 -> zero [label="chSemWait()\n(taken)"];
+    zero -> p1 [label="chSemSignal()"];
+    p1 -> pn [label="chSemSignal()" style=dotted];
+    pn -> p1 [label="chSemWait()\n(taken)" style=dotted];
+  }
