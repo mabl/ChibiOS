@@ -19,9 +19,9 @@
     init -> zero [label="\nchSemObjectInit(0)\nSEMAPHORE_DECL(0)"];
     init -> p1 [label="\nchSemObjectInit(1)\nSEMAPHORE_DECL(1)"];
     init -> pn [label="\nchSemObjectInit(N)\nSEMAPHORE_DECL(N)"];
-    nn -> n1 [label="chSemSignal()\n(wakeup next)" style=dotted];
+    nn -> n1 [label="\nchSemSignal()\n(one dequeued)" style=dotted];
     n1 -> nn [label="chSemWait()\n(queued)" style=dotted];
-    n1 -> zero [label="chSemSignal()\n(wakeup next)"];
+    n1 -> zero [label="chSemSignal()\n(last dequeued)"];
     zero -> n1 [label="chSemWait()\n(queued)"];
     p1 -> zero [label="chSemWait()\n(taken)"];
     zero -> p1 [label="chSemSignal()"];

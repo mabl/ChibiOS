@@ -13,12 +13,12 @@
     init -> ntaken [label="\nchBSemObjectInit(false)\nBSEMAPHORE_DECL(false)"];
     init -> taken [label="\nchBSemObjectInit(true)\nBSEMAPHORE_DECL(true)"];
     ntaken -> taken [label="\nchBSemWait()\nchBSemReset(true)"];
-    taken -> qtaken [label="\nchBSemWait()"];
-    qtaken -> qtaken [label="\nchBSemSignal()\n(not last)"];
-    qtaken -> qtaken [label="\nchBSemWait()"];
-    qtaken -> taken [label="\nchBSemReset(true)\nchBSemSignal()\n(last thread)"];
+    taken -> qtaken [label="\nchBSemWait()\n(queued)"];
+    qtaken -> qtaken [label="\nchBSemSignal()\n(one dequeued)"];
+    qtaken -> qtaken [label="\nchBSemWait()\n(queued)"];
+    qtaken -> taken [label="\nchBSemReset(true)\nchBSemSignal()\n(last dequeued)"];
     taken -> ntaken [label="\nchBSemSignal()\nchBSemReset(false)"];
     ntaken -> ntaken [label="\nchBSemSignal()\nchBSemReset(false)"];
-    qtaken -> ntaken [label="\nchBSemReset(false)"];
+    qtaken -> ntaken [label="\nchBSemReset(false)\n(all dequeued)"];
     taken -> taken [label="\nchBSemReset(true)"];
   }
