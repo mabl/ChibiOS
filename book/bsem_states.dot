@@ -5,6 +5,13 @@
     node [shape=circle, fontname=Sans Serif, fontsize=8, fixedsize="true", width="0.8", height="0.8"];
     edge [fontname=Sans Serif, fontsize=8];
 
+    any [label="Any State\n(initialized)"];
+    taken2 [label="Taken\n(No Threads\nQueued)"];
+    ntaken2 [label="Not Taken"];
+
+    any -> taken2 [label="\nchSemReset(true)\n(all dequeued)"];
+    any -> ntaken2 [label="\nchSemReset(false)\n(all dequeued)"];
+
     init [label="Semaphore\nnot\nInitialized"];
     ntaken [label="Not Taken"];
     taken [label="Taken\n(No Threads\nQueued)"];
@@ -12,13 +19,11 @@
 
     init -> ntaken [label="\nchBSemObjectInit(false)\nBSEMAPHORE_DECL(false)"];
     init -> taken [label="\nchBSemObjectInit(true)\nBSEMAPHORE_DECL(true)"];
-    ntaken -> taken [label="\nchBSemWait()\nchBSemReset(true)"];
+    ntaken -> taken [label="\nchBSemWait()"];
     taken -> qtaken [label="\nchBSemWait()\n(queued)"];
     qtaken -> qtaken [label="\nchBSemSignal()\n(one dequeued)"];
     qtaken -> qtaken [label="\nchBSemWait()\n(queued)"];
-    qtaken -> taken [label="\nchBSemReset(true)\nchBSemSignal()\n(last dequeued)"];
-    taken -> ntaken [label="\nchBSemSignal()\nchBSemReset(false)"];
-    ntaken -> ntaken [label="\nchBSemSignal()\nchBSemReset(false)"];
-    qtaken -> ntaken [label="\nchBSemReset(false)\n(all dequeued)"];
-    taken -> taken [label="\nchBSemReset(true)"];
+    qtaken -> taken [label="\nchBSemSignal()\n(last dequeued)"];
+    taken -> ntaken [label="\nchBSemSignal()"];
+    ntaken -> ntaken [label="\nchBSemSignal()"];
   }

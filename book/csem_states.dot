@@ -5,9 +5,9 @@
     edge [fontname=Sans Serif, fontsize=8];
 
     any [label="CNT = ANY\n(initialized)"];
-    zp [label="CNT = N"];
+    zp [label="CNT = N\n(N >= 0)"];
 
-    any -> zp [label="chSemReset(N)\n(N >= 0)"];
+    any -> zp [label="chSemReset(N)\n(all dequeued)"];
 
     init [label="Semaphore\nnot\nInitialized"];
     nn [label="CNT = -N\n(N Threads\nQueued)"];
