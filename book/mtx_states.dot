@@ -1,0 +1,21 @@
+  digraph example {
+    rankdir="LR";
+    ranksep=0.2;
+
+    node [shape=circle, fontname=Sans Serif, fontsize=8, fixedsize="true", width="0.8", height="0.8"];
+    edge [fontname=Sans Serif, fontsize=8];
+
+    init [label="Mutex\nnot\nInitialized"];
+    ntaken [label="Not Taken"];
+    taken [label="Taken\n(No Threads\nQueued)"];
+    qtaken [label="Taken\n(Threads\nQueued)"];
+
+    init -> ntaken [label="\nchMtxObjectInit()\nMUTEX_DECL()"];
+    ntaken -> taken [label="\nchMtxLock()\nchMtxTryLock()"];
+    taken -> qtaken [label="\nchMtxLock()\n(queued)"];
+    qtaken -> qtaken [label="\nchMtxUnlock()\nchMtxUnlockAll()\n(one dequeued)"];
+    qtaken -> qtaken [label="\nchMtxLock()\n(queued)"];
+    qtaken -> taken [label="\nchMtxUnlock()\nchMtxUnlockAll()\n(last dequeued)"];
+    taken -> ntaken [label="\nchMtxUnlock()\nchMtxUnlockAll()"];
+    ntaken -> ntaken [label="\nchMtxUnlockAll()"];
+  }
