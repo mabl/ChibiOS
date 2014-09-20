@@ -13,8 +13,10 @@
     init -> ntaken [label="\nchMtxObjectInit()\nMUTEX_DECL()"];
     ntaken -> taken [label="\nchMtxLock()\nchMtxTryLock()"];
     taken -> qtaken [label="\nchMtxLock()\n(queued)"];
+    taken -> taken [label="\nchMtxTryLock()\n(failed)"];
     qtaken -> qtaken [label="\nchMtxUnlock()\nchMtxUnlockAll()\n(one dequeued)"];
     qtaken -> qtaken [label="\nchMtxLock()\n(queued)"];
+    qtaken -> qtaken [label="\nchMtxTryLock()\n(failed)"];
     qtaken -> taken [label="\nchMtxUnlock()\nchMtxUnlockAll()\n(last dequeued)"];
     taken -> ntaken [label="\nchMtxUnlock()\nchMtxUnlockAll()"];
     ntaken -> ntaken [label="\nchMtxUnlockAll()"];
