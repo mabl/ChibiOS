@@ -1,0 +1,35 @@
+  digraph example {
+    rankdir="LR";
+    ranksep=0.2;
+    nodesep=0.1;
+
+    node [shape=circle, fontname=Sans Serif, fontsize=8, fixedsize="true", width="0.8", height="0.8"];
+    edge [fontname=Sans Serif, fontsize=8];
+
+    qinit [label="Condvar\nnot\nInitialized"];
+    qempty [label="Condvar\n(Empty)"];
+    qnempty [label="Condvar\n(Queued)"];
+
+    qinit -> qempty [label="\nchCondObjectInit()\nCONDVAR_DECL()"];
+    qempty -> qempty [label="\nchCondBroadcast()\nchCondSignal()"];
+    qempty -> qnempty [label="\nchCondWait()"];
+    qnempty -> qnempty [label="\nchCondSignal()\n(more in queue)"];
+    qnempty -> qnempty [label="\nchCondWait("];
+    qnempty -> qempty [label="\nchCondBroadcast()\nchCondSignal()\n(last in queue)"];
+
+    init [label="Mutex\nnot\nInitialized"];
+    ntaken [label="Mutex\nNot Taken"];
+    taken [label="Taken\n(No Threads\nQueued)"];
+    qtaken [label="Taken\n(Threads\nQueued)"];
+
+    init -> ntaken [label="\nchMtxObjectInit()\nMUTEX_DECL()"];
+    ntaken -> taken [label="\nchMtxLock()"];
+    taken -> ntaken [label="\nchMtxUnlock()"];
+    taken -> qtaken [label="\nchMtxLock()"];
+    qtaken -> qtaken [label="\nchMtxLock()"];
+    qtaken -> taken [label="\nchMtxUnlock()\nchCondWaitTimeout()"];
+    taken -> ntaken [label="\nchCondWait()\nchCondWaitTimeout()"];
+    qtaken -> ntaken [label="\nchCondWait(), chCondWaitTimeout()"];
+    ntaken -> taken [label="\nExiting from chCondWait()"];
+    ntaken -> qtaken [label="\nExiting from chCondWait()"];
+  }
