@@ -14,7 +14,7 @@
     qempty -> qempty [label="\nchCondBroadcast()\nchCondSignal()"];
     qempty -> qnempty [label="\nchCondWait()"];
     qnempty -> qnempty [label="\nchCondSignal()\n(more in queue)"];
-    qnempty -> qnempty [label="\nchCondWait("];
+    qnempty -> qnempty [label="\nchCondWait()"];
     qnempty -> qempty [label="\nchCondBroadcast()\nchCondSignal()\n(last in queue)"];
 
     init [label="Mutex\nnot\nInitialized"];
