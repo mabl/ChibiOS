@@ -1,0 +1,36 @@
+  digraph example {
+    rankdir="LR";
+    ranksep=0.2;
+
+    node [shape=circle, fontname=Sans Serif, fontsize=8, fixedsize="true", width="0.8", height="0.8"];
+    edge [fontname=Sans Serif, fontsize=8];
+
+    any [label="Any State\n(initialized)"];
+
+    init [label="Mailbox\nnot\nInitialized"];
+    qempty [label="Empty\n(queued)"];
+    empty [label="Empty"];
+    half [label="Half Full"];
+    full [label="Full"];
+    qfull [label="Full\n(queued)"];
+
+    full -> qfull [label="\nchMbxPost()\nchMbxPostAhead()\n(filled)" constraint=false];
+    qfull -> qfull:sw [label="\nchMbxPost()\nchMbxPostAhead()\n(filled)"];
+    qfull -> qfull [label="\nnchMbxFetch()\n(more queued)" dir=back];
+    qfull -> full [label="\nnchMbxFetch()"];
+
+    empty -> qempty [label="\nnchMbxFetch()\n(empty)" constraint=false];
+    qempty -> qempty:s [label="\nnchMbxFetch()\n(empty)"];
+    qempty -> qempty [label="\nchMbxPost()\nchMbxPostAhead()\n(more queued)" dir=back];
+    qempty -> empty [label="\nchMbxPost()"];
+
+    init -> empty [label="\nchMbxObjectInit()\nMAILBOX_DECL()" constraint=false];
+    empty -> half [label="\nchMbxPost()\nchMbxPostAhead()" style=dotted];
+    half -> empty [label="\nchMbxFetch()\n(last)" style=dotted];
+    half -> half [label="\nchMbxPost()\nchMbxPostAhead()\n(not filled)"];
+    half -> half [label="\nchMbxFetch()\n(not last)" dir=back];
+    half -> full [label="\nchMbxPost()\nchMbxPostAhead()\n(filled)" style=dotted];
+    full -> half [label="\nchMbxFetch()\n(not last)" style=dotted];
+
+    any -> empty [label="\nchMbxReset(true)\n(all dequeued)"];
+  }
