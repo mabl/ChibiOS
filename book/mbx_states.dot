@@ -8,29 +8,29 @@
     any [label="Any State\n(initialized)"];
 
     init [label="Mailbox\nnot\nInitialized"];
-    qempty [label="Empty\n(queued)"];
-    empty [label="Empty"];
-    half [label="Half Full"];
-    full [label="Full"];
-    qfull [label="Full\n(queued)"];
+    qempty [label="Mailbox\nEmpty\n(queued)"];
+    empty [label="Mailbox\nEmpty"];
+    half [label="Mailbox\nHalf Full"];
+    full [label="Mailbox\nFull"];
+    qfull [label="Mailbox\nFull\n(queued)"];
 
-    full -> qfull [label="\nchMbxPost()\nchMbxPostAhead()\n(filled)" constraint=false];
-    qfull -> qfull:sw [label="\nchMbxPost()\nchMbxPostAhead()\n(filled)"];
-    qfull -> qfull [label="\nnchMbxFetch()\n(more queued)" dir=back];
-    qfull -> full [label="\nnchMbxFetch()"];
+    full -> qfull [label="\nchMBPost()\nchMBPostAhead()\n(filled)" constraint=false];
+    qfull -> qfull:sw [label="\nchMBPost()\nchMBPostAhead()\n(filled)"];
+    qfull -> qfull [label="\nchMBFetch()\n(more queued)" dir=back];
+    qfull -> full [label="\nchMBFetch()"];
 
-    empty -> qempty [label="\nnchMbxFetch()\n(empty)" constraint=false];
-    qempty -> qempty:s [label="\nnchMbxFetch()\n(empty)"];
-    qempty -> qempty [label="\nchMbxPost()\nchMbxPostAhead()\n(more queued)" dir=back];
-    qempty -> empty [label="\nchMbxPost()"];
+    empty -> qempty [label="\nchMBFetch()\n(empty)" constraint=false];
+    qempty -> qempty:s [label="\nchMBFetch()\n(empty)"];
+    qempty -> qempty [label="\nchMBPost()\nchMBPostAhead()\n(more queued)" dir=back];
+    qempty -> empty [label="\nchMBPost()"];
 
-    init -> empty [label="\nchMbxObjectInit()\nMAILBOX_DECL()" constraint=false];
-    empty -> half [label="\nchMbxPost()\nchMbxPostAhead()" style=dotted];
-    half -> empty [label="\nchMbxFetch()\n(last)" style=dotted];
-    half -> half [label="\nchMbxPost()\nchMbxPostAhead()\n(not filled)"];
-    half -> half [label="\nchMbxFetch()\n(not last)" dir=back];
-    half -> full [label="\nchMbxPost()\nchMbxPostAhead()\n(filled)" style=dotted];
-    full -> half [label="\nchMbxFetch()\n(not last)" style=dotted];
+    init -> empty [label="\nchMBObjectInit()\nMAILBOX_DECL()" constraint=false];
+    empty -> half [label="\nchMBPost()\nchMBPostAhead()" style=dotted];
+    half -> empty [label="\nchMBFetch()\n(last)" style=dotted];
+    half -> half [label="\nchMBPost()\nchMBPostAhead()\n(not filled)"];
+    half -> half [label="\nchMBFetch()\n(not last)" dir=back];
+    half -> full [label="\nchMBPost()\nchMBPostAhead()\n(filled)" style=dotted];
+    full -> half [label="\nchMBFetch()\n(not last)" style=dotted];
 
-    any -> empty [label="\nchMbxReset(true)\n(all dequeued)"];
+    any -> empty [label="\nchMBReset(true)\n(all dequeued)"];
   }
