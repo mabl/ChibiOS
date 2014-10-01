@@ -1,0 +1,166 @@
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc88WM8g.s 			page 1
+
+
+   1              	# 1 "../../os/ports/GCC/ARM/BCM2835/vectors.s"
+   1              	/*
+   0              	
+   2              	    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+   3              	                 2011,2012 Giovanni Di Sirio.
+   4              	
+   5              	    This file is part of ChibiOS/RT.
+   6              	
+   7              	    ChibiOS/RT is free software; you can redistribute it and/or modify
+   8              	    it under the terms of the GNU General Public License as published by
+   9              	    the Free Software Foundation; either version 3 of the License, or
+  10              	    (at your option) any later version.
+  11              	
+  12              	    ChibiOS/RT is distributed in the hope that it will be useful,
+  13              	    but WITHOUT ANY WARRANTY; without even the implied warranty of
+  14              	    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  15              	    GNU General Public License for more details.
+  16              	
+  17              	    You should have received a copy of the GNU General Public License
+  18              	    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  19              	*/
+  20              	
+  21              	/**
+  22              	 * @file    ARM/BCM2835/vectors.s
+  23              	 * @brief   Interrupt vectors for the BCM2835 family.
+  24              	 *
+  25              	 * @defgroup ARM_BCM2835_VECTORS BCM2835 Interrupt Vectors
+  26              	 * @ingroup ARM_SPECIFIC
+  27              	 * @details Interrupt vectors for the BCM2835 family.
+  28              	 * @{
+  29              	 */
+  30              	
+  31              	#if defined(__DOXYGEN__)
+  32              	/**
+  33              	 * @brief   Unhandled exceptions handler.
+  34              	 * @details Any undefined exception vector points to this function by default.
+  35              	 *          This function simply stops the system into an infinite loop.
+  36              	 *
+  37              	 * @notapi
+  38              	 */
+  39              	void _unhandled_exception(void) {}
+  40              	#endif
+  41              	
+  42              	#if !defined(__DOXYGEN__)
+  43              	
+  44              	.section vectors
+  45              	.code 32
+  46              	.balign 4
+  47              	/*
+  48              	 * System entry points.
+  49              	 */
+  50              	_start:
+  51 0000 18F09FE5 	        ldr     pc, _reset
+  52 0004 18F09FE5 	        ldr     pc, _undefined
+  53 0008 18F09FE5 	        ldr     pc, _swi
+  54 000c 18F09FE5 	        ldr     pc, _prefetch
+  55 0010 18F09FE5 	        ldr     pc, _abort
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc88WM8g.s 			page 2
+
+
+  56 0014 00F020E3 	        nop
+  57 0018 18F09FE5 	        ldr     pc, _irq
+  58 001c 18F09FE5 	        ldr     pc, _fiq
+  59              	
+  60              	_reset:
+  61 0020 00000000 	        .word   ResetHandler            /* In crt0.s */
+  62              	_undefined:
+  63 0024 00000000 	        .word   UndHandler
+  64              	_swi:
+  65 0028 00000000 	        .word   SwiHandler
+  66              	_prefetch:
+  67 002c 00000000 	        .word   PrefetchHandler
+  68              	_abort:
+  69 0030 00000000 	        .word   AbortHandler
+  70 0034 00000000 	        .word   0
+  71              	_irq:
+  72 0038 00000000 	        .word   IrqHandler
+  73              	_fiq:
+  74 003c 00000000 	        .word   FiqHandler
+  75              	
+  76              	.text
+  77              	.code 32
+  78              	.balign 4
+  79              	
+  80              	/*
+  81              	 * Default exceptions handlers. The handlers are declared weak in order to be
+  82              	 * replaced by the real handling code. Everything is defaulted to an infinite
+  83              	 * loop.
+  84              	 */
+  85              	.weak UndHandler
+  86              	UndHandler:
+  87              	
+  88              	.weak SwiHandler
+  89              	SwiHandler:
+  90              	
+  91              	.weak PrefetchHandler
+  92              	PrefetchHandler:
+  93              	
+  94              	.weak AbortHandler
+  95              	AbortHandler:
+  96              	
+  97              	.weak IrqHandler
+  98              	IrqHandler:
+  99              	
+ 100              	.weak FiqHandler
+ 101              	FiqHandler:
+ 102              	
+ 103              	.global _unhandled_exception
+ 104              	_unhandled_exception:
+ 105 0000 FEFFFFEA 	        b       _unhandled_exception
+ 106              	
+ 107              	.global __early_init
+ 108              	__early_init:
+ 109 0004 0209A0E3 	        mov r0,#0x8000
+ 110 0008 0010A0E3 	        mov r1,#0x0000
+ 111 000c FC03B0E8 	        ldmia r0!,{r2,r3,r4,r5,r6,r7,r8,r9}
+ 112 0010 FC03A1E8 	        stmia r1!,{r2,r3,r4,r5,r6,r7,r8,r9}
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc88WM8g.s 			page 3
+
+
+ 113 0014 FC03B0E8 	        ldmia r0!,{r2,r3,r4,r5,r6,r7,r8,r9}
+ 114 0018 FC03A1E8 	        stmia r1!,{r2,r3,r4,r5,r6,r7,r8,r9}
+ 115 001c 1EFF2FE1 	        bx      lr
+ 116              	
+ 117              	.global arm_enable_irq
+ 118              	arm_enable_irq:
+ 119 0020 00000FE1 	    mrs r0,cpsr
+ 120 0024 8000C0E3 	    bic r0,r0,#0x80
+ 121 0028 00F021E1 	    msr cpsr_c,r0
+ 122 002c 1EFF2FE1 	    bx lr
+ 123              	
+ 124              	.global get_cpsr
+ 125              	get_cpsr:
+ 126 0030 00000FE1 	  mrs r0,cpsr
+ 127 0034 1EFF2FE1 	  bx lr
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc88WM8g.s 			page 4
+
+
+DEFINED SYMBOLS
+../../os/ports/GCC/ARM/BCM2835/vectors.s:50     vectors:00000000 _start
+../../os/ports/GCC/ARM/BCM2835/vectors.s:60     vectors:00000020 _reset
+../../os/ports/GCC/ARM/BCM2835/vectors.s:51     vectors:00000000 $a
+../../os/ports/GCC/ARM/BCM2835/vectors.s:62     vectors:00000024 _undefined
+../../os/ports/GCC/ARM/BCM2835/vectors.s:64     vectors:00000028 _swi
+../../os/ports/GCC/ARM/BCM2835/vectors.s:66     vectors:0000002c _prefetch
+../../os/ports/GCC/ARM/BCM2835/vectors.s:68     vectors:00000030 _abort
+../../os/ports/GCC/ARM/BCM2835/vectors.s:71     vectors:00000038 _irq
+../../os/ports/GCC/ARM/BCM2835/vectors.s:73     vectors:0000003c _fiq
+../../os/ports/GCC/ARM/BCM2835/vectors.s:61     vectors:00000020 $d
+../../os/ports/GCC/ARM/BCM2835/vectors.s:86     .text:00000000 UndHandler
+../../os/ports/GCC/ARM/BCM2835/vectors.s:89     .text:00000000 SwiHandler
+../../os/ports/GCC/ARM/BCM2835/vectors.s:92     .text:00000000 PrefetchHandler
+../../os/ports/GCC/ARM/BCM2835/vectors.s:95     .text:00000000 AbortHandler
+../../os/ports/GCC/ARM/BCM2835/vectors.s:98     .text:00000000 IrqHandler
+../../os/ports/GCC/ARM/BCM2835/vectors.s:101    .text:00000000 FiqHandler
+../../os/ports/GCC/ARM/BCM2835/vectors.s:78     .text:00000000 $a
+../../os/ports/GCC/ARM/BCM2835/vectors.s:104    .text:00000000 _unhandled_exception
+../../os/ports/GCC/ARM/BCM2835/vectors.s:108    .text:00000004 __early_init
+../../os/ports/GCC/ARM/BCM2835/vectors.s:118    .text:00000020 arm_enable_irq
+../../os/ports/GCC/ARM/BCM2835/vectors.s:125    .text:00000030 get_cpsr
+
+UNDEFINED SYMBOLS
+ResetHandler

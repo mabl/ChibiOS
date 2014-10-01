@@ -1,0 +1,297 @@
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccD9UGvk.s 			page 1
+
+
+   1              	# 1 "../../os/ports/GCC/ARM/chcoreasm.s"
+   1              	/*
+   0              	
+   2              	    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+   3              	                 2011,2012,2013 Giovanni Di Sirio.
+   4              	
+   5              	    This file is part of ChibiOS/RT.
+   6              	
+   7              	    ChibiOS/RT is free software; you can redistribute it and/or modify
+   8              	    it under the terms of the GNU General Public License as published by
+   9              	    the Free Software Foundation; either version 3 of the License, or
+  10              	    (at your option) any later version.
+  11              	
+  12              	    ChibiOS/RT is distributed in the hope that it will be useful,
+  13              	    but WITHOUT ANY WARRANTY; without even the implied warranty of
+  14              	    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  15              	    GNU General Public License for more details.
+  16              	
+  17              	    You should have received a copy of the GNU General Public License
+  18              	    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  19              	
+  20              	                                      ---
+  21              	
+  22              	    A special exception to the GPL can be applied should you wish to distribute
+  23              	    a combined work that includes ChibiOS/RT, without being obliged to provide
+  24              	    the source code for any proprietary components. See the file exception.txt
+  25              	    for full details of how and when the exception can be applied.
+  26              	*/
+  27              	
+  28              	/**
+  29              	 * @file    ARM/chcoreasm.s
+  30              	 * @brief   ARM7/9 architecture port low level code.
+  31              	 *
+  32              	 * @addtogroup ARM_CORE
+  33              	 * @{
+  34              	 */
+  35              	
+  36              	#include "chconf.h"
+   1              	/*
+  37              	
+  38              	#define FALSE 0
+  39              	#define TRUE 1
+  40              	
+  41              	#if !defined(__DOXYGEN__)
+  42              	
+  43              	.set    MODE_USR, 0x10
+  44              	.set    MODE_FIQ, 0x11
+  45              	.set    MODE_IRQ, 0x12
+  46              	.set    MODE_SVC, 0x13
+  47              	.set    MODE_ABT, 0x17
+  48              	.set    MODE_UND, 0x1B
+  49              	.set    MODE_SYS, 0x1F
+  50              	
+  51              	.equ    I_BIT, 0x80
+  52              	.equ    F_BIT, 0x40
+  53              	
+  54              	.text
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccD9UGvk.s 			page 2
+
+
+  55              	
+  56              	/*
+  57              	 * Interrupt enable/disable functions, only present if there is THUMB code in
+  58              	 * the system because those are inlined in ARM code.
+  59              	 */
+  60              	#ifdef THUMB_PRESENT
+  61              	.balign 16
+  62              	.code 16
+  63              	.thumb_func
+  64              	.global _port_disable_thumb
+  65              	_port_disable_thumb:
+  66              	        mov     r3, pc
+  67              	        bx      r3
+  68              	.code 32
+  69              	        mrs     r3, CPSR
+  70              	        orr     r3, #I_BIT
+  71              	        msr     CPSR_c, r3
+  72              	        orr     r3, #F_BIT
+  73              	        msr     CPSR_c, r3
+  74              	        bx      lr
+  75              	
+  76              	.balign 16
+  77              	.code 16
+  78              	.thumb_func
+  79              	.global _port_suspend_thumb
+  80              	_port_suspend_thumb:
+  81              	.thumb_func
+  82              	.global _port_lock_thumb
+  83              	_port_lock_thumb:
+  84              	        mov     r3, pc
+  85              	        bx      r3
+  86              	.code 32
+  87              	        msr     CPSR_c, #MODE_SYS | I_BIT
+  88              	        bx      lr
+  89              	
+  90              	.balign 16
+  91              	.code 16
+  92              	.thumb_func
+  93              	.global _port_enable_thumb
+  94              	_port_enable_thumb:
+  95              	.thumb_func
+  96              	.global _port_unlock_thumb
+  97              	_port_unlock_thumb:
+  98              	        mov     r3, pc
+  99              	        bx      r3
+ 100              	.code 32
+ 101              	        msr     CPSR_c, #MODE_SYS
+ 102              	        bx      lr
+ 103              	
+ 104              	#endif
+ 105              	
+ 106              	.balign 16
+ 107              	#ifdef THUMB_PRESENT
+ 108              	.code 16
+ 109              	.thumb_func
+ 110              	.global _port_switch_thumb
+ 111              	_port_switch_thumb:
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccD9UGvk.s 			page 3
+
+
+ 112              	        mov     r2, pc
+ 113              	        bx      r2
+ 114              	        // Jumps into _port_switch_arm in ARM mode
+ 115              	#endif
+ 116              	.code 32
+ 117              	.global _port_switch_arm
+ 118              	_port_switch_arm:
+ 119              	#ifdef CH_CURRP_REGISTER_CACHE
+ 120              	        stmfd   sp!, {r4, r5, r6, r8, r9, r10, r11, lr}
+ 121              	        str     sp, [r1, #12]
+ 122              	        ldr     sp, [r0, #12]
+ 123              	#ifdef THUMB_PRESENT
+ 124              	        ldmfd   sp!, {r4, r5, r6, r8, r9, r10, r11, lr}
+ 125              	        bx      lr
+ 126              	#else /* !THUMB_PRESENT */
+ 127              	        ldmfd   sp!, {r4, r5, r6, r8, r9, r10, r11, pc}
+ 128              	#endif /* !THUMB_PRESENT */
+ 129              	#else /* !CH_CURRP_REGISTER_CACHE */
+ 130 0000 F04F2DE9 	        stmfd   sp!, {r4, r5, r6, r7, r8, r9, r10, r11, lr}
+ 131 0004 0CD081E5 	        str     sp, [r1, #12]
+ 132 0008 0CD090E5 	        ldr     sp, [r0, #12]
+ 133              	#ifdef THUMB_PRESENT
+ 134              	        ldmfd   sp!, {r4, r5, r6, r7, r8, r9, r10, r11, lr}
+ 135              	        bx      lr
+ 136              	#else /* !THUMB_PRESENT */
+ 137 000c F08FBDE8 	        ldmfd   sp!, {r4, r5, r6, r7, r8, r9, r10, r11, pc}
+ 138              	#endif /* !THUMB_PRESENT */
+ 139              	#endif /* !CH_CURRP_REGISTER_CACHE */
+ 140              	
+ 141              	/*
+ 142              	 * Common exit point for all IRQ routines, it performs the rescheduling if
+ 143              	 * required.
+ 144              	 * System stack frame structure after a context switch in the
+ 145              	 * interrupt handler:
+ 146              	 *
+ 147              	 * High +------------+
+ 148              	 *      |   LR_USR   | -+
+ 149              	 *      |     R12    |  |
+ 150              	 *      |     R3     |  |
+ 151              	 *      |     R2     |  | External context: IRQ handler frame
+ 152              	 *      |     R1     |  |
+ 153              	 *      |     R0     |  |
+ 154              	 *      |     PC     |  |   (user code return address)
+ 155              	 *      |   PSR_USR  | -+   (user code status)
+ 156              	 *      |    ....    | <- chSchDoReschedule() stack frame, optimize it for space
+ 157              	 *      |     LR     | -+   (system code return address)
+ 158              	 *      |     R11    |  |
+ 159              	 *      |     R10    |  |
+ 160              	 *      |     R9     |  |
+ 161              	 *      |     R8     |  | Internal context: chSysSwitch() frame
+ 162              	 *      |    (R7)    |  |   (optional, see CH_CURRP_REGISTER_CACHE)
+ 163              	 *      |     R6     |  |
+ 164              	 *      |     R5     |  |
+ 165              	 * SP-> |     R4     | -+
+ 166              	 * Low  +------------+
+ 167              	 */
+ 168              	.balign 16
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccD9UGvk.s 			page 4
+
+
+ 169              	#ifdef THUMB_NO_INTERWORKING
+ 170              	.code 16
+ 171              	.thumb_func
+ 172              	.globl _port_irq_common
+ 173              	_port_irq_common:
+ 174              	        bl      chSchIsPreemptionRequired
+ 175              	        mov     lr, pc
+ 176              	        bx      lr
+ 177              	.code 32
+ 178              	#else /* !THUMB_NO_INTERWORKING */
+ 179              	.code 32
+ 180              	.globl _port_irq_common
+ 181              	_port_irq_common:
+ 182 0010 FEFFFFEB 	        bl      chSchIsPreemptionRequired
+ 183              	#endif /* !THUMB_NO_INTERWORKING */
+ 184 0014 000050E3 	        cmp     r0, #0                          // Simply returns if a
+ 185 0018 0F50BD08 	        ldmeqfd sp!, {r0-r3, r12, lr}           // reschedule is not
+ 186 001c 04F05E02 	        subeqs  pc, lr, #4                      // required.
+ 187              	
+ 188              	        // Saves the IRQ mode registers in the system stack.
+ 189 0020 0F50BDE8 	        ldmfd   sp!, {r0-r3, r12, lr}           // IRQ stack now empty.
+ 190 0024 9FF021E3 	        msr     CPSR_c, #MODE_SYS | I_BIT
+ 191 0028 0F502DE9 	        stmfd   sp!, {r0-r3, r12, lr}           // Registers on System Stack.
+ 192 002c 92F021E3 	        msr     CPSR_c, #MODE_IRQ | I_BIT
+ 193 0030 00004FE1 	        mrs     r0, SPSR
+ 194 0034 0E10A0E1 	        mov     r1, lr
+ 195 0038 9FF021E3 	        msr     CPSR_c, #MODE_SYS | I_BIT
+ 196 003c 03002DE9 	        stmfd   sp!, {r0, r1}                   // Push R0=SPSR, R1=LR_IRQ.
+ 197              	
+ 198              	        // Context switch.
+ 199              	#ifdef THUMB_NO_INTERWORKING
+ 200              	        add     r0, pc, #1
+ 201              	        bx      r0
+ 202              	.code 16
+ 203              	#if CH_DBG_SYSTEM_STATE_CHECK
+ 204              	        bl      dbg_check_lock
+ 205              	#endif
+ 206              	        bl      chSchDoReschedule
+ 207              	#if CH_DBG_SYSTEM_STATE_CHECK
+ 208              	        bl      dbg_check_unlock
+ 209              	#endif
+ 210              	        mov     lr, pc
+ 211              	        bx      lr
+ 212              	.code 32
+ 213              	#else /* !THUMB_NO_INTERWORKING */
+ 214              	#if CH_DBG_SYSTEM_STATE_CHECK
+ 215              	        bl      dbg_check_lock
+ 216              	#endif
+ 217 0040 FEFFFFEB 	        bl      chSchDoReschedule
+ 218              	#if CH_DBG_SYSTEM_STATE_CHECK
+ 219              	        bl      dbg_check_unlock
+ 220              	#endif
+ 221              	#endif /* !THUMB_NO_INTERWORKING */
+ 222              	
+ 223              	        // Re-establish the IRQ conditions again.
+ 224 0044 0300BDE8 	        ldmfd   sp!, {r0, r1}                   // Pop R0=SPSR, R1=LR_IRQ.
+ 225 0048 92F021E3 	        msr     CPSR_c, #MODE_IRQ | I_BIT
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccD9UGvk.s 			page 5
+
+
+ 226 004c 00F06FE1 	        msr     SPSR_fsxc, r0
+ 227 0050 01E0A0E1 	        mov     lr, r1
+ 228 0054 9FF021E3 	        msr     CPSR_c, #MODE_SYS | I_BIT
+ 229 0058 0F50BDE8 	        ldmfd   sp!, {r0-r3, r12, lr}
+ 230 005c 92F021E3 	        msr     CPSR_c, #MODE_IRQ | I_BIT
+ 231 0060 04F05EE2 	        subs    pc, lr, #4
+ 232              	
+ 233              	/*
+ 234              	 * Threads trampoline code.
+ 235              	 * NOTE: The threads always start in ARM mode and then switches to the
+ 236              	 * thread-function mode.
+ 237              	 */
+ 238 0064 00F020E3 	.balign 16
+ 238      00F020E3 
+ 238      00F020E3 
+ 239              	.code 32
+ 240              	.globl _port_thread_start
+ 241              	_port_thread_start:
+ 242              	#if CH_DBG_SYSTEM_STATE_CHECK
+ 243              	        mov     r0, #0
+ 244              	        ldr     r1, =dbg_lock_cnt
+ 245              	        str     r0, [r1]
+ 246              	#endif
+ 247 0070 1FF021E3 	        msr     CPSR_c, #MODE_SYS
+ 248              	#ifndef THUMB_NO_INTERWORKING
+ 249 0074 0500A0E1 	        mov     r0, r5
+ 250 0078 0FE0A0E1 	        mov     lr, pc
+ 251 007c 14FF2FE1 	        bx      r4
+ 252 0080 FEFFFFEB 	        bl      chThdExit
+ 252      00F020E3 
+ 252      00F020E3 
+ 252      00F020E3 
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccD9UGvk.s 			page 6
+
+
+DEFINED SYMBOLS
+../../os/ports/GCC/ARM/chcoreasm.s:43     *ABS*:00000010 MODE_USR
+../../os/ports/GCC/ARM/chcoreasm.s:44     *ABS*:00000011 MODE_FIQ
+../../os/ports/GCC/ARM/chcoreasm.s:45     *ABS*:00000012 MODE_IRQ
+../../os/ports/GCC/ARM/chcoreasm.s:46     *ABS*:00000013 MODE_SVC
+../../os/ports/GCC/ARM/chcoreasm.s:47     *ABS*:00000017 MODE_ABT
+../../os/ports/GCC/ARM/chcoreasm.s:48     *ABS*:0000001b MODE_UND
+../../os/ports/GCC/ARM/chcoreasm.s:49     *ABS*:0000001f MODE_SYS
+../../os/ports/GCC/ARM/chcoreasm.s:51     *ABS*:00000080 I_BIT
+../../os/ports/GCC/ARM/chcoreasm.s:52     *ABS*:00000040 F_BIT
+../../os/ports/GCC/ARM/chcoreasm.s:106    .text:00000000 $a
+../../os/ports/GCC/ARM/chcoreasm.s:118    .text:00000000 _port_switch_arm
+../../os/ports/GCC/ARM/chcoreasm.s:181    .text:00000010 _port_irq_common
+../../os/ports/GCC/ARM/chcoreasm.s:241    .text:00000070 _port_thread_start
+
+UNDEFINED SYMBOLS
+chSchIsPreemptionRequired
+chSchDoReschedule
+chThdExit
