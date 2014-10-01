@@ -1,0 +1,1849 @@
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 1
+
+
+   1              		.cpu arm1176jz-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 2
+  10              		.eabi_attribute 34, 1
+  11              		.eabi_attribute 18, 4
+  12              		.file	"chregistry.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.chRegFirstThread,"ax",%progbits
+  17              		.align	2
+  18              		.global	chRegFirstThread
+  19              		.type	chRegFirstThread, %function
+  20              	chRegFirstThread:
+  21              	.LFB7:
+  22              		.file 1 "../../os/kernel/src/chregistry.c"
+  23              		.loc 1 117 0
+  24              		.cfi_startproc
+  25              		@ args = 0, pretend = 0, frame = 0
+  26              		@ frame_needed = 0, uses_anonymous_args = 0
+  27              		@ link register save eliminated.
+  28              		.loc 1 120 0
+  29              	@ 120 "../../os/kernel/src/chregistry.c" 1
+  30 0000 9FF021E3 		msr     CPSR_c, #0x9F
+  31              	@ 0 "" 2
+  32              		.loc 1 121 0
+  33 0004 14309FE5 		ldr	r3, .L2
+  34 0008 100093E5 		ldr	r0, [r3, #16]
+  35              	.LVL0:
+  36              		.loc 1 123 0
+  37 000c 1E30D0E5 		ldrb	r3, [r0, #30]	@ zero_extendqisi2
+  38 0010 013083E2 		add	r3, r3, #1
+  39 0014 1E30C0E5 		strb	r3, [r0, #30]
+  40              		.loc 1 125 0
+  41              	@ 125 "../../os/kernel/src/chregistry.c" 1
+  42 0018 1FF021E3 		msr     CPSR_c, #0x1F
+  43              	@ 0 "" 2
+  44              		.loc 1 127 0
+  45 001c 1EFF2FE1 		bx	lr
+  46              	.L3:
+  47              		.align	2
+  48              	.L2:
+  49 0020 00000000 		.word	rlist
+  50              		.cfi_endproc
+  51              	.LFE7:
+  52              		.size	chRegFirstThread, .-chRegFirstThread
+  53              		.section	.text.chRegNextThread,"ax",%progbits
+  54              		.align	2
+  55              		.global	chRegNextThread
+  56              		.type	chRegNextThread, %function
+  57              	chRegNextThread:
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 2
+
+
+  58              	.LFB8:
+  59              		.loc 1 140 0
+  60              		.cfi_startproc
+  61              		@ args = 0, pretend = 0, frame = 0
+  62              		@ frame_needed = 0, uses_anonymous_args = 0
+  63              	.LVL1:
+  64 0000 10402DE9 		stmfd	sp!, {r4, lr}
+  65              	.LCFI0:
+  66              		.cfi_def_cfa_offset 8
+  67              		.cfi_offset 4, -8
+  68              		.cfi_offset 14, -4
+  69              		.loc 1 143 0
+  70              	@ 143 "../../os/kernel/src/chregistry.c" 1
+  71 0004 9FF021E3 		msr     CPSR_c, #0x9F
+  72              	@ 0 "" 2
+  73              		.loc 1 145 0
+  74 0008 24309FE5 		ldr	r3, .L7
+  75              		.loc 1 144 0
+  76 000c 104090E5 		ldr	r4, [r0, #16]
+  77              	.LVL2:
+  78              		.loc 1 145 0
+  79 0010 030054E1 		cmp	r4, r3
+  80              		.loc 1 151 0
+  81 0014 1E30D415 		ldrneb	r3, [r4, #30]	@ zero_extendqisi2
+  82              		.loc 1 146 0
+  83 0018 0040A003 		moveq	r4, #0
+  84              	.LVL3:
+  85              		.loc 1 151 0
+  86 001c 01308312 		addne	r3, r3, #1
+  87 0020 1E30C415 		strneb	r3, [r4, #30]
+  88              		.loc 1 154 0
+  89              	@ 154 "../../os/kernel/src/chregistry.c" 1
+  90 0024 1FF021E3 		msr     CPSR_c, #0x1F
+  91              	@ 0 "" 2
+  92              		.loc 1 156 0
+  93 0028 FEFFFFEB 		bl	chThdRelease
+  94              	.LVL4:
+  95              		.loc 1 159 0
+  96 002c 0400A0E1 		mov	r0, r4
+  97 0030 1080BDE8 		ldmfd	sp!, {r4, pc}
+  98              	.L8:
+  99              		.align	2
+ 100              	.L7:
+ 101 0034 00000000 		.word	rlist
+ 102              		.cfi_endproc
+ 103              	.LFE8:
+ 104              		.size	chRegNextThread, .-chRegNextThread
+ 105              		.global	ch_debug
+ 106              		.section	.rodata.ch_debug,"a",%progbits
+ 107              		.align	2
+ 108              		.type	ch_debug, %object
+ 109              		.size	ch_debug, 22
+ 110              	ch_debug:
+ 111 0000 6D61696E 		.ascii	"main"
+ 112 0004 00       		.byte	0
+ 113 0005 16       		.byte	22
+ 114 0006 8611     		.short	4486
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 3
+
+
+ 115 0008 04       		.byte	4
+ 116 0009 04       		.byte	4
+ 117 000a 44       		.byte	68
+ 118 000b 08       		.byte	8
+ 119 000c 0C       		.byte	12
+ 120 000d 10       		.byte	16
+ 121 000e 14       		.byte	20
+ 122 000f 18       		.byte	24
+ 123 0010 00       		.byte	0
+ 124 0011 1C       		.byte	28
+ 125 0012 1D       		.byte	29
+ 126 0013 1E       		.byte	30
+ 127 0014 1F       		.byte	31
+ 128 0015 20       		.byte	32
+ 129 0016 0000     		.text
+ 130              	.Letext0:
+ 131              		.file 2 "c:\\yagarto-20121222\\bin\\../lib/gcc/arm-none-eabi/4.7.2/include/stddef.h"
+ 132              		.file 3 "c:/yagarto-20121222/lib/gcc/../../arm-none-eabi/sys-include/stdint.h"
+ 133              		.file 4 "../../os/ports/GCC/ARM/chtypes.h"
+ 134              		.file 5 "../../os/kernel/include/chlists.h"
+ 135              		.file 6 "../../os/kernel/include/chthreads.h"
+ 136              		.file 7 "../../os/ports/GCC/ARM/chcore.h"
+ 137              		.file 8 "../../os/kernel/include/chschd.h"
+ 138              		.file 9 "../../os/kernel/include/chmtx.h"
+ 139              		.file 10 "../../os/kernel/include/chregistry.h"
+ 140              		.file 11 "../../os/kernel/include/chdynamic.h"
+ 141              		.section	.debug_info,"",%progbits
+ 142              	.Ldebug_info0:
+ 143 0000 00060000 		.4byte	0x600
+ 144 0004 0200     		.2byte	0x2
+ 145 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 146 000a 04       		.byte	0x4
+ 147 000b 01       		.uleb128 0x1
+ 148 000c 0B020000 		.4byte	.LASF87
+ 149 0010 01       		.byte	0x1
+ 150 0011 58030000 		.4byte	.LASF88
+ 151 0015 EA000000 		.4byte	.LASF89
+ 152 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 153 001d 00000000 		.4byte	0
+ 154 0021 00000000 		.4byte	0
+ 155 0025 00000000 		.4byte	.Ldebug_line0
+ 156 0029 02       		.uleb128 0x2
+ 157 002a 04       		.byte	0x4
+ 158 002b 05       		.byte	0x5
+ 159 002c 696E7400 		.ascii	"int\000"
+ 160 0030 03       		.uleb128 0x3
+ 161 0031 13000000 		.4byte	.LASF2
+ 162 0035 02       		.byte	0x2
+ 163 0036 D5       		.byte	0xd5
+ 164 0037 3B000000 		.4byte	0x3b
+ 165 003b 04       		.uleb128 0x4
+ 166 003c 04       		.byte	0x4
+ 167 003d 07       		.byte	0x7
+ 168 003e 36010000 		.4byte	.LASF0
+ 169 0042 04       		.uleb128 0x4
+ 170 0043 01       		.byte	0x1
+ 171 0044 06       		.byte	0x6
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 4
+
+
+ 172 0045 82000000 		.4byte	.LASF1
+ 173 0049 03       		.uleb128 0x3
+ 174 004a 9B030000 		.4byte	.LASF3
+ 175 004e 03       		.byte	0x3
+ 176 004f 2A       		.byte	0x2a
+ 177 0050 54000000 		.4byte	0x54
+ 178 0054 04       		.uleb128 0x4
+ 179 0055 01       		.byte	0x1
+ 180 0056 08       		.byte	0x8
+ 181 0057 59020000 		.4byte	.LASF4
+ 182 005b 04       		.uleb128 0x4
+ 183 005c 02       		.byte	0x2
+ 184 005d 05       		.byte	0x5
+ 185 005e 71020000 		.4byte	.LASF5
+ 186 0062 03       		.uleb128 0x3
+ 187 0063 CF000000 		.4byte	.LASF6
+ 188 0067 03       		.byte	0x3
+ 189 0068 36       		.byte	0x36
+ 190 0069 6D000000 		.4byte	0x6d
+ 191 006d 04       		.uleb128 0x4
+ 192 006e 02       		.byte	0x2
+ 193 006f 07       		.byte	0x7
+ 194 0070 74010000 		.4byte	.LASF7
+ 195 0074 03       		.uleb128 0x3
+ 196 0075 51020000 		.4byte	.LASF8
+ 197 0079 03       		.byte	0x3
+ 198 007a 4F       		.byte	0x4f
+ 199 007b 7F000000 		.4byte	0x7f
+ 200 007f 04       		.uleb128 0x4
+ 201 0080 04       		.byte	0x4
+ 202 0081 05       		.byte	0x5
+ 203 0082 BD000000 		.4byte	.LASF9
+ 204 0086 03       		.uleb128 0x3
+ 205 0087 F1020000 		.4byte	.LASF10
+ 206 008b 03       		.byte	0x3
+ 207 008c 50       		.byte	0x50
+ 208 008d 91000000 		.4byte	0x91
+ 209 0091 04       		.uleb128 0x4
+ 210 0092 04       		.byte	0x4
+ 211 0093 07       		.byte	0x7
+ 212 0094 43010000 		.4byte	.LASF11
+ 213 0098 04       		.uleb128 0x4
+ 214 0099 08       		.byte	0x8
+ 215 009a 05       		.byte	0x5
+ 216 009b 74000000 		.4byte	.LASF12
+ 217 009f 04       		.uleb128 0x4
+ 218 00a0 08       		.byte	0x8
+ 219 00a1 07       		.byte	0x7
+ 220 00a2 21000000 		.4byte	.LASF13
+ 221 00a6 04       		.uleb128 0x4
+ 222 00a7 01       		.byte	0x1
+ 223 00a8 02       		.byte	0x2
+ 224 00a9 4B020000 		.4byte	.LASF14
+ 225 00ad 03       		.uleb128 0x3
+ 226 00ae 8D010000 		.4byte	.LASF15
+ 227 00b2 04       		.byte	0x4
+ 228 00b3 2C       		.byte	0x2c
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 5
+
+
+ 229 00b4 49000000 		.4byte	0x49
+ 230 00b8 03       		.uleb128 0x3
+ 231 00b9 C6000000 		.4byte	.LASF16
+ 232 00bd 04       		.byte	0x4
+ 233 00be 2D       		.byte	0x2d
+ 234 00bf 49000000 		.4byte	0x49
+ 235 00c3 03       		.uleb128 0x3
+ 236 00c4 29020000 		.4byte	.LASF17
+ 237 00c8 04       		.byte	0x4
+ 238 00c9 2E       		.byte	0x2e
+ 239 00ca 49000000 		.4byte	0x49
+ 240 00ce 03       		.uleb128 0x3
+ 241 00cf B3000000 		.4byte	.LASF18
+ 242 00d3 04       		.byte	0x4
+ 243 00d4 2F       		.byte	0x2f
+ 244 00d5 49000000 		.4byte	0x49
+ 245 00d9 03       		.uleb128 0x3
+ 246 00da 43020000 		.4byte	.LASF19
+ 247 00de 04       		.byte	0x4
+ 248 00df 30       		.byte	0x30
+ 249 00e0 86000000 		.4byte	0x86
+ 250 00e4 03       		.uleb128 0x3
+ 251 00e5 87010000 		.4byte	.LASF20
+ 252 00e9 04       		.byte	0x4
+ 253 00ea 31       		.byte	0x31
+ 254 00eb 74000000 		.4byte	0x74
+ 255 00ef 03       		.uleb128 0x3
+ 256 00f0 A1010000 		.4byte	.LASF21
+ 257 00f4 04       		.byte	0x4
+ 258 00f5 33       		.byte	0x33
+ 259 00f6 86000000 		.4byte	0x86
+ 260 00fa 03       		.uleb128 0x3
+ 261 00fb 2A030000 		.4byte	.LASF22
+ 262 00ff 04       		.byte	0x4
+ 263 0100 35       		.byte	0x35
+ 264 0101 86000000 		.4byte	0x86
+ 265 0105 03       		.uleb128 0x3
+ 266 0106 D2020000 		.4byte	.LASF23
+ 267 010a 05       		.byte	0x5
+ 268 010b 2A       		.byte	0x2a
+ 269 010c 10010000 		.4byte	0x110
+ 270 0110 05       		.uleb128 0x5
+ 271 0111 D2020000 		.4byte	.LASF23
+ 272 0115 44       		.byte	0x44
+ 273 0116 06       		.byte	0x6
+ 274 0117 5E       		.byte	0x5e
+ 275 0118 27020000 		.4byte	0x227
+ 276 011c 06       		.uleb128 0x6
+ 277 011d A7020000 		.4byte	.LASF24
+ 278 0121 06       		.byte	0x6
+ 279 0122 5F       		.byte	0x5f
+ 280 0123 4C020000 		.4byte	0x24c
+ 281 0127 02       		.byte	0x2
+ 282 0128 23       		.byte	0x23
+ 283 0129 00       		.uleb128 0
+ 284 012a 06       		.uleb128 0x6
+ 285 012b 3C020000 		.4byte	.LASF25
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 6
+
+
+ 286 012f 06       		.byte	0x6
+ 287 0130 61       		.byte	0x61
+ 288 0131 4C020000 		.4byte	0x24c
+ 289 0135 02       		.byte	0x2
+ 290 0136 23       		.byte	0x23
+ 291 0137 04       		.uleb128 0x4
+ 292 0138 06       		.uleb128 0x6
+ 293 0139 60000000 		.4byte	.LASF26
+ 294 013d 06       		.byte	0x6
+ 295 013e 63       		.byte	0x63
+ 296 013f D9000000 		.4byte	0xd9
+ 297 0143 02       		.byte	0x2
+ 298 0144 23       		.byte	0x23
+ 299 0145 08       		.uleb128 0x8
+ 300 0146 06       		.uleb128 0x6
+ 301 0147 C4030000 		.4byte	.LASF27
+ 302 014b 06       		.byte	0x6
+ 303 014c 64       		.byte	0x64
+ 304 014d 10030000 		.4byte	0x310
+ 305 0151 02       		.byte	0x2
+ 306 0152 23       		.byte	0x23
+ 307 0153 0C       		.uleb128 0xc
+ 308 0154 06       		.uleb128 0x6
+ 309 0155 E2000000 		.4byte	.LASF28
+ 310 0159 06       		.byte	0x6
+ 311 015a 66       		.byte	0x66
+ 312 015b 4C020000 		.4byte	0x24c
+ 313 015f 02       		.byte	0x2
+ 314 0160 23       		.byte	0x23
+ 315 0161 10       		.uleb128 0x10
+ 316 0162 06       		.uleb128 0x6
+ 317 0163 E8010000 		.4byte	.LASF29
+ 318 0167 06       		.byte	0x6
+ 319 0168 67       		.byte	0x67
+ 320 0169 4C020000 		.4byte	0x24c
+ 321 016d 02       		.byte	0x2
+ 322 016e 23       		.byte	0x23
+ 323 016f 14       		.uleb128 0x14
+ 324 0170 06       		.uleb128 0x6
+ 325 0171 AA030000 		.4byte	.LASF30
+ 326 0175 06       		.byte	0x6
+ 327 0176 6E       		.byte	0x6e
+ 328 0177 1B040000 		.4byte	0x41b
+ 329 017b 02       		.byte	0x2
+ 330 017c 23       		.byte	0x23
+ 331 017d 18       		.uleb128 0x18
+ 332 017e 06       		.uleb128 0x6
+ 333 017f 7B020000 		.4byte	.LASF31
+ 334 0183 06       		.byte	0x6
+ 335 0184 79       		.byte	0x79
+ 336 0185 B8000000 		.4byte	0xb8
+ 337 0189 02       		.byte	0x2
+ 338 018a 23       		.byte	0x23
+ 339 018b 1C       		.uleb128 0x1c
+ 340 018c 06       		.uleb128 0x6
+ 341 018d BD020000 		.4byte	.LASF32
+ 342 0191 06       		.byte	0x6
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 7
+
+
+ 343 0192 7D       		.byte	0x7d
+ 344 0193 AD000000 		.4byte	0xad
+ 345 0197 02       		.byte	0x2
+ 346 0198 23       		.byte	0x23
+ 347 0199 1D       		.uleb128 0x1d
+ 348 019a 06       		.uleb128 0x6
+ 349 019b 84030000 		.4byte	.LASF33
+ 350 019f 06       		.byte	0x6
+ 351 01a0 82       		.byte	0x82
+ 352 01a1 C3000000 		.4byte	0xc3
+ 353 01a5 02       		.byte	0x2
+ 354 01a6 23       		.byte	0x23
+ 355 01a7 1E       		.uleb128 0x1e
+ 356 01a8 06       		.uleb128 0x6
+ 357 01a9 83020000 		.4byte	.LASF34
+ 358 01ad 06       		.byte	0x6
+ 359 01ae 88       		.byte	0x88
+ 360 01af CE000000 		.4byte	0xce
+ 361 01b3 02       		.byte	0x2
+ 362 01b4 23       		.byte	0x23
+ 363 01b5 1F       		.uleb128 0x1f
+ 364 01b6 06       		.uleb128 0x6
+ 365 01b7 3F030000 		.4byte	.LASF35
+ 366 01bb 06       		.byte	0x6
+ 367 01bc 8F       		.byte	0x8f
+ 368 01bd 31030000 		.4byte	0x331
+ 369 01c1 02       		.byte	0x2
+ 370 01c2 23       		.byte	0x23
+ 371 01c3 20       		.uleb128 0x20
+ 372 01c4 07       		.uleb128 0x7
+ 373 01c5 705F7500 		.ascii	"p_u\000"
+ 374 01c9 06       		.byte	0x6
+ 375 01ca B4       		.byte	0xb4
+ 376 01cb E6030000 		.4byte	0x3e6
+ 377 01cf 02       		.byte	0x2
+ 378 01d0 23       		.byte	0x23
+ 379 01d1 24       		.uleb128 0x24
+ 380 01d2 06       		.uleb128 0x6
+ 381 01d3 CA030000 		.4byte	.LASF36
+ 382 01d7 06       		.byte	0x6
+ 383 01d8 B9       		.byte	0xb9
+ 384 01d9 74020000 		.4byte	0x274
+ 385 01dd 02       		.byte	0x2
+ 386 01de 23       		.byte	0x23
+ 387 01df 28       		.uleb128 0x28
+ 388 01e0 06       		.uleb128 0x6
+ 389 01e1 4D030000 		.4byte	.LASF37
+ 390 01e5 06       		.byte	0x6
+ 391 01e6 BF       		.byte	0xbf
+ 392 01e7 52020000 		.4byte	0x252
+ 393 01eb 02       		.byte	0x2
+ 394 01ec 23       		.byte	0x23
+ 395 01ed 2C       		.uleb128 0x2c
+ 396 01ee 06       		.uleb128 0x6
+ 397 01ef 0D000000 		.4byte	.LASF38
+ 398 01f3 06       		.byte	0x6
+ 399 01f4 C3       		.byte	0xc3
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 8
+
+
+ 400 01f5 E4000000 		.4byte	0xe4
+ 401 01f9 02       		.byte	0x2
+ 402 01fa 23       		.byte	0x23
+ 403 01fb 34       		.uleb128 0x34
+ 404 01fc 06       		.uleb128 0x6
+ 405 01fd E6020000 		.4byte	.LASF39
+ 406 0201 06       		.byte	0x6
+ 407 0202 C9       		.byte	0xc9
+ 408 0203 EF000000 		.4byte	0xef
+ 409 0207 02       		.byte	0x2
+ 410 0208 23       		.byte	0x23
+ 411 0209 38       		.uleb128 0x38
+ 412 020a 06       		.uleb128 0x6
+ 413 020b 67020000 		.4byte	.LASF40
+ 414 020f 06       		.byte	0x6
+ 415 0210 D0       		.byte	0xd0
+ 416 0211 2D040000 		.4byte	0x42d
+ 417 0215 02       		.byte	0x2
+ 418 0216 23       		.byte	0x23
+ 419 0217 3C       		.uleb128 0x3c
+ 420 0218 06       		.uleb128 0x6
+ 421 0219 34030000 		.4byte	.LASF41
+ 422 021d 06       		.byte	0x6
+ 423 021e D4       		.byte	0xd4
+ 424 021f D9000000 		.4byte	0xd9
+ 425 0223 02       		.byte	0x2
+ 426 0224 23       		.byte	0x23
+ 427 0225 40       		.uleb128 0x40
+ 428 0226 00       		.byte	0
+ 429 0227 08       		.uleb128 0x8
+ 430 0228 08       		.byte	0x8
+ 431 0229 05       		.byte	0x5
+ 432 022a 61       		.byte	0x61
+ 433 022b 4C020000 		.4byte	0x24c
+ 434 022f 06       		.uleb128 0x6
+ 435 0230 A7020000 		.4byte	.LASF24
+ 436 0234 05       		.byte	0x5
+ 437 0235 62       		.byte	0x62
+ 438 0236 4C020000 		.4byte	0x24c
+ 439 023a 02       		.byte	0x2
+ 440 023b 23       		.byte	0x23
+ 441 023c 00       		.uleb128 0
+ 442 023d 06       		.uleb128 0x6
+ 443 023e 3C020000 		.4byte	.LASF25
+ 444 0242 05       		.byte	0x5
+ 445 0243 64       		.byte	0x64
+ 446 0244 4C020000 		.4byte	0x24c
+ 447 0248 02       		.byte	0x2
+ 448 0249 23       		.byte	0x23
+ 449 024a 04       		.uleb128 0x4
+ 450 024b 00       		.byte	0
+ 451 024c 09       		.uleb128 0x9
+ 452 024d 04       		.byte	0x4
+ 453 024e 05010000 		.4byte	0x105
+ 454 0252 03       		.uleb128 0x3
+ 455 0253 F6010000 		.4byte	.LASF42
+ 456 0257 05       		.byte	0x5
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 9
+
+
+ 457 0258 66       		.byte	0x66
+ 458 0259 27020000 		.4byte	0x227
+ 459 025d 08       		.uleb128 0x8
+ 460 025e 04       		.byte	0x4
+ 461 025f 05       		.byte	0x5
+ 462 0260 6B       		.byte	0x6b
+ 463 0261 74020000 		.4byte	0x274
+ 464 0265 06       		.uleb128 0x6
+ 465 0266 A7020000 		.4byte	.LASF24
+ 466 026a 05       		.byte	0x5
+ 467 026b 6D       		.byte	0x6d
+ 468 026c 4C020000 		.4byte	0x24c
+ 469 0270 02       		.byte	0x2
+ 470 0271 23       		.byte	0x23
+ 471 0272 00       		.uleb128 0
+ 472 0273 00       		.byte	0
+ 473 0274 03       		.uleb128 0x3
+ 474 0275 95010000 		.4byte	.LASF43
+ 475 0279 05       		.byte	0x5
+ 476 027a 70       		.byte	0x70
+ 477 027b 5D020000 		.4byte	0x25d
+ 478 027f 03       		.uleb128 0x3
+ 479 0280 2D010000 		.4byte	.LASF44
+ 480 0284 07       		.byte	0x7
+ 481 0285 A9       		.byte	0xa9
+ 482 0286 8A020000 		.4byte	0x28a
+ 483 028a 0A       		.uleb128 0xa
+ 484 028b 04       		.byte	0x4
+ 485 028c 05       		.uleb128 0x5
+ 486 028d 46030000 		.4byte	.LASF45
+ 487 0291 24       		.byte	0x24
+ 488 0292 07       		.byte	0x7
+ 489 0293 C0       		.byte	0xc0
+ 490 0294 10030000 		.4byte	0x310
+ 491 0298 07       		.uleb128 0x7
+ 492 0299 723400   		.ascii	"r4\000"
+ 493 029c 07       		.byte	0x7
+ 494 029d C1       		.byte	0xc1
+ 495 029e 7F020000 		.4byte	0x27f
+ 496 02a2 02       		.byte	0x2
+ 497 02a3 23       		.byte	0x23
+ 498 02a4 00       		.uleb128 0
+ 499 02a5 07       		.uleb128 0x7
+ 500 02a6 723500   		.ascii	"r5\000"
+ 501 02a9 07       		.byte	0x7
+ 502 02aa C2       		.byte	0xc2
+ 503 02ab 7F020000 		.4byte	0x27f
+ 504 02af 02       		.byte	0x2
+ 505 02b0 23       		.byte	0x23
+ 506 02b1 04       		.uleb128 0x4
+ 507 02b2 07       		.uleb128 0x7
+ 508 02b3 723600   		.ascii	"r6\000"
+ 509 02b6 07       		.byte	0x7
+ 510 02b7 C3       		.byte	0xc3
+ 511 02b8 7F020000 		.4byte	0x27f
+ 512 02bc 02       		.byte	0x2
+ 513 02bd 23       		.byte	0x23
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 10
+
+
+ 514 02be 08       		.uleb128 0x8
+ 515 02bf 07       		.uleb128 0x7
+ 516 02c0 723700   		.ascii	"r7\000"
+ 517 02c3 07       		.byte	0x7
+ 518 02c4 C4       		.byte	0xc4
+ 519 02c5 7F020000 		.4byte	0x27f
+ 520 02c9 02       		.byte	0x2
+ 521 02ca 23       		.byte	0x23
+ 522 02cb 0C       		.uleb128 0xc
+ 523 02cc 07       		.uleb128 0x7
+ 524 02cd 723800   		.ascii	"r8\000"
+ 525 02d0 07       		.byte	0x7
+ 526 02d1 C5       		.byte	0xc5
+ 527 02d2 7F020000 		.4byte	0x27f
+ 528 02d6 02       		.byte	0x2
+ 529 02d7 23       		.byte	0x23
+ 530 02d8 10       		.uleb128 0x10
+ 531 02d9 07       		.uleb128 0x7
+ 532 02da 723900   		.ascii	"r9\000"
+ 533 02dd 07       		.byte	0x7
+ 534 02de C6       		.byte	0xc6
+ 535 02df 7F020000 		.4byte	0x27f
+ 536 02e3 02       		.byte	0x2
+ 537 02e4 23       		.byte	0x23
+ 538 02e5 14       		.uleb128 0x14
+ 539 02e6 07       		.uleb128 0x7
+ 540 02e7 72313000 		.ascii	"r10\000"
+ 541 02eb 07       		.byte	0x7
+ 542 02ec C7       		.byte	0xc7
+ 543 02ed 7F020000 		.4byte	0x27f
+ 544 02f1 02       		.byte	0x2
+ 545 02f2 23       		.byte	0x23
+ 546 02f3 18       		.uleb128 0x18
+ 547 02f4 07       		.uleb128 0x7
+ 548 02f5 72313100 		.ascii	"r11\000"
+ 549 02f9 07       		.byte	0x7
+ 550 02fa C8       		.byte	0xc8
+ 551 02fb 7F020000 		.4byte	0x27f
+ 552 02ff 02       		.byte	0x2
+ 553 0300 23       		.byte	0x23
+ 554 0301 1C       		.uleb128 0x1c
+ 555 0302 07       		.uleb128 0x7
+ 556 0303 6C7200   		.ascii	"lr\000"
+ 557 0306 07       		.byte	0x7
+ 558 0307 C9       		.byte	0xc9
+ 559 0308 7F020000 		.4byte	0x27f
+ 560 030c 02       		.byte	0x2
+ 561 030d 23       		.byte	0x23
+ 562 030e 20       		.uleb128 0x20
+ 563 030f 00       		.byte	0
+ 564 0310 05       		.uleb128 0x5
+ 565 0311 6C010000 		.4byte	.LASF46
+ 566 0315 04       		.byte	0x4
+ 567 0316 07       		.byte	0x7
+ 568 0317 D1       		.byte	0xd1
+ 569 0318 2B030000 		.4byte	0x32b
+ 570 031c 07       		.uleb128 0x7
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 11
+
+
+ 571 031d 72313300 		.ascii	"r13\000"
+ 572 0321 07       		.byte	0x7
+ 573 0322 D2       		.byte	0xd2
+ 574 0323 2B030000 		.4byte	0x32b
+ 575 0327 02       		.byte	0x2
+ 576 0328 23       		.byte	0x23
+ 577 0329 00       		.uleb128 0
+ 578 032a 00       		.byte	0
+ 579 032b 09       		.uleb128 0x9
+ 580 032c 04       		.byte	0x4
+ 581 032d 8C020000 		.4byte	0x28c
+ 582 0331 0B       		.uleb128 0xb
+ 583 0332 FA000000 		.4byte	0xfa
+ 584 0336 08       		.uleb128 0x8
+ 585 0337 1C       		.byte	0x1c
+ 586 0338 08       		.byte	0x8
+ 587 0339 5E       		.byte	0x5e
+ 588 033a 93030000 		.4byte	0x393
+ 589 033e 06       		.uleb128 0x6
+ 590 033f 06030000 		.4byte	.LASF47
+ 591 0343 08       		.byte	0x8
+ 592 0344 5F       		.byte	0x5f
+ 593 0345 52020000 		.4byte	0x252
+ 594 0349 02       		.byte	0x2
+ 595 034a 23       		.byte	0x23
+ 596 034b 00       		.uleb128 0
+ 597 034c 06       		.uleb128 0x6
+ 598 034d 99020000 		.4byte	.LASF48
+ 599 0351 08       		.byte	0x8
+ 600 0352 60       		.byte	0x60
+ 601 0353 D9000000 		.4byte	0xd9
+ 602 0357 02       		.byte	0x2
+ 603 0358 23       		.byte	0x23
+ 604 0359 08       		.uleb128 0x8
+ 605 035a 06       		.uleb128 0x6
+ 606 035b F0010000 		.4byte	.LASF49
+ 607 035f 08       		.byte	0x8
+ 608 0360 62       		.byte	0x62
+ 609 0361 10030000 		.4byte	0x310
+ 610 0365 02       		.byte	0x2
+ 611 0366 23       		.byte	0x23
+ 612 0367 0C       		.uleb128 0xc
+ 613 0368 06       		.uleb128 0x6
+ 614 0369 25010000 		.4byte	.LASF50
+ 615 036d 08       		.byte	0x8
+ 616 036e 65       		.byte	0x65
+ 617 036f 4C020000 		.4byte	0x24c
+ 618 0373 02       		.byte	0x2
+ 619 0374 23       		.byte	0x23
+ 620 0375 10       		.uleb128 0x10
+ 621 0376 06       		.uleb128 0x6
+ 622 0377 21020000 		.4byte	.LASF51
+ 623 037b 08       		.byte	0x8
+ 624 037c 66       		.byte	0x66
+ 625 037d 4C020000 		.4byte	0x24c
+ 626 0381 02       		.byte	0x2
+ 627 0382 23       		.byte	0x23
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 12
+
+
+ 628 0383 14       		.uleb128 0x14
+ 629 0384 06       		.uleb128 0x6
+ 630 0385 17020000 		.4byte	.LASF52
+ 631 0389 08       		.byte	0x8
+ 632 038a 69       		.byte	0x69
+ 633 038b 4C020000 		.4byte	0x24c
+ 634 038f 02       		.byte	0x2
+ 635 0390 23       		.byte	0x23
+ 636 0391 18       		.uleb128 0x18
+ 637 0392 00       		.byte	0
+ 638 0393 03       		.uleb128 0x3
+ 639 0394 8B030000 		.4byte	.LASF53
+ 640 0398 08       		.byte	0x8
+ 641 0399 6B       		.byte	0x6b
+ 642 039a 36030000 		.4byte	0x336
+ 643 039e 05       		.uleb128 0x5
+ 644 039f AD010000 		.4byte	.LASF54
+ 645 03a3 10       		.byte	0x10
+ 646 03a4 09       		.byte	0x9
+ 647 03a5 2C       		.byte	0x2c
+ 648 03a6 D5030000 		.4byte	0x3d5
+ 649 03aa 06       		.uleb128 0x6
+ 650 03ab AB000000 		.4byte	.LASF55
+ 651 03af 09       		.byte	0x9
+ 652 03b0 2D       		.byte	0x2d
+ 653 03b1 52020000 		.4byte	0x252
+ 654 03b5 02       		.byte	0x2
+ 655 03b6 23       		.byte	0x23
+ 656 03b7 00       		.uleb128 0
+ 657 03b8 06       		.uleb128 0x6
+ 658 03b9 BC030000 		.4byte	.LASF56
+ 659 03bd 09       		.byte	0x9
+ 660 03be 2F       		.byte	0x2f
+ 661 03bf 4C020000 		.4byte	0x24c
+ 662 03c3 02       		.byte	0x2
+ 663 03c4 23       		.byte	0x23
+ 664 03c5 08       		.uleb128 0x8
+ 665 03c6 06       		.uleb128 0x6
+ 666 03c7 23030000 		.4byte	.LASF57
+ 667 03cb 09       		.byte	0x9
+ 668 03cc 31       		.byte	0x31
+ 669 03cd D5030000 		.4byte	0x3d5
+ 670 03d1 02       		.byte	0x2
+ 671 03d2 23       		.byte	0x23
+ 672 03d3 0C       		.uleb128 0xc
+ 673 03d4 00       		.byte	0
+ 674 03d5 09       		.uleb128 0x9
+ 675 03d6 04       		.byte	0x4
+ 676 03d7 9E030000 		.4byte	0x39e
+ 677 03db 03       		.uleb128 0x3
+ 678 03dc AD010000 		.4byte	.LASF54
+ 679 03e0 09       		.byte	0x9
+ 680 03e1 33       		.byte	0x33
+ 681 03e2 9E030000 		.4byte	0x39e
+ 682 03e6 0C       		.uleb128 0xc
+ 683 03e7 04       		.byte	0x4
+ 684 03e8 06       		.byte	0x6
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 13
+
+
+ 685 03e9 96       		.byte	0x96
+ 686 03ea 1B040000 		.4byte	0x41b
+ 687 03ee 0D       		.uleb128 0xd
+ 688 03ef 1A000000 		.4byte	.LASF58
+ 689 03f3 06       		.byte	0x6
+ 690 03f4 9D       		.byte	0x9d
+ 691 03f5 E4000000 		.4byte	0xe4
+ 692 03f9 0D       		.uleb128 0xd
+ 693 03fa 46000000 		.4byte	.LASF59
+ 694 03fe 06       		.byte	0x6
+ 695 03ff A4       		.byte	0xa4
+ 696 0400 E4000000 		.4byte	0xe4
+ 697 0404 0D       		.uleb128 0xd
+ 698 0405 A3030000 		.4byte	.LASF60
+ 699 0409 06       		.byte	0x6
+ 700 040a AB       		.byte	0xab
+ 701 040b 8A020000 		.4byte	0x28a
+ 702 040f 0D       		.uleb128 0xd
+ 703 0410 A0020000 		.4byte	.LASF61
+ 704 0414 06       		.byte	0x6
+ 705 0415 B2       		.byte	0xb2
+ 706 0416 EF000000 		.4byte	0xef
+ 707 041a 00       		.byte	0
+ 708 041b 09       		.uleb128 0x9
+ 709 041c 04       		.byte	0x4
+ 710 041d 21040000 		.4byte	0x421
+ 711 0421 0E       		.uleb128 0xe
+ 712 0422 26040000 		.4byte	0x426
+ 713 0426 04       		.uleb128 0x4
+ 714 0427 01       		.byte	0x1
+ 715 0428 08       		.byte	0x8
+ 716 0429 0E030000 		.4byte	.LASF62
+ 717 042d 09       		.uleb128 0x9
+ 718 042e 04       		.byte	0x4
+ 719 042f DB030000 		.4byte	0x3db
+ 720 0433 08       		.uleb128 0x8
+ 721 0434 16       		.byte	0x16
+ 722 0435 0A       		.byte	0xa
+ 723 0436 2C       		.byte	0x2c
+ 724 0437 38050000 		.4byte	0x538
+ 725 043b 06       		.uleb128 0x6
+ 726 043c 5E010000 		.4byte	.LASF63
+ 727 0440 0A       		.byte	0xa
+ 728 0441 2D       		.byte	0x2d
+ 729 0442 38050000 		.4byte	0x538
+ 730 0446 02       		.byte	0x2
+ 731 0447 23       		.byte	0x23
+ 732 0448 00       		.uleb128 0
+ 733 0449 06       		.uleb128 0x6
+ 734 044a B3010000 		.4byte	.LASF64
+ 735 044e 0A       		.byte	0xa
+ 736 044f 2E       		.byte	0x2e
+ 737 0450 49000000 		.4byte	0x49
+ 738 0454 02       		.byte	0x2
+ 739 0455 23       		.byte	0x23
+ 740 0456 04       		.uleb128 0x4
+ 741 0457 06       		.uleb128 0x6
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 14
+
+
+ 742 0458 03020000 		.4byte	.LASF65
+ 743 045c 0A       		.byte	0xa
+ 744 045d 2F       		.byte	0x2f
+ 745 045e 49000000 		.4byte	0x49
+ 746 0462 02       		.byte	0x2
+ 747 0463 23       		.byte	0x23
+ 748 0464 05       		.uleb128 0x5
+ 749 0465 06       		.uleb128 0x6
+ 750 0466 B1030000 		.4byte	.LASF66
+ 751 046a 0A       		.byte	0xa
+ 752 046b 30       		.byte	0x30
+ 753 046c 62000000 		.4byte	0x62
+ 754 0470 02       		.byte	0x2
+ 755 0471 23       		.byte	0x23
+ 756 0472 06       		.uleb128 0x6
+ 757 0473 06       		.uleb128 0x6
+ 758 0474 31020000 		.4byte	.LASF67
+ 759 0478 0A       		.byte	0xa
+ 760 0479 31       		.byte	0x31
+ 761 047a 49000000 		.4byte	0x49
+ 762 047e 02       		.byte	0x2
+ 763 047f 23       		.byte	0x23
+ 764 0480 08       		.uleb128 0x8
+ 765 0481 06       		.uleb128 0x6
+ 766 0482 D0010000 		.4byte	.LASF68
+ 767 0486 0A       		.byte	0xa
+ 768 0487 32       		.byte	0x32
+ 769 0488 49000000 		.4byte	0x49
+ 770 048c 02       		.byte	0x2
+ 771 048d 23       		.byte	0x23
+ 772 048e 09       		.uleb128 0x9
+ 773 048f 06       		.uleb128 0x6
+ 774 0490 38000000 		.4byte	.LASF69
+ 775 0494 0A       		.byte	0xa
+ 776 0495 33       		.byte	0x33
+ 777 0496 49000000 		.4byte	0x49
+ 778 049a 02       		.byte	0x2
+ 779 049b 23       		.byte	0x23
+ 780 049c 0A       		.uleb128 0xa
+ 781 049d 06       		.uleb128 0x6
+ 782 049e FA020000 		.4byte	.LASF70
+ 783 04a2 0A       		.byte	0xa
+ 784 04a3 34       		.byte	0x34
+ 785 04a4 49000000 		.4byte	0x49
+ 786 04a8 02       		.byte	0x2
+ 787 04a9 23       		.byte	0x23
+ 788 04aa 0B       		.uleb128 0xb
+ 789 04ab 06       		.uleb128 0x6
+ 790 04ac 79030000 		.4byte	.LASF71
+ 791 04b0 0A       		.byte	0xa
+ 792 04b1 35       		.byte	0x35
+ 793 04b2 49000000 		.4byte	0x49
+ 794 04b6 02       		.byte	0x2
+ 795 04b7 23       		.byte	0x23
+ 796 04b8 0C       		.uleb128 0xc
+ 797 04b9 06       		.uleb128 0x6
+ 798 04ba D9020000 		.4byte	.LASF72
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 15
+
+
+ 799 04be 0A       		.byte	0xa
+ 800 04bf 36       		.byte	0x36
+ 801 04c0 49000000 		.4byte	0x49
+ 802 04c4 02       		.byte	0x2
+ 803 04c5 23       		.byte	0x23
+ 804 04c6 0D       		.uleb128 0xd
+ 805 04c7 06       		.uleb128 0x6
+ 806 04c8 00000000 		.4byte	.LASF73
+ 807 04cc 0A       		.byte	0xa
+ 808 04cd 37       		.byte	0x37
+ 809 04ce 49000000 		.4byte	0x49
+ 810 04d2 02       		.byte	0x2
+ 811 04d3 23       		.byte	0x23
+ 812 04d4 0E       		.uleb128 0xe
+ 813 04d5 06       		.uleb128 0x6
+ 814 04d6 DC010000 		.4byte	.LASF74
+ 815 04da 0A       		.byte	0xa
+ 816 04db 38       		.byte	0x38
+ 817 04dc 49000000 		.4byte	0x49
+ 818 04e0 02       		.byte	0x2
+ 819 04e1 23       		.byte	0x23
+ 820 04e2 0F       		.uleb128 0xf
+ 821 04e3 06       		.uleb128 0x6
+ 822 04e4 8E000000 		.4byte	.LASF75
+ 823 04e8 0A       		.byte	0xa
+ 824 04e9 39       		.byte	0x39
+ 825 04ea 49000000 		.4byte	0x49
+ 826 04ee 02       		.byte	0x2
+ 827 04ef 23       		.byte	0x23
+ 828 04f0 10       		.uleb128 0x10
+ 829 04f1 06       		.uleb128 0x6
+ 830 04f2 67000000 		.4byte	.LASF76
+ 831 04f6 0A       		.byte	0xa
+ 832 04f7 3B       		.byte	0x3b
+ 833 04f8 49000000 		.4byte	0x49
+ 834 04fc 02       		.byte	0x2
+ 835 04fd 23       		.byte	0x23
+ 836 04fe 11       		.uleb128 0x11
+ 837 04ff 06       		.uleb128 0x6
+ 838 0500 9E000000 		.4byte	.LASF77
+ 839 0504 0A       		.byte	0xa
+ 840 0505 3C       		.byte	0x3c
+ 841 0506 49000000 		.4byte	0x49
+ 842 050a 02       		.byte	0x2
+ 843 050b 23       		.byte	0x23
+ 844 050c 12       		.uleb128 0x12
+ 845 050d 06       		.uleb128 0x6
+ 846 050e BB010000 		.4byte	.LASF78
+ 847 0512 0A       		.byte	0xa
+ 848 0513 3D       		.byte	0x3d
+ 849 0514 49000000 		.4byte	0x49
+ 850 0518 02       		.byte	0x2
+ 851 0519 23       		.byte	0x23
+ 852 051a 13       		.uleb128 0x13
+ 853 051b 06       		.uleb128 0x6
+ 854 051c AE020000 		.4byte	.LASF79
+ 855 0520 0A       		.byte	0xa
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 16
+
+
+ 856 0521 3E       		.byte	0x3e
+ 857 0522 49000000 		.4byte	0x49
+ 858 0526 02       		.byte	0x2
+ 859 0527 23       		.byte	0x23
+ 860 0528 14       		.uleb128 0x14
+ 861 0529 06       		.uleb128 0x6
+ 862 052a 8D020000 		.4byte	.LASF80
+ 863 052e 0A       		.byte	0xa
+ 864 052f 40       		.byte	0x40
+ 865 0530 49000000 		.4byte	0x49
+ 866 0534 02       		.byte	0x2
+ 867 0535 23       		.byte	0x23
+ 868 0536 15       		.uleb128 0x15
+ 869 0537 00       		.byte	0
+ 870 0538 0F       		.uleb128 0xf
+ 871 0539 26040000 		.4byte	0x426
+ 872 053d 48050000 		.4byte	0x548
+ 873 0541 10       		.uleb128 0x10
+ 874 0542 48050000 		.4byte	0x548
+ 875 0546 03       		.byte	0x3
+ 876 0547 00       		.byte	0
+ 877 0548 04       		.uleb128 0x4
+ 878 0549 04       		.byte	0x4
+ 879 054a 07       		.byte	0x7
+ 880 054b C7010000 		.4byte	.LASF81
+ 881 054f 03       		.uleb128 0x3
+ 882 0550 D8000000 		.4byte	.LASF82
+ 883 0554 0A       		.byte	0xa
+ 884 0555 41       		.byte	0x41
+ 885 0556 33040000 		.4byte	0x433
+ 886 055a 11       		.uleb128 0x11
+ 887 055b 01       		.byte	0x1
+ 888 055c 4F000000 		.4byte	.LASF83
+ 889 0560 01       		.byte	0x1
+ 890 0561 75       		.byte	0x75
+ 891 0562 01       		.byte	0x1
+ 892 0563 4C020000 		.4byte	0x24c
+ 893 0567 00000000 		.4byte	.LFB7
+ 894 056b 24000000 		.4byte	.LFE7
+ 895 056f 02       		.byte	0x2
+ 896 0570 7D       		.byte	0x7d
+ 897 0571 00       		.sleb128 0
+ 898 0572 01       		.byte	0x1
+ 899 0573 84050000 		.4byte	0x584
+ 900 0577 12       		.uleb128 0x12
+ 901 0578 747000   		.ascii	"tp\000"
+ 902 057b 01       		.byte	0x1
+ 903 057c 76       		.byte	0x76
+ 904 057d 4C020000 		.4byte	0x24c
+ 905 0581 01       		.byte	0x1
+ 906 0582 50       		.byte	0x50
+ 907 0583 00       		.byte	0
+ 908 0584 13       		.uleb128 0x13
+ 909 0585 01       		.byte	0x1
+ 910 0586 13030000 		.4byte	.LASF84
+ 911 058a 01       		.byte	0x1
+ 912 058b 8C       		.byte	0x8c
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 17
+
+
+ 913 058c 01       		.byte	0x1
+ 914 058d 4C020000 		.4byte	0x24c
+ 915 0591 00000000 		.4byte	.LFB8
+ 916 0595 38000000 		.4byte	.LFE8
+ 917 0599 00000000 		.4byte	.LLST0
+ 918 059d 01       		.byte	0x1
+ 919 059e CF050000 		.4byte	0x5cf
+ 920 05a2 14       		.uleb128 0x14
+ 921 05a3 747000   		.ascii	"tp\000"
+ 922 05a6 01       		.byte	0x1
+ 923 05a7 8C       		.byte	0x8c
+ 924 05a8 4C020000 		.4byte	0x24c
+ 925 05ac 20000000 		.4byte	.LLST1
+ 926 05b0 12       		.uleb128 0x12
+ 927 05b1 6E747000 		.ascii	"ntp\000"
+ 928 05b5 01       		.byte	0x1
+ 929 05b6 8D       		.byte	0x8d
+ 930 05b7 4C020000 		.4byte	0x24c
+ 931 05bb 01       		.byte	0x1
+ 932 05bc 54       		.byte	0x54
+ 933 05bd 15       		.uleb128 0x15
+ 934 05be 2C000000 		.4byte	.LVL4
+ 935 05c2 F3050000 		.4byte	0x5f3
+ 936 05c6 16       		.uleb128 0x16
+ 937 05c7 01       		.byte	0x1
+ 938 05c8 50       		.byte	0x50
+ 939 05c9 03       		.byte	0x3
+ 940 05ca F3       		.byte	0xf3
+ 941 05cb 01       		.uleb128 0x1
+ 942 05cc 50       		.byte	0x50
+ 943 05cd 00       		.byte	0
+ 944 05ce 00       		.byte	0
+ 945 05cf 17       		.uleb128 0x17
+ 946 05d0 95030000 		.4byte	.LASF85
+ 947 05d4 08       		.byte	0x8
+ 948 05d5 6F       		.byte	0x6f
+ 949 05d6 93030000 		.4byte	0x393
+ 950 05da 01       		.byte	0x1
+ 951 05db 01       		.byte	0x1
+ 952 05dc 18       		.uleb128 0x18
+ 953 05dd 55010000 		.4byte	.LASF86
+ 954 05e1 01       		.byte	0x1
+ 955 05e2 42       		.byte	0x42
+ 956 05e3 EE050000 		.4byte	0x5ee
+ 957 05e7 01       		.byte	0x1
+ 958 05e8 05       		.byte	0x5
+ 959 05e9 03       		.byte	0x3
+ 960 05ea 00000000 		.4byte	ch_debug
+ 961 05ee 0E       		.uleb128 0xe
+ 962 05ef 4F050000 		.4byte	0x54f
+ 963 05f3 19       		.uleb128 0x19
+ 964 05f4 01       		.byte	0x1
+ 965 05f5 C5020000 		.4byte	.LASF90
+ 966 05f9 0B       		.byte	0xb
+ 967 05fa 3A       		.byte	0x3a
+ 968 05fb 01       		.byte	0x1
+ 969 05fc 01       		.byte	0x1
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 18
+
+
+ 970 05fd 1A       		.uleb128 0x1a
+ 971 05fe 4C020000 		.4byte	0x24c
+ 972 0602 00       		.byte	0
+ 973 0603 00       		.byte	0
+ 974              		.section	.debug_abbrev,"",%progbits
+ 975              	.Ldebug_abbrev0:
+ 976 0000 01       		.uleb128 0x1
+ 977 0001 11       		.uleb128 0x11
+ 978 0002 01       		.byte	0x1
+ 979 0003 25       		.uleb128 0x25
+ 980 0004 0E       		.uleb128 0xe
+ 981 0005 13       		.uleb128 0x13
+ 982 0006 0B       		.uleb128 0xb
+ 983 0007 03       		.uleb128 0x3
+ 984 0008 0E       		.uleb128 0xe
+ 985 0009 1B       		.uleb128 0x1b
+ 986 000a 0E       		.uleb128 0xe
+ 987 000b 55       		.uleb128 0x55
+ 988 000c 06       		.uleb128 0x6
+ 989 000d 11       		.uleb128 0x11
+ 990 000e 01       		.uleb128 0x1
+ 991 000f 52       		.uleb128 0x52
+ 992 0010 01       		.uleb128 0x1
+ 993 0011 10       		.uleb128 0x10
+ 994 0012 06       		.uleb128 0x6
+ 995 0013 00       		.byte	0
+ 996 0014 00       		.byte	0
+ 997 0015 02       		.uleb128 0x2
+ 998 0016 24       		.uleb128 0x24
+ 999 0017 00       		.byte	0
+ 1000 0018 0B       		.uleb128 0xb
+ 1001 0019 0B       		.uleb128 0xb
+ 1002 001a 3E       		.uleb128 0x3e
+ 1003 001b 0B       		.uleb128 0xb
+ 1004 001c 03       		.uleb128 0x3
+ 1005 001d 08       		.uleb128 0x8
+ 1006 001e 00       		.byte	0
+ 1007 001f 00       		.byte	0
+ 1008 0020 03       		.uleb128 0x3
+ 1009 0021 16       		.uleb128 0x16
+ 1010 0022 00       		.byte	0
+ 1011 0023 03       		.uleb128 0x3
+ 1012 0024 0E       		.uleb128 0xe
+ 1013 0025 3A       		.uleb128 0x3a
+ 1014 0026 0B       		.uleb128 0xb
+ 1015 0027 3B       		.uleb128 0x3b
+ 1016 0028 0B       		.uleb128 0xb
+ 1017 0029 49       		.uleb128 0x49
+ 1018 002a 13       		.uleb128 0x13
+ 1019 002b 00       		.byte	0
+ 1020 002c 00       		.byte	0
+ 1021 002d 04       		.uleb128 0x4
+ 1022 002e 24       		.uleb128 0x24
+ 1023 002f 00       		.byte	0
+ 1024 0030 0B       		.uleb128 0xb
+ 1025 0031 0B       		.uleb128 0xb
+ 1026 0032 3E       		.uleb128 0x3e
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 19
+
+
+ 1027 0033 0B       		.uleb128 0xb
+ 1028 0034 03       		.uleb128 0x3
+ 1029 0035 0E       		.uleb128 0xe
+ 1030 0036 00       		.byte	0
+ 1031 0037 00       		.byte	0
+ 1032 0038 05       		.uleb128 0x5
+ 1033 0039 13       		.uleb128 0x13
+ 1034 003a 01       		.byte	0x1
+ 1035 003b 03       		.uleb128 0x3
+ 1036 003c 0E       		.uleb128 0xe
+ 1037 003d 0B       		.uleb128 0xb
+ 1038 003e 0B       		.uleb128 0xb
+ 1039 003f 3A       		.uleb128 0x3a
+ 1040 0040 0B       		.uleb128 0xb
+ 1041 0041 3B       		.uleb128 0x3b
+ 1042 0042 0B       		.uleb128 0xb
+ 1043 0043 01       		.uleb128 0x1
+ 1044 0044 13       		.uleb128 0x13
+ 1045 0045 00       		.byte	0
+ 1046 0046 00       		.byte	0
+ 1047 0047 06       		.uleb128 0x6
+ 1048 0048 0D       		.uleb128 0xd
+ 1049 0049 00       		.byte	0
+ 1050 004a 03       		.uleb128 0x3
+ 1051 004b 0E       		.uleb128 0xe
+ 1052 004c 3A       		.uleb128 0x3a
+ 1053 004d 0B       		.uleb128 0xb
+ 1054 004e 3B       		.uleb128 0x3b
+ 1055 004f 0B       		.uleb128 0xb
+ 1056 0050 49       		.uleb128 0x49
+ 1057 0051 13       		.uleb128 0x13
+ 1058 0052 38       		.uleb128 0x38
+ 1059 0053 0A       		.uleb128 0xa
+ 1060 0054 00       		.byte	0
+ 1061 0055 00       		.byte	0
+ 1062 0056 07       		.uleb128 0x7
+ 1063 0057 0D       		.uleb128 0xd
+ 1064 0058 00       		.byte	0
+ 1065 0059 03       		.uleb128 0x3
+ 1066 005a 08       		.uleb128 0x8
+ 1067 005b 3A       		.uleb128 0x3a
+ 1068 005c 0B       		.uleb128 0xb
+ 1069 005d 3B       		.uleb128 0x3b
+ 1070 005e 0B       		.uleb128 0xb
+ 1071 005f 49       		.uleb128 0x49
+ 1072 0060 13       		.uleb128 0x13
+ 1073 0061 38       		.uleb128 0x38
+ 1074 0062 0A       		.uleb128 0xa
+ 1075 0063 00       		.byte	0
+ 1076 0064 00       		.byte	0
+ 1077 0065 08       		.uleb128 0x8
+ 1078 0066 13       		.uleb128 0x13
+ 1079 0067 01       		.byte	0x1
+ 1080 0068 0B       		.uleb128 0xb
+ 1081 0069 0B       		.uleb128 0xb
+ 1082 006a 3A       		.uleb128 0x3a
+ 1083 006b 0B       		.uleb128 0xb
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 20
+
+
+ 1084 006c 3B       		.uleb128 0x3b
+ 1085 006d 0B       		.uleb128 0xb
+ 1086 006e 01       		.uleb128 0x1
+ 1087 006f 13       		.uleb128 0x13
+ 1088 0070 00       		.byte	0
+ 1089 0071 00       		.byte	0
+ 1090 0072 09       		.uleb128 0x9
+ 1091 0073 0F       		.uleb128 0xf
+ 1092 0074 00       		.byte	0
+ 1093 0075 0B       		.uleb128 0xb
+ 1094 0076 0B       		.uleb128 0xb
+ 1095 0077 49       		.uleb128 0x49
+ 1096 0078 13       		.uleb128 0x13
+ 1097 0079 00       		.byte	0
+ 1098 007a 00       		.byte	0
+ 1099 007b 0A       		.uleb128 0xa
+ 1100 007c 0F       		.uleb128 0xf
+ 1101 007d 00       		.byte	0
+ 1102 007e 0B       		.uleb128 0xb
+ 1103 007f 0B       		.uleb128 0xb
+ 1104 0080 00       		.byte	0
+ 1105 0081 00       		.byte	0
+ 1106 0082 0B       		.uleb128 0xb
+ 1107 0083 35       		.uleb128 0x35
+ 1108 0084 00       		.byte	0
+ 1109 0085 49       		.uleb128 0x49
+ 1110 0086 13       		.uleb128 0x13
+ 1111 0087 00       		.byte	0
+ 1112 0088 00       		.byte	0
+ 1113 0089 0C       		.uleb128 0xc
+ 1114 008a 17       		.uleb128 0x17
+ 1115 008b 01       		.byte	0x1
+ 1116 008c 0B       		.uleb128 0xb
+ 1117 008d 0B       		.uleb128 0xb
+ 1118 008e 3A       		.uleb128 0x3a
+ 1119 008f 0B       		.uleb128 0xb
+ 1120 0090 3B       		.uleb128 0x3b
+ 1121 0091 0B       		.uleb128 0xb
+ 1122 0092 01       		.uleb128 0x1
+ 1123 0093 13       		.uleb128 0x13
+ 1124 0094 00       		.byte	0
+ 1125 0095 00       		.byte	0
+ 1126 0096 0D       		.uleb128 0xd
+ 1127 0097 0D       		.uleb128 0xd
+ 1128 0098 00       		.byte	0
+ 1129 0099 03       		.uleb128 0x3
+ 1130 009a 0E       		.uleb128 0xe
+ 1131 009b 3A       		.uleb128 0x3a
+ 1132 009c 0B       		.uleb128 0xb
+ 1133 009d 3B       		.uleb128 0x3b
+ 1134 009e 0B       		.uleb128 0xb
+ 1135 009f 49       		.uleb128 0x49
+ 1136 00a0 13       		.uleb128 0x13
+ 1137 00a1 00       		.byte	0
+ 1138 00a2 00       		.byte	0
+ 1139 00a3 0E       		.uleb128 0xe
+ 1140 00a4 26       		.uleb128 0x26
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 21
+
+
+ 1141 00a5 00       		.byte	0
+ 1142 00a6 49       		.uleb128 0x49
+ 1143 00a7 13       		.uleb128 0x13
+ 1144 00a8 00       		.byte	0
+ 1145 00a9 00       		.byte	0
+ 1146 00aa 0F       		.uleb128 0xf
+ 1147 00ab 01       		.uleb128 0x1
+ 1148 00ac 01       		.byte	0x1
+ 1149 00ad 49       		.uleb128 0x49
+ 1150 00ae 13       		.uleb128 0x13
+ 1151 00af 01       		.uleb128 0x1
+ 1152 00b0 13       		.uleb128 0x13
+ 1153 00b1 00       		.byte	0
+ 1154 00b2 00       		.byte	0
+ 1155 00b3 10       		.uleb128 0x10
+ 1156 00b4 21       		.uleb128 0x21
+ 1157 00b5 00       		.byte	0
+ 1158 00b6 49       		.uleb128 0x49
+ 1159 00b7 13       		.uleb128 0x13
+ 1160 00b8 2F       		.uleb128 0x2f
+ 1161 00b9 0B       		.uleb128 0xb
+ 1162 00ba 00       		.byte	0
+ 1163 00bb 00       		.byte	0
+ 1164 00bc 11       		.uleb128 0x11
+ 1165 00bd 2E       		.uleb128 0x2e
+ 1166 00be 01       		.byte	0x1
+ 1167 00bf 3F       		.uleb128 0x3f
+ 1168 00c0 0C       		.uleb128 0xc
+ 1169 00c1 03       		.uleb128 0x3
+ 1170 00c2 0E       		.uleb128 0xe
+ 1171 00c3 3A       		.uleb128 0x3a
+ 1172 00c4 0B       		.uleb128 0xb
+ 1173 00c5 3B       		.uleb128 0x3b
+ 1174 00c6 0B       		.uleb128 0xb
+ 1175 00c7 27       		.uleb128 0x27
+ 1176 00c8 0C       		.uleb128 0xc
+ 1177 00c9 49       		.uleb128 0x49
+ 1178 00ca 13       		.uleb128 0x13
+ 1179 00cb 11       		.uleb128 0x11
+ 1180 00cc 01       		.uleb128 0x1
+ 1181 00cd 12       		.uleb128 0x12
+ 1182 00ce 01       		.uleb128 0x1
+ 1183 00cf 40       		.uleb128 0x40
+ 1184 00d0 0A       		.uleb128 0xa
+ 1185 00d1 9742     		.uleb128 0x2117
+ 1186 00d3 0C       		.uleb128 0xc
+ 1187 00d4 01       		.uleb128 0x1
+ 1188 00d5 13       		.uleb128 0x13
+ 1189 00d6 00       		.byte	0
+ 1190 00d7 00       		.byte	0
+ 1191 00d8 12       		.uleb128 0x12
+ 1192 00d9 34       		.uleb128 0x34
+ 1193 00da 00       		.byte	0
+ 1194 00db 03       		.uleb128 0x3
+ 1195 00dc 08       		.uleb128 0x8
+ 1196 00dd 3A       		.uleb128 0x3a
+ 1197 00de 0B       		.uleb128 0xb
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 22
+
+
+ 1198 00df 3B       		.uleb128 0x3b
+ 1199 00e0 0B       		.uleb128 0xb
+ 1200 00e1 49       		.uleb128 0x49
+ 1201 00e2 13       		.uleb128 0x13
+ 1202 00e3 02       		.uleb128 0x2
+ 1203 00e4 0A       		.uleb128 0xa
+ 1204 00e5 00       		.byte	0
+ 1205 00e6 00       		.byte	0
+ 1206 00e7 13       		.uleb128 0x13
+ 1207 00e8 2E       		.uleb128 0x2e
+ 1208 00e9 01       		.byte	0x1
+ 1209 00ea 3F       		.uleb128 0x3f
+ 1210 00eb 0C       		.uleb128 0xc
+ 1211 00ec 03       		.uleb128 0x3
+ 1212 00ed 0E       		.uleb128 0xe
+ 1213 00ee 3A       		.uleb128 0x3a
+ 1214 00ef 0B       		.uleb128 0xb
+ 1215 00f0 3B       		.uleb128 0x3b
+ 1216 00f1 0B       		.uleb128 0xb
+ 1217 00f2 27       		.uleb128 0x27
+ 1218 00f3 0C       		.uleb128 0xc
+ 1219 00f4 49       		.uleb128 0x49
+ 1220 00f5 13       		.uleb128 0x13
+ 1221 00f6 11       		.uleb128 0x11
+ 1222 00f7 01       		.uleb128 0x1
+ 1223 00f8 12       		.uleb128 0x12
+ 1224 00f9 01       		.uleb128 0x1
+ 1225 00fa 40       		.uleb128 0x40
+ 1226 00fb 06       		.uleb128 0x6
+ 1227 00fc 9742     		.uleb128 0x2117
+ 1228 00fe 0C       		.uleb128 0xc
+ 1229 00ff 01       		.uleb128 0x1
+ 1230 0100 13       		.uleb128 0x13
+ 1231 0101 00       		.byte	0
+ 1232 0102 00       		.byte	0
+ 1233 0103 14       		.uleb128 0x14
+ 1234 0104 05       		.uleb128 0x5
+ 1235 0105 00       		.byte	0
+ 1236 0106 03       		.uleb128 0x3
+ 1237 0107 08       		.uleb128 0x8
+ 1238 0108 3A       		.uleb128 0x3a
+ 1239 0109 0B       		.uleb128 0xb
+ 1240 010a 3B       		.uleb128 0x3b
+ 1241 010b 0B       		.uleb128 0xb
+ 1242 010c 49       		.uleb128 0x49
+ 1243 010d 13       		.uleb128 0x13
+ 1244 010e 02       		.uleb128 0x2
+ 1245 010f 06       		.uleb128 0x6
+ 1246 0110 00       		.byte	0
+ 1247 0111 00       		.byte	0
+ 1248 0112 15       		.uleb128 0x15
+ 1249 0113 898201   		.uleb128 0x4109
+ 1250 0116 01       		.byte	0x1
+ 1251 0117 11       		.uleb128 0x11
+ 1252 0118 01       		.uleb128 0x1
+ 1253 0119 31       		.uleb128 0x31
+ 1254 011a 13       		.uleb128 0x13
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 23
+
+
+ 1255 011b 00       		.byte	0
+ 1256 011c 00       		.byte	0
+ 1257 011d 16       		.uleb128 0x16
+ 1258 011e 8A8201   		.uleb128 0x410a
+ 1259 0121 00       		.byte	0
+ 1260 0122 02       		.uleb128 0x2
+ 1261 0123 0A       		.uleb128 0xa
+ 1262 0124 9142     		.uleb128 0x2111
+ 1263 0126 0A       		.uleb128 0xa
+ 1264 0127 00       		.byte	0
+ 1265 0128 00       		.byte	0
+ 1266 0129 17       		.uleb128 0x17
+ 1267 012a 34       		.uleb128 0x34
+ 1268 012b 00       		.byte	0
+ 1269 012c 03       		.uleb128 0x3
+ 1270 012d 0E       		.uleb128 0xe
+ 1271 012e 3A       		.uleb128 0x3a
+ 1272 012f 0B       		.uleb128 0xb
+ 1273 0130 3B       		.uleb128 0x3b
+ 1274 0131 0B       		.uleb128 0xb
+ 1275 0132 49       		.uleb128 0x49
+ 1276 0133 13       		.uleb128 0x13
+ 1277 0134 3F       		.uleb128 0x3f
+ 1278 0135 0C       		.uleb128 0xc
+ 1279 0136 3C       		.uleb128 0x3c
+ 1280 0137 0C       		.uleb128 0xc
+ 1281 0138 00       		.byte	0
+ 1282 0139 00       		.byte	0
+ 1283 013a 18       		.uleb128 0x18
+ 1284 013b 34       		.uleb128 0x34
+ 1285 013c 00       		.byte	0
+ 1286 013d 03       		.uleb128 0x3
+ 1287 013e 0E       		.uleb128 0xe
+ 1288 013f 3A       		.uleb128 0x3a
+ 1289 0140 0B       		.uleb128 0xb
+ 1290 0141 3B       		.uleb128 0x3b
+ 1291 0142 0B       		.uleb128 0xb
+ 1292 0143 49       		.uleb128 0x49
+ 1293 0144 13       		.uleb128 0x13
+ 1294 0145 3F       		.uleb128 0x3f
+ 1295 0146 0C       		.uleb128 0xc
+ 1296 0147 02       		.uleb128 0x2
+ 1297 0148 0A       		.uleb128 0xa
+ 1298 0149 00       		.byte	0
+ 1299 014a 00       		.byte	0
+ 1300 014b 19       		.uleb128 0x19
+ 1301 014c 2E       		.uleb128 0x2e
+ 1302 014d 01       		.byte	0x1
+ 1303 014e 3F       		.uleb128 0x3f
+ 1304 014f 0C       		.uleb128 0xc
+ 1305 0150 03       		.uleb128 0x3
+ 1306 0151 0E       		.uleb128 0xe
+ 1307 0152 3A       		.uleb128 0x3a
+ 1308 0153 0B       		.uleb128 0xb
+ 1309 0154 3B       		.uleb128 0x3b
+ 1310 0155 0B       		.uleb128 0xb
+ 1311 0156 27       		.uleb128 0x27
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 24
+
+
+ 1312 0157 0C       		.uleb128 0xc
+ 1313 0158 3C       		.uleb128 0x3c
+ 1314 0159 0C       		.uleb128 0xc
+ 1315 015a 00       		.byte	0
+ 1316 015b 00       		.byte	0
+ 1317 015c 1A       		.uleb128 0x1a
+ 1318 015d 05       		.uleb128 0x5
+ 1319 015e 00       		.byte	0
+ 1320 015f 49       		.uleb128 0x49
+ 1321 0160 13       		.uleb128 0x13
+ 1322 0161 00       		.byte	0
+ 1323 0162 00       		.byte	0
+ 1324 0163 00       		.byte	0
+ 1325              		.section	.debug_loc,"",%progbits
+ 1326              	.Ldebug_loc0:
+ 1327              	.LLST0:
+ 1328 0000 00000000 		.4byte	.LFB8
+ 1329 0004 04000000 		.4byte	.LCFI0
+ 1330 0008 0200     		.2byte	0x2
+ 1331 000a 7D       		.byte	0x7d
+ 1332 000b 00       		.sleb128 0
+ 1333 000c 04000000 		.4byte	.LCFI0
+ 1334 0010 38000000 		.4byte	.LFE8
+ 1335 0014 0200     		.2byte	0x2
+ 1336 0016 7D       		.byte	0x7d
+ 1337 0017 08       		.sleb128 8
+ 1338 0018 00000000 		.4byte	0
+ 1339 001c 00000000 		.4byte	0
+ 1340              	.LLST1:
+ 1341 0020 00000000 		.4byte	.LVL1
+ 1342 0024 2B000000 		.4byte	.LVL4-1
+ 1343 0028 0100     		.2byte	0x1
+ 1344 002a 50       		.byte	0x50
+ 1345 002b 2B000000 		.4byte	.LVL4-1
+ 1346 002f 38000000 		.4byte	.LFE8
+ 1347 0033 0400     		.2byte	0x4
+ 1348 0035 F3       		.byte	0xf3
+ 1349 0036 01       		.uleb128 0x1
+ 1350 0037 50       		.byte	0x50
+ 1351 0038 9F       		.byte	0x9f
+ 1352 0039 00000000 		.4byte	0
+ 1353 003d 00000000 		.4byte	0
+ 1354              		.section	.debug_aranges,"",%progbits
+ 1355 0000 24000000 		.4byte	0x24
+ 1356 0004 0200     		.2byte	0x2
+ 1357 0006 00000000 		.4byte	.Ldebug_info0
+ 1358 000a 04       		.byte	0x4
+ 1359 000b 00       		.byte	0
+ 1360 000c 0000     		.2byte	0
+ 1361 000e 0000     		.2byte	0
+ 1362 0010 00000000 		.4byte	.LFB7
+ 1363 0014 24000000 		.4byte	.LFE7-.LFB7
+ 1364 0018 00000000 		.4byte	.LFB8
+ 1365 001c 38000000 		.4byte	.LFE8-.LFB8
+ 1366 0020 00000000 		.4byte	0
+ 1367 0024 00000000 		.4byte	0
+ 1368              		.section	.debug_ranges,"",%progbits
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 25
+
+
+ 1369              	.Ldebug_ranges0:
+ 1370 0000 00000000 		.4byte	.LFB7
+ 1371 0004 24000000 		.4byte	.LFE7
+ 1372 0008 00000000 		.4byte	.LFB8
+ 1373 000c 38000000 		.4byte	.LFE8
+ 1374 0010 00000000 		.4byte	0
+ 1375 0014 00000000 		.4byte	0
+ 1376              		.section	.debug_line,"",%progbits
+ 1377              	.Ldebug_line0:
+ 1378 0000 99010000 		.section	.debug_str,"MS",%progbits,1
+ 1378      02006401 
+ 1378      00000201 
+ 1378      FB0E0D00 
+ 1378      01010101 
+ 1379              	.LASF73:
+ 1380 0000 63665F6F 		.ascii	"cf_off_older\000"
+ 1380      66665F6F 
+ 1380      6C646572 
+ 1380      00
+ 1381              	.LASF38:
+ 1382 000d 705F6D73 		.ascii	"p_msg\000"
+ 1382      6700
+ 1383              	.LASF2:
+ 1384 0013 73697A65 		.ascii	"size_t\000"
+ 1384      5F7400
+ 1385              	.LASF58:
+ 1386 001a 7264796D 		.ascii	"rdymsg\000"
+ 1386      736700
+ 1387              	.LASF13:
+ 1388 0021 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1388      206C6F6E 
+ 1388      6720756E 
+ 1388      7369676E 
+ 1388      65642069 
+ 1389              	.LASF69:
+ 1390 0038 63685F74 		.ascii	"ch_threadsize\000"
+ 1390      68726561 
+ 1390      6473697A 
+ 1390      6500
+ 1391              	.LASF59:
+ 1392 0046 65786974 		.ascii	"exitcode\000"
+ 1392      636F6465 
+ 1392      00
+ 1393              	.LASF83:
+ 1394 004f 63685265 		.ascii	"chRegFirstThread\000"
+ 1394      67466972 
+ 1394      73745468 
+ 1394      72656164 
+ 1394      00
+ 1395              	.LASF26:
+ 1396 0060 705F7072 		.ascii	"p_prio\000"
+ 1396      696F00
+ 1397              	.LASF76:
+ 1398 0067 63665F6F 		.ascii	"cf_off_state\000"
+ 1398      66665F73 
+ 1398      74617465 
+ 1398      00
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 26
+
+
+ 1399              	.LASF12:
+ 1400 0074 6C6F6E67 		.ascii	"long long int\000"
+ 1400      206C6F6E 
+ 1400      6720696E 
+ 1400      7400
+ 1401              	.LASF1:
+ 1402 0082 7369676E 		.ascii	"signed char\000"
+ 1402      65642063 
+ 1402      68617200 
+ 1403              	.LASF75:
+ 1404 008e 63665F6F 		.ascii	"cf_off_stklimit\000"
+ 1404      66665F73 
+ 1404      746B6C69 
+ 1404      6D697400 
+ 1405              	.LASF77:
+ 1406 009e 63665F6F 		.ascii	"cf_off_flags\000"
+ 1406      66665F66 
+ 1406      6C616773 
+ 1406      00
+ 1407              	.LASF55:
+ 1408 00ab 6D5F7175 		.ascii	"m_queue\000"
+ 1408      65756500 
+ 1409              	.LASF18:
+ 1410 00b3 74736C69 		.ascii	"tslices_t\000"
+ 1410      6365735F 
+ 1410      7400
+ 1411              	.LASF9:
+ 1412 00bd 6C6F6E67 		.ascii	"long int\000"
+ 1412      20696E74 
+ 1412      00
+ 1413              	.LASF16:
+ 1414 00c6 74737461 		.ascii	"tstate_t\000"
+ 1414      74655F74 
+ 1414      00
+ 1415              	.LASF6:
+ 1416 00cf 75696E74 		.ascii	"uint16_t\000"
+ 1416      31365F74 
+ 1416      00
+ 1417              	.LASF82:
+ 1418 00d8 63686465 		.ascii	"chdebug_t\000"
+ 1418      6275675F 
+ 1418      7400
+ 1419              	.LASF28:
+ 1420 00e2 705F6E65 		.ascii	"p_newer\000"
+ 1420      77657200 
+ 1421              	.LASF89:
+ 1422 00ea 433A5C55 		.ascii	"C:\\Users\\Nico Maas\\Desktop\\ChibiOS\\demos\\ARM1"
+ 1422      73657273 
+ 1422      5C4E6963 
+ 1422      6F204D61 
+ 1422      61735C44 
+ 1423 0117 312D4243 		.ascii	"1-BCM2835-GCC\000"
+ 1423      4D323833 
+ 1423      352D4743 
+ 1423      4300
+ 1424              	.LASF50:
+ 1425 0125 725F6E65 		.ascii	"r_newer\000"
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 27
+
+
+ 1425      77657200 
+ 1426              	.LASF44:
+ 1427 012d 72656761 		.ascii	"regarm_t\000"
+ 1427      726D5F74 
+ 1427      00
+ 1428              	.LASF0:
+ 1429 0136 756E7369 		.ascii	"unsigned int\000"
+ 1429      676E6564 
+ 1429      20696E74 
+ 1429      00
+ 1430              	.LASF11:
+ 1431 0143 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1431      20756E73 
+ 1431      69676E65 
+ 1431      6420696E 
+ 1431      7400
+ 1432              	.LASF86:
+ 1433 0155 63685F64 		.ascii	"ch_debug\000"
+ 1433      65627567 
+ 1433      00
+ 1434              	.LASF63:
+ 1435 015e 63685F69 		.ascii	"ch_identifier\000"
+ 1435      64656E74 
+ 1435      69666965 
+ 1435      7200
+ 1436              	.LASF46:
+ 1437 016c 636F6E74 		.ascii	"context\000"
+ 1437      65787400 
+ 1438              	.LASF7:
+ 1439 0174 73686F72 		.ascii	"short unsigned int\000"
+ 1439      7420756E 
+ 1439      7369676E 
+ 1439      65642069 
+ 1439      6E7400
+ 1440              	.LASF20:
+ 1441 0187 6D73675F 		.ascii	"msg_t\000"
+ 1441      7400
+ 1442              	.LASF15:
+ 1443 018d 746D6F64 		.ascii	"tmode_t\000"
+ 1443      655F7400 
+ 1444              	.LASF43:
+ 1445 0195 54687265 		.ascii	"ThreadsList\000"
+ 1445      6164734C 
+ 1445      69737400 
+ 1446              	.LASF21:
+ 1447 01a1 6576656E 		.ascii	"eventmask_t\000"
+ 1447      746D6173 
+ 1447      6B5F7400 
+ 1448              	.LASF54:
+ 1449 01ad 4D757465 		.ascii	"Mutex\000"
+ 1449      7800
+ 1450              	.LASF64:
+ 1451 01b3 63685F7A 		.ascii	"ch_zero\000"
+ 1451      65726F00 
+ 1452              	.LASF78:
+ 1453 01bb 63665F6F 		.ascii	"cf_off_refs\000"
+ 1453      66665F72 
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 28
+
+
+ 1453      65667300 
+ 1454              	.LASF81:
+ 1455 01c7 73697A65 		.ascii	"sizetype\000"
+ 1455      74797065 
+ 1455      00
+ 1456              	.LASF68:
+ 1457 01d0 63685F74 		.ascii	"ch_timesize\000"
+ 1457      696D6573 
+ 1457      697A6500 
+ 1458              	.LASF74:
+ 1459 01dc 63665F6F 		.ascii	"cf_off_name\000"
+ 1459      66665F6E 
+ 1459      616D6500 
+ 1460              	.LASF29:
+ 1461 01e8 705F6F6C 		.ascii	"p_older\000"
+ 1461      64657200 
+ 1462              	.LASF49:
+ 1463 01f0 725F6374 		.ascii	"r_ctx\000"
+ 1463      7800
+ 1464              	.LASF42:
+ 1465 01f6 54687265 		.ascii	"ThreadsQueue\000"
+ 1465      61647351 
+ 1465      75657565 
+ 1465      00
+ 1466              	.LASF65:
+ 1467 0203 63685F73 		.ascii	"ch_size\000"
+ 1467      697A6500 
+ 1468              	.LASF87:
+ 1469 020b 474E5520 		.ascii	"GNU C 4.7.2\000"
+ 1469      4320342E 
+ 1469      372E3200 
+ 1470              	.LASF52:
+ 1471 0217 725F6375 		.ascii	"r_current\000"
+ 1471      7272656E 
+ 1471      7400
+ 1472              	.LASF51:
+ 1473 0221 725F6F6C 		.ascii	"r_older\000"
+ 1473      64657200 
+ 1474              	.LASF17:
+ 1475 0229 74726566 		.ascii	"trefs_t\000"
+ 1475      735F7400 
+ 1476              	.LASF67:
+ 1477 0231 63685F70 		.ascii	"ch_ptrsize\000"
+ 1477      74727369 
+ 1477      7A6500
+ 1478              	.LASF25:
+ 1479 023c 705F7072 		.ascii	"p_prev\000"
+ 1479      657600
+ 1480              	.LASF19:
+ 1481 0243 74707269 		.ascii	"tprio_t\000"
+ 1481      6F5F7400 
+ 1482              	.LASF14:
+ 1483 024b 5F426F6F 		.ascii	"_Bool\000"
+ 1483      6C00
+ 1484              	.LASF8:
+ 1485 0251 696E7433 		.ascii	"int32_t\000"
+ 1485      325F7400 
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 29
+
+
+ 1486              	.LASF4:
+ 1487 0259 756E7369 		.ascii	"unsigned char\000"
+ 1487      676E6564 
+ 1487      20636861 
+ 1487      7200
+ 1488              	.LASF40:
+ 1489 0267 705F6D74 		.ascii	"p_mtxlist\000"
+ 1489      786C6973 
+ 1489      7400
+ 1490              	.LASF5:
+ 1491 0271 73686F72 		.ascii	"short int\000"
+ 1491      7420696E 
+ 1491      7400
+ 1492              	.LASF31:
+ 1493 027b 705F7374 		.ascii	"p_state\000"
+ 1493      61746500 
+ 1494              	.LASF34:
+ 1495 0283 705F7072 		.ascii	"p_preempt\000"
+ 1495      65656D70 
+ 1495      7400
+ 1496              	.LASF80:
+ 1497 028d 63665F6F 		.ascii	"cf_off_time\000"
+ 1497      66665F74 
+ 1497      696D6500 
+ 1498              	.LASF48:
+ 1499 0299 725F7072 		.ascii	"r_prio\000"
+ 1499      696F00
+ 1500              	.LASF61:
+ 1501 02a0 65776D61 		.ascii	"ewmask\000"
+ 1501      736B00
+ 1502              	.LASF24:
+ 1503 02a7 705F6E65 		.ascii	"p_next\000"
+ 1503      787400
+ 1504              	.LASF79:
+ 1505 02ae 63665F6F 		.ascii	"cf_off_preempt\000"
+ 1505      66665F70 
+ 1505      7265656D 
+ 1505      707400
+ 1506              	.LASF32:
+ 1507 02bd 705F666C 		.ascii	"p_flags\000"
+ 1507      61677300 
+ 1508              	.LASF90:
+ 1509 02c5 63685468 		.ascii	"chThdRelease\000"
+ 1509      6452656C 
+ 1509      65617365 
+ 1509      00
+ 1510              	.LASF23:
+ 1511 02d2 54687265 		.ascii	"Thread\000"
+ 1511      616400
+ 1512              	.LASF72:
+ 1513 02d9 63665F6F 		.ascii	"cf_off_newer\000"
+ 1513      66665F6E 
+ 1513      65776572 
+ 1513      00
+ 1514              	.LASF39:
+ 1515 02e6 705F6570 		.ascii	"p_epending\000"
+ 1515      656E6469 
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 30
+
+
+ 1515      6E6700
+ 1516              	.LASF10:
+ 1517 02f1 75696E74 		.ascii	"uint32_t\000"
+ 1517      33325F74 
+ 1517      00
+ 1518              	.LASF70:
+ 1519 02fa 63665F6F 		.ascii	"cf_off_prio\000"
+ 1519      66665F70 
+ 1519      72696F00 
+ 1520              	.LASF47:
+ 1521 0306 725F7175 		.ascii	"r_queue\000"
+ 1521      65756500 
+ 1522              	.LASF62:
+ 1523 030e 63686172 		.ascii	"char\000"
+ 1523      00
+ 1524              	.LASF84:
+ 1525 0313 63685265 		.ascii	"chRegNextThread\000"
+ 1525      674E6578 
+ 1525      74546872 
+ 1525      65616400 
+ 1526              	.LASF57:
+ 1527 0323 6D5F6E65 		.ascii	"m_next\000"
+ 1527      787400
+ 1528              	.LASF22:
+ 1529 032a 73797374 		.ascii	"systime_t\000"
+ 1529      696D655F 
+ 1529      7400
+ 1530              	.LASF41:
+ 1531 0334 705F7265 		.ascii	"p_realprio\000"
+ 1531      616C7072 
+ 1531      696F00
+ 1532              	.LASF35:
+ 1533 033f 705F7469 		.ascii	"p_time\000"
+ 1533      6D6500
+ 1534              	.LASF45:
+ 1535 0346 696E7463 		.ascii	"intctx\000"
+ 1535      747800
+ 1536              	.LASF37:
+ 1537 034d 705F6D73 		.ascii	"p_msgqueue\000"
+ 1537      67717565 
+ 1537      756500
+ 1538              	.LASF88:
+ 1539 0358 2E2E2F2E 		.ascii	"../../os/kernel/src/chregistry.c\000"
+ 1539      2E2F6F73 
+ 1539      2F6B6572 
+ 1539      6E656C2F 
+ 1539      7372632F 
+ 1540              	.LASF71:
+ 1541 0379 63665F6F 		.ascii	"cf_off_ctx\000"
+ 1541      66665F63 
+ 1541      747800
+ 1542              	.LASF33:
+ 1543 0384 705F7265 		.ascii	"p_refs\000"
+ 1543      667300
+ 1544              	.LASF53:
+ 1545 038b 52656164 		.ascii	"ReadyList\000"
+ 1545      794C6973 
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 31
+
+
+ 1545      7400
+ 1546              	.LASF85:
+ 1547 0395 726C6973 		.ascii	"rlist\000"
+ 1547      7400
+ 1548              	.LASF3:
+ 1549 039b 75696E74 		.ascii	"uint8_t\000"
+ 1549      385F7400 
+ 1550              	.LASF60:
+ 1551 03a3 77746F62 		.ascii	"wtobjp\000"
+ 1551      6A7000
+ 1552              	.LASF30:
+ 1553 03aa 705F6E61 		.ascii	"p_name\000"
+ 1553      6D6500
+ 1554              	.LASF66:
+ 1555 03b1 63685F76 		.ascii	"ch_version\000"
+ 1555      65727369 
+ 1555      6F6E00
+ 1556              	.LASF56:
+ 1557 03bc 6D5F6F77 		.ascii	"m_owner\000"
+ 1557      6E657200 
+ 1558              	.LASF27:
+ 1559 03c4 705F6374 		.ascii	"p_ctx\000"
+ 1559      7800
+ 1560              	.LASF36:
+ 1561 03ca 705F7761 		.ascii	"p_waiting\000"
+ 1561      6974696E 
+ 1561      6700
+ 1562              		.ident	"GCC: (GNU) 4.7.2"
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s 			page 32
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 chregistry.c
+C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s:17     .text.chRegFirstThread:00000000 $a
+C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s:20     .text.chRegFirstThread:00000000 chRegFirstThread
+C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s:49     .text.chRegFirstThread:00000020 $d
+C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s:54     .text.chRegNextThread:00000000 $a
+C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s:57     .text.chRegNextThread:00000000 chRegNextThread
+C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s:101    .text.chRegNextThread:00000034 $d
+C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s:110    .rodata.ch_debug:00000000 ch_debug
+C:\Users\NICOMA~1\AppData\Local\Temp\ccv4yzvR.s:107    .rodata.ch_debug:00000000 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+rlist
+chThdRelease

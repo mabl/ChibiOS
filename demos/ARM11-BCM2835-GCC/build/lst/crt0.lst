@@ -1,0 +1,220 @@
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccVo6UZe.s 			page 1
+
+
+   1              	# 1 "../../os/ports/GCC/ARM/crt0.s"
+   1              	/*
+   0              	
+   2              	    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+   3              	                 2011,2012,2013 Giovanni Di Sirio.
+   4              	
+   5              	    This file is part of ChibiOS/RT.
+   6              	
+   7              	    ChibiOS/RT is free software; you can redistribute it and/or modify
+   8              	    it under the terms of the GNU General Public License as published by
+   9              	    the Free Software Foundation; either version 3 of the License, or
+  10              	    (at your option) any later version.
+  11              	
+  12              	    ChibiOS/RT is distributed in the hope that it will be useful,
+  13              	    but WITHOUT ANY WARRANTY; without even the implied warranty of
+  14              	    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  15              	    GNU General Public License for more details.
+  16              	
+  17              	    You should have received a copy of the GNU General Public License
+  18              	    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  19              	
+  20              	                                      ---
+  21              	
+  22              	    A special exception to the GPL can be applied should you wish to distribute
+  23              	    a combined work that includes ChibiOS/RT, without being obliged to provide
+  24              	    the source code for any proprietary components. See the file exception.txt
+  25              	    for full details of how and when the exception can be applied.
+  26              	*/
+  27              	
+  28              	/**
+  29              	 * @file    ARM/crt0.s
+  30              	 * @brief   Generic ARM7/9 startup file for ChibiOS/RT.
+  31              	 *
+  32              	 * @addtogroup ARM_CORE
+  33              	 * @{
+  34              	 */
+  35              	
+  36              	#if !defined(__DOXYGEN__)
+  37              	
+  38              	        .set    MODE_USR, 0x10
+  39              	        .set    MODE_FIQ, 0x11
+  40              	        .set    MODE_IRQ, 0x12
+  41              	        .set    MODE_SVC, 0x13
+  42              	        .set    MODE_ABT, 0x17
+  43              	        .set    MODE_UND, 0x1B
+  44              	        .set    MODE_SYS, 0x1F
+  45              	
+  46              	        .set    I_BIT, 0x80
+  47              	        .set    F_BIT, 0x40
+  48              	
+  49              	        .text
+  50              	        .code   32
+  51              	        .balign 4
+  52              	
+  53              	/*
+  54              	 * Reset handler.
+  55              	 */
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccVo6UZe.s 			page 2
+
+
+  56              	        .global ResetHandler
+  57              	ResetHandler:
+  58              	        /*
+  59              	         * Stack pointers initialization.
+  60              	         */
+  61 0000 9C009FE5 	        ldr     r0, =__ram_end__
+  62              	        /* Undefined */
+  63 0004 DBF021E3 	        msr     CPSR_c, #MODE_UND | I_BIT | F_BIT
+  64 0008 00D0A0E1 	        mov     sp, r0
+  65 000c 94109FE5 	        ldr     r1, =__und_stack_size__
+  66 0010 010040E0 	        sub     r0, r0, r1
+  67              	        /* Abort */
+  68 0014 D7F021E3 	        msr     CPSR_c, #MODE_ABT | I_BIT | F_BIT
+  69 0018 00D0A0E1 	        mov     sp, r0
+  70 001c 88109FE5 	        ldr     r1, =__abt_stack_size__
+  71 0020 010040E0 	        sub     r0, r0, r1
+  72              	        /* FIQ */
+  73 0024 D1F021E3 	        msr     CPSR_c, #MODE_FIQ | I_BIT | F_BIT
+  74 0028 00D0A0E1 	        mov     sp, r0
+  75 002c 7C109FE5 	        ldr     r1, =__fiq_stack_size__
+  76 0030 010040E0 	        sub     r0, r0, r1
+  77              	        /* IRQ */
+  78 0034 D2F021E3 	        msr     CPSR_c, #MODE_IRQ | I_BIT | F_BIT
+  79 0038 00D0A0E1 	        mov     sp, r0
+  80 003c 70109FE5 	        ldr     r1, =__irq_stack_size__
+  81 0040 010040E0 	        sub     r0, r0, r1
+  82              	        /* Supervisor */
+  83 0044 D3F021E3 	        msr     CPSR_c, #MODE_SVC | I_BIT | F_BIT
+  84 0048 00D0A0E1 	        mov     sp, r0
+  85 004c 64109FE5 	        ldr     r1, =__svc_stack_size__
+  86 0050 010040E0 	        sub     r0, r0, r1
+  87              	        /* System */
+  88 0054 DFF021E3 	        msr     CPSR_c, #MODE_SYS | I_BIT | F_BIT
+  89 0058 00D0A0E1 	        mov     sp, r0
+  90              	//        ldr     r1, =__sys_stack_size__
+  91              	//        sub     r0, r0, r1
+  92              	        /*
+  93              	         * Early initialization.
+  94              	         */
+  95              	#ifndef THUMB_NO_INTERWORKING
+  96 005c FEFFFFEB 	        bl      __early_init
+  97              	#else
+  98              	        add     r0, pc, #1
+  99              	        bx      r0
+ 100              	        .code   16
+ 101              	        bl      __early_init
+ 102              	        mov     r0, pc
+ 103              	        bx      r0
+ 104              	        .code   32
+ 105              	#endif
+ 106              	        /*
+ 107              	         * Data initialization.
+ 108              	         * NOTE: It assumes that the DATA size is a multiple of 4.
+ 109              	         */
+ 110 0060 54109FE5 	        ldr     r1, =_textdata
+ 111 0064 54209FE5 	        ldr     r2, =_data
+ 112 0068 54309FE5 	        ldr     r3, =_edata
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccVo6UZe.s 			page 3
+
+
+ 113              	dataloop:
+ 114 006c 030052E1 	        cmp     r2, r3
+ 115 0070 04009134 	        ldrlo   r0, [r1], #4
+ 116 0074 04008234 	        strlo   r0, [r2], #4
+ 117 0078 FBFFFF3A 	        blo     dataloop
+ 118              	        /*
+ 119              	         * BSS initialization.
+ 120              	         * NOTE: It assumes that the BSS size is a multiple of 4.
+ 121              	         */
+ 122 007c 0000A0E3 	        mov     r0, #0
+ 123 0080 40109FE5 	        ldr     r1, =_bss_start
+ 124 0084 40209FE5 	        ldr     r2, =_bss_end
+ 125              	bssloop:
+ 126 0088 020051E1 	        cmp     r1, r2
+ 127 008c 04008134 	        strlo   r0, [r1], #4
+ 128 0090 FCFFFF3A 	        blo     bssloop
+ 129              	        /*
+ 130              	         * Main program invocation.
+ 131              	         */
+ 132              	#ifdef THUMB_NO_INTERWORKING
+ 133              	        add     r0, pc, #1
+ 134              	        bx      r0
+ 135              	        .code   16
+ 136              	        bl      main
+ 137              	        ldr     r1, =_main_exit_handler
+ 138              	        bx      r1
+ 139              	        .code   32
+ 140              	#else
+ 141 0094 FEFFFFEB 	        bl      main
+ 142 0098 FEFFFFEA 	        b       _main_exit_handler
+ 143              	#endif
+ 144              	
+ 145              	/*
+ 146              	 * Default main function exit handler.
+ 147              	 */
+ 148              	        .weak   _main_exit_handler
+ 149              	        .global _main_exit_handler
+ 150              	_main_exit_handler:
+ 151 009c FEFFFFEA 	.loop:  b       .loop
+ 152              	
+ 153              	/*
+ 154              	 * Default early initialization code. It is declared weak in order to be
+ 155              	 * replaced by the real initialization code.
+ 156              	 * Early initialization is performed just after reset before BSS and DATA
+ 157              	 * segments initialization.
+ 158              	 */
+ 159              	#ifdef THUMB_NO_INTERWORKING
+ 160              	        .thumb_func
+ 161              	        .code   16
+ 162              	#endif
+ 163              	        .weak   __early_init
+ 164              	hwinit0:
+ 165 00a0 1EFF2FE1 	        bx      lr
+ 166 00a4 00000000 	        .code   32
+ 166      00000000 
+ 166      00000000 
+ 166      00000000 
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccVo6UZe.s 			page 4
+
+
+ 166      00000000 
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\ccVo6UZe.s 			page 5
+
+
+DEFINED SYMBOLS
+../../os/ports/GCC/ARM/crt0.s:38     *ABS*:00000010 MODE_USR
+../../os/ports/GCC/ARM/crt0.s:39     *ABS*:00000011 MODE_FIQ
+../../os/ports/GCC/ARM/crt0.s:40     *ABS*:00000012 MODE_IRQ
+../../os/ports/GCC/ARM/crt0.s:41     *ABS*:00000013 MODE_SVC
+../../os/ports/GCC/ARM/crt0.s:42     *ABS*:00000017 MODE_ABT
+../../os/ports/GCC/ARM/crt0.s:43     *ABS*:0000001b MODE_UND
+../../os/ports/GCC/ARM/crt0.s:44     *ABS*:0000001f MODE_SYS
+../../os/ports/GCC/ARM/crt0.s:46     *ABS*:00000080 I_BIT
+../../os/ports/GCC/ARM/crt0.s:47     *ABS*:00000040 F_BIT
+../../os/ports/GCC/ARM/crt0.s:51     .text:00000000 $a
+../../os/ports/GCC/ARM/crt0.s:57     .text:00000000 ResetHandler
+../../os/ports/GCC/ARM/crt0.s:113    .text:0000006c dataloop
+../../os/ports/GCC/ARM/crt0.s:125    .text:00000088 bssloop
+../../os/ports/GCC/ARM/crt0.s:150    .text:0000009c _main_exit_handler
+../../os/ports/GCC/ARM/crt0.s:151    .text:0000009c .loop
+../../os/ports/GCC/ARM/crt0.s:164    .text:000000a0 hwinit0
+../../os/ports/GCC/ARM/crt0.s:166    .text:000000a4 $d
+
+UNDEFINED SYMBOLS
+__ram_end__
+__und_stack_size__
+__abt_stack_size__
+__fiq_stack_size__
+__irq_stack_size__
+__svc_stack_size__
+__early_init
+_textdata
+_data
+_edata
+_bss_start
+_bss_end
+main

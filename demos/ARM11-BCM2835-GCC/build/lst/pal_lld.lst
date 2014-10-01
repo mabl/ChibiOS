@@ -1,0 +1,1947 @@
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 1
+
+
+   1              		.cpu arm1176jz-s
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 2
+  10              		.eabi_attribute 34, 1
+  11              		.eabi_attribute 18, 4
+  12              		.file	"pal_lld.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.set_gpio_in,"ax",%progbits
+  17              		.align	2
+  18              		.type	set_gpio_in, %function
+  19              	set_gpio_in:
+  20              	.LFB9:
+  21              		.file 1 "../../os/hal/platforms/BCM2835/pal_lld.c"
+  22              		.loc 1 64 0
+  23              		.cfi_startproc
+  24              		@ args = 0, pretend = 0, frame = 0
+  25              		@ frame_needed = 0, uses_anonymous_args = 0
+  26              	.LVL0:
+  27 0000 70402DE9 		stmfd	sp!, {r4, r5, r6, lr}
+  28              	.LCFI0:
+  29              		.cfi_def_cfa_offset 16
+  30              		.cfi_offset 4, -16
+  31              		.cfi_offset 5, -12
+  32              		.cfi_offset 6, -8
+  33              		.cfi_offset 14, -4
+  34              		.loc 1 64 0
+  35 0004 0060A0E1 		mov	r6, r0
+  36 0008 0150A0E1 		mov	r5, r1
+  37              		.loc 1 66 0
+  38 000c 0040A0E3 		mov	r4, #0
+  39 0010 030000EA 		b	.L3
+  40              	.LVL1:
+  41              	.L2:
+  42 0014 014084E2 		add	r4, r4, #1
+  43 0018 200054E3 		cmp	r4, #32
+  44              	.LBB2:
+  45              		.loc 1 70 0
+  46 001c A550A0E1 		mov	r5, r5, lsr #1
+  47              	.LVL2:
+  48              	.LBE2:
+  49              		.loc 1 66 0
+  50 0020 0900000A 		beq	.L9
+  51              	.LVL3:
+  52              	.L3:
+  53              	.LBB3:
+  54              		.loc 1 68 0
+  55 0024 010015E3 		tst	r5, #1
+  56 0028 F9FFFF0A 		beq	.L2
+  57              		.loc 1 69 0
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 2
+
+
+  58 002c 140096E5 		ldr	r0, [r6, #20]
+  59 0030 0010A0E3 		mov	r1, #0
+  60 0034 000084E0 		add	r0, r4, r0
+  61              	.LBE3:
+  62              		.loc 1 66 0
+  63 0038 014084E2 		add	r4, r4, #1
+  64              	.LBB4:
+  65              		.loc 1 69 0
+  66 003c FEFFFFEB 		bl	bcm2835_gpio_fnsel
+  67              	.LVL4:
+  68              	.LBE4:
+  69              		.loc 1 66 0
+  70 0040 200054E3 		cmp	r4, #32
+  71              	.LBB5:
+  72              		.loc 1 70 0
+  73 0044 A550A0E1 		mov	r5, r5, lsr #1
+  74              	.LVL5:
+  75              	.LBE5:
+  76              		.loc 1 66 0
+  77 0048 F5FFFF1A 		bne	.L3
+  78              	.L9:
+  79              		.loc 1 72 0
+  80 004c 7080BDE8 		ldmfd	sp!, {r4, r5, r6, pc}
+  81              		.cfi_endproc
+  82              	.LFE9:
+  83              		.size	set_gpio_in, .-set_gpio_in
+  84              		.section	.text.set_gpio_pud,"ax",%progbits
+  85              		.align	2
+  86              		.type	set_gpio_pud, %function
+  87              	set_gpio_pud:
+  88              	.LFB8:
+  89              		.loc 1 54 0
+  90              		.cfi_startproc
+  91              		@ args = 0, pretend = 0, frame = 0
+  92              		@ frame_needed = 0, uses_anonymous_args = 0
+  93              	.LVL6:
+  94 0000 70402DE9 		stmfd	sp!, {r4, r5, r6, lr}
+  95              	.LCFI1:
+  96              		.cfi_def_cfa_offset 16
+  97              		.cfi_offset 4, -16
+  98              		.cfi_offset 5, -12
+  99              		.cfi_offset 6, -8
+ 100              		.cfi_offset 14, -4
+ 101              		.loc 1 56 0
+ 102 0004 34409FE5 		ldr	r4, .L11
+ 103              		.loc 1 54 0
+ 104 0008 0050A0E1 		mov	r5, r0
+ 105              		.loc 1 56 0
+ 106 000c 942084E5 		str	r2, [r4, #148]
+ 107              		.loc 1 57 0
+ 108 0010 9600A0E3 		mov	r0, #150
+ 109              	.LVL7:
+ 110              		.loc 1 54 0
+ 111 0014 0160A0E1 		mov	r6, r1
+ 112              		.loc 1 57 0
+ 113 0018 FEFFFFEB 		bl	bcm2835_delay
+ 114              	.LVL8:
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 3
+
+
+ 115              		.loc 1 58 0
+ 116 001c 103095E5 		ldr	r3, [r5, #16]
+ 117              		.loc 1 59 0
+ 118 0020 9600A0E3 		mov	r0, #150
+ 119              		.loc 1 58 0
+ 120 0024 006083E5 		str	r6, [r3, #0]
+ 121              		.loc 1 59 0
+ 122 0028 FEFFFFEB 		bl	bcm2835_delay
+ 123              	.LVL9:
+ 124              		.loc 1 61 0
+ 125 002c 102095E5 		ldr	r2, [r5, #16]
+ 126              		.loc 1 60 0
+ 127 0030 0030A0E3 		mov	r3, #0
+ 128 0034 943084E5 		str	r3, [r4, #148]
+ 129              		.loc 1 61 0
+ 130 0038 003082E5 		str	r3, [r2, #0]
+ 131 003c 7080BDE8 		ldmfd	sp!, {r4, r5, r6, pc}
+ 132              	.L12:
+ 133              		.align	2
+ 134              	.L11:
+ 135 0040 00002020 		.word	538968064
+ 136              		.cfi_endproc
+ 137              	.LFE8:
+ 138              		.size	set_gpio_pud, .-set_gpio_pud
+ 139              		.section	.text._pal_lld_init,"ax",%progbits
+ 140              		.align	2
+ 141              		.global	_pal_lld_init
+ 142              		.type	_pal_lld_init, %function
+ 143              	_pal_lld_init:
+ 144              	.LFB10:
+ 145              		.loc 1 82 0
+ 146              		.cfi_startproc
+ 147              		@ args = 0, pretend = 0, frame = 0
+ 148              		@ frame_needed = 0, uses_anonymous_args = 0
+ 149              	.LVL10:
+ 150 0000 08402DE9 		stmfd	sp!, {r3, lr}
+ 151              	.LCFI2:
+ 152              		.cfi_def_cfa_offset 8
+ 153              		.cfi_offset 3, -8
+ 154              		.cfi_offset 14, -4
+ 155              		.loc 1 86 0
+ 156 0004 64209FE5 		ldr	r2, .L14
+ 157 0008 64309FE5 		ldr	r3, .L14+4
+ 158              		.loc 1 90 0
+ 159 000c 0010E0E3 		mvn	r1, #0
+ 160              		.loc 1 86 0
+ 161 0010 042083E5 		str	r2, [r3, #4]
+ 162              		.loc 1 87 0
+ 163 0014 0C2082E2 		add	r2, r2, #12
+ 164 0018 082083E5 		str	r2, [r3, #8]
+ 165              		.loc 1 88 0
+ 166 001c 0C2082E2 		add	r2, r2, #12
+ 167              		.loc 1 90 0
+ 168 0020 0300A0E1 		mov	r0, r3
+ 169              	.LVL11:
+ 170              		.loc 1 88 0
+ 171 0024 0C2083E5 		str	r2, [r3, #12]
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 4
+
+
+ 172              		.loc 1 89 0
+ 173 0028 642082E2 		add	r2, r2, #100
+ 174 002c 102083E5 		str	r2, [r3, #16]
+ 175              		.loc 1 90 0
+ 176 0030 FEFFFFEB 		bl	set_gpio_in
+ 177              	.LVL12:
+ 178              		.loc 1 92 0
+ 179 0034 3C309FE5 		ldr	r3, .L14+8
+ 180 0038 3C209FE5 		ldr	r2, .L14+12
+ 181              		.loc 1 97 0
+ 182 003c 0300A0E1 		mov	r0, r3
+ 183              		.loc 1 92 0
+ 184 0040 042083E5 		str	r2, [r3, #4]
+ 185              		.loc 1 93 0
+ 186 0044 0C2082E2 		add	r2, r2, #12
+ 187 0048 082083E5 		str	r2, [r3, #8]
+ 188              		.loc 1 94 0
+ 189 004c 0C2082E2 		add	r2, r2, #12
+ 190 0050 0C2083E5 		str	r2, [r3, #12]
+ 191              		.loc 1 95 0
+ 192 0054 642082E2 		add	r2, r2, #100
+ 193 0058 102083E5 		str	r2, [r3, #16]
+ 194              		.loc 1 97 0
+ 195 005c 0010E0E3 		mvn	r1, #0
+ 196              		.loc 1 96 0
+ 197 0060 2020A0E3 		mov	r2, #32
+ 198 0064 142083E5 		str	r2, [r3, #20]
+ 199              		.loc 1 98 0
+ 200 0068 0840BDE8 		ldmfd	sp!, {r3, lr}
+ 201              		.loc 1 97 0
+ 202 006c FEFFFFEA 		b	set_gpio_in
+ 203              	.LVL13:
+ 204              	.L15:
+ 205              		.align	2
+ 206              	.L14:
+ 207 0070 1C002020 		.word	538968092
+ 208 0074 00000000 		.word	IOPORT0
+ 209 0078 00000000 		.word	IOPORT1
+ 210 007c 20002020 		.word	538968096
+ 211              		.cfi_endproc
+ 212              	.LFE10:
+ 213              		.size	_pal_lld_init, .-_pal_lld_init
+ 214              		.section	.text._pal_lld_setgroupmode,"ax",%progbits
+ 215              		.align	2
+ 216              		.global	_pal_lld_setgroupmode
+ 217              		.type	_pal_lld_setgroupmode, %function
+ 218              	_pal_lld_setgroupmode:
+ 219              	.LFB11:
+ 220              		.loc 1 100 0
+ 221              		.cfi_startproc
+ 222              		@ args = 0, pretend = 0, frame = 0
+ 223              		@ frame_needed = 0, uses_anonymous_args = 0
+ 224              	.LVL14:
+ 225              		.loc 1 102 0
+ 226 0000 040052E3 		cmp	r2, #4
+ 227              		.loc 1 100 0
+ 228 0004 70402DE9 		stmfd	sp!, {r4, r5, r6, lr}
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 5
+
+
+ 229              	.LCFI3:
+ 230              		.cfi_def_cfa_offset 16
+ 231              		.cfi_offset 4, -16
+ 232              		.cfi_offset 5, -12
+ 233              		.cfi_offset 6, -8
+ 234              		.cfi_offset 14, -4
+ 235              		.loc 1 100 0
+ 236 0008 0060A0E1 		mov	r6, r0
+ 237 000c 0150A0E1 		mov	r5, r1
+ 238              		.loc 1 102 0
+ 239 0010 2100000A 		beq	.L20
+ 240 0014 0900008A 		bhi	.L22
+ 241 0018 020052E3 		cmp	r2, #2
+ 242 001c 2400000A 		beq	.L18
+ 243 0020 030052E3 		cmp	r2, #3
+ 244 0024 7080BD18 		ldmnefd	sp!, {r4, r5, r6, pc}
+ 245              		.loc 1 108 0
+ 246 0028 FEFFFFEB 		bl	set_gpio_in
+ 247              	.LVL15:
+ 248              		.loc 1 109 0
+ 249 002c 0600A0E1 		mov	r0, r6
+ 250 0030 0510A0E1 		mov	r1, r5
+ 251 0034 0220A0E3 		mov	r2, #2
+ 252              		.loc 1 126 0
+ 253 0038 7040BDE8 		ldmfd	sp!, {r4, r5, r6, lr}
+ 254              		.loc 1 109 0
+ 255 003c FEFFFFEA 		b	set_gpio_pud
+ 256              	.LVL16:
+ 257              	.L22:
+ 258              		.loc 1 102 0
+ 259 0040 060052E3 		cmp	r2, #6
+ 260 0044 7080BD38 		ldmccfd	sp!, {r4, r5, r6, pc}
+ 261 0048 070052E3 		cmp	r2, #7
+ 262 004c 0100009A 		bls	.L24
+ 263 0050 FF0052E3 		cmp	r2, #255
+ 264 0054 7080BD18 		ldmnefd	sp!, {r4, r5, r6, pc}
+ 265              	.L24:
+ 266 0058 0040A0E3 		mov	r4, #0
+ 267 005c 030000EA 		b	.L21
+ 268              	.LVL17:
+ 269              	.L23:
+ 270              		.loc 1 118 0
+ 271 0060 014084E2 		add	r4, r4, #1
+ 272 0064 200054E3 		cmp	r4, #32
+ 273              	.LBB6:
+ 274              		.loc 1 122 0
+ 275 0068 A550A0E1 		mov	r5, r5, lsr #1
+ 276              	.LVL18:
+ 277              	.LBE6:
+ 278              		.loc 1 118 0
+ 279 006c 0900000A 		beq	.L32
+ 280              	.LVL19:
+ 281              	.L21:
+ 282              	.LBB7:
+ 283              		.loc 1 120 0
+ 284 0070 010015E3 		tst	r5, #1
+ 285 0074 F9FFFF0A 		beq	.L23
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 6
+
+
+ 286              		.loc 1 121 0
+ 287 0078 140096E5 		ldr	r0, [r6, #20]
+ 288 007c 0110A0E3 		mov	r1, #1
+ 289 0080 000084E0 		add	r0, r4, r0
+ 290              	.LBE7:
+ 291              		.loc 1 118 0
+ 292 0084 014084E2 		add	r4, r4, #1
+ 293              	.LBB8:
+ 294              		.loc 1 121 0
+ 295 0088 FEFFFFEB 		bl	bcm2835_gpio_fnsel
+ 296              	.LVL20:
+ 297              	.LBE8:
+ 298              		.loc 1 118 0
+ 299 008c 200054E3 		cmp	r4, #32
+ 300              	.LBB9:
+ 301              		.loc 1 122 0
+ 302 0090 A550A0E1 		mov	r5, r5, lsr #1
+ 303              	.LVL21:
+ 304              	.LBE9:
+ 305              		.loc 1 118 0
+ 306 0094 F5FFFF1A 		bne	.L21
+ 307              	.L32:
+ 308 0098 7080BDE8 		ldmfd	sp!, {r4, r5, r6, pc}
+ 309              	.LVL22:
+ 310              	.L20:
+ 311              		.loc 1 112 0
+ 312 009c FEFFFFEB 		bl	set_gpio_in
+ 313              	.LVL23:
+ 314              		.loc 1 113 0
+ 315 00a0 0600A0E1 		mov	r0, r6
+ 316 00a4 0510A0E1 		mov	r1, r5
+ 317 00a8 0120A0E3 		mov	r2, #1
+ 318              		.loc 1 126 0
+ 319 00ac 7040BDE8 		ldmfd	sp!, {r4, r5, r6, lr}
+ 320              		.loc 1 113 0
+ 321 00b0 FEFFFFEA 		b	set_gpio_pud
+ 322              	.LVL24:
+ 323              	.L18:
+ 324              		.loc 1 104 0
+ 325 00b4 FEFFFFEB 		bl	set_gpio_in
+ 326              	.LVL25:
+ 327              		.loc 1 105 0
+ 328 00b8 0600A0E1 		mov	r0, r6
+ 329 00bc 0510A0E1 		mov	r1, r5
+ 330 00c0 0020A0E3 		mov	r2, #0
+ 331              		.loc 1 126 0
+ 332 00c4 7040BDE8 		ldmfd	sp!, {r4, r5, r6, lr}
+ 333              		.loc 1 105 0
+ 334 00c8 FEFFFFEA 		b	set_gpio_pud
+ 335              	.LVL26:
+ 336              		.cfi_endproc
+ 337              	.LFE11:
+ 338              		.size	_pal_lld_setgroupmode, .-_pal_lld_setgroupmode
+ 339              		.section	.text._pal_lld_writeport,"ax",%progbits
+ 340              		.align	2
+ 341              		.global	_pal_lld_writeport
+ 342              		.type	_pal_lld_writeport, %function
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 7
+
+
+ 343              	_pal_lld_writeport:
+ 344              	.LFB12:
+ 345              		.loc 1 128 0
+ 346              		.cfi_startproc
+ 347              		@ args = 0, pretend = 0, frame = 0
+ 348              		@ frame_needed = 0, uses_anonymous_args = 0
+ 349              		@ link register save eliminated.
+ 350              	.LVL27:
+ 351              		.loc 1 129 0
+ 352 0000 04C090E5 		ldr	ip, [r0, #4]
+ 353              		.loc 1 130 0
+ 354 0004 083090E5 		ldr	r3, [r0, #8]
+ 355 0008 0120E0E1 		mvn	r2, r1
+ 356              		.loc 1 129 0
+ 357 000c 001080E5 		str	r1, [r0, #0]
+ 358 0010 00108CE5 		str	r1, [ip, #0]
+ 359              		.loc 1 130 0
+ 360 0014 002083E5 		str	r2, [r3, #0]
+ 361 0018 1EFF2FE1 		bx	lr
+ 362              		.cfi_endproc
+ 363              	.LFE12:
+ 364              		.size	_pal_lld_writeport, .-_pal_lld_writeport
+ 365              		.comm	IOPORT1,24,4
+ 366              		.comm	IOPORT0,24,4
+ 367              		.text
+ 368              	.Letext0:
+ 369              		.file 2 "../../os/hal/platforms/BCM2835/pal_lld.h"
+ 370              		.file 3 "c:/yagarto-20121222/lib/gcc/../../arm-none-eabi/sys-include/stdint.h"
+ 371              		.file 4 "../../os/hal/platforms/BCM2835/bcm2835.h"
+ 372              		.section	.debug_info,"",%progbits
+ 373              	.Ldebug_info0:
+ 374 0000 F2030000 		.4byte	0x3f2
+ 375 0004 0200     		.2byte	0x2
+ 376 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 377 000a 04       		.byte	0x4
+ 378 000b 01       		.uleb128 0x1
+ 379 000c 00000000 		.4byte	.LASF36
+ 380 0010 01       		.byte	0x1
+ 381 0011 BF000000 		.4byte	.LASF37
+ 382 0015 5F000000 		.4byte	.LASF38
+ 383 0019 50000000 		.4byte	.Ldebug_ranges0+0x50
+ 384 001d 00000000 		.4byte	0
+ 385 0021 00000000 		.4byte	0
+ 386 0025 00000000 		.4byte	.Ldebug_line0
+ 387 0029 02       		.uleb128 0x2
+ 388 002a 04       		.byte	0x4
+ 389 002b 05       		.byte	0x5
+ 390 002c 696E7400 		.ascii	"int\000"
+ 391 0030 03       		.uleb128 0x3
+ 392 0031 04       		.byte	0x4
+ 393 0032 07       		.byte	0x7
+ 394 0033 27010000 		.4byte	.LASF0
+ 395 0037 03       		.uleb128 0x3
+ 396 0038 01       		.byte	0x1
+ 397 0039 06       		.byte	0x6
+ 398 003a D9010000 		.4byte	.LASF1
+ 399 003e 03       		.uleb128 0x3
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 8
+
+
+ 400 003f 01       		.byte	0x1
+ 401 0040 08       		.byte	0x8
+ 402 0041 51000000 		.4byte	.LASF2
+ 403 0045 03       		.uleb128 0x3
+ 404 0046 02       		.byte	0x2
+ 405 0047 05       		.byte	0x5
+ 406 0048 A7010000 		.4byte	.LASF3
+ 407 004c 03       		.uleb128 0x3
+ 408 004d 02       		.byte	0x2
+ 409 004e 07       		.byte	0x7
+ 410 004f AC000000 		.4byte	.LASF4
+ 411 0053 03       		.uleb128 0x3
+ 412 0054 04       		.byte	0x4
+ 413 0055 05       		.byte	0x5
+ 414 0056 CB010000 		.4byte	.LASF5
+ 415 005a 04       		.uleb128 0x4
+ 416 005b C2010000 		.4byte	.LASF18
+ 417 005f 03       		.byte	0x3
+ 418 0060 50       		.byte	0x50
+ 419 0061 65000000 		.4byte	0x65
+ 420 0065 03       		.uleb128 0x3
+ 421 0066 04       		.byte	0x4
+ 422 0067 07       		.byte	0x7
+ 423 0068 9A000000 		.4byte	.LASF6
+ 424 006c 03       		.uleb128 0x3
+ 425 006d 08       		.byte	0x8
+ 426 006e 05       		.byte	0x5
+ 427 006f 8A010000 		.4byte	.LASF7
+ 428 0073 03       		.uleb128 0x3
+ 429 0074 08       		.byte	0x8
+ 430 0075 07       		.byte	0x7
+ 431 0076 34010000 		.4byte	.LASF8
+ 432 007a 03       		.uleb128 0x3
+ 433 007b 01       		.byte	0x1
+ 434 007c 02       		.byte	0x2
+ 435 007d 1F000000 		.4byte	.LASF9
+ 436 0081 03       		.uleb128 0x3
+ 437 0082 01       		.byte	0x1
+ 438 0083 08       		.byte	0x8
+ 439 0084 D4010000 		.4byte	.LASF10
+ 440 0088 03       		.uleb128 0x3
+ 441 0089 04       		.byte	0x4
+ 442 008a 07       		.byte	0x7
+ 443 008b 7C010000 		.4byte	.LASF11
+ 444 008f 05       		.uleb128 0x5
+ 445 0090 18       		.byte	0x18
+ 446 0091 02       		.byte	0x2
+ 447 0092 2A       		.byte	0x2a
+ 448 0093 EC000000 		.4byte	0xec
+ 449 0097 06       		.uleb128 0x6
+ 450 0098 25000000 		.4byte	.LASF12
+ 451 009c 02       		.byte	0x2
+ 452 009d 2F       		.byte	0x2f
+ 453 009e 5A000000 		.4byte	0x5a
+ 454 00a2 02       		.byte	0x2
+ 455 00a3 23       		.byte	0x23
+ 456 00a4 00       		.uleb128 0
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 9
+
+
+ 457 00a5 06       		.uleb128 0x6
+ 458 00a6 BC010000 		.4byte	.LASF13
+ 459 00aa 02       		.byte	0x2
+ 460 00ab 31       		.byte	0x31
+ 461 00ac EC000000 		.4byte	0xec
+ 462 00b0 02       		.byte	0x2
+ 463 00b1 23       		.byte	0x23
+ 464 00b2 04       		.uleb128 0x4
+ 465 00b3 06       		.uleb128 0x6
+ 466 00b4 08020000 		.4byte	.LASF14
+ 467 00b8 02       		.byte	0x2
+ 468 00b9 32       		.byte	0x32
+ 469 00ba EC000000 		.4byte	0xec
+ 470 00be 02       		.byte	0x2
+ 471 00bf 23       		.byte	0x23
+ 472 00c0 08       		.uleb128 0x8
+ 473 00c1 06       		.uleb128 0x6
+ 474 00c2 F8000000 		.4byte	.LASF15
+ 475 00c6 02       		.byte	0x2
+ 476 00c7 33       		.byte	0x33
+ 477 00c8 EC000000 		.4byte	0xec
+ 478 00cc 02       		.byte	0x2
+ 479 00cd 23       		.byte	0x23
+ 480 00ce 0C       		.uleb128 0xc
+ 481 00cf 06       		.uleb128 0x6
+ 482 00d0 3B000000 		.4byte	.LASF16
+ 483 00d4 02       		.byte	0x2
+ 484 00d5 34       		.byte	0x34
+ 485 00d6 EC000000 		.4byte	0xec
+ 486 00da 02       		.byte	0x2
+ 487 00db 23       		.byte	0x23
+ 488 00dc 10       		.uleb128 0x10
+ 489 00dd 06       		.uleb128 0x6
+ 490 00de EF000000 		.4byte	.LASF17
+ 491 00e2 02       		.byte	0x2
+ 492 00e3 35       		.byte	0x35
+ 493 00e4 30000000 		.4byte	0x30
+ 494 00e8 02       		.byte	0x2
+ 495 00e9 23       		.byte	0x23
+ 496 00ea 14       		.uleb128 0x14
+ 497 00eb 00       		.byte	0
+ 498 00ec 07       		.uleb128 0x7
+ 499 00ed 04       		.byte	0x4
+ 500 00ee F2000000 		.4byte	0xf2
+ 501 00f2 08       		.uleb128 0x8
+ 502 00f3 5A000000 		.4byte	0x5a
+ 503 00f7 04       		.uleb128 0x4
+ 504 00f8 FC010000 		.4byte	.LASF19
+ 505 00fc 02       		.byte	0x2
+ 506 00fd 37       		.byte	0x37
+ 507 00fe 8F000000 		.4byte	0x8f
+ 508 0102 09       		.uleb128 0x9
+ 509 0103 00       		.byte	0
+ 510 0104 02       		.byte	0x2
+ 511 0105 43       		.byte	0x43
+ 512 0106 04       		.uleb128 0x4
+ 513 0107 E5010000 		.4byte	.LASF20
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 10
+
+
+ 514 010b 02       		.byte	0x2
+ 515 010c 45       		.byte	0x45
+ 516 010d 02010000 		.4byte	0x102
+ 517 0111 04       		.uleb128 0x4
+ 518 0112 44000000 		.4byte	.LASF21
+ 519 0116 02       		.byte	0x2
+ 520 0117 55       		.byte	0x55
+ 521 0118 5A000000 		.4byte	0x5a
+ 522 011c 04       		.uleb128 0x4
+ 523 011d B1010000 		.4byte	.LASF22
+ 524 0121 02       		.byte	0x2
+ 525 0122 62       		.byte	0x62
+ 526 0123 27010000 		.4byte	0x127
+ 527 0127 07       		.uleb128 0x7
+ 528 0128 04       		.byte	0x4
+ 529 0129 F7000000 		.4byte	0xf7
+ 530 012d 0A       		.uleb128 0xa
+ 531 012e 4B010000 		.4byte	.LASF25
+ 532 0132 01       		.byte	0x1
+ 533 0133 40       		.byte	0x40
+ 534 0134 01       		.byte	0x1
+ 535 0135 00000000 		.4byte	.LFB9
+ 536 0139 50000000 		.4byte	.LFE9
+ 537 013d 00000000 		.4byte	.LLST0
+ 538 0141 01       		.byte	0x1
+ 539 0142 96010000 		.4byte	0x196
+ 540 0146 0B       		.uleb128 0xb
+ 541 0147 A2010000 		.4byte	.LASF23
+ 542 014b 01       		.byte	0x1
+ 543 014c 40       		.byte	0x40
+ 544 014d 1C010000 		.4byte	0x11c
+ 545 0151 20000000 		.4byte	.LLST1
+ 546 0155 0B       		.uleb128 0xb
+ 547 0156 98010000 		.4byte	.LASF24
+ 548 015a 01       		.byte	0x1
+ 549 015b 40       		.byte	0x40
+ 550 015c 11010000 		.4byte	0x111
+ 551 0160 3E000000 		.4byte	.LLST2
+ 552 0164 0C       		.uleb128 0xc
+ 553 0165 6900     		.ascii	"i\000"
+ 554 0167 01       		.byte	0x1
+ 555 0168 41       		.byte	0x41
+ 556 0169 29000000 		.4byte	0x29
+ 557 016d 5C000000 		.4byte	.LLST3
+ 558 0171 0D       		.uleb128 0xd
+ 559 0172 00000000 		.4byte	.Ldebug_ranges0+0
+ 560 0176 0C       		.uleb128 0xc
+ 561 0177 62697400 		.ascii	"bit\000"
+ 562 017b 01       		.byte	0x1
+ 563 017c 43       		.byte	0x43
+ 564 017d 30000000 		.4byte	0x30
+ 565 0181 86000000 		.4byte	.LLST4
+ 566 0185 0E       		.uleb128 0xe
+ 567 0186 40000000 		.4byte	.LVL4
+ 568 018a CA030000 		.4byte	0x3ca
+ 569 018e 0F       		.uleb128 0xf
+ 570 018f 01       		.byte	0x1
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 11
+
+
+ 571 0190 51       		.byte	0x51
+ 572 0191 01       		.byte	0x1
+ 573 0192 30       		.byte	0x30
+ 574 0193 00       		.byte	0
+ 575 0194 00       		.byte	0
+ 576 0195 00       		.byte	0
+ 577 0196 0A       		.uleb128 0xa
+ 578 0197 EF010000 		.4byte	.LASF26
+ 579 019b 01       		.byte	0x1
+ 580 019c 36       		.byte	0x36
+ 581 019d 01       		.byte	0x1
+ 582 019e 00000000 		.4byte	.LFB8
+ 583 01a2 44000000 		.4byte	.LFE8
+ 584 01a6 AC000000 		.4byte	.LLST5
+ 585 01aa 01       		.byte	0x1
+ 586 01ab 01020000 		.4byte	0x201
+ 587 01af 0B       		.uleb128 0xb
+ 588 01b0 A2010000 		.4byte	.LASF23
+ 589 01b4 01       		.byte	0x1
+ 590 01b5 36       		.byte	0x36
+ 591 01b6 1C010000 		.4byte	0x11c
+ 592 01ba CC000000 		.4byte	.LLST6
+ 593 01be 0B       		.uleb128 0xb
+ 594 01bf 98010000 		.4byte	.LASF24
+ 595 01c3 01       		.byte	0x1
+ 596 01c4 36       		.byte	0x36
+ 597 01c5 11010000 		.4byte	0x111
+ 598 01c9 EA000000 		.4byte	.LLST7
+ 599 01cd 0B       		.uleb128 0xb
+ 600 01ce 73010000 		.4byte	.LASF27
+ 601 01d2 01       		.byte	0x1
+ 602 01d3 36       		.byte	0x36
+ 603 01d4 5A000000 		.4byte	0x5a
+ 604 01d8 08010000 		.4byte	.LLST8
+ 605 01dc 10       		.uleb128 0x10
+ 606 01dd 1C000000 		.4byte	.LVL8
+ 607 01e1 E4030000 		.4byte	0x3e4
+ 608 01e5 F0010000 		.4byte	0x1f0
+ 609 01e9 0F       		.uleb128 0xf
+ 610 01ea 01       		.byte	0x1
+ 611 01eb 50       		.byte	0x50
+ 612 01ec 02       		.byte	0x2
+ 613 01ed 08       		.byte	0x8
+ 614 01ee 96       		.byte	0x96
+ 615 01ef 00       		.byte	0
+ 616 01f0 0E       		.uleb128 0xe
+ 617 01f1 2C000000 		.4byte	.LVL9
+ 618 01f5 E4030000 		.4byte	0x3e4
+ 619 01f9 0F       		.uleb128 0xf
+ 620 01fa 01       		.byte	0x1
+ 621 01fb 50       		.byte	0x50
+ 622 01fc 02       		.byte	0x2
+ 623 01fd 08       		.byte	0x8
+ 624 01fe 96       		.byte	0x96
+ 625 01ff 00       		.byte	0
+ 626 0200 00       		.byte	0
+ 627 0201 11       		.uleb128 0x11
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 12
+
+
+ 628 0202 01       		.byte	0x1
+ 629 0203 57010000 		.4byte	.LASF29
+ 630 0207 01       		.byte	0x1
+ 631 0208 52       		.byte	0x52
+ 632 0209 01       		.byte	0x1
+ 633 020a 00000000 		.4byte	.LFB10
+ 634 020e 80000000 		.4byte	.LFE10
+ 635 0212 29010000 		.4byte	.LLST9
+ 636 0216 01       		.byte	0x1
+ 637 0217 62020000 		.4byte	0x262
+ 638 021b 0B       		.uleb128 0xb
+ 639 021c E8000000 		.4byte	.LASF28
+ 640 0220 01       		.byte	0x1
+ 641 0221 52       		.byte	0x52
+ 642 0222 62020000 		.4byte	0x262
+ 643 0226 49010000 		.4byte	.LLST10
+ 644 022a 10       		.uleb128 0x10
+ 645 022b 34000000 		.4byte	.LVL12
+ 646 022f 2D010000 		.4byte	0x12d
+ 647 0233 47020000 		.4byte	0x247
+ 648 0237 0F       		.uleb128 0xf
+ 649 0238 01       		.byte	0x1
+ 650 0239 51       		.byte	0x51
+ 651 023a 02       		.byte	0x2
+ 652 023b 09       		.byte	0x9
+ 653 023c FF       		.byte	0xff
+ 654 023d 0F       		.uleb128 0xf
+ 655 023e 01       		.byte	0x1
+ 656 023f 50       		.byte	0x50
+ 657 0240 05       		.byte	0x5
+ 658 0241 03       		.byte	0x3
+ 659 0242 00000000 		.4byte	IOPORT0
+ 660 0246 00       		.byte	0
+ 661 0247 12       		.uleb128 0x12
+ 662 0248 70000000 		.4byte	.LVL13
+ 663 024c 01       		.byte	0x1
+ 664 024d 2D010000 		.4byte	0x12d
+ 665 0251 0F       		.uleb128 0xf
+ 666 0252 01       		.byte	0x1
+ 667 0253 51       		.byte	0x51
+ 668 0254 02       		.byte	0x2
+ 669 0255 09       		.byte	0x9
+ 670 0256 FF       		.byte	0xff
+ 671 0257 0F       		.uleb128 0xf
+ 672 0258 01       		.byte	0x1
+ 673 0259 50       		.byte	0x50
+ 674 025a 05       		.byte	0x5
+ 675 025b 03       		.byte	0x3
+ 676 025c 00000000 		.4byte	IOPORT1
+ 677 0260 00       		.byte	0
+ 678 0261 00       		.byte	0
+ 679 0262 07       		.uleb128 0x7
+ 680 0263 04       		.byte	0x4
+ 681 0264 68020000 		.4byte	0x268
+ 682 0268 13       		.uleb128 0x13
+ 683 0269 06010000 		.4byte	0x106
+ 684 026d 11       		.uleb128 0x11
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 13
+
+
+ 685 026e 01       		.byte	0x1
+ 686 026f 11010000 		.4byte	.LASF30
+ 687 0273 01       		.byte	0x1
+ 688 0274 64       		.byte	0x64
+ 689 0275 01       		.byte	0x1
+ 690 0276 00000000 		.4byte	.LFB11
+ 691 027a CC000000 		.4byte	.LFE11
+ 692 027e 6A010000 		.4byte	.LLST11
+ 693 0282 01       		.byte	0x1
+ 694 0283 72030000 		.4byte	0x372
+ 695 0287 0B       		.uleb128 0xb
+ 696 0288 A2010000 		.4byte	.LASF23
+ 697 028c 01       		.byte	0x1
+ 698 028d 64       		.byte	0x64
+ 699 028e 1C010000 		.4byte	0x11c
+ 700 0292 8A010000 		.4byte	.LLST12
+ 701 0296 0B       		.uleb128 0xb
+ 702 0297 98010000 		.4byte	.LASF24
+ 703 029b 01       		.byte	0x1
+ 704 029c 64       		.byte	0x64
+ 705 029d 11010000 		.4byte	0x111
+ 706 02a1 EA010000 		.4byte	.LLST13
+ 707 02a5 0B       		.uleb128 0xb
+ 708 02a6 85010000 		.4byte	.LASF31
+ 709 02aa 01       		.byte	0x1
+ 710 02ab 64       		.byte	0x64
+ 711 02ac 5A000000 		.4byte	0x5a
+ 712 02b0 4A020000 		.4byte	.LLST14
+ 713 02b4 0C       		.uleb128 0xc
+ 714 02b5 6900     		.ascii	"i\000"
+ 715 02b7 01       		.byte	0x1
+ 716 02b8 65       		.byte	0x65
+ 717 02b9 29000000 		.4byte	0x29
+ 718 02bd B6020000 		.4byte	.LLST15
+ 719 02c1 14       		.uleb128 0x14
+ 720 02c2 28000000 		.4byte	.Ldebug_ranges0+0x28
+ 721 02c6 E9020000 		.4byte	0x2e9
+ 722 02ca 0C       		.uleb128 0xc
+ 723 02cb 62697400 		.ascii	"bit\000"
+ 724 02cf 01       		.byte	0x1
+ 725 02d0 77       		.byte	0x77
+ 726 02d1 30000000 		.4byte	0x30
+ 727 02d5 D4020000 		.4byte	.LLST16
+ 728 02d9 0E       		.uleb128 0xe
+ 729 02da 8C000000 		.4byte	.LVL20
+ 730 02de CA030000 		.4byte	0x3ca
+ 731 02e2 0F       		.uleb128 0xf
+ 732 02e3 01       		.byte	0x1
+ 733 02e4 51       		.byte	0x51
+ 734 02e5 01       		.byte	0x1
+ 735 02e6 31       		.byte	0x31
+ 736 02e7 00       		.byte	0
+ 737 02e8 00       		.byte	0
+ 738 02e9 10       		.uleb128 0x10
+ 739 02ea 2C000000 		.4byte	.LVL15
+ 740 02ee 2D010000 		.4byte	0x12d
+ 741 02f2 03030000 		.4byte	0x303
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 14
+
+
+ 742 02f6 0F       		.uleb128 0xf
+ 743 02f7 01       		.byte	0x1
+ 744 02f8 51       		.byte	0x51
+ 745 02f9 02       		.byte	0x2
+ 746 02fa 75       		.byte	0x75
+ 747 02fb 00       		.sleb128 0
+ 748 02fc 0F       		.uleb128 0xf
+ 749 02fd 01       		.byte	0x1
+ 750 02fe 50       		.byte	0x50
+ 751 02ff 02       		.byte	0x2
+ 752 0300 76       		.byte	0x76
+ 753 0301 00       		.sleb128 0
+ 754 0302 00       		.byte	0
+ 755 0303 15       		.uleb128 0x15
+ 756 0304 40000000 		.4byte	.LVL16
+ 757 0308 01       		.byte	0x1
+ 758 0309 96010000 		.4byte	0x196
+ 759 030d 23030000 		.4byte	0x323
+ 760 0311 0F       		.uleb128 0xf
+ 761 0312 01       		.byte	0x1
+ 762 0313 52       		.byte	0x52
+ 763 0314 01       		.byte	0x1
+ 764 0315 32       		.byte	0x32
+ 765 0316 0F       		.uleb128 0xf
+ 766 0317 01       		.byte	0x1
+ 767 0318 51       		.byte	0x51
+ 768 0319 02       		.byte	0x2
+ 769 031a 75       		.byte	0x75
+ 770 031b 00       		.sleb128 0
+ 771 031c 0F       		.uleb128 0xf
+ 772 031d 01       		.byte	0x1
+ 773 031e 50       		.byte	0x50
+ 774 031f 02       		.byte	0x2
+ 775 0320 76       		.byte	0x76
+ 776 0321 00       		.sleb128 0
+ 777 0322 00       		.byte	0
+ 778 0323 16       		.uleb128 0x16
+ 779 0324 A0000000 		.4byte	.LVL23
+ 780 0328 2D010000 		.4byte	0x12d
+ 781 032c 15       		.uleb128 0x15
+ 782 032d B4000000 		.4byte	.LVL24
+ 783 0331 01       		.byte	0x1
+ 784 0332 96010000 		.4byte	0x196
+ 785 0336 4C030000 		.4byte	0x34c
+ 786 033a 0F       		.uleb128 0xf
+ 787 033b 01       		.byte	0x1
+ 788 033c 52       		.byte	0x52
+ 789 033d 01       		.byte	0x1
+ 790 033e 31       		.byte	0x31
+ 791 033f 0F       		.uleb128 0xf
+ 792 0340 01       		.byte	0x1
+ 793 0341 51       		.byte	0x51
+ 794 0342 02       		.byte	0x2
+ 795 0343 75       		.byte	0x75
+ 796 0344 00       		.sleb128 0
+ 797 0345 0F       		.uleb128 0xf
+ 798 0346 01       		.byte	0x1
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 15
+
+
+ 799 0347 50       		.byte	0x50
+ 800 0348 02       		.byte	0x2
+ 801 0349 76       		.byte	0x76
+ 802 034a 00       		.sleb128 0
+ 803 034b 00       		.byte	0
+ 804 034c 16       		.uleb128 0x16
+ 805 034d B8000000 		.4byte	.LVL25
+ 806 0351 2D010000 		.4byte	0x12d
+ 807 0355 12       		.uleb128 0x12
+ 808 0356 CC000000 		.4byte	.LVL26
+ 809 035a 01       		.byte	0x1
+ 810 035b 96010000 		.4byte	0x196
+ 811 035f 0F       		.uleb128 0xf
+ 812 0360 01       		.byte	0x1
+ 813 0361 52       		.byte	0x52
+ 814 0362 01       		.byte	0x1
+ 815 0363 30       		.byte	0x30
+ 816 0364 0F       		.uleb128 0xf
+ 817 0365 01       		.byte	0x1
+ 818 0366 51       		.byte	0x51
+ 819 0367 02       		.byte	0x2
+ 820 0368 75       		.byte	0x75
+ 821 0369 00       		.sleb128 0
+ 822 036a 0F       		.uleb128 0xf
+ 823 036b 01       		.byte	0x1
+ 824 036c 50       		.byte	0x50
+ 825 036d 02       		.byte	0x2
+ 826 036e 76       		.byte	0x76
+ 827 036f 00       		.sleb128 0
+ 828 0370 00       		.byte	0
+ 829 0371 00       		.byte	0
+ 830 0372 17       		.uleb128 0x17
+ 831 0373 01       		.byte	0x1
+ 832 0374 FE000000 		.4byte	.LASF32
+ 833 0378 01       		.byte	0x1
+ 834 0379 80       		.byte	0x80
+ 835 037a 01       		.byte	0x1
+ 836 037b 00000000 		.4byte	.LFB12
+ 837 037f 1C000000 		.4byte	.LFE12
+ 838 0383 02       		.byte	0x2
+ 839 0384 7D       		.byte	0x7d
+ 840 0385 00       		.sleb128 0
+ 841 0386 01       		.byte	0x1
+ 842 0387 A6030000 		.4byte	0x3a6
+ 843 038b 18       		.uleb128 0x18
+ 844 038c A2010000 		.4byte	.LASF23
+ 845 0390 01       		.byte	0x1
+ 846 0391 80       		.byte	0x80
+ 847 0392 1C010000 		.4byte	0x11c
+ 848 0396 01       		.byte	0x1
+ 849 0397 50       		.byte	0x50
+ 850 0398 18       		.uleb128 0x18
+ 851 0399 9D010000 		.4byte	.LASF33
+ 852 039d 01       		.byte	0x1
+ 853 039e 80       		.byte	0x80
+ 854 039f 11010000 		.4byte	0x111
+ 855 03a3 01       		.byte	0x1
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 16
+
+
+ 856 03a4 51       		.byte	0x51
+ 857 03a5 00       		.byte	0
+ 858 03a6 19       		.uleb128 0x19
+ 859 03a7 2B000000 		.4byte	.LASF34
+ 860 03ab 01       		.byte	0x1
+ 861 03ac 2B       		.byte	0x2b
+ 862 03ad F7000000 		.4byte	0xf7
+ 863 03b1 01       		.byte	0x1
+ 864 03b2 05       		.byte	0x5
+ 865 03b3 03       		.byte	0x3
+ 866 03b4 00000000 		.4byte	IOPORT0
+ 867 03b8 19       		.uleb128 0x19
+ 868 03b9 33000000 		.4byte	.LASF35
+ 869 03bd 01       		.byte	0x1
+ 870 03be 2C       		.byte	0x2c
+ 871 03bf F7000000 		.4byte	0xf7
+ 872 03c3 01       		.byte	0x1
+ 873 03c4 05       		.byte	0x5
+ 874 03c5 03       		.byte	0x3
+ 875 03c6 00000000 		.4byte	IOPORT1
+ 876 03ca 1A       		.uleb128 0x1a
+ 877 03cb 01       		.byte	0x1
+ 878 03cc 0C000000 		.4byte	.LASF39
+ 879 03d0 04       		.byte	0x4
+ 880 03d1 8C01     		.2byte	0x18c
+ 881 03d3 01       		.byte	0x1
+ 882 03d4 01       		.byte	0x1
+ 883 03d5 E4030000 		.4byte	0x3e4
+ 884 03d9 1B       		.uleb128 0x1b
+ 885 03da 5A000000 		.4byte	0x5a
+ 886 03de 1B       		.uleb128 0x1b
+ 887 03df 5A000000 		.4byte	0x5a
+ 888 03e3 00       		.byte	0
+ 889 03e4 1C       		.uleb128 0x1c
+ 890 03e5 01       		.byte	0x1
+ 891 03e6 65010000 		.4byte	.LASF40
+ 892 03ea 04       		.byte	0x4
+ 893 03eb 8D01     		.2byte	0x18d
+ 894 03ed 01       		.byte	0x1
+ 895 03ee 01       		.byte	0x1
+ 896 03ef 1B       		.uleb128 0x1b
+ 897 03f0 5A000000 		.4byte	0x5a
+ 898 03f4 00       		.byte	0
+ 899 03f5 00       		.byte	0
+ 900              		.section	.debug_abbrev,"",%progbits
+ 901              	.Ldebug_abbrev0:
+ 902 0000 01       		.uleb128 0x1
+ 903 0001 11       		.uleb128 0x11
+ 904 0002 01       		.byte	0x1
+ 905 0003 25       		.uleb128 0x25
+ 906 0004 0E       		.uleb128 0xe
+ 907 0005 13       		.uleb128 0x13
+ 908 0006 0B       		.uleb128 0xb
+ 909 0007 03       		.uleb128 0x3
+ 910 0008 0E       		.uleb128 0xe
+ 911 0009 1B       		.uleb128 0x1b
+ 912 000a 0E       		.uleb128 0xe
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 17
+
+
+ 913 000b 55       		.uleb128 0x55
+ 914 000c 06       		.uleb128 0x6
+ 915 000d 11       		.uleb128 0x11
+ 916 000e 01       		.uleb128 0x1
+ 917 000f 52       		.uleb128 0x52
+ 918 0010 01       		.uleb128 0x1
+ 919 0011 10       		.uleb128 0x10
+ 920 0012 06       		.uleb128 0x6
+ 921 0013 00       		.byte	0
+ 922 0014 00       		.byte	0
+ 923 0015 02       		.uleb128 0x2
+ 924 0016 24       		.uleb128 0x24
+ 925 0017 00       		.byte	0
+ 926 0018 0B       		.uleb128 0xb
+ 927 0019 0B       		.uleb128 0xb
+ 928 001a 3E       		.uleb128 0x3e
+ 929 001b 0B       		.uleb128 0xb
+ 930 001c 03       		.uleb128 0x3
+ 931 001d 08       		.uleb128 0x8
+ 932 001e 00       		.byte	0
+ 933 001f 00       		.byte	0
+ 934 0020 03       		.uleb128 0x3
+ 935 0021 24       		.uleb128 0x24
+ 936 0022 00       		.byte	0
+ 937 0023 0B       		.uleb128 0xb
+ 938 0024 0B       		.uleb128 0xb
+ 939 0025 3E       		.uleb128 0x3e
+ 940 0026 0B       		.uleb128 0xb
+ 941 0027 03       		.uleb128 0x3
+ 942 0028 0E       		.uleb128 0xe
+ 943 0029 00       		.byte	0
+ 944 002a 00       		.byte	0
+ 945 002b 04       		.uleb128 0x4
+ 946 002c 16       		.uleb128 0x16
+ 947 002d 00       		.byte	0
+ 948 002e 03       		.uleb128 0x3
+ 949 002f 0E       		.uleb128 0xe
+ 950 0030 3A       		.uleb128 0x3a
+ 951 0031 0B       		.uleb128 0xb
+ 952 0032 3B       		.uleb128 0x3b
+ 953 0033 0B       		.uleb128 0xb
+ 954 0034 49       		.uleb128 0x49
+ 955 0035 13       		.uleb128 0x13
+ 956 0036 00       		.byte	0
+ 957 0037 00       		.byte	0
+ 958 0038 05       		.uleb128 0x5
+ 959 0039 13       		.uleb128 0x13
+ 960 003a 01       		.byte	0x1
+ 961 003b 0B       		.uleb128 0xb
+ 962 003c 0B       		.uleb128 0xb
+ 963 003d 3A       		.uleb128 0x3a
+ 964 003e 0B       		.uleb128 0xb
+ 965 003f 3B       		.uleb128 0x3b
+ 966 0040 0B       		.uleb128 0xb
+ 967 0041 01       		.uleb128 0x1
+ 968 0042 13       		.uleb128 0x13
+ 969 0043 00       		.byte	0
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 18
+
+
+ 970 0044 00       		.byte	0
+ 971 0045 06       		.uleb128 0x6
+ 972 0046 0D       		.uleb128 0xd
+ 973 0047 00       		.byte	0
+ 974 0048 03       		.uleb128 0x3
+ 975 0049 0E       		.uleb128 0xe
+ 976 004a 3A       		.uleb128 0x3a
+ 977 004b 0B       		.uleb128 0xb
+ 978 004c 3B       		.uleb128 0x3b
+ 979 004d 0B       		.uleb128 0xb
+ 980 004e 49       		.uleb128 0x49
+ 981 004f 13       		.uleb128 0x13
+ 982 0050 38       		.uleb128 0x38
+ 983 0051 0A       		.uleb128 0xa
+ 984 0052 00       		.byte	0
+ 985 0053 00       		.byte	0
+ 986 0054 07       		.uleb128 0x7
+ 987 0055 0F       		.uleb128 0xf
+ 988 0056 00       		.byte	0
+ 989 0057 0B       		.uleb128 0xb
+ 990 0058 0B       		.uleb128 0xb
+ 991 0059 49       		.uleb128 0x49
+ 992 005a 13       		.uleb128 0x13
+ 993 005b 00       		.byte	0
+ 994 005c 00       		.byte	0
+ 995 005d 08       		.uleb128 0x8
+ 996 005e 35       		.uleb128 0x35
+ 997 005f 00       		.byte	0
+ 998 0060 49       		.uleb128 0x49
+ 999 0061 13       		.uleb128 0x13
+ 1000 0062 00       		.byte	0
+ 1001 0063 00       		.byte	0
+ 1002 0064 09       		.uleb128 0x9
+ 1003 0065 13       		.uleb128 0x13
+ 1004 0066 00       		.byte	0
+ 1005 0067 0B       		.uleb128 0xb
+ 1006 0068 0B       		.uleb128 0xb
+ 1007 0069 3A       		.uleb128 0x3a
+ 1008 006a 0B       		.uleb128 0xb
+ 1009 006b 3B       		.uleb128 0x3b
+ 1010 006c 0B       		.uleb128 0xb
+ 1011 006d 00       		.byte	0
+ 1012 006e 00       		.byte	0
+ 1013 006f 0A       		.uleb128 0xa
+ 1014 0070 2E       		.uleb128 0x2e
+ 1015 0071 01       		.byte	0x1
+ 1016 0072 03       		.uleb128 0x3
+ 1017 0073 0E       		.uleb128 0xe
+ 1018 0074 3A       		.uleb128 0x3a
+ 1019 0075 0B       		.uleb128 0xb
+ 1020 0076 3B       		.uleb128 0x3b
+ 1021 0077 0B       		.uleb128 0xb
+ 1022 0078 27       		.uleb128 0x27
+ 1023 0079 0C       		.uleb128 0xc
+ 1024 007a 11       		.uleb128 0x11
+ 1025 007b 01       		.uleb128 0x1
+ 1026 007c 12       		.uleb128 0x12
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 19
+
+
+ 1027 007d 01       		.uleb128 0x1
+ 1028 007e 40       		.uleb128 0x40
+ 1029 007f 06       		.uleb128 0x6
+ 1030 0080 9742     		.uleb128 0x2117
+ 1031 0082 0C       		.uleb128 0xc
+ 1032 0083 01       		.uleb128 0x1
+ 1033 0084 13       		.uleb128 0x13
+ 1034 0085 00       		.byte	0
+ 1035 0086 00       		.byte	0
+ 1036 0087 0B       		.uleb128 0xb
+ 1037 0088 05       		.uleb128 0x5
+ 1038 0089 00       		.byte	0
+ 1039 008a 03       		.uleb128 0x3
+ 1040 008b 0E       		.uleb128 0xe
+ 1041 008c 3A       		.uleb128 0x3a
+ 1042 008d 0B       		.uleb128 0xb
+ 1043 008e 3B       		.uleb128 0x3b
+ 1044 008f 0B       		.uleb128 0xb
+ 1045 0090 49       		.uleb128 0x49
+ 1046 0091 13       		.uleb128 0x13
+ 1047 0092 02       		.uleb128 0x2
+ 1048 0093 06       		.uleb128 0x6
+ 1049 0094 00       		.byte	0
+ 1050 0095 00       		.byte	0
+ 1051 0096 0C       		.uleb128 0xc
+ 1052 0097 34       		.uleb128 0x34
+ 1053 0098 00       		.byte	0
+ 1054 0099 03       		.uleb128 0x3
+ 1055 009a 08       		.uleb128 0x8
+ 1056 009b 3A       		.uleb128 0x3a
+ 1057 009c 0B       		.uleb128 0xb
+ 1058 009d 3B       		.uleb128 0x3b
+ 1059 009e 0B       		.uleb128 0xb
+ 1060 009f 49       		.uleb128 0x49
+ 1061 00a0 13       		.uleb128 0x13
+ 1062 00a1 02       		.uleb128 0x2
+ 1063 00a2 06       		.uleb128 0x6
+ 1064 00a3 00       		.byte	0
+ 1065 00a4 00       		.byte	0
+ 1066 00a5 0D       		.uleb128 0xd
+ 1067 00a6 0B       		.uleb128 0xb
+ 1068 00a7 01       		.byte	0x1
+ 1069 00a8 55       		.uleb128 0x55
+ 1070 00a9 06       		.uleb128 0x6
+ 1071 00aa 00       		.byte	0
+ 1072 00ab 00       		.byte	0
+ 1073 00ac 0E       		.uleb128 0xe
+ 1074 00ad 898201   		.uleb128 0x4109
+ 1075 00b0 01       		.byte	0x1
+ 1076 00b1 11       		.uleb128 0x11
+ 1077 00b2 01       		.uleb128 0x1
+ 1078 00b3 31       		.uleb128 0x31
+ 1079 00b4 13       		.uleb128 0x13
+ 1080 00b5 00       		.byte	0
+ 1081 00b6 00       		.byte	0
+ 1082 00b7 0F       		.uleb128 0xf
+ 1083 00b8 8A8201   		.uleb128 0x410a
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 20
+
+
+ 1084 00bb 00       		.byte	0
+ 1085 00bc 02       		.uleb128 0x2
+ 1086 00bd 0A       		.uleb128 0xa
+ 1087 00be 9142     		.uleb128 0x2111
+ 1088 00c0 0A       		.uleb128 0xa
+ 1089 00c1 00       		.byte	0
+ 1090 00c2 00       		.byte	0
+ 1091 00c3 10       		.uleb128 0x10
+ 1092 00c4 898201   		.uleb128 0x4109
+ 1093 00c7 01       		.byte	0x1
+ 1094 00c8 11       		.uleb128 0x11
+ 1095 00c9 01       		.uleb128 0x1
+ 1096 00ca 31       		.uleb128 0x31
+ 1097 00cb 13       		.uleb128 0x13
+ 1098 00cc 01       		.uleb128 0x1
+ 1099 00cd 13       		.uleb128 0x13
+ 1100 00ce 00       		.byte	0
+ 1101 00cf 00       		.byte	0
+ 1102 00d0 11       		.uleb128 0x11
+ 1103 00d1 2E       		.uleb128 0x2e
+ 1104 00d2 01       		.byte	0x1
+ 1105 00d3 3F       		.uleb128 0x3f
+ 1106 00d4 0C       		.uleb128 0xc
+ 1107 00d5 03       		.uleb128 0x3
+ 1108 00d6 0E       		.uleb128 0xe
+ 1109 00d7 3A       		.uleb128 0x3a
+ 1110 00d8 0B       		.uleb128 0xb
+ 1111 00d9 3B       		.uleb128 0x3b
+ 1112 00da 0B       		.uleb128 0xb
+ 1113 00db 27       		.uleb128 0x27
+ 1114 00dc 0C       		.uleb128 0xc
+ 1115 00dd 11       		.uleb128 0x11
+ 1116 00de 01       		.uleb128 0x1
+ 1117 00df 12       		.uleb128 0x12
+ 1118 00e0 01       		.uleb128 0x1
+ 1119 00e1 40       		.uleb128 0x40
+ 1120 00e2 06       		.uleb128 0x6
+ 1121 00e3 9742     		.uleb128 0x2117
+ 1122 00e5 0C       		.uleb128 0xc
+ 1123 00e6 01       		.uleb128 0x1
+ 1124 00e7 13       		.uleb128 0x13
+ 1125 00e8 00       		.byte	0
+ 1126 00e9 00       		.byte	0
+ 1127 00ea 12       		.uleb128 0x12
+ 1128 00eb 898201   		.uleb128 0x4109
+ 1129 00ee 01       		.byte	0x1
+ 1130 00ef 11       		.uleb128 0x11
+ 1131 00f0 01       		.uleb128 0x1
+ 1132 00f1 9542     		.uleb128 0x2115
+ 1133 00f3 0C       		.uleb128 0xc
+ 1134 00f4 31       		.uleb128 0x31
+ 1135 00f5 13       		.uleb128 0x13
+ 1136 00f6 00       		.byte	0
+ 1137 00f7 00       		.byte	0
+ 1138 00f8 13       		.uleb128 0x13
+ 1139 00f9 26       		.uleb128 0x26
+ 1140 00fa 00       		.byte	0
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 21
+
+
+ 1141 00fb 49       		.uleb128 0x49
+ 1142 00fc 13       		.uleb128 0x13
+ 1143 00fd 00       		.byte	0
+ 1144 00fe 00       		.byte	0
+ 1145 00ff 14       		.uleb128 0x14
+ 1146 0100 0B       		.uleb128 0xb
+ 1147 0101 01       		.byte	0x1
+ 1148 0102 55       		.uleb128 0x55
+ 1149 0103 06       		.uleb128 0x6
+ 1150 0104 01       		.uleb128 0x1
+ 1151 0105 13       		.uleb128 0x13
+ 1152 0106 00       		.byte	0
+ 1153 0107 00       		.byte	0
+ 1154 0108 15       		.uleb128 0x15
+ 1155 0109 898201   		.uleb128 0x4109
+ 1156 010c 01       		.byte	0x1
+ 1157 010d 11       		.uleb128 0x11
+ 1158 010e 01       		.uleb128 0x1
+ 1159 010f 9542     		.uleb128 0x2115
+ 1160 0111 0C       		.uleb128 0xc
+ 1161 0112 31       		.uleb128 0x31
+ 1162 0113 13       		.uleb128 0x13
+ 1163 0114 01       		.uleb128 0x1
+ 1164 0115 13       		.uleb128 0x13
+ 1165 0116 00       		.byte	0
+ 1166 0117 00       		.byte	0
+ 1167 0118 16       		.uleb128 0x16
+ 1168 0119 898201   		.uleb128 0x4109
+ 1169 011c 00       		.byte	0
+ 1170 011d 11       		.uleb128 0x11
+ 1171 011e 01       		.uleb128 0x1
+ 1172 011f 31       		.uleb128 0x31
+ 1173 0120 13       		.uleb128 0x13
+ 1174 0121 00       		.byte	0
+ 1175 0122 00       		.byte	0
+ 1176 0123 17       		.uleb128 0x17
+ 1177 0124 2E       		.uleb128 0x2e
+ 1178 0125 01       		.byte	0x1
+ 1179 0126 3F       		.uleb128 0x3f
+ 1180 0127 0C       		.uleb128 0xc
+ 1181 0128 03       		.uleb128 0x3
+ 1182 0129 0E       		.uleb128 0xe
+ 1183 012a 3A       		.uleb128 0x3a
+ 1184 012b 0B       		.uleb128 0xb
+ 1185 012c 3B       		.uleb128 0x3b
+ 1186 012d 0B       		.uleb128 0xb
+ 1187 012e 27       		.uleb128 0x27
+ 1188 012f 0C       		.uleb128 0xc
+ 1189 0130 11       		.uleb128 0x11
+ 1190 0131 01       		.uleb128 0x1
+ 1191 0132 12       		.uleb128 0x12
+ 1192 0133 01       		.uleb128 0x1
+ 1193 0134 40       		.uleb128 0x40
+ 1194 0135 0A       		.uleb128 0xa
+ 1195 0136 9742     		.uleb128 0x2117
+ 1196 0138 0C       		.uleb128 0xc
+ 1197 0139 01       		.uleb128 0x1
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 22
+
+
+ 1198 013a 13       		.uleb128 0x13
+ 1199 013b 00       		.byte	0
+ 1200 013c 00       		.byte	0
+ 1201 013d 18       		.uleb128 0x18
+ 1202 013e 05       		.uleb128 0x5
+ 1203 013f 00       		.byte	0
+ 1204 0140 03       		.uleb128 0x3
+ 1205 0141 0E       		.uleb128 0xe
+ 1206 0142 3A       		.uleb128 0x3a
+ 1207 0143 0B       		.uleb128 0xb
+ 1208 0144 3B       		.uleb128 0x3b
+ 1209 0145 0B       		.uleb128 0xb
+ 1210 0146 49       		.uleb128 0x49
+ 1211 0147 13       		.uleb128 0x13
+ 1212 0148 02       		.uleb128 0x2
+ 1213 0149 0A       		.uleb128 0xa
+ 1214 014a 00       		.byte	0
+ 1215 014b 00       		.byte	0
+ 1216 014c 19       		.uleb128 0x19
+ 1217 014d 34       		.uleb128 0x34
+ 1218 014e 00       		.byte	0
+ 1219 014f 03       		.uleb128 0x3
+ 1220 0150 0E       		.uleb128 0xe
+ 1221 0151 3A       		.uleb128 0x3a
+ 1222 0152 0B       		.uleb128 0xb
+ 1223 0153 3B       		.uleb128 0x3b
+ 1224 0154 0B       		.uleb128 0xb
+ 1225 0155 49       		.uleb128 0x49
+ 1226 0156 13       		.uleb128 0x13
+ 1227 0157 3F       		.uleb128 0x3f
+ 1228 0158 0C       		.uleb128 0xc
+ 1229 0159 02       		.uleb128 0x2
+ 1230 015a 0A       		.uleb128 0xa
+ 1231 015b 00       		.byte	0
+ 1232 015c 00       		.byte	0
+ 1233 015d 1A       		.uleb128 0x1a
+ 1234 015e 2E       		.uleb128 0x2e
+ 1235 015f 01       		.byte	0x1
+ 1236 0160 3F       		.uleb128 0x3f
+ 1237 0161 0C       		.uleb128 0xc
+ 1238 0162 03       		.uleb128 0x3
+ 1239 0163 0E       		.uleb128 0xe
+ 1240 0164 3A       		.uleb128 0x3a
+ 1241 0165 0B       		.uleb128 0xb
+ 1242 0166 3B       		.uleb128 0x3b
+ 1243 0167 05       		.uleb128 0x5
+ 1244 0168 27       		.uleb128 0x27
+ 1245 0169 0C       		.uleb128 0xc
+ 1246 016a 3C       		.uleb128 0x3c
+ 1247 016b 0C       		.uleb128 0xc
+ 1248 016c 01       		.uleb128 0x1
+ 1249 016d 13       		.uleb128 0x13
+ 1250 016e 00       		.byte	0
+ 1251 016f 00       		.byte	0
+ 1252 0170 1B       		.uleb128 0x1b
+ 1253 0171 05       		.uleb128 0x5
+ 1254 0172 00       		.byte	0
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 23
+
+
+ 1255 0173 49       		.uleb128 0x49
+ 1256 0174 13       		.uleb128 0x13
+ 1257 0175 00       		.byte	0
+ 1258 0176 00       		.byte	0
+ 1259 0177 1C       		.uleb128 0x1c
+ 1260 0178 2E       		.uleb128 0x2e
+ 1261 0179 01       		.byte	0x1
+ 1262 017a 3F       		.uleb128 0x3f
+ 1263 017b 0C       		.uleb128 0xc
+ 1264 017c 03       		.uleb128 0x3
+ 1265 017d 0E       		.uleb128 0xe
+ 1266 017e 3A       		.uleb128 0x3a
+ 1267 017f 0B       		.uleb128 0xb
+ 1268 0180 3B       		.uleb128 0x3b
+ 1269 0181 05       		.uleb128 0x5
+ 1270 0182 27       		.uleb128 0x27
+ 1271 0183 0C       		.uleb128 0xc
+ 1272 0184 3C       		.uleb128 0x3c
+ 1273 0185 0C       		.uleb128 0xc
+ 1274 0186 00       		.byte	0
+ 1275 0187 00       		.byte	0
+ 1276 0188 00       		.byte	0
+ 1277              		.section	.debug_loc,"",%progbits
+ 1278              	.Ldebug_loc0:
+ 1279              	.LLST0:
+ 1280 0000 00000000 		.4byte	.LFB9
+ 1281 0004 04000000 		.4byte	.LCFI0
+ 1282 0008 0200     		.2byte	0x2
+ 1283 000a 7D       		.byte	0x7d
+ 1284 000b 00       		.sleb128 0
+ 1285 000c 04000000 		.4byte	.LCFI0
+ 1286 0010 50000000 		.4byte	.LFE9
+ 1287 0014 0200     		.2byte	0x2
+ 1288 0016 7D       		.byte	0x7d
+ 1289 0017 10       		.sleb128 16
+ 1290 0018 00000000 		.4byte	0
+ 1291 001c 00000000 		.4byte	0
+ 1292              	.LLST1:
+ 1293 0020 00000000 		.4byte	.LVL0
+ 1294 0024 14000000 		.4byte	.LVL1
+ 1295 0028 0100     		.2byte	0x1
+ 1296 002a 50       		.byte	0x50
+ 1297 002b 14000000 		.4byte	.LVL1
+ 1298 002f 50000000 		.4byte	.LFE9
+ 1299 0033 0100     		.2byte	0x1
+ 1300 0035 56       		.byte	0x56
+ 1301 0036 00000000 		.4byte	0
+ 1302 003a 00000000 		.4byte	0
+ 1303              	.LLST2:
+ 1304 003e 00000000 		.4byte	.LVL0
+ 1305 0042 14000000 		.4byte	.LVL1
+ 1306 0046 0100     		.2byte	0x1
+ 1307 0048 51       		.byte	0x51
+ 1308 0049 14000000 		.4byte	.LVL1
+ 1309 004d 50000000 		.4byte	.LFE9
+ 1310 0051 0100     		.2byte	0x1
+ 1311 0053 55       		.byte	0x55
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 24
+
+
+ 1312 0054 00000000 		.4byte	0
+ 1313 0058 00000000 		.4byte	0
+ 1314              	.LLST3:
+ 1315 005c 00000000 		.4byte	.LVL0
+ 1316 0060 14000000 		.4byte	.LVL1
+ 1317 0064 0200     		.2byte	0x2
+ 1318 0066 30       		.byte	0x30
+ 1319 0067 9F       		.byte	0x9f
+ 1320 0068 20000000 		.4byte	.LVL2
+ 1321 006c 24000000 		.4byte	.LVL3
+ 1322 0070 0100     		.2byte	0x1
+ 1323 0072 54       		.byte	0x54
+ 1324 0073 48000000 		.4byte	.LVL5
+ 1325 0077 50000000 		.4byte	.LFE9
+ 1326 007b 0100     		.2byte	0x1
+ 1327 007d 54       		.byte	0x54
+ 1328 007e 00000000 		.4byte	0
+ 1329 0082 00000000 		.4byte	0
+ 1330              	.LLST4:
+ 1331 0086 14000000 		.4byte	.LVL1
+ 1332 008a 20000000 		.4byte	.LVL2
+ 1333 008e 0500     		.2byte	0x5
+ 1334 0090 75       		.byte	0x75
+ 1335 0091 00       		.sleb128 0
+ 1336 0092 31       		.byte	0x31
+ 1337 0093 1A       		.byte	0x1a
+ 1338 0094 9F       		.byte	0x9f
+ 1339 0095 24000000 		.4byte	.LVL3
+ 1340 0099 48000000 		.4byte	.LVL5
+ 1341 009d 0500     		.2byte	0x5
+ 1342 009f 75       		.byte	0x75
+ 1343 00a0 00       		.sleb128 0
+ 1344 00a1 31       		.byte	0x31
+ 1345 00a2 1A       		.byte	0x1a
+ 1346 00a3 9F       		.byte	0x9f
+ 1347 00a4 00000000 		.4byte	0
+ 1348 00a8 00000000 		.4byte	0
+ 1349              	.LLST5:
+ 1350 00ac 00000000 		.4byte	.LFB8
+ 1351 00b0 04000000 		.4byte	.LCFI1
+ 1352 00b4 0200     		.2byte	0x2
+ 1353 00b6 7D       		.byte	0x7d
+ 1354 00b7 00       		.sleb128 0
+ 1355 00b8 04000000 		.4byte	.LCFI1
+ 1356 00bc 44000000 		.4byte	.LFE8
+ 1357 00c0 0200     		.2byte	0x2
+ 1358 00c2 7D       		.byte	0x7d
+ 1359 00c3 10       		.sleb128 16
+ 1360 00c4 00000000 		.4byte	0
+ 1361 00c8 00000000 		.4byte	0
+ 1362              	.LLST6:
+ 1363 00cc 00000000 		.4byte	.LVL6
+ 1364 00d0 14000000 		.4byte	.LVL7
+ 1365 00d4 0100     		.2byte	0x1
+ 1366 00d6 50       		.byte	0x50
+ 1367 00d7 14000000 		.4byte	.LVL7
+ 1368 00db 44000000 		.4byte	.LFE8
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 25
+
+
+ 1369 00df 0100     		.2byte	0x1
+ 1370 00e1 55       		.byte	0x55
+ 1371 00e2 00000000 		.4byte	0
+ 1372 00e6 00000000 		.4byte	0
+ 1373              	.LLST7:
+ 1374 00ea 00000000 		.4byte	.LVL6
+ 1375 00ee 1B000000 		.4byte	.LVL8-1
+ 1376 00f2 0100     		.2byte	0x1
+ 1377 00f4 51       		.byte	0x51
+ 1378 00f5 1B000000 		.4byte	.LVL8-1
+ 1379 00f9 44000000 		.4byte	.LFE8
+ 1380 00fd 0100     		.2byte	0x1
+ 1381 00ff 56       		.byte	0x56
+ 1382 0100 00000000 		.4byte	0
+ 1383 0104 00000000 		.4byte	0
+ 1384              	.LLST8:
+ 1385 0108 00000000 		.4byte	.LVL6
+ 1386 010c 1B000000 		.4byte	.LVL8-1
+ 1387 0110 0100     		.2byte	0x1
+ 1388 0112 52       		.byte	0x52
+ 1389 0113 1B000000 		.4byte	.LVL8-1
+ 1390 0117 44000000 		.4byte	.LFE8
+ 1391 011b 0400     		.2byte	0x4
+ 1392 011d F3       		.byte	0xf3
+ 1393 011e 01       		.uleb128 0x1
+ 1394 011f 52       		.byte	0x52
+ 1395 0120 9F       		.byte	0x9f
+ 1396 0121 00000000 		.4byte	0
+ 1397 0125 00000000 		.4byte	0
+ 1398              	.LLST9:
+ 1399 0129 00000000 		.4byte	.LFB10
+ 1400 012d 04000000 		.4byte	.LCFI2
+ 1401 0131 0200     		.2byte	0x2
+ 1402 0133 7D       		.byte	0x7d
+ 1403 0134 00       		.sleb128 0
+ 1404 0135 04000000 		.4byte	.LCFI2
+ 1405 0139 80000000 		.4byte	.LFE10
+ 1406 013d 0200     		.2byte	0x2
+ 1407 013f 7D       		.byte	0x7d
+ 1408 0140 08       		.sleb128 8
+ 1409 0141 00000000 		.4byte	0
+ 1410 0145 00000000 		.4byte	0
+ 1411              	.LLST10:
+ 1412 0149 00000000 		.4byte	.LVL10
+ 1413 014d 24000000 		.4byte	.LVL11
+ 1414 0151 0100     		.2byte	0x1
+ 1415 0153 50       		.byte	0x50
+ 1416 0154 24000000 		.4byte	.LVL11
+ 1417 0158 80000000 		.4byte	.LFE10
+ 1418 015c 0400     		.2byte	0x4
+ 1419 015e F3       		.byte	0xf3
+ 1420 015f 01       		.uleb128 0x1
+ 1421 0160 50       		.byte	0x50
+ 1422 0161 9F       		.byte	0x9f
+ 1423 0162 00000000 		.4byte	0
+ 1424 0166 00000000 		.4byte	0
+ 1425              	.LLST11:
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 26
+
+
+ 1426 016a 00000000 		.4byte	.LFB11
+ 1427 016e 08000000 		.4byte	.LCFI3
+ 1428 0172 0200     		.2byte	0x2
+ 1429 0174 7D       		.byte	0x7d
+ 1430 0175 00       		.sleb128 0
+ 1431 0176 08000000 		.4byte	.LCFI3
+ 1432 017a CC000000 		.4byte	.LFE11
+ 1433 017e 0200     		.2byte	0x2
+ 1434 0180 7D       		.byte	0x7d
+ 1435 0181 10       		.sleb128 16
+ 1436 0182 00000000 		.4byte	0
+ 1437 0186 00000000 		.4byte	0
+ 1438              	.LLST12:
+ 1439 018a 00000000 		.4byte	.LVL14
+ 1440 018e 2B000000 		.4byte	.LVL15-1
+ 1441 0192 0100     		.2byte	0x1
+ 1442 0194 50       		.byte	0x50
+ 1443 0195 2B000000 		.4byte	.LVL15-1
+ 1444 0199 40000000 		.4byte	.LVL16
+ 1445 019d 0100     		.2byte	0x1
+ 1446 019f 56       		.byte	0x56
+ 1447 01a0 40000000 		.4byte	.LVL16
+ 1448 01a4 60000000 		.4byte	.LVL17
+ 1449 01a8 0100     		.2byte	0x1
+ 1450 01aa 50       		.byte	0x50
+ 1451 01ab 60000000 		.4byte	.LVL17
+ 1452 01af 9C000000 		.4byte	.LVL22
+ 1453 01b3 0100     		.2byte	0x1
+ 1454 01b5 56       		.byte	0x56
+ 1455 01b6 9C000000 		.4byte	.LVL22
+ 1456 01ba 9F000000 		.4byte	.LVL23-1
+ 1457 01be 0100     		.2byte	0x1
+ 1458 01c0 50       		.byte	0x50
+ 1459 01c1 9F000000 		.4byte	.LVL23-1
+ 1460 01c5 B4000000 		.4byte	.LVL24
+ 1461 01c9 0100     		.2byte	0x1
+ 1462 01cb 56       		.byte	0x56
+ 1463 01cc B4000000 		.4byte	.LVL24
+ 1464 01d0 B7000000 		.4byte	.LVL25-1
+ 1465 01d4 0100     		.2byte	0x1
+ 1466 01d6 50       		.byte	0x50
+ 1467 01d7 B7000000 		.4byte	.LVL25-1
+ 1468 01db CC000000 		.4byte	.LFE11
+ 1469 01df 0100     		.2byte	0x1
+ 1470 01e1 56       		.byte	0x56
+ 1471 01e2 00000000 		.4byte	0
+ 1472 01e6 00000000 		.4byte	0
+ 1473              	.LLST13:
+ 1474 01ea 00000000 		.4byte	.LVL14
+ 1475 01ee 2B000000 		.4byte	.LVL15-1
+ 1476 01f2 0100     		.2byte	0x1
+ 1477 01f4 51       		.byte	0x51
+ 1478 01f5 2B000000 		.4byte	.LVL15-1
+ 1479 01f9 40000000 		.4byte	.LVL16
+ 1480 01fd 0100     		.2byte	0x1
+ 1481 01ff 55       		.byte	0x55
+ 1482 0200 40000000 		.4byte	.LVL16
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 27
+
+
+ 1483 0204 60000000 		.4byte	.LVL17
+ 1484 0208 0100     		.2byte	0x1
+ 1485 020a 51       		.byte	0x51
+ 1486 020b 60000000 		.4byte	.LVL17
+ 1487 020f 9C000000 		.4byte	.LVL22
+ 1488 0213 0100     		.2byte	0x1
+ 1489 0215 55       		.byte	0x55
+ 1490 0216 9C000000 		.4byte	.LVL22
+ 1491 021a 9F000000 		.4byte	.LVL23-1
+ 1492 021e 0100     		.2byte	0x1
+ 1493 0220 51       		.byte	0x51
+ 1494 0221 9F000000 		.4byte	.LVL23-1
+ 1495 0225 B4000000 		.4byte	.LVL24
+ 1496 0229 0100     		.2byte	0x1
+ 1497 022b 55       		.byte	0x55
+ 1498 022c B4000000 		.4byte	.LVL24
+ 1499 0230 B7000000 		.4byte	.LVL25-1
+ 1500 0234 0100     		.2byte	0x1
+ 1501 0236 51       		.byte	0x51
+ 1502 0237 B7000000 		.4byte	.LVL25-1
+ 1503 023b CC000000 		.4byte	.LFE11
+ 1504 023f 0100     		.2byte	0x1
+ 1505 0241 55       		.byte	0x55
+ 1506 0242 00000000 		.4byte	0
+ 1507 0246 00000000 		.4byte	0
+ 1508              	.LLST14:
+ 1509 024a 00000000 		.4byte	.LVL14
+ 1510 024e 2B000000 		.4byte	.LVL15-1
+ 1511 0252 0100     		.2byte	0x1
+ 1512 0254 52       		.byte	0x52
+ 1513 0255 2B000000 		.4byte	.LVL15-1
+ 1514 0259 40000000 		.4byte	.LVL16
+ 1515 025d 0400     		.2byte	0x4
+ 1516 025f F3       		.byte	0xf3
+ 1517 0260 01       		.uleb128 0x1
+ 1518 0261 52       		.byte	0x52
+ 1519 0262 9F       		.byte	0x9f
+ 1520 0263 40000000 		.4byte	.LVL16
+ 1521 0267 60000000 		.4byte	.LVL17
+ 1522 026b 0100     		.2byte	0x1
+ 1523 026d 52       		.byte	0x52
+ 1524 026e 60000000 		.4byte	.LVL17
+ 1525 0272 9C000000 		.4byte	.LVL22
+ 1526 0276 0400     		.2byte	0x4
+ 1527 0278 F3       		.byte	0xf3
+ 1528 0279 01       		.uleb128 0x1
+ 1529 027a 52       		.byte	0x52
+ 1530 027b 9F       		.byte	0x9f
+ 1531 027c 9C000000 		.4byte	.LVL22
+ 1532 0280 9F000000 		.4byte	.LVL23-1
+ 1533 0284 0100     		.2byte	0x1
+ 1534 0286 52       		.byte	0x52
+ 1535 0287 9F000000 		.4byte	.LVL23-1
+ 1536 028b B4000000 		.4byte	.LVL24
+ 1537 028f 0400     		.2byte	0x4
+ 1538 0291 F3       		.byte	0xf3
+ 1539 0292 01       		.uleb128 0x1
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 28
+
+
+ 1540 0293 52       		.byte	0x52
+ 1541 0294 9F       		.byte	0x9f
+ 1542 0295 B4000000 		.4byte	.LVL24
+ 1543 0299 B7000000 		.4byte	.LVL25-1
+ 1544 029d 0100     		.2byte	0x1
+ 1545 029f 52       		.byte	0x52
+ 1546 02a0 B7000000 		.4byte	.LVL25-1
+ 1547 02a4 CC000000 		.4byte	.LFE11
+ 1548 02a8 0400     		.2byte	0x4
+ 1549 02aa F3       		.byte	0xf3
+ 1550 02ab 01       		.uleb128 0x1
+ 1551 02ac 52       		.byte	0x52
+ 1552 02ad 9F       		.byte	0x9f
+ 1553 02ae 00000000 		.4byte	0
+ 1554 02b2 00000000 		.4byte	0
+ 1555              	.LLST15:
+ 1556 02b6 6C000000 		.4byte	.LVL18
+ 1557 02ba 70000000 		.4byte	.LVL19
+ 1558 02be 0100     		.2byte	0x1
+ 1559 02c0 54       		.byte	0x54
+ 1560 02c1 94000000 		.4byte	.LVL21
+ 1561 02c5 9C000000 		.4byte	.LVL22
+ 1562 02c9 0100     		.2byte	0x1
+ 1563 02cb 54       		.byte	0x54
+ 1564 02cc 00000000 		.4byte	0
+ 1565 02d0 00000000 		.4byte	0
+ 1566              	.LLST16:
+ 1567 02d4 60000000 		.4byte	.LVL17
+ 1568 02d8 6C000000 		.4byte	.LVL18
+ 1569 02dc 0500     		.2byte	0x5
+ 1570 02de 75       		.byte	0x75
+ 1571 02df 00       		.sleb128 0
+ 1572 02e0 31       		.byte	0x31
+ 1573 02e1 1A       		.byte	0x1a
+ 1574 02e2 9F       		.byte	0x9f
+ 1575 02e3 70000000 		.4byte	.LVL19
+ 1576 02e7 94000000 		.4byte	.LVL21
+ 1577 02eb 0500     		.2byte	0x5
+ 1578 02ed 75       		.byte	0x75
+ 1579 02ee 00       		.sleb128 0
+ 1580 02ef 31       		.byte	0x31
+ 1581 02f0 1A       		.byte	0x1a
+ 1582 02f1 9F       		.byte	0x9f
+ 1583 02f2 00000000 		.4byte	0
+ 1584 02f6 00000000 		.4byte	0
+ 1585              		.section	.debug_aranges,"",%progbits
+ 1586 0000 3C000000 		.4byte	0x3c
+ 1587 0004 0200     		.2byte	0x2
+ 1588 0006 00000000 		.4byte	.Ldebug_info0
+ 1589 000a 04       		.byte	0x4
+ 1590 000b 00       		.byte	0
+ 1591 000c 0000     		.2byte	0
+ 1592 000e 0000     		.2byte	0
+ 1593 0010 00000000 		.4byte	.LFB9
+ 1594 0014 50000000 		.4byte	.LFE9-.LFB9
+ 1595 0018 00000000 		.4byte	.LFB8
+ 1596 001c 44000000 		.4byte	.LFE8-.LFB8
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 29
+
+
+ 1597 0020 00000000 		.4byte	.LFB10
+ 1598 0024 80000000 		.4byte	.LFE10-.LFB10
+ 1599 0028 00000000 		.4byte	.LFB11
+ 1600 002c CC000000 		.4byte	.LFE11-.LFB11
+ 1601 0030 00000000 		.4byte	.LFB12
+ 1602 0034 1C000000 		.4byte	.LFE12-.LFB12
+ 1603 0038 00000000 		.4byte	0
+ 1604 003c 00000000 		.4byte	0
+ 1605              		.section	.debug_ranges,"",%progbits
+ 1606              	.Ldebug_ranges0:
+ 1607 0000 1C000000 		.4byte	.LBB2
+ 1608 0004 20000000 		.4byte	.LBE2
+ 1609 0008 24000000 		.4byte	.LBB3
+ 1610 000c 38000000 		.4byte	.LBE3
+ 1611 0010 3C000000 		.4byte	.LBB4
+ 1612 0014 40000000 		.4byte	.LBE4
+ 1613 0018 44000000 		.4byte	.LBB5
+ 1614 001c 48000000 		.4byte	.LBE5
+ 1615 0020 00000000 		.4byte	0
+ 1616 0024 00000000 		.4byte	0
+ 1617 0028 68000000 		.4byte	.LBB6
+ 1618 002c 6C000000 		.4byte	.LBE6
+ 1619 0030 70000000 		.4byte	.LBB7
+ 1620 0034 84000000 		.4byte	.LBE7
+ 1621 0038 88000000 		.4byte	.LBB8
+ 1622 003c 8C000000 		.4byte	.LBE8
+ 1623 0040 90000000 		.4byte	.LBB9
+ 1624 0044 94000000 		.4byte	.LBE9
+ 1625 0048 00000000 		.4byte	0
+ 1626 004c 00000000 		.4byte	0
+ 1627 0050 00000000 		.4byte	.LFB9
+ 1628 0054 50000000 		.4byte	.LFE9
+ 1629 0058 00000000 		.4byte	.LFB8
+ 1630 005c 44000000 		.4byte	.LFE8
+ 1631 0060 00000000 		.4byte	.LFB10
+ 1632 0064 80000000 		.4byte	.LFE10
+ 1633 0068 00000000 		.4byte	.LFB11
+ 1634 006c CC000000 		.4byte	.LFE11
+ 1635 0070 00000000 		.4byte	.LFB12
+ 1636 0074 1C000000 		.4byte	.LFE12
+ 1637 0078 00000000 		.4byte	0
+ 1638 007c 00000000 		.4byte	0
+ 1639              		.section	.debug_line,"",%progbits
+ 1640              	.Ldebug_line0:
+ 1641 0000 54010000 		.section	.debug_str,"MS",%progbits,1
+ 1641      0200A100 
+ 1641      00000201 
+ 1641      FB0E0D00 
+ 1641      01010101 
+ 1642              	.LASF36:
+ 1643 0000 474E5520 		.ascii	"GNU C 4.7.2\000"
+ 1643      4320342E 
+ 1643      372E3200 
+ 1644              	.LASF39:
+ 1645 000c 62636D32 		.ascii	"bcm2835_gpio_fnsel\000"
+ 1645      3833355F 
+ 1645      6770696F 
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 30
+
+
+ 1645      5F666E73 
+ 1645      656C00
+ 1646              	.LASF9:
+ 1647 001f 5F426F6F 		.ascii	"_Bool\000"
+ 1647      6C00
+ 1648              	.LASF12:
+ 1649 0025 6C617463 		.ascii	"latch\000"
+ 1649      6800
+ 1650              	.LASF34:
+ 1651 002b 494F504F 		.ascii	"IOPORT0\000"
+ 1651      52543000 
+ 1652              	.LASF35:
+ 1653 0033 494F504F 		.ascii	"IOPORT1\000"
+ 1653      52543100 
+ 1654              	.LASF16:
+ 1655 003b 67707075 		.ascii	"gppudclk\000"
+ 1655      64636C6B 
+ 1655      00
+ 1656              	.LASF21:
+ 1657 0044 696F706F 		.ascii	"ioportmask_t\000"
+ 1657      72746D61 
+ 1657      736B5F74 
+ 1657      00
+ 1658              	.LASF2:
+ 1659 0051 756E7369 		.ascii	"unsigned char\000"
+ 1659      676E6564 
+ 1659      20636861 
+ 1659      7200
+ 1660              	.LASF38:
+ 1661 005f 433A5C55 		.ascii	"C:\\Users\\Nico Maas\\Desktop\\ChibiOS\\demos\\ARM1"
+ 1661      73657273 
+ 1661      5C4E6963 
+ 1661      6F204D61 
+ 1661      61735C44 
+ 1662 008c 312D4243 		.ascii	"1-BCM2835-GCC\000"
+ 1662      4D323833 
+ 1662      352D4743 
+ 1662      4300
+ 1663              	.LASF6:
+ 1664 009a 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1664      20756E73 
+ 1664      69676E65 
+ 1664      6420696E 
+ 1664      7400
+ 1665              	.LASF4:
+ 1666 00ac 73686F72 		.ascii	"short unsigned int\000"
+ 1666      7420756E 
+ 1666      7369676E 
+ 1666      65642069 
+ 1666      6E7400
+ 1667              	.LASF37:
+ 1668 00bf 2E2E2F2E 		.ascii	"../../os/hal/platforms/BCM2835/pal_lld.c\000"
+ 1668      2E2F6F73 
+ 1668      2F68616C 
+ 1668      2F706C61 
+ 1668      74666F72 
+ 1669              	.LASF28:
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 31
+
+
+ 1670 00e8 636F6E66 		.ascii	"config\000"
+ 1670      696700
+ 1671              	.LASF17:
+ 1672 00ef 70696E5F 		.ascii	"pin_base\000"
+ 1672      62617365 
+ 1672      00
+ 1673              	.LASF15:
+ 1674 00f8 67706C65 		.ascii	"gplev\000"
+ 1674      7600
+ 1675              	.LASF32:
+ 1676 00fe 5F70616C 		.ascii	"_pal_lld_writeport\000"
+ 1676      5F6C6C64 
+ 1676      5F777269 
+ 1676      7465706F 
+ 1676      727400
+ 1677              	.LASF30:
+ 1678 0111 5F70616C 		.ascii	"_pal_lld_setgroupmode\000"
+ 1678      5F6C6C64 
+ 1678      5F736574 
+ 1678      67726F75 
+ 1678      706D6F64 
+ 1679              	.LASF0:
+ 1680 0127 756E7369 		.ascii	"unsigned int\000"
+ 1680      676E6564 
+ 1680      20696E74 
+ 1680      00
+ 1681              	.LASF8:
+ 1682 0134 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1682      206C6F6E 
+ 1682      6720756E 
+ 1682      7369676E 
+ 1682      65642069 
+ 1683              	.LASF25:
+ 1684 014b 7365745F 		.ascii	"set_gpio_in\000"
+ 1684      6770696F 
+ 1684      5F696E00 
+ 1685              	.LASF29:
+ 1686 0157 5F70616C 		.ascii	"_pal_lld_init\000"
+ 1686      5F6C6C64 
+ 1686      5F696E69 
+ 1686      7400
+ 1687              	.LASF40:
+ 1688 0165 62636D32 		.ascii	"bcm2835_delay\000"
+ 1688      3833355F 
+ 1688      64656C61 
+ 1688      7900
+ 1689              	.LASF27:
+ 1690 0173 7075645F 		.ascii	"pud_mode\000"
+ 1690      6D6F6465 
+ 1690      00
+ 1691              	.LASF11:
+ 1692 017c 73697A65 		.ascii	"sizetype\000"
+ 1692      74797065 
+ 1692      00
+ 1693              	.LASF31:
+ 1694 0185 6D6F6465 		.ascii	"mode\000"
+ 1694      00
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 32
+
+
+ 1695              	.LASF7:
+ 1696 018a 6C6F6E67 		.ascii	"long long int\000"
+ 1696      206C6F6E 
+ 1696      6720696E 
+ 1696      7400
+ 1697              	.LASF24:
+ 1698 0198 6D61736B 		.ascii	"mask\000"
+ 1698      00
+ 1699              	.LASF33:
+ 1700 019d 62697473 		.ascii	"bits\000"
+ 1700      00
+ 1701              	.LASF23:
+ 1702 01a2 706F7274 		.ascii	"port\000"
+ 1702      00
+ 1703              	.LASF3:
+ 1704 01a7 73686F72 		.ascii	"short int\000"
+ 1704      7420696E 
+ 1704      7400
+ 1705              	.LASF22:
+ 1706 01b1 696F706F 		.ascii	"ioportid_t\000"
+ 1706      72746964 
+ 1706      5F7400
+ 1707              	.LASF13:
+ 1708 01bc 67707365 		.ascii	"gpset\000"
+ 1708      7400
+ 1709              	.LASF18:
+ 1710 01c2 75696E74 		.ascii	"uint32_t\000"
+ 1710      33325F74 
+ 1710      00
+ 1711              	.LASF5:
+ 1712 01cb 6C6F6E67 		.ascii	"long int\000"
+ 1712      20696E74 
+ 1712      00
+ 1713              	.LASF10:
+ 1714 01d4 63686172 		.ascii	"char\000"
+ 1714      00
+ 1715              	.LASF1:
+ 1716 01d9 7369676E 		.ascii	"signed char\000"
+ 1716      65642063 
+ 1716      68617200 
+ 1717              	.LASF20:
+ 1718 01e5 50414C43 		.ascii	"PALConfig\000"
+ 1718      6F6E6669 
+ 1718      6700
+ 1719              	.LASF26:
+ 1720 01ef 7365745F 		.ascii	"set_gpio_pud\000"
+ 1720      6770696F 
+ 1720      5F707564 
+ 1720      00
+ 1721              	.LASF19:
+ 1722 01fc 6770696F 		.ascii	"gpio_port_t\000"
+ 1722      5F706F72 
+ 1722      745F7400 
+ 1723              	.LASF14:
+ 1724 0208 6770636C 		.ascii	"gpclr\000"
+ 1724      7200
+ 1725              		.ident	"GCC: (GNU) 4.7.2"
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 33
+
+
+ARM GAS  C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s 			page 34
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 pal_lld.c
+C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s:17     .text.set_gpio_in:00000000 $a
+C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s:19     .text.set_gpio_in:00000000 set_gpio_in
+C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s:85     .text.set_gpio_pud:00000000 $a
+C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s:87     .text.set_gpio_pud:00000000 set_gpio_pud
+C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s:135    .text.set_gpio_pud:00000040 $d
+C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s:140    .text._pal_lld_init:00000000 $a
+C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s:143    .text._pal_lld_init:00000000 _pal_lld_init
+C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s:207    .text._pal_lld_init:00000070 $d
+                            *COM*:00000018 IOPORT0
+                            *COM*:00000018 IOPORT1
+C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s:215    .text._pal_lld_setgroupmode:00000000 $a
+C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s:218    .text._pal_lld_setgroupmode:00000000 _pal_lld_setgroupmode
+C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s:340    .text._pal_lld_writeport:00000000 $a
+C:\Users\NICOMA~1\AppData\Local\Temp\cc5JDUMb.s:343    .text._pal_lld_writeport:00000000 _pal_lld_writeport
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+bcm2835_gpio_fnsel
+bcm2835_delay

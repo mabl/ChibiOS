@@ -48,7 +48,7 @@
 #include "armparams.h"
 
 /* ARM core check, only ARM7TDMI and ARM9 supported right now.*/
-#if (ARM_CORE == ARM_CORE_ARM7TDMI) || (ARM_CORE == ARM_CORE_ARM9)
+#if (ARM_CORE == ARM_CORE_ARM7TDMI) || (ARM_CORE == ARM_CORE_ARM9) || (ARM_CORE == ARM_CORE_ARM1176JZF_S)
 #else
 #error "unknown or unsupported ARM core"
 #endif
@@ -127,6 +127,11 @@
 #define CH_ARCHITECTURE_ARM7TDMI
 #define CH_ARCHITECTURE_NAME            "ARM7"
 #define CH_CORE_VARIANT_NAME            "ARM7TDMI"
+
+#elif ARM_CORE == ARM_CORE_ARM1176JZF_S
+#define CH_ARCHITECTURE_ARM11
+#define CH_ARCHITECTURE_NAME            "ARM11"
+#define CH_CORE_VARIANT_NAME            "ARM1176JZF-S"
 
 #elif ARM_MODEL == ARM_VARIANT_ARM9
 #define CH_ARCHITECTURE_ARM9

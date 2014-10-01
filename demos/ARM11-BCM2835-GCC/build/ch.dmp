@@ -1,0 +1,340 @@
+
+build/ch.elf:     file format elf32-littlearm
+build/ch.elf
+architecture: arm, flags 0x00000112:
+EXEC_P, HAS_SYMS, D_PAGED
+start address 0x00008000
+
+Program Header:
+    LOAD off    0x00008000 vaddr 0x00008000 paddr 0x00008000 align 2**15
+         filesz 0x00003e74 memsz 0x00004210 flags rwx
+private flags = 5000002: [Version5 EABI] [has entry point]
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00003e58  00008000  00008000  00008000  2**4
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         0000001c  0000be58  0000be58  0000be58  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          0000039c  0000be74  0000be74  0000be74  2**2
+                  ALLOC
+  3 .ARM.attributes 00000033  00000000  00000000  0000be74  2**0
+                  CONTENTS, READONLY
+  4 .comment      00000011  00000000  00000000  0000bea7  2**0
+                  CONTENTS, READONLY
+  5 .debug_info   0000e07e  00000000  00000000  0000beb8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 00003bff  00000000  00000000  00019f36  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_loc    00004ff0  00000000  00000000  0001db35  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_aranges 000009a0  00000000  00000000  00022b28  2**3
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_ranges 00000d80  00000000  00000000  000234c8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_line   00004460  00000000  00000000  00024248  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_str    000019e6  00000000  00000000  000286a8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_frame  000013e0  00000000  00000000  0002a090  2**2
+                  CONTENTS, READONLY, DEBUGGING
+SYMBOL TABLE:
+00008000 l    d  .text	00000000 .text
+0000be58 l    d  .data	00000000 .data
+0000be74 l    d  .bss	00000000 .bss
+00000000 l    d  .ARM.attributes	00000000 .ARM.attributes
+00000000 l    d  .comment	00000000 .comment
+00000000 l    d  .debug_info	00000000 .debug_info
+00000000 l    d  .debug_abbrev	00000000 .debug_abbrev
+00000000 l    d  .debug_loc	00000000 .debug_loc
+00000000 l    d  .debug_aranges	00000000 .debug_aranges
+00000000 l    d  .debug_ranges	00000000 .debug_ranges
+00000000 l    d  .debug_line	00000000 .debug_line
+00000000 l    d  .debug_str	00000000 .debug_str
+00000000 l    d  .debug_frame	00000000 .debug_frame
+00000000 l    df *ABS*	00000000 build/obj/vectors.o
+00008000 l       .text	00000000 _start
+00008020 l       .text	00000000 _reset
+00008024 l       .text	00000000 _undefined
+00008028 l       .text	00000000 _swi
+0000802c l       .text	00000000 _prefetch
+00008030 l       .text	00000000 _abort
+00008038 l       .text	00000000 _irq
+0000803c l       .text	00000000 _fiq
+00000000 l    df *ABS*	00000000 build/obj/crt0.o
+00000010 l       *ABS*	00000000 MODE_USR
+00000011 l       *ABS*	00000000 MODE_FIQ
+00000012 l       *ABS*	00000000 MODE_IRQ
+00000013 l       *ABS*	00000000 MODE_SVC
+00000017 l       *ABS*	00000000 MODE_ABT
+0000001b l       *ABS*	00000000 MODE_UND
+0000001f l       *ABS*	00000000 MODE_SYS
+00000080 l       *ABS*	00000000 I_BIT
+00000040 l       *ABS*	00000000 F_BIT
+000080ac l       .text	00000000 dataloop
+000080c8 l       .text	00000000 bssloop
+000080dc l       .text	00000000 .loop
+000080e0 l       .text	00000000 hwinit0
+00000000 l    df *ABS*	00000000 build/obj/chcoreasm.o
+00000010 l       *ABS*	00000000 MODE_USR
+00000011 l       *ABS*	00000000 MODE_FIQ
+00000012 l       *ABS*	00000000 MODE_IRQ
+00000013 l       *ABS*	00000000 MODE_SVC
+00000017 l       *ABS*	00000000 MODE_ABT
+0000001b l       *ABS*	00000000 MODE_UND
+0000001f l       *ABS*	00000000 MODE_SYS
+00000080 l       *ABS*	00000000 I_BIT
+00000040 l       *ABS*	00000000 F_BIT
+00000000 l    df *ABS*	00000000 _udivsi3.o
+000081e0 l       .text	00000000 .udivsi3_skip_div0_test
+00000000 l    df *ABS*	00000000 _dvmd_tls.o
+00000000 l    df *ABS*	00000000 _arm_addsubdf3.o
+00000000 l    df *ABS*	00000000 _arm_muldivdf3.o
+00000000 l    df *ABS*	00000000 _arm_fixdfsi.o
+00000000 l    df *ABS*	00000000 _arm_truncdfsf2.o
+00000000 l    df *ABS*	00000000 _arm_cmpsf2.o
+00000000 l    df *ABS*	00000000 _arm_fixsfsi.o
+00000000 l    df *ABS*	00000000 strcasecmp.c
+00000000 l    df *ABS*	00000000 strpbrk.c
+00000000 l    df *ABS*	00000000 strspn.c
+00000000 l    df *ABS*	00000000 chsys.c
+0000be74 l     O .bss	00000044 mainthread.4654
+00000000 l    df *ABS*	00000000 chvt.c
+00000000 l    df *ABS*	00000000 chschd.c
+000091e0 l     F .text	000000ac wakeup
+00000000 l    df *ABS*	00000000 chthreads.c
+00000000 l    df *ABS*	00000000 chdynamic.c
+00000000 l    df *ABS*	00000000 chmtx.c
+00000000 l    df *ABS*	00000000 chevents.c
+00000000 l    df *ABS*	00000000 chqueues.c
+00009bd0 l     F .text	0000003c qwait
+00000000 l    df *ABS*	00000000 chmemcore.c
+0000beb8 l     O .bss	00000004 endmem
+0000bebc l     O .bss	00000004 nextmem
+00000000 l    df *ABS*	00000000 chheap.c
+0000bec0 l     O .bss	0000001c default_heap
+00000000 l    df *ABS*	00000000 hal.c
+00000000 l    df *ABS*	00000000 i2c.c
+00000000 l    df *ABS*	00000000 serial.c
+0000a290 l     F .text	00000008 readt
+0000a2a0 l     F .text	0000000c read
+0000a2b0 l     F .text	00000008 writet
+0000a2c0 l     F .text	0000000c write
+0000a2d0 l     F .text	00000008 gett
+0000a2e0 l     F .text	0000000c get
+0000a2f0 l     F .text	00000008 putt
+0000a300 l     F .text	0000000c put
+0000bc20 l     O .text	00000020 vmt
+00000000 l    df *ABS*	00000000 spi.c
+00000000 l    df *ABS*	00000000 tm.c
+0000a470 l     F .text	00000014 tm_start
+0000a490 l     F .text	00000048 tm_stop
+0000bedc l     O .bss	00000004 measurement_offset
+00000000 l    df *ABS*	00000000 hal_lld.c
+00000000 l    df *ABS*	00000000 pal_lld.c
+0000a630 l     F .text	00000050 set_gpio_in
+0000a680 l     F .text	00000044 set_gpio_pud
+00000000 l    df *ABS*	00000000 serial_lld.c
+0000a840 l     F .text	00000018 output_notify
+0000bc40 l     O .text	00000004 default_config
+00000000 l    df *ABS*	00000000 i2c_lld.c
+00000000 l    df *ABS*	00000000 spi_lld.c
+00000000 l    df *ABS*	00000000 bcm2835.c
+00000000 l    df *ABS*	00000000 board.c
+00000000 l    df *ABS*	00000000 shell.c
+0000ae00 l     F .text	00000030 chprintf
+0000ae30 l     F .text	00000074 _strtok.constprop.2
+0000aeb0 l     F .text	00000034 cmd_systime
+0000aef0 l     F .text	000000f0 cmd_info
+0000b160 l     F .text	00000288 shell_thread
+0000be5c l     O .data	00000018 local_commands
+00000000 l    df *ABS*	00000000 chprintf.c
+0000b3f0 l     F .text	00000094 long_to_string_with_divisor
+00000000 l    df *ABS*	00000000 main.c
+0000b980 l     F .text	00000030 chprintf
+0000b9b0 l     F .text	0000001c cmd_reboot
+0000b9d0 l     F .text	00000058 Thread1
+0000be00 l     O .text	00000010 commands
+0000bee0 l     O .bss	00000118 waThread1
+0000be50 l     O .text	00000008 shell_config
+00000000 l    df *ABS*	00000000 ctype_.c
+00000000 l    df *ABS*	00000000 chregistry.c
+00000000 l    df *ABS*	00000000 
+0000be58 l       .text	00000000 __exidx_end
+0000be58 l       .data	00000000 _etext
+00000000 l       *UND*	00000000 msObjectInit
+0000049c l       *ABS*	00000000 __stacks_total_size__
+0000be58 l       .text	00000000 __exidx_start
+00000400 l       *ABS*	00000000 __sys_stack_size__
+05ffffe0 l       *ABS*	00000000 __ram_size__
+00008000 l       .text	00000000 __ram_start__
+0000c210 l       .bss	00000000 _end
+06007b44 l       *ABS*	00000000 __main_thread_stack_base__
+0000bc50 g     O .text	00000000 pal_default_config
+00009070 g     F .text	00000090 chSysTimerHandlerI
+000097b0 g     F .text	00000008 chThdExit
+00009b90 g     F .text	00000040 chEvtBroadcastFlagsI
+00009340 g     F .text	00000068 chSchGoSleepTimeoutS
+0000a260 g     F .text	00000004 i2cInit
+000098f0 g     F .text	00000178 chMtxLockS
+000086cc g     F .text	00000060 __floatdidf
+0000a170 g     F .text	000000bc chHeapFree
+0000abb0 g     F .text	00000194 spi_lld_serve_interrupt
+0000a820 g     F .text	0000001c _pal_lld_writeport
+000081d0 g       .text	00000000 get_cpsr
+00008df0 g     F .text	0000005c __fixsfsi
+00009300 g     F .text	0000003c chSchGoSleepS
+000081a0  w      .text	00000000 UndHandler
+0000c210 g       .bss	00000000 __heap_base__
+0000c164 g     O .bss	00000040 I2C1
+0000c1a4 g     O .bss	00000040 I2C0
+00009640 g     F .text	00000098 chThdCreateI
+0000c0c0 g     O .bss	00000018 IOPORT1
+000093b0 g     F .text	000000a8 chSchWakeupS
+0000a3b0 g     F .text	0000004c sdIncomingDataI
+00009eb0 g     F .text	00000080 chOQGetI
+00009290 g     F .text	00000024 _scheduler_init
+000096e0 g     F .text	00000034 chThdCreateStatic
+00008dcc g     F .text	00000018 __aeabi_fcmpgt
+00008650 g     F .text	00000028 __floatsidf
+000092c0 g     F .text	0000003c chSchReadyI
+00009100 g     F .text	00000024 _vt_init
+000081e0 g     F .text	000000f4 __udivsi3
+0000a060 g     F .text	00000024 _heap_init
+0000a230 g     F .text	0000002c halInit
+00008cd8 g     F .text	0000006c __lesf2
+0000be74 g       .bss	00000000 _bss_start
+000094b0 g     F .text	00000074 chSchDoRescheduleBehind
+06007b44 g       *ABS*	00000000 __heap_end__
+00009870 g     F .text	00000060 chThdCreateFromHeap
+0000862c g     F .text	00000024 __aeabi_ui2d
+0000c0d8 g     O .bss	00000018 IOPORT0
+0000a5f0 g     F .text	00000034 watchdog_start
+00008310 g     F .text	00000000 __aeabi_drsub
+00000004 g       *ABS*	00000000 __abt_stack_size__
+00008040 g       .text	00000000 ResetHandler
+00009d60 g     F .text	000000a0 chIQReadTimeout
+0000a5a0 g     F .text	0000004c hal_lld_init
+00008678 g     F .text	00000040 __extendsfdf2
+000089c0 g     F .text	0000020c __aeabi_ddiv
+0000831c g     F .text	00000310 __adddf3
+00008ce0 g     F .text	00000064 __nesf2
+0000ad50 g     F .text	0000000c spi_lld_init
+00008730 g     F .text	00000290 __aeabi_dmul
+0000ad60 g     F .text	00000050 bcm2835_gpio_fnsel
+00009740 g     F .text	0000006c chThdExitS
+0000c20c g     O .bss	00000004 shell_terminated
+0000862c g     F .text	00000024 __floatunsidf
+0000c1e4 g     O .bss	00000028 SPI0
+0000b490 g     F .text	000004e4 chvprintf
+0000afe0 g     F .text	00000010 shellInit
+00008c30 g     F .text	000000a0 __aeabi_d2f
+00009130 g     F .text	00000068 chVTSetI
+0000c210 g       .bss	00000000 _bss_end
+0000a750 g     F .text	000000cc _pal_lld_setgroupmode
+00008db4 g     F .text	00000018 __aeabi_fcmpge
+00008bd0 g     F .text	0000005c __fixdfsi
+0000a910 g     F .text	00000018 sd_lld_init
+00008cd0 g     F .text	00000074 __gtsf2
+0000831c g     F .text	00000310 __aeabi_dadd
+00009a70 g     F .text	00000014 chMtxLock
+00008d9c g     F .text	00000018 __aeabi_fcmple
+000086b8 g     F .text	00000074 __aeabi_ul2d
+000095a0 g     F .text	00000020 chSchDoReschedule
+00008ff0 g     F .text	00000078 chSysInit
+00009720 g     F .text	0000001c chThdSleep
+00009c10 g     F .text	00000034 chIQInit
+0000a400 g     F .text	00000034 sdRequestDataI
+0000a450 g     F .text	0000001c spiObjectInit
+0000a6d0 g     F .text	00000080 _pal_lld_init
+0000a310 g     F .text	00000004 sdInit
+00008318 g     F .text	00000314 __aeabi_dsub
+00009fd0 g     F .text	00000034 _core_init
+000086b8 g     F .text	00000074 __floatundidf
+0000a390 g     F .text	00000020 sdStart
+00000080 g       *ABS*	00000000 __irq_stack_size__
+00008110 g       .text	00000000 _port_switch_arm
+00008df0 g     F .text	0000005c __aeabi_f2iz
+00008ce0 g     F .text	00000064 __eqsf2
+00008e50 g     F .text	0000005c strcasecmp
+000081c0 g       .text	00000000 arm_enable_irq
+0000c094 g     O .bss	00000010 vtlist
+0000a010 g     F .text	00000044 chCoreAlloc
+0000b020 g     F .text	00000024 shellCreate
+00008650 g     F .text	00000028 __aeabi_i2d
+0000a090 g     F .text	000000d4 chHeapAlloc
+0000aa10 g     F .text	00000154 i2c_lld_serve_interrupt
+00008300  w    F .text	00000004 __aeabi_ldiv0
+000089c0 g     F .text	0000020c __divdf3
+00008730 g     F .text	00000290 __muldf3
+0000be58 g       .data	00000000 _textdata
+00008000 g       .text	00000000 _text
+000081a0  w      .text	00000000 PrefetchHandler
+00008ce0 g     F .text	00000064 __cmpsf2
+0000ba30 g     F .text	000000a4 main
+0000c0a4 g     O .bss	0000001c rlist
+00008cd8 g     F .text	0000006c __ltsf2
+0000a440 g     F .text	00000004 spiInit
+000081e0 g     F .text	00000000 __aeabi_uidiv
+00008c30 g     F .text	000000a0 __truncdfsf2
+000086cc g     F .text	00000060 __aeabi_l2d
+000098d0 g     F .text	00000014 chMtxInit
+00008fd0 g     F .text	00000020 _idle_thread
+00009f30 g     F .text	0000009c chOQWriteTimeout
+00008d54 g     F .text	00000018 __aeabi_cfcmple
+0000bc00 g     O .text	00000016 ch_debug
+00009b30 g     F .text	00000054 chEvtSignalI
+00008180 g       .text	00000000 _port_thread_start
+0000adb0 g     F .text	0000003c bcm2835_delay
+00009530 g     F .text	0000006c chSchDoRescheduleAhead
+0000ab70 g     F .text	00000040 i2c_lld_init
+00008cd0 g     F .text	00000074 __gesf2
+00008d6c g     F .text	00000018 __aeabi_fcmpeq
+0000a270 g     F .text	00000018 i2cObjectInit
+0000b050 g     F .text	0000010c shellGetLine
+00009810 g     F .text	00000054 chThdRelease
+00008d44 g     F .text	00000028 __aeabi_cfrcmple
+0000bff8 g     O .bss	0000009c _idle_thread_wa
+00009e00 g     F .text	00000030 chOQInit
+00009ce0 g     F .text	00000074 chIQGetTimeout
+0000be58 g       .data	00000000 _data
+00008120 g       .text	00000000 _port_irq_common
+000081a0  w      .text	00000000 AbortHandler
+00009c50 g     F .text	00000090 chIQPutI
+0000a4e0 g     F .text	00000068 tmInit
+00008d84 g     F .text	00000018 __aeabi_fcmplt
+00009a90 g     F .text	000000a0 chMtxUnlock
+000082d4 g     F .text	00000020 __aeabi_uidivmod
+0000be74 g       .data	00000000 _edata
+06007fe0 g       *ABS*	00000000 __ram_end__
+000091a0 g     F .text	0000003c chVTResetI
+000081a0 g       .text	00000000 _unhandled_exception
+0000aff0 g     F .text	00000028 shellExit
+0000a320 g     F .text	00000064 sdObjectInit
+0000a860 g     F .text	000000b0 sd_lld_serve_interrupt
+0000a550 g     F .text	0000004c IrqHandler
+00008bd0 g     F .text	0000005c __aeabi_d2iz
+0000be58 g     O .data	00000004 __ctype_ptr__
+00008d54 g     F .text	00000018 __aeabi_cfcmpeq
+000081a0  w      .text	00000000 SwiHandler
+0000bae0 g     O .text	00000101 _ctype_
+00008300  w    F .text	00000004 __aeabi_idiv0
+000097c0 g     F .text	00000050 chThdWait
+00009460 g     F .text	00000044 chSchIsPreemptionRequired
+0000c0f0 g     O .bss	00000074 SD1
+00000010 g       *ABS*	00000000 __fiq_stack_size__
+00008f50 g     F .text	00000080 strspn
+000095c0 g     F .text	00000074 _thread_init
+00000004 g       *ABS*	00000000 __svc_stack_size__
+00000004 g       *ABS*	00000000 __und_stack_size__
+00009e30 g     F .text	00000080 chOQPutTimeout
+00008678 g     F .text	00000040 __aeabi_f2d
+0000adf0 g     F .text	00000004 boardInit
+0000a930 g     F .text	000000dc sd_lld_start
+000080dc  w      .text	00000000 _main_exit_handler
+00008318 g     F .text	00000314 __subdf3
+000081a4 g       .text	00000000 __early_init
+00008eb0 g     F .text	0000009c strpbrk
+000081a0  w      .text	00000000 FiqHandler
+
+
