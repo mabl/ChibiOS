@@ -16,9 +16,11 @@
     ready -> stop [label="\nicuStop()"];
     ready -> ready [label="\nicuStart()\nicuStopCapture()"];
     ready -> waiting [label="\nicuStartCapture()"];
-    waiting -> active [label="\nFirst Activation Edge\nicuWaitCapture()"];
+    waiting -> active [label="\nicuWaitCapture() capture\n>period_cb<"];
     waiting -> ready [label="\nicuStopCapture()"];
     active -> ready [label="\nicuStopCapture()"];
-    active -> active [label="\nActivation Edge\n>period_cb<"];
-    active -> active [label="\nDe-activation Edge\n>width_cb<"];
+    active -> active:sw [label="\nicuWaitCapture() capture\n>period_cb<"];
+    active -> active [label="\n>width_cb<"];
+    active -> waiting [label="\icuWaitCapture() overflow\n>overflow_cb<"];
+    waiting -> waiting [label="\icuWaitCapture() overflow\n>overflow_cb<"];
   }
