@@ -19,12 +19,21 @@
           <irq_stack_size>
             <value>0</value>
           </irq_stack_size>
-          <boot_mode index="0" disabled="true">
+          <boot_mode index="0">
             <value>Execute from Flash</value>
           </boot_mode>
           <load_address disabled="true">
             <value>0x60c000</value>
           </load_address>
+          <instruction_cache>
+            <value>true</value>
+          </instruction_cache>
+          <unlock_debug_tracing>
+            <value>true</value>
+          </unlock_debug_tracing>
+          <clock_divider_0>
+            <value>0</value>
+          </clock_divider_0>
         </runtime_settings>
         <build_settings>
           <application_name>
@@ -79,7 +88,7 @@
           <system_tick_mode index="0">
             <value>Periodic Tick Mode</value>
           </system_tick_mode>
-          <system_tick_delta index="0">
+          <system_tick_delta index="0" disabled="true">
             <value>2</value>
           </system_tick_delta>
         </general_options>
