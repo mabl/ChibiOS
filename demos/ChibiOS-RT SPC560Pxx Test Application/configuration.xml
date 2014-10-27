@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SPC5-Config version="1.0.0">
-  <application name="SPC560Pxx Test Application" version="1.0.0" standalone="false" locked="false">
+  <application name="SPC560Pxx Test Application" version="1.0.0" standalone="true" locked="false">
     <description>Test application for the SPC560Pxx created using the SPC5's Application Wizard.</description>
     <component id="com.st.tools.spc5.components.platform.spc560pxx" version="1.0.0">
       <component id="org.chibios.spc5.components.rtos.spc560pxx" version="2.6.4" />
@@ -944,13 +944,13 @@
             <fm_enable>
               <value>false</value>
             </fm_enable>
-            <spread_type index="0" disabled="true">
+            <spread_type index="0">
               <value>Center Spread</value>
             </spread_type>
-            <modulation_period disabled="true">
+            <modulation_period>
               <value>0</value>
             </modulation_period>
-            <increment_step disabled="true">
+            <increment_step>
               <value>0</value>
             </increment_step>
           </fmpll0_settings>
@@ -973,13 +973,13 @@
             <fm_enable>
               <value>false</value>
             </fm_enable>
-            <spread_type index="0" disabled="true">
+            <spread_type index="0">
               <value>Center Spread</value>
             </spread_type>
-            <modulation_period disabled="true">
+            <modulation_period>
               <value>0</value>
             </modulation_period>
-            <increment_step disabled="true">
+            <increment_step>
               <value>0</value>
             </increment_step>
           </fmpll1_settings>
