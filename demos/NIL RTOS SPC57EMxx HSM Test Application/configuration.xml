@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SPC5-Config version="1.0.0">
-  <application name="SCP57EMxx HSM Test Application with NIL RTOS" version="1.0.0" standalone="false" locked="false">
+  <application name="SCP57EMxx HSM Test Application with NIL RTOS" version="1.0.0" standalone="true" locked="false">
     <description>Test application for the SCP57EMxx HSM using NIL RTOS.</description>
     <component id="com.st.tools.spc5.components.platform.spc57emxx.z0">
       <component id="org.chibios.spc5.components.nil.rtos.spc57emxx_hsm" />
@@ -88,7 +88,7 @@
           <system_tick_mode index="0">
             <value>Periodic Tick Mode</value>
           </system_tick_mode>
-          <system_tick_delta index="0" disabled="true">
+          <system_tick_delta index="0">
             <value>2</value>
           </system_tick_delta>
         </general_options>
