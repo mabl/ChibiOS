@@ -37,6 +37,23 @@ cp ${chibios}/os/common/ports/e200/compilers/GCC/vectors.s  ../SPC560Dxx/NIL_SPC
 cp ${chibios}/os/common/ports/e200/devices/SPC560Dxx/intc.h ../SPC560Dxx/NIL_SPC560Dxx_Kernel_Port_Component/component/lib/include/
 cp ${chibios}/os/common/ports/e200/devices/SPC560Dxx/ppcparams.h ../SPC560Dxx/NIL_SPC560Dxx_Kernel_Port_Component/component/lib/include/
 
+
+#============================================================================#
+# SPC560Bxx Components.                                                      #
+#============================================================================#
+
+# SPC560Bxx Kernel Port.
+echo "SPC560Bxx Kernel Port"
+cp ${code}/ports/e200/cfg/*.ftl                             ../SPC560Dxx/NIL_SPC560Bxx_Kernel_Port_Component/component/root_wa/source/isrs/
+cp ${chibios}/os/nil/ports/e200/*.h                         ../SPC560Dxx/NIL_SPC560Bxx_Kernel_Port_Component/component/lib/include/
+cp ${chibios}/os/nil/ports/e200/*.c                         ../SPC560Dxx/NIL_SPC560Bxx_Kernel_Port_Component/component/lib/src/
+cp ${chibios}/os/nil/ports/e200/compilers/GCC/*.h           ../SPC560Dxx/NIL_SPC560Bxx_Kernel_Port_Component/component/lib/include/
+cp ${chibios}/os/nil/ports/e200/compilers/GCC/ivor.s        ../SPC560Dxx/NIL_SPC560Bxx_Kernel_Port_Component/component/lib/src/
+cp ${chibios}/os/common/ports/e200/compilers/GCC/*.h        ../SPC560Dxx/NIL_SPC560Bxx_Kernel_Port_Component/component/lib/include/
+cp ${chibios}/os/common/ports/e200/compilers/GCC/vectors.s  ../SPC560Dxx/NIL_SPC560Bxx_Kernel_Port_Component/component/lib/src/
+cp ${chibios}/os/common/ports/e200/devices/SPC560Bxx/intc.h ../SPC560Dxx/NIL_SPC560Bxx_Kernel_Port_Component/component/lib/include/
+cp ${chibios}/os/common/ports/e200/devices/SPC560Bxx/ppcparams.h ../SPC560Dxx/NIL_SPC560Bxx_Kernel_Port_Component/component/lib/include/
+
 #============================================================================#
 # SPC57EMxx HSM Components.                                                  #
 #============================================================================#
