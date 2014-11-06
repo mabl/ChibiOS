@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="org.chibios.spc5.components.nil.rtos.spc560bxx"
+         name="NIL RTOS for SPC560Bxx Component"
+         point="com.st.tools.spc5.extension.v1">
+      <component
+            headerName="nil.h,osal.h,isrs.h,hal.h"
+            icon="rsc/chibios.ico"
+            initFunction="halInit,osalInit,isrInit,chSysInit"
+            isPlatform="false">
+            <description>
+                This is a meta component that depends on all components required to create a NIL RTOS environment for the STMicroelectronics SPC560Bxx automotive microcontrollers family.
+            </description>
+            <categories>
+               <category
+                     id="NIL RTOS/Platforms/SPC560Bxx">
+               </category>
+            </categories>
+            <configuration>
+               <description>
+                  This is a meta components with no settings.
+               </description>
+               <image
+                     align="left"
+                     file="rsc/chibios48x48.png">
+                  <text>
+                     NIL RTOS is GPL3-licensed free software. A special exception has been added to the GPL3 in order to allow inclusion in closed source applications, details are in the exception.txt document.
+                  </text>
+               </image>
+            </configuration>
+            <requiredFeatures>
+               <requiredFeature
+                     id="com.st.tools.spc5.features.build.gccenv">
+               </requiredFeature>
+               <requiredFeature
+                     id="com.st.tools.spc5.features.platform.spc560bxx">
+               </requiredFeature>
+            </requiredFeatures>
+            <exportedFeatures>
+               <exportedFeature
+                     brief="NIL RTOS"
+                     exclusive="false"
+                     id="com.st.tools.spc5.services.rtos">
+               </exportedFeature>
+               <exportedFeature
+                     brief="Generic NIL RTOS environment."
+                     exclusive="false"
+                     id="org.chibios.spc5.components.chibios.nil">
+               </exportedFeature>
+               <exportedFeature
+                     brief="SPC560Bxx NIL RTOS environment."
+                     exclusive="false"
+                     id="org.chibios.spc5.components.chibios.nil.spc560bxx">
+               </exportedFeature>
+            </exportedFeatures>
+      </component>
+   </extension>
+
+</plugin>
