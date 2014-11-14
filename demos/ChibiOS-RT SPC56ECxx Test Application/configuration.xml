@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SPC5-Config version="1.0.0">
-  <application name="ChibiOS-RT SPC56ECxx Test Application" version="1.0.0" standalone="false" locked="false">
+  <application name="ChibiOS-RT SPC56ECxx Test Application" version="1.0.0" standalone="true" locked="false">
     <description>Test application for the SPC56E/Cxx created using the SPC5's Application Wizard.</description>
     <component id="com.st.tools.spc5.components.platform.spc56ecxx">
       <component id="org.chibios.spc5.components.rtos.spc56ecxx" />
@@ -10,8 +10,8 @@
     <instances>
       <instance locked="false" id="com.st.tools.spc5.components.platform.spc56ecxx">
         <platform_settings>
-          <specific_model index="12">
-            <value>SPC56EC74L8</value>
+          <specific_model index="0">
+            <value>SPC564B64L7</value>
           </specific_model>
         </platform_settings>
         <runtime_settings>
