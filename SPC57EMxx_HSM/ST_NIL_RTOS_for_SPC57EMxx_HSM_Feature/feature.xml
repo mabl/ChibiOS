@@ -4,7 +4,7 @@
       label="ST NIL RTOS for SPC57EMxx HSM Components"
       version="1.0.0.qualifier"
       provider-name="www.chibios.org"
-      plugin="org.chibios.spc5.branding"
+      plugin="com.st.spc5.components.nil.rtos.branding"
       exclusive="true">
 
    <description>
