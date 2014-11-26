@@ -8,7 +8,7 @@
       <component
             headerName="nil.h,isrs.h"
             hidden="false"
-            icon="rsc/chibios.ico"
+            icon="rsc/st16x16.png"
             initFunction="isrInit,chSysInit"
             isPlatform="false">
             <description>
@@ -25,7 +25,7 @@
                </description>
                <image
                      align="left"
-                     file="rsc/chibios48x48.png">
+                     file="rsc/st48x48.png">
                   <text>
                      NIL RTOS is GPL3-licensed free software. A special exception has been added to the GPL3 in order to allow inclusion in closed source applications, details are in the exception.txt document.
                   </text>
