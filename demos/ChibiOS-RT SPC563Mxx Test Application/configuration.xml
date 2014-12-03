@@ -965,54 +965,54 @@
           </spi_configurations>
         </dspi_settings>
         <emios200_settings>
-          <ch1>
-            <value>false</value>
-          </ch1>
-          <ch2>
-            <value>false</value>
-          </ch2>
-          <ch3>
-            <value>false</value>
-          </ch3>
-          <ch4>
-            <value>false</value>
-          </ch4>
-          <ch5>
-            <value>false</value>
-          </ch5>
-          <ch6>
-            <value>false</value>
-          </ch6>
-          <ch11>
-            <value>false</value>
-          </ch11>
-          <ch13>
-            <value>false</value>
-          </ch13>
-          <ch0>
-            <value>false</value>
-          </ch0>
-          <ch8>
-            <value>false</value>
-          </ch8>
-          <ch9>
-            <value>false</value>
-          </ch9>
-          <ch10>
-            <value>false</value>
-          </ch10>
-          <ch12>
-            <value>false</value>
-          </ch12>
-          <ch14>
-            <value>false</value>
-          </ch14>
-          <ch15>
-            <value>false</value>
-          </ch15>
-          <ch23>
-            <value>false</value>
-          </ch23>
+          <emios_uc0 index="0">
+            <value>None</value>
+          </emios_uc0>
+          <emios_uc1 index="0">
+            <value>None</value>
+          </emios_uc1>
+          <emios_uc2 index="0">
+            <value>None</value>
+          </emios_uc2>
+          <emios_uc3 index="0">
+            <value>None</value>
+          </emios_uc3>
+          <emios_uc4 index="0">
+            <value>None</value>
+          </emios_uc4>
+          <emios_uc5 index="0">
+            <value>None</value>
+          </emios_uc5>
+          <emios_uc6 index="0">
+            <value>None</value>
+          </emios_uc6>
+          <emios_uc8 index="0">
+            <value>None</value>
+          </emios_uc8>
+          <emios_uc9 index="0">
+            <value>None</value>
+          </emios_uc9>
+          <emios_uc10 index="0">
+            <value>None</value>
+          </emios_uc10>
+          <emios_uc11 index="0">
+            <value>None</value>
+          </emios_uc11>
+          <emios_uc12 index="0">
+            <value>None</value>
+          </emios_uc12>
+          <emios_uc13 index="0">
+            <value>None</value>
+          </emios_uc13>
+          <emios_uc14 index="0">
+            <value>None</value>
+          </emios_uc14>
+          <emios_uc15 index="0">
+            <value>None</value>
+          </emios_uc15>
+          <emios_uc23 index="0">
+            <value>None</value>
+          </emios_uc23>
           <icu_configurations>
             <configs />
           </icu_configurations>
