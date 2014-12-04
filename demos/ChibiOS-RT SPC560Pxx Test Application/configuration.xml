@@ -1486,18 +1486,6 @@
           <flexpwm0_sm3 index="6">
             <value>7</value>
           </flexpwm0_sm3>
-          <flexpwm1_sm0 index="6">
-            <value>7</value>
-          </flexpwm1_sm0>
-          <flexpwm1_sm1 index="6">
-            <value>7</value>
-          </flexpwm1_sm1>
-          <flexpwm1_sm2 index="6">
-            <value>7</value>
-          </flexpwm1_sm2>
-          <flexpwm1_sm3 index="6">
-            <value>7</value>
-          </flexpwm1_sm3>
           <linflex0 index="7">
             <value>8</value>
           </linflex0>
@@ -1823,18 +1811,6 @@
           <flexpwm0_sm3>
             <value>false</value>
           </flexpwm0_sm3>
-          <flexpwm1_sm0>
-            <value>false</value>
-          </flexpwm1_sm0>
-          <flexpwm1_sm1>
-            <value>false</value>
-          </flexpwm1_sm1>
-          <flexpwm1_sm2>
-            <value>false</value>
-          </flexpwm1_sm2>
-          <flexpwm1_sm3>
-            <value>false</value>
-          </flexpwm1_sm3>
           <pwm_configurations>
             <configs />
           </pwm_configurations>
