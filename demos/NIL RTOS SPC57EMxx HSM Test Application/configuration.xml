@@ -28,6 +28,9 @@
           <instruction_cache>
             <value>true</value>
           </instruction_cache>
+          <sbi_r_w_buffers>
+            <value>false</value>
+          </sbi_r_w_buffers>
           <unlock_debug_tracing>
             <value>true</value>
           </unlock_debug_tracing>
@@ -54,7 +57,7 @@
           <cpp_options>
             <value>-fno-rtti -fno-exceptions</value>
           </cpp_options>
-          <use_vle index="0" disabled="true">
+          <use_vle disabled="true" index="0">
             <value>yes</value>
           </use_vle>
           <use_verbose_compile index="1">
@@ -88,7 +91,7 @@
           <system_tick_mode index="0">
             <value>Periodic Tick Mode</value>
           </system_tick_mode>
-          <system_tick_delta index="0">
+          <system_tick_delta disabled="true" index="0">
             <value>2</value>
           </system_tick_delta>
         </general_options>
@@ -209,7 +212,7 @@ THD_FUNCTION(TASK_NAME, arg) {
               <number>
                 <value>8</value>
               </number>
-              <cores index="0" disabled="true">
+              <cores disabled="true" index="0">
                 <value>Core 4</value>
               </cores>
               <priority index="7">
