@@ -10,13 +10,13 @@
   <board_name>-----human readable board name-----</board_name>
   <board_id>BOARD_IDENTIFIER</board_id>
   <board_functions></board_functions>
-  <subtype>STM32F0XX_MD</subtype>
+  <subtype>STM32F051x8</subtype>
   <clocks
     HSEFrequency="8000000"
     HSEBypass="false"
     LSEFrequency="32768"
     LSEBypass="false"
-    LSEDrive="3 High Drive (default)" />
+    LSEDrive="3 High Drive (default)" ></clocks>
   <ports>
     <GPIOA>
       <pin0

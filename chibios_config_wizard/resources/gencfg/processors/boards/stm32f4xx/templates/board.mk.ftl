@@ -1,16 +1,16 @@
 [#ftl]
 [#--
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012,2013 Giovanni Di Sirio.
+    ChibiOS - Copyright (C) 2006,2007,2008,2009,2010,
+              2011,2012,2013,2014 Giovanni Di Sirio.
 
-    This file is part of ChibiOS/RT.
+    This file is part of ChibiOS.
 
-    ChibiOS/RT is free software; you can redistribute it and/or modify
+    ChibiOS is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 3 of the License, or
     (at your option) any later version.
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
+    ChibiOS is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
@@ -22,7 +22,7 @@
 [#import "/@lib/libutils.ftl" as utils /]
 [@pp.changeOutputFile name="board.mk" /]
 # List of all the board related files.
-BOARDSRC = ${'$'}{CHIBIOS}/boards/${doc1.board.board_id[0]}/board.c
+BOARDSRC = ${'$'}{CHIBIOS}/os/hal/boards/${doc1.board.board_id[0]}/board.c
 
 # Required include directories
-BOARDINC = ${'$'}{CHIBIOS}/boards/${doc1.board.board_id[0]}
+BOARDINC = ${'$'}{CHIBIOS}/os/hal/boards/${doc1.board.board_id[0]}

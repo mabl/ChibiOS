@@ -1,16 +1,16 @@
 [#ftl]
 [#--
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012,2013 Giovanni Di Sirio.
+    ChibiOS - Copyright (C) 2006,2007,2008,2009,2010,
+              2011,2012,2013,2014 Giovanni Di Sirio.
 
-    This file is part of ChibiOS/RT.
+    This file is part of ChibiOS.
 
-    ChibiOS/RT is free software; you can redistribute it and/or modify
+    ChibiOS is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 3 of the License, or
     (at your option) any later version.
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
+    ChibiOS is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
@@ -94,28 +94,28 @@ void __early_init(void) {
 /**
  * @brief   MMC_SPI card detection.
  */
-bool_t mmc_lld_is_card_inserted(MMCDriver *mmcp) {
+bool mmc_lld_is_card_inserted(MMCDriver *mmcp) {
 [#if doc1.board.board_functions.mmc_lld_is_card_inserted[0]??]
 ${doc1.board.board_functions.mmc_lld_is_card_inserted[0]}
 [#else]
 
   (void)mmcp;
   /* TODO: Fill the implementation.*/
-  return TRUE;
+  return true;
 [/#if]
 }
 
 /**
  * @brief   MMC_SPI card write protection detection.
  */
-bool_t mmc_lld_is_write_protected(MMCDriver *mmcp) {
+bool mmc_lld_is_write_protected(MMCDriver *mmcp) {
 [#if doc1.board.board_functions.mmc_lld_is_write_protected[0]??]
 ${doc1.board.board_functions.mmc_lld_is_write_protected[0]}
 [#else]
 
   (void)mmcp;
   /* TODO: Fill the implementation.*/
-  return FALSE;
+  return false;
 [/#if]
 }
 #endif
