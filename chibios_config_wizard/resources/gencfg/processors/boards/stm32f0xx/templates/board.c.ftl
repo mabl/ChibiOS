@@ -22,6 +22,15 @@
 [#import "/@lib/libutils.ftl" as utils /]
 [#import "/@lib/liblicense.ftl" as license /]
 [@pp.changeOutputFile name="board.c" /]
+[#if doc1.board.configuration_settings.hal_version[0]?trim == "2.6.x"]
+  [#assign varbool = "bool_t" /]
+  [#assign varfalse = "FALSE" /]
+  [#assign vartrue = "TRUE" /]
+[#else]
+  [#assign varbool = "bool" /]
+  [#assign varfalse = "false" /]
+  [#assign vartrue = "true" /]
+[/#if]
 /*
 [@license.EmitLicenseAsText /]
 */
@@ -29,6 +38,9 @@
 [#list doc1.board.headers.header as header]
 #include "${header[0]?string?trim}"
 [/#list]
+[#if doc1.board.configuration_settings.hal_version[0]?trim == "2.6.x"]
+#include "ch.h"
+[/#if]
 #include "hal.h"
 
 #if HAL_USE_PAL || defined(__DOXYGEN__)
@@ -68,7 +80,7 @@ const PALConfig pal_default_config = {
 #endif
 #if STM32_HAS_GPIOH
   {VAL_GPIOH_MODER, VAL_GPIOH_OTYPER, VAL_GPIOH_OSPEEDR, VAL_GPIOH_PUPDR,
-   VAL_GPIOH_ODR,   VAL_GPIOH_AFRL,   VAL_GPIOH_AFRH}
+   VAL_GPIOH_ODR,   VAL_GPIOH_AFRL,   VAL_GPIOH_AFRH},
 #endif
 #if STM32_HAS_GPIOI
   {VAL_GPIOI_MODER, VAL_GPIOI_OTYPER, VAL_GPIOI_OSPEEDR, VAL_GPIOI_PUPDR,
@@ -94,28 +106,28 @@ void __early_init(void) {
 /**
  * @brief   MMC_SPI card detection.
  */
-bool mmc_lld_is_card_inserted(MMCDriver *mmcp) {
+${varbool} mmc_lld_is_card_inserted(MMCDriver *mmcp) {
 [#if doc1.board.board_functions.mmc_lld_is_card_inserted[0]??]
 ${doc1.board.board_functions.mmc_lld_is_card_inserted[0]}
 [#else]
 
   (void)mmcp;
   /* TODO: Fill the implementation.*/
-  return true;
+  return ${vartrue};
 [/#if]
 }
 
 /**
  * @brief   MMC_SPI card write protection detection.
  */
-bool mmc_lld_is_write_protected(MMCDriver *mmcp) {
+${varbool} mmc_lld_is_write_protected(MMCDriver *mmcp) {
 [#if doc1.board.board_functions.mmc_lld_is_write_protected[0]??]
 ${doc1.board.board_functions.mmc_lld_is_write_protected[0]}
 [#else]
 
   (void)mmcp;
   /* TODO: Fill the implementation.*/
-  return false;
+  return ${varfalse};
 [/#if]
 }
 #endif
