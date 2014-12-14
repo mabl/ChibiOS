@@ -40,8 +40,8 @@
     			maxOccurs="1">
     			<xs:simpleType>
     				<xs:restriction base="xs:string">
-    					<xs:enumeration value="2.6.x"></xs:enumeration>
     					<xs:enumeration value="3.0.x"></xs:enumeration>
+    					<xs:enumeration value="2.6.x"></xs:enumeration>
     				</xs:restriction>
     			</xs:simpleType>
     		</xs:element>
