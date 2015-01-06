@@ -4,5 +4,5 @@ doxygen Doxyfile_pdf
 cd latex
 copy ..\..\common\rsc\Makefile .
 mingw32-make all
-copy refman.pdf ..\chibios_rt_2.6.0_kernel_hal_rm.pdf
+copy refman.pdf ..\chibios_rt_3.0.0_kernel_rm.pdf
 pause

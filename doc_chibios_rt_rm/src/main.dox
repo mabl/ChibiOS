@@ -23,9 +23,9 @@
  *
  * @section copyright Copyright
  * @if HTML_FREE
- * Copyright (C) 2006..2013 Giovanni Di Sirio. All rights reserved.
+ * Copyright (C) 2006..2015 Giovanni Di Sirio. All rights reserved.
  * @else
- * Copyright (C) 2006..2013 Giovanni Di Sirio. All rights reserved.
+ * Copyright (C) 2006..2015 Giovanni Di Sirio. All rights reserved.
  * <br><br><small>
  * Neither the whole nor any part of the information contained in this
  * document may be adapted or reproduced in any form except with the
