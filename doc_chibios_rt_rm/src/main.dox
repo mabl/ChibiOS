@@ -1,0 +1,54 @@
+/*
+    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
+                 2011,2012,2013,2014,2015 Giovanni Di Sirio.
+
+    This file is part of ChibiOS/RT.
+
+    ChibiOS/RT is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 3 of the License, or
+    (at your option) any later version.
+
+    ChibiOS/RT is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/**
+ * @mainpage ChibiOS/RT
+ *
+ * @section copyright Copyright
+ * @if HTML_FREE
+ * Copyright (C) 2006..2013 Giovanni Di Sirio. All rights reserved.
+ * @else
+ * Copyright (C) 2006..2013 Giovanni Di Sirio. All rights reserved.
+ * <br><br><small>
+ * Neither the whole nor any part of the information contained in this
+ * document may be adapted or reproduced in any form except with the
+ * prior written permission of the copyright holder.
+ * <br><br>
+ * The product described in this document is subject to continuous
+ * developments and improvements. All particulars of the product and its
+ * use contained in this document are given by Giovanni Di Sirio in good faith.
+ * However, all warranties implied or expressed, including but not limited
+ * to implied warranties of merchantability, or fitness for purpose, are
+ * excluded.
+ * <br><br>
+ * This document is intended only to assist the reader in the use of the
+ * product. Giovanni Di Sirio shall not be liable for any loss or damage arising
+ * from the use of any information in this document, or any error or
+ * omission in such information, or any incorrect use of the product.
+ * <br></small>
+ * @endif
+ *
+ * @section introduction Introduction
+ * This document is the Reference Manual for the ChibiOS/RT portable Kernel.
+ *
+ * @section related Related Documents
+ * - ChibiOS/RT General Architecture
+ * .
+ */
