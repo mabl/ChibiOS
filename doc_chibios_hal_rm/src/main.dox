@@ -19,7 +19,7 @@
 */
 
 /**
- * @mainpage ChibiOS/RT
+ * @mainpage ChibiOS/HAL
  *
  * @section copyright Copyright
  * @if HTML_FREE
@@ -46,9 +46,10 @@
  * @endif
  *
  * @section introduction Introduction
- * This document is the Reference Manual for the ChibiOS/RT portable Kernel.
+ * This document is the Reference Manual for the ChibiOS/HAL hardware
+ * abstraction layer.
  *
  * @section related Related Documents
- * - ChibiOS/RT General Architecture
+ * - ChibiOS/HAL General Architecture
  * .
  */
