@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2013 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -644,11 +644,7 @@ ROMCONST struct testcase testbmk12 = {
 static void bmk13_execute(void) {
 
   test_print("--- System: ");
-  test_printn(sizeof(ready_list_t) + sizeof(virtual_timers_list_t) +
-              PORT_IDLE_THREAD_STACK_SIZE +
-              (sizeof(thread_t) + sizeof(struct port_intctx) +
-               sizeof(struct port_extctx) +
-               PORT_INT_REQUIRED_STACK) * 2);
+  test_printn(sizeof(ch_system_t));
   test_println(" bytes");
   test_print("--- Thread: ");
   test_printn(sizeof(thread_t));

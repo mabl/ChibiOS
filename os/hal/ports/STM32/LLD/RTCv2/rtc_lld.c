@@ -1,5 +1,5 @@
 /*
-    ChibiOS/HAL - Copyright (C) 2006-2014 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -197,6 +197,8 @@ static uint32_t rtc_encode_date(const RTCDateTime *timespec) {
   return dr;
 }
 
+#if RTC_HAS_STORAGE
+/* TODO: Map on the backup SRAM on devices that have it.*/
 static size_t _write(void *instance, const uint8_t *bp, size_t n) {
 
   (void)instance;
@@ -274,6 +276,7 @@ struct RTCDriverVMT _rtc_lld_vmt = {
   _write, _read, _put, _get,
   _close, _geterror, _getsize, _getposition, _lseek
 };
+#endif /* RTC_HAS_STORAGE */
 
 /*===========================================================================*/
 /* Driver interrupt handlers.                                                */
@@ -300,21 +303,21 @@ void rtc_lld_init(void) {
   RTCD1.rtc->WPR = 0xCA;
   RTCD1.rtc->WPR = 0x53;
 
-  rtc_enter_init();
-
   /* If calendar has not been initialized yet then proceed with the
      initial setup.*/
   if (!(RTCD1.rtc->ISR & RTC_ISR_INITS)) {
+
+    rtc_enter_init();
 
     RTCD1.rtc->CR   = 0;
     RTCD1.rtc->ISR  = 0;
     RTCD1.rtc->PRER = STM32_RTC_PRER_BITS;
     RTCD1.rtc->PRER = STM32_RTC_PRER_BITS;
+
+    rtc_exit_init();
   }
   else
     RTCD1.rtc->ISR &= ~RTC_ISR_RSF;
-
-  rtc_exit_init();
 }
 
 /**

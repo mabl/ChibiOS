@@ -1,5 +1,5 @@
 /*
-    ChibiOS/HAL - Copyright (C) 2006-2014 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -26,8 +26,9 @@
  *          - STM32_VDD (as hundredths of Volt).
  *          .
  *          One of the following macros must also be defined:
+ *          - STM32F2XX for High-performance STM32 F-2 devices.
  *          - STM32F405xx, STM32F415xx, STM32F407xx, STM32F417xx for
- *            High-performance STM32 F-2 devices.
+ *            High-performance STM32 F-4 devices.
  *          - STM32F427xx, STM32F437xx, STM32F429xx, STM32F439xx for
  *            High-performance STM32 F-4 devices.
  *          - STM32F401xC, STM32F401xE for High-performance STM32 F-4 devices.
@@ -164,7 +165,7 @@
 #define STM32_PLLVCO_MAX        432000000
 
 /**
- * @brief   Maximum PLLs VCO clock frequency.
+ * @brief   Minimum PLLs VCO clock frequency.
  */
 #define STM32_PLLVCO_MIN        192000000
 

@@ -1,5 +1,5 @@
 /*
-    ChibiOS/HAL - Copyright (C) 2006-2014 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@
 /**
  * @brief   Presence of a local persistent storage.
  */
-#define RTC_HAS_STORAGE             TRUE
+#define RTC_HAS_STORAGE             FALSE
 /** @} */
 
 /**

@@ -1,5 +1,5 @@
 /*
-    ChibiOS/HAL - Copyright (C) 2006-2014 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -71,7 +71,8 @@
 /**
  * @brief   USB1 interrupt priority level setting.
  */
-#if !defined(STM32_USB_USB1_HP_IRQ_PRIORITY) || defined(__DOXYGEN__)
+#if (!defined(STM32_USB_USB1_HP_IRQ_PRIORITY) &&                           \
+     (STM32_USB1_HP_NUMBER != STM32_USB1_LP_NUMBER)) || defined(__DOXYGEN__)
 #define STM32_USB_USB1_HP_IRQ_PRIORITY      13
 #endif
 
@@ -94,18 +95,35 @@
 #error "USB driver activated but no USB peripheral assigned"
 #endif
 
-#if STM32_USB_USE_USB1 &&                                                \
+#if STM32_USB_USE_USB1 &&                                                   \
+    (STM32_USB1_HP_NUMBER != STM32_USB1_LP_NUMBER) &&                       \
     !CORTEX_IS_VALID_KERNEL_PRIORITY(STM32_USB_USB1_HP_IRQ_PRIORITY)
 #error "Invalid IRQ priority assigned to USB HP"
 #endif
 
-#if STM32_USB_USE_USB1 &&                                                \
+#if STM32_USB_USE_USB1 &&                                                   \
     !CORTEX_IS_VALID_KERNEL_PRIORITY(STM32_USB_USB1_LP_IRQ_PRIORITY)
 #error "Invalid IRQ priority assigned to USB LP"
 #endif
 
 #if STM32_USBCLK != 48000000
 #error "the USB driver requires a 48MHz clock"
+#endif
+
+#if !defined(STM32_USB1_HP_HANDLER)
+#error "STM32_USB1_HP_HANDLER not defined"
+#endif
+
+#if !defined(STM32_USB1_HP_NUMBER)
+#error "STM32_USB1_HP_NUMBER not defined"
+#endif
+
+#if !defined(STM32_USB1_LP_HANDLER)
+#error "STM32_USB1_LP_HANDLER not defined"
+#endif
+
+#if !defined(STM32_USB1_LP_NUMBER)
+#error "STM32_USB1_LP_NUMBER not defined"
 #endif
 
 /*===========================================================================*/
@@ -387,6 +405,26 @@ struct USBDriver {
  */
 #define usb_lld_get_transaction_size(usbp, ep)                              \
   ((usbp)->epc[ep]->out_state->rxcnt)
+
+#if STM32_USB_HAS_BCDR || defined(__DOXYGEN__)
+/**
+ * @brief   Connects the USB device.
+ *
+ * @api
+ */
+#if !defined(usb_lld_connect_bus)
+#define usb_lld_connect_bus(usbp) (STM32_USB->BCDR |= USB_BCDR_DPPU)
+#endif
+
+/**
+ * @brief   Disconnect the USB device.
+ *
+ * @api
+ */
+#if !defined(usb_lld_disconnect_bus)
+#define usb_lld_disconnect_bus(usbp) (STM32_USB->BCDR &= ~USB_BCDR_DPPU)
+#endif
+#endif /* STM32_USB_HAS_BCDR */
 
 /*===========================================================================*/
 /* External declarations.                                                    */

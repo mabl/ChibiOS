@@ -1,15 +1,14 @@
 /*
-    ChibiOS/HAL - Copyright (C) 2006,2007,2008,2009,2010,
-                  2011,2012,2013,2014 Giovanni Di Sirio.
+    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio.
 
-    This file is part of ChibiOS/HAL 
+    This file is part of ChibiOS.
 
-    ChibiOS/HAL is free software; you can redistribute it and/or modify
+    ChibiOS is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 3 of the License, or
     (at your option) any later version.
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
+    ChibiOS is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
@@ -549,7 +548,7 @@ static inline void osalOsRescheduleS(void) {
  * @note    The counter can reach its maximum and then restart from zero.
  * @note    This function can be called from any context but its atomicity
  *          is not guaranteed on architectures whose word size is less than
- *          @systime_t size.
+ *          @p systime_t size.
  *
  * @return              The system time in ticks.
  *
@@ -815,7 +814,7 @@ static inline void osalMutexObjectInit(mutex_t *mp) {
   chSemObjectInit((semaphore_t *)mp, 1);
 }
 
-/*
+/**
  * @brief   Locks the specified mutex.
  * @post    The mutex is locked and inserted in the per-thread stack of owned
  *          mutexes.

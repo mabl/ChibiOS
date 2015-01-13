@@ -1,14 +1,14 @@
 /*
-    ChibiOS/NIL - Copyright (C) 2013,2014 Giovanni Di Sirio.
+    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio.
 
-    This file is part of ChibiOS/NIL.
+    This file is part of ChibiOS.
 
-    ChibiOS/NIL is free software; you can redistribute it and/or modify
+    ChibiOS is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 3 of the License, or
     (at your option) any later version.
 
-    ChibiOS/NIL is distributed in the hope that it will be useful,
+    ChibiOS is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
@@ -23,7 +23,7 @@
  * @details This header includes all the required kernel headers so it is the
  *          only header you usually need to include in your application.
  *
- * @addtogroup nil
+ * @addtogroup NIL_KERNEL
  * @{
  */
 
@@ -46,10 +46,10 @@ typedef struct nil_thread thread_t;
  */
 #define _NIL_                           /**< @brief Nil RTOS identification.*/
 
-#define CH_KERNEL_VERSION      "0.1.0alpha"
+#define CH_KERNEL_VERSION      "1.0.0dev"
 
-#define CH_KERNEL_MAJOR        0
-#define CH_KERNEL_MINOR        1
+#define CH_KERNEL_MAJOR        1
+#define CH_KERNEL_MINOR        0
 #define CH_KERNEL_PATCH        0
 /** @} */
 
@@ -284,11 +284,16 @@ extern stkalign_t __main_thread_stack_base__, __main_thread_stack_end__;
 typedef struct port_intctx intctx_t;
 
 /**
- * @brief   Type of a structure representing a counting semaphore.
+ * @brief   Type of a structure representing a semaphore.
  */
-typedef struct {
+typedef struct nil_semaphore semaphore_t;
+
+/**
+ * @brief   Structure representing a counting semaphore.
+ */
+struct nil_semaphore {
   volatile cnt_t    cnt;        /**< @brief Semaphore counter.              */
-} semaphore_t;
+};
 
 /**
  * @brief Thread function.
@@ -301,11 +306,6 @@ typedef void (*tfunc_t)(void *);
 typedef struct nil_thread_cfg thread_config_t;
 
 /**
- * @brief   Type of a structure representing a thread.
- */
-typedef struct nil_thread thread_t;
-
-/**
  * @brief   Structure representing a thread static configuration.
  */
 struct nil_thread_cfg {
@@ -315,6 +315,11 @@ struct nil_thread_cfg {
   tfunc_t           funcp;      /**< @brief Thread function.                */
   void              *arg;       /**< @brief Thread function argument.       */
 };
+
+/**
+ * @brief   Type of a structure representing a thread.
+ */
+typedef struct nil_thread thread_t;
 
 /**
  * @brief   Type of a thread reference.
@@ -351,11 +356,16 @@ struct nil_thread {
 };
 
 /**
+ * @brief   Type of a structure representing the system.
+ */
+typedef struct nil_system nil_system_t;
+
+/**
  * @brief   System data structure.
  * @note    This structure contain all the data areas used by the OS except
  *          stacks.
  */
-typedef struct {
+struct nil_system {
   /**
    * @brief   Pointer to the running thread.
    */
@@ -396,7 +406,7 @@ typedef struct {
    */
   const char            * volatile dbg_panic_msg;
 #endif
-} nil_system_t;
+};
 
 /*===========================================================================*/
 /* Module macros.                                                            */
@@ -758,7 +768,7 @@ typedef struct {
  * @note    The counter can reach its maximum and then restart from zero.
  * @note    This function can be called from any context but its atomicity
  *          is not guaranteed on architectures whose word size is less than
- *          @systime_t size.
+ *          @p systime_t size.
  *
  * @return              The system time in ticks.
  *
@@ -835,8 +845,8 @@ extern "C" {
   void chSysInit(void);
   void chSysHalt(const char *reason);
   void chSysTimerHandlerI(void);
-  void chSysConditionalLock(void);
-  void chSysConditionalUnlock(void);
+  void chSysUnconditionalLock(void);
+  void chSysUnconditionalUnlock(void);
   syssts_t chSysGetStatusAndLockX(void);
   void chSysRestoreStatusX(syssts_t sts);
   thread_t *chSchReadyI(thread_t *tp, msg_t msg);

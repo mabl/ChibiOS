@@ -1,15 +1,14 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012,2013,2014 Giovanni Di Sirio.
+    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio.
 
-    This file is part of ChibiOS/RT.
+    This file is part of ChibiOS.
 
-    ChibiOS/RT is free software; you can redistribute it and/or modify
+    ChibiOS is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 3 of the License, or
     (at your option) any later version.
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
+    ChibiOS is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
@@ -48,13 +47,6 @@
 /* Module local variables.                                                   */
 /*===========================================================================*/
 
-#if !CH_CFG_NO_IDLE_THREAD || defined(__DOXYGEN__)
-/**
- * @brief   Idle thread working area.
- */
-static THD_WORKING_AREA(_idle_thread_wa, PORT_IDLE_THREAD_STACK_SIZE);
-#endif /* CH_CFG_NO_IDLE_THREAD */
-
 /*===========================================================================*/
 /* Module local functions.                                                   */
 /*===========================================================================*/
@@ -68,7 +60,7 @@ static THD_WORKING_AREA(_idle_thread_wa, PORT_IDLE_THREAD_STACK_SIZE);
  *          that this thread is executed only if there are no other ready
  *          threads in the system.
  *
- * @param[in] p the thread parameter, unused in this scenario
+ * @param[in] p         the thread parameter, unused in this scenario
  */
 static void _idle_thread(void *p) {
 
@@ -89,16 +81,13 @@ static void _idle_thread(void *p) {
  * @brief   ChibiOS/RT initialization.
  * @details After executing this function the current instructions stream
  *          becomes the main thread.
- * @pre     Interrupts must be still disabled when @p chSysInit() is invoked
- *          and are internally enabled.
- * @post    The main thread is created with priority @p NORMALPRIO.
- * @note    This function has special, architecture-dependent, requirements,
- *          see the notes into the various port reference manuals.
+ * @pre     Interrupts must disabled before invoking this function.
+ * @post    The main thread is created with priority @p NORMALPRIO and
+ *          interrupts are enabled.
  *
  * @special
  */
 void chSysInit(void) {
-  static thread_t mainthread;
 #if CH_DBG_ENABLE_STACK_CHECK
   extern stkalign_t __main_thread_stack_base__;
 #endif
@@ -124,10 +113,10 @@ void chSysInit(void) {
 
 #if !CH_CFG_NO_IDLE_THREAD
   /* Now this instructions flow becomes the main thread.*/
-  setcurrp(_thread_init(&mainthread, NORMALPRIO));
+  setcurrp(_thread_init(&ch.mainthread, NORMALPRIO));
 #else
-  /* Now this instructions flow becomes the main thread.*/
-  setcurrp(_thread_init(&mainthread, IDLEPRIO));
+  /* Now this instructions flow becomes the idle thread.*/
+  setcurrp(_thread_init(&ch.mainthread, IDLEPRIO));
 #endif
 
   currp->p_state = CH_STATE_CURRENT;
@@ -146,7 +135,7 @@ void chSysInit(void) {
   /* This thread has the lowest priority in the system, its role is just to
      serve interrupts in its context while keeping the lowest energy saving
      mode compatible with the system status.*/
-  chThdCreateStatic(_idle_thread_wa, sizeof(_idle_thread_wa), IDLEPRIO,
+  chThdCreateStatic(ch.idle_thread_wa, sizeof(ch.idle_thread_wa), IDLEPRIO,
                     (tfunc_t)_idle_thread, NULL);
 #endif
 }

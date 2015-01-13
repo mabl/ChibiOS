@@ -5,24 +5,25 @@
   <configuration_settings>
     <templates_path>resources/gencfg/processors/boards/stm32f4xx/templates</templates_path>
     <output_path>..</output_path>
+    <hal_version>3.0.x</hal_version>
   </configuration_settings>
     <board_name>Olimex STM32-E407</board_name>
     <board_id>OLIMEX_STM32_E407</board_id>
     <board_functions>
-        <sdc_lld_is_card_inserted><![CDATA[  static bool_t last_status = FALSE;
+        <sdc_lld_is_card_inserted><![CDATA[  static bool last_status = false;
 
   if (blkIsTransferring(sdcp))
     return last_status;
-  return last_status = (bool_t)palReadPad(GPIOC, GPIOC_SD_D3);]]></sdc_lld_is_card_inserted>
+  return last_status = (bool)palReadPad(GPIOC, GPIOC_SD_D3);]]></sdc_lld_is_card_inserted>
         <sdc_lld_is_write_protected>
 <![CDATA[  (void)sdcp;
-  return FALSE;]]></sdc_lld_is_write_protected>
+  return false;]]></sdc_lld_is_write_protected>
     </board_functions>
     <ethernet_phy>
         <identifier>MII_KS8721_ID</identifier>
         <bus_type>RMII</bus_type>
     </ethernet_phy>
-    <subtype>STM32F40_41xxx</subtype>
+    <subtype>STM32F407xx</subtype>
     <clocks
        HSEFrequency="12000000"
        HSEBypass="false"
@@ -49,7 +50,7 @@
             <pin7 ID="ETH_RMII_CRS_DV" Type="PushPull" Speed="Maximum"
                 Resistor="Floating" Level="High" Mode="Alternate" Alternate="11" />
             <pin8 ID="USB_HS_BUSON" Type="PushPull" Speed="Maximum"
-                Resistor="Floating" Level="High" Mode="Output" Alternate="0" />
+                Resistor="Floating" Level="Low" Mode="Output" Alternate="0" />
             <pin9 ID="OTG_FS_VBUS" Type="PushPull" Speed="Maximum" Resistor="PullDown"
                 Level="High" Mode="Input" Alternate="0" />
             <pin10 ID="OTG_FS_ID" Type="PushPull" Speed="Maximum" Resistor="Floating"
@@ -67,7 +68,7 @@
         </GPIOA>
         <GPIOB>
             <pin0 ID="USB_FS_BUSON" Type="PushPull" Speed="Maximum"
-                Resistor="Floating" Level="High" Mode="Output" Alternate="0" />
+                Resistor="Floating" Level="Low" Mode="Output" Alternate="0" />
             <pin1 ID="USB_HS_FAULT" Type="PushPull" Speed="Maximum"
                 Resistor="Floating" Level="High" Mode="Input" Alternate="0" />
             <pin2 ID="BOOT1" Type="PushPull" Speed="Maximum" Resistor="Floating"

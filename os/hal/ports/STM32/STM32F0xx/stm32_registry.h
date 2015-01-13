@@ -1,5 +1,5 @@
 /*
-    ChibiOS/HAL - Copyright (C) 2006-2014 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -192,7 +192,15 @@
 #define STM32_HAS_USART6                    FALSE
 
 /* USB attributes.*/
+#if defined(STM32F042x6) || defined(STM32F048xx) || defined(STM32F072xB) || \
+    defined(STM32F078xx)
+#define STM32_HAS_USB                       TRUE
+#define STM32_USB_ACCESS_SCHEME_2x16        TRUE
+#define STM32_USB_PMA_SIZE                  768
+#define STM32_USB_HAS_BCDR                  TRUE
+#else
 #define STM32_HAS_USB                       FALSE
+#endif
 #define STM32_HAS_OTG1                      FALSE
 #define STM32_HAS_OTG2                      FALSE
 

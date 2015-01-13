@@ -1,5 +1,5 @@
 /*
-    ChibiOS/HAL - Copyright (C) 2006-2014 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -64,6 +64,14 @@
 
 #define STM32_USART1_NUMBER         27
 #define STM32_USART2_NUMBER         28
+
+/*
+ * USB units.
+ */
+#define STM32_USB1_LP_HANDLER       VectorBC
+#define STM32_USB1_LP_NUMBER        31
+#define STM32_USB1_HP_HANDLER       VectorBC
+#define STM32_USB1_HP_NUMBER        31
 /** @} */
 
 /*===========================================================================*/

@@ -1,14 +1,14 @@
 /*
-    ChibiOS/NIL - Copyright (C) 2013,2014 Giovanni Di Sirio.
+    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio.
 
-    This file is part of ChibiOS/NIL.
+    This file is part of ChibiOS.
 
-    ChibiOS/NIL is free software; you can redistribute it and/or modify
+    ChibiOS is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 3 of the License, or
     (at your option) any later version.
 
-    ChibiOS/NIL is distributed in the hope that it will be useful,
+    ChibiOS is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
@@ -72,9 +72,9 @@
  */
 #define CORTEX_M0                       0   /**< @brief Cortex-M0 variant.  */
 #define CORTEX_M0PLUS                   1   /**< @brief Cortex-M0+ variant. */
-#define CORTEX_M1                       2   /**< @brief Cortex-M1 variant.  */
-#define CORTEX_M3                       3   /**< @brief Cortex-M3 variant.  */
-#define CORTEX_M4                       4   /**< @brief Cortex-M4 variant.  */
+#define CORTEX_M1                       10  /**< @brief Cortex-M1 variant.  */
+#define CORTEX_M3                       30  /**< @brief Cortex-M3 variant.  */
+#define CORTEX_M4                       40  /**< @brief Cortex-M4 variant.  */
 /** @} */
 
 /* Inclusion of the Cortex-Mx implementation specific parameters.*/

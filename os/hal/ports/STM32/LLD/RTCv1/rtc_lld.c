@@ -1,5 +1,5 @@
 /*
-    ChibiOS/HAL - Copyright (C) 2006-2014 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -60,7 +60,8 @@ RTCDriver RTCD1;
  * @notapi
  */
 static void rtc_apb1_sync(void) {
-  while ((RTCD1.rtc->CRL & RTC_CRL_RSF) == 0)
+
+  while ((RTC->CRL & RTC_CRL_RSF) == 0)
     ;
 }
 
@@ -71,7 +72,8 @@ static void rtc_apb1_sync(void) {
  * @notapi
  */
 static void rtc_wait_write_completed(void) {
-  while ((RTCD1.rtc->CRL & RTC_CRL_RTOFF) == 0)
+
+  while ((RTC->CRL & RTC_CRL_RTOFF) == 0)
     ;
 }
 
@@ -84,8 +86,9 @@ static void rtc_wait_write_completed(void) {
  * @notapi
  */
 static void rtc_acquire_access(void) {
+
   rtc_wait_write_completed();
-  RTCD1.rtc->CRL |= RTC_CRL_CNF;
+  RTC->CRL |= RTC_CRL_CNF;
 }
 
 /**
@@ -94,7 +97,8 @@ static void rtc_acquire_access(void) {
  * @notapi
  */
 static void rtc_release_access(void) {
-  RTCD1.rtc->CRL &= ~RTC_CRL_CNF;
+
+  RTC->CRL &= ~RTC_CRL_CNF;
 }
 
 /**
@@ -189,8 +193,8 @@ void rtc_lld_set_prescaler(void) {
   sts = chSysGetStatusAndLockX();
 
   rtc_acquire_access();
-  RTCD1.rtc->PRLH = (uint16_t)((STM32_RTCCLK - 1) >> 16) & 0x000F;
-  RTCD1.rtc->PRLL = (uint16_t)(((STM32_RTCCLK - 1))      & 0xFFFF);
+  RTC->PRLH = (uint16_t)((STM32_RTCCLK - 1) >> 16) & 0x000F;
+  RTC->PRLL = (uint16_t)(((STM32_RTCCLK - 1))      & 0xFFFF);
   rtc_release_access();
 
   /* Leaving a reentrant critical zone.*/
