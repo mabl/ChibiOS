@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SPC5-Config version="1.0.0">
-  <application name="SPC560Dxx Test Application with NIL RTOS" version="1.0.0" standalone="false" locked="false">
+  <application name="SPC560Dxx Test Application with NIL RTOS" version="1.0.0" standalone="true" locked="false">
     <description>Test application for the SPC560Dxx using NIL RTOS.</description>
     <component id="com.st.tools.spc5.components.platform.spc560dxx">
       <component id="org.chibios.spc5.components.nil.rtos.spc560dxx" />
