@@ -1633,6 +1633,9 @@
           </can_configurations>
         </flexcan_settings>
         <flexpwm_settings>
+          <synchronized_flexpwm0>
+            <value>false</value>
+          </synchronized_flexpwm0>
           <flexpwm0_sm0>
             <value>false</value>
           </flexpwm0_sm0>
@@ -1645,9 +1648,9 @@
           <flexpwm0_sm3>
             <value>false</value>
           </flexpwm0_sm3>
-          <pwm_configurations>
+          <pwm0_configurations>
             <configs />
-          </pwm_configurations>
+          </pwm0_configurations>
         </flexpwm_settings>
         <linflex_settings>
           <linflex0 index="1">
