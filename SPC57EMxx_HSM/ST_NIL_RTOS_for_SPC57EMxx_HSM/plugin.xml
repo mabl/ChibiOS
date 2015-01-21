@@ -27,7 +27,7 @@
                      align="left"
                      file="rsc/st48x48.png">
                   <text>
-                     NIL RTOS is GPL3-licensed free software. A special exception has been added to the GPL3 in order to allow inclusion in closed source applications, details are in the exception.txt document.
+                     NIL RTOS has been licensed to STMicroelectronics for use in resident system application code in SPC5 microcontrollers.
                   </text>
                </image>
             </configuration>
