@@ -22,6 +22,10 @@
  * @{
  */
 
+ /* parasoft suppress item MISRA2012-DIR-4_9 "Comparison of structure fields
+    with constants are as macro rather than functions for
+    performance and code readability" */
+
 #ifndef _NILCONF_H_
 #define _NILCONF_H_
 

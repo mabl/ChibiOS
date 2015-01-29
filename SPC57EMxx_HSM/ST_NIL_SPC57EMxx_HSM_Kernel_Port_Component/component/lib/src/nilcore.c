@@ -8,6 +8,11 @@
     for use in SPC5xx micro controllers embedded firmware.
 */
 
+/* parasoft suppress item MISRA2012-DIR-4_2 "Some inline assembly code is used
+   for context switch performance" */
+/* parasoft suppress item MISRA2012-DIR-4_3 "Some inline assembly code is used
+   for context switch performance" */
+
 /**
  * @file    templates/nilcore.c
  * @brief   Port code.

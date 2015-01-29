@@ -8,6 +8,9 @@
     for use in SPC5xx micro controllers embedded firmware.
 */
 
+/* parasoft suppress item MISRA2012-DIR-4_9 "Code defined as macro for
+   performance and readability" */
+
 /**
  * @file    e200/compilers/GCC/niltypes.h
  * @brief   Power e200 port system types.
@@ -52,10 +55,14 @@ typedef uint32_t        ucnt_t;         /**< Generic unsigned counter.      */
 /**
  * @brief   Type of system time.
  */
+#if defined(NIL_CFG_ST_RESOLUTION) || defined(__DOXYGEN__)
 #if (NIL_CFG_ST_RESOLUTION == 32) || defined(__DOXYGEN__)
 typedef uint32_t systime_t;
 #else
 typedef uint16_t systime_t;
+#endif
+#else
+typedef uint32_t systime_t;
 #endif
 
 /**

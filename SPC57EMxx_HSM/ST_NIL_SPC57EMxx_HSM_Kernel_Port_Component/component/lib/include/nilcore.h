@@ -8,6 +8,17 @@
     for use in SPC5xx micro controllers embedded firmware.
 */
 
+/* parasoft suppress item MISRA2012-DIR-4_9 "MACRO are used to ease platform
+   porting " */
+/* parasoft suppress item MISRA2012-DIR-4_2 "Some inline assembly code is used
+   for context switch performance" */
+/* parasoft suppress item MISRA2012-RULE-20_9_a "The MACROS used for
+   conditional compilation are all defined in ppcparams.h" */
+/* parasoft suppress item MISRA2012-RULE-20_9_b "The MACROS used for
+   conditional compilation are all defined in ppcparams.h" */
+/* parasoft suppress item MISRA2012-RULE-20_1 "Some files are explicitly
+   included after code statement. This is for late inclusion purpose" */
+
 /**
  * @file    templates/nilcore.h
  * @brief   Port macros and structures.
@@ -291,13 +302,14 @@ struct port_intctx {
  * @param[in] otp       the thread to be switched out
  */
 #if !NIL_CFG_ENABLE_STACK_CHECK || defined(__DOXYGEN__)
-#define port_switch(ntp, otp) _port_switch(ntp, otp)
+#define port_switch(ntp, otp) _port_switch((ntp), (otp))
 #else
 #define port_switch(ntp, otp) {                                             \
   register struct port_intctx *sp asm ("%r1");                              \
-  if ((stkalign_t *)(sp - 1) < otp->stklim)                                 \
+  if ((stkalign_t *)(sp - 1) < (otp)->stklim) {                             \
     chSysHalt("stack overflow");                                            \
-  _port_switch(ntp, otp);                                                   \
+  }                                                                         \
+  _port_switch((ntp), (otp));                                               \
 }
 #endif
 

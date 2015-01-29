@@ -8,6 +8,16 @@
     for use in SPC5xx micro controllers embedded firmware.
 */
 
+/* parasoft suppress item MISRA2012-DIR-4_9 "Comparison of structure fields
+   with constants are as macro rather than functions for performance and code
+   readability" */
+/* parasoft suppress item MISRA2012-RULE-20_9_a "The MACROS used for
+   conditional compilation are all defined in ppcparams.h" */
+/* parasoft suppress item MISRA2012-RULE-19_2 "union are used to have a simpler
+   strcuture filed access" */
+/* parasoft suppress MISRA2012-RULE-20_1 "Some files are explicitly included
+   after code statement (typedef, used in the included files)." */
+
 /**
  * @file    nil.h
  * @brief   Nil RTOS main header file.
@@ -407,8 +417,8 @@ typedef struct {
  * @brief   Entry of user threads table
  */
 #define THD_TABLE_ENTRY(wap, name, funcp, arg)                              \
-  {wap, ((stkalign_t *)(wap)) + (sizeof (wap) / sizeof(stkalign_t)),        \
-   name, funcp, arg},
+  {(wap), ((stkalign_t *)(wap)) + (sizeof (wap) / sizeof(stkalign_t)),      \
+   (name), (funcp), (arg)},
 
 /**
  * @brief   End of user threads table.
@@ -466,7 +476,7 @@ typedef struct {
  * @note    Thread declarations should be performed using this macro because
  *          the port layer could define optimizations for thread functions.
  */
-#define THD_FUNCTION(tname, arg) PORT_THD_FUNCTION(tname, arg)
+#define THD_FUNCTION(tname, arg) PORT_THD_FUNCTION((tname), (arg))
 /** @} */
 
 /**
@@ -683,7 +693,7 @@ typedef struct {
  *
  * @sclass
  */
-#define chThdSleepS(timeout) chSchGoSleepTimeoutS(NIL_STATE_SLEEPING, timeout)
+#define chThdSleepS(timeout) chSchGoSleepTimeoutS(NIL_STATE_SLEEPING, (timeout))
 
 /**
  * @brief   Suspends the invoking thread until the system time arrives to the
@@ -705,7 +715,7 @@ typedef struct {
  *
  * @init
  */
-#define chSemObjectInit(sp, n) ((sp)->cnt = n)
+#define chSemObjectInit(sp, n) ((sp)->cnt = (n))
 
 /**
  * @brief   Performs a wait operation on a semaphore.
@@ -719,7 +729,7 @@ typedef struct {
  *
  * @api
  */
-#define chSemWait(sp) chSemWaitTimeout(sp, TIME_INFINITE)
+#define chSemWait(sp) chSemWaitTimeout((sp), TIME_INFINITE)
 
 /**
  * @brief   Performs a wait operation on a semaphore.
@@ -733,7 +743,7 @@ typedef struct {
  *
  * @sclass
  */
-#define chSemWaitS(sp) chSemWaitTimeoutS(sp, TIME_INFINITE)
+#define chSemWaitS(sp) chSemWaitTimeoutS((sp), TIME_INFINITE)
 
 /**
  * @brief   Returns the semaphore counter current value.
@@ -805,8 +815,9 @@ typedef struct {
  */
 #if !defined(chDbgAssert)
 #define chDbgAssert(c, r) do {                                              \
-  if (NIL_CFG_ENABLE_ASSERTS && !(c))                                       \
+  if (NIL_CFG_ENABLE_ASSERTS && !(c)) {                                     \
     chSysHalt(__func__);                                                    \
+  }                                                                         \
 } while (0)
 #endif /* !defined(chDbgAssert) */
 /** @} */

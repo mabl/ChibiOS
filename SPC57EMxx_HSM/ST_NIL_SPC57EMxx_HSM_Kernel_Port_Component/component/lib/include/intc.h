@@ -8,6 +8,9 @@
     for use in SPC5xx micro controllers embedded firmware.
 */
 
+ /* parasoft suppress item MISRA2012-DIR-4_9 "MACRO are used to define
+    peripheral register addresses with best performances" */
+
 /**
  * @file    SPC57EMxx_HSM/intc.h
  * @brief   SPC57EMxx_HSM INTC module header.
