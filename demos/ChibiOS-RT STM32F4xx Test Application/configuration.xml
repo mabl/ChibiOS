@@ -35,7 +35,7 @@
           <application_name>
             <value>out</value>
           </application_name>
-          <compiler_variant index="0">
+          <compiler_variant disabled="true" index="0">
             <value>arm-none-eabi-</value>
           </compiler_variant>
           <optimization_level index="3">
@@ -128,9 +128,6 @@
           <use_memory_core_allocator>
             <value>true</value>
           </use_memory_core_allocator>
-          <use_heap_allocator>
-            <value>true</value>
-          </use_heap_allocator>
           <use_heap_allocator>
             <value>true</value>
           </use_heap_allocator>
@@ -406,7 +403,7 @@
           <adc3_stream_priority index="2">
             <value>Medium-High</value>
           </adc3_stream_priority>
-          <adc_dmas_error_hook>
+          <adc_dmas_error_hook disabled="true">
             <value>chSysHalt()</value>
           </adc_dmas_error_hook>
           <i2c1_rx_stream index="0">
@@ -445,7 +442,7 @@
           <sdio_stream_priority index="3">
             <value>Highest</value>
           </sdio_stream_priority>
-          <sdio_dmas_error_hook>
+          <sdio_dmas_error_hook disabled="true">
             <value>chSysHalt()</value>
           </sdio_dmas_error_hook>
           <spi1_rx_stream index="0">

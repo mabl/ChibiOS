@@ -1046,7 +1046,54 @@
               <value>chSysHalt()</value>
             </clock_failure_hook>
           </clocks>
+          <clock_points>
+            <xosc disabled="true">
+              <value>40000000</value>
+            </xosc>
+            <irc disabled="true">
+              <value>16000000</value>
+            </irc>
+            <fmpll0_in disabled="true">
+              <value>8000000</value>
+            </fmpll0_in>
+            <fmpll0_vco disabled="true">
+              <value>256000000</value>
+            </fmpll0_vco>
+            <fmpll0_out disabled="true">
+              <value>64000000</value>
+            </fmpll0_out>
+            <fmpll1_in disabled="true">
+              <value>8000000</value>
+            </fmpll1_in>
+            <fmpll1_vco disabled="true">
+              <value>480000000</value>
+            </fmpll1_vco>
+            <fmpll1_out disabled="true">
+              <value>120000000</value>
+            </fmpll1_out>
+            <fmpll1_d1_out disabled="true">
+              <value>80000000</value>
+            </fmpll1_d1_out>
+            <clkout disabled="true">
+              <value>32000000</value>
+            </clkout>
+            <mc_pll disabled="true">
+              <value>60000000</value>
+            </mc_pll>
+            <fmpll1_div disabled="true">
+              <value>60000000</value>
+            </fmpll1_div>
+            <sp_pll disabled="true">
+              <value>60000000</value>
+            </sp_pll>
+            <fr_pll disabled="true">
+              <value>60000000</value>
+            </fr_pll>
+          </clock_points>
           <module_entry>
+            <final_run_mode index="1">
+              <value>RUN0</value>
+            </final_run_mode>
             <run_modes>
               <reset disabled="true">
                 <value>true</value>

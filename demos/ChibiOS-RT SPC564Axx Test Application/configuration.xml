@@ -84,22 +84,22 @@
           <can>
             <value>false</value>
           </can>
-          <ext>
+          <ext disabled="true">
             <value>false</value>
           </ext>
-          <gpt>
+          <gpt disabled="true">
             <value>false</value>
           </gpt>
-          <i2c>
+          <i2c disabled="true">
             <value>false</value>
           </i2c>
           <icu>
             <value>false</value>
           </icu>
-          <mac>
+          <mac disabled="true">
             <value>false</value>
           </mac>
-          <mmc_spi>
+          <mmc_spi disabled="true">
             <value>false</value>
           </mmc_spi>
           <pwm>
@@ -111,7 +111,7 @@
           <spi>
             <value>false</value>
           </spi>
-          <uart>
+          <uart disabled="true">
             <value>false</value>
           </uart>
         </enabled_drivers>
@@ -124,15 +124,15 @@
           </buffers_size>
         </serial_driver_settings>
         <adc_driver_settings>
-          <enable_synchronous_functions>
+          <enable_synchronous_functions disabled="true">
             <value>true</value>
           </enable_synchronous_functions>
-          <enable_mutual_exclusion_functions>
+          <enable_mutual_exclusion_functions disabled="true">
             <value>false</value>
           </enable_mutual_exclusion_functions>
         </adc_driver_settings>
         <can_driver_settings>
-          <enable_sleep_mode_functions>
+          <enable_sleep_mode_functions disabled="true">
             <value>true</value>
           </enable_sleep_mode_functions>
         </can_driver_settings>
@@ -152,10 +152,10 @@
           </nice_waiting>
         </mmc_spi_driver_settings>
         <spi_driver_settings>
-          <enable_synchronous_functions>
+          <enable_synchronous_functions disabled="true">
             <value>true</value>
           </enable_synchronous_functions>
-          <enable_mutual_exclusion_functions>
+          <enable_mutual_exclusion_functions disabled="true">
             <value>false</value>
           </enable_mutual_exclusion_functions>
         </spi_driver_settings>
@@ -197,31 +197,31 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa index="0">
+                <pa disabled="true" index="0">
                   <value>GPIO Mode</value>
                 </pa>
-                <obe>
+                <obe disabled="true">
                   <value>false</value>
                 </obe>
-                <ibe>
+                <ibe disabled="true">
                   <value>false</value>
                 </ibe>
-                <hys>
+                <hys disabled="true">
                   <value>false</value>
                 </hys>
-                <dsc index="0">
+                <dsc disabled="true" index="0">
                   <value>Drive 10pF</value>
                 </dsc>
-                <ode index="0">
+                <ode disabled="true" index="0">
                   <value>Push-Pull</value>
                 </ode>
-                <src index="0">
+                <src disabled="true" index="0">
                   <value>Minimum</value>
                 </src>
-                <wpe index="0">
+                <wpe disabled="true" index="0">
                   <value>Disabled</value>
                 </wpe>
-                <wps index="0">
+                <wps disabled="true" index="0">
                   <value>Pull-Down</value>
                 </wps>
               </advanced>
@@ -247,31 +247,31 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa index="0">
+                <pa disabled="true" index="0">
                   <value>GPIO Mode</value>
                 </pa>
-                <obe>
+                <obe disabled="true">
                   <value>false</value>
                 </obe>
-                <ibe>
+                <ibe disabled="true">
                   <value>false</value>
                 </ibe>
-                <hys>
+                <hys disabled="true">
                   <value>false</value>
                 </hys>
-                <dsc index="0">
+                <dsc disabled="true" index="0">
                   <value>Drive 10pF</value>
                 </dsc>
-                <ode index="0">
+                <ode disabled="true" index="0">
                   <value>Push-Pull</value>
                 </ode>
-                <src index="0">
+                <src disabled="true" index="0">
                   <value>Minimum</value>
                 </src>
-                <wpe index="0">
+                <wpe disabled="true" index="0">
                   <value>Disabled</value>
                 </wpe>
-                <wps index="0">
+                <wps disabled="true" index="0">
                   <value>Pull-Down</value>
                 </wps>
               </advanced>
@@ -297,31 +297,31 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa index="0">
+                <pa disabled="true" index="0">
                   <value>GPIO Mode</value>
                 </pa>
-                <obe>
+                <obe disabled="true">
                   <value>false</value>
                 </obe>
-                <ibe>
+                <ibe disabled="true">
                   <value>false</value>
                 </ibe>
-                <hys>
+                <hys disabled="true">
                   <value>false</value>
                 </hys>
-                <dsc index="0">
+                <dsc disabled="true" index="0">
                   <value>Drive 10pF</value>
                 </dsc>
-                <ode index="0">
+                <ode disabled="true" index="0">
                   <value>Push-Pull</value>
                 </ode>
-                <src index="0">
+                <src disabled="true" index="0">
                   <value>Minimum</value>
                 </src>
-                <wpe index="0">
+                <wpe disabled="true" index="0">
                   <value>Disabled</value>
                 </wpe>
-                <wps index="0">
+                <wps disabled="true" index="0">
                   <value>Pull-Down</value>
                 </wps>
               </advanced>
@@ -347,31 +347,31 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa index="0">
+                <pa disabled="true" index="0">
                   <value>GPIO Mode</value>
                 </pa>
-                <obe>
+                <obe disabled="true">
                   <value>false</value>
                 </obe>
-                <ibe>
+                <ibe disabled="true">
                   <value>false</value>
                 </ibe>
-                <hys>
+                <hys disabled="true">
                   <value>false</value>
                 </hys>
-                <dsc index="0">
+                <dsc disabled="true" index="0">
                   <value>Drive 10pF</value>
                 </dsc>
-                <ode index="0">
+                <ode disabled="true" index="0">
                   <value>Push-Pull</value>
                 </ode>
-                <src index="0">
+                <src disabled="true" index="0">
                   <value>Minimum</value>
                 </src>
-                <wpe index="0">
+                <wpe disabled="true" index="0">
                   <value>Disabled</value>
                 </wpe>
-                <wps index="0">
+                <wps disabled="true" index="0">
                   <value>Pull-Down</value>
                 </wps>
               </advanced>
@@ -397,31 +397,31 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa index="0">
+                <pa disabled="true" index="0">
                   <value>GPIO Mode</value>
                 </pa>
-                <obe>
+                <obe disabled="true">
                   <value>false</value>
                 </obe>
-                <ibe>
+                <ibe disabled="true">
                   <value>false</value>
                 </ibe>
-                <hys>
+                <hys disabled="true">
                   <value>false</value>
                 </hys>
-                <dsc index="0">
+                <dsc disabled="true" index="0">
                   <value>Drive 10pF</value>
                 </dsc>
-                <ode index="0">
+                <ode disabled="true" index="0">
                   <value>Push-Pull</value>
                 </ode>
-                <src index="0">
+                <src disabled="true" index="0">
                   <value>Minimum</value>
                 </src>
-                <wpe index="0">
+                <wpe disabled="true" index="0">
                   <value>Disabled</value>
                 </wpe>
-                <wps index="0">
+                <wps disabled="true" index="0">
                   <value>Pull-Down</value>
                 </wps>
               </advanced>
@@ -447,31 +447,31 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa index="0">
+                <pa disabled="true" index="0">
                   <value>GPIO Mode</value>
                 </pa>
-                <obe>
+                <obe disabled="true">
                   <value>false</value>
                 </obe>
-                <ibe>
+                <ibe disabled="true">
                   <value>false</value>
                 </ibe>
-                <hys>
+                <hys disabled="true">
                   <value>false</value>
                 </hys>
-                <dsc index="0">
+                <dsc disabled="true" index="0">
                   <value>Drive 10pF</value>
                 </dsc>
-                <ode index="0">
+                <ode disabled="true" index="0">
                   <value>Push-Pull</value>
                 </ode>
-                <src index="0">
+                <src disabled="true" index="0">
                   <value>Minimum</value>
                 </src>
-                <wpe index="0">
+                <wpe disabled="true" index="0">
                   <value>Disabled</value>
                 </wpe>
-                <wps index="0">
+                <wps disabled="true" index="0">
                   <value>Pull-Down</value>
                 </wps>
               </advanced>
@@ -497,31 +497,31 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa index="0">
+                <pa disabled="true" index="0">
                   <value>GPIO Mode</value>
                 </pa>
-                <obe>
+                <obe disabled="true">
                   <value>false</value>
                 </obe>
-                <ibe>
+                <ibe disabled="true">
                   <value>false</value>
                 </ibe>
-                <hys>
+                <hys disabled="true">
                   <value>false</value>
                 </hys>
-                <dsc index="0">
+                <dsc disabled="true" index="0">
                   <value>Drive 10pF</value>
                 </dsc>
-                <ode index="0">
+                <ode disabled="true" index="0">
                   <value>Push-Pull</value>
                 </ode>
-                <src index="0">
+                <src disabled="true" index="0">
                   <value>Minimum</value>
                 </src>
-                <wpe index="0">
+                <wpe disabled="true" index="0">
                   <value>Disabled</value>
                 </wpe>
-                <wps index="0">
+                <wps disabled="true" index="0">
                   <value>Pull-Down</value>
                 </wps>
               </advanced>
@@ -547,31 +547,31 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa index="0">
+                <pa disabled="true" index="0">
                   <value>GPIO Mode</value>
                 </pa>
-                <obe>
+                <obe disabled="true">
                   <value>false</value>
                 </obe>
-                <ibe>
+                <ibe disabled="true">
                   <value>false</value>
                 </ibe>
-                <hys>
+                <hys disabled="true">
                   <value>false</value>
                 </hys>
-                <dsc index="0">
+                <dsc disabled="true" index="0">
                   <value>Drive 10pF</value>
                 </dsc>
-                <ode index="0">
+                <ode disabled="true" index="0">
                   <value>Push-Pull</value>
                 </ode>
-                <src index="0">
+                <src disabled="true" index="0">
                   <value>Minimum</value>
                 </src>
-                <wpe index="0">
+                <wpe disabled="true" index="0">
                   <value>Disabled</value>
                 </wpe>
-                <wps index="0">
+                <wps disabled="true" index="0">
                   <value>Pull-Down</value>
                 </wps>
               </advanced>
@@ -597,31 +597,31 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa index="0">
+                <pa disabled="true" index="0">
                   <value>GPIO Mode</value>
                 </pa>
-                <obe>
+                <obe disabled="true">
                   <value>false</value>
                 </obe>
-                <ibe>
+                <ibe disabled="true">
                   <value>false</value>
                 </ibe>
-                <hys>
+                <hys disabled="true">
                   <value>false</value>
                 </hys>
-                <dsc index="0">
+                <dsc disabled="true" index="0">
                   <value>Drive 10pF</value>
                 </dsc>
-                <ode index="0">
+                <ode disabled="true" index="0">
                   <value>Push-Pull</value>
                 </ode>
-                <src index="0">
+                <src disabled="true" index="0">
                   <value>Minimum</value>
                 </src>
-                <wpe index="0">
+                <wpe disabled="true" index="0">
                   <value>Disabled</value>
                 </wpe>
-                <wps index="0">
+                <wps disabled="true" index="0">
                   <value>Pull-Down</value>
                 </wps>
               </advanced>
@@ -647,31 +647,31 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa index="0">
+                <pa disabled="true" index="0">
                   <value>GPIO Mode</value>
                 </pa>
-                <obe>
+                <obe disabled="true">
                   <value>false</value>
                 </obe>
-                <ibe>
+                <ibe disabled="true">
                   <value>false</value>
                 </ibe>
-                <hys>
+                <hys disabled="true">
                   <value>false</value>
                 </hys>
-                <dsc index="0">
+                <dsc disabled="true" index="0">
                   <value>Drive 10pF</value>
                 </dsc>
-                <ode index="0">
+                <ode disabled="true" index="0">
                   <value>Push-Pull</value>
                 </ode>
-                <src index="0">
+                <src disabled="true" index="0">
                   <value>Minimum</value>
                 </src>
-                <wpe index="0">
+                <wpe disabled="true" index="0">
                   <value>Disabled</value>
                 </wpe>
-                <wps index="0">
+                <wps disabled="true" index="0">
                   <value>Pull-Down</value>
                 </wps>
               </advanced>
@@ -1301,6 +1301,14 @@
           </flexcan_enable_filters>
           <can_configurations>
             <configs />
+            <mailboxes_configuration>
+              <number_of_tx_mailboxes>
+                <value>24</value>
+              </number_of_tx_mailboxes>
+              <number_of_rx_mailboxes>
+                <value>8</value>
+              </number_of_rx_mailboxes>
+            </mailboxes_configuration>
           </can_configurations>
         </flexcan_settings>
       </instance>
