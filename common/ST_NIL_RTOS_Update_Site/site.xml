@@ -6,6 +6,9 @@
    <feature url="features/com.st.spc5.components.nil.rtos.spc57emxx_hsm.stonly.feature_1.0.0.qualifier.jar" id="com.st.spc5.components.nil.rtos.spc57emxx_hsm.stonly.feature" version="1.0.0.qualifier">
       <category name="ST_NIL_RTOS"/>
    </feature>
+   <feature url="features/com.st.spc5.components.nil.rtos.spc58nexx_hsm.stonly.feature_1.0.0.qualifier.jar" id="com.st.spc5.components.nil.rtos.spc58nexx_hsm.stonly.feature" version="1.0.0.qualifier">
+      <category name="ST_NIL_RTOS"/>
+   </feature>
    <category-def name="ST_NIL_RTOS" label="ST_NIL_RTOS">
       <description>
          ST_NIL_RTOS components and plugins.

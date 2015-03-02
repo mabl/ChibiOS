@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.st.spc5.components.nil.rtos.spc58nexx_hsm.stonly.feature"
+      label="ST NIL RTOS for SPC58NExx HSM Components"
+      version="1.0.0.qualifier"
+      provider-name="www.chibios.org"
+      plugin="com.st.spc5.components.nil.rtos.branding"
+      exclusive="true">
+
+   <description>
+      ST NIL RTOS for SPC58NExx HSM Components.
+   </description>
+
+   <copyright url="http://www.chibios.org/dokuwiki/doku.php?id=chibios:copyright">
+      ChibiOS/NIL RTOS - Copyright (C) 2013...2015 Giovanni Di Sirio.
+   </copyright>
+
+   <license url="http://www.chibios.org/dokuwiki/doku.php?id=chibios:license">
+      A limited, non exclusive, license has been granted to STMicroelectronics for use in SPC5xx micro controllers embedded firmware.
+   </license>
+
+   <url>
+      <update label="ST NIL RTOS Eclipse Update Site" url="http://www.chibios.org/eclipse/SPC5-NIL-ST"/>
+   </url>
+
+   <requires>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="com.st.tools.spc5" version="1.0.0" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="com.st.spc5.components.nil.rtos.branding"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.st.spc5.components.nil.kernel.port.gcc.spc58nexx_hsm.stonly"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="com.st.spc5.components.nil.rtos.spc58nexx_hsm.stonly"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="com.st.spc5.components.nil.kernel.stonly"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+   <plugin
+         id="com.st.spc5.components.hal.osal.nil.stonly"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+</feature>
