@@ -6,6 +6,10 @@ Bundle-Version: 1.0.0.qualifier
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
  com.st.tools.spc5;bundle-version="1.0.0",
+ org.chibios.spc5.components.spc5hal;bundle-version="1.0.0",
+ org.chibios.spc5.components.hal.board.spc57emxx.z0;bundle-version="1.0.0",
+ org.chibios.spc5.components.hal.platform.spc57emxx.z0;bundle-version="1.0.0",
+ com.st.spc5.components.hal.osal.nil.stonly;bundle-version="1.0.0",
  com.st.spc5.components.nil.kernel.stonly;bundle-version="1.0.0",
  com.st.spc5.components.nil.kernel.port.gcc.spc57emxx_hsm.stonly;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
