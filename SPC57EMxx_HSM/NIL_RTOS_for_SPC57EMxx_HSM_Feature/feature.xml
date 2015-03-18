@@ -2,7 +2,7 @@
 <feature
       id="org.chibios.spc5.components.nil.rtos.spc57emxx_hsm.feature"
       label="NIL RTOS for SPC57EMxx HSM Components"
-      version="1.0.0.qualifier"
+      version="1.2.0.qualifier"
       provider-name="www.chibios.org"
       plugin="org.chibios.spc5.branding"
       exclusive="true">

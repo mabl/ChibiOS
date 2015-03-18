@@ -3,10 +3,13 @@
    <description name="NIL RTOS Eclipse Update Site" url="http://www.chibios.org/eclipse/SPC5-NIL">
       NIL RTOS Eclipse Update Site.
    </description>
-   <feature url="features/org.chibios.spc5.components.nil.rtos.spc560dxx.feature_1.0.0.qualifier.jar" id="org.chibios.spc5.components.nil.rtos.spc560dxx.feature" version="1.0.0.qualifier">
+   <feature url="features/org.chibios.spc5.components.nil.rtos.spc560dxx.feature_1.2.0.qualifier.jar" id="org.chibios.spc5.components.nil.rtos.spc560dxx.feature" version="1.2.0.qualifier">
       <category name="NIL_RTOS"/>
    </feature>
-   <feature url="features/org.chibios.spc5.components.nil.rtos.spc57emxx_hsm.feature_1.0.0.qualifier.jar" id="org.chibios.spc5.components.nil.rtos.spc57emxx_hsm.feature" version="1.0.0.qualifier">
+   <feature url="features/org.chibios.spc5.components.nil.rtos.spc560bxx.feature_1.2.0.qualifier.jar" id="org.chibios.spc5.components.nil.rtos.spc560bxx.feature" version="1.2.0.qualifier">
+      <category name="NIL_RTOS"/>
+   </feature>
+   <feature url="features/org.chibios.spc5.components.nil.rtos.spc57emxx_hsm.feature_1.2.0.qualifier.jar" id="org.chibios.spc5.components.nil.rtos.spc57emxx_hsm.feature" version="1.2.0.qualifier">
       <category name="NIL_RTOS"/>
    </feature>
    <category-def name="NIL_RTOS" label="NIL_RTOS">
