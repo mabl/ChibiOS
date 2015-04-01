@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: SPC5 Application Repository
+Bundle-SymbolicName: org.chibios.spc5.components.demos.stm32f4xx;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: .
+Bundle-Vendor: STMicroelectronics
+Bundle-ActivationPolicy: lazy

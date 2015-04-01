@@ -1,0 +1,1603 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+  <extension point="com.st.tools.spc5.appbundle">
+    <application name="ChibiOS-RT SPC560BCxx Test Application">
+      <description>Test application for the SPC560B/Cxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560BCXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560B50L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="ChibiOS/RT" />
+      </category>
+    </application>
+    <application name="ChibiOS-RT SPC560Bxx Test Application">
+      <description>Test application for the SPC560Bxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560BXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560B64L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="ChibiOS/RT" />
+      </category>
+    </application>
+    <application name="ChibiOS-RT SPC560Bxx Test Application for Discovery">
+      <description>Test application for the SPC560Bxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56B_DISCOVERY" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560B54L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="ChibiOS/RT" />
+      </category>
+    </application>
+    <application name="ChibiOS-RT SPC560Dxx ADC Test Application for Discovery">
+      <description>Test application for the SPC560Dxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56D_DISCOVERY" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560D40L1" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="ADC" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="ChibiOS/RT" />
+      </category>
+    </application>
+    <application name="ChibiOS-RT SPC560Dxx Test Application">
+      <description>Test application for the SPC560Dxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560DXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560D40L3" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="ChibiOS/RT" />
+      </category>
+    </application>
+    <application name="ChibiOS-RT SPC560Dxx Test Application for Discovery">
+      <description>Test application for the SPC560Dxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56D_DISCOVERY" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560D40L1" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="ChibiOS/RT" />
+      </category>
+    </application>
+    <application name="ChibiOS-RT SPC560Pxx Test Application">
+      <description>Test application for the SPC560Pxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560PXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560P50L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="ChibiOS/RT" />
+      </category>
+    </application>
+    <application name="ChibiOS-RT SPC560Pxx Test Application for Discovery">
+      <description>Test application for the SPC560Pxx created using the SPC5's Application Wizard</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56P_DISCOVERY" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560P50L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="ChibiOS/RT" />
+      </category>
+    </application>
+    <application name="ChibiOS-RT SPC563Mxx Test Application">
+      <description>Test application for the SPC563Mxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC563MXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC563M64L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="ChibiOS/RT" />
+      </category>
+    </application>
+    <application name="ChibiOS-RT SPC563Mxx eQADC Example">
+      <description>This application shows how to use the eQADC unit found on the SPC563Mxx platform.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC563MXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC563M64L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="ADC" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="ChibiOS/RT" />
+      </category>
+    </application>
+    <application name="ChibiOS-RT SPC564Axx Test Application">
+      <description>Test application for the SPC564Axx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC564AXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC564A70L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="ChibiOS/RT" />
+      </category>
+    </application>
+    <application name="ChibiOS-RT SPC564Axx eQADC Example">
+      <description>This application shows how to use the eQADC unit found on the SPC564Axx platform.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC564AXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC564A70L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="ADC" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="ChibiOS/RT" />
+      </category>
+    </application>
+    <application name="ChibiOS-RT SPC56ECxx Test Application">
+      <description>Test application for the SPC56E/Cxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56ECXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC56EC74L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="ChibiOS/RT" />
+      </category>
+    </application>
+    <application name="ChibiOS-RT SPC56ELxx Test Application">
+      <description>Test application for the SPC56ELxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56ELXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC56EL60L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="ChibiOS/RT" />
+      </category>
+    </application>
+    <application name="ChibiOS-RT SPC56ELxx Test Application for DiscoveryPlus">
+      <description>Test application for the SPC56ELxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56EL_DISCOVERY_PLUS" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC56EL70L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="ChibiOS/RT" />
+      </category>
+    </application>
+    <application name="NIL RTOS SPC560Bxx Test Application for Discovery">
+      <description>Test application for the SPC560Bxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56B_DISCOVERY" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560B54L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="NIL" />
+      </category>
+    </application>
+    <application name="NIL RTOS SPC560Dxx Test Application">
+      <description>Test application for the SPC560Dxx NIL RTOS using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560DXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560D40L3" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="NIL" />
+      </category>
+    </application>
+    <application name="NIL RTOS SPC560Dxx Test Application for Discovery">
+      <description>Test application for the SPC560Dxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56D_DISCOVERY" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560D40L1" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="NIL" />
+      </category>
+    </application>
+    <application name="SPC560BCxx OS-Less ADC Test Application">
+      <description>Test application for the SPC560Bxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560BCXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560B50L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="ADC" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560BCxx OS-Less CAN Test Application">
+      <description>Test application for the SPC560BCxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560BCXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560B50L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="CAN" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560BCxx OS-Less DSPI Example Application">
+      <description>Test application for the DSPI unit on the SPC560BCxx.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560BCXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560B50L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="SPI" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560BCxx OS-Less PWM-ICU Test Application">
+      <description>Test application for the SPC560BCxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560BCXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560B50L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="ICU" />
+        <metadata value="PWM" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560BCxx OS-Less Test Application">
+      <description>Test application for the SPC560BCxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560BCXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560B50L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Bxx OS-Less ADC Test Application">
+      <description>Test application for the SPC560Bxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560BXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560B64L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="ADC" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Bxx OS-Less CAN Test Application">
+      <description>Test application for the SPC560Bxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560BXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560B64L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="CAN" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Bxx OS-Less DSPI Example Application">
+      <description>Test application for the DSPI unit on the SPC560Bxx.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560BXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560B64L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="SPI" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Bxx OS-Less Flash Integration Test Application">
+      <description>Test application for the SPC560Bxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560BXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560B64L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Flash" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Bxx OS-Less PWM-ICU Test Application">
+      <description>Test application for the SPC560Bxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560BXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560B64L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="ICU" />
+        <metadata value="PWM" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Bxx OS-Less Test Application">
+      <description>Test application for the SPC560Bxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560BXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560B64L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Bxx OS-Less Test Application for Discovery">
+      <description>Test application for the SPC560Bxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56B_DISCOVERY" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560B54L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Dxx OS-Less ADC Test Application">
+      <description>Test application for the SPC560Dxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560DXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560D40L3" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="ADC" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Dxx OS-Less ADC Test Application for Discovery">
+      <description>Test application for the SPC560Dxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56D_DISCOVERY" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560D40L1" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="ADC" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Dxx OS-Less CAN Test Application">
+      <description>Test application for the SPC560Dxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560DXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560D40L3" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="CAN" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Dxx OS-Less CAN Test Application for Discovery">
+      <description>Test application for the SPC560Dxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56D_DISCOVERY" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560D40L1" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="CAN" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Dxx OS-Less DSPI Example Application">
+      <description>Test application for the DSPI unit on the SPC560Dxx.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560DXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560D40L3" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="SPI" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Dxx OS-Less DSPI Example Application for Discovery">
+      <description>Test application for the DSPI unit on the SPC560Dxx.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56D_DISCOVERY" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560D40L1" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="SPI" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Dxx OS-Less EIRQ Test Application for Discovery">
+      <description>Test application for External IRQ on the SPC560Dxx.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56D_DISCOVERY" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560D40L1" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Dxx OS-Less PWM-ICU Test Application">
+      <description>Test application for the SPC560Dxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560DXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560D40L3" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="ICU" />
+        <metadata value="PWM" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Dxx OS-Less PWM-ICU Test Application for Discovery">
+      <description>Test application for the SPC560Dxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56D_DISCOVERY" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560D40L1" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="ICU" />
+        <metadata value="PWM" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Dxx OS-Less Test Application">
+      <description>Test application for the SPC560Dxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560DXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560D40L3" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Dxx OS-Less Test Application for Discovery">
+      <description>Test application for the SPC560Dxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56D_DISCOVERY" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560D40L1" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Pxx OS-Less Test Application for Discovery">
+      <description>Test application for the SPC560Pxx created using the SPC5's Application Wizard</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56P_DISCOVERY" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560P50L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Pxx OS-Less ADC Test Application">
+      <description>Test application for the SPC560Pxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560PXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560P50L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="ADC" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Pxx OS-Less CAN Test Application">
+      <description>Test application for the SPC560Pxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560PXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560P50L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="CAN" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Pxx OS-Less DSPI Example Application">
+      <description>Test application for the DSPI unit on the SPC560Pxx.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560PXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560P50L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="SPI" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>   
+    <application name="SPC560Pxx OS-Less PWM-ICU Example Application">
+      <description>Test application for the FlexPWM and eTimer units on the SPC560Pxx.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560PXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560P50L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="ICU" />
+        <metadata value="PWM" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Pxx OS-Less PWM-ICU Example Application for Discovery">
+      <description>Test application for the FlexPWM and eTimer units on the SPC560Pxx.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56P_DISCOVERY" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560P50L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="ICU" />
+        <metadata value="PWM" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Pxx OS-Less Test Application">
+      <description>Test application for the SPC560Pxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC560PXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560P50L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Pxx OS-Less ADC Test Application for Discovery">
+      <description>Test application for the SPC560Pxx created using the SPC5's Application Wizard</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56P_DISCOVERY" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560P50L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="ADC" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Pxx OS-Less CAN Test Application for Discovery">
+      <description>Test application for the SPC560Pxx created using the SPC5's Application Wizard</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56P_DISCOVERY" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560P50L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="CAN" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC560Pxx OS-Less DSPI Example Application for Discovery">
+      <description>Test application for the SPC560Pxx created using the SPC5's Application Wizard</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56P_DISCOVERY" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560P50L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="SPI" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC563Mxx OS-Less CAN Test Application">
+      <description>Test application for the SPC563Mxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC563MXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC563M64L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="CAN" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC563Mxx OS-Less DSPI Example Application">
+      <description>Test application for the DSPI unit on the SPC563Mxx.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC563MXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC563M64L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="SPI" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC563Mxx OS-Less PWM-ICU Example Application">
+      <description>Test application for the FlexPWM and eTimer units on the SPC563Mxx.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC563MXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC563M64L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="ICU" />
+        <metadata value="PWM" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC563Mxx OS-Less Test Application">
+      <description>Test application for the SPC563Mxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC563MXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC563M64L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC563Mxx OS-Less eQADC Example Application">
+      <description>Test application for the eQADC unit on the SPC563Mxx.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC563MXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC563M64L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="ADC" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC564Axx OS-Less CAN Test Application">
+      <description>Test application for the SPC564Axx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC564AXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC564A70L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="CAN" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC564Axx OS-Less DSPI Example Application">
+      <description>Test application for the DSPI unit on the SPC564Axx.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC564AXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC564A70L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="SPI" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC564Axx OS-Less ICU-PWM Test Application">
+      <description>Test application for the SPC564Axx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC564AXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC564A70L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="ICU" />
+        <metadata value="PWM" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC564Axx OS-Less Test Application">
+      <description>Test application for the SPC564Axx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC564AXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC564A70L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC564Axx OS-Less eQADC Example Application">
+      <description>Test application for the eQADC unit on the SPC564Axx.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC564AXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC564A70L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="ADC" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC56ECxx OS-Less ADC Test Application">
+      <description>Test application for the SPC56ECxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56ECXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC56EC74L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="ADC" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC56ECxx OS-Less CAN Test Application">
+      <description>Test application for the SPC56ECxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56ECXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC56EC74L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="CAN" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC56ECxx OS-Less DSPI Example Application">
+      <description>Test application for the DSPI unit on the SPC56ECxx.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56ECXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC56EC74L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="SPI" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC56ECxx OS-Less PWM-ICU Test Application">
+      <description>Test application for the SPC56ECxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56ECXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC56EC74L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="ICU" />
+        <metadata value="PWM" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC56ECxx OS-Less Test Application">
+      <description>Test application for the SPC56ECxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56ECXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC56EC74L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC56ECxx OS-Less Z0 Slave Core Test Application">
+      <description>Test application for the SPC56ECxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56ECXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC56EC74L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC56ECxx OS-Less Z4 Master Core Test Application">
+      <description>Test application for the SPC56ECxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56ECXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC56EC74L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC56ELxx OS-Less ADC Test Application">
+      <description>Test application for the SPC56ELxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56ELXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC56EL60L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="ADC" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC56ELxx OS-Less CAN Test Application">
+      <description>Test application for the SPC56ELxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56ELXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC56EL60L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="CAN" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC56ELxx OS-Less DSPI Example Application">
+      <description>Test application for the DSPI unit on the SPC56ELxx.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56ELXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC56EL60L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="SPI" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC56ELxx OS-Less PWM-ICU Example Application">
+      <description>Test application for the FlexPWM and eTimer units on the SPC56ELxx.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56ELXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC56EL60L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="ICU" />
+        <metadata value="PWM" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC56ELxx OS-Less Test Application">
+      <description>Test application for the SPC56ELxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56ELXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC56EL60L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC56ELxx OS-Less Test Application for DiscoveryPlus">
+      <description>Test application for the SPC56ELxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56EL_DISCOVERY_PLUS" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC56EL60L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC56ELxx OS-Less ADC Test Application for DiscoveryPlus">
+      <description>Test application for the SPC56ELxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56EL_DISCOVERY_PLUS" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC56EL60L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="ADC" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC56ELxx OS-Less CAN Test Application for DiscoveryPlus">
+      <description>Test application for the SPC56ELxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56EL_DISCOVERY_PLUS" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC56EL60L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="CAN" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC56ELxx OS-Less DSPI Example Application for DiscoveryPlus">
+      <description>Test application for the DSPI unit on the SPC56ELxx.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56EL_DISCOVERY_PLUS" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC56EL60L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="SPI" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+    <application name="SPC56ELxx OS-Less PWM-ICU Example Application for DiscoveryPlus">
+      <description>Test application for the FlexPWM and eTimer units on the SPC560ELxx.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56EL_DISCOVERY_PLUS" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC56EL60L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="PWM" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="OSLess" />
+      </category>
+    </application>
+  </extension>
+</plugin>

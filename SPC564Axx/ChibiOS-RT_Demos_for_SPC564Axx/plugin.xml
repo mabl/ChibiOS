@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+  <extension point="com.st.tools.spc5.appbundle">
+    <application name="ChibiOS-RT SPC564Axx Test Application">
+      <description>Test application for the SPC564Axx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC564AXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC564A70L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="ChibiOS/RT" />
+      </category>
+    </application>
+    <application name="ChibiOS-RT SPC564Axx eQADC Example">
+      <description>This application shows how to use the eQADC unit found on the SPC564Axx platform.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC564AXX_EVB" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC564A70L7" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="ADC" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="ChibiOS/RT" />
+      </category>
+    </application>
+  </extension>
+</plugin>
