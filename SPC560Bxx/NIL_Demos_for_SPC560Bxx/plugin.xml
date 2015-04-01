@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+  <extension point="com.st.tools.spc5.appbundle">
+    <application name="NIL RTOS SPC560Bxx Test Application for Discovery">
+      <description>Test application for the SPC560Bxx created using the SPC5's Application Wizard.</description>
+      <category name="Board">
+        <description>Supported Board</description>
+        <metadata value="SPC56B_DISCOVERY" />
+      </category>
+      <category name="Device">
+        <description>Supported Device</description>
+        <metadata value="SPC560B54L5" />
+      </category>
+      <category name="Drivers">
+        <description>Enabled Drivers</description>
+        <metadata value="PAL" />
+        <metadata value="Serial" />
+      </category>
+      <category name="RTOS">
+        <description>Supported Operating System</description>
+        <metadata value="NIL" />
+      </category>
+    </application>
+  </extension>
+</plugin>
