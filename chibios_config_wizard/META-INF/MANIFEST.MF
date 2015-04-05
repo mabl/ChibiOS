@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ChibiOS Configuration Support
 Bundle-SymbolicName: org.chibios.tools.eclipse.config;singleton:=true
-Bundle-Version: 1.6.0.qualifier
+Bundle-Version: 1.6.1.qualifier
 Bundle-Activator: config_wizard.Activator
 Require-Bundle: org.eclipse.core.resources;bundle-version="3.7.101",
  org.eclipse.core.runtime;bundle-version="3.7.0",
@@ -10,8 +10,7 @@ Require-Bundle: org.eclipse.core.resources;bundle-version="3.7.101",
  org.eclipse.ui.console;bundle-version="3.5.100",
  org.eclipse.ui.ide;bundle-version="3.7.0",
  org.eclipse.cdt.core;bundle-version="5.3.2",
- org.eclipse.cdt.managedbuilder.core;bundle-version="8.0.2",
- org.eclipse.cdt.ui;bundle-version="5.3.2"
+ org.eclipse.cdt.managedbuilder.core;bundle-version="8.0.2"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-Vendor: chibios.org

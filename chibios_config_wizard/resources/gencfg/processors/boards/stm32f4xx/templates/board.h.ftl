@@ -59,7 +59,7 @@
 [/#if]
  */
 #if !defined(STM32_LSECLK)
-#define STM32_LSECLK                ${doc1.board.clocks.@LSEFrequency[0]}
+#define STM32_LSECLK                ${doc1.board.clocks.@LSEFrequency[0]}U
 #endif
 
 [#if doc1.board.clocks.@LSEBypass[0]?string == "true"]
@@ -67,7 +67,7 @@
 
 [/#if]
 #if !defined(STM32_HSECLK)
-#define STM32_HSECLK                ${doc1.board.clocks.@HSEFrequency[0]}
+#define STM32_HSECLK                ${doc1.board.clocks.@HSEFrequency[0]}U
 #endif
 
 [#if doc1.board.clocks.@HSEBypass[0]?string == "true"]
@@ -78,7 +78,7 @@
  * Board voltages.
  * Required for performance limits calculation.
  */
-#define STM32_VDD                   ${doc1.board.clocks.@VDD[0]}
+#define STM32_VDD                   ${doc1.board.clocks.@VDD[0]}U
 
 /*
  * MCU type as defined in the ST header.
@@ -96,7 +96,7 @@
     [#if name?length == 0]
       [#assign name = pin_name /]
     [/#if]
-#define ${(port_name + "_" + name)?right_pad(27, " ")} ${pin_index?string}
+#define ${(port_name + "_" + name)?right_pad(27, " ")} ${pin_index?string}U
   [/#list]
 
 [/#list]
@@ -105,22 +105,22 @@
  * in the initialization code.
  * Please refer to the STM32 Reference Manual for details.
  */
-#define PIN_MODE_INPUT(n)           (0U << ((n) * 2))
-#define PIN_MODE_OUTPUT(n)          (1U << ((n) * 2))
-#define PIN_MODE_ALTERNATE(n)       (2U << ((n) * 2))
-#define PIN_MODE_ANALOG(n)          (3U << ((n) * 2))
+#define PIN_MODE_INPUT(n)           (0U << ((n) * 2U))
+#define PIN_MODE_OUTPUT(n)          (1U << ((n) * 2U))
+#define PIN_MODE_ALTERNATE(n)       (2U << ((n) * 2U))
+#define PIN_MODE_ANALOG(n)          (3U << ((n) * 2U))
 #define PIN_ODR_LOW(n)              (0U << (n))
 #define PIN_ODR_HIGH(n)             (1U << (n))
 #define PIN_OTYPE_PUSHPULL(n)       (0U << (n))
 #define PIN_OTYPE_OPENDRAIN(n)      (1U << (n))
-#define PIN_OSPEED_2M(n)            (0U << ((n) * 2))
-#define PIN_OSPEED_25M(n)           (1U << ((n) * 2))
-#define PIN_OSPEED_50M(n)           (2U << ((n) * 2))
-#define PIN_OSPEED_100M(n)          (3U << ((n) * 2))
-#define PIN_PUPDR_FLOATING(n)       (0U << ((n) * 2))
-#define PIN_PUPDR_PULLUP(n)         (1U << ((n) * 2))
-#define PIN_PUPDR_PULLDOWN(n)       (2U << ((n) * 2))
-#define PIN_AFIO_AF(n, v)           ((v##U) << ((n % 8) * 4))
+#define PIN_OSPEED_2M(n)            (0U << ((n) * 2U))
+#define PIN_OSPEED_25M(n)           (1U << ((n) * 2U))
+#define PIN_OSPEED_50M(n)           (2U << ((n) * 2U))
+#define PIN_OSPEED_100M(n)          (3U << ((n) * 2U))
+#define PIN_PUPDR_FLOATING(n)       (0U << ((n) * 2U))
+#define PIN_PUPDR_PULLUP(n)         (1U << ((n) * 2U))
+#define PIN_PUPDR_PULLDOWN(n)       (2U << ((n) * 2U))
+#define PIN_AFIO_AF(n, v)           ((v) << (((n) % 8U) * 4U))
 
 [#list doc1.board.ports.* as port]
   [#assign port_name = port?node_name?upper_case /]

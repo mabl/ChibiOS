@@ -125,16 +125,27 @@
 
   <xs:complexType name="portsType">
     <xs:sequence>
-      <xs:element name="GPIOA" type="STM32GPIOv2PortType"
-        minOccurs="1" maxOccurs="1"></xs:element>
-      <xs:element name="GPIOB" type="STM32GPIOv2PortType"
-        minOccurs="1" maxOccurs="1"></xs:element>
-      <xs:element name="GPIOC" type="STM32GPIOv2PortType"
-        minOccurs="1" maxOccurs="1"></xs:element>
-      <xs:element name="GPIOD" type="STM32GPIOv2PortType"
-        maxOccurs="1" minOccurs="1"></xs:element>
-      <xs:element name="GPIOF" type="STM32GPIOv2PortType"
-        maxOccurs="1" minOccurs="1"></xs:element>
+    	<xs:element name="GPIOA" type="STM32GPIOv2PortType"
+    		minOccurs="1" maxOccurs="1">
+    	</xs:element>
+    	<xs:element name="GPIOB" type="STM32GPIOv2PortType"
+    		minOccurs="1" maxOccurs="1">
+    	</xs:element>
+    	<xs:element name="GPIOC" type="STM32GPIOv2PortType"
+    		minOccurs="1" maxOccurs="1">
+    	</xs:element>
+    	<xs:element name="GPIOD" type="STM32GPIOv2PortType"
+    		maxOccurs="1" minOccurs="1">
+    	</xs:element>
+    	<xs:element name="GPIOE" type="STM32GPIOv2PortType"
+    		maxOccurs="1" minOccurs="1">
+    	</xs:element>
+	   	<xs:element name="GPIOF" type="STM32GPIOv2PortType"
+    		maxOccurs="1" minOccurs="1">
+    	</xs:element>
+
+
+
     </xs:sequence>
   </xs:complexType>
 
