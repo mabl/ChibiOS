@@ -62,7 +62,7 @@ void osalThreadDequeueNextI(threads_queue_t *tqp, msg_t msg) {
 
         chDbgAssert(NIL_THD_IS_WTSEM(tr), "not waiting");
 
-        chSchReadyI(tr, msg);
+        (void)chSchReadyI(tr, msg);
         return;
       }
       tr++;
@@ -96,7 +96,7 @@ void osalThreadDequeueAllI(threads_queue_t *tqp, msg_t msg) {
       chDbgAssert(NIL_THD_IS_WTSEM(tr), "not waiting");
 
       cnt++;
-      chSchReadyI(tr, msg);
+      (void)chSchReadyI(tr, msg);
     }
     tr++;
 

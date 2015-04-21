@@ -240,7 +240,7 @@ typedef struct {
  *
  * @api
  */
-#define osalDbgAssert(c, remark) chDbgAssert(c, remark)
+#define osalDbgAssert(c, remark) chDbgAssert((c), (remark))
 
 /**
  * @brief   Function parameters check.
@@ -252,7 +252,7 @@ typedef struct {
  *
  * @api
  */
-#define osalDbgCheck(c) chDbgAssert(c, "parameter check")
+#define osalDbgCheck(c) chDbgAssert((c), "parameter check")
 
 /**
  * @brief   I-Class state check.
@@ -585,7 +585,7 @@ static inline bool osalOsIsTimeWithinX(systime_t time,
  */
 static inline void osalThreadSleepS(systime_t time) {
 
-  chThdSleepS(time);
+  (void)chThdSleepS(time);
 }
 
 /**
@@ -602,7 +602,7 @@ static inline void osalThreadSleepS(systime_t time) {
  */
 static inline void osalThreadSleep(systime_t time) {
 
-  chThdSleep(time);
+  (void)chThdSleep(time);
 }
 
 /**
@@ -747,8 +747,9 @@ static inline void osalEventBroadcastFlagsI(event_source_t *esp,
   osalDbgCheck(esp != NULL);
 
   esp->flags |= flags;
-  if (esp->cb != NULL)
+  if (esp->cb != NULL) {
     esp->cb(esp);
+  }
 }
 
 /**
@@ -816,7 +817,7 @@ static inline void osalMutexObjectInit(mutex_t *mp) {
  */
 static inline void osalMutexLock(mutex_t *mp) {
 
-  chSemWait((semaphore_t *)mp);
+  (void)chSemWait((semaphore_t *)mp);
 }
 
 /**
