@@ -117,7 +117,7 @@ OSAL_IRQ_HANDLER(name) {
                         brief="Comma separated list of headers to be included in the ISRs module other than components.h."
                         editable="true"
                         name="Headers"
-                        regex="^([a-zA-Z_]([a-zA-Z0-9_\-/]*(|\.h,[a-zA-Z_]))*\.h)*$"
+                        regex="^$|^([a-zA-Z_]([a-zA-Z0-9_\-/]*\.h[a-zA-Z_]*))|^(([a-zA-Z_]([a-zA-Z0-9_\-/]*\.h[a-zA-Z_]*),)+([a-zA-Z_]([a-zA-Z0-9_\-/]*\.h[a-zA-Z_]*)))$"
                         required="false"
                         type="string">
                   </property>
