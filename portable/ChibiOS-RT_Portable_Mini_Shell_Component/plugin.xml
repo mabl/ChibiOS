@@ -32,6 +32,11 @@
                   </text>
                </image>
             </configuration>
+            <requiredFeatures>
+               <requiredFeature
+                     id="org.chibios.spc5.features.kernel">
+               </requiredFeature>
+            </requiredFeatures>
       </component>
    </extension>
 
