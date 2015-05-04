@@ -31,6 +31,10 @@
 #ifndef _NIL_H_
 #define _NIL_H_
 
+/**
+ * @brief   Type of a structure representing a thread.
+ * @note    It is required as an early definition.
+ */
 typedef struct nil_thread thread_t;
 
 #include "nilconf.h"
@@ -300,11 +304,6 @@ typedef void (*tfunc_t)(void *);
  * @brief   Type of a structure representing a thread static configuration.
  */
 typedef struct nil_thread_cfg thread_config_t;
-
-/**
- * @brief   Type of a structure representing a thread.
- */
-typedef struct nil_thread thread_t;
 
 /**
  * @brief   Structure representing a thread static configuration.
