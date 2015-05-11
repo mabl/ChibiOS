@@ -5,16 +5,27 @@
       version="1.0.0.qualifier"
       provider-name="ST Microelectronics">
 
-   <description url="http://www.example.com/description">
-      [Enter Feature Description here.]
+   <description>
+      NIL RTOS for SPC560xx Components.
    </description>
 
-   <copyright url="http://www.example.com/copyright">
-      [Enter Copyright Description here.]
+   <copyright url="http://www.chibios.org/dokuwiki/doku.php?id=chibios:copyright">
+      NIL RTOS - Copyright (C) 2013...2015 Giovanni Di Sirio.
    </copyright>
 
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
+   <license url="http://www.chibios.org/dokuwiki/doku.php?id=chibios:license">
+      NIL RTOS is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
+
+NIL RTOS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;
    </license>
 
    <includes
