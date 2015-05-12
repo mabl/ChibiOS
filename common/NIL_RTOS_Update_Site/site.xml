@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <description name="NIL RTOS Eclipse Update Site" url="http://www.chibios.org/eclipse/SPC5-NIL">
+   <description name="NIL RTOS Eclipse Update Site">
       NIL RTOS Eclipse Update Site.
    </description>
    <feature url="features/org.chibios.spc5.components.nil.rtos.spc560dxx.feature_1.2.0.qualifier.jar" id="org.chibios.spc5.components.nil.rtos.spc560dxx.feature" version="1.2.0.qualifier">
