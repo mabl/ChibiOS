@@ -1,0 +1,45 @@
+  digraph example {
+    ranksep=0.2;
+
+    node [shape=rect, fontname=Sans Serif, fontsize=8, fixedsize="true", width="1.2", height="0.3"];
+    edge [fontname=Sans, fontsize=8, ranksep=0.3];
+
+    startup [label="Startup Code", penwidth=2.0];
+    startup -> hw [label=" Reset", style="dotted", dir="back"];
+    startup -> application;
+
+    application [label="Application", width="2.0", height="0.3"];
+
+    application -> rtos[label="\n API"];
+    application -> hal_hld [label="\n API"];
+    application -> osal [label="\n API"];
+
+    subgraph cluster_0 {
+      fontname = "Sans Bold";
+      fontsize = 12;
+      label = "HAL";
+      color = blue;
+      penwidth = 2.0;
+
+      hal_hld [label="HAL API Layer"];
+      hal_board [label="HAL Board Layer"];
+      hal_lld [label="HAL Port Layer"];
+    }
+
+    hal_hld -> hal_lld;
+    hal_lld -> hal_board;
+    hal_hld -> osal;
+    hal_lld -> osal;
+    hal_board -> osal;
+
+    osal [label="OSAL"];
+
+    rtos [label="RTOS\nNIL, RT or Other", height="0.5"];
+    rtos -> hw;
+
+    hal_lld -> hw;
+    hal_board -> hw;
+    osal -> rtos;
+
+    hw [label="Hardware", width="2.0", height="0.3", style=filled, fillcolor=lightgray];
+  }
