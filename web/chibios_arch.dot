@@ -12,6 +12,7 @@
 
     application -> rtos[label="\n API"];
     application -> hal_hld [label="\n API"];
+    application -> hal_complex [label="\n API"];
     application -> osal [label="\n API"];
 
     subgraph cluster_0 {
@@ -21,20 +22,22 @@
       color = blue;
       penwidth = 2.0;
 
-      hal_hld [label="HAL API Layer"];
-      hal_board [label="HAL Board Layer"];
-      hal_lld [label="HAL Port Layer"];
+      hal_complex [label="Complex Drivers"];
+      hal_hld [label="Device Drivers"];
+      hal_lld [label="Low Level Drivers"];
+      hal_board [label="Board Initialization"];
     }
 
+    hal_complex -> hal_hld;
     hal_hld -> hal_lld;
     hal_lld -> hal_board;
     hal_hld -> osal;
     hal_lld -> osal;
     hal_board -> osal;
 
-    osal [label="OSAL"];
+    osal [label="OSAL", penwidth=2.0, color="blue"];
 
-    rtos [label="RTOS\nNIL, RT or Other", height="0.5"];
+    rtos [label="RTOS\nNIL, RT or Others", height="0.5", penwidth=2.0, color="blue"];
     rtos -> hw;
 
     hal_lld -> hw;
