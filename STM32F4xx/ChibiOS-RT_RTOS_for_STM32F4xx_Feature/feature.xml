@@ -95,4 +95,11 @@ along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
          install-size="0"
          version="0.0.0"/>
 
+   <plugin
+         id="org.chibios.spc5.components.demos.stm32f4xx"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>

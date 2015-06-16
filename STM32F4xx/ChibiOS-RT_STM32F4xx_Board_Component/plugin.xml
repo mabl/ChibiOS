@@ -296,5 +296,55 @@
             </exportedFeatures>
       </component>
    </extension>
+   <extension
+         point="com.st.tools.spc5.resources">
+      <resources
+            type="com.st.tools.spc5.lines.resource">
+         <resource
+               id="LINE_STM32"
+               name="STM32-Line"
+               rsc="rsc/stm32_01.png">
+         </resource>
+      </resources>
+      <resources
+            type="com.st.tools.spc5.boards.resource">
+         <resource
+               id="STM32F4XX_NUCLEO"
+               name="NUCLEO Board with STM32FXX"
+               rsc="rsc/NUCLEO_STM32.png">
+            <property
+                  name="cpn"
+                  value="NUCLEO-F401RE">
+            </property>
+            <property
+                  name="line"
+                  value="LINE_STM32">
+            </property>
+            <property
+                  name="description"
+                  value="Daughter/Nucleo board for STM32 series devices">
+            </property>
+            <property
+                  name="link"
+                  value="http://www.st.com/web/catalog/tools/FM116/SC959/SS1675/PF253066">
+            </property>
+         </resource>
+      </resources>
+      <resources
+            type="com.st.tools.spc5.devices.resource">
+         <resource
+               id="STM32F401"
+               name="STM32F401">
+            <property
+                  name="line"
+                  value="LINE_STM32">
+            </property>
+            <property
+                  name="board"
+                  value="STM32F4XX_NUCLEO">
+            </property>
+         </resource>
+      </resources>
+   </extension>
 
 </plugin>
