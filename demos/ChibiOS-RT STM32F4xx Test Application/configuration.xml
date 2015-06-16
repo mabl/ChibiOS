@@ -188,7 +188,7 @@
           </system_halt_hook>
         </hooks>
       </instance>
-      <instance locked="false" id="org.chibios.spc5.components.kernel.port.gcc.armcmx.stm32f4xx" />
+      <instance locked="false" id="org.chibios.spc5.components.kernel.port.gcc.stm32f4xx" />
       <instance locked="false" id="org.chibios.spc5.components.external.cmsis" />
       <instance locked="false" id="org.chibios.spc5.components.hal">
         <enabled_drivers>
