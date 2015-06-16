@@ -57,7 +57,7 @@
             <value>yes</value>
           </use_linker_gc>
           <use_verbose_compile index="0">
-            <value>yes</value>
+            <value>no</value>
           </use_verbose_compile>
         </build_settings>
       </instance>
