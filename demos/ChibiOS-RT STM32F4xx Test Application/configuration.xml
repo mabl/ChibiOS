@@ -56,8 +56,8 @@
           <use_linker_gc index="0">
             <value>yes</value>
           </use_linker_gc>
-          <use_verbose_compile index="1">
-            <value>no</value>
+          <use_verbose_compile index="0">
+            <value>yes</value>
           </use_verbose_compile>
         </build_settings>
       </instance>
@@ -300,7 +300,7 @@
           </enable_mutual_exclusion_functions>
         </spi_driver_settings>
       </instance>
-      <instance locked="false" id="org.chibios.spc5.components.hal.platform.stm32f4pxx">
+      <instance locked="false" id="org.chibios.spc5.components.hal.platform.stm32f4xx">
         <initialization_settings>
           <do_not_init>
             <value>false</value>
