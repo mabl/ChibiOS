@@ -3,7 +3,7 @@
 <plugin>
   <extension point="com.st.tools.spc5.appbundle">
   <application name="ChibiOS-RT STM32F4xx Test Application">
-      <description>Test application for the SPC56ELxx created using the SPC5's Application Wizard.</description>
+      <description>Test application for the STM32F4xx created using the SPC5's Application Wizard.</description>
       <category name="Board">
         <description>Supported Board</description>
         <metadata value="STM32F4XX_NUCLEO" />
