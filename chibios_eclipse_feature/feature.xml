@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.chibios.eclipse.tools.feature"
-      label="ChibiOS/RT Eclipse Tools"
-      version="1.0.0.qualifier"
+      label="ChibiOS Eclipse Tools"
+      version="2.0.0.qualifier"
       provider-name="www.chibios.org"
       plugin="org.chibios.chibistudio.branding"
       exclusive="true">
