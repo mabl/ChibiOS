@@ -38,8 +38,8 @@
  */
 #define BOARD_${doc1.board.board_id[0]}
 #define BOARD_NAME                  "${doc1.board.board_name[0]}"
-
 [#if doc1.board.ethernet_phy[0]??]
+
 /*
  * Ethernet PHY type.
  */
@@ -77,7 +77,7 @@
 /*
  * MCU type as defined in the ST header file stm32l1xx.h.
  */
-#define STM32L1XX_MD
+#define ${doc1.board.subtype[0]}
 
 /*
  * IO pins assignments.
