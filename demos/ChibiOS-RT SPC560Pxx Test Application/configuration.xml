@@ -1521,9 +1521,6 @@
           <etimer1 index="6">
             <value>7</value>
           </etimer1>
-          <etimer2 index="6">
-            <value>7</value>
-          </etimer2>
           <flexcan0 index="11">
             <value>12</value>
           </flexcan0>
