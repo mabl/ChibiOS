@@ -183,66 +183,6 @@
             <pin_settings>
               <pin_identification>
                 <identifier>
-                  <value>PA_BUTTON</value>
-                </identifier>
-                <port index="0">
-                  <value>PORT_A</value>
-                </port>
-                <bit index="11">
-                  <value>11</value>
-                </bit>
-                <metadatas>
-                  <metadata name="active" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
-                    <value>NONE</value>
-                  </metadata>
-                </metadatas>
-              </pin_identification>
-              <settings>
-                <pin_mode index="3">
-                  <value>MODE_INPUT</value>
-                  <metadatas>
-                    <metadata name="direction" class="com.st.tools.spc5.extensions.GenericMetadataHandler" source="com.st.tools.spc5.wizard.pinmap">
-                      <value>I</value>
-                    </metadata>
-                  </metadatas>
-                </pin_mode>
-                <latched_state index="0">
-                  <value>LOW</value>
-                </latched_state>
-              </settings>
-              <advanced>
-                <pa disabled="true" index="0">
-                  <value>GPIO Mode</value>
-                </pa>
-                <smc disabled="true">
-                  <value>false</value>
-                </smc>
-                <apc disabled="true">
-                  <value>false</value>
-                </apc>
-                <obe disabled="true">
-                  <value>false</value>
-                </obe>
-                <ibe disabled="true">
-                  <value>true</value>
-                </ibe>
-                <ode disabled="true" index="0">
-                  <value>Push-Pull</value>
-                </ode>
-                <src disabled="true" index="0">
-                  <value>Slow</value>
-                </src>
-                <wpe disabled="true" index="0">
-                  <value>Disabled</value>
-                </wpe>
-                <wps disabled="true" index="0">
-                  <value>Pull-Down</value>
-                </wps>
-              </advanced>
-            </pin_settings>
-            <pin_settings>
-              <pin_identification>
-                <identifier>
                   <value>PB_LIN0_TDX</value>
                 </identifier>
                 <port index="1">
@@ -281,10 +221,10 @@
                   <value>false</value>
                 </apc>
                 <obe disabled="true">
-                  <value>true</value>
+                  <value>false</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>true</value>
+                  <value>false</value>
                 </ibe>
                 <ode disabled="true" index="0">
                   <value>Push-Pull</value>
