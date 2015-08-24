@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SPC5-Config version="1.0.0">
-  <application name="spc560bxx Test Application with NIL RTOS" version="1.0.0" standalone="true" locked="false">
+  <application name="SPC560Bxx Test Application with NIL RTOS" version="1.0.0" standalone="true" locked="false">
     <description>Test application for the spc560bxx using NIL RTOS.</description>
     <component id="com.st.tools.spc5.components.platform.spc560bxx">
       <component id="org.chibios.spc5.components.nil.rtos.spc560bxx" />
@@ -8,8 +8,8 @@
     <instances>
       <instance locked="false" id="com.st.tools.spc5.components.platform.spc560bxx">
         <platform_settings>
-          <specific_model index="6">
-            <value>SPC560B64L7</value>
+          <specific_model index="1">
+            <value>SPC560B54L5</value>
           </specific_model>
         </platform_settings>
         <runtime_settings>
@@ -161,10 +161,10 @@
       <instance locked="false" id="org.chibios.spc5.components.hal.board.spc560bxx">
         <identification>
           <board_identifier>
-            <value>spc560bxx_EVB</value>
+            <value>SPC56B_DISCOVERY</value>
           </board_identifier>
           <board_name>
-            <value>EVB with spc560bxx Mini Module</value>
+            <value>STMicroelectronics SPC56B Discovery</value>
           </board_name>
         </identification>
         <clock_settings>
