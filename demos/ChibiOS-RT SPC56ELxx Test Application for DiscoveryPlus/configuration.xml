@@ -10,7 +10,7 @@
     <instances>
       <instance locked="false" id="com.st.tools.spc5.components.platform.spc56elxx">
         <platform_settings>
-          <specific_model index="9">
+          <specific_model index="10">
             <value>SPC56EL70L5</value>
           </specific_model>
         </platform_settings>
@@ -219,7 +219,7 @@
                   <value>false</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode disabled="true" index="0">
                   <value>Push-Pull</value>
@@ -256,8 +256,8 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa disabled="true" index="0">
-                  <value>GPIO Mode</value>
+                <pa disabled="true" index="1">
+                  <value>Alternate 1</value>
                 </pa>
                 <smc disabled="true">
                   <value>false</value>
@@ -319,7 +319,7 @@
                   <value>false</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode disabled="true" index="0">
                   <value>Push-Pull</value>
@@ -366,10 +366,10 @@
                   <value>false</value>
                 </apc>
                 <obe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode disabled="true" index="0">
                   <value>Push-Pull</value>
@@ -416,10 +416,10 @@
                   <value>false</value>
                 </apc>
                 <obe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode disabled="true" index="0">
                   <value>Push-Pull</value>
@@ -466,10 +466,10 @@
                   <value>false</value>
                 </apc>
                 <obe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode disabled="true" index="0">
                   <value>Push-Pull</value>
@@ -959,58 +959,58 @@
         </dspi_settings>
         <etimer_settings>
           <etimer0_ch0>
-            <value>true</value>
+            <value>false</value>
           </etimer0_ch0>
           <etimer0_ch1>
-            <value>true</value>
+            <value>false</value>
           </etimer0_ch1>
           <etimer0_ch2>
-            <value>true</value>
+            <value>false</value>
           </etimer0_ch2>
           <etimer0_ch3>
-            <value>true</value>
+            <value>false</value>
           </etimer0_ch3>
           <etimer0_ch4>
-            <value>true</value>
+            <value>false</value>
           </etimer0_ch4>
           <etimer0_ch5>
-            <value>true</value>
+            <value>false</value>
           </etimer0_ch5>
           <etimer1_ch0>
-            <value>true</value>
+            <value>false</value>
           </etimer1_ch0>
           <etimer1_ch1>
-            <value>true</value>
+            <value>false</value>
           </etimer1_ch1>
           <etimer1_ch2>
-            <value>true</value>
+            <value>false</value>
           </etimer1_ch2>
           <etimer1_ch3>
-            <value>true</value>
+            <value>false</value>
           </etimer1_ch3>
           <etimer1_ch4>
-            <value>true</value>
+            <value>false</value>
           </etimer1_ch4>
           <etimer1_ch5>
-            <value>true</value>
+            <value>false</value>
           </etimer1_ch5>
           <etimer2_ch0>
-            <value>true</value>
+            <value>false</value>
           </etimer2_ch0>
           <etimer2_ch1>
-            <value>true</value>
+            <value>false</value>
           </etimer2_ch1>
           <etimer2_ch2>
-            <value>true</value>
+            <value>false</value>
           </etimer2_ch2>
           <etimer2_ch3>
-            <value>true</value>
+            <value>false</value>
           </etimer2_ch3>
           <etimer2_ch4>
-            <value>true</value>
+            <value>false</value>
           </etimer2_ch4>
           <etimer2_ch5>
-            <value>true</value>
+            <value>false</value>
           </etimer2_ch5>
           <icu_configurations>
             <configs />
