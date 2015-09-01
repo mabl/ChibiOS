@@ -429,56 +429,6 @@
             <pin_settings>
               <pin_identification>
                 <identifier>
-                  <value>P11_BUTTON4</value>
-                </identifier>
-                <port index="6">
-                  <value>PORT11</value>
-                </port>
-                <bit index="9">
-                  <value>9</value>
-                </bit>
-              </pin_identification>
-              <settings>
-                <pin_mode index="3">
-                  <value>MODE_INPUT</value>
-                </pin_mode>
-                <latched_state index="0">
-                  <value>LOW</value>
-                </latched_state>
-              </settings>
-              <advanced>
-                <pa disabled="true" index="0">
-                  <value>GPIO Mode</value>
-                </pa>
-                <obe disabled="true">
-                  <value>false</value>
-                </obe>
-                <ibe disabled="true">
-                  <value>false</value>
-                </ibe>
-                <hys disabled="true">
-                  <value>false</value>
-                </hys>
-                <dsc disabled="true" index="0">
-                  <value>Drive 10pF</value>
-                </dsc>
-                <ode disabled="true" index="0">
-                  <value>Push-Pull</value>
-                </ode>
-                <src disabled="true" index="0">
-                  <value>Minimum</value>
-                </src>
-                <wpe disabled="true" index="0">
-                  <value>Disabled</value>
-                </wpe>
-                <wps disabled="true" index="0">
-                  <value>Pull-Down</value>
-                </wps>
-              </advanced>
-            </pin_settings>
-            <pin_settings>
-              <pin_identification>
-                <identifier>
                   <value>P11_LED1</value>
                 </identifier>
                 <port index="6">
