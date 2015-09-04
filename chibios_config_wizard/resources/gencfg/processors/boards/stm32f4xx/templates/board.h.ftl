@@ -48,6 +48,13 @@
 #define BOARD_PHY_RMII
 [/#if]
 [/#if]
+[#if doc1.board.usb_phy[0]?? && doc1.board.usb_phy.bus_type[0]?string == "ULPI"]
+
+/*
+ * The board has an ULPI USB PHY.
+ */
+#define BOARD_OTG2_USES_ULPI
+[/#if]
 
 /*
  * Board oscillators-related settings.
