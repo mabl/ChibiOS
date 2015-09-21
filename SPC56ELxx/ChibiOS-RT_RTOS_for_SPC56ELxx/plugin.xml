@@ -35,7 +35,7 @@
                      id="com.st.tools.spc5.features.build.gccenv">
                </requiredFeature>
                <requiredFeature
-                     id="com.st.tools.spc5.features.platform.spc56elxx">
+                     id="com.st.tools.spc5.features.platform.hal.spc56elxx">
                </requiredFeature>
             </requiredFeatures>
             <exportedFeatures>

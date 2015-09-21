@@ -34,6 +34,7 @@ along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
       <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="com.st.tools.spc5" version="1.0.0" match="greaterOrEqual"/>
+      <import feature="org.chibios.spc5.components.spc5hal.spc560bxx.feature" version="1.4.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
