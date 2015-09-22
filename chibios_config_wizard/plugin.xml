@@ -55,9 +55,9 @@
          <uri
             name="http://www.chibios.org/xml/schema/boards/stm32l1xx_board.xsd"
             uri="resources/gencfg/schema/boards/stm32l1xx_board.xsd" />
-<!--          <uri
+          <uri
             name="http://www.chibios.org/xml/schema/boards/stm32l4xx_board.xsd"
-            uri="resources/gencfg/schema/boards/stm32l4xx_board.xsd" /> -->
+            uri="resources/gencfg/schema/boards/stm32l4xx_board.xsd" />
       </catalogContribution>
    </extension>
 
