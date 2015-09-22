@@ -35,7 +35,10 @@
                      id="com.st.tools.spc5.features.build.gccenv">
                </requiredFeature>
                <requiredFeature
-                     id="com.st.tools.spc5.features.platform.hal.spc560dxx">
+                     id="com.st.tools.spc5.features.platform.spc560dxx">
+               </requiredFeature>
+               <requiredFeature
+                     id="org.chibios.spc5.features.platform.spc560dxx">
                </requiredFeature>
             </requiredFeatures>
             <exportedFeatures>
