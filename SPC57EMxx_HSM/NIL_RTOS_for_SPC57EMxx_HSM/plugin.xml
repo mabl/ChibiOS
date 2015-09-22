@@ -38,6 +38,9 @@
                <requiredFeature
                      id="com.st.tools.spc5.features.platform.spc57emxx.z0">
                </requiredFeature>
+               <requiredFeature
+                     id="org.chibios.spc5.features.platform.spc57emxx.z0">
+               </requiredFeature>
             </requiredFeatures>
             <exportedFeatures>
                <exportedFeature

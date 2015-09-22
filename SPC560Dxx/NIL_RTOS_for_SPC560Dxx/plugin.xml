@@ -37,6 +37,9 @@
                <requiredFeature
                      id="com.st.tools.spc5.features.platform.spc560dxx">
                </requiredFeature>
+               <requiredFeature
+                     id="org.chibios.spc5.features.platform.spc560dxx">
+               </requiredFeature>
             </requiredFeatures>
             <exportedFeatures>
                <exportedFeature
