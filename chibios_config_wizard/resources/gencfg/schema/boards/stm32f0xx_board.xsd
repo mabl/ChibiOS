@@ -25,6 +25,8 @@
                        		<xs:enumeration value="STM32F071xB"></xs:enumeration>
                        		<xs:enumeration value="STM32F072xB"></xs:enumeration>
                        		<xs:enumeration value="STM32F078xx"></xs:enumeration>
+                       		<xs:enumeration value="STM32F091xC"></xs:enumeration>
+                       		<xs:enumeration value="STM32F098xx"></xs:enumeration>
                        	</xs:restriction>
                        </xs:simpleType>
                     </xs:element>
