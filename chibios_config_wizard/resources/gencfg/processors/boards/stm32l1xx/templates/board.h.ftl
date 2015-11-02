@@ -95,6 +95,21 @@
 
 [/#list]
 /*
+ * IO lines assignments.
+ */
+[#list doc1.board.ports.* as port]
+  [#assign port_name = port?node_name?upper_case /]
+  [#list port.* as pin]
+    [#assign pin_name = pin?node_name?upper_case /]
+    [#assign name = pin.@ID[0]?string?trim /]
+    [#if name?length == 0]
+      [#assign name = pin_name /]
+    [/#if]
+#define LINE_${name?right_pad(22, " ")} PAL_LINE(${port_name}, ${pin_index?string}U)
+  [/#list]
+
+[/#list]
+/*
  * I/O ports initial setup, this configuration is established soon after reset
  * in the initialization code.
  * Please refer to the STM32 Reference Manual for details.
