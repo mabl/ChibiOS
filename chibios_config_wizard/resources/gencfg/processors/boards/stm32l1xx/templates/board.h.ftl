@@ -85,12 +85,15 @@
 [#list doc1.board.ports.* as port]
   [#assign port_name = port?node_name?upper_case /]
   [#list port.* as pin]
-    [#assign pin_name = pin?node_name?upper_case /]
-    [#assign name = pin.@ID[0]?string?trim /]
-    [#if name?length == 0]
-      [#assign name = pin_name /]
-    [/#if]
+    [#assign names = pin.@ID[0]?string?word_list /]
+    [#if names?size == 0]
+      [#assign pin_name = pin?node_name?upper_case /]
+#define ${(port_name + "_" + pin_name)?right_pad(27, " ")} ${pin_index?string}U
+    [#else]
+      [#list names as name]
 #define ${(port_name + "_" + name)?right_pad(27, " ")} ${pin_index?string}U
+      [/#list]
+    [/#if]
   [/#list]
 
 [/#list]
@@ -100,12 +103,12 @@
 [#list doc1.board.ports.* as port]
   [#assign port_name = port?node_name?upper_case /]
   [#list port.* as pin]
-    [#assign pin_name = pin?node_name?upper_case /]
-    [#assign name = pin.@ID[0]?string?trim /]
-    [#if name?length == 0]
-      [#assign name = pin_name /]
-    [/#if]
+    [#assign names = pin.@ID[0]?string?word_list /]
+    [#if names?size > 0]
+      [#list names as name]
 #define LINE_${name?right_pad(22, " ")} PAL_LINE(${port_name}, ${pin_index?string}U)
+      [/#list]
+    [/#if]
   [/#list]
 
 [/#list]
