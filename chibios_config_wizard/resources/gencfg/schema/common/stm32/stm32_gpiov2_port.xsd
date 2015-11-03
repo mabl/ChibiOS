@@ -110,7 +110,7 @@
           </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-          <xs:pattern value="([a-zA-Z_][\w_]*\s*)+"></xs:pattern>
+          <xs:pattern value="([a-zA-Z_][\w_]*\s*)*"></xs:pattern>
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
