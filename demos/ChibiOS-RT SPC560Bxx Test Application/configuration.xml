@@ -33,7 +33,7 @@
             <value>out</value>
           </application_name>
           <compiler_variant index="0">
-            <value>ppc-vle-</value>
+            <value>ppc-freevle-eabi-</value>
           </compiler_variant>
           <optimization_level index="3">
             <value>-O2</value>
