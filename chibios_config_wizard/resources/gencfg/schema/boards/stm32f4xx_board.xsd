@@ -25,6 +25,12 @@
 								<xs:enumeration value="STM32F401xC"></xs:enumeration>
 								<xs:enumeration value="STM32F401xE"></xs:enumeration>
 								<xs:enumeration value="STM32F411xE"></xs:enumeration>
+								<xs:enumeration value="STM32F410cx"></xs:enumeration>
+								<xs:enumeration value="STM32F410rx"></xs:enumeration>
+								<xs:enumeration value="STM32F410tx"></xs:enumeration>
+								<xs:enumeration value="STM32F446xx"></xs:enumeration>
+								<xs:enumeration value="STM32F469xx"></xs:enumeration>
+								<xs:enumeration value="STM32F479xx"></xs:enumeration>
 								<xs:enumeration value="STM32F205xx"></xs:enumeration>
 								<xs:enumeration value="STM32F215xx"></xs:enumeration>
 								<xs:enumeration value="STM32F207xx"></xs:enumeration>

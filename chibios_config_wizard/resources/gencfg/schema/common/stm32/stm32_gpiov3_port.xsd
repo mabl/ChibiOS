@@ -120,10 +120,10 @@
   		</xs:annotation>
   		<xs:simpleType>
   			<xs:restriction base="xs:string">
+  				<xs:enumeration value="Analog"></xs:enumeration>
   				<xs:enumeration value="Input"></xs:enumeration>
   				<xs:enumeration value="Output"></xs:enumeration>
   				<xs:enumeration value="Alternate"></xs:enumeration>
-  				<xs:enumeration value="Analog"></xs:enumeration>
   			</xs:restriction>
   		</xs:simpleType>
   	</xs:attribute>
