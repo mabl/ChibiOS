@@ -180,7 +180,7 @@ struct ch_threads_list {
 /**
  * @brief   Generic threads bidirectional linked list header and element.
  */
-struct ch_threads_queue{
+struct ch_threads_queue {
   thread_t              *p_next;    /**< @brief Next in the list/queue.     */
   thread_t              *p_prev;    /**< @brief Previous in the queue.      */
 };
@@ -478,6 +478,10 @@ struct ch_system {
    */
   kernel_stats_t        kernel_stats;
 #endif
+  /**
+   * @brief   Thread structures for all the defined threads.
+   */
+  thread_t              threads[CH_CFG_MAX_THREADS];
 #if CH_CFG_NO_IDLE_THREAD == FALSE
   /**
    * @brief   Idle thread working area.

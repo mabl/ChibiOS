@@ -48,17 +48,17 @@
 /**
  * @brief   Kernel version string.
  */
-#define CH_KERNEL_VERSION       "3.2.0"
+#define CH_KERNEL_VERSION       "4.0.0"
 
 /**
  * @brief   Kernel version major number.
  */
-#define CH_KERNEL_MAJOR         3
+#define CH_KERNEL_MAJOR         4
 
 /**
  * @brief   Kernel version minor number.
  */
-#define CH_KERNEL_MINOR         2
+#define CH_KERNEL_MINOR         0
 
 /**
  * @brief   Kernel version patch number.
