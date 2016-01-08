@@ -478,10 +478,6 @@ struct ch_system {
    */
   kernel_stats_t        kernel_stats;
 #endif
-  /**
-   * @brief   Thread structures for all the defined threads.
-   */
-  thread_t              threads[CH_CFG_MAX_THREADS];
 #if CH_CFG_NO_IDLE_THREAD == FALSE
   /**
    * @brief   Idle thread working area.
