@@ -108,20 +108,42 @@
 /** @} */
 
 /**
- * @name    Working Areas and Alignment
+ * @name    Memory alignment support macros
  */
 /**
- * @brief   Enforces a correct alignment for a stack area size value.
- *
- * @param[in] n         the stack size to be aligned to the next stack
- *                      alignment boundary
- * @return              The aligned stack size.
- *
- * @api
+ * @brief   Alignment size constant.
+ * @note    Alignment type is @p stkalign_t.
  */
-#define THD_ALIGN_STACK_SIZE(n)                                             \
-  (((((size_t)(n)) - 1U) | (sizeof(stkalign_t) - 1U)) + 1U)
+#define MEM_ALIGN_SIZE      sizeof (stkalign_t)
 
+/**
+ * @brief   Alignment mask constant.
+ * @note    Alignment type is @p stkalign_t.
+ */
+#define MEM_ALIGN_MASK      (MEM_ALIGN_SIZE - 1U)
+
+/**
+ * @brief   Aligns to the previous aligned memory address.
+ * @note    Alignment type is @p stkalign_t.
+ */
+#define MEM_ALIGN_PREV(p)   ((size_t)(p) & ~MEM_ALIGN_MASK)
+
+/**
+ * @brief   Aligns to the new aligned memory address.
+ * @note    Alignment type is @p stkalign_t.
+ */
+#define MEM_ALIGN_NEXT(p)   MEM_ALIGN_PREV((size_t)(p) + MEM_ALIGN_MASK)
+
+/**
+ * @brief   Returns whatever a pointer or memory size is aligned.
+ * @note    Alignment type is @p stkalign_t.
+ */
+#define MEM_IS_ALIGNED(p)   (((size_t)(p) & MEM_ALIGN_MASK) == 0U)
+/** @} */
+
+/**
+ * @name    Working Areas
+ */
 /**
  * @brief   Calculates the total Working Area size.
  *
@@ -131,7 +153,7 @@
  * @api
  */
 #define THD_WORKING_AREA_SIZE(n)                                            \
-  THD_ALIGN_STACK_SIZE(sizeof(thread_t) + PORT_WA_SIZE(n))
+  MEM_ALIGN_NEXT(sizeof(thread_t) + PORT_WA_SIZE(n))
 
 /**
  * @brief   Static working area allocation.
@@ -209,12 +231,11 @@ struct ch_thread {
    */
   const char            *p_name;
 #endif
-#if (CH_DBG_ENABLE_STACK_CHECK == TRUE) || defined(__DOXYGEN__)
   /**
    * @brief Thread stack boundary.
+   * @note  This pointer matches with the working area base address.
    */
   stkalign_t            *p_stklimit;
-#endif
   /**
    * @brief Current thread state.
    */

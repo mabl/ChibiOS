@@ -91,9 +91,7 @@ static void _idle_thread(void *p) {
  * @special
  */
 void chSysInit(void) {
-#if CH_DBG_ENABLE_STACK_CHECK == TRUE
   extern stkalign_t __main_thread_stack_base__;
-#endif
 
   port_init();
   _scheduler_init();
@@ -122,12 +120,13 @@ void chSysInit(void) {
   setcurrp(_thread_init(&ch.mainthread, IDLEPRIO));
 #endif
 
-  currp->p_state = CH_STATE_CURRENT;
-#if CH_DBG_ENABLE_STACK_CHECK == TRUE
-  /* This is a special case because the main thread thread_t structure is not
-     adjacent to its stack area.*/
+  /* Setting up the base address of the static main thread stack.*/
   currp->p_stklimit = &__main_thread_stack_base__;
-#endif
+
+  /* Setting up the caller as current thread.*/
+  currp->p_state = CH_STATE_CURRENT;
+
+  /* It is alive now.*/
   chSysEnable();
 
 #if CH_CFG_USE_REGISTRY == TRUE

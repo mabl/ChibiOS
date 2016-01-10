@@ -107,7 +107,7 @@ void chThdRelease(thread_t *tp) {
 #if CH_CFG_USE_REGISTRY == TRUE
       REG_REMOVE(tp);
 #endif
-      chHeapFree(tp);
+      chHeapFree(tp->p_stklimit);
       break;
 #endif
 #if CH_CFG_USE_MEMPOOLS == TRUE
@@ -115,7 +115,7 @@ void chThdRelease(thread_t *tp) {
 #if CH_CFG_USE_REGISTRY == TRUE
       REG_REMOVE(tp);
 #endif
-      chPoolFree(tp->p_mpool, tp);
+      chPoolFree(tp->p_mpool, tp->p_stklimit);
       break;
 #endif
     default:

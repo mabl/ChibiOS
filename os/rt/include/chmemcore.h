@@ -57,36 +57,6 @@ typedef void *(*memgetfunc_t)(size_t size);
 /* Module macros.                                                            */
 /*===========================================================================*/
 
-/**
- * @name    Alignment support macros
- */
-/**
- * @brief   Alignment size constant.
- */
-#define MEM_ALIGN_SIZE      sizeof(stkalign_t)
-
-/**
- * @brief   Alignment mask constant.
- */
-#define MEM_ALIGN_MASK      (MEM_ALIGN_SIZE - 1U)
-
-/**
- * @brief   Alignment helper macro.
- */
-#define MEM_ALIGN_PREV(p)   ((size_t)(p) & ~MEM_ALIGN_MASK)
-
-/**
- * @brief   Alignment helper macro.
- */
-#define MEM_ALIGN_NEXT(p)   MEM_ALIGN_PREV((size_t)(p) + MEM_ALIGN_MASK)
-
-/**
- * @brief   Returns whatever a pointer or memory size is aligned to
- *          the type @p align_t.
- */
-#define MEM_IS_ALIGNED(p)   (((size_t)(p) & MEM_ALIGN_MASK) == 0U)
-/** @} */
-
 /*===========================================================================*/
 /* External declarations.                                                    */
 /*===========================================================================*/

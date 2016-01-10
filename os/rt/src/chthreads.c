@@ -119,9 +119,6 @@ thread_t *_thread_init(thread_t *tp, tprio_t prio) {
 #if CH_CFG_USE_MESSAGES == TRUE
   queue_init(&tp->p_msgqueue);
 #endif
-#if CH_DBG_ENABLE_STACK_CHECK == TRUE
-  tp->p_stklimit = (stkalign_t *)(tp + 1);
-#endif
 #if CH_DBG_STATISTICS == TRUE
   chTMObjectInit(&tp->p_stats);
   chTMStartMeasurementX(&tp->p_stats);
@@ -176,15 +173,22 @@ void _thread_memfill(uint8_t *startp, uint8_t *endp, uint8_t v) {
  */
 thread_t *chThdCreateI(void *wsp, size_t size,
                        tprio_t prio, tfunc_t pf, void *arg) {
-  /* The thread structure is laid out in the lower part of the thread
-     workspace.*/
-  thread_t *tp = wsp;
+  thread_t *tp;
 
   chDbgCheckClassI();
-  chDbgCheck((wsp != NULL) && (size >= THD_WORKING_AREA_SIZE(0)) &&
+  chDbgCheck((wsp != NULL) && MEM_IS_ALIGNED(wsp) &&
+             (size >= THD_WORKING_AREA_SIZE(0)) && MEM_IS_ALIGNED(size) &&
              (prio <= HIGHPRIO) && (pf != NULL));
 
-  PORT_SETUP_CONTEXT(tp, wsp, size, pf, arg);
+  /* The thread structure is laid out in the upper part of the thread
+     workspace.*/
+  tp = (thread_t *)((uint8_t *)wsp + size - sizeof (thread_t));
+
+  /* Stack boundary.*/
+  tp->p_stklimit = (stkalign_t *)wsp;
+
+  /* Setting up the port-dependent part of the working area.*/
+  PORT_SETUP_CONTEXT(tp, wsp, tp, pf, arg);
 
   return _thread_init(tp, prio);
 }
