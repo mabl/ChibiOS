@@ -96,6 +96,10 @@
 #include "chqueues.h"
 #include "chstreams.h"
 
+#if !defined(_CHIBIOS_RT_CONF_)
+#error "missing or wrong configuration file"
+#endif
+
 #endif /* _CH_H_ */
 
 /** @} */
