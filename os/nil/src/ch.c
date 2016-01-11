@@ -18,14 +18,14 @@
 */
 
 /**
- * @file    nil.c
+ * @file    ch.c
  * @brief   Nil RTOS main source file.
  *
  * @addtogroup NIL_KERNEL
  * @{
  */
 
-#include "nil.h"
+#include "ch.h"
 
 /*===========================================================================*/
 /* Module local definitions.                                                 */
@@ -75,27 +75,27 @@ void chSysInit(void) {
   port_init();
 
   /* System initialization hook.*/
-  NIL_CFG_SYSTEM_INIT_HOOK();
+  CH_CFG_SYSTEM_INIT_HOOK();
 
   /* Iterates through the list of defined threads.*/
   tp = &nil.threads[0];
   tcp = nil_thd_configs;
-  while (tp < &nil.threads[NIL_CFG_NUM_THREADS]) {
-#if NIL_CFG_ENABLE_STACK_CHECK
+  while (tp < &nil.threads[CH_CFG_NUM_THREADS]) {
+#if CH_DBG_ENABLE_STACK_CHECK
     tp->stklim  = (stkalign_t *)tcp->wbase;
 #endif
 
     /* Port dependent thread initialization.*/
-    PORT_SETUP_CONTEXT(tp, tcp->wend, tcp->funcp, tcp->arg);
+    PORT_SETUP_CONTEXT(tp, tcp->wbase, tcp->wend, tcp->funcp, tcp->arg);
 
     /* Initialization hook.*/
-    NIL_CFG_THREAD_EXT_INIT_HOOK(tp);
+    CH_CFG_THREAD_EXT_INIT_HOOK(tp);
 
     tp++;
     tcp++;
   }
 
-#if NIL_CFG_ENABLE_STACK_CHECK
+#if CH_DBG_ENABLE_STACK_CHECK
   /* The idle thread is a special case because its stack is set up by the
      runtime environment.*/
   tp->stklim  = THD_IDLE_BASE;
@@ -132,7 +132,7 @@ void chSysHalt(const char *reason) {
   (void)reason;
 #endif
 
-  NIL_CFG_SYSTEM_HALT_HOOK(reason);
+  CH_CFG_SYSTEM_HALT_HOOK(reason);
 
   /* Harmless infinite loop.*/
   while (true) {
@@ -148,7 +148,7 @@ void chSysHalt(const char *reason) {
  */
 void chSysTimerHandlerI(void) {
 
-#if NIL_CFG_ST_TIMEDELTA == 0
+#if CH_CFG_ST_TIMEDELTA == 0
   thread_t *tp = &nil.threads[0];
   nil.systime++;
   do {
@@ -177,7 +177,7 @@ void chSysTimerHandlerI(void) {
     chSysUnlockFromISR();
     tp++;
     chSysLockFromISR();
-  } while (tp < &nil.threads[NIL_CFG_NUM_THREADS]);
+  } while (tp < &nil.threads[CH_CFG_NUM_THREADS]);
 #else
   thread_t *tp = &nil.threads[0];
   systime_t next = (systime_t)0;
@@ -216,7 +216,7 @@ void chSysTimerHandlerI(void) {
     chSysUnlockFromISR();
     tp++;
     chSysLockFromISR();
-  } while (tp < &nil.threads[NIL_CFG_NUM_THREADS]);
+  } while (tp < &nil.threads[CH_CFG_NUM_THREADS]);
   nil.lasttime = nil.nexttime;
   if (next > (systime_t)0) {
     nil.nexttime += next;
@@ -361,7 +361,7 @@ void chSysPolledDelayX(rtcnt_t cycles) {
 thread_t *chSchReadyI(thread_t *tp, msg_t msg) {
 
   chDbgAssert((tp >= nil.threads) &&
-              (tp < &nil.threads[NIL_CFG_NUM_THREADS]),
+              (tp < &nil.threads[CH_CFG_NUM_THREADS]),
               "pointer out of range");
   chDbgAssert(!NIL_THD_IS_READY(tp), "already ready");
   chDbgAssert(nil.next <= nil.current, "priority ordering");
@@ -376,6 +376,44 @@ thread_t *chSchReadyI(thread_t *tp, msg_t msg) {
 }
 
 /**
+ * @brief   Evaluates if preemption is required.
+ * @details The decision is taken by comparing the relative priorities and
+ *          depending on the state of the round robin timeout counter.
+ * @note    Not a user function, it is meant to be invoked by the scheduler
+ *          itself or from within the port layer.
+ *
+ * @retval true         if there is a thread that must go in running state
+ *                      immediately.
+ * @retval false        if preemption is not required.
+ *
+ * @special
+ */
+bool chSchIsPreemptionRequired(void) {
+
+  return chSchIsRescRequiredI();
+}
+
+/**
+ * @brief   Switches to the first thread on the runnable queue.
+ * @details The current thread is positioned in the ready list behind or
+ *          ahead of all threads having the same priority depending on
+ *          if it used its whole time slice.
+ * @note    Not a user function, it is meant to be invoked by the scheduler
+ *          itself or from within the port layer.
+ *
+ * @special
+ */
+void chSchDoReschedule(void) {
+  thread_t *otp = nil.current;
+
+  nil.current = nil.next;
+  if (otp == &nil.threads[CH_CFG_NUM_THREADS]) {
+    CH_CFG_IDLE_LEAVE_HOOK();
+  }
+  port_switch(nil.next, otp);
+}
+
+/**
  * @brief   Reschedules if needed.
  *
  * @sclass
@@ -383,13 +421,7 @@ thread_t *chSchReadyI(thread_t *tp, msg_t msg) {
 void chSchRescheduleS(void) {
 
   if (chSchIsRescRequiredI()) {
-    thread_t *otp = nil.current;
-
-    nil.current = nil.next;
-    if (otp == &nil.threads[NIL_CFG_NUM_THREADS]) {
-      NIL_CFG_IDLE_LEAVE_HOOK();
-    }
-    port_switch(nil.next, otp);
+    chSchDoReschedule();
   }
 }
 
@@ -413,20 +445,20 @@ void chSchRescheduleS(void) {
 msg_t chSchGoSleepTimeoutS(tstate_t newstate, systime_t timeout) {
   thread_t *ntp, *otp = nil.current;
 
-  chDbgAssert(otp != &nil.threads[NIL_CFG_NUM_THREADS],
+  chDbgAssert(otp != &nil.threads[CH_CFG_NUM_THREADS],
                "idle cannot sleep");
 
   /* Storing the wait object for the current thread.*/
   otp->state = newstate;
 
-#if NIL_CFG_ST_TIMEDELTA > 0
+#if CH_CFG_ST_TIMEDELTA > 0
   if (timeout != TIME_INFINITE) {
     systime_t abstime;
 
     /* TIMEDELTA makes sure to have enough time to reprogram the timer
        before the free-running timer counter reaches the selected timeout.*/
-    if (timeout < (systime_t)NIL_CFG_ST_TIMEDELTA) {
-      timeout = (systime_t)NIL_CFG_ST_TIMEDELTA;
+    if (timeout < (systime_t)CH_CFG_ST_TIMEDELTA) {
+      timeout = (systime_t)CH_CFG_ST_TIMEDELTA;
     }
 
     /* Absolute time of the timeout event.*/
@@ -461,8 +493,8 @@ msg_t chSchGoSleepTimeoutS(tstate_t newstate, systime_t timeout) {
     /* Is this thread ready to execute?*/
     if (NIL_THD_IS_READY(ntp)) {
       nil.current = nil.next = ntp;
-      if (ntp == &nil.threads[NIL_CFG_NUM_THREADS]) {
-        NIL_CFG_IDLE_ENTER_HOOK();
+      if (ntp == &nil.threads[CH_CFG_NUM_THREADS]) {
+        CH_CFG_IDLE_ENTER_HOOK();
       }
       port_switch(ntp, otp);
       return nil.current->u1.msg;
@@ -470,7 +502,7 @@ msg_t chSchGoSleepTimeoutS(tstate_t newstate, systime_t timeout) {
 
     /* Points to the next thread in lowering priority order.*/
     ntp++;
-    chDbgAssert(ntp <= &nil.threads[NIL_CFG_NUM_THREADS],
+    chDbgAssert(ntp <= &nil.threads[CH_CFG_NUM_THREADS],
                 "pointer out of range");
   }
 }
@@ -659,7 +691,7 @@ void chSemSignalI(semaphore_t *sp) {
       }
       tr++;
 
-      chDbgAssert(tr < &nil.threads[NIL_CFG_NUM_THREADS],
+      chDbgAssert(tr < &nil.threads[CH_CFG_NUM_THREADS],
                   "pointer out of range");
     }
   }
@@ -714,7 +746,7 @@ void chSemResetI(semaphore_t *sp, cnt_t n) {
   tp = nil.threads;
   while (cnt < (cnt_t)0) {
 
-    chDbgAssert(tp < &nil.threads[NIL_CFG_NUM_THREADS],
+    chDbgAssert(tp < &nil.threads[CH_CFG_NUM_THREADS],
                 "pointer out of range");
 
     /* Is this thread waiting on this semaphore?*/

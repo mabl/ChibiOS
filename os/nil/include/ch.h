@@ -18,7 +18,7 @@
 */
 
 /**
- * @file    nil.h
+ * @file    ch.h
  * @brief   Nil RTOS main header file.
  * @details This header includes all the required kernel headers so it is the
  *          only header you usually need to include in your application.
@@ -27,18 +27,11 @@
  * @{
  */
 
-#ifndef _NIL_H_
-#define _NIL_H_
+#ifndef _CH_H_
+#define _CH_H_
 
-/**
- * @brief   Type of a structure representing a thread.
- * @note    It is required as an early definition.
- */
-typedef struct nil_thread thread_t;
-
-#include "nilconf.h"
-#include "niltypes.h"
-#include "nilcore.h"
+#include "chconf.h"
+#include "chtypes.h"
 
 /*===========================================================================*/
 /* Module constants.                                                         */
@@ -61,17 +54,17 @@ typedef struct nil_thread thread_t;
 /**
  * @brief   Kernel version string.
  */
-#define CH_KERNEL_VERSION       "1.1.0"
+#define CH_KERNEL_VERSION       "2.0.0"
 
 /**
  * @brief   Kernel version major number.
  */
-#define CH_KERNEL_MAJOR         1
+#define CH_KERNEL_MAJOR         2
 
 /**
  * @brief   Kernel version minor number.
  */
-#define CH_KERNEL_MINOR         1
+#define CH_KERNEL_MINOR         0
 
 /**
  * @brief   Kernel version patch number.
@@ -150,26 +143,26 @@ typedef struct nil_thread thread_t;
  * @note    This number is not inclusive of the idle thread which is
  *          implicitly handled.
  */
-#if !defined(NIL_CFG_NUM_THREADS) || defined(__DOXYGEN__)
-#define NIL_CFG_NUM_THREADS                 2
+#if !defined(CH_CFG_NUM_THREADS) || defined(__DOXYGEN__)
+#define CH_CFG_NUM_THREADS                  2
 #endif
 
 /**
  * @brief   System time counter resolution.
  * @note    Allowed values are 16 or 32 bits.
  */
-#if !defined(NIL_CFG_ST_RESOLUTION) || defined(__DOXYGEN__)
-#define NIL_CFG_ST_RESOLUTION               32
+#if !defined(CH_CFG_ST_RESOLUTION) || defined(__DOXYGEN__)
+#define CH_CFG_ST_RESOLUTION                32
 #endif
 
 /**
  * @brief   System tick frequency.
- * @note    This value together with the @p NIL_CFG_ST_RESOLUTION
+ * @note    This value together with the @p CH_CFG_ST_RESOLUTION
  *          option defines the maximum amount of time allowed for
  *          timeouts.
  */
-#if !defined(NIL_CFG_ST_FREQUENCY) || defined(__DOXYGEN__)
-#define NIL_CFG_ST_FREQUENCY                100
+#if !defined(CH_CFG_ST_FREQUENCY) || defined(__DOXYGEN__)
+#define CH_CFG_ST_FREQUENCY                 100
 #endif
 
 /**
@@ -180,8 +173,8 @@ typedef struct nil_thread thread_t;
  *          The value one is not valid, timeouts are rounded up to
  *          this value.
  */
-#if !defined(NIL_CFG_ST_TIMEDELTA) || defined(__DOXYGEN__)
-#define NIL_CFG_ST_TIMEDELTA                0
+#if !defined(CH_CFG_ST_TIMEDELTA) || defined(__DOXYGEN__)
+#define CH_CFG_ST_TIMEDELTA                 0
 #endif
 
 /**
@@ -190,44 +183,68 @@ typedef struct nil_thread thread_t;
  *
  * @note    The default is @p TRUE.
  */
-#if !defined(NIL_CFG_USE_EVENTS) || defined(__DOXYGEN__)
-#define NIL_CFG_USE_EVENTS                  TRUE
+#if !defined(CH_CFG_USE_EVENTS) || defined(__DOXYGEN__)
+#define CH_CFG_USE_EVENTS                   TRUE
+#endif
+
+/**
+ * @brief   Debug option, kernel statistics.
+ * @note    This is a planned feature, not yet implemented.
+ */
+#if !defined(CH_DBG_STATISTICS) || defined(__DOXYGEN__)
+#define CH_DBG_STATISTICS                   FALSE
+#endif
+
+/**
+ * @brief   Debug option, system state check.
+ * @note    This is a planned feature, not yet implemented.
+ */
+#if !defined(CH_DBG_SYSTEM_STATE_CHECK) || defined(__DOXYGEN__)
+#define CH_DBG_SYSTEM_STATE_CHECK           FALSE
+#endif
+
+/**
+ * @brief   Debug option, parameters checks.
+ * @note    This is a planned feature, not yet implemented.
+ */
+#if !defined(CH_DBG_ENABLE_CHECKS) || defined(__DOXYGEN__)
+#define CH_DBG_ENABLE_CHECKS                FALSE
 #endif
 
 /**
  * @brief   System assertions.
  */
-#if !defined(NIL_CFG_ENABLE_ASSERTS) || defined(__DOXYGEN__)
-#define NIL_CFG_ENABLE_ASSERTS              FALSE
+#if !defined(CH_DBG_ENABLE_ASSERTS) || defined(__DOXYGEN__)
+#define CH_DBG_ENABLE_ASSERTS               FALSE
 #endif
 
 /**
  * @brief   Stack check.
  */
-#if !defined(NIL_CFG_ENABLE_STACK_CHECK) || defined(__DOXYGEN__)
-#define NIL_CFG_ENABLE_STACK_CHECK          FALSE
+#if !defined(CH_DBG_ENABLE_STACK_CHECK) || defined(__DOXYGEN__)
+#define CH_DBG_ENABLE_STACK_CHECK           FALSE
 #endif
 
 /**
  * @brief   System initialization hook.
  */
-#if !defined(NIL_CFG_SYSTEM_INIT_HOOK) || defined(__DOXYGEN__)
-#define NIL_CFG_SYSTEM_INIT_HOOK() {}
+#if !defined(CH_CFG_SYSTEM_INIT_HOOK) || defined(__DOXYGEN__)
+#define CH_CFG_SYSTEM_INIT_HOOK() {}
 #endif
 
 /**
  * @brief   Threads descriptor structure extension.
  * @details User fields added to the end of the @p thread_t structure.
  */
-#if !defined(NIL_CFG_THREAD_EXT_FIELDS) || defined(__DOXYGEN__)
-#define NIL_CFG_THREAD_EXT_FIELDS
+#if !defined(CH_CFG_THREAD_EXT_FIELDS) || defined(__DOXYGEN__)
+#define CH_CFG_THREAD_EXT_FIELDS
 #endif
 
 /**
  * @brief   Threads initialization hook.
  */
-#if !defined(NIL_CFG_THREAD_EXT_INIT_HOOK) || defined(__DOXYGEN__)
-#define NIL_CFG_THREAD_EXT_INIT_HOOK(tr) {}
+#if !defined(CH_CFG_THREAD_EXT_INIT_HOOK) || defined(__DOXYGEN__)
+#define CH_CFG_THREAD_EXT_INIT_HOOK(tr) {}
 #endif
 
 /**
@@ -236,8 +253,8 @@ typedef struct nil_thread thread_t;
  *          should be invoked from here.
  * @note    This macro can be used to activate a power saving mode.
  */
-#if !defined(NIL_CFG_IDLE_ENTER_HOOK) || defined(__DOXYGEN__)
-#define NIL_CFG_IDLE_ENTER_HOOK() {}
+#if !defined(CH_CFG_IDLE_ENTER_HOOK) || defined(__DOXYGEN__)
+#define CH_CFG_IDLE_ENTER_HOOK() {}
 #endif
 
 /**
@@ -246,44 +263,63 @@ typedef struct nil_thread thread_t;
  *          should be invoked from here.
  * @note    This macro can be used to deactivate a power saving mode.
  */
-#if !defined(NIL_CFG_IDLE_LEAVE_HOOK) || defined(__DOXYGEN__)
-#define NIL_CFG_IDLE_LEAVE_HOOK() {}
+#if !defined(CH_CFG_IDLE_LEAVE_HOOK) || defined(__DOXYGEN__)
+#define CH_CFG_IDLE_LEAVE_HOOK() {}
 #endif
 
 /**
  * @brief   System halt hook.
  */
-#if !defined(NIL_CFG_SYSTEM_HALT_HOOK) || defined(__DOXYGEN__)
-#define NIL_CFG_SYSTEM_HALT_HOOK(reason) {}
+#if !defined(CH_CFG_SYSTEM_HALT_HOOK) || defined(__DOXYGEN__)
+#define CH_CFG_SYSTEM_HALT_HOOK(reason) {}
 #endif
 
 /*===========================================================================*/
 /* Derived constants and error checks.                                       */
 /*===========================================================================*/
 
-#if NIL_CFG_NUM_THREADS < 1
+#if !defined(_CHIBIOS_NIL_CONF_)
+#error "missing or wrong configuration file"
+#endif
+
+#if CH_CFG_NUM_THREADS < 1
 #error "at least one thread must be defined"
 #endif
 
-#if NIL_CFG_NUM_THREADS > 12
+#if CH_CFG_NUM_THREADS > 12
 #error "Nil is not recommended for thread-intensive applications, consider" \
        "ChibiOS/RT instead"
 #endif
 
-#if (NIL_CFG_ST_RESOLUTION != 16) && (NIL_CFG_ST_RESOLUTION != 32)
-#error "invalid NIL_CFG_ST_RESOLUTION specified, must be 16 or 32"
+#if (CH_CFG_ST_RESOLUTION != 16) && (CH_CFG_ST_RESOLUTION != 32)
+#error "invalid CH_CFG_ST_RESOLUTION specified, must be 16 or 32"
 #endif
 
-#if NIL_CFG_ST_FREQUENCY <= 0
-#error "invalid NIL_CFG_ST_FREQUENCY specified, must be greated than zero"
+#if CH_CFG_ST_FREQUENCY <= 0
+#error "invalid CH_CFG_ST_FREQUENCY specified, must be greated than zero"
 #endif
 
-#if (NIL_CFG_ST_TIMEDELTA < 0) || (NIL_CFG_ST_TIMEDELTA == 1)
-#error "invalid NIL_CFG_ST_TIMEDELTA specified, must "                      \
+#if (CH_CFG_ST_TIMEDELTA < 0) || (CH_CFG_ST_TIMEDELTA == 1)
+#error "invalid CH_CFG_ST_TIMEDELTA specified, must "                      \
        "be zero or greater than one"
 #endif
 
-#if (NIL_CFG_ENABLE_ASSERTS == TRUE) || (NIL_CFG_ENABLE_STACK_CHECK == TRUE)
+#if CH_DBG_STATISTICS == TRUE
+#error "statistics not yet supported"
+#endif
+
+#if CH_DBG_SYSTEM_STATE_CHECK == TRUE
+#error "state checker not yet supported"
+#endif
+
+#if CH_DBG_ENABLE_CHECKS == TRUE
+#error "parameter checks not yet supported"
+#endif
+
+#if (CH_DBG_SYSTEM_STATE_CHECK == TRUE) ||                                  \
+    (CH_DBG_ENABLE_CHECKS == TRUE)      ||                                  \
+    (CH_DBG_ENABLE_ASSERTS == TRUE)     ||                                  \
+    (CH_DBG_ENABLE_STACK_CHECK == TRUE)
 #define NIL_DBG_ENABLED                 TRUE
 #else
 #define NIL_DBG_ENABLED                 FALSE
@@ -291,7 +327,7 @@ typedef struct nil_thread thread_t;
 
 /** Boundaries of the idle thread boundaries, only required if stack checking
     is enabled.*/
-#if (NIL_CFG_ENABLE_STACK_CHECK == TRUE) || defined(__DOXYGEN__)
+#if (CH_DBG_ENABLE_STACK_CHECK == TRUE) || defined(__DOXYGEN__)
 extern stkalign_t __main_thread_stack_base__, __main_thread_stack_end__;
 
 #define THD_IDLE_BASE                   (&__main_thread_stack_base__)
@@ -309,6 +345,23 @@ extern stkalign_t __main_thread_stack_base__, __main_thread_stack_end__;
  * @brief   Type of internal context structure.
  */
 typedef struct port_intctx intctx_t;
+
+/**
+ * @brief   Type of system time.
+ */
+#if (CH_CFG_ST_RESOLUTION == 32) || defined(__DOXYGEN__)
+typedef uint32_t systime_t;
+#else
+typedef uint16_t systime_t;
+#endif
+
+/**
+ * @brief   Type of a structure representing a thread.
+ * @note    It is required as an early definition.
+ */
+typedef struct nil_thread thread_t;
+
+#include "chcore.h"
 
 /**
  * @brief   Type of a structure representing a semaphore.
@@ -352,7 +405,7 @@ typedef thread_t * thread_reference_t;
  * @brief   Structure representing a thread.
  */
 struct nil_thread {
-  intctx_t              *ctxp;  /**< @brief Pointer to internal context.    */
+  struct context        p_ctx;  /**< @brief Processor context.              */
   tstate_t              state;  /**< @brief Thread state.                   */
   /* Note, the following union contains a pointer while the thread is in a
      sleeping state (!NIL_THD_IS_READY()) else contains the wake-up message.*/
@@ -361,20 +414,20 @@ struct nil_thread {
     void                *p;     /**< @brief Generic pointer.                */
     thread_reference_t  *trp;   /**< @brief Pointer to thread reference.    */
     semaphore_t         *semp;  /**< @brief Pointer to semaphore.           */
-#if (NIL_CFG_USE_EVENTS == TRUE) || defined(__DOXYGEN__)
+#if (CH_CFG_USE_EVENTS == TRUE) || defined(__DOXYGEN__)
     eventmask_t         ewmask; /**< @brief Enabled events mask.            */
 #endif
   } u1;
   volatile systime_t    timeout;/**< @brief Timeout counter, zero
                                             if disabled.                    */
-#if (NIL_CFG_USE_EVENTS == TRUE) || defined(__DOXYGEN__)
+#if (CH_CFG_USE_EVENTS == TRUE) || defined(__DOXYGEN__)
   eventmask_t           epmask; /**< @brief Pending events mask.            */
 #endif
-#if (NIL_CFG_ENABLE_STACK_CHECK == TRUE) || defined(__DOXYGEN__)
+#if (CH_DBG_ENABLE_STACK_CHECK == TRUE) || defined(__DOXYGEN__)
   stkalign_t            *stklim;/**< @brief Thread stack boundary.          */
 #endif
   /* Optional extra fields.*/
-  NIL_CFG_THREAD_EXT_FIELDS
+  CH_CFG_THREAD_EXT_FIELDS
 };
 
 /**
@@ -398,13 +451,13 @@ struct nil_system {
    *          or to an higher priority thread if a switch is required.
    */
   thread_t              *next;
-#if (NIL_CFG_ST_TIMEDELTA == 0) || defined(__DOXYGEN__)
+#if (CH_CFG_ST_TIMEDELTA == 0) || defined(__DOXYGEN__)
   /**
    * @brief   System time.
    */
   volatile systime_t    systime;
 #endif
-#if (NIL_CFG_ST_TIMEDELTA > 0) || defined(__DOXYGEN__)
+#if (CH_CFG_ST_TIMEDELTA > 0) || defined(__DOXYGEN__)
   /**
    * @brief   System time of the last tick event.
    */
@@ -417,7 +470,7 @@ struct nil_system {
   /**
    * @brief   Thread structures for all the defined threads.
    */
-  thread_t              threads[NIL_CFG_NUM_THREADS + 1];
+  thread_t              threads[CH_CFG_NUM_THREADS + 1];
 #if (NIL_DBG_ENABLED == TRUE) || defined(__DOXYGEN__)
   /**
    * @brief   Panic message.
@@ -442,7 +495,7 @@ struct nil_system {
  * @brief   Start of user threads table.
  */
 #define THD_TABLE_BEGIN                                                     \
-  const thread_config_t nil_thd_configs[NIL_CFG_NUM_THREADS + 1] = {
+  const thread_config_t nil_thd_configs[CH_CFG_NUM_THREADS + 1] = {
 
 /**
  * @brief   Entry of user threads table
@@ -605,7 +658,7 @@ struct nil_system {
  * @api
  */
 #define S2ST(sec)                                                           \
-  ((systime_t)((uint32_t)(sec) * (uint32_t)NIL_CFG_ST_FREQUENCY))
+  ((systime_t)((uint32_t)(sec) * (uint32_t)CH_CFG_ST_FREQUENCY))
 
 /**
  * @brief   Milliseconds to system ticks.
@@ -619,7 +672,7 @@ struct nil_system {
  */
 #define MS2ST(msec)                                                         \
   ((systime_t)(((((uint32_t)(msec)) *                                       \
-                 ((uint32_t)NIL_CFG_ST_FREQUENCY)) + 999UL) / 1000UL))
+                 ((uint32_t)CH_CFG_ST_FREQUENCY)) + 999UL) / 1000UL))
 
 /**
  * @brief   Microseconds to system ticks.
@@ -633,7 +686,7 @@ struct nil_system {
  */
 #define US2ST(usec)                                                         \
   ((systime_t)(((((uint32_t)(usec)) *                                       \
-                 ((uint32_t)NIL_CFG_ST_FREQUENCY)) + 999999UL) / 1000000UL))
+                 ((uint32_t)CH_CFG_ST_FREQUENCY)) + 999999UL) / 1000000UL))
 /** @} */
 
 /**
@@ -893,7 +946,7 @@ struct nil_system {
  *
  * @xclass
  */
-#if (NIL_CFG_ST_TIMEDELTA == 0) || defined(__DOXYGEN__)
+#if (CH_CFG_ST_TIMEDELTA == 0) || defined(__DOXYGEN__)
 #define chVTGetSystemTimeX() (nil.systime)
 #else
 #define chVTGetSystemTimeX() port_timer_get_time()
@@ -931,7 +984,7 @@ struct nil_system {
  * @brief   Condition assertion.
  * @details If the condition check fails then the kernel panics with a
  *          message and halts.
- * @note    The condition is tested only if the @p NIL_CFG_ENABLE_ASSERTS
+ * @note    The condition is tested only if the @p CH_DBG_ENABLE_ASSERTS
  *          switch is specified in @p nilconf.h else the macro does nothing.
  * @note    The remark string is not currently used except for putting a
  *          comment in the code about the assertion.
@@ -944,7 +997,7 @@ struct nil_system {
 #if !defined(chDbgAssert)
 #define chDbgAssert(c, r) do {                                              \
   /*lint -save -e506 -e774 [2.1, 14.3] Can be a constant by design.*/       \
-  if (NIL_CFG_ENABLE_ASSERTS != FALSE) {                                    \
+  if (CH_DBG_ENABLE_ASSERTS != FALSE) {                                     \
     if (!(c)) {                                                             \
   /*lint -restore*/                                                         \
       chSysHalt(__func__);                                                  \
@@ -960,7 +1013,7 @@ struct nil_system {
 
 #if !defined(__DOXYGEN__)
 extern nil_system_t nil;
-extern const thread_config_t nil_thd_configs[NIL_CFG_NUM_THREADS + 1];
+extern const thread_config_t nil_thd_configs[CH_CFG_NUM_THREADS + 1];
 #endif
 
 #ifdef __cplusplus
@@ -976,6 +1029,8 @@ extern "C" {
   void chSysPolledDelayX(rtcnt_t cycles);
   void chSysRestoreStatusX(syssts_t sts);
   thread_t *chSchReadyI(thread_t *tp, msg_t msg);
+  bool chSchIsPreemptionRequired(void);
+  void chSchDoReschedule(void);
   void chSchRescheduleS(void);
   msg_t chSchGoSleepTimeoutS(tstate_t newstate, systime_t timeout);
   msg_t chThdSuspendTimeoutS(thread_reference_t *trp, systime_t timeout);
@@ -996,6 +1051,6 @@ extern "C" {
 }
 #endif
 
-#endif /* _NIL_H_ */
+#endif /* _CH_H_ */
 
 /** @} */

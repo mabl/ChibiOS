@@ -96,8 +96,15 @@ _port_thread_start:
 #endif
                 mov     r0, r5
                 blx     r4
+#if defined(_CHIBIOS_RT_CONF_)
                 movs    r0, #0              /* MSG_OK */
                 bl      chThdExit
+#elif defined(_CHIBIOS_NIL_CONF_)
+                mov     r3, #0
+                bl      chSysHalt
+#else
+#error "missing RTOS identifier macro"
+#endif
 
 /*--------------------------------------------------------------------------*
  * Post-IRQ switch code.
