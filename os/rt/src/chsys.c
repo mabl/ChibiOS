@@ -93,7 +93,6 @@ static void _idle_thread(void *p) {
 void chSysInit(void) {
   extern stkalign_t __main_thread_stack_base__;
 
-  port_init();
   _scheduler_init();
   _vt_init();
 #if CH_CFG_USE_TM == TRUE
@@ -125,6 +124,10 @@ void chSysInit(void) {
 
   /* Setting up the caller as current thread.*/
   currp->p_state = CH_STATE_CURRENT;
+
+  /* Port layer initialization last because it depend on some of the
+     initializations performed before.*/
+  port_init();
 
   /* It is alive now.*/
   chSysEnable();

@@ -47,6 +47,17 @@
 /*===========================================================================*/
 
 /**
+ * @brief   Enables stack overflow guard pages using MPU.
+ * @note    This option can only be enabled if also option
+ *          @p CH_DBG_ENABLE_STACK_CHECK is enabled.
+ * @note    The use of this option has an overhead of 32 bytes for each
+ *          thread.
+ */
+#if !defined(PORT_ENABLE_GUARD_PAGES) || defined(__DOXYGEN__)
+#define PORT_ENABLE_GUARD_PAGES         TRUE
+#endif
+
+/**
  * @brief   Stack size for the system idle thread.
  * @details This size depends on the idle thread implementation, usually
  *          the idle thread should take no more space than those reserved
@@ -135,6 +146,23 @@
 /* Derived constants and error checks.                                       */
 /*===========================================================================*/
 
+#if !defined(_FROM_ASM_)
+/**
+ * @brief   MPU guard page size.
+ */
+#if (PORT_ENABLE_GUARD_PAGES == TRUE) || defined(__DOXYGEN__)
+  #if CH_DBG_ENABLE_STACK_CHECK == FALSE
+    #error "PORT_ENABLE_GUARD_PAGES requires CH_DBG_ENABLE_STACK_CHECK"
+  #endif
+  #if __MPU_PRESENT == 0
+    #error "MPU not present in current device"
+  #endif
+  #define PORT_GUARD_PAGE_SIZE          32U
+#else
+  #define PORT_GUARD_PAGE_SIZE          0U
+#endif
+#endif /* !defined(_FROM_ASM_) */
+
 /**
  * @name    Architecture and Compiler
  * @{
@@ -153,25 +181,45 @@
 /**
  * @brief   Name of the architecture variant.
  */
-#define PORT_CORE_VARIANT_NAME          "Cortex-M3"
+#if (PORT_ENABLE_GUARD_PAGES == FALSE) || defined(__DOXYGEN__)
+  #define PORT_CORE_VARIANT_NAME        "Cortex-M3"
+#else
+  #define PORT_CORE_VARIANT_NAME        "Cortex-M3 (MPU)"
+#endif
 
 #elif (CORTEX_MODEL == 4)
-#define PORT_ARCHITECTURE_ARM_v7ME
-#define PORT_ARCHITECTURE_NAME          "ARMv7E-M"
-#if CORTEX_USE_FPU
-#define PORT_CORE_VARIANT_NAME          "Cortex-M4F"
-#else
-#define PORT_CORE_VARIANT_NAME          "Cortex-M4"
-#endif
+  #define PORT_ARCHITECTURE_ARM_v7ME
+  #define PORT_ARCHITECTURE_NAME        "ARMv7E-M"
+  #if CORTEX_USE_FPU
+    #if PORT_ENABLE_GUARD_PAGES == FALSE
+      #define PORT_CORE_VARIANT_NAME    "Cortex-M4F"
+    #else
+      #define PORT_CORE_VARIANT_NAME    "Cortex-M4F (MPU)"
+    #endif
+  #else
+    #if PORT_ENABLE_GUARD_PAGES == FALSE
+      #define PORT_CORE_VARIANT_NAME    "Cortex-M4"
+    #else
+      #define PORT_CORE_VARIANT_NAME    "Cortex-M4 (MPU)"
+    #endif
+  #endif
 
 #elif (CORTEX_MODEL == 7)
-#define PORT_ARCHITECTURE_ARM_v7ME
-#define PORT_ARCHITECTURE_NAME          "ARMv7E-M"
-#if CORTEX_USE_FPU
-#define PORT_CORE_VARIANT_NAME          "Cortex-M7F"
-#else
-#define PORT_CORE_VARIANT_NAME          "Cortex-M7"
-#endif
+  #define PORT_ARCHITECTURE_ARM_v7ME
+  #define PORT_ARCHITECTURE_NAME        "ARMv7E-M"
+  #if CORTEX_USE_FPU
+    #if PORT_ENABLE_GUARD_PAGES == FALSE
+      #define PORT_CORE_VARIANT_NAME    "Cortex-M7F"
+    #else
+      #define PORT_CORE_VARIANT_NAME    "Cortex-M7F (MPU)"
+    #endif
+  #else
+    #if PORT_ENABLE_GUARD_PAGES == FALSE
+      #define PORT_CORE_VARIANT_NAME    "Cortex-M7"
+    #else
+      #define PORT_CORE_VARIANT_NAME    "Cortex-M7 (MPU)"
+    #endif
+  #endif
 #endif
 
 /**
@@ -302,9 +350,27 @@ struct port_intctx {
  * @brief   Computes the thread working area global size.
  * @note    There is no need to perform alignments in this macro.
  */
-#define PORT_WA_SIZE(n) (sizeof(struct port_intctx) +                       \
-                         sizeof(struct port_extctx) +                       \
-                         ((size_t)(n)) + ((size_t)(PORT_INT_REQUIRED_STACK)))
+#define PORT_WA_SIZE(n) ((size_t)PORT_GUARD_PAGE_SIZE +                     \
+                         sizeof (struct port_intctx) +                      \
+                         sizeof (struct port_extctx) +                      \
+                         (size_t)(n) +                                      \
+                         (size_t)PORT_INT_REQUIRED_STACK)
+
+/**
+ * @brief   Static working area allocation.
+ * @details This macro is used to allocate a static thread working area
+ *          aligned as both position and size.
+ *
+ * @param[in] s         the name to be assigned to the stack array
+ * @param[in] n         the stack size to be assigned to the thread
+ */
+#if (PORT_ENABLE_GUARD_PAGES == FALSE) || defined(__DOXYGEN__)
+#define PORT_WORKING_AREA(s, n)                                             \
+  stkalign_t s[THD_WORKING_AREA_SIZE(n) / sizeof(stkalign_t)]
+#else
+#define PORT_WORKING_AREA(s, n)                                             \
+  ALIGNED_VAR(32) stkalign_t s[THD_WORKING_AREA_SIZE(n) / sizeof(stkalign_t)]
+#endif
 
 /**
  * @brief   IRQ prologue code.
@@ -347,6 +413,7 @@ struct port_intctx {
 #if (CH_DBG_ENABLE_STACK_CHECK == FALSE) || defined(__DOXYGEN__)
 #define port_switch(ntp, otp) _port_switch(ntp, otp)
 #else
+#if PORT_ENABLE_GUARD_PAGES == FALSE
 #define port_switch(ntp, otp) {                                             \
   struct port_intctx *r13 = (struct port_intctx *)__get_PSP();              \
   if ((stkalign_t *)(r13 - 1) < (otp)->p_stklimit) {                        \
@@ -354,6 +421,19 @@ struct port_intctx {
   }                                                                         \
   _port_switch(ntp, otp);                                                   \
 }
+#else
+#define port_switch(ntp, otp) {                                             \
+  _port_switch(ntp, otp);                                                   \
+                                                                            \
+  /* Setting up the guard page for the switched-in thread.*/                \
+  mpuConfigureRegion(MPU_REGION_0,                                          \
+                     currp->p_stklimit,                                     \
+                     MPU_RASR_ATTR_AP_NA_NA |                               \
+                     MPU_RASR_ATTR_NON_CACHEABLE |                          \
+                     MPU_RASR_SIZE_32 |                                     \
+                     MPU_RASR_ENABLE);                                      \
+}
+#endif
 #endif
 
 /*===========================================================================*/
@@ -380,6 +460,7 @@ extern "C" {
  * @brief   Port-related initialization code.
  */
 static inline void port_init(void) {
+  extern stkalign_t __main_thread_stack_base__;
 
   /* Initialization of the vector table and priority related settings.*/
   SCB->VTOR = CORTEX_VTOR_INIT;
@@ -399,6 +480,20 @@ static inline void port_init(void) {
   NVIC_SetPriority(SVCall_IRQn, CORTEX_PRIORITY_SVCALL);
 #endif
   NVIC_SetPriority(PendSV_IRQn, CORTEX_PRIORITY_PENDSV);
+
+#if PORT_ENABLE_GUARD_PAGES == TRUE
+  /* Setting up the guard page on the main() function stack base
+     initially.*/
+  mpuConfigureRegion(MPU_REGION_0,
+                     &__main_thread_stack_base__,
+                     MPU_RASR_ATTR_AP_NA_NA |
+                     MPU_RASR_ATTR_NON_CACHEABLE |
+                     MPU_RASR_SIZE_32 |
+                     MPU_RASR_ENABLE);
+
+  /* MPU is enabled.*/
+  mpuEnable(MPU_CTRL_PRIVDEFENA);
+#endif
 }
 
 /**

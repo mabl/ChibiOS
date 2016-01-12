@@ -165,8 +165,7 @@
  *
  * @api
  */
-#define THD_WORKING_AREA(s, n)                                              \
-  stkalign_t s[THD_WORKING_AREA_SIZE(n) / sizeof(stkalign_t)]
+#define THD_WORKING_AREA(s, n) PORT_WORKING_AREA(s, n)
 /** @} */
 
 /**
