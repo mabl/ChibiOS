@@ -41,6 +41,7 @@
 #define CH_TRACE_TYPE_ISR_ENTER             2U
 #define CH_TRACE_TYPE_ISR_LEAVE             3U
 #define CH_TRACE_TYPE_HALT                  4U
+#define CH_TRACE_TYPE_USER                  5U
 /** @} */
 
 /**
@@ -51,9 +52,11 @@
 #define CH_DBG_TRACE_MASK_SWITCH            1U
 #define CH_DBG_TRACE_MASK_ISR               2U
 #define CH_DBG_TRACE_MASK_HALT              4U
+#define CH_DBG_TRACE_MASK_USER              8U
 #define CH_DBG_TRACE_MASK_ALL               (CH_DBG_TRACE_MASK_SWITCH |     \
                                              CH_DBG_TRACE_MASK_ISR |        \
-                                             CH_DBG_TRACE_MASK_HALT)
+                                             CH_DBG_TRACE_MASK_HALT |       \
+                                             CH_DBG_TRACE_MASK_USER)
 /** @} */
 
 /*===========================================================================*/
@@ -162,6 +165,19 @@ typedef struct {
        */
       const char            *reason;
     } halt;
+    /**
+     * @brief   User trace structure.
+     */
+    struct {
+      /**
+       * @brief   Trace user parameter 1.
+       */
+      void                  *up1;
+      /**
+       * @brief   Trace user parameter 2.
+       */
+      void                  *up2;
+    } user;
   } u;
 } ch_trace_event_t;
 
@@ -211,8 +227,8 @@ typedef struct {
 #define chDbgCheckClassS()
 #endif
 
-/* When the trace feature is disabled this function is replaced by an empty
-   macro.*/
+/* When a trace feature is disabled the associated functions are replaced by
+   an empty macro.*/
 #if (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_SWITCH) == 0
 #define _dbg_trace_switch(otp)
 #endif
@@ -222,6 +238,10 @@ typedef struct {
 #endif
 #if (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_HALT) == 0
 #define _dbg_trace_halt(reason)
+#endif
+#if (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_USER) == 0
+#define chDbgWriteTraceI(up1, up2)
+#define chDbgWriteTrace(up1, up2)
 #endif
 
 /**
@@ -309,7 +329,11 @@ extern "C" {
 #if (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_HALT) != 0
   void _dbg_trace_halt(const char *reason);
 #endif
+#if (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_USER) != 0
+  void chDbgWriteTraceI(void *up1, void *up2);
+  void chDbgWriteTrace(void *up1, void *up2);
 #endif
+#endif /* CH_DBG_TRACE_MASK != CH_DBG_TRACE_MASK_NONE */
 #ifdef __cplusplus
 }
 #endif

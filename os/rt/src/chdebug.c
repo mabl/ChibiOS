@@ -365,6 +365,43 @@ void _dbg_trace_halt(const char *reason) {
   trace_next();
 }
 #endif /* (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_HALT) != 0 */
+
+#if ((CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_USER) != 0) ||                  \
+    defined(__DOXYGEN__)
+/**
+ * @brief   Adds an user trace record to the trace buffer.
+ *
+ * @param[in] up1       user parameter 1
+ * @param[in] up2       user parameter 2
+ *
+ * @iclass
+ */
+void chDbgWriteTraceI(void *up1, void *up2) {
+
+  chDbgCheckClassI();
+
+  ch.dbg.trace_buffer.tb_ptr->type       = CH_TRACE_TYPE_USER;
+  ch.dbg.trace_buffer.tb_ptr->state      = 0;
+  ch.dbg.trace_buffer.tb_ptr->u.user.up1 = up1;
+  ch.dbg.trace_buffer.tb_ptr->u.user.up2 = up2;
+  trace_next();
+}
+
+/**
+ * @brief   Adds an user trace record to the trace buffer.
+ *
+ * @param[in] up1       user parameter 1
+ * @param[in] up2       user parameter 2
+ *
+ * @api
+ */
+void chDbgWriteTrace(void *up1, void *up2) {
+
+  chSysLock();
+  chDbgWriteTraceI(up1, up2);
+  chSysUnlock();
+}
+#endif /* (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_USER) != 0 */
 #endif /* CH_DBG_TRACE_MASK != CH_DBG_TRACE_MASK_NONE */
 
 /** @} */
