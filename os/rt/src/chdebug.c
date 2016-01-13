@@ -256,17 +256,23 @@ void chDbgCheckClassS(void) {
 
 #endif /* CH_DBG_SYSTEM_STATE_CHECK == TRUE */
 
-#if (CH_DBG_ENABLE_TRACE == TRUE) || defined(__DOXYGEN__)
+#if (CH_DBG_TRACE_MASK != CH_DBG_TRACE_MASK_NONE) || defined(__DOXYGEN__)
 /**
  * @brief   Trace circular buffer subsystem initialization.
  * @note    Internal use only.
  */
 void _dbg_trace_init(void) {
+  unsigned i;
 
   ch.dbg.trace_buffer.tb_size = CH_DBG_TRACE_BUFFER_SIZE;
   ch.dbg.trace_buffer.tb_ptr = &ch.dbg.trace_buffer.tb_buffer[0];
+  for (i = 0U; i < CH_DBG_TRACE_BUFFER_SIZE; i++) {
+    ch.dbg.trace_buffer.tb_buffer[i].type = CH_TRACE_TYPE_UNUSED;
+  }
 }
 
+#if ((CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_SWITCH) != 0) ||                \
+    defined(__DOXYGEN__)
 /**
  * @brief   Inserts in the circular debug trace buffer a context switch record.
  *
@@ -274,17 +280,70 @@ void _dbg_trace_init(void) {
  *
  * @notapi
  */
-void _dbg_trace(thread_t *otp) {
+void _dbg_trace_switch(thread_t *otp) {
 
-  ch.dbg.trace_buffer.tb_ptr->se_time   = chVTGetSystemTimeX();
-  ch.dbg.trace_buffer.tb_ptr->se_tp     = currp;
-  ch.dbg.trace_buffer.tb_ptr->se_wtobjp = otp->p_u.wtobjp;
-  ch.dbg.trace_buffer.tb_ptr->se_state  = (uint8_t)otp->p_state;
+  ch.dbg.trace_buffer.tb_ptr->type        = CH_TRACE_TYPE_SWITCH;
+  ch.dbg.trace_buffer.tb_ptr->state       = (uint8_t)otp->p_state;
+  ch.dbg.trace_buffer.tb_ptr->time        = chVTGetSystemTimeX();
+  ch.dbg.trace_buffer.tb_ptr->u.sw.ntp    = currp;
+  ch.dbg.trace_buffer.tb_ptr->u.sw.wtobjp = otp->p_u.wtobjp;
   if (++ch.dbg.trace_buffer.tb_ptr >=
       &ch.dbg.trace_buffer.tb_buffer[CH_DBG_TRACE_BUFFER_SIZE]) {
     ch.dbg.trace_buffer.tb_ptr = &ch.dbg.trace_buffer.tb_buffer[0];
   }
 }
-#endif /* CH_DBG_ENABLE_TRACE */
+#endif /* (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_SWITCH) != 0 */
+
+#if ((CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_ISR) != 0) ||                   \
+    defined(__DOXYGEN__)
+/**
+ * @brief   Inserts in the circular debug trace buffer an ISR-enter record.
+ *
+ * @param[in] isr       name of the isr
+ *
+ * @notapi
+ */
+void _dbg_trace_isr_enter(const char *isr) {
+
+  ch.dbg.trace_buffer.tb_ptr->type        = CH_TRACE_TYPE_ISR_ENTER;
+  ch.dbg.trace_buffer.tb_ptr->state       = 0U;
+  ch.dbg.trace_buffer.tb_ptr->time        = chVTGetSystemTimeX();
+#if PORT_SUPPORTS_RT == TRUE
+  ch.dbg.trace_buffer.tb_ptr->rtstamp     = chSysGetRealtimeCounterX();
+#else
+  ch.dbg.trace_buffer.tb_ptr->rtstamp     = (rtcnt_t)0;
+#endif
+  ch.dbg.trace_buffer.tb_ptr->u.isr.name  = isr;
+  if (++ch.dbg.trace_buffer.tb_ptr >=
+      &ch.dbg.trace_buffer.tb_buffer[CH_DBG_TRACE_BUFFER_SIZE]) {
+    ch.dbg.trace_buffer.tb_ptr = &ch.dbg.trace_buffer.tb_buffer[0];
+  }
+}
+
+/**
+ * @brief   Inserts in the circular debug trace buffer an ISR-leave record.
+ *
+ * @param[in] isr       name of the isr
+ *
+ * @notapi
+ */
+void _dbg_trace_isr_leave(const char *isr) {
+
+  ch.dbg.trace_buffer.tb_ptr->type        = CH_TRACE_TYPE_ISR_LEAVE;
+  ch.dbg.trace_buffer.tb_ptr->state       = 0U;
+  ch.dbg.trace_buffer.tb_ptr->time        = chVTGetSystemTimeX();
+#if PORT_SUPPORTS_RT == TRUE
+  ch.dbg.trace_buffer.tb_ptr->rtstamp     = chSysGetRealtimeCounterX();
+#else
+  ch.dbg.trace_buffer.tb_ptr->rtstamp     = (rtcnt_t)0;
+#endif
+  ch.dbg.trace_buffer.tb_ptr->u.isr.name  = isr;
+  if (++ch.dbg.trace_buffer.tb_ptr >=
+      &ch.dbg.trace_buffer.tb_buffer[CH_DBG_TRACE_BUFFER_SIZE]) {
+    ch.dbg.trace_buffer.tb_ptr = &ch.dbg.trace_buffer.tb_buffer[0];
+  }
+}
+#endif /* (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_ISR) != 0 */
+#endif /* CH_DBG_TRACE_MASK != CH_DBG_TRACE_MASK_NONE */
 
 /** @} */

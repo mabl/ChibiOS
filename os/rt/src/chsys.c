@@ -107,7 +107,7 @@ void chSysInit(void) {
 #if CH_DBG_STATISTICS == TRUE
   _stats_init();
 #endif
-#if CH_DBG_ENABLE_TRACE == TRUE
+#if CH_DBG_TRACE_MASK != CH_DBG_TRACE_MASK_NONE
   _dbg_trace_init();
 #endif
 

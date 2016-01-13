@@ -456,7 +456,7 @@ struct ch_system_debug {
    */
   cnt_t                 lock_cnt;
 #endif
-#if (CH_DBG_ENABLE_TRACE == TRUE) || defined(__DOXYGEN__)
+#if (CH_DBG_TRACE_MASK != CH_DBG_TRACE_MASK_NONE) || defined(__DOXYGEN__)
   /**
    * @brief   Public trace buffer.
    */

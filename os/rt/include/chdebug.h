@@ -32,6 +32,27 @@
 /* Module constants.                                                         */
 /*===========================================================================*/
 
+/**
+ * @name    Trace record types
+ * @{
+ */
+#define CH_TRACE_TYPE_UNUSED                0U
+#define CH_TRACE_TYPE_SWITCH                1U
+#define CH_TRACE_TYPE_ISR_ENTER             2U
+#define CH_TRACE_TYPE_ISR_LEAVE             3U
+/** @} */
+
+/**
+ * @name    Events to trace
+ * @{
+ */
+#define CH_DBG_TRACE_MASK_NONE              0U
+#define CH_DBG_TRACE_MASK_SWITCH            1U
+#define CH_DBG_TRACE_MASK_ISR               2U
+#define CH_DBG_TRACE_MASK_ALL               (CH_DBG_TRACE_MASK_SWITCH |     \
+                                             CH_DBG_TRACE_MASK_ISR)
+/** @} */
+
 /*===========================================================================*/
 /* Module pre-compile time settings.                                         */
 /*===========================================================================*/
@@ -43,14 +64,23 @@
 /**
  * @brief   Trace buffer entries.
  */
-#ifndef CH_DBG_TRACE_BUFFER_SIZE
-#define CH_DBG_TRACE_BUFFER_SIZE            64
+#if !defined(CH_DBG_TRACE_MASK) || defined(__DOXYGEN__)
+#define CH_DBG_TRACE_MASK                   CH_DBG_TRACE_MASK_ALL
+#endif
+
+/**
+ * @brief   Trace buffer entries.
+ * @note    The trace buffer is only allocated if @p CH_DBG_TRACE_MASK is
+ *          different from @p CH_DBG_TRACE_MASK_NONE.
+ */
+#if !defined(CH_DBG_TRACE_BUFFER_SIZE) || defined(__DOXYGEN__)
+#define CH_DBG_TRACE_BUFFER_SIZE            128
 #endif
 
 /**
  * @brief   Fill value for thread stack area in debug mode.
  */
-#ifndef CH_DBG_STACK_FILL_VALUE
+#if !defined(CH_DBG_STACK_FILL_VALUE) || defined(__DOXYGEN__)
 #define CH_DBG_STACK_FILL_VALUE             0x55
 #endif
 
@@ -61,7 +91,7 @@
  *          a debugger. A uninitialized field is not an error in itself but it
  *          better to know it.
  */
-#ifndef CH_DBG_THREAD_FILL_VALUE
+#if !defined(CH_DBG_THREAD_FILL_VALUE) || defined(__DOXYGEN__)
 #define CH_DBG_THREAD_FILL_VALUE            0xFF
 #endif
 /** @} */
@@ -74,28 +104,54 @@
 /* Module data structures and types.                                         */
 /*===========================================================================*/
 
-#if (CH_DBG_ENABLE_TRACE == TRUE) || defined(__DOXYGEN__)
+#if (CH_DBG_TRACE_MASK != CH_DBG_TRACE_MASK_NONE) || defined(__DOXYGEN__)
 /**
  * @brief   Trace buffer record.
  */
 typedef struct {
   /**
-   * @brief   Time of the switch event.
+   * @brief   Record type.
    */
-  systime_t             se_time;
-  /**
-   * @brief   Switched in thread.
-   */
-  thread_t              *se_tp;
-  /**
-   * @brief   Object where going to sleep.
-   */
-  void                  *se_wtobjp;
+  uint32_t              type:3;
   /**
    * @brief   Switched out thread state.
    */
-  uint8_t               se_state;
-} ch_swc_event_t;
+  uint32_t              state:5;
+  /**
+   * @brief   Accurate time stamp.
+   * @note    This field only available if the post supports
+   *          @p PORT_SUPPORTS_RT else it is set to zero.
+   */
+  uint32_t              rtstamp:24;
+  /**
+   * @brief   System time stamp of the switch event.
+   */
+  systime_t             time;
+  union {
+    /**
+     * @brief   Structure representing a  context switch.
+     */
+    struct {
+      /**
+       * @brief   Switched in thread.
+       */
+      thread_t              *ntp;
+      /**
+       * @brief   Object where going to sleep.
+       */
+      void                  *wtobjp;
+    } sw;
+    /**
+     * @brief   Structure representing an ISR enter.
+     */
+    struct {
+      /**
+       * @brief   ISR function name taken using @p __func__.
+       */
+      const char *          name;
+    } isr;
+  } u;
+} ch_trace_event_t;
 
 /**
  * @brief   Trace buffer header.
@@ -108,13 +164,13 @@ typedef struct {
   /**
    * @brief   Pointer to the buffer front.
    */
-  ch_swc_event_t        *tb_ptr;
+  ch_trace_event_t      *tb_ptr;
   /**
    * @brief   Ring buffer.
    */
-  ch_swc_event_t        tb_buffer[CH_DBG_TRACE_BUFFER_SIZE];
+  ch_trace_event_t      tb_buffer[CH_DBG_TRACE_BUFFER_SIZE];
 } ch_trace_buffer_t;
-#endif /* CH_DBG_ENABLE_TRACE */
+#endif /* CH_DBG_TRACE_MASK != CH_DBG_TRACE_MASK_NONE */
 
 /*===========================================================================*/
 /* Module macros.                                                            */
@@ -145,8 +201,12 @@ typedef struct {
 
 /* When the trace feature is disabled this function is replaced by an empty
    macro.*/
-#if CH_DBG_ENABLE_TRACE == FALSE
-#define _dbg_trace(otp)
+#if (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_SWITCH) == 0
+#define _dbg_trace_switch(otp)
+#endif
+#if (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_ISR) == 0
+#define _dbg_trace_isr_enter(isr)
+#define _dbg_trace_isr_leave(isr)
 #endif
 
 /**
@@ -222,9 +282,15 @@ extern "C" {
   void chDbgCheckClassI(void);
   void chDbgCheckClassS(void);
 #endif
-#if (CH_DBG_ENABLE_TRACE == TRUE) || defined(__DOXYGEN__)
+#if (CH_DBG_TRACE_MASK != CH_DBG_TRACE_MASK_NONE) || defined(__DOXYGEN__)
   void _dbg_trace_init(void);
-  void _dbg_trace(thread_t *otp);
+#if (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_SWITCH) != 0
+  void _dbg_trace_switch(thread_t *otp);
+#endif
+#if (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_ISR) != 0
+  void _dbg_trace_isr_enter(const char *isr);
+  void _dbg_trace_isr_leave(const char *isr);
+#endif
 #endif
 #ifdef __cplusplus
 }

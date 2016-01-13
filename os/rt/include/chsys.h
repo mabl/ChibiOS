@@ -109,6 +109,7 @@
 #define CH_IRQ_PROLOGUE()                                                   \
   PORT_IRQ_PROLOGUE();                                                      \
   _stats_increase_irq();                                                    \
+  _dbg_trace_isr_enter(__func__);                                           \
   _dbg_check_enter_isr()
 
 /**
@@ -121,6 +122,7 @@
  */
 #define CH_IRQ_EPILOGUE()                                                   \
   _dbg_check_leave_isr();                                                   \
+  _dbg_trace_isr_leave(__func__);                                           \
   PORT_IRQ_EPILOGUE()
 
 /**
@@ -261,7 +263,7 @@
  */
 #define chSysSwitch(ntp, otp) {                                             \
                                                                             \
-  _dbg_trace(otp);                                                          \
+  _dbg_trace_switch(otp);                                                   \
   _stats_ctxswc(ntp, otp);                                                  \
   CH_CFG_CONTEXT_SWITCH_HOOK(ntp, otp);                                     \
   port_switch(ntp, otp);                                                    \
@@ -280,7 +282,7 @@ extern "C" {
   void chSysTimerHandlerI(void);
   syssts_t chSysGetStatusAndLockX(void);
   void chSysRestoreStatusX(syssts_t sts);
-#if PORT_SUPPORTS_RT
+#if PORT_SUPPORTS_RT == TRUE
   bool chSysIsCounterWithinX(rtcnt_t cnt, rtcnt_t start, rtcnt_t end);
   void chSysPolledDelayX(rtcnt_t cycles);
 #endif
