@@ -322,10 +322,12 @@ void _dbg_trace_switch(thread_t *otp) {
  */
 void _dbg_trace_isr_enter(const char *isr) {
 
+  port_lock_from_isr();
   ch.dbg.trace_buffer.tb_ptr->type        = CH_TRACE_TYPE_ISR_ENTER;
   ch.dbg.trace_buffer.tb_ptr->state       = 0U;
   ch.dbg.trace_buffer.tb_ptr->u.isr.name  = isr;
   trace_next();
+  port_unlock_from_isr();
 }
 
 /**
@@ -337,10 +339,12 @@ void _dbg_trace_isr_enter(const char *isr) {
  */
 void _dbg_trace_isr_leave(const char *isr) {
 
+  port_lock_from_isr();
   ch.dbg.trace_buffer.tb_ptr->type        = CH_TRACE_TYPE_ISR_LEAVE;
   ch.dbg.trace_buffer.tb_ptr->state       = 0U;
   ch.dbg.trace_buffer.tb_ptr->u.isr.name  = isr;
   trace_next();
+  port_unlock_from_isr();
 }
 #endif /* (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_ISR) != 0 */
 
