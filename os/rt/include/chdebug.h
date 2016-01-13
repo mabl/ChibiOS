@@ -40,6 +40,7 @@
 #define CH_TRACE_TYPE_SWITCH                1U
 #define CH_TRACE_TYPE_ISR_ENTER             2U
 #define CH_TRACE_TYPE_ISR_LEAVE             3U
+#define CH_TRACE_TYPE_HALT                  4U
 /** @} */
 
 /**
@@ -49,8 +50,10 @@
 #define CH_DBG_TRACE_MASK_NONE              0U
 #define CH_DBG_TRACE_MASK_SWITCH            1U
 #define CH_DBG_TRACE_MASK_ISR               2U
+#define CH_DBG_TRACE_MASK_HALT              4U
 #define CH_DBG_TRACE_MASK_ALL               (CH_DBG_TRACE_MASK_SWITCH |     \
-                                             CH_DBG_TRACE_MASK_ISR)
+                                             CH_DBG_TRACE_MASK_ISR |        \
+                                             CH_DBG_TRACE_MASK_HALT)
 /** @} */
 
 /*===========================================================================*/
@@ -148,8 +151,17 @@ typedef struct {
       /**
        * @brief   ISR function name taken using @p __func__.
        */
-      const char *          name;
+      const char            *name;
     } isr;
+    /**
+     * @brief   Structure representing an halt.
+     */
+    struct {
+      /**
+       * @brief   Halt error string.
+       */
+      const char            *reason;
+    } halt;
   } u;
 } ch_trace_event_t;
 
@@ -207,6 +219,9 @@ typedef struct {
 #if (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_ISR) == 0
 #define _dbg_trace_isr_enter(isr)
 #define _dbg_trace_isr_leave(isr)
+#endif
+#if (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_HALT) == 0
+#define _dbg_trace_halt(reason)
 #endif
 
 /**
@@ -290,6 +305,9 @@ extern "C" {
 #if (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_ISR) != 0
   void _dbg_trace_isr_enter(const char *isr);
   void _dbg_trace_isr_leave(const char *isr);
+#endif
+#if (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_HALT) != 0
+  void _dbg_trace_halt(const char *reason);
 #endif
 #endif
 #ifdef __cplusplus

@@ -101,6 +101,27 @@
 /* Module local functions.                                                   */
 /*===========================================================================*/
 
+#if (CH_DBG_TRACE_MASK != CH_DBG_TRACE_MASK_NONE) || defined(__DOXYGEN__)
+/**
+ * @brief   Writes a time stamp and increases the trace buffer pointer.
+ *
+ * @notapi
+ */
+static void trace_next(void) {
+
+  ch.dbg.trace_buffer.tb_ptr->time    = chVTGetSystemTimeX();
+#if PORT_SUPPORTS_RT == TRUE
+  ch.dbg.trace_buffer.tb_ptr->rtstamp = chSysGetRealtimeCounterX();
+#else
+  ch.dbg.trace_buffer.tb_ptr->rtstamp = (rtcnt_t)0;
+#endif
+  if (++ch.dbg.trace_buffer.tb_ptr >=
+      &ch.dbg.trace_buffer.tb_buffer[CH_DBG_TRACE_BUFFER_SIZE]) {
+    ch.dbg.trace_buffer.tb_ptr = &ch.dbg.trace_buffer.tb_buffer[0];
+  }
+}
+#endif
+
 /*===========================================================================*/
 /* Module exported functions.                                                */
 /*===========================================================================*/
@@ -284,13 +305,9 @@ void _dbg_trace_switch(thread_t *otp) {
 
   ch.dbg.trace_buffer.tb_ptr->type        = CH_TRACE_TYPE_SWITCH;
   ch.dbg.trace_buffer.tb_ptr->state       = (uint8_t)otp->p_state;
-  ch.dbg.trace_buffer.tb_ptr->time        = chVTGetSystemTimeX();
   ch.dbg.trace_buffer.tb_ptr->u.sw.ntp    = currp;
   ch.dbg.trace_buffer.tb_ptr->u.sw.wtobjp = otp->p_u.wtobjp;
-  if (++ch.dbg.trace_buffer.tb_ptr >=
-      &ch.dbg.trace_buffer.tb_buffer[CH_DBG_TRACE_BUFFER_SIZE]) {
-    ch.dbg.trace_buffer.tb_ptr = &ch.dbg.trace_buffer.tb_buffer[0];
-  }
+  trace_next();
 }
 #endif /* (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_SWITCH) != 0 */
 
@@ -307,17 +324,8 @@ void _dbg_trace_isr_enter(const char *isr) {
 
   ch.dbg.trace_buffer.tb_ptr->type        = CH_TRACE_TYPE_ISR_ENTER;
   ch.dbg.trace_buffer.tb_ptr->state       = 0U;
-  ch.dbg.trace_buffer.tb_ptr->time        = chVTGetSystemTimeX();
-#if PORT_SUPPORTS_RT == TRUE
-  ch.dbg.trace_buffer.tb_ptr->rtstamp     = chSysGetRealtimeCounterX();
-#else
-  ch.dbg.trace_buffer.tb_ptr->rtstamp     = (rtcnt_t)0;
-#endif
   ch.dbg.trace_buffer.tb_ptr->u.isr.name  = isr;
-  if (++ch.dbg.trace_buffer.tb_ptr >=
-      &ch.dbg.trace_buffer.tb_buffer[CH_DBG_TRACE_BUFFER_SIZE]) {
-    ch.dbg.trace_buffer.tb_ptr = &ch.dbg.trace_buffer.tb_buffer[0];
-  }
+  trace_next();
 }
 
 /**
@@ -331,19 +339,28 @@ void _dbg_trace_isr_leave(const char *isr) {
 
   ch.dbg.trace_buffer.tb_ptr->type        = CH_TRACE_TYPE_ISR_LEAVE;
   ch.dbg.trace_buffer.tb_ptr->state       = 0U;
-  ch.dbg.trace_buffer.tb_ptr->time        = chVTGetSystemTimeX();
-#if PORT_SUPPORTS_RT == TRUE
-  ch.dbg.trace_buffer.tb_ptr->rtstamp     = chSysGetRealtimeCounterX();
-#else
-  ch.dbg.trace_buffer.tb_ptr->rtstamp     = (rtcnt_t)0;
-#endif
   ch.dbg.trace_buffer.tb_ptr->u.isr.name  = isr;
-  if (++ch.dbg.trace_buffer.tb_ptr >=
-      &ch.dbg.trace_buffer.tb_buffer[CH_DBG_TRACE_BUFFER_SIZE]) {
-    ch.dbg.trace_buffer.tb_ptr = &ch.dbg.trace_buffer.tb_buffer[0];
-  }
+  trace_next();
 }
 #endif /* (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_ISR) != 0 */
+
+#if ((CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_HALT) != 0) ||                  \
+    defined(__DOXYGEN__)
+/**
+ * @brief   Inserts in the circular debug trace buffer an halt record.
+ *
+ * @param[in] reason    the halt error string
+ *
+ * @notapi
+ */
+void _dbg_trace_halt(const char *reason) {
+
+  ch.dbg.trace_buffer.tb_ptr->type          = CH_TRACE_TYPE_HALT;
+  ch.dbg.trace_buffer.tb_ptr->state         = 0;
+  ch.dbg.trace_buffer.tb_ptr->u.halt.reason = reason;
+  trace_next();
+}
+#endif /* (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_HALT) != 0 */
 #endif /* CH_DBG_TRACE_MASK != CH_DBG_TRACE_MASK_NONE */
 
 /** @} */

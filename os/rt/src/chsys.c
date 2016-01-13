@@ -173,6 +173,9 @@ void chSysHalt(const char *reason) {
   CH_CFG_SYSTEM_HALT_HOOK(reason);
 #endif
 
+  /* Logging the event.*/
+  _dbg_trace_halt(reason);
+
   /* Pointing to the passed message.*/
   ch.dbg.panic_msg = reason;
 
