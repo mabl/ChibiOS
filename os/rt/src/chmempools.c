@@ -76,9 +76,9 @@ void chPoolObjectInit(memory_pool_t *mp, size_t size, memgetfunc_t provider) {
 
   chDbgCheck((mp != NULL) && (size >= sizeof(void *)));
 
-  mp->mp_next = NULL;
-  mp->mp_object_size = size;
-  mp->mp_provider = provider;
+  mp->next = NULL;
+  mp->object_size = size;
+  mp->provider = provider;
 }
 
 /**
@@ -101,7 +101,7 @@ void chPoolLoadArray(memory_pool_t *mp, void *p, size_t n) {
   while (n != 0U) {
     chPoolAdd(mp, p);
     /*lint -save -e9087 [11.3] Safe cast.*/
-    p = (void *)(((uint8_t *)p) + mp->mp_object_size);
+    p = (void *)(((uint8_t *)p) + mp->object_size);
     /*lint -restore*/
     n--;
   }
@@ -123,13 +123,13 @@ void *chPoolAllocI(memory_pool_t *mp) {
   chDbgCheckClassI();
   chDbgCheck(mp != NULL);
 
-  objp = mp->mp_next;
+  objp = mp->next;
   /*lint -save -e9013 [15.7] There is no else because it is not needed.*/
   if (objp != NULL) {
-    mp->mp_next = mp->mp_next->ph_next;
+    mp->next = mp->next->next;
   }
-  else if (mp->mp_provider != NULL) {
-    objp = mp->mp_provider(mp->mp_object_size);
+  else if (mp->provider != NULL) {
+    objp = mp->provider(mp->object_size);
   }
   /*lint -restore*/
 
@@ -174,8 +174,8 @@ void chPoolFreeI(memory_pool_t *mp, void *objp) {
   chDbgCheckClassI();
   chDbgCheck((mp != NULL) && (objp != NULL));
 
-  php->ph_next = mp->mp_next;
-  mp->mp_next = php;
+  php->next = mp->next;
+  mp->next = php;
 }
 
 /**

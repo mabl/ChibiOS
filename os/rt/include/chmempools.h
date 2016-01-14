@@ -54,7 +54,7 @@
  * @brief   Memory pool free object header.
  */
 struct pool_header {
-  struct pool_header    *ph_next;       /**< @brief Pointer to the next pool
+  struct pool_header    *next;          /**< @brief Pointer to the next pool
                                                     header in the list.     */
 };
 
@@ -62,10 +62,10 @@ struct pool_header {
  * @brief   Memory pool descriptor.
  */
 typedef struct {
-  struct pool_header    *mp_next;       /**< @brief Pointer to the header.  */
-  size_t                mp_object_size; /**< @brief Memory pool objects
+  struct pool_header    *next;          /**< @brief Pointer to the header.  */
+  size_t                object_size;    /**< @brief Memory pool objects
                                                     size.                   */
-  memgetfunc_t          mp_provider;    /**< @brief Memory blocks provider
+  memgetfunc_t          provider;       /**< @brief Memory blocks provider
                                                     for this pool.          */
 } memory_pool_t;
 

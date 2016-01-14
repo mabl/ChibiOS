@@ -45,11 +45,11 @@
  * Defaults on the best synchronization mechanism available.
  */
 #if (CH_CFG_USE_MUTEXES == TRUE) || defined(__DOXYGEN__)
-#define H_LOCK(h)       chMtxLock(&(h)->h_mtx)
-#define H_UNLOCK(h)     chMtxUnlock(&(h)->h_mtx)
+#define H_LOCK(h)       chMtxLock(&(h)->mtx)
+#define H_UNLOCK(h)     chMtxUnlock(&(h)->mtx)
 #else
-#define H_LOCK(h)       (void) chSemWait(&(h)->h_sem)
-#define H_UNLOCK(h)     chSemSignal(&(h)->h_sem)
+#define H_LOCK(h)       (void) chSemWait(&(h)->sem)
+#define H_UNLOCK(h)     chSemSignal(&(h)->sem)
 #endif
 
 #define LIMIT(p)                                                            \
@@ -90,13 +90,13 @@ static memory_heap_t default_heap;
  */
 void _heap_init(void) {
 
-  default_heap.h_provider = chCoreAlloc;
-  default_heap.h_free.h.u.next = NULL;
-  default_heap.h_free.h.size = 0;
+  default_heap.provider = chCoreAlloc;
+  default_heap.free.h.u.next = NULL;
+  default_heap.free.h.size = 0;
 #if (CH_CFG_USE_MUTEXES == TRUE) || defined(__DOXYGEN__)
-  chMtxObjectInit(&default_heap.h_mtx);
+  chMtxObjectInit(&default_heap.mtx);
 #else
-  chSemObjectInit(&default_heap.h_sem, (cnt_t)1);
+  chSemObjectInit(&default_heap.sem, (cnt_t)1);
 #endif
 }
 
@@ -116,15 +116,15 @@ void chHeapObjectInit(memory_heap_t *heapp, void *buf, size_t size) {
 
   chDbgCheck(MEM_IS_ALIGNED(buf) && MEM_IS_ALIGNED(size));
 
-  heapp->h_provider = NULL;
-  heapp->h_free.h.u.next = hp;
-  heapp->h_free.h.size = 0;
+  heapp->provider = NULL;
+  heapp->free.h.u.next = hp;
+  heapp->free.h.size = 0;
   hp->h.u.next = NULL;
   hp->h.size = size - sizeof(union heap_header);
 #if (CH_CFG_USE_MUTEXES == TRUE) || defined(__DOXYGEN__)
-  chMtxObjectInit(&heapp->h_mtx);
+  chMtxObjectInit(&heapp->mtx);
 #else
-  chSemObjectInit(&heapp->h_sem, (cnt_t)1);
+  chSemObjectInit(&heapp->sem, (cnt_t)1);
 #endif
 }
 
@@ -152,7 +152,7 @@ void *chHeapAlloc(memory_heap_t *heapp, size_t size) {
   }
 
   size = MEM_ALIGN_NEXT(size);
-  qp = &heapp->h_free;
+  qp = &heapp->free;
 
   H_LOCK(heapp);
   while (qp->h.u.next != NULL) {
@@ -187,8 +187,8 @@ void *chHeapAlloc(memory_heap_t *heapp, size_t size) {
 
   /* More memory is required, tries to get it from the associated provider
      else fails.*/
-  if (heapp->h_provider != NULL) {
-    hp = heapp->h_provider(size + sizeof(union heap_header));
+  if (heapp->provider != NULL) {
+    hp = heapp->provider(size + sizeof(union heap_header));
     if (hp != NULL) {
       hp->h.u.heap = heapp;
       hp->h.size = size;
@@ -220,13 +220,13 @@ void chHeapFree(void *p) {
   hp = (union heap_header *)p - 1;
   /*lint -restore*/
   heapp = hp->h.u.heap;
-  qp = &heapp->h_free;
+  qp = &heapp->free;
 
   H_LOCK(heapp);
   while (true) {
     chDbgAssert((hp < qp) || (hp >= LIMIT(qp)), "within free block");
 
-    if (((qp == &heapp->h_free) || (hp > qp)) &&
+    if (((qp == &heapp->free) || (hp > qp)) &&
         ((qp->h.u.next == NULL) || (hp < qp->h.u.next))) {
       /* Insertion after qp.*/
       hp->h.u.next = qp->h.u.next;
@@ -275,7 +275,7 @@ size_t chHeapStatus(memory_heap_t *heapp, size_t *sizep) {
   H_LOCK(heapp);
   sz = 0;
   n = 0;
-  qp = &heapp->h_free;
+  qp = &heapp->free;
   while (qp->h.u.next != NULL) {
     sz += qp->h.u.next->h.size;
     n++;

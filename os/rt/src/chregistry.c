@@ -87,30 +87,30 @@ ROMCONST chdebug_t ch_debug = {
   (uint8_t)sizeof (void *),
   (uint8_t)sizeof (systime_t),
   (uint8_t)sizeof (thread_t),
-  (uint8_t)_offsetof(thread_t, p_prio),
-  (uint8_t)_offsetof(thread_t, p_ctx),
-  (uint8_t)_offsetof(thread_t, p_newer),
-  (uint8_t)_offsetof(thread_t, p_older),
-  (uint8_t)_offsetof(thread_t, p_name),
+  (uint8_t)_offsetof(thread_t, prio),
+  (uint8_t)_offsetof(thread_t, ctx),
+  (uint8_t)_offsetof(thread_t, newer),
+  (uint8_t)_offsetof(thread_t, older),
+  (uint8_t)_offsetof(thread_t, name),
 #if CH_DBG_ENABLE_STACK_CHECK == TRUE
-  (uint8_t)_offsetof(thread_t, p_stklimit),
+  (uint8_t)_offsetof(thread_t, stklimit),
 #else
   (uint8_t)0,
 #endif
-  (uint8_t)_offsetof(thread_t, p_state),
-  (uint8_t)_offsetof(thread_t, p_flags),
+  (uint8_t)_offsetof(thread_t, state),
+  (uint8_t)_offsetof(thread_t, flags),
 #if CH_CFG_USE_DYNAMIC == TRUE
-  (uint8_t)_offsetof(thread_t, p_refs),
+  (uint8_t)_offsetof(thread_t, refs),
 #else
   (uint8_t)0,
 #endif
 #if CH_CFG_TIME_QUANTUM > 0
-  (uint8_t)_offsetof(thread_t, p_preempt),
+  (uint8_t)_offsetof(thread_t, preempt),
 #else
   (uint8_t)0,
 #endif
 #if CH_DBG_THREADS_PROFILING == TRUE
-  (uint8_t)_offsetof(thread_t, p_time)
+  (uint8_t)_offsetof(thread_t, time)
 #else
   (uint8_t)0
 #endif
@@ -132,9 +132,9 @@ thread_t *chRegFirstThread(void) {
   thread_t *tp;
 
   chSysLock();
-  tp = ch.rlist.r_newer;
+  tp = ch.rlist.newer;
 #if CH_CFG_USE_DYNAMIC == TRUE
-  tp->p_refs++;
+  tp->refs++;
 #endif
   chSysUnlock();
 
@@ -156,7 +156,7 @@ thread_t *chRegNextThread(thread_t *tp) {
   thread_t *ntp;
 
   chSysLock();
-  ntp = tp->p_newer;
+  ntp = tp->newer;
   /*lint -save -e9087 -e740 [11.3, 1.3] Cast required by list handling.*/
   if (ntp == (thread_t *)&ch.rlist) {
   /*lint -restore*/
@@ -164,8 +164,8 @@ thread_t *chRegNextThread(thread_t *tp) {
   }
 #if CH_CFG_USE_DYNAMIC == TRUE
   else {
-    chDbgAssert(ntp->p_refs < (trefs_t)255, "too many references");
-    ntp->p_refs++;
+    chDbgAssert(ntp->refs < (trefs_t)255, "too many references");
+    ntp->refs++;
   }
 #endif
   chSysUnlock();

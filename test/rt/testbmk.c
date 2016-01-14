@@ -211,7 +211,7 @@ static THD_FUNCTION(thread4, p) {
   chSysLock();
   do {
     chSchGoSleepS(CH_STATE_SUSPENDED);
-    msg = self->p_u.rdymsg;
+    msg = self->u.rdymsg;
   } while (msg == MSG_OK);
   chSysUnlock();
 }

@@ -120,10 +120,10 @@ void chSysInit(void) {
 #endif
 
   /* Setting up the base address of the static main thread stack.*/
-  currp->p_stklimit = &__main_thread_stack_base__;
+  currp->stklimit = &__main_thread_stack_base__;
 
   /* Setting up the caller as current thread.*/
-  currp->p_state = CH_STATE_CURRENT;
+  currp->state = CH_STATE_CURRENT;
 
   /* Port layer initialization last because it depend on some of the
      initializations performed before.*/
@@ -219,17 +219,17 @@ bool chSysIntegrityCheckI(unsigned testmask) {
 
     /* Scanning the ready list forward.*/
     n = (cnt_t)0;
-    tp = ch.rlist.r_queue.p_next;
-    while (tp != (thread_t *)&ch.rlist.r_queue) {
+    tp = ch.rlist.queue.next;
+    while (tp != (thread_t *)&ch.rlist.queue) {
       n++;
-      tp = tp->p_next;
+      tp = tp->next;
     }
 
     /* Scanning the ready list backward.*/
-    tp = ch.rlist.r_queue.p_prev;
-    while (tp != (thread_t *)&ch.rlist.r_queue) {
+    tp = ch.rlist.queue.prev;
+    while (tp != (thread_t *)&ch.rlist.queue) {
       n--;
-      tp = tp->p_prev;
+      tp = tp->prev;
     }
 
     /* The number of elements must match.*/
@@ -244,17 +244,17 @@ bool chSysIntegrityCheckI(unsigned testmask) {
 
     /* Scanning the timers list forward.*/
     n = (cnt_t)0;
-    vtp = ch.vtlist.vt_next;
+    vtp = ch.vtlist.next;
     while (vtp != (virtual_timer_t *)&ch.vtlist) {
       n++;
-      vtp = vtp->vt_next;
+      vtp = vtp->next;
     }
 
     /* Scanning the timers list backward.*/
-    vtp = ch.vtlist.vt_prev;
+    vtp = ch.vtlist.prev;
     while (vtp != (virtual_timer_t *)&ch.vtlist) {
       n--;
-      vtp = vtp->vt_prev;
+      vtp = vtp->prev;
     }
 
     /* The number of elements must match.*/
@@ -269,17 +269,17 @@ bool chSysIntegrityCheckI(unsigned testmask) {
 
     /* Scanning the ready list forward.*/
     n = (cnt_t)0;
-    tp = ch.rlist.r_newer;
+    tp = ch.rlist.newer;
     while (tp != (thread_t *)&ch.rlist) {
       n++;
-      tp = tp->p_newer;
+      tp = tp->newer;
     }
 
     /* Scanning the ready list backward.*/
-    tp = ch.rlist.r_older;
+    tp = ch.rlist.older;
     while (tp != (thread_t *)&ch.rlist) {
       n--;
-      tp = tp->p_older;
+      tp = tp->older;
     }
 
     /* The number of elements must match.*/
@@ -315,13 +315,13 @@ void chSysTimerHandlerI(void) {
 
 #if CH_CFG_TIME_QUANTUM > 0
   /* Running thread has not used up quantum yet? */
-  if (currp->p_preempt > (tslices_t)0) {
+  if (currp->preempt > (tslices_t)0) {
     /* Decrement remaining quantum.*/
-    currp->p_preempt--;
+    currp->preempt--;
   }
 #endif
 #if CH_DBG_THREADS_PROFILING == TRUE
-  currp->p_time++;
+  currp->time++;
 #endif
   chVTDoTickI();
 #if defined(CH_CFG_SYSTEM_TICK_HOOK)

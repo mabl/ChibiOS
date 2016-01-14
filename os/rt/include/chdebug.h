@@ -188,15 +188,15 @@ typedef struct {
   /**
    * @brief   Trace buffer size (entries).
    */
-  unsigned              tb_size;
+  unsigned              size;
   /**
    * @brief   Pointer to the buffer front.
    */
-  ch_trace_event_t      *tb_ptr;
+  ch_trace_event_t      *ptr;
   /**
    * @brief   Ring buffer.
    */
-  ch_trace_event_t      tb_buffer[CH_DBG_TRACE_BUFFER_SIZE];
+  ch_trace_event_t      buffer[CH_DBG_TRACE_BUFFER_SIZE];
 } ch_trace_buffer_t;
 #endif /* CH_DBG_TRACE_MASK != CH_DBG_TRACE_MASK_NONE */
 

@@ -68,8 +68,8 @@
 thread_t *chThdAddRef(thread_t *tp) {
 
   chSysLock();
-  chDbgAssert(tp->p_refs < (trefs_t)255, "too many references");
-  tp->p_refs++;
+  chDbgAssert(tp->refs < (trefs_t)255, "too many references");
+  tp->refs++;
   chSysUnlock();
 
   return tp;
@@ -92,22 +92,22 @@ void chThdRelease(thread_t *tp) {
   trefs_t refs;
 
   chSysLock();
-  chDbgAssert(tp->p_refs > (trefs_t)0, "not referenced");
-  tp->p_refs--;
-  refs = tp->p_refs;
+  chDbgAssert(tp->refs > (trefs_t)0, "not referenced");
+  tp->refs--;
+  refs = tp->refs;
   chSysUnlock();
 
   /* If the references counter reaches zero and the thread is in its
      terminated state then the memory can be returned to the proper
      allocator. Of course static threads are not affected.*/
-  if ((refs == (trefs_t)0) && (tp->p_state == CH_STATE_FINAL)) {
-    switch (tp->p_flags & CH_FLAG_MODE_MASK) {
+  if ((refs == (trefs_t)0) && (tp->state == CH_STATE_FINAL)) {
+    switch (tp->flags & CH_FLAG_MODE_MASK) {
 #if CH_CFG_USE_HEAP == TRUE
     case CH_FLAG_MODE_HEAP:
 #if CH_CFG_USE_REGISTRY == TRUE
       REG_REMOVE(tp);
 #endif
-      chHeapFree(tp->p_stklimit);
+      chHeapFree(tp->stklimit);
       break;
 #endif
 #if CH_CFG_USE_MEMPOOLS == TRUE
@@ -115,7 +115,7 @@ void chThdRelease(thread_t *tp) {
 #if CH_CFG_USE_REGISTRY == TRUE
       REG_REMOVE(tp);
 #endif
-      chPoolFree(tp->p_mpool, tp->p_stklimit);
+      chPoolFree(tp->mpool, tp->stklimit);
       break;
 #endif
     default:
@@ -170,7 +170,7 @@ thread_t *chThdCreateFromHeap(memory_heap_t *heapp, size_t size,
   
   chSysLock();
   tp = chThdCreateI(wsp, size, prio, pf, arg);
-  tp->p_flags = CH_FLAG_MODE_HEAP;
+  tp->flags = CH_FLAG_MODE_HEAP;
   chSchWakeupS(tp, MSG_OK);
   chSysUnlock();
 
@@ -223,9 +223,9 @@ thread_t *chThdCreateFromMemoryPool(memory_pool_t *mp, tprio_t prio,
 #endif
 
   chSysLock();
-  tp = chThdCreateI(wsp, mp->mp_object_size, prio, pf, arg);
-  tp->p_flags = CH_FLAG_MODE_MPOOL;
-  tp->p_mpool = mp;
+  tp = chThdCreateI(wsp, mp->object_size, prio, pf, arg);
+  tp->flags = CH_FLAG_MODE_MPOOL;
+  tp->mpool = mp;
   chSchWakeupS(tp, MSG_OK);
   chSysUnlock();
 

@@ -212,11 +212,11 @@ static void dyn3_execute(void) {
 
   /* Testing references increase/decrease and final detach.*/
   tp = chThdCreateFromHeap(&heap1, WA_SIZE, prio-1, thread, "A");
-  test_assert(1, tp->p_refs == 1, "wrong initial reference counter");
+  test_assert(1, tp->refs == 1, "wrong initial reference counter");
   chThdAddRef(tp);
-  test_assert(2, tp->p_refs == 2, "references increase failure");
+  test_assert(2, tp->refs == 2, "references increase failure");
   chThdRelease(tp);
-  test_assert(3, tp->p_refs == 1, "references decrease failure");
+  test_assert(3, tp->refs == 1, "references decrease failure");
 
   /* Verify the new threads count.*/
   test_assert(4, regfind(tp), "thread missing from registry");
@@ -224,12 +224,12 @@ static void dyn3_execute(void) {
 
   /* Detach and let the thread execute and terminate.*/
   chThdRelease(tp);
-  test_assert(6, tp->p_refs == 0, "detach failure");
-  test_assert(7, tp->p_state == CH_STATE_READY, "invalid state");
+  test_assert(6, tp->refs == 0, "detach failure");
+  test_assert(7, tp->state == CH_STATE_READY, "invalid state");
   test_assert(8, regfind(tp), "thread disappeared");
   test_assert(9, regfind(tp), "thread disappeared");
   chThdSleepMilliseconds(50);           /* The thread just terminates.      */
-  test_assert(10, tp->p_state == CH_STATE_FINAL, "invalid state");
+  test_assert(10, tp->state == CH_STATE_FINAL, "invalid state");
 
   /* Clearing the zombie by scanning the registry.*/
   test_assert(11, regfind(tp), "thread disappeared");

@@ -109,15 +109,15 @@
  */
 static void trace_next(void) {
 
-  ch.dbg.trace_buffer.tb_ptr->time    = chVTGetSystemTimeX();
+  ch.dbg.trace_buffer.ptr->time    = chVTGetSystemTimeX();
 #if PORT_SUPPORTS_RT == TRUE
-  ch.dbg.trace_buffer.tb_ptr->rtstamp = chSysGetRealtimeCounterX();
+  ch.dbg.trace_buffer.ptr->rtstamp = chSysGetRealtimeCounterX();
 #else
-  ch.dbg.trace_buffer.tb_ptr->rtstamp = (rtcnt_t)0;
+  ch.dbg.trace_buffer.ptr->rtstamp = (rtcnt_t)0;
 #endif
-  if (++ch.dbg.trace_buffer.tb_ptr >=
-      &ch.dbg.trace_buffer.tb_buffer[CH_DBG_TRACE_BUFFER_SIZE]) {
-    ch.dbg.trace_buffer.tb_ptr = &ch.dbg.trace_buffer.tb_buffer[0];
+  if (++ch.dbg.trace_buffer.ptr >=
+      &ch.dbg.trace_buffer.buffer[CH_DBG_TRACE_BUFFER_SIZE]) {
+    ch.dbg.trace_buffer.ptr = &ch.dbg.trace_buffer.buffer[0];
   }
 }
 #endif
@@ -285,10 +285,10 @@ void chDbgCheckClassS(void) {
 void _dbg_trace_init(void) {
   unsigned i;
 
-  ch.dbg.trace_buffer.tb_size = CH_DBG_TRACE_BUFFER_SIZE;
-  ch.dbg.trace_buffer.tb_ptr = &ch.dbg.trace_buffer.tb_buffer[0];
+  ch.dbg.trace_buffer.size = CH_DBG_TRACE_BUFFER_SIZE;
+  ch.dbg.trace_buffer.ptr  = &ch.dbg.trace_buffer.buffer[0];
   for (i = 0U; i < CH_DBG_TRACE_BUFFER_SIZE; i++) {
-    ch.dbg.trace_buffer.tb_buffer[i].type = CH_TRACE_TYPE_UNUSED;
+    ch.dbg.trace_buffer.buffer[i].type = CH_TRACE_TYPE_UNUSED;
   }
 }
 
@@ -303,10 +303,10 @@ void _dbg_trace_init(void) {
  */
 void _dbg_trace_switch(thread_t *otp) {
 
-  ch.dbg.trace_buffer.tb_ptr->type        = CH_TRACE_TYPE_SWITCH;
-  ch.dbg.trace_buffer.tb_ptr->state       = (uint8_t)otp->p_state;
-  ch.dbg.trace_buffer.tb_ptr->u.sw.ntp    = currp;
-  ch.dbg.trace_buffer.tb_ptr->u.sw.wtobjp = otp->p_u.wtobjp;
+  ch.dbg.trace_buffer.ptr->type        = CH_TRACE_TYPE_SWITCH;
+  ch.dbg.trace_buffer.ptr->state       = (uint8_t)otp->state;
+  ch.dbg.trace_buffer.ptr->u.sw.ntp    = currp;
+  ch.dbg.trace_buffer.ptr->u.sw.wtobjp = otp->u.wtobjp;
   trace_next();
 }
 #endif /* (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_SWITCH) != 0 */
@@ -323,9 +323,9 @@ void _dbg_trace_switch(thread_t *otp) {
 void _dbg_trace_isr_enter(const char *isr) {
 
   port_lock_from_isr();
-  ch.dbg.trace_buffer.tb_ptr->type        = CH_TRACE_TYPE_ISR_ENTER;
-  ch.dbg.trace_buffer.tb_ptr->state       = 0U;
-  ch.dbg.trace_buffer.tb_ptr->u.isr.name  = isr;
+  ch.dbg.trace_buffer.ptr->type        = CH_TRACE_TYPE_ISR_ENTER;
+  ch.dbg.trace_buffer.ptr->state       = 0U;
+  ch.dbg.trace_buffer.ptr->u.isr.name  = isr;
   trace_next();
   port_unlock_from_isr();
 }
@@ -340,9 +340,9 @@ void _dbg_trace_isr_enter(const char *isr) {
 void _dbg_trace_isr_leave(const char *isr) {
 
   port_lock_from_isr();
-  ch.dbg.trace_buffer.tb_ptr->type        = CH_TRACE_TYPE_ISR_LEAVE;
-  ch.dbg.trace_buffer.tb_ptr->state       = 0U;
-  ch.dbg.trace_buffer.tb_ptr->u.isr.name  = isr;
+  ch.dbg.trace_buffer.ptr->type        = CH_TRACE_TYPE_ISR_LEAVE;
+  ch.dbg.trace_buffer.ptr->state       = 0U;
+  ch.dbg.trace_buffer.ptr->u.isr.name  = isr;
   trace_next();
   port_unlock_from_isr();
 }
@@ -359,9 +359,9 @@ void _dbg_trace_isr_leave(const char *isr) {
  */
 void _dbg_trace_halt(const char *reason) {
 
-  ch.dbg.trace_buffer.tb_ptr->type          = CH_TRACE_TYPE_HALT;
-  ch.dbg.trace_buffer.tb_ptr->state         = 0;
-  ch.dbg.trace_buffer.tb_ptr->u.halt.reason = reason;
+  ch.dbg.trace_buffer.ptr->type          = CH_TRACE_TYPE_HALT;
+  ch.dbg.trace_buffer.ptr->state         = 0;
+  ch.dbg.trace_buffer.ptr->u.halt.reason = reason;
   trace_next();
 }
 #endif /* (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_HALT) != 0 */
@@ -380,10 +380,10 @@ void chDbgWriteTraceI(void *up1, void *up2) {
 
   chDbgCheckClassI();
 
-  ch.dbg.trace_buffer.tb_ptr->type       = CH_TRACE_TYPE_USER;
-  ch.dbg.trace_buffer.tb_ptr->state      = 0;
-  ch.dbg.trace_buffer.tb_ptr->u.user.up1 = up1;
-  ch.dbg.trace_buffer.tb_ptr->u.user.up2 = up2;
+  ch.dbg.trace_buffer.ptr->type       = CH_TRACE_TYPE_USER;
+  ch.dbg.trace_buffer.ptr->state      = 0;
+  ch.dbg.trace_buffer.ptr->u.user.up1 = up1;
+  ch.dbg.trace_buffer.ptr->u.user.up2 = up2;
   trace_next();
 }
 

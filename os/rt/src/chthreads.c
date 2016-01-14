@@ -90,38 +90,38 @@
  */
 thread_t *_thread_init(thread_t *tp, tprio_t prio) {
 
-  tp->p_prio = prio;
-  tp->p_state = CH_STATE_WTSTART;
-  tp->p_flags = CH_FLAG_MODE_STATIC;
+  tp->prio = prio;
+  tp->state = CH_STATE_WTSTART;
+  tp->flags = CH_FLAG_MODE_STATIC;
 #if CH_CFG_TIME_QUANTUM > 0
-  tp->p_preempt = (tslices_t)CH_CFG_TIME_QUANTUM;
+  tp->preempt = (tslices_t)CH_CFG_TIME_QUANTUM;
 #endif
 #if CH_CFG_USE_MUTEXES == TRUE
-  tp->p_realprio = prio;
-  tp->p_mtxlist = NULL;
+  tp->realprio = prio;
+  tp->mtxlist = NULL;
 #endif
 #if CH_CFG_USE_EVENTS == TRUE
-  tp->p_epending = (eventmask_t)0;
+  tp->epending = (eventmask_t)0;
 #endif
 #if CH_DBG_THREADS_PROFILING == TRUE
-  tp->p_time = (systime_t)0;
+  tp->time = (systime_t)0;
 #endif
 #if CH_CFG_USE_DYNAMIC == TRUE
-  tp->p_refs = (trefs_t)1;
+  tp->refs = (trefs_t)1;
 #endif
 #if CH_CFG_USE_REGISTRY == TRUE
-  tp->p_name = NULL;
+  tp->name = NULL;
   REG_INSERT(tp);
 #endif
 #if CH_CFG_USE_WAITEXIT == TRUE
-  list_init(&tp->p_waiting);
+  list_init(&tp->waiting);
 #endif
 #if CH_CFG_USE_MESSAGES == TRUE
-  queue_init(&tp->p_msgqueue);
+  queue_init(&tp->msgqueue);
 #endif
 #if CH_DBG_STATISTICS == TRUE
-  chTMObjectInit(&tp->p_stats);
-  chTMStartMeasurementX(&tp->p_stats);
+  chTMObjectInit(&tp->stats);
+  chTMStartMeasurementX(&tp->stats);
 #endif
 #if defined(CH_CFG_THREAD_INIT_HOOK)
   CH_CFG_THREAD_INIT_HOOK(tp);
@@ -185,7 +185,7 @@ thread_t *chThdCreateI(void *wsp, size_t size,
   tp = (thread_t *)((uint8_t *)wsp + size - sizeof (thread_t));
 
   /* Stack boundary.*/
-  tp->p_stklimit = (stkalign_t *)wsp;
+  tp->stklimit = (stkalign_t *)wsp;
 
   /* Setting up the port-dependent part of the working area.*/
   PORT_SETUP_CONTEXT(tp, wsp, tp, pf, arg);
@@ -267,14 +267,14 @@ tprio_t chThdSetPriority(tprio_t newprio) {
 
   chSysLock();
 #if CH_CFG_USE_MUTEXES == TRUE
-  oldprio = currp->p_realprio;
-  if ((currp->p_prio == currp->p_realprio) || (newprio > currp->p_prio)) {
-    currp->p_prio = newprio;
+  oldprio = currp->realprio;
+  if ((currp->prio == currp->realprio) || (newprio > currp->prio)) {
+    currp->prio = newprio;
   }
-  currp->p_realprio = newprio;
+  currp->realprio = newprio;
 #else
-  oldprio = currp->p_prio;
-  currp->p_prio = newprio;
+  oldprio = currp->prio;
+  currp->prio = newprio;
 #endif
   chSchRescheduleS();
   chSysUnlock();
@@ -297,7 +297,7 @@ tprio_t chThdSetPriority(tprio_t newprio) {
 void chThdTerminate(thread_t *tp) {
 
   chSysLock();
-  tp->p_flags |= CH_FLAG_TERMINATE;
+  tp->flags |= CH_FLAG_TERMINATE;
   chSysUnlock();
 }
 
@@ -422,19 +422,19 @@ void chThdExit(msg_t msg) {
 void chThdExitS(msg_t msg) {
   thread_t *tp = currp;
 
-  tp->p_u.exitcode = msg;
+  tp->u.exitcode = msg;
 #if defined(CH_CFG_THREAD_EXIT_HOOK)
   CH_CFG_THREAD_EXIT_HOOK(tp);
 #endif
 #if CH_CFG_USE_WAITEXIT == TRUE
-  while (list_notempty(&tp->p_waiting)) {
-    (void) chSchReadyI(list_remove(&tp->p_waiting));
+  while (list_notempty(&tp->waiting)) {
+    (void) chSchReadyI(list_remove(&tp->waiting));
   }
 #endif
 #if CH_CFG_USE_REGISTRY == TRUE
   /* Static threads are immediately removed from the registry because
      there is no memory to recover.*/
-  if ((tp->p_flags & CH_FLAG_MODE_MASK) == CH_FLAG_MODE_STATIC) {
+  if ((tp->flags & CH_FLAG_MODE_MASK) == CH_FLAG_MODE_STATIC) {
     REG_REMOVE(tp);
   }
 #endif
@@ -484,13 +484,13 @@ msg_t chThdWait(thread_t *tp) {
   chSysLock();
   chDbgAssert(tp != currp, "waiting self");
 #if CH_CFG_USE_DYNAMIC == TRUE
-  chDbgAssert(tp->p_refs > (trefs_t)0, "not referenced");
+  chDbgAssert(tp->refs > (trefs_t)0, "not referenced");
 #endif
-  if (tp->p_state != CH_STATE_FINAL) {
-    list_insert(currp, &tp->p_waiting);
+  if (tp->state != CH_STATE_FINAL) {
+    list_insert(currp, &tp->waiting);
     chSchGoSleepS(CH_STATE_WTEXIT);
   }
-  msg = tp->p_u.exitcode;
+  msg = tp->u.exitcode;
   chSysUnlock();
 
 #if CH_CFG_USE_DYNAMIC == TRUE
@@ -518,10 +518,10 @@ msg_t chThdSuspendS(thread_reference_t *trp) {
   chDbgAssert(*trp == NULL, "not NULL");
 
   *trp = tp;
-  tp->p_u.wttrp = trp;
+  tp->u.wttrp = trp;
   chSchGoSleepS(CH_STATE_SUSPENDED);
 
-  return chThdGetSelfX()->p_u.rdymsg;
+  return chThdGetSelfX()->u.rdymsg;
 }
 
 /**
@@ -553,7 +553,7 @@ msg_t chThdSuspendTimeoutS(thread_reference_t *trp, systime_t timeout) {
   }
 
   *trp = tp;
-  tp->p_u.wttrp = trp;
+  tp->u.wttrp = trp;
 
   return chSchGoSleepTimeoutS(CH_STATE_SUSPENDED, timeout);
 }
@@ -573,11 +573,10 @@ void chThdResumeI(thread_reference_t *trp, msg_t msg) {
   if (*trp != NULL) {
     thread_t *tp = *trp;
 
-    chDbgAssert(tp->p_state == CH_STATE_SUSPENDED,
-                "not THD_STATE_SUSPENDED");
+    chDbgAssert(tp->state == CH_STATE_SUSPENDED, "not CH_STATE_SUSPENDED");
 
     *trp = NULL;
-    tp->p_u.rdymsg = msg;
+    tp->u.rdymsg = msg;
     (void) chSchReadyI(tp);
   }
 }
@@ -597,8 +596,7 @@ void chThdResumeS(thread_reference_t *trp, msg_t msg) {
   if (*trp != NULL) {
     thread_t *tp = *trp;
 
-    chDbgAssert(tp->p_state == CH_STATE_SUSPENDED,
-                "not THD_STATE_SUSPENDED");
+    chDbgAssert(tp->state == CH_STATE_SUSPENDED, "not CH_STATE_SUSPENDED");
 
     *trp = NULL;
     chSchWakeupS(tp, msg);

@@ -173,7 +173,7 @@ extern "C" {
   */
 static inline thread_t *chThdGetSelfX(void) {
 
-  return ch.rlist.r_current;
+  return ch.rlist.current;
 }
 
 /**
@@ -186,7 +186,7 @@ static inline thread_t *chThdGetSelfX(void) {
  */
 static inline tprio_t chThdGetPriorityX(void) {
 
-  return chThdGetSelfX()->p_prio;
+  return chThdGetSelfX()->prio;
 }
 
 /**
@@ -202,7 +202,7 @@ static inline tprio_t chThdGetPriorityX(void) {
 #if (CH_DBG_THREADS_PROFILING == TRUE) || defined(__DOXYGEN__)
 static inline systime_t chThdGetTicksX(thread_t *tp) {
 
-  return tp->p_time;
+  return tp->time;
 }
 #endif
 
@@ -217,7 +217,7 @@ static inline systime_t chThdGetTicksX(thread_t *tp) {
  */
 static inline bool chThdTerminatedX(thread_t *tp) {
 
-  return (bool)(tp->p_state == CH_STATE_FINAL);
+  return (bool)(tp->state == CH_STATE_FINAL);
 }
 
 /**
@@ -230,7 +230,7 @@ static inline bool chThdTerminatedX(thread_t *tp) {
  */
 static inline bool chThdShouldTerminateX(void) {
 
-  return (bool)((chThdGetSelfX()->p_flags & CH_FLAG_TERMINATE) != (tmode_t)0);
+  return (bool)((chThdGetSelfX()->flags & CH_FLAG_TERMINATE) != (tmode_t)0);
 }
 
 /**
@@ -244,7 +244,7 @@ static inline bool chThdShouldTerminateX(void) {
  */
 static inline thread_t *chThdStartI(thread_t *tp) {
 
-  chDbgAssert(tp->p_state == CH_STATE_WTSTART, "wrong state");
+  chDbgAssert(tp->state == CH_STATE_WTSTART, "wrong state");
 
   return chSchReadyI(tp);
 }
@@ -316,9 +316,9 @@ static inline void chThdDoDequeueNextI(threads_queue_t *tqp, msg_t msg) {
 
   tp = queue_fifo_remove(tqp);
 
-  chDbgAssert(tp->p_state == CH_STATE_QUEUED, "invalid state");
+  chDbgAssert(tp->state == CH_STATE_QUEUED, "invalid state");
 
-  tp->p_u.rdymsg = msg;
+  tp->u.rdymsg = msg;
   (void) chSchReadyI(tp);
 }
 

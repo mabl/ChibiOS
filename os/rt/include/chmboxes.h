@@ -54,15 +54,15 @@
  * @brief   Structure representing a mailbox object.
  */
 typedef struct {
-  msg_t                 *mb_buffer;     /**< @brief Pointer to the mailbox
+  msg_t                 *buffer;        /**< @brief Pointer to the mailbox
                                                     buffer.                 */
-  msg_t                 *mb_top;        /**< @brief Pointer to the location
+  msg_t                 *top;           /**< @brief Pointer to the location
                                                     after the buffer.       */
-  msg_t                 *mb_wrptr;      /**< @brief Write pointer.          */
-  msg_t                 *mb_rdptr;      /**< @brief Read pointer.           */
-  semaphore_t           mb_fullsem;     /**< @brief Full counter
+  msg_t                 *wrptr;         /**< @brief Write pointer.          */
+  msg_t                 *rdptr;         /**< @brief Read pointer.           */
+  semaphore_t           fullsem;        /**< @brief Full counter
                                                     @p semaphore_t.         */
-  semaphore_t           mb_emptysem;    /**< @brief Empty counter
+  semaphore_t           emptysem;       /**< @brief Empty counter
                                                     @p semaphore_t.         */
 } mailbox_t;
 
@@ -79,13 +79,13 @@ typedef struct {
  * @param[in] buffer    pointer to the mailbox buffer area
  * @param[in] size      size of the mailbox buffer area
  */
-#define _MAILBOX_DATA(name, buffer, size) {                             \
-  (msg_t *)(buffer),                                                    \
-  (msg_t *)(buffer) + size,                                             \
-  (msg_t *)(buffer),                                                    \
-  (msg_t *)(buffer),                                                    \
-  _SEMAPHORE_DATA(name.mb_fullsem, 0),                                  \
-  _SEMAPHORE_DATA(name.mb_emptysem, size),                              \
+#define _MAILBOX_DATA(name, buffer, size) {                                 \
+  (msg_t *)(buffer),                                                        \
+  (msg_t *)(buffer) + size,                                                 \
+  (msg_t *)(buffer),                                                        \
+  (msg_t *)(buffer),                                                        \
+  _SEMAPHORE_DATA(name.fullsem, 0),                                         \
+  _SEMAPHORE_DATA(name.emptysem, size),                                     \
 }
 
 /**
@@ -97,7 +97,7 @@ typedef struct {
  * @param[in] buffer    pointer to the mailbox buffer area
  * @param[in] size      size of the mailbox buffer area
  */
-#define MAILBOX_DECL(name, buffer, size)                                \
+#define MAILBOX_DECL(name, buffer, size)                                    \
   mailbox_t name = _MAILBOX_DATA(name, buffer, size)
 
 /*===========================================================================*/
@@ -139,7 +139,7 @@ static inline size_t chMBGetSizeI(mailbox_t *mbp) {
 
   /*lint -save -e9033 [10.8] Perfectly safe pointers
     arithmetic.*/
-  return (size_t)(mbp->mb_top - mbp->mb_buffer);
+  return (size_t)(mbp->top - mbp->buffer);
   /*lint -restore*/
 }
 
@@ -159,7 +159,7 @@ static inline cnt_t chMBGetFreeCountI(mailbox_t *mbp) {
 
   chDbgCheckClassI();
 
-  return chSemGetCounterI(&mbp->mb_emptysem);
+  return chSemGetCounterI(&mbp->emptysem);
 }
 
 /**
@@ -178,7 +178,7 @@ static inline cnt_t chMBGetUsedCountI(mailbox_t *mbp) {
 
   chDbgCheckClassI();
 
-  return chSemGetCounterI(&mbp->mb_fullsem);
+  return chSemGetCounterI(&mbp->fullsem);
 }
 
 /**
@@ -197,7 +197,7 @@ static inline msg_t chMBPeekI(mailbox_t *mbp) {
 
   chDbgCheckClassI();
 
-  return *mbp->mb_rdptr;
+  return *mbp->rdptr;
 }
 
 #endif /* CH_CFG_USE_MAILBOXES == TRUE */
