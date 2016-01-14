@@ -286,9 +286,9 @@
 #error "at least one thread must be defined"
 #endif
 
-#if CH_CFG_NUM_THREADS > 12
-#error "Nil is not recommended for thread-intensive applications, consider" \
-       "ChibiOS/RT instead"
+#if CH_CFG_NUM_THREADS > 16
+#error "ChibiOS/NIL is not recommended for thread-intensive applications,"  \
+       "consider ChibiOS/RT instead"
 #endif
 
 #if (CH_CFG_ST_RESOLUTION != 16) && (CH_CFG_ST_RESOLUTION != 32)
@@ -300,7 +300,7 @@
 #endif
 
 #if (CH_CFG_ST_TIMEDELTA < 0) || (CH_CFG_ST_TIMEDELTA == 1)
-#error "invalid CH_CFG_ST_TIMEDELTA specified, must "                      \
+#error "invalid CH_CFG_ST_TIMEDELTA specified, must "                       \
        "be zero or greater than one"
 #endif
 
@@ -328,8 +328,6 @@
 /** Boundaries of the idle thread boundaries, only required if stack checking
     is enabled.*/
 #if (CH_DBG_ENABLE_STACK_CHECK == TRUE) || defined(__DOXYGEN__)
-extern stkalign_t __main_thread_stack_base__, __main_thread_stack_end__;
-
 #define THD_IDLE_BASE                   (&__main_thread_stack_base__)
 #define THD_IDLE_END                    (&__main_thread_stack_end__)
 #else
@@ -340,11 +338,6 @@ extern stkalign_t __main_thread_stack_base__, __main_thread_stack_end__;
 /*===========================================================================*/
 /* Module data structures and types.                                         */
 /*===========================================================================*/
-
-/**
- * @brief   Type of internal context structure.
- */
-typedef struct port_intctx intctx_t;
 
 /**
  * @brief   Type of system time.
@@ -405,26 +398,26 @@ typedef thread_t * thread_reference_t;
  * @brief   Structure representing a thread.
  */
 struct nil_thread {
-  struct context        p_ctx;  /**< @brief Processor context.              */
-  tstate_t              state;  /**< @brief Thread state.                   */
+  struct context        ctx;        /**< @brief Processor context.          */
+  tstate_t              state;      /**< @brief Thread state.               */
   /* Note, the following union contains a pointer while the thread is in a
      sleeping state (!NIL_THD_IS_READY()) else contains the wake-up message.*/
   union {
-    msg_t               msg;    /**< @brief Wake-up message.                */
-    void                *p;     /**< @brief Generic pointer.                */
-    thread_reference_t  *trp;   /**< @brief Pointer to thread reference.    */
-    semaphore_t         *semp;  /**< @brief Pointer to semaphore.           */
+    msg_t               msg;        /**< @brief Wake-up message.            */
+    void                *p;         /**< @brief Generic pointer.            */
+    thread_reference_t  *trp;       /**< @brief Pointer to thread reference.*/
+    semaphore_t         *semp;      /**< @brief Pointer to semaphore.       */
 #if (CH_CFG_USE_EVENTS == TRUE) || defined(__DOXYGEN__)
-    eventmask_t         ewmask; /**< @brief Enabled events mask.            */
+    eventmask_t         ewmask;     /**< @brief Enabled events mask.        */
 #endif
   } u1;
-  volatile systime_t    timeout;/**< @brief Timeout counter, zero
+  volatile systime_t    timeout;    /**< @brief Timeout counter, zero
                                             if disabled.                    */
 #if (CH_CFG_USE_EVENTS == TRUE) || defined(__DOXYGEN__)
-  eventmask_t           epmask; /**< @brief Pending events mask.            */
+  eventmask_t           epmask;     /**< @brief Pending events mask.        */
 #endif
 #if (CH_DBG_ENABLE_STACK_CHECK == TRUE) || defined(__DOXYGEN__)
-  stkalign_t            *stklim;/**< @brief Thread stack boundary.          */
+  stkalign_t            *stklimit;  /**< @brief Thread stack boundary.      */
 #endif
   /* Optional extra fields.*/
   CH_CFG_THREAD_EXT_FIELDS
@@ -513,20 +506,42 @@ struct nil_system {
 /** @} */
 
 /**
- * @name    Working Areas and Alignment
+ * @name    Memory alignment support macros
  */
 /**
- * @brief   Enforces a correct alignment for a stack area size value.
- *
- * @param[in] n         the stack size to be aligned to the next stack
- *                      alignment boundary
- * @return              The aligned stack size.
- *
- * @api
+ * @brief   Alignment size constant.
+ * @note    Alignment type is @p stkalign_t.
  */
-#define THD_ALIGN_STACK_SIZE(n)                                             \
-  ((((n) - 1U) | (sizeof(stkalign_t) - 1U)) + 1U)
+#define MEM_ALIGN_SIZE      sizeof (stkalign_t)
 
+/**
+ * @brief   Alignment mask constant.
+ * @note    Alignment type is @p stkalign_t.
+ */
+#define MEM_ALIGN_MASK      (MEM_ALIGN_SIZE - 1U)
+
+/**
+ * @brief   Aligns to the previous aligned memory address.
+ * @note    Alignment type is @p stkalign_t.
+ */
+#define MEM_ALIGN_PREV(p)   ((size_t)(p) & ~MEM_ALIGN_MASK)
+
+/**
+ * @brief   Aligns to the new aligned memory address.
+ * @note    Alignment type is @p stkalign_t.
+ */
+#define MEM_ALIGN_NEXT(p)   MEM_ALIGN_PREV((size_t)(p) + MEM_ALIGN_MASK)
+
+/**
+ * @brief   Returns whatever a pointer or memory size is aligned.
+ * @note    Alignment type is @p stkalign_t.
+ */
+#define MEM_IS_ALIGNED(p)   (((size_t)(p) & MEM_ALIGN_MASK) == 0U)
+/** @} */
+
+/**
+ * @name    Working Areas
+ */
 /**
  * @brief   Calculates the total Working Area size.
  *
@@ -535,8 +550,7 @@ struct nil_system {
  *
  * @api
  */
-#define THD_WORKING_AREA_SIZE(n)                                            \
-  THD_ALIGN_STACK_SIZE(PORT_WA_SIZE(n))
+#define THD_WORKING_AREA_SIZE(n) MEM_ALIGN_NEXT(PORT_WA_SIZE(n))
 
 /**
  * @brief   Static working area allocation.
@@ -548,8 +562,7 @@ struct nil_system {
  *
  * @api
  */
-#define THD_WORKING_AREA(s, n)                                              \
-  stkalign_t s[THD_WORKING_AREA_SIZE(n) / sizeof(stkalign_t)]
+#define THD_WORKING_AREA(s, n) PORT_WORKING_AREA(s, n)
 /** @} */
 
 /**
@@ -1012,6 +1025,9 @@ struct nil_system {
 /*===========================================================================*/
 
 #if !defined(__DOXYGEN__)
+#if (CH_DBG_ENABLE_STACK_CHECK == TRUE) || defined(__DOXYGEN__)
+extern stkalign_t __main_thread_stack_base__, __main_thread_stack_end__;
+#endif
 extern nil_system_t nil;
 extern const thread_config_t nil_thd_configs[CH_CFG_NUM_THREADS + 1];
 #endif

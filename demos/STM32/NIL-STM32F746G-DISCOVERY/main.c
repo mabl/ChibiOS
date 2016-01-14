@@ -26,76 +26,39 @@ static THD_FUNCTION(Thread1, arg) {
 
   (void)arg;
 
-  while (true) {
-    palSetPad(GPIOE, GPIOE_LED3_RED);
-    chThdSleepMilliseconds(125);
-    palClearPad(GPIOE, GPIOE_LED3_RED);
-    chThdSleepMilliseconds(125);
-    palSetPad(GPIOE, GPIOE_LED7_GREEN);
-    chThdSleepMilliseconds(125);
-    palClearPad(GPIOE, GPIOE_LED7_GREEN);
-    chThdSleepMilliseconds(125);
-    palSetPad(GPIOE, GPIOE_LED10_RED);
-    chThdSleepMilliseconds(125);
-    palClearPad(GPIOE, GPIOE_LED10_RED);
-    chThdSleepMilliseconds(125);
-    palSetPad(GPIOE, GPIOE_LED6_GREEN);
-    chThdSleepMilliseconds(125);
-    palClearPad(GPIOE, GPIOE_LED6_GREEN);
-    chThdSleepMilliseconds(125);
-  }
-}
-
-/*
- * Blinker thread #2.
- */
-static THD_WORKING_AREA(waThread2, 128);
-static THD_FUNCTION(Thread2, arg) {
-
-  (void)arg;
+  /*
+   * GPIOI1 is programmed as output (board LED).
+   */
+  palClearLine(LINE_ARD_D13);
+  palSetLineMode(LINE_ARD_D13, PAL_MODE_OUTPUT_PUSHPULL);
 
   while (true) {
-    chThdSleepMilliseconds(125);
-    palSetPad(GPIOE, GPIOE_LED5_ORANGE);
-    chThdSleepMilliseconds(125);
-    palClearPad(GPIOE, GPIOE_LED5_ORANGE);
-    chThdSleepMilliseconds(125);
-    palSetPad(GPIOE, GPIOE_LED9_BLUE);
-    chThdSleepMilliseconds(125);
-    palClearPad(GPIOE, GPIOE_LED9_BLUE);
-    chThdSleepMilliseconds(125);
-    palSetPad(GPIOE, GPIOE_LED8_ORANGE);
-    chThdSleepMilliseconds(125);
-    palClearPad(GPIOE, GPIOE_LED8_ORANGE);
-    chThdSleepMilliseconds(125);
-    palSetPad(GPIOE, GPIOE_LED4_BLUE);
-    chThdSleepMilliseconds(125);
-    palClearPad(GPIOE, GPIOE_LED4_BLUE);
+    palSetLine(LINE_ARD_D13);
+    chThdSleepMilliseconds(500);
+    palClearLine(LINE_ARD_D13);
+    chThdSleepMilliseconds(500);
   }
 }
 
 /*
  * Tester thread.
  */
-THD_WORKING_AREA(waThread3, 128);
-THD_FUNCTION(Thread3, arg) {
+THD_WORKING_AREA(waThread2, 128);
+THD_FUNCTION(Thread2, arg) {
 
   (void)arg;
 
   /*
    * Activates the serial driver 1 using the driver default configuration.
-   * PA9 and PA10 are routed to USART1.
    */
   sdStart(&SD1, NULL);
-  palSetPadMode(GPIOA, 9, PAL_MODE_ALTERNATE(7));       /* USART1 TX.       */
-  palSetPadMode(GPIOA, 10, PAL_MODE_ALTERNATE(7));      /* USART1 RX.       */
 
   /* Welcome message.*/
   chnWrite(&SD1, (const uint8_t *)"Hello World!\r\n", 14);
 
   /* Waiting for button push and activation of the test suite.*/
   while (true) {
-    if (palReadPad(GPIOA, GPIOA_BUTTON))
+    if (palReadLine(LINE_BUTTON_USER))
       test_execute((BaseSequentialStream *)&SD1);
     chThdSleepMilliseconds(500);
   }
@@ -107,9 +70,8 @@ THD_FUNCTION(Thread3, arg) {
  */
 THD_TABLE_BEGIN
   THD_TABLE_ENTRY(waThread1, "blinker1", Thread1, NULL)
-  THD_TABLE_ENTRY(waThread2, "blinker2", Thread2, NULL)
-  THD_TABLE_ENTRY(wa_test_support, "test_support", test_support, (void *)&nil.threads[3])
-  THD_TABLE_ENTRY(waThread3, "tester", Thread3, NULL)
+  THD_TABLE_ENTRY(wa_test_support, "test_support", test_support, (void *)&nil.threads[2])
+  THD_TABLE_ENTRY(waThread2, "tester", Thread2, NULL)
 THD_TABLE_END
 
 /*

@@ -39,7 +39,17 @@
 
 #if !defined(__DOXYGEN__)
 
-                .set    CONTEXT_OFFSET, 12
+/*
+ * RTOS-specific context offset.
+ */
+#if defined(_CHIBIOS_RT_CONF_)
+#define CONTEXT_OFFSET  12
+#elif defined(_CHIBIOS_NIL_CONF_)
+#define CONTEXT_OFFSET  0
+#else
+#error "invalid chconf.h"
+#endif
+
                 .set    SCB_ICSR, 0xE000ED04
                 .set    ICSR_PENDSVSET, 0x10000000
                 .set    ICSR_NMIPENDSET, 0x80000000

@@ -42,7 +42,7 @@
  * @note    This number is not inclusive of the idle thread which is
  *          Implicitly handled.
  */
-#define CH_CFG_NUM_THREADS                  4
+#define CH_CFG_NUM_THREADS                  3
 
 /** @} */
 
@@ -126,7 +126,7 @@
 /**
  * @brief   Stack check.
  */
-#define CH_DBG_ENABLE_STACK_CHECK           FALSE
+#define CH_DBG_ENABLE_STACK_CHECK           TRUE
 
 /** @} */
 
@@ -190,6 +190,8 @@
 /*===========================================================================*/
 /* Port-specific settings (override port settings defaulted in nilcore.h).   */
 /*===========================================================================*/
+
+#define CORTEX_VTOR_INIT                    0x00200000U
 
 #endif  /* _CHCONF_H_ */
 

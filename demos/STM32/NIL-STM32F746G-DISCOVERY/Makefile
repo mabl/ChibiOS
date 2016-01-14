@@ -60,7 +60,7 @@ endif
 # Stack size to be allocated to the Cortex-M process stack. This stack is
 # the stack used by the main() thread.
 ifeq ($(USE_PROCESS_STACKSIZE),)
-  USE_PROCESS_STACKSIZE = 0x100
+  USE_PROCESS_STACKSIZE = 0x400
 endif
 
 # Stack size to the allocated to the Cortex-M main/exceptions stack. This
@@ -88,11 +88,11 @@ PROJECT = ch
 # Imported source files and paths
 CHIBIOS = ../../..
 # Startup files.
-include $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk/startup_stm32f3xx.mk
+include $(CHIBIOS)/os/common/startup/ARMCMx/compilers/GCC/mk/startup_stm32f7xx.mk
 # HAL-OSAL files (optional).
 include $(CHIBIOS)/os/hal/hal.mk
-include $(CHIBIOS)/os/hal/ports/STM32/STM32F3xx/platform.mk
-include $(CHIBIOS)/os/hal/boards/ST_STM32F3_DISCOVERY/board.mk
+include $(CHIBIOS)/os/hal/ports/STM32/STM32F7xx/platform.mk
+include $(CHIBIOS)/os/hal/boards/ST_STM32F746G_DISCOVERY/board.mk
 include $(CHIBIOS)/os/hal/osal/nil/osal.mk
 # RTOS files (optional).
 include $(CHIBIOS)/os/nil/nil.mk
@@ -101,7 +101,7 @@ include $(CHIBIOS)/os/common/ports/ARMCMx/compilers/GCC/mk/port_v7m.mk
 include $(CHIBIOS)/test/nil/test.mk
 
 # Define linker script file here
-LDSCRIPT= $(STARTUPLD)/STM32F303xC.ld
+LDSCRIPT= $(STARTUPLD)/STM32F746xG.ld
 
 # C sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
