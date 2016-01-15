@@ -205,7 +205,6 @@
 
 /**
  * @brief   Debug option, parameters checks.
- * @note    This is a planned feature, not yet implemented.
  */
 #if !defined(CH_DBG_ENABLE_CHECKS) || defined(__DOXYGEN__)
 #define CH_DBG_ENABLE_CHECKS                FALSE
@@ -310,10 +309,6 @@
 
 #if CH_DBG_SYSTEM_STATE_CHECK == TRUE
 #error "state checker not yet supported"
-#endif
-
-#if CH_DBG_ENABLE_CHECKS == TRUE
-#error "parameter checks not yet supported"
 #endif
 
 #if (CH_DBG_SYSTEM_STATE_CHECK == TRUE) ||                                  \
@@ -994,11 +989,33 @@ struct nil_system {
   ((bool)((systime_t)((time) - (start)) < (systime_t)((end) - (start))))
 
 /**
+ * @brief   Function parameters check.
+ * @details If the condition check fails then the kernel panics and halts.
+ * @note    The condition is tested only if the @p CH_DBG_ENABLE_CHECKS switch
+ *          is specified in @p chconf.h else the macro does nothing.
+ *
+ * @param[in] c         the condition to be verified to be true
+ *
+ * @api
+ */
+#if !defined(chDbgCheck)
+#define chDbgCheck(c) do {                                                  \
+  /*lint -save -e506 -e774 [2.1, 14.3] Can be a constant by design.*/       \
+  if (CH_DBG_ENABLE_CHECKS != FALSE) {                                      \
+    if (!(c)) {                                                             \
+  /*lint -restore*/                                                         \
+      chSysHalt(__func__);                                                  \
+    }                                                                       \
+  }                                                                         \
+} while (false)
+#endif /* !defined(chDbgCheck) */
+
+/**
  * @brief   Condition assertion.
  * @details If the condition check fails then the kernel panics with a
  *          message and halts.
  * @note    The condition is tested only if the @p CH_DBG_ENABLE_ASSERTS
- *          switch is specified in @p nilconf.h else the macro does nothing.
+ *          switch is specified in @p chconf.h else the macro does nothing.
  * @note    The remark string is not currently used except for putting a
  *          comment in the code about the assertion.
  *
@@ -1019,6 +1036,23 @@ struct nil_system {
 } while (false)
 #endif /* !defined(chDbgAssert) */
 /** @} */
+
+/* Empty macros if the state checker is not enabled.*/
+#if CH_DBG_SYSTEM_STATE_CHECK == FALSE
+#define _dbg_enter_lock()
+#define _dbg_leave_lock()
+#define _dbg_check_disable()
+#define _dbg_check_suspend()
+#define _dbg_check_enable()
+#define _dbg_check_lock()
+#define _dbg_check_unlock()
+#define _dbg_check_lock_from_isr()
+#define _dbg_check_unlock_from_isr()
+#define _dbg_check_enter_isr()
+#define _dbg_check_leave_isr()
+#define chDbgCheckClassI()
+#define chDbgCheckClassS()
+#endif
 
 /*===========================================================================*/
 /* External declarations.                                                    */

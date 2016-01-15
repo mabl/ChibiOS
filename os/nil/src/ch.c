@@ -148,6 +148,8 @@ void chSysHalt(const char *reason) {
  */
 void chSysTimerHandlerI(void) {
 
+  chDbgCheckClassI();
+
 #if CH_CFG_ST_TIMEDELTA == 0
   thread_t *tp = &nil.threads[0];
   nil.systime++;
@@ -360,9 +362,8 @@ void chSysPolledDelayX(rtcnt_t cycles) {
  */
 thread_t *chSchReadyI(thread_t *tp, msg_t msg) {
 
-  chDbgAssert((tp >= nil.threads) &&
-              (tp < &nil.threads[CH_CFG_NUM_THREADS]),
-              "pointer out of range");
+  chDbgCheckClassI();
+  chDbgCheck((tp >= nil.threads) && (tp < &nil.threads[CH_CFG_NUM_THREADS]));
   chDbgAssert(!NIL_THD_IS_READY(tp), "already ready");
   chDbgAssert(nil.next <= nil.current, "priority ordering");
 
@@ -420,6 +421,8 @@ void chSchDoReschedule(void) {
  */
 void chSchRescheduleS(void) {
 
+  chDbgCheckClassS();
+
   if (chSchIsRescRequiredI()) {
     chSchDoReschedule();
   }
@@ -444,6 +447,8 @@ void chSchRescheduleS(void) {
  */
 msg_t chSchGoSleepTimeoutS(tstate_t newstate, systime_t timeout) {
   thread_t *ntp, *otp = nil.current;
+
+  chDbgCheckClassS();
 
   chDbgAssert(otp != &nil.threads[CH_CFG_NUM_THREADS],
                "idle cannot sleep");
@@ -631,6 +636,9 @@ msg_t chSemWaitTimeout(semaphore_t *sp, systime_t timeout) {
  */
 msg_t chSemWaitTimeoutS(semaphore_t *sp, systime_t timeout) {
 
+  chDbgCheckClassS();
+  chDbgCheck(sp != NULL);
+
   /* Note, the semaphore counter is a volatile variable so accesses are
      manually optimized.*/
   cnt_t cnt = sp->cnt;
@@ -677,6 +685,9 @@ void chSemSignal(semaphore_t *sp) {
  * @iclass
  */
 void chSemSignalI(semaphore_t *sp) {
+
+  chDbgCheckClassI();
+  chDbgCheck(sp != NULL);
 
   if (++sp->cnt <= (cnt_t)0) {
     thread_reference_t tr = nil.threads;
@@ -741,6 +752,9 @@ void chSemResetI(semaphore_t *sp, cnt_t n) {
   thread_t *tp;
   cnt_t cnt;
 
+  chDbgCheckClassI();
+  chDbgCheck((sp != NULL) && (n >= (cnt_t)0));
+
   cnt = sp->cnt;
   sp->cnt = n;
   tp = nil.threads;
@@ -790,6 +804,9 @@ void chEvtSignal(thread_t *tp, eventmask_t mask) {
  * @iclass
  */
 void chEvtSignalI(thread_t *tp, eventmask_t mask) {
+
+  chDbgCheckClassI();
+  chDbgCheck(tp != NULL);
 
   tp->epmask |= mask;
   if (NIL_THD_IS_WTOREVT(tp) &&
@@ -847,6 +864,8 @@ eventmask_t chEvtWaitAnyTimeout(eventmask_t mask, systime_t timeout) {
 eventmask_t chEvtWaitAnyTimeoutS(eventmask_t mask, systime_t timeout) {
   thread_t *ctp = nil.current;
   eventmask_t m;
+
+  chDbgCheckClassS();
 
   if ((m = (ctp->epmask & mask)) == (eventmask_t)0) {
     if (TIME_IMMEDIATE == timeout) {

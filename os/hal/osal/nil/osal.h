@@ -258,19 +258,17 @@ typedef struct {
  *
  * @api
  */
-#define osalDbgCheck(c) chDbgAssert(c, "parameter check")
+#define osalDbgCheck(c) chDbgCheck(c)
 
 /**
  * @brief   I-Class state check.
- * @note    Not implemented in this simplified OSAL.
  */
-#define osalDbgCheckClassI() /*chDbgCheckClassI()*/
+#define osalDbgCheckClassI() chDbgCheckClassI()
 
 /**
  * @brief   S-Class state check.
- * @note    Not implemented in this simplified OSAL.
  */
-#define osalDbgCheckClassS() /*chDbgCheckClassS()*/
+#define osalDbgCheckClassS() chDbgCheckClassS()
 /** @} */
 
 /**
