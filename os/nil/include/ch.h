@@ -307,10 +307,6 @@
 #error "statistics not yet supported"
 #endif
 
-#if CH_DBG_SYSTEM_STATE_CHECK == TRUE
-#error "state checker not yet supported"
-#endif
-
 #if (CH_DBG_SYSTEM_STATE_CHECK == TRUE) ||                                  \
     (CH_DBG_ENABLE_CHECKS == TRUE)      ||                                  \
     (CH_DBG_ENABLE_ASSERTS == TRUE)     ||                                  \
@@ -455,10 +451,16 @@ struct nil_system {
    */
   systime_t             nexttime;
 #endif
+#if (CH_DBG_SYSTEM_STATE_CHECK == TRUE) || defined(__DOXYGEN__)
   /**
-   * @brief   Thread structures for all the defined threads.
+   * @brief   ISR nesting level.
    */
-  thread_t              threads[CH_CFG_NUM_THREADS + 1];
+  cnt_t                 isr_cnt;
+  /**
+   * @brief   Lock nesting level.
+   */
+  cnt_t                 lock_cnt;
+#endif
 #if (NIL_DBG_ENABLED == TRUE) || defined(__DOXYGEN__)
   /**
    * @brief   Panic message.
@@ -469,11 +471,20 @@ struct nil_system {
    */
   const char            * volatile dbg_panic_msg;
 #endif
+  /**
+   * @brief   Thread structures for all the defined threads.
+   */
+  thread_t              threads[CH_CFG_NUM_THREADS + 1];
 };
 
 /*===========================================================================*/
 /* Module macros.                                                            */
 /*===========================================================================*/
+
+#if CH_DBG_SYSTEM_STATE_CHECK == TRUE
+#define _dbg_enter_lock() (nil.lock_cnt = (cnt_t)1)
+#define _dbg_leave_lock() (nil.lock_cnt = (cnt_t)0)
+#endif
 
 /**
  * @name    Threads tables definition macros
@@ -617,7 +628,9 @@ struct nil_system {
  *
  * @special
  */
-#define CH_IRQ_PROLOGUE() PORT_IRQ_PROLOGUE()
+#define CH_IRQ_PROLOGUE()                                                   \
+  PORT_IRQ_PROLOGUE();                                                      \
+  _dbg_check_enter_isr()
 
 /**
  * @brief   IRQ handler exit code.
@@ -625,7 +638,9 @@ struct nil_system {
  *
  * @special
  */
-#define CH_IRQ_EPILOGUE() PORT_IRQ_EPILOGUE()
+#define CH_IRQ_EPILOGUE()                                                   \
+  _dbg_check_leave_isr();                                                   \
+  PORT_IRQ_EPILOGUE()
 
 /**
  * @brief   Standard normal IRQ handler declaration.
@@ -762,32 +777,67 @@ struct nil_system {
 #endif
 
 /**
- * @brief   Enters the kernel lock mode.
+ * @brief   Raises the system interrupt priority mask to the maximum level.
+ * @details All the maskable interrupt sources are disabled regardless their
+ *          hardware priority.
+ * @note    Do not invoke this API from within a kernel lock.
  *
  * @special
  */
-#define chSysDisable() port_disable()
+#define chSysDisable() {                                                    \
+  port_disable();                                                           \
+  _dbg_check_disable();                                                     \
+}
 
 /**
- * @brief   Enters the kernel lock mode.
+ * @brief   Raises the system interrupt priority mask to system level.
+ * @details The interrupt sources that should not be able to preempt the kernel
+ *          are disabled, interrupt sources with higher priority are still
+ *          enabled.
+ * @note    Do not invoke this API from within a kernel lock.
+ * @note    This API is no replacement for @p chSysLock(), the @p chSysLock()
+ *          could do more than just disable the interrupts.
  *
  * @special
  */
-#define chSysEnable() port_enable()
+#define chSysSuspend() {                                                    \
+  port_suspend();                                                           \
+  _dbg_check_suspend();                                                     \
+}
+
+/**
+ * @brief   Lowers the system interrupt priority mask to user level.
+ * @details All the interrupt sources are enabled.
+ * @note    Do not invoke this API from within a kernel lock.
+ * @note    This API is no replacement for @p chSysUnlock(), the
+ *          @p chSysUnlock() could do more than just enable the interrupts.
+ *
+ * @special
+ */
+#define chSysEnable() {                                                     \
+  _dbg_check_enable();                                                      \
+  port_enable();                                                            \
+}
 
 /**
  * @brief   Enters the kernel lock state.
  *
  * @special
  */
-#define chSysLock() port_lock()
+#define chSysLock() {                                                       \
+  port_lock();                                                              \
+  _dbg_check_lock();                                                        \
+}
 
 /**
  * @brief   Leaves the kernel lock state.
  *
  * @special
  */
-#define chSysUnlock() port_unlock()
+#define chSysUnlock() {                                                     \
+  _dbg_check_unlock();                                                      \
+  port_unlock();                                                            \
+}
 
 /**
  * @brief   Enters the kernel lock state from within an interrupt handler.
@@ -801,7 +851,10 @@ struct nil_system {
  *
  * @special
  */
-#define chSysLockFromISR() port_lock_from_isr()
+#define chSysLockFromISR() {                                                \
+  port_lock_from_isr();                                                     \
+  _dbg_check_lock_from_isr();                                               \
+}
 
 /**
  * @brief   Leaves the kernel lock state from within an interrupt handler.
@@ -816,7 +869,10 @@ struct nil_system {
  *
  * @special
  */
-#define chSysUnlockFromISR() port_unlock_from_isr()
+#define chSysUnlockFromISR() {                                              \
+  _dbg_check_unlock_from_isr();                                             \
+  port_unlock_from_isr();                                                   \
+}
 
 /**
  * @brief   Evaluates if a reschedule is required.
@@ -1093,10 +1149,24 @@ extern "C" {
   void chSemSignalI(semaphore_t *sp);
   void chSemReset(semaphore_t *sp, cnt_t n);
   void chSemResetI(semaphore_t *sp, cnt_t n);
+#if (CH_CFG_USE_EVENTS == TRUE) || defined(__DOXYGEN__)
   void chEvtSignal(thread_t *tp, eventmask_t mask);
   void chEvtSignalI(thread_t *tp, eventmask_t mask);
   eventmask_t chEvtWaitAnyTimeout(eventmask_t mask, systime_t timeout);
-  eventmask_t chEvtWaitAnyTimeoutS(eventmask_t mask, systime_t timeout);
+#endif
+#if CH_DBG_SYSTEM_STATE_CHECK == TRUE
+  void _dbg_check_disable(void);
+  void _dbg_check_suspend(void);
+  void _dbg_check_enable(void);
+  void _dbg_check_lock(void);
+  void _dbg_check_unlock(void);
+  void _dbg_check_lock_from_isr(void);
+  void _dbg_check_unlock_from_isr(void);
+  void _dbg_check_enter_isr(void);
+  void _dbg_check_leave_isr(void);
+  void chDbgCheckClassI(void);
+  void chDbgCheckClassS(void);
+#endif
 #ifdef __cplusplus
 }
 #endif

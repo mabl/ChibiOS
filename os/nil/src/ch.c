@@ -56,6 +56,156 @@ nil_system_t nil;
 /* Module exported functions.                                                */
 /*===========================================================================*/
 
+#if (CH_DBG_SYSTEM_STATE_CHECK == TRUE) || defined(__DOXYGEN__)
+/**
+ * @brief   Guard code for @p chSysDisable().
+ *
+ * @notapi
+ */
+void _dbg_check_disable(void) {
+
+  if ((nil.isr_cnt != (cnt_t)0) || (nil.lock_cnt != (cnt_t)0)) {
+    chSysHalt("SV#1");
+  }
+}
+
+/**
+ * @brief   Guard code for @p chSysSuspend().
+ *
+ * @notapi
+ */
+void _dbg_check_suspend(void) {
+
+  if ((nil.isr_cnt != (cnt_t)0) || (nil.lock_cnt != (cnt_t)0)) {
+    chSysHalt("SV#2");
+  }
+}
+
+/**
+ * @brief   Guard code for @p chSysEnable().
+ *
+ * @notapi
+ */
+void _dbg_check_enable(void) {
+
+  if ((nil.isr_cnt != (cnt_t)0) || (nil.lock_cnt != (cnt_t)0)) {
+    chSysHalt("SV#3");
+  }
+}
+
+/**
+ * @brief   Guard code for @p chSysLock().
+ *
+ * @notapi
+ */
+void _dbg_check_lock(void) {
+
+  if ((nil.isr_cnt != (cnt_t)0) || (nil.lock_cnt != (cnt_t)0)) {
+    chSysHalt("SV#4");
+  }
+  _dbg_enter_lock();
+}
+
+/**
+ * @brief   Guard code for @p chSysUnlock().
+ *
+ * @notapi
+ */
+void _dbg_check_unlock(void) {
+
+  if ((nil.isr_cnt != (cnt_t)0) || (nil.lock_cnt <= (cnt_t)0)) {
+    chSysHalt("SV#5");
+  }
+  _dbg_leave_lock();
+}
+
+/**
+ * @brief   Guard code for @p chSysLockFromIsr().
+ *
+ * @notapi
+ */
+void _dbg_check_lock_from_isr(void) {
+
+  if ((nil.isr_cnt <= (cnt_t)0) || (nil.lock_cnt != (cnt_t)0)) {
+    chSysHalt("SV#6");
+  }
+  _dbg_enter_lock();
+}
+
+/**
+ * @brief   Guard code for @p chSysUnlockFromIsr().
+ *
+ * @notapi
+ */
+void _dbg_check_unlock_from_isr(void) {
+
+  if ((nil.isr_cnt <= (cnt_t)0) || (nil.lock_cnt <= (cnt_t)0)) {
+    chSysHalt("SV#7");
+  }
+  _dbg_leave_lock();
+}
+
+/**
+ * @brief   Guard code for @p CH_IRQ_PROLOGUE().
+ *
+ * @notapi
+ */
+void _dbg_check_enter_isr(void) {
+
+  port_lock_from_isr();
+  if ((nil.isr_cnt < (cnt_t)0) || (nil.lock_cnt != (cnt_t)0)) {
+    chSysHalt("SV#8");
+  }
+  nil.isr_cnt++;
+  port_unlock_from_isr();
+}
+
+/**
+ * @brief   Guard code for @p CH_IRQ_EPILOGUE().
+ *
+ * @notapi
+ */
+void _dbg_check_leave_isr(void) {
+
+  port_lock_from_isr();
+  if ((nil.isr_cnt <= (cnt_t)0) || (nil.lock_cnt != (cnt_t)0)) {
+    chSysHalt("SV#9");
+  }
+  nil.isr_cnt--;
+  port_unlock_from_isr();
+}
+
+/**
+ * @brief   I-class functions context check.
+ * @details Verifies that the system is in an appropriate state for invoking
+ *          an I-class API function. A panic is generated if the state is
+ *          not compatible.
+ *
+ * @api
+ */
+void chDbgCheckClassI(void) {
+
+  if ((nil.isr_cnt < (cnt_t)0) || (nil.lock_cnt <= (cnt_t)0)) {
+    chSysHalt("SV#10");
+  }
+}
+
+/**
+ * @brief   S-class functions context check.
+ * @details Verifies that the system is in an appropriate state for invoking
+ *          an S-class API function. A panic is generated if the state is
+ *          not compatible.
+ *
+ * @api
+ */
+void chDbgCheckClassS(void) {
+
+  if ((nil.isr_cnt != (cnt_t)0) || (nil.lock_cnt <= (cnt_t)0)) {
+    chSysHalt("SV#11");
+  }
+}
+#endif /* CH_DBG_SYSTEM_STATE_CHECK == TRUE */
+
 /**
  * @brief   Initializes the kernel.
  * @details Initializes the kernel structures, the current instructions flow
@@ -71,8 +221,10 @@ void chSysInit(void) {
   thread_t *tp;
   const thread_config_t *tcp;
 
-  /* Port layer initialization.*/
-  port_init();
+#if CH_DBG_SYSTEM_STATE_CHECK == TRUE
+  nil.isr_cnt  = (cnt_t)0;
+  nil.lock_cnt = (cnt_t)0;
+#endif
 
   /* System initialization hook.*/
   CH_CFG_SYSTEM_INIT_HOOK();
@@ -101,13 +253,22 @@ void chSysInit(void) {
   tp->stklimit  = THD_IDLE_BASE;
 #endif
 
+  /* Interrupts partially enabled. It is equivalent to entering the
+     kernel critical zone.*/
+  chSysSuspend();
+#if CH_DBG_SYSTEM_STATE_CHECK == TRUE
+  nil.lock_cnt = (cnt_t)1;
+#endif
+
+  /* Port layer initialization last because it depend on some of the
+     initializations performed before.*/
+  port_init();
+
   /* Runs the highest priority thread, the current one becomes the idle
      thread.*/
   nil.current = nil.next = nil.threads;
   port_switch(nil.current, tp);
-
-  /* Interrupts enabled for the idle thread.*/
-  chSysEnable();
+  chSysUnlock();
 }
 
 /**
@@ -791,6 +952,7 @@ void chEvtSignal(thread_t *tp, eventmask_t mask) {
   chSysUnlock();
 }
 
+#if (CH_CFG_USE_EVENTS == TRUE) || defined(__DOXYGEN__)
 /**
  * @brief   Adds a set of event flags directly to the specified @p thread_t.
  * @post    This function does not reschedule so a call to a rescheduling
@@ -834,39 +996,10 @@ void chEvtSignalI(thread_t *tp, eventmask_t mask) {
  * @api
  */
 eventmask_t chEvtWaitAnyTimeout(eventmask_t mask, systime_t timeout) {
-  eventmask_t m;
-
-  chSysLock();
-  m = chEvtWaitAnyTimeoutS(mask, timeout);
-  chSysUnlock();
-
-  return m;
-}
-
-/**
- * @brief   Waits for any of the specified events.
- * @details The function waits for any event among those specified in
- *          @p mask to become pending then the events are cleared and
- *          returned.
- *
- * @param[in] mask      mask of the event flags that the function should wait
- *                      for, @p ALL_EVENTS enables all the events
- * @param[in] timeout   the number of ticks before the operation timeouts,
- *                      the following special values are allowed:
- *                      - @a TIME_IMMEDIATE immediate timeout.
- *                      - @a TIME_INFINITE no timeout.
- *                      .
- * @return              The mask of the served and cleared events.
- * @retval 0            if the operation has timed out.
- *
- * @sclass
- */
-eventmask_t chEvtWaitAnyTimeoutS(eventmask_t mask, systime_t timeout) {
   thread_t *ctp = nil.current;
   eventmask_t m;
 
-  chDbgCheckClassS();
-
+  chSysLock();
   if ((m = (ctp->epmask & mask)) == (eventmask_t)0) {
     if (TIME_IMMEDIATE == timeout) {
       chSysUnlock();
@@ -882,8 +1015,10 @@ eventmask_t chEvtWaitAnyTimeoutS(eventmask_t mask, systime_t timeout) {
     m = ctp->epmask & mask;
   }
   ctp->epmask &= ~m;
+  chSysUnlock();
 
   return m;
 }
+#endif /* CH_CFG_USE_EVENTS == TRUE */
 
 /** @} */
