@@ -215,9 +215,6 @@ thread_t *chThdCreateStatic(void *wsp, size_t size,
   
 #if CH_DBG_FILL_THREADS == TRUE
   _thread_memfill((uint8_t *)wsp,
-                  (uint8_t *)wsp + sizeof(thread_t),
-                  CH_DBG_THREAD_FILL_VALUE);
-  _thread_memfill((uint8_t *)wsp + sizeof(thread_t),
                   (uint8_t *)wsp + size,
                   CH_DBG_STACK_FILL_VALUE);
 #endif

@@ -161,9 +161,6 @@ thread_t *chThdCreateFromHeap(memory_heap_t *heapp, size_t size,
   
 #if CH_DBG_FILL_THREADS == TRUE
   _thread_memfill((uint8_t *)wsp,
-                  (uint8_t *)wsp + sizeof(thread_t),
-                  CH_DBG_THREAD_FILL_VALUE);
-  _thread_memfill((uint8_t *)wsp + sizeof(thread_t),
                   (uint8_t *)wsp + size,
                   CH_DBG_STACK_FILL_VALUE);
 #endif
@@ -215,10 +212,7 @@ thread_t *chThdCreateFromMemoryPool(memory_pool_t *mp, tprio_t prio,
   
 #if CH_DBG_FILL_THREADS == TRUE
   _thread_memfill((uint8_t *)wsp,
-                  (uint8_t *)wsp + sizeof(thread_t),
-                  CH_DBG_THREAD_FILL_VALUE);
-  _thread_memfill((uint8_t *)wsp + sizeof(thread_t),
-                  (uint8_t *)wsp + mp->mp_object_size,
+                  (uint8_t *)wsp + mp->object_size,
                   CH_DBG_STACK_FILL_VALUE);
 #endif
 

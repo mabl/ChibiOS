@@ -89,17 +89,6 @@
 #if !defined(CH_DBG_STACK_FILL_VALUE) || defined(__DOXYGEN__)
 #define CH_DBG_STACK_FILL_VALUE             0x55
 #endif
-
-/**
- * @brief   Fill value for thread area in debug mode.
- * @note    The chosen default value is 0xFF in order to make evident which
- *          thread fields were not initialized when inspecting the memory with
- *          a debugger. A uninitialized field is not an error in itself but it
- *          better to know it.
- */
-#if !defined(CH_DBG_THREAD_FILL_VALUE) || defined(__DOXYGEN__)
-#define CH_DBG_THREAD_FILL_VALUE            0xFF
-#endif
 /** @} */
 
 /*===========================================================================*/
