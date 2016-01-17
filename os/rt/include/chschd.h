@@ -218,10 +218,10 @@ struct ch_thread {
   thread_t              *prev;      /**< @brief Previous in the queue.      */
   /* End of the fields shared with the threads_queue_t structure.*/
   tprio_t               prio;       /**< @brief Thread priority.            */
-  struct context        ctx;        /**< @brief Processor context.          */
+  struct port_context   ctx;        /**< @brief Processor context.          */
 #if (CH_CFG_USE_REGISTRY == TRUE) || defined(__DOXYGEN__)
   thread_t              *newer;     /**< @brief Newer registry element.     */
-  thread_t              *older;    /**< @brief Older registry element.     */
+  thread_t              *older;     /**< @brief Older registry element.     */
 #endif
   /* End of the fields shared with the ReadyList structure. */
 #if (CH_CFG_USE_REGISTRY == TRUE) || defined(__DOXYGEN__)
@@ -423,7 +423,7 @@ struct ch_ready_list {
   threads_queue_t       queue;      /**< @brief Threads queue.              */
   tprio_t               prio;       /**< @brief This field must be
                                                 initialized to zero.        */
-  struct context        ctx;        /**< @brief Not used, present because
+  struct port_context   ctx;        /**< @brief Not used, present because
                                                 offsets.                    */
 #if (CH_CFG_USE_REGISTRY == TRUE) || defined(__DOXYGEN__)
   thread_t              *newer;     /**< @brief Newer registry element.     */

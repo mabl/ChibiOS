@@ -389,7 +389,7 @@ typedef thread_t * thread_reference_t;
  * @brief   Structure representing a thread.
  */
 struct nil_thread {
-  struct context        ctx;        /**< @brief Processor context.          */
+  struct port_context   ctx;        /**< @brief Processor context.          */
   tstate_t              state;      /**< @brief Thread state.               */
   /* Note, the following union contains a pointer while the thread is in a
      sleeping state (!NIL_THD_IS_READY()) else contains the wake-up message.*/

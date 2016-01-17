@@ -134,7 +134,7 @@ struct port_intctx {};
  *          @p port_intctx structure representing the stack pointer
  *          at context switch time.
  */
-struct context {
+struct port_context {
   struct port_intctx *r13;
 };
 
