@@ -18,13 +18,13 @@
     <basefilename>board</basefilename>
   </processor>
   <processor class="board" target="STM32F7xx">
-    <name>STM32F4xx Board Configuration</name>
+    <name>STM32F7xx Board Configuration</name>
     <path>resources/gencfg/processors/boards/stm32f7xx/templates</path>
     <default>resources/gencfg/xml/stm32f7board.xml</default>
     <basefilename>board</basefilename>
   </processor>
   <processor class="board" target="STM32L0xx">
-    <name>STM32L1xx Board Configuration</name>
+    <name>STM32L0xx Board Configuration</name>
     <path>resources/gencfg/processors/boards/stm32l0xx/templates</path>
     <default>resources/gencfg/xml/stm32l0board.xml</default>
     <basefilename>board</basefilename>
