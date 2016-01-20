@@ -453,7 +453,7 @@ void chDbgResumeTraceI(uint16_t mask) {
 
   chDbgCheckClassI();
 
-  ch.dbg.trace_buffer.suspended |= mask;
+  ch.dbg.trace_buffer.suspended &= ~mask;
 }
 
 /**
