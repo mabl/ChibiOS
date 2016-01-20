@@ -285,8 +285,9 @@ void chDbgCheckClassS(void) {
 void _dbg_trace_init(void) {
   unsigned i;
 
-  ch.dbg.trace_buffer.size = CH_DBG_TRACE_BUFFER_SIZE;
-  ch.dbg.trace_buffer.ptr  = &ch.dbg.trace_buffer.buffer[0];
+  ch.dbg.trace_buffer.suspended = 0U;
+  ch.dbg.trace_buffer.size      = CH_DBG_TRACE_BUFFER_SIZE;
+  ch.dbg.trace_buffer.ptr       = &ch.dbg.trace_buffer.buffer[0];
   for (i = 0U; i < CH_DBG_TRACE_BUFFER_SIZE; i++) {
     ch.dbg.trace_buffer.buffer[i].type = CH_TRACE_TYPE_UNUSED;
   }
@@ -303,11 +304,13 @@ void _dbg_trace_init(void) {
  */
 void _dbg_trace_switch(thread_t *otp) {
 
-  ch.dbg.trace_buffer.ptr->type        = CH_TRACE_TYPE_SWITCH;
-  ch.dbg.trace_buffer.ptr->state       = (uint8_t)otp->state;
-  ch.dbg.trace_buffer.ptr->u.sw.ntp    = currp;
-  ch.dbg.trace_buffer.ptr->u.sw.wtobjp = otp->u.wtobjp;
-  trace_next();
+  if ((ch.dbg.trace_buffer.suspended & CH_TRACE_SUSPEND_SWITCH) == 0U) {
+    ch.dbg.trace_buffer.ptr->type        = CH_TRACE_TYPE_SWITCH;
+    ch.dbg.trace_buffer.ptr->state       = (uint8_t)otp->state;
+    ch.dbg.trace_buffer.ptr->u.sw.ntp    = currp;
+    ch.dbg.trace_buffer.ptr->u.sw.wtobjp = otp->u.wtobjp;
+    trace_next();
+  }
 }
 #endif /* (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_SWITCH) != 0 */
 
@@ -322,12 +325,14 @@ void _dbg_trace_switch(thread_t *otp) {
  */
 void _dbg_trace_isr_enter(const char *isr) {
 
-  port_lock_from_isr();
-  ch.dbg.trace_buffer.ptr->type        = CH_TRACE_TYPE_ISR_ENTER;
-  ch.dbg.trace_buffer.ptr->state       = 0U;
-  ch.dbg.trace_buffer.ptr->u.isr.name  = isr;
-  trace_next();
-  port_unlock_from_isr();
+  if ((ch.dbg.trace_buffer.suspended & CH_TRACE_SUSPEND_ISR_ENTER) == 0U) {
+    port_lock_from_isr();
+    ch.dbg.trace_buffer.ptr->type        = CH_TRACE_TYPE_ISR_ENTER;
+    ch.dbg.trace_buffer.ptr->state       = 0U;
+    ch.dbg.trace_buffer.ptr->u.isr.name  = isr;
+    trace_next();
+    port_unlock_from_isr();
+  }
 }
 
 /**
@@ -339,12 +344,14 @@ void _dbg_trace_isr_enter(const char *isr) {
  */
 void _dbg_trace_isr_leave(const char *isr) {
 
-  port_lock_from_isr();
-  ch.dbg.trace_buffer.ptr->type        = CH_TRACE_TYPE_ISR_LEAVE;
-  ch.dbg.trace_buffer.ptr->state       = 0U;
-  ch.dbg.trace_buffer.ptr->u.isr.name  = isr;
-  trace_next();
-  port_unlock_from_isr();
+  if ((ch.dbg.trace_buffer.suspended & CH_TRACE_SUSPEND_ISR_LEAVE) == 0U) {
+    port_lock_from_isr();
+    ch.dbg.trace_buffer.ptr->type        = CH_TRACE_TYPE_ISR_LEAVE;
+    ch.dbg.trace_buffer.ptr->state       = 0U;
+    ch.dbg.trace_buffer.ptr->u.isr.name  = isr;
+    trace_next();
+    port_unlock_from_isr();
+  }
 }
 #endif /* (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_ISR) != 0 */
 
@@ -359,10 +366,12 @@ void _dbg_trace_isr_leave(const char *isr) {
  */
 void _dbg_trace_halt(const char *reason) {
 
-  ch.dbg.trace_buffer.ptr->type          = CH_TRACE_TYPE_HALT;
-  ch.dbg.trace_buffer.ptr->state         = 0;
-  ch.dbg.trace_buffer.ptr->u.halt.reason = reason;
-  trace_next();
+  if ((ch.dbg.trace_buffer.suspended & CH_TRACE_SUSPEND_HALT) == 0U) {
+    ch.dbg.trace_buffer.ptr->type          = CH_TRACE_TYPE_HALT;
+    ch.dbg.trace_buffer.ptr->state         = 0;
+    ch.dbg.trace_buffer.ptr->u.halt.reason = reason;
+    trace_next();
+  }
 }
 #endif /* (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_HALT) != 0 */
 
@@ -380,11 +389,13 @@ void chDbgWriteTraceI(void *up1, void *up2) {
 
   chDbgCheckClassI();
 
-  ch.dbg.trace_buffer.ptr->type       = CH_TRACE_TYPE_USER;
-  ch.dbg.trace_buffer.ptr->state      = 0;
-  ch.dbg.trace_buffer.ptr->u.user.up1 = up1;
-  ch.dbg.trace_buffer.ptr->u.user.up2 = up2;
-  trace_next();
+  if ((ch.dbg.trace_buffer.suspended & CH_TRACE_SUSPEND_SWITCH) == 0U) {
+    ch.dbg.trace_buffer.ptr->type       = CH_TRACE_TYPE_USER;
+    ch.dbg.trace_buffer.ptr->state      = 0;
+    ch.dbg.trace_buffer.ptr->u.user.up1 = up1;
+    ch.dbg.trace_buffer.ptr->u.user.up2 = up2;
+    trace_next();
+  }
 }
 
 /**
@@ -402,6 +413,62 @@ void chDbgWriteTrace(void *up1, void *up2) {
   chSysUnlock();
 }
 #endif /* (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_USER) != 0 */
+
+/**
+ * @brief   Suspends one or more trace events.
+ *
+ * @paramin mask        mask of the trace events to be suspended
+ *
+ * @iclass
+ */
+void chDbgSuspendTraceI(uint16_t mask) {
+
+  chDbgCheckClassI();
+
+  ch.dbg.trace_buffer.suspended |= mask;
+}
+
+/**
+ * @brief   Suspends one or more trace events.
+ *
+ * @paramin mask        mask of the trace events to be suspended
+ *
+ * @api
+ */
+void chDbgSuspendTrace(uint16_t mask) {
+
+  chSysLock();
+  chDbgSuspendTraceI(mask);
+  chSysUnlock();
+}
+
+/**
+ * @brief   Resumes one or more trace events.
+ *
+ * @paramin mask        mask of the trace events to be resumed
+ *
+ * @iclass
+ */
+void chDbgResumeTraceI(uint16_t mask) {
+
+  chDbgCheckClassI();
+
+  ch.dbg.trace_buffer.suspended |= mask;
+}
+
+/**
+ * @brief   Resumes one or more trace events.
+ *
+ * @paramin mask        mask of the trace events to be resumed
+ *
+ * @api
+ */
+void chDbgResumeTrace(uint16_t mask) {
+
+  chSysLock();
+  chDbgResumeTraceI(mask);
+  chSysUnlock();
+}
 #endif /* CH_DBG_TRACE_MASK != CH_DBG_TRACE_MASK_NONE */
 
 /** @} */

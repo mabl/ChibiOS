@@ -45,6 +45,24 @@
 /** @} */
 
 /**
+ * @name    Trace suspend masks
+ * @{
+ */
+#define CH_TRACE_SUSPEND_NONE               0U
+#define CH_TRACE_SUSPEND_SWITCH             (1U << CH_TRACE_TYPE_SWITCH)
+#define CH_TRACE_SUSPEND_ISR_ENTER          (1U << CH_TRACE_TYPE_ISR_ENTER)
+#define CH_TRACE_SUSPEND_ISR_LEAVE          (1U << CH_TRACE_TYPE_ISR_LEAVE)
+#define CH_TRACE_SUSPEND_HALT               (1U << CH_TRACE_TYPE_HALT)
+#define CH_TRACE_SUSPEND_USER               (1U << CH_TRACE_TYPE_USER)
+#define CH_TRACE_SUSPEND_ALL                (CH_TRACE_SUSPEND_SWITCH |      \
+                                             CH_TRACE_SUSPEND_ISR_ENTER |   \
+                                             CH_TRACE_SUSPEND_ISR_LEAVE |   \
+                                             CH_TRACE_SUSPEND_HALT |        \
+                                             CH_TRACE_SUSPEND_USER)
+
+/** @} */
+
+/**
  * @name    Events to trace
  * @{
  */
@@ -175,9 +193,13 @@ typedef struct {
  */
 typedef struct {
   /**
+   * @brief   Suspended trace sources mask.
+   */
+  uint16_t              suspended;
+  /**
    * @brief   Trace buffer size (entries).
    */
-  unsigned              size;
+  uint16_t              size;
   /**
    * @brief   Pointer to the buffer front.
    */
@@ -321,6 +343,10 @@ extern "C" {
 #if (CH_DBG_TRACE_MASK & CH_DBG_TRACE_MASK_USER) != 0
   void chDbgWriteTraceI(void *up1, void *up2);
   void chDbgWriteTrace(void *up1, void *up2);
+  void chDbgSuspendTraceI(uint16_t mask);
+  void chDbgSuspendTrace(uint16_t mask);
+  void chDbgResumeTraceI(uint16_t mask);
+  void chDbgResumeTrace(uint16_t mask);
 #endif
 #endif /* CH_DBG_TRACE_MASK != CH_DBG_TRACE_MASK_NONE */
 #ifdef __cplusplus
