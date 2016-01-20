@@ -107,7 +107,7 @@
  *
  * @notapi
  */
-static void trace_next(void) {
+NOINLINE static void trace_next(void) {
 
   ch.dbg.trace_buffer.ptr->time    = chVTGetSystemTimeX();
 #if PORT_SUPPORTS_RT == TRUE
