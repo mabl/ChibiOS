@@ -293,19 +293,27 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     tblclmnTraceBufferIndex.setWidth(48);
     tblclmnTraceBufferIndex.setText("Event");
 
+    TableColumn tblclmnTraceBufferType = new TableColumn(tbTable, SWT.LEFT);
+    tblclmnTraceBufferType.setWidth(80);
+    tblclmnTraceBufferType.setText("Type");
+
     TableColumn tblclmnTraceBufferTime = new TableColumn(tbTable, SWT.RIGHT);
-    tblclmnTraceBufferTime.setWidth(64);
-    tblclmnTraceBufferTime.setText("Time");
+    tblclmnTraceBufferTime.setWidth(80);
+    tblclmnTraceBufferTime.setText("SysTime");
+
+    TableColumn tblclmnTraceBufferStamp = new TableColumn(tbTable, SWT.RIGHT);
+    tblclmnTraceBufferStamp.setWidth(80);
+    tblclmnTraceBufferStamp.setText("RT Stamp");
 
     TableColumn tblclmnTraceBufferPrevAddress = new TableColumn(tbTable, SWT.RIGHT);
     tblclmnTraceBufferPrevAddress.setWidth(72);
-    tblclmnTraceBufferPrevAddress.setText("Previous");
+    tblclmnTraceBufferPrevAddress.setText("From");
 
     TableColumn tblclmnTraceBufferPrevName = new TableColumn(tbTable, SWT.LEFT);
     tblclmnTraceBufferPrevName.setWidth(144);
-    tblclmnTraceBufferPrevName.setText("Previous Name");
+    tblclmnTraceBufferPrevName.setText("Name");
 
-    TableColumn tblclmnTraceBufferState = new TableColumn(tbTable, SWT.RIGHT);
+    TableColumn tblclmnTraceBufferState = new TableColumn(tbTable, SWT.LEFT);
     tblclmnTraceBufferState.setWidth(72);
     tblclmnTraceBufferState.setText("State");
 
@@ -315,11 +323,11 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
 
     TableColumn tblclmnTraceBufferCurrentAddress = new TableColumn(tbTable, SWT.RIGHT);
     tblclmnTraceBufferCurrentAddress.setWidth(72);
-    tblclmnTraceBufferCurrentAddress.setText("Current");
+    tblclmnTraceBufferCurrentAddress.setText("To");
 
     TableColumn tblclmnTraceBufferCurrentName = new TableColumn(tbTable, SWT.LEFT);
     tblclmnTraceBufferCurrentName.setWidth(144);
-    tblclmnTraceBufferCurrentName.setText("Current Name");
+    tblclmnTraceBufferCurrentName.setText("Name");
     
     tbtmStatistics = new CTabItem(tabFolder, SWT.NONE);
     tbtmStatistics.setText("Statistics");
@@ -569,30 +577,121 @@ public class ChibiView extends ViewPart implements IDebugEventSetListener {
     for (Entry<String, HashMap<String, String>> entry : set) {
       HashMap<String, String> map = entry.getValue();
       TableItem tableItem = new TableItem(tbTable, SWT.NONE);
-      
-      // Searches the current thread into the threads map.
-      String currentaddr = map.get("tp");
-      HashMap<String, String> thread = lhmthreads.get(currentaddr);
-      String currentname;
-      if (thread != null)
-        currentname = thread.get("name");
-      else
-        currentname = "";
 
-      String current = makeHex(currentaddr);
-      tableItem.setText(new String[] {
-        "",
-        entry.getKey(),
-        map.get("time"),
-        prev,
-        prevname,
-        map.get("state_s"),
-        makeHex(map.get("wtobjp")),
-        current,
-        currentname
-      });
-      prev = current;
-      prevname = currentname;
+      // Fixed fields.
+      int typen = (int)HexUtils.parseNumber(map.get("type"));
+      String state = map.get("state_s");
+      String rtstamp = map.get("rtstamp");
+      String time = map.get("time");
+
+      // Fields depending on type.
+      String[] line;
+      switch (typen) {
+      case 1:
+        // Searches the current thread into the threads map.
+        String currentaddr = map.get("sw_ntp");
+        HashMap<String, String> thread = lhmthreads.get(currentaddr);
+        String currentname;
+        if (thread != null)
+          currentname = thread.get("name");
+        else
+          currentname = "";
+        String current = makeHex(currentaddr);
+        String wtobjp = makeHex(map.get("sw_wtobjp"));
+
+        line = new String[] {
+          "",
+          entry.getKey(),
+          "Switch",
+          time,
+          rtstamp,
+          prev,
+          prevname,
+          state,
+          wtobjp,
+          current,
+          currentname
+        };
+        prev = current;
+        prevname = currentname;
+        break;
+      case 2:
+        line = new String[] {
+          "",
+          entry.getKey(),
+          "ISR-enter",
+          time,
+          rtstamp,
+          "",
+          map.get("isr_name_s"),
+          "",
+          "",
+          "",
+          ""
+        };
+        break;
+      case 3:
+        line = new String[] {
+          "",
+          entry.getKey(),
+          "ISR-leave",
+          time,
+          rtstamp,
+          "",
+          map.get("isr_name_s"),
+          "",
+          "",
+          "",
+          ""
+        };
+        break;
+      case 4:
+        line = new String[] {
+          "",
+          entry.getKey(),
+          "Halt",
+          time,
+          rtstamp,
+          "",
+          map.get("halt_reason_s"),
+          "",
+          "",
+          "",
+          ""
+        };
+        break;
+      case 5:
+        line = new String[] {
+          "",
+          entry.getKey(),
+          "User",
+          time,
+          rtstamp,
+          makeHex(map.get("user_up1")),
+          "",
+          "",
+          "",
+          makeHex(map.get("user_up2")),
+          ""
+        };
+        break;
+      default:
+        line = new String[] {
+          "",
+          entry.getKey(),
+          "Unknown",
+          time,
+          rtstamp,
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        };
+      }
+
+      tableItem.setText(line);
     }
   }
 
