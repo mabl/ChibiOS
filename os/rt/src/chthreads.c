@@ -121,7 +121,6 @@ thread_t *_thread_init(thread_t *tp, tprio_t prio) {
 #endif
 #if CH_DBG_STATISTICS == TRUE
   chTMObjectInit(&tp->stats);
-  chTMStartMeasurementX(&tp->stats);
 #endif
 #if defined(CH_CFG_THREAD_INIT_HOOK)
   CH_CFG_THREAD_INIT_HOOK(tp);
