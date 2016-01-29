@@ -33,9 +33,32 @@
 /*===========================================================================*/
 
 /**
- * @brief   This port does not support a realtime counter.
+ * @name    Port Capabilities and Constants
+ * @{
+ */
+/**
+ * @brief   This port supports a realtime counter.
  */
 #define PORT_SUPPORTS_RT                FALSE
+
+/**
+ * @brief   Natural alignment constant as power of two.
+ * @note    It is the minimum alignment for pointer-size variables.
+ */
+#define PORT_NATURAL_ALIGN              2U
+
+/**
+ * @brief   Stack alignment constant as power of two.
+ * @note    It is the alignement required for the stack pointer.
+ */
+#define PORT_STACK_ALIGN                3U
+
+/**
+ * @brief   Working Areas alignment constant as power of two.
+ * @note    It is the alignement to be enforced for thread working areas.
+ */
+#define PORT_WORKING_AREA_ALIGN         3U
+/** @} */
 
 /**
  * @brief   PendSV priority level.
@@ -186,7 +209,7 @@ struct port_intctx {
 #define PORT_SETUP_CONTEXT(tp, workspace, wsize, pf, arg) {                 \
   (tp)->p_ctx.r13 = (struct port_intctx *)((uint8_t *)(workspace) +         \
                                            (wsize) -                        \
-                                           sizeof(struct port_intctx));     \
+                                           sizeof (struct port_intctx));    \
   (tp)->p_ctx.r13->r4 = (regarm_t)(pf);                                     \
   (tp)->p_ctx.r13->r5 = (regarm_t)(arg);                                    \
   (tp)->p_ctx.r13->lr = (regarm_t)_port_thread_start;                       \
@@ -196,8 +219,8 @@ struct port_intctx {
  * @brief   Computes the thread working area global size.
  * @note    There is no need to perform alignments in this macro.
  */
-#define PORT_WA_SIZE(n) (sizeof(struct port_intctx) +                       \
-                         sizeof(struct port_extctx) +                       \
+#define PORT_WA_SIZE(n) (sizeof (struct port_intctx) +                      \
+                         sizeof (struct port_extctx) +                      \
                          ((size_t)(n)) + ((size_t)(PORT_INT_REQUIRED_STACK)))
 
 /**

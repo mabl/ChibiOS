@@ -33,9 +33,33 @@
 /*===========================================================================*/
 
 /**
+ * @name    Port Capabilities and Constants
+ * @{
+ */
+/**
  * @brief   This port supports a realtime counter.
  */
 #define PORT_SUPPORTS_RT                TRUE
+
+/**
+ * @brief   Natural alignment constant as power of two.
+ * @note    It is the minimum alignment for pointer-size variables.
+ */
+#define PORT_NATURAL_ALIGN              2U
+
+/**
+ * @brief   Stack alignment constant as power of two.
+ * @note    It is the alignement required for the stack pointer.
+ */
+#define PORT_STACK_ALIGN                3U
+
+/**
+ * @brief   Working Areas alignment constant as power of two.
+ * @note    It is the alignement to be enforced for thread working areas.
+ */
+#define PORT_WORKING_AREA_ALIGN         (PORT_ENABLE_GUARD_PAGES == TRUE ?  \
+                                         5U : 3U)
+/** @} */
 
 /**
  * @brief   Disabled value for BASEPRI register.
@@ -366,10 +390,10 @@ struct port_intctx {
  */
 #if (PORT_ENABLE_GUARD_PAGES == FALSE) || defined(__DOXYGEN__)
 #define PORT_WORKING_AREA(s, n)                                             \
-  stkalign_t s[THD_WORKING_AREA_SIZE(n) / sizeof(stkalign_t)]
+  stkalign_t s[THD_WORKING_AREA_SIZE(n) / sizeof (stkalign_t)]
 #else
 #define PORT_WORKING_AREA(s, n)                                             \
-  ALIGNED_VAR(32) stkalign_t s[THD_WORKING_AREA_SIZE(n) / sizeof(stkalign_t)]
+  ALIGNED_VAR(32) stkalign_t s[THD_WORKING_AREA_SIZE(n) / sizeof (stkalign_t)]
 #endif
 
 /**

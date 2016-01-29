@@ -27,7 +27,8 @@
  *          The heap allocator implements a first-fit strategy and its APIs
  *          are functionally equivalent to the usual @p malloc() and @p free()
  *          library functions. The main difference is that the OS heap APIs
- *          are guaranteed to be thread safe.<br>
+ *          are guaranteed to be thread safe and there is the ability to
+ *          return memory blocks aligned to arbitrary powers of two.<br>
  * @pre     In order to use the heap APIs the @p CH_CFG_USE_HEAP option must
  *          be enabled in @p chconf.h.
  * @{
@@ -114,7 +115,8 @@ void _heap_init(void) {
 void chHeapObjectInit(memory_heap_t *heapp, void *buf, size_t size) {
   union heap_header *hp = buf;
 
-  chDbgCheck(MEM_IS_ALIGNED(buf) && MEM_IS_ALIGNED(size));
+  chDbgCheck(MEM_IS_ALIGNED(buf, PORT_NATURAL_ALIGN) &&
+             MEM_IS_ALIGNED(size, PORT_NATURAL_ALIGN));
 
   heapp->provider = NULL;
   heapp->free.h.u.next = hp;
@@ -131,27 +133,28 @@ void chHeapObjectInit(memory_heap_t *heapp, void *buf, size_t size) {
 /**
  * @brief   Allocates a block of memory from the heap by using the first-fit
  *          algorithm.
- * @details The allocated block is guaranteed to be properly aligned for a
- *          pointer data type (@p stkalign_t).
+ * @details The allocated block is guaranteed to be properly aligned to the
+ *          specified power of two.
  *
  * @param[in] heapp     pointer to a heap descriptor or @p NULL in order to
  *                      access the default heap.
  * @param[in] size      the size of the block to be allocated. Note that the
  *                      allocated block may be a bit bigger than the requested
  *                      size for alignment and fragmentation reasons.
- * @return              A pointer to the allocated block.
+ * @param[in] align     power of two of the desided memory alignment
+ * @return              A pointer to the aligned allocated block.
  * @retval NULL         if the block cannot be allocated.
  *
  * @api
  */
-void *chHeapAlloc(memory_heap_t *heapp, size_t size) {
+void *chHeapAllocAligned(memory_heap_t *heapp, size_t size, unsigned align) {
   union heap_header *qp, *hp, *fp;
 
   if (heapp == NULL) {
     heapp = &default_heap;
   }
 
-  size = MEM_ALIGN_NEXT(size);
+  size = MEM_ALIGN_NEXT(size, PORT_NATURAL_ALIGN);
   qp = &heapp->free;
 
   H_LOCK(heapp);

@@ -111,34 +111,43 @@
  * @name    Memory alignment support macros
  */
 /**
- * @brief   Alignment size constant.
- * @note    Alignment type is @p stkalign_t.
+ * @brief   Alignment size.
+ *
+ * @param[in] a         alignment power of two
  */
-#define MEM_ALIGN_SIZE      sizeof (stkalign_t)
+#define MEM_ALIGN_SIZE(a)       (1U << (a))
 
 /**
  * @brief   Alignment mask constant.
- * @note    Alignment type is @p stkalign_t.
+ *
+ * @param[in] a         alignment power of two
  */
-#define MEM_ALIGN_MASK      (MEM_ALIGN_SIZE - 1U)
+#define MEM_ALIGN_MASK(a)       ((size_t)MEM_ALIGN_SIZE(a) - 1U)
 
 /**
  * @brief   Aligns to the previous aligned memory address.
- * @note    Alignment type is @p stkalign_t.
+ *
+ * @param[in] p         variable to be aligned
+ * @param[in] a         alignment power of two
  */
-#define MEM_ALIGN_PREV(p)   ((size_t)(p) & ~MEM_ALIGN_MASK)
+#define MEM_ALIGN_PREV(p, a)    ((size_t)(p) & ~MEM_ALIGN_MASK(a))
 
 /**
  * @brief   Aligns to the new aligned memory address.
- * @note    Alignment type is @p stkalign_t.
+ *
+ * @param[in] p         variable to be aligned
+ * @param[in] a         alignment power of two
  */
-#define MEM_ALIGN_NEXT(p)   MEM_ALIGN_PREV((size_t)(p) + MEM_ALIGN_MASK)
+#define MEM_ALIGN_NEXT(p, a)    MEM_ALIGN_PREV((size_t)(p) +                \
+                                               MEM_ALIGN_MASK(a), (a))
 
 /**
  * @brief   Returns whatever a pointer or memory size is aligned.
- * @note    Alignment type is @p stkalign_t.
+ *
+ * @param[in] p         variable to be aligned
+ * @param[in] a         alignment power of two
  */
-#define MEM_IS_ALIGNED(p)   (((size_t)(p) & MEM_ALIGN_MASK) == 0U)
+#define MEM_IS_ALIGNED(p, a)    (((size_t)(p) & MEM_ALIGN_MASK(a)) == 0U)
 /** @} */
 
 /**
@@ -153,7 +162,7 @@
  * @api
  */
 #define THD_WORKING_AREA_SIZE(n)                                            \
-  MEM_ALIGN_NEXT(sizeof(thread_t) + PORT_WA_SIZE(n))
+  MEM_ALIGN_NEXT(sizeof(thread_t) + PORT_WA_SIZE(n), PORT_WORKING_AREA_ALIGN)
 
 /**
  * @brief   Static working area allocation.

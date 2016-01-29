@@ -175,8 +175,10 @@ thread_t *chThdCreateI(void *wsp, size_t size,
   thread_t *tp;
 
   chDbgCheckClassI();
-  chDbgCheck((wsp != NULL) && MEM_IS_ALIGNED(wsp) &&
-             (size >= THD_WORKING_AREA_SIZE(0)) && MEM_IS_ALIGNED(size) &&
+  chDbgCheck((wsp != NULL) &&
+             MEM_IS_ALIGNED(wsp, PORT_WORKING_AREA_ALIGN) &&
+             (size >= THD_WORKING_AREA_SIZE(0)) &&
+             MEM_IS_ALIGNED(size, PORT_STACK_ALIGN) &&
              (prio <= HIGHPRIO) && (pf != NULL));
 
   /* The thread structure is laid out in the upper part of the thread

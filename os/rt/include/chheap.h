@@ -100,7 +100,7 @@ extern "C" {
 #endif
   void _heap_init(void);
   void chHeapObjectInit(memory_heap_t *heapp, void *buf, size_t size);
-  void *chHeapAlloc(memory_heap_t *heapp, size_t size);
+  void *chHeapAllocAligned(memory_heap_t *heapp, size_t size, unsigned align);
   void chHeapFree(void *p);
   size_t chHeapStatus(memory_heap_t *heapp, size_t *sizep);
 #ifdef __cplusplus
@@ -110,6 +110,27 @@ extern "C" {
 /*===========================================================================*/
 /* Module inline functions.                                                  */
 /*===========================================================================*/
+
+/**
+ * @brief   Allocates a block of memory from the heap by using the first-fit
+ *          algorithm.
+ * @details The allocated block is guaranteed to be properly aligned for a
+ *          pointer data type.
+ *
+ * @param[in] heapp     pointer to a heap descriptor or @p NULL in order to
+ *                      access the default heap.
+ * @param[in] size      the size of the block to be allocated. Note that the
+ *                      allocated block may be a bit bigger than the requested
+ *                      size for alignment and fragmentation reasons.
+ * @return              A pointer to the allocated block.
+ * @retval NULL         if the block cannot be allocated.
+ *
+ * @api
+ */
+static inline void *chHeapAlloc(memory_heap_t *heapp, size_t size) {
+
+  return chHeapAllocAligned(heapp, size, 0);
+}
 
 #endif /* CH_CFG_USE_HEAP == TRUE */
 
