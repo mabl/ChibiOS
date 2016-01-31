@@ -34,6 +34,11 @@
 /* Module constants.                                                         */
 /*===========================================================================*/
 
+/**
+ * @brief   Minimum alignment used for heap.
+ */
+#define CH_HEAP_ALIGNMENT   sizeof (heap_header_t)
+
 /*===========================================================================*/
 /* Module pre-compile time settings.                                         */
 /*===========================================================================*/
@@ -60,13 +65,18 @@
 typedef struct memory_heap memory_heap_t;
 
 /**
+ * @brief   Type of a memory heap header.
+ */
+typedef union heap_header heap_header_t;
+
+/**
  * @brief   Memory heap block header.
  */
 union heap_header {
   stkalign_t align;
   struct {
     union {
-      union heap_header *next;      /**< @brief Next block in free list.    */
+      heap_header_t     *next;      /**< @brief Next block in free list.    */
       memory_heap_t     *heap;      /**< @brief Block owner heap.           */
     } u;                            /**< @brief Overlapped fields.          */
     size_t              size;       /**< @brief Size of the memory block.   */
@@ -79,7 +89,7 @@ union heap_header {
 struct memory_heap {
   memgetfunc_t          provider;   /**< @brief Memory blocks provider for
                                                 this heap.                  */
-  union heap_header     free;       /**< @brief Free blocks list header.    */
+  heap_header_t         free;       /**< @brief Free blocks list header.    */
 #if CH_CFG_USE_MUTEXES == TRUE
   mutex_t               mtx;        /**< @brief Heap access mutex.          */
 #else
@@ -129,7 +139,7 @@ extern "C" {
  */
 static inline void *chHeapAlloc(memory_heap_t *heapp, size_t size) {
 
-  return chHeapAllocAligned(heapp, size, 0);
+  return chHeapAllocAligned(heapp, size, CH_HEAP_ALIGNMENT);
 }
 
 #endif /* CH_CFG_USE_HEAP == TRUE */

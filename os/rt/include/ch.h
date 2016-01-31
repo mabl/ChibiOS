@@ -71,6 +71,7 @@
 #include "chconf.h"
 #include "chlicense.h"
 #include "chsystypes.h"
+#include "chalign.h"
 #include "chcore.h"
 #include "chdebug.h"
 #include "chtm.h"

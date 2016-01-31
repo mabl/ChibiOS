@@ -42,23 +42,23 @@
 #define PORT_SUPPORTS_RT                TRUE
 
 /**
- * @brief   Natural alignment constant as power of two.
+ * @brief   Natural alignment constant.
  * @note    It is the minimum alignment for pointer-size variables.
  */
-#define PORT_NATURAL_ALIGN              2U
+#define PORT_NATURAL_ALIGN              sizeof (void *)
 
 /**
- * @brief   Stack alignment constant as power of two.
+ * @brief   Stack alignment constant.
  * @note    It is the alignement required for the stack pointer.
  */
-#define PORT_STACK_ALIGN                3U
+#define PORT_STACK_ALIGN                sizeof (stkalign_t)
 
 /**
- * @brief   Working Areas alignment constant as power of two.
- * @note    It is the alignement to be enforced for thread working areas.
+ * @brief   Working Areas alignment constant.
+ * @note    It is the alignment to be enforced for thread working areas.
  */
 #define PORT_WORKING_AREA_ALIGN         (PORT_ENABLE_GUARD_PAGES == TRUE ?  \
-                                         5U : 3U)
+                                         32U : PORT_STACK_ALIGN)
 /** @} */
 
 /**

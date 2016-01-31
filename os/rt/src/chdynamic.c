@@ -154,7 +154,7 @@ thread_t *chThdCreateFromHeap(memory_heap_t *heapp, size_t size,
   void *wsp;
   thread_t *tp;
 
-  wsp = chHeapAlloc(heapp, size);
+  wsp = chHeapAllocAligned(heapp, size, PORT_WORKING_AREA_ALIGN);
   if (wsp == NULL) {
     return NULL;
   }

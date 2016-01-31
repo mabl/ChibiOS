@@ -18,17 +18,15 @@
 */
 
 /**
- * @file    chmemcore.h
- * @brief   Core memory manager macros and structures.
+ * @file    chmem.h
+ * @brief   Memory alignment macros and structures.
  *
- * @addtogroup memcore
+ * @addtogroup mem
  * @{
  */
 
-#ifndef _CHMEMCORE_H_
-#define _CHMEMCORE_H_
-
-#if (CH_CFG_USE_MEMCORE == TRUE) || defined(__DOXYGEN__)
+#ifndef _CHALIGN_H_
+#define _CHALIGN_H_
 
 /*===========================================================================*/
 /* Module constants.                                                         */
@@ -46,14 +44,54 @@
 /* Module data structures and types.                                         */
 /*===========================================================================*/
 
-/**
- * @brief   Memory get function.
- */
-typedef void *(*memgetfunc_t)(size_t size, unsigned align);
-
 /*===========================================================================*/
 /* Module macros.                                                            */
 /*===========================================================================*/
+
+/**
+ * @name    Memory alignment support macros
+ */
+/**
+ * @brief   Alignment mask constant.
+ *
+ * @param[in] a         alignment, must be a power of two
+ */
+#define MEM_ALIGN_MASK(a)       ((size_t)(a) - 1U)
+
+/**
+ * @brief   Aligns to the previous aligned memory address.
+ *
+ * @param[in] p         variable to be aligned
+ * @param[in] a         alignment, must be a power of two
+ */
+#define MEM_ALIGN_PREV(p, a)    ((size_t)(p) & ~MEM_ALIGN_MASK(a))
+
+/**
+ * @brief   Aligns to the new aligned memory address.
+ *
+ * @param[in] p         variable to be aligned
+ * @param[in] a         alignment, must be a power of two
+ */
+#define MEM_ALIGN_NEXT(p, a)    MEM_ALIGN_PREV((size_t)(p) +                \
+                                               MEM_ALIGN_MASK(a), (a))
+
+/**
+ * @brief   Returns whatever a pointer or memory size is aligned.
+ *
+ * @param[in] p         variable to be aligned
+ * @param[in] a         alignment, must be a power of two
+ */
+#define MEM_IS_ALIGNED(p, a)    (((size_t)(p) & MEM_ALIGN_MASK(a)) == 0U)
+
+/**
+ * @brief   Returns whatever a constant is a valid alignment.
+ * @details Valid alignments are powers of two.
+ *
+ * @param[in] a         alignment to be checked, must be a constant
+ */
+#define MEM_IS_VALID_ALIGNMENT(a)                                           \
+  (((size_t)(a) != 0U) && (((size_t)(a) & ((size_t)(a) - 1U)) == 0U))
+/** @} */
 
 /*===========================================================================*/
 /* External declarations.                                                    */
@@ -62,10 +100,7 @@ typedef void *(*memgetfunc_t)(size_t size, unsigned align);
 #ifdef __cplusplus
 extern "C" {
 #endif
-  void _core_init(void);
-  void *chCoreAllocAlignedI(size_t size, unsigned align);
-  void *chCoreAllocAligned(size_t size, unsigned align);
-  size_t chCoreGetStatusX(void);
+
 #ifdef __cplusplus
 }
 #endif
@@ -74,40 +109,6 @@ extern "C" {
 /* Module inline functions.                                                  */
 /*===========================================================================*/
 
-/**
- * @brief   Allocates a memory block.
- * @details The allocated block is guaranteed to be properly aligned for a
- *          pointer data type.
- *
- * @param[in] size      the size of the block to be allocated.
- * @return              A pointer to the allocated memory block.
- * @retval NULL         allocation failed, core memory exhausted.
- *
- * @iclass
- */
-static inline void *chCoreAllocI(size_t size) {
-
-  return chCoreAllocAlignedI(size, PORT_NATURAL_ALIGN);
-}
-
-/**
- * @brief   Allocates a memory block.
- * @details The allocated block is guaranteed to be properly aligned for a
- *          pointer data type.
- *
- * @param[in] size      the size of the block to be allocated.
- * @return              A pointer to the allocated memory block.
- * @retval NULL         allocation failed, core memory exhausted.
- *
- * @api
- */
-static inline void *chCoreAlloc(size_t size) {
-
-  return chCoreAllocAligned(size, PORT_NATURAL_ALIGN);
-}
-
-#endif /* CH_CFG_USE_MEMCORE == TRUE */
-
-#endif /* _CHMEMCORE_H_ */
+#endif /* _CHALIGN_H_ */
 
 /** @} */

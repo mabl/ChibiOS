@@ -53,11 +53,15 @@
 #define H_UNLOCK(h)     chSemSignal(&(h)->sem)
 #endif
 
-#define LIMIT(p)                                                            \
-  /*lint -save -e9087 [11.3] Safe cast.*/                                   \
-  (union heap_header *)((uint8_t *)(p) +                                    \
-                        sizeof(union heap_header) + (p)->h.size)            \
-  /*lint -restore*/
+#define H_BLOCK(hp)     ((hp) + 1U)
+
+#define H_NEXT(hp)      ((hp)->h.u.next)
+
+#define H_HEAP(hp)      ((hp)->h.u.heap)
+
+#define H_SIZE(hp)      ((hp)->h.size)
+
+#define H_LIMIT(hp)     (H_BLOCK(hp) + H_SIZE(hp))
 
 /*===========================================================================*/
 /* Module exported variables.                                                */
@@ -91,9 +95,9 @@ static memory_heap_t default_heap;
  */
 void _heap_init(void) {
 
-  default_heap.provider = chCoreAlloc;
-  default_heap.free.h.u.next = NULL;
-  default_heap.free.h.size = 0;
+  default_heap.provider = chCoreAllocAligned;
+  H_NEXT(&default_heap.free) = NULL;
+  H_SIZE(&default_heap.free) = 0;
 #if (CH_CFG_USE_MUTEXES == TRUE) || defined(__DOXYGEN__)
   chMtxObjectInit(&default_heap.mtx);
 #else
@@ -104,7 +108,7 @@ void _heap_init(void) {
 /**
  * @brief   Initializes a memory heap from a static memory area.
  * @pre     Both the heap buffer base and the heap size must be aligned to
- *          the @p stkalign_t type size.
+ *          the @p heap_header_t type size.
  *
  * @param[out] heapp    pointer to the memory heap descriptor to be initialized
  * @param[in] buf       heap buffer base
@@ -113,16 +117,17 @@ void _heap_init(void) {
  * @init
  */
 void chHeapObjectInit(memory_heap_t *heapp, void *buf, size_t size) {
-  union heap_header *hp = buf;
+  heap_header_t *hp = buf;
 
-  chDbgCheck(MEM_IS_ALIGNED(buf, PORT_NATURAL_ALIGN) &&
-             MEM_IS_ALIGNED(size, PORT_NATURAL_ALIGN));
+  chDbgCheck((heapp != NULL) && (size > 0U) &&
+             MEM_IS_ALIGNED(buf, CH_HEAP_ALIGNMENT) &&
+             MEM_IS_ALIGNED(size, CH_HEAP_ALIGNMENT));
 
   heapp->provider = NULL;
-  heapp->free.h.u.next = hp;
-  heapp->free.h.size = 0;
-  hp->h.u.next = NULL;
-  hp->h.size = size - sizeof(union heap_header);
+  H_NEXT(&heapp->free) = hp;
+  H_SIZE(&heapp->free) = 0;
+  H_NEXT(hp) = NULL;
+  H_SIZE(hp) = (size - sizeof (heap_header_t)) / CH_HEAP_ALIGNMENT;
 #if (CH_CFG_USE_MUTEXES == TRUE) || defined(__DOXYGEN__)
   chMtxObjectInit(&heapp->mtx);
 #else
@@ -134,71 +139,120 @@ void chHeapObjectInit(memory_heap_t *heapp, void *buf, size_t size) {
  * @brief   Allocates a block of memory from the heap by using the first-fit
  *          algorithm.
  * @details The allocated block is guaranteed to be properly aligned to the
- *          specified power of two.
+ *          specified alignment.
  *
  * @param[in] heapp     pointer to a heap descriptor or @p NULL in order to
  *                      access the default heap.
  * @param[in] size      the size of the block to be allocated. Note that the
  *                      allocated block may be a bit bigger than the requested
  *                      size for alignment and fragmentation reasons.
- * @param[in] align     power of two of the desided memory alignment
+ * @param[in] align     desired memory alignment
  * @return              A pointer to the aligned allocated block.
  * @retval NULL         if the block cannot be allocated.
  *
  * @api
  */
 void *chHeapAllocAligned(memory_heap_t *heapp, size_t size, unsigned align) {
-  union heap_header *qp, *hp, *fp;
+  heap_header_t *qp, *hp;
 
+  chDbgCheck((size > 0U) && MEM_IS_VALID_ALIGNMENT(align));
+
+  /* If an heap is not specified then the default system header is used.*/
   if (heapp == NULL) {
     heapp = &default_heap;
   }
 
-  size = MEM_ALIGN_NEXT(size, PORT_NATURAL_ALIGN);
-  qp = &heapp->free;
+  /* Minimum alignment is constrained by the heap header structure size.*/
+  if (align < CH_HEAP_ALIGNMENT) {
+    align = CH_HEAP_ALIGNMENT;
+  }
 
+  /* Size is converted in number of elementary allocation units.*/
+  size = MEM_ALIGN_NEXT(size, CH_HEAP_ALIGNMENT) / CH_HEAP_ALIGNMENT;
+
+  /* Taking heap mutex/semaphore.*/
   H_LOCK(heapp);
+
+  /* Start of the free blocks list.*/
+  qp = &heapp->free;
   while (qp->h.u.next != NULL) {
+    heap_header_t *ahp;
+
+    /* Next free block.*/
     hp = qp->h.u.next;
-    if (hp->h.size >= size) {
-      if (hp->h.size < (size + sizeof(union heap_header))) {
-        /* Gets the whole block even if it is slightly bigger than the
-           requested size because the fragment would be too small to be
-           useful.*/
-        qp->h.u.next = hp->h.u.next;
+
+    /* Pointer aligned to the requested alignment.*/
+    ahp = (heap_header_t *)MEM_ALIGN_NEXT(H_BLOCK(hp), align) - 1U;
+
+    if ((ahp < H_LIMIT(hp)) && (size <= (size_t)(H_LIMIT(hp) - 1U - ahp))) {
+      /* The block is large enough to contain a correctly aligned area
+         of sufficient size.*/
+
+      if (ahp > hp) {
+        /* The block is not properly aligned, must split it.*/
+        H_SIZE(ahp) = H_LIMIT(hp) - H_BLOCK(ahp);
+        H_SIZE(hp) = ahp - H_BLOCK(hp);
+
+        if ((size_t)(H_LIMIT(hp) - H_BLOCK(ahp)) > size) {
+          /* The block is bigger than required, must split the excess.*/
+          heap_header_t *fp;
+
+          fp = H_BLOCK(ahp) + size;
+          H_NEXT(fp) = H_NEXT(hp);
+          H_SIZE(fp) = H_LIMIT(ahp) - H_BLOCK(fp);
+          H_NEXT(hp) = fp;
+          H_SIZE(ahp) = size;
+        }
+
+        hp = ahp;
       }
       else {
-        /* Block bigger enough, must split it.*/
-        /*lint -save -e9087 [11.3] Safe cast.*/
-        fp = (void *)((uint8_t *)(hp) + sizeof(union heap_header) + size);
-        /*lint -restore*/
-        fp->h.u.next = hp->h.u.next;
-        fp->h.size = (hp->h.size - sizeof(union heap_header)) - size;
-        qp->h.u.next = fp;
-        hp->h.size = size;
+        /* The block is already properly aligned.*/
+
+        if (H_SIZE(hp) == size) {
+          /* Exact size, getting the whole block.*/
+          H_NEXT(qp) = H_NEXT(hp);
+        }
+        else {
+          /* The block is bigger than required, must split the excess.*/
+          heap_header_t *fp;
+
+          fp = H_BLOCK(hp) + size;
+          H_NEXT(fp) = H_NEXT(hp);
+          H_SIZE(fp) = H_LIMIT(hp) - H_BLOCK(fp);
+          H_NEXT(qp) = fp;
+          H_SIZE(hp) = size;
+        }
       }
-      hp->h.u.heap = heapp;
+
+      /* Marking the block with the owner heap.*/
+      H_HEAP(hp) = heapp;
+
+      /* Releasing heap mutex/semaphore.*/
       H_UNLOCK(heapp);
 
       /*lint -save -e9087 [11.3] Safe cast.*/
-      return (void *)(hp + 1);
+      return (void *)H_BLOCK(hp);
       /*lint -restore*/
     }
+
+    /* Next in the free blocks list.*/
     qp = hp;
   }
+
+  /* Releasing heap mutex/semaphore.*/
   H_UNLOCK(heapp);
 
   /* More memory is required, tries to get it from the associated provider
      else fails.*/
   if (heapp->provider != NULL) {
-    hp = heapp->provider(size + sizeof(union heap_header));
+    hp = heapp->provider(size + sizeof (heap_header_t), align);
     if (hp != NULL) {
-      hp->h.u.heap = heapp;
-      hp->h.size = size;
-      hp++;
+      H_HEAP(hp) = heapp;
+      H_SIZE(hp) = size;
 
       /*lint -save -e9087 [11.3] Safe cast.*/
-      return (void *)hp;
+      return (void *)H_BLOCK(hp);
       /*lint -restore*/
     }
   }
@@ -214,41 +268,45 @@ void *chHeapAllocAligned(memory_heap_t *heapp, size_t size, unsigned align) {
  * @api
  */
 void chHeapFree(void *p) {
-  union heap_header *qp, *hp;
+  heap_header_t *qp, *hp;
   memory_heap_t *heapp;
 
-  chDbgCheck(p != NULL);
+  chDbgCheck((p != NULL) && MEM_IS_ALIGNED(p, CH_HEAP_ALIGNMENT));
 
   /*lint -save -e9087 [11.3] Safe cast.*/
-  hp = (union heap_header *)p - 1;
+  hp = (heap_header_t *)p - 1U;
   /*lint -restore*/
   heapp = hp->h.u.heap;
   qp = &heapp->free;
 
+  /* Taking heap mutex/semaphore.*/
   H_LOCK(heapp);
+
   while (true) {
-    chDbgAssert((hp < qp) || (hp >= LIMIT(qp)), "within free block");
+    chDbgAssert((hp < qp) || (hp >= H_LIMIT(qp)), "within free block");
 
     if (((qp == &heapp->free) || (hp > qp)) &&
-        ((qp->h.u.next == NULL) || (hp < qp->h.u.next))) {
+        ((H_NEXT(qp) == NULL) || (hp < H_NEXT(qp)))) {
       /* Insertion after qp.*/
-      hp->h.u.next = qp->h.u.next;
-      qp->h.u.next = hp;
+      H_NEXT(hp) = H_NEXT(qp);
+      H_NEXT(qp) = hp;
       /* Verifies if the newly inserted block should be merged.*/
-      if (LIMIT(hp) == hp->h.u.next) {
+      if (H_LIMIT(hp) == H_NEXT(hp)) {
         /* Merge with the next block.*/
-        hp->h.size += hp->h.u.next->h.size + sizeof(union heap_header);
-        hp->h.u.next = hp->h.u.next->h.u.next;
+        H_SIZE(hp) += H_SIZE(H_NEXT(hp)) + 1U;
+        H_NEXT(hp) = H_NEXT(H_NEXT(hp));
       }
-      if ((LIMIT(qp) == hp)) {
+      if ((H_LIMIT(qp) == hp)) {
         /* Merge with the previous block.*/
-        qp->h.size += hp->h.size + sizeof(union heap_header);
-        qp->h.u.next = hp->h.u.next;
+        H_SIZE(qp) += H_SIZE(hp) + 1U;
+        H_NEXT(qp) = H_NEXT(hp);
       }
       break;
     }
-    qp = qp->h.u.next;
+    qp = H_NEXT(qp);
   }
+
+  /* Releasing heap mutex/semaphore.*/
   H_UNLOCK(heapp);
 
   return;
@@ -262,13 +320,13 @@ void chHeapFree(void *p) {
  * @param[in] heapp     pointer to a heap descriptor or @p NULL in order to
  *                      access the default heap.
  * @param[in] sizep     pointer to a variable that will receive the total
- *                      fragmented free space
+ *                      fragmented free space or @ NULL
  * @return              The number of fragments in the heap.
  *
  * @api
  */
 size_t chHeapStatus(memory_heap_t *heapp, size_t *sizep) {
-  union heap_header *qp;
+  heap_header_t *qp;
   size_t n, sz;
 
   if (heapp == NULL) {
@@ -276,16 +334,16 @@ size_t chHeapStatus(memory_heap_t *heapp, size_t *sizep) {
   }
 
   H_LOCK(heapp);
-  sz = 0;
-  n = 0;
+  sz = 0U;
+  n = 0U;
   qp = &heapp->free;
-  while (qp->h.u.next != NULL) {
-    sz += qp->h.u.next->h.size;
+  while (H_NEXT(qp) != NULL) {
+    sz += H_SIZE(H_NEXT(qp));
     n++;
-    qp = qp->h.u.next;
+    qp = H_NEXT(qp);
   }
   if (sizep != NULL) {
-    *sizep = sz;
+    *sizep = sz * CH_HEAP_ALIGNMENT;
   }
   H_UNLOCK(heapp);
 

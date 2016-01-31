@@ -96,51 +96,53 @@ void _core_init(void) {
 
 /**
  * @brief   Allocates a memory block.
- * @details The size of the returned block is aligned to the alignment
- *          type so it is not possible to allocate less
- *          than <code>MEM_ALIGN_SIZE</code>.
+ * @details The allocated block is guaranteed to be properly aligned to the
+ *          specified alignment.
  *
- * @param[in] size      the size of the block to be allocated
+ * @param[in] size      the size of the block to be allocated.
+ * @param[in] align     desired memory alignment
  * @return              A pointer to the allocated memory block.
  * @retval NULL         allocation failed, core memory exhausted.
  *
- * @api
+ * @iclass
  */
-void *chCoreAlloc(size_t size) {
-  void *p;
+void *chCoreAllocAlignedI(size_t size, unsigned align) {
+  uint8_t *p;
 
-  chSysLock();
-  p = chCoreAllocI(size);
-  chSysUnlock();
+  chDbgCheckClassI();
+  chDbgCheck(MEM_IS_VALID_ALIGNMENT(align));
+
+  size = MEM_ALIGN_NEXT(size, align);
+  p = (uint8_t *)MEM_ALIGN_NEXT(nextmem, align);
+
+  /* ---????? lint -save -e9033 [10.8] The cast is safe.*/
+  if ((size_t)(endmem - p) < size) {
+  /* ---????? lint -restore*/
+    return NULL;
+  }
+  nextmem = p + size;
 
   return p;
 }
 
 /**
  * @brief   Allocates a memory block.
- * @details The size of the returned block is aligned to the alignment
- *          type so it is not possible to allocate less than
- *          <code>MEM_ALIGN_SIZE</code>.
+ * @details The allocated block is guaranteed to be properly aligned to the
+ *          specified alignment.
  *
- * @param[in] size      the size of the block to be allocated.
+ * @param[in] size      the size of the block to be allocated
+ * @param[in] align     desired memory alignment
  * @return              A pointer to the allocated memory block.
  * @retval NULL         allocation failed, core memory exhausted.
  *
- * @iclass
+ * @api
  */
-void *chCoreAllocI(size_t size) {
+void *chCoreAllocAligned(size_t size, unsigned align) {
   void *p;
 
-  chDbgCheckClassI();
-
-  size = MEM_ALIGN_NEXT(size, PORT_NATURAL_ALIGN);
-  /*lint -save -e9033 [10.8] The cast is safe.*/
-  if ((size_t)(endmem - nextmem) < size) {
-  /*lint -restore*/
-    return NULL;
-  }
-  p = nextmem;
-  nextmem += size;
+  chSysLock();
+  p = chCoreAllocAlignedI(size, align);
+  chSysUnlock();
 
   return p;
 }

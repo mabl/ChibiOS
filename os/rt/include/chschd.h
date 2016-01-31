@@ -108,49 +108,6 @@
 /** @} */
 
 /**
- * @name    Memory alignment support macros
- */
-/**
- * @brief   Alignment size.
- *
- * @param[in] a         alignment power of two
- */
-#define MEM_ALIGN_SIZE(a)       (1U << (a))
-
-/**
- * @brief   Alignment mask constant.
- *
- * @param[in] a         alignment power of two
- */
-#define MEM_ALIGN_MASK(a)       ((size_t)MEM_ALIGN_SIZE(a) - 1U)
-
-/**
- * @brief   Aligns to the previous aligned memory address.
- *
- * @param[in] p         variable to be aligned
- * @param[in] a         alignment power of two
- */
-#define MEM_ALIGN_PREV(p, a)    ((size_t)(p) & ~MEM_ALIGN_MASK(a))
-
-/**
- * @brief   Aligns to the new aligned memory address.
- *
- * @param[in] p         variable to be aligned
- * @param[in] a         alignment power of two
- */
-#define MEM_ALIGN_NEXT(p, a)    MEM_ALIGN_PREV((size_t)(p) +                \
-                                               MEM_ALIGN_MASK(a), (a))
-
-/**
- * @brief   Returns whatever a pointer or memory size is aligned.
- *
- * @param[in] p         variable to be aligned
- * @param[in] a         alignment power of two
- */
-#define MEM_IS_ALIGNED(p, a)    (((size_t)(p) & MEM_ALIGN_MASK(a)) == 0U)
-/** @} */
-
-/**
  * @name    Working Areas
  */
 /**
