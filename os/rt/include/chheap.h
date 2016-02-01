@@ -75,12 +75,13 @@ typedef union heap_header heap_header_t;
 union heap_header {
   stkalign_t align;
   struct {
-    union {
-      heap_header_t     *next;      /**< @brief Next block in free list.    */
-      memory_heap_t     *heap;      /**< @brief Block owner heap.           */
-    } u;                            /**< @brief Overlapped fields.          */
-    size_t              size;       /**< @brief Size of the memory block.   */
-  } h;
+    heap_header_t       *next;      /**< @brief Next block in free list.    */
+    size_t              pages;      /**< @brief Size of the area in pages.  */
+  } free;
+  struct {
+    memory_heap_t       *heap;      /**< @brief Block owner heap.           */
+    size_t              size;       /**< @brief Size of the area in bytes.  */
+  } used;
 };
 
 /**
@@ -89,7 +90,7 @@ union heap_header {
 struct memory_heap {
   memgetfunc_t          provider;   /**< @brief Memory blocks provider for
                                                 this heap.                  */
-  heap_header_t         free;       /**< @brief Free blocks list header.    */
+  heap_header_t         header;     /**< @brief Free blocks list header.    */
 #if CH_CFG_USE_MUTEXES == TRUE
   mutex_t               mtx;        /**< @brief Heap access mutex.          */
 #else
@@ -112,7 +113,7 @@ extern "C" {
   void chHeapObjectInit(memory_heap_t *heapp, void *buf, size_t size);
   void *chHeapAllocAligned(memory_heap_t *heapp, size_t size, unsigned align);
   void chHeapFree(void *p);
-  size_t chHeapStatus(memory_heap_t *heapp, size_t *sizep);
+  size_t chHeapStatus(memory_heap_t *heapp, size_t *totalp, size_t *largestp);
 #ifdef __cplusplus
 }
 #endif
@@ -140,6 +141,20 @@ extern "C" {
 static inline void *chHeapAlloc(memory_heap_t *heapp, size_t size) {
 
   return chHeapAllocAligned(heapp, size, CH_HEAP_ALIGNMENT);
+}
+
+/**
+ * @brief   Returns the size of an allocated block.
+ * @note    The returned value is the requested size, the real size is the
+ *          same value aligned to the next @p CH_HEAP_ALIGNMENT multiple.
+ *
+ * @param[in] p         pointer to the memory block
+ *
+ * @api
+ */
+static inline size_t chHeapGetSize(const void *p) {
+
+  return ((heap_header_t *)p)->used.size;
 }
 
 #endif /* CH_CFG_USE_HEAP == TRUE */
