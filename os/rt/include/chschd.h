@@ -206,16 +206,6 @@ struct ch_thread {
    */
   tstate_t              state;
   /**
-   * @brief Various thread flags.
-   */
-  tmode_t               flags;
-#if (CH_CFG_USE_DYNAMIC == TRUE) || defined(__DOXYGEN__)
-  /**
-   * @brief References to this thread.
-   */
-  trefs_t               refs;
-#endif
-  /**
    * @brief Number of ticks remaining to this thread.
    */
 #if (CH_CFG_TIME_QUANTUM > 0) || defined(__DOXYGEN__)
@@ -323,13 +313,6 @@ struct ch_thread {
    * @brief Thread's own, non-inherited, priority.
    */
   tprio_t               realprio;
-#endif
-#if ((CH_CFG_USE_DYNAMIC == TRUE) && (CH_CFG_USE_MEMPOOLS == TRUE)) ||      \
-    defined(__DOXYGEN__)
-  /**
-   * @brief Memory Pool where the thread workspace is returned.
-   */
-  void                  *mpool;
 #endif
 #if (CH_DBG_STATISTICS == TRUE) || defined(__DOXYGEN__)
   /**

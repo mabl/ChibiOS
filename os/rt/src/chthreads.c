@@ -45,10 +45,6 @@
  *          - <b>SetPriority</b>, a thread changes its own priority level.
  *          - <b>Yield</b>, a thread voluntarily renounces to its time slot.
  *          .
- *          The threads subsystem is implicitly included in kernel however
- *          some of its part may be excluded by disabling them in @p chconf.h,
- *          see the @p CH_CFG_USE_WAITEXIT and @p CH_CFG_USE_DYNAMIC configuration
- *          options.
  * @{
  */
 
@@ -92,7 +88,6 @@ thread_t *_thread_init(thread_t *tp, tprio_t prio) {
 
   tp->prio = prio;
   tp->state = CH_STATE_WTSTART;
-  tp->flags = CH_FLAG_MODE_STATIC;
 #if CH_CFG_TIME_QUANTUM > 0
   tp->preempt = (tslices_t)CH_CFG_TIME_QUANTUM;
 #endif
@@ -105,9 +100,6 @@ thread_t *_thread_init(thread_t *tp, tprio_t prio) {
 #endif
 #if CH_DBG_THREADS_PROFILING == TRUE
   tp->time = (systime_t)0;
-#endif
-#if CH_CFG_USE_DYNAMIC == TRUE
-  tp->refs = (trefs_t)1;
 #endif
 #if CH_CFG_USE_REGISTRY == TRUE
   tp->name = NULL;
@@ -283,25 +275,6 @@ tprio_t chThdSetPriority(tprio_t newprio) {
 }
 
 /**
- * @brief   Requests a thread termination.
- * @pre     The target thread must be written to invoke periodically
- *          @p chThdShouldTerminate() and terminate cleanly if it returns
- *          @p true.
- * @post    The specified thread will terminate after detecting the termination
- *          condition.
- *
- * @param[in] tp        pointer to the thread
- *
- * @api
- */
-void chThdTerminate(thread_t *tp) {
-
-  chSysLock();
-  tp->flags |= CH_FLAG_TERMINATE;
-  chSysUnlock();
-}
-
-/**
  * @brief   Suspends the invoking thread for the specified time.
  *
  * @param[in] time      the delay in system ticks, the special values are
@@ -432,11 +405,7 @@ void chThdExitS(msg_t msg) {
   }
 #endif
 #if CH_CFG_USE_REGISTRY == TRUE
-  /* Static threads are immediately removed from the registry because
-     there is no memory to recover.*/
-  if ((tp->flags & CH_FLAG_MODE_MASK) == CH_FLAG_MODE_STATIC) {
-    REG_REMOVE(tp);
-  }
+  REG_REMOVE(tp);
 #endif
   chSchGoSleepS(CH_STATE_FINAL);
 
@@ -448,28 +417,12 @@ void chThdExitS(msg_t msg) {
 /**
  * @brief   Blocks the execution of the invoking thread until the specified
  *          thread terminates then the exit code is returned.
- * @details This function waits for the specified thread to terminate then
- *          decrements its reference counter, if the counter reaches zero then
- *          the thread working area is returned to the proper allocator.<br>
- *          The memory used by the exited thread is handled in different ways
- *          depending on the API that spawned the thread:
- *          - If the thread was spawned by @p chThdCreateStatic() or by
- *            @p chThdCreateI() then nothing happens and the thread working
- *            area is not released or modified in any way. This is the
- *            default, totally static, behavior.
- *          - If the thread was spawned by @p chThdCreateFromHeap() then
- *            the working area is returned to the system heap.
- *          - If the thread was spawned by @p chThdCreateFromMemoryPool()
- *            then the working area is returned to the owning memory pool.
- *          .
  * @pre     The configuration option @p CH_CFG_USE_WAITEXIT must be enabled in
  *          order to use this function.
  * @post    Enabling @p chThdWait() requires 2-4 (depending on the
  *          architecture) extra bytes in the @p thread_t structure.
  * @post    After invoking @p chThdWait() the thread pointer becomes invalid
  *          and must not be used as parameter for further system calls.
- * @note    If @p CH_CFG_USE_DYNAMIC is not specified this function just waits for
- *          the thread termination, no memory allocators are involved.
  *
  * @param[in] tp        pointer to the thread
  * @return              The exit code from the terminated thread.
@@ -483,20 +436,12 @@ msg_t chThdWait(thread_t *tp) {
 
   chSysLock();
   chDbgAssert(tp != currp, "waiting self");
-#if CH_CFG_USE_DYNAMIC == TRUE
-  chDbgAssert(tp->refs > (trefs_t)0, "not referenced");
-#endif
   if (tp->state != CH_STATE_FINAL) {
     list_insert(currp, &tp->waiting);
     chSchGoSleepS(CH_STATE_WTEXIT);
   }
   msg = tp->u.exitcode;
   chSysUnlock();
-
-#if CH_CFG_USE_DYNAMIC == TRUE
-  /* Releasing a lock if it is a dynamic thread.*/
-  chThdRelease(tp);
-#endif
 
   return msg;
 }

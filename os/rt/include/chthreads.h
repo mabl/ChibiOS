@@ -146,7 +146,6 @@ extern "C" {
   msg_t chThdEnqueueTimeoutS(threads_queue_t *tqp, systime_t timeout);
   void chThdDequeueNextI(threads_queue_t *tqp, msg_t msg);
   void chThdDequeueAllI(threads_queue_t *tqp, msg_t msg);
-  void chThdTerminate(thread_t *tp);
   void chThdSleep(systime_t time);
   void chThdSleepUntil(systime_t time);
   systime_t chThdSleepUntilWindowed(systime_t prev, systime_t next);
@@ -218,19 +217,6 @@ static inline systime_t chThdGetTicksX(thread_t *tp) {
 static inline bool chThdTerminatedX(thread_t *tp) {
 
   return (bool)(tp->state == CH_STATE_FINAL);
-}
-
-/**
- * @brief   Verifies if the current thread has a termination request pending.
- *
- * @retval true         termination request pending.
- * @retval false        termination request not pending.
- *
- * @xclass
- */
-static inline bool chThdShouldTerminateX(void) {
-
-  return (bool)((chThdGetSelfX()->flags & CH_FLAG_TERMINATE) != (tmode_t)0);
 }
 
 /**

@@ -14,9 +14,6 @@ endif
 ifneq ($(findstring CH_DBG_STATISTICS TRUE,$(CHCONF)),)
 KERNSRC += $(CHIBIOS)/os/rt/src/chstats.c
 endif
-ifneq ($(findstring CH_CFG_USE_DYNAMIC TRUE,$(CHCONF)),)
-KERNSRC += $(CHIBIOS)/os/rt/src/chdynamic.c
-endif
 ifneq ($(findstring CH_CFG_USE_REGISTRY TRUE,$(CHCONF)),)
 KERNSRC += $(CHIBIOS)/os/rt/src/chregistry.c
 endif
@@ -58,7 +55,6 @@ KERNSRC = $(CHIBIOS)/os/rt/src/chsys.c \
           $(CHIBIOS)/os/rt/src/chthreads.c \
           $(CHIBIOS)/os/rt/src/chtm.c \
           $(CHIBIOS)/os/rt/src/chstats.c \
-          $(CHIBIOS)/os/rt/src/chdynamic.c \
           $(CHIBIOS)/os/rt/src/chregistry.c \
           $(CHIBIOS)/os/rt/src/chsem.c \
           $(CHIBIOS)/os/rt/src/chmtx.c \
