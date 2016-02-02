@@ -184,8 +184,8 @@ thread_t *chThdCreateI(void *wsp, size_t size,
   /* The thread structure is laid out in the upper part of the thread
      workspace. The thread position structure is aligned to the required
      stack alignment because it represents the stack top.*/
-  tp = (thread_t *)MEM_ALIGN_PREV(((uint8_t *)wsp + size - sizeof (thread_t)),
-                                  PORT_STACK_ALIGN);
+  tp = (thread_t *)((uint8_t *)wsp + size -
+                    MEM_ALIGN_NEXT(sizeof (thread_t), PORT_STACK_ALIGN));
 
   /* Stack boundary.*/
   tp->stklimit = (stkalign_t *)wsp;

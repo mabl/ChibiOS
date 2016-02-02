@@ -119,7 +119,7 @@
  * @api
  */
 #define THD_WORKING_AREA_SIZE(n)                                            \
-  MEM_ALIGN_NEXT(sizeof(thread_t) + PORT_WA_SIZE(n), PORT_WORKING_AREA_ALIGN)
+  MEM_ALIGN_NEXT(sizeof(thread_t) + PORT_WA_SIZE(n), PORT_STACK_ALIGN)
 
 /**
  * @brief   Static working area allocation.
