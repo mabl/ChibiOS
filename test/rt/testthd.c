@@ -96,11 +96,7 @@ static void thd2_execute(void) {
   threads[0] = chThdCreateStatic(wa[0], WA_SIZE, chThdGetPriorityX()-5, thread, "E");
   threads[4] = chThdCreateStatic(wa[4], WA_SIZE, chThdGetPriorityX()-1, thread, "A");
   threads[3] = chThdCreateStatic(wa[3], WA_SIZE, chThdGetPriorityX()-2, thread, "B");
-  /* Done this way for coverage of chThdCreateI() and chThdStart().*/
-  chSysLock();
-  threads[2] = chThdCreateI(wa[2], WA_SIZE, chThdGetPriorityX()-3, thread, "C");
-  chSysUnlock();
-  chThdStart(threads[2]);
+  threads[2] = chThdCreateStatic(wa[2], WA_SIZE, chThdGetPriorityX()-3, thread, "C");
   test_wait_threads();
   test_assert_sequence(1, "ABCDE");
 }

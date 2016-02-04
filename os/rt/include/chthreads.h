@@ -51,6 +51,36 @@
  */
 typedef void (*tfunc_t)(void *p);
 
+/**
+ * @brief   Type of a thread descriptor.
+ */
+typedef struct {
+  /**
+   * @brief   Thread name.
+   */
+  const char        *name;
+  /**
+   * @brief   Pointer to the working area base.
+   */
+  stkalign_t        *wbase;
+  /**
+   * @brief   End of the working area.
+   */
+  stkalign_t        *wend;
+  /**
+   * @brief   Thread priority.
+   */
+  tprio_t           prio;
+  /**
+   * @brief   Thread function pointer.
+   */
+  tfunc_t           funcp;
+  /**
+   * @brief   Thread argument.
+   */
+  void              *arg;
+} thread_descriptor_t;
+
 /*===========================================================================*/
 /* Module macros.                                                            */
 /*===========================================================================*/
@@ -128,12 +158,14 @@ typedef void (*tfunc_t)(void *p);
 #ifdef __cplusplus
 extern "C" {
 #endif
-   thread_t *_thread_init(thread_t *tp, tprio_t prio);
+   thread_t *_thread_init(thread_t *tp, const char *name, tprio_t prio);
 #if CH_DBG_FILL_THREADS == TRUE
   void _thread_memfill(uint8_t *startp, uint8_t *endp, uint8_t v);
 #endif
-  thread_t *chThdCreateI(void *wsp, size_t size,
-                         tprio_t prio, tfunc_t pf, void *arg);
+  thread_t *chThdCreateSuspendedI(const thread_descriptor_t *tdp);
+  thread_t *chThdCreateSuspended(const thread_descriptor_t *tdp);
+  thread_t *chThdCreateI(const thread_descriptor_t *tdp);
+  thread_t *chThdCreate(const thread_descriptor_t *tdp);
   thread_t *chThdCreateStatic(void *wsp, size_t size,
                               tprio_t prio, tfunc_t pf, void *arg);
   thread_t *chThdStart(thread_t *tp);

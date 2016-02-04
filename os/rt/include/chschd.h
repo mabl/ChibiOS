@@ -132,6 +132,21 @@
  * @api
  */
 #define THD_WORKING_AREA(s, n) PORT_WORKING_AREA(s, n)
+
+/**
+ * @brief   Base of a working area casted to the correct type.
+ *
+ * @param[in] s         name of the working area
+ */
+#define THD_WORKING_AREA_BASE(s) ((stkalign_t *)(s))
+
+/**
+ * @brief   End of a working area casted to the correct type.
+ *
+ * @param[in] s         name of the working area
+ */
+#define THD_WORKING_AREA_END(s) (THD_WORKING_AREA_BASE(s) +                 \
+                                 (sizeof (s) / sizeof (stkalign_t)))
 /** @} */
 
 /**

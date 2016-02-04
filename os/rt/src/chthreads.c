@@ -79,15 +79,15 @@
  * @note    This is an internal functions, do not use it in application code.
  *
  * @param[in] tp        pointer to the thread
+ * @param[in] name      thread name
  * @param[in] prio      the priority level for the new thread
  * @return              The same thread pointer passed as parameter.
  *
  * @notapi
  */
-thread_t *_thread_init(thread_t *tp, tprio_t prio) {
+thread_t *_thread_init(thread_t *tp, const char *name, tprio_t prio) {
 
   tp->prio = prio;
-  tp->state = CH_STATE_WTSTART;
 #if CH_CFG_TIME_QUANTUM > 0
   tp->preempt = (tslices_t)CH_CFG_TIME_QUANTUM;
 #endif
@@ -102,7 +102,7 @@ thread_t *_thread_init(thread_t *tp, tprio_t prio) {
   tp->time = (systime_t)0;
 #endif
 #if CH_CFG_USE_REGISTRY == TRUE
-  tp->name = NULL;
+  tp->name = name;
   REG_INSERT(tp);
 #endif
 #if CH_CFG_USE_WAITEXIT == TRUE
@@ -151,41 +151,126 @@ void _thread_memfill(uint8_t *startp, uint8_t *endp, uint8_t v) {
  *          @p CH_DBG_FILL_THREADS debug option because it would keep
  *          the kernel locked for too much time.
  *
- * @param[out] wsp      pointer to a working area dedicated to the thread stack
- * @param[in] size      size of the working area
- * @param[in] prio      the priority level for the new thread
- * @param[in] pf        the thread function
- * @param[in] arg       an argument passed to the thread function. It can be
- *                      @p NULL.
+ * @param[out] tdp      pointer to the thread descriptor
  * @return              The pointer to the @p thread_t structure allocated for
  *                      the thread into the working space area.
  *
  * @iclass
  */
-thread_t *chThdCreateI(void *wsp, size_t size,
-                       tprio_t prio, tfunc_t pf, void *arg) {
+thread_t *chThdCreateSuspendedI(const thread_descriptor_t *tdp) {
   thread_t *tp;
 
   chDbgCheckClassI();
-  chDbgCheck((wsp != NULL) &&
-             MEM_IS_ALIGNED(wsp, PORT_WORKING_AREA_ALIGN) &&
-             (size >= THD_WORKING_AREA_SIZE(0)) &&
-             MEM_IS_ALIGNED(size, PORT_STACK_ALIGN) &&
-             (prio <= HIGHPRIO) && (pf != NULL));
+  chDbgCheck(tdp != NULL);
+  chDbgCheck(MEM_IS_ALIGNED(tdp->wbase, PORT_WORKING_AREA_ALIGN) &&
+             MEM_IS_ALIGNED(tdp->wend, PORT_STACK_ALIGN) &&
+             (tdp->wend > tdp->wbase) &&
+             ((size_t)((tdp->wend - tdp->wbase) *
+                       sizeof (stkalign_t)) >= THD_WORKING_AREA_SIZE(0)));
+  chDbgCheck((tdp->prio <= HIGHPRIO) && (tdp->funcp != NULL));
 
   /* The thread structure is laid out in the upper part of the thread
      workspace. The thread position structure is aligned to the required
      stack alignment because it represents the stack top.*/
-  tp = (thread_t *)((uint8_t *)wsp + size -
+  tp = (thread_t *)((uint8_t *)tdp->wend -
                     MEM_ALIGN_NEXT(sizeof (thread_t), PORT_STACK_ALIGN));
 
+  /* Initial state.*/
+  tp->state = CH_STATE_WTSTART;
+
   /* Stack boundary.*/
-  tp->stklimit = (stkalign_t *)wsp;
+  tp->stklimit = tdp->wbase;
 
   /* Setting up the port-dependent part of the working area.*/
-  PORT_SETUP_CONTEXT(tp, wsp, tp, pf, arg);
+  PORT_SETUP_CONTEXT(tp, tdp->wbase, tp, tdp->funcp, tdp->arg);
 
-  return _thread_init(tp, prio);
+  /* The driver object is initialized but not started.*/
+  return _thread_init(tp, tdp->name, tdp->prio);
+}
+
+
+/**
+ * @brief   Creates a new thread into a static memory area.
+ * @details The new thread is initialized but not inserted in the ready list,
+ *          the initial state is @p CH_STATE_WTSTART.
+ * @post    The initialized thread can be subsequently started by invoking
+ *          @p chThdStart(), @p chThdStartI() or @p chSchWakeupS()
+ *          depending on the execution context.
+ * @note    A thread can terminate by calling @p chThdExit() or by simply
+ *          returning from its main function.
+ *
+ * @param[out] tdp      pointer to the thread descriptor
+ * @return              The pointer to the @p thread_t structure allocated for
+ *                      the thread into the working space area.
+ *
+ * @api
+ */
+thread_t *chThdCreateSuspended(const thread_descriptor_t *tdp) {
+  thread_t *tp;
+
+#if CH_DBG_FILL_THREADS == TRUE
+  _thread_memfill((uint8_t *)tdp->wbase,
+                  (uint8_t *)tdp->wend,
+                  CH_DBG_STACK_FILL_VALUE);
+#endif
+
+  chSysLock();
+  tp = chThdCreateSuspendedI(tdp);
+  chSysUnlock();
+
+  return tp;
+}
+
+/**
+ * @brief   Creates a new thread into a static memory area.
+ * @details The new thread is initialized and make ready to execute.
+ * @post    The initialized thread can be subsequently started by invoking
+ *          @p chThdStart(), @p chThdStartI() or @p chSchWakeupS()
+ *          depending on the execution context.
+ * @note    A thread can terminate by calling @p chThdExit() or by simply
+ *          returning from its main function.
+ * @note    Threads created using this function do not obey to the
+ *          @p CH_DBG_FILL_THREADS debug option because it would keep
+ *          the kernel locked for too much time.
+ *
+ * @param[out] tdp      pointer to the thread descriptor
+ * @return              The pointer to the @p thread_t structure allocated for
+ *                      the thread into the working space area.
+ *
+ * @iclass
+ */
+thread_t *chThdCreateI(const thread_descriptor_t *tdp) {
+
+  return chSchReadyI(chThdCreateSuspendedI(tdp));
+}
+
+/**
+ * @brief   Creates a new thread into a static memory area.
+ * @details The new thread is initialized and make ready to execute.
+ * @note    A thread can terminate by calling @p chThdExit() or by simply
+ *          returning from its main function.
+ *
+ * @param[out] tdp      pointer to the thread descriptor
+ * @return              The pointer to the @p thread_t structure allocated for
+ *                      the thread into the working space area.
+ *
+ * @iclass
+ */
+thread_t *chThdCreate(const thread_descriptor_t *tdp) {
+  thread_t *tp;
+
+#if CH_DBG_FILL_THREADS == TRUE
+  _thread_memfill((uint8_t *)tdp->wbase,
+                  (uint8_t *)tdp->wend,
+                  CH_DBG_STACK_FILL_VALUE);
+#endif
+
+  chSysLock();
+  tp = chThdCreateSuspendedI(tdp);
+  chSchWakeupS(tp, MSG_OK);
+  chSysUnlock();
+
+  return tp;
 }
 
 /**
@@ -207,7 +292,13 @@ thread_t *chThdCreateI(void *wsp, size_t size,
 thread_t *chThdCreateStatic(void *wsp, size_t size,
                             tprio_t prio, tfunc_t pf, void *arg) {
   thread_t *tp;
-  
+
+  chDbgCheck((wsp != NULL) &&
+             MEM_IS_ALIGNED(wsp, PORT_WORKING_AREA_ALIGN) &&
+             (size >= THD_WORKING_AREA_SIZE(0)) &&
+             MEM_IS_ALIGNED(size, PORT_STACK_ALIGN) &&
+             (prio <= HIGHPRIO) && (pf != NULL));
+
 #if CH_DBG_FILL_THREADS == TRUE
   _thread_memfill((uint8_t *)wsp,
                   (uint8_t *)wsp + size,
@@ -215,7 +306,22 @@ thread_t *chThdCreateStatic(void *wsp, size_t size,
 #endif
 
   chSysLock();
-  tp = chThdCreateI(wsp, size, prio, pf, arg);
+
+  /* The thread structure is laid out in the upper part of the thread
+     workspace. The thread position structure is aligned to the required
+     stack alignment because it represents the stack top.*/
+  tp = (thread_t *)((uint8_t *)wsp + size -
+                    MEM_ALIGN_NEXT(sizeof (thread_t), PORT_STACK_ALIGN));
+
+  /* Stack boundary.*/
+  tp->stklimit = (stkalign_t *)wsp;
+
+  /* Setting up the port-dependent part of the working area.*/
+  PORT_SETUP_CONTEXT(tp, wsp, tp, pf, arg);
+
+  tp = _thread_init(tp, "noname", prio);
+
+  /* Starting the thread immediately.*/
   chSchWakeupS(tp, MSG_OK);
   chSysUnlock();
 

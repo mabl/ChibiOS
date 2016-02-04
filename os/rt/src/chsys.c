@@ -118,10 +118,10 @@ void chSysInit(void) {
 
 #if CH_CFG_NO_IDLE_THREAD == FALSE
   /* Now this instructions flow becomes the main thread.*/
-  setcurrp(_thread_init(&ch.mainthread, NORMALPRIO));
+  setcurrp(_thread_init(&ch.mainthread, "main", NORMALPRIO));
 #else
   /* Now this instructions flow becomes the idle thread.*/
-  setcurrp(_thread_init(&ch.mainthread, IDLEPRIO));
+  setcurrp(_thread_init(&ch.mainthread, "idle", IDLEPRIO));
 #endif
 
   /* Setting up the base address of the static main thread stack.*/
@@ -145,15 +145,19 @@ void chSysInit(void) {
 
 #if CH_CFG_NO_IDLE_THREAD == FALSE
   {
-  /* This thread has the lowest priority in the system, its role is just to
-     serve interrupts in its context while keeping the lowest energy saving
-     mode compatible with the system status.*/
-    thread_t *tp =  chThdCreateStatic(ch.idle_thread_wa,
-                                      sizeof(ch.idle_thread_wa),
-                                      IDLEPRIO,
-                                      (tfunc_t)_idle_thread,
-                                      NULL);
-    chRegSetThreadNameX(tp, "idle");
+    static const thread_descriptor_t idle_descriptor = {
+      "idle",
+      THD_WORKING_AREA_BASE(ch.idle_thread_wa),
+      THD_WORKING_AREA_END(ch.idle_thread_wa),
+      IDLEPRIO,
+      _idle_thread,
+      NULL
+    };
+
+    /* This thread has the lowest priority in the system, its role is just to
+       serve interrupts in its context while keeping the lowest energy saving
+       mode compatible with the system status.*/
+    (void) chThdCreate(&idle_descriptor);
   }
 #endif
 }

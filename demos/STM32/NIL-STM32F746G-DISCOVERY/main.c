@@ -66,7 +66,7 @@ THD_FUNCTION(Thread2, arg) {
 
 /*
  * Threads static table, one entry per thread. The number of entries must
- * match NIL_CFG_NUM_THREADS.
+ * match CH_CFG_NUM_THREADS.
  */
 THD_TABLE_BEGIN
   THD_TABLE_ENTRY(waThread1, "blinker1", Thread1, NULL)
