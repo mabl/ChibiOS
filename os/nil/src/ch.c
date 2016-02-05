@@ -356,16 +356,20 @@ void chSysTimerHandlerI(void) {
 
       tp->timeout -= nil.nexttime - nil.lasttime;
       if (tp->timeout == (systime_t)0) {
+#if CH_CFG_USE_SEMAPHORES == TRUE
         /* Timeout on semaphores requires a special handling because the
            semaphore counter must be incremented.*/
-        /*lint -save -e9013 [15.7] There is no else because it is not needed.*/
-       if (NIL_THD_IS_WTSEM(tp)) {
+        if (NIL_THD_IS_WTSEM(tp)) {
           tp->u1.semp->cnt++;
         }
-        else if (NIL_THD_IS_SUSP(tp)) {
-          *tp->u1.trp = NULL;
+        else {
+#endif
+          if (NIL_THD_IS_SUSP(tp)) {
+            *tp->u1.trp = NULL;
+          }
+#if CH_CFG_USE_SEMAPHORES == TRUE
         }
-        /*lint -restore*/
+#endif
         (void) chSchReadyI(tp, MSG_TIMEOUT);
       }
       else {
@@ -747,6 +751,7 @@ void chThdSleepUntil(systime_t abstime) {
   chSysUnlock();
 }
 
+#if (CH_CFG_USE_SEMAPHORES == TRUE) || defined(__DOXYGEN__)
 /**
  * @brief   Performs a wait operation on a semaphore with timeout specification.
  *
@@ -951,6 +956,7 @@ void chEvtSignal(thread_t *tp, eventmask_t mask) {
   chSchRescheduleS();
   chSysUnlock();
 }
+#endif /* CH_CFG_USE_SEMAPHORES == TRUE */
 
 #if (CH_CFG_USE_EVENTS == TRUE) || defined(__DOXYGEN__)
 /**

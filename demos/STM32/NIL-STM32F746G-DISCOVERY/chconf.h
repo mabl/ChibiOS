@@ -87,6 +87,14 @@
 /*===========================================================================*/
 
 /**
+ * @brief   Semaphores APIs.
+ * @details If enabled then the Semaphores APIs are included in the kernel.
+ *
+ * @note    The default is @p TRUE.
+ */
+#define CH_CFG_USE_SEMAPHORES               TRUE
+
+/**
  * @brief   Events Flags APIs.
  * @details If enabled then the event flags APIs are included in the kernel.
  *

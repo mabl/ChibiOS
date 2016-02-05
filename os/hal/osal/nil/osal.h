@@ -117,6 +117,10 @@
 /* Derived constants and error checks.                                       */
 /*===========================================================================*/
 
+#if CH_CFG_USE_SEMAPHORES == FALSE
+#error "OSAL requires CH_CFG_USE_SEMAPHORES=TRUE"
+#endif
+
 #if CH_CFG_USE_EVENTS == FALSE
 #error "OSAL requires CH_CFG_USE_EVENTS=TRUE"
 #endif

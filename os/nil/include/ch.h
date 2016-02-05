@@ -178,6 +178,16 @@
 #endif
 
 /**
+ * @brief   Semaphores APIs.
+ * @details If enabled then the Semaphores APIs are included in the kernel.
+ *
+ * @note    The default is @p TRUE.
+ */
+#if !defined(CH_CFG_USE_SEMAPHORES) || defined(__DOXYGEN__)
+#define CH_CFG_USE_SEMAPHORES               TRUE
+#endif
+
+/**
  * @brief   Events Flags APIs.
  * @details If enabled then the event flags APIs are included in the kernel.
  *
@@ -347,6 +357,7 @@ typedef struct nil_thread thread_t;
 
 #include "chcore.h"
 
+#if (CH_CFG_USE_SEMAPHORES == TRUE) || defined(__DOXYGEN__)
 /**
  * @brief   Type of a structure representing a semaphore.
  */
@@ -358,6 +369,7 @@ typedef struct nil_semaphore semaphore_t;
 struct nil_semaphore {
   volatile cnt_t    cnt;        /**< @brief Semaphore counter.              */
 };
+#endif /* CH_CFG_USE_SEMAPHORES == TRUE */
 
 /**
  * @brief Thread function.
@@ -397,7 +409,9 @@ struct nil_thread {
     msg_t               msg;        /**< @brief Wake-up message.            */
     void                *p;         /**< @brief Generic pointer.            */
     thread_reference_t  *trp;       /**< @brief Pointer to thread reference.*/
+#if (CH_CFG_USE_SEMAPHORES == TRUE) || defined(__DOXYGEN__)
     semaphore_t         *semp;      /**< @brief Pointer to semaphore.       */
+#endif
 #if (CH_CFG_USE_EVENTS == TRUE) || defined(__DOXYGEN__)
     eventmask_t         ewmask;     /**< @brief Enabled events mask.        */
 #endif
@@ -963,6 +977,7 @@ struct nil_system {
     (void) chSchGoSleepTimeoutS(NIL_STATE_SLEEPING, (abstime) -             \
                                 chVTGetSystemTimeX())
 
+#if (CH_CFG_USE_SEMAPHORES == TRUE) || defined(__DOXYGEN__)
 /**
  * @brief   Initializes a semaphore with the specified counter value.
  *
@@ -1008,6 +1023,7 @@ struct nil_system {
  * @iclass
  */
 #define chSemGetCounterI(sp) ((sp)->cnt)
+#endif /* CH_CFG_USE_SEMAPHORES == TRUE */
 
 /**
  * @brief   Current system time.
@@ -1155,13 +1171,15 @@ extern "C" {
   void chThdResumeI(thread_reference_t *trp, msg_t msg);
   void chThdSleep(systime_t timeout);
   void chThdSleepUntil(systime_t abstime);
+#if CH_CFG_USE_SEMAPHORES == TRUE
   msg_t chSemWaitTimeout(semaphore_t *sp, systime_t timeout);
   msg_t chSemWaitTimeoutS(semaphore_t *sp, systime_t timeout);
   void chSemSignal(semaphore_t *sp);
   void chSemSignalI(semaphore_t *sp);
   void chSemReset(semaphore_t *sp, cnt_t n);
   void chSemResetI(semaphore_t *sp, cnt_t n);
-#if (CH_CFG_USE_EVENTS == TRUE) || defined(__DOXYGEN__)
+#endif /* CH_CFG_USE_SEMAPHORES == TRUE */
+#if CH_CFG_USE_EVENTS == TRUE
   void chEvtSignal(thread_t *tp, eventmask_t mask);
   void chEvtSignalI(thread_t *tp, eventmask_t mask);
   eventmask_t chEvtWaitAnyTimeout(eventmask_t mask, systime_t timeout);
