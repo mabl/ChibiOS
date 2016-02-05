@@ -188,6 +188,17 @@
 #endif
 
 /**
+ * @brief   Mutexes APIs.
+ * @details If enabled then the mutexes APIs are included in the kernel.
+ *
+ * @note    Feature not currently implemented.
+ * @note    The default is @p FALSE.
+ */
+#if !defined(CH_CFG_USE_MUTEXES) || defined(__DOXYGEN__)
+#define CH_CFG_USE_MUTEXES                  FALSE
+#endif
+
+/**
  * @brief   Events Flags APIs.
  * @details If enabled then the event flags APIs are included in the kernel.
  *
@@ -198,8 +209,55 @@
 #endif
 
 /**
+ * @brief   Mailboxes APIs.
+ * @details If enabled then the asynchronous messages (mailboxes) APIs are
+ *          included in the kernel.
+ *
+ * @note    The default is @p TRUE.
+ * @note    Requires @p CH_CFG_USE_SEMAPHORES.
+ */
+#if !defined(CH_CFG_USE_MAILBOXES) || defined(__DOXYGEN__)
+#define CH_CFG_USE_MAILBOXES                TRUE
+#endif
+
+/**
+ * @brief   Core Memory Manager APIs.
+ * @details If enabled then the core memory manager APIs are included
+ *          in the kernel.
+ *
+ * @note    The default is @p TRUE.
+ */
+#if !defined(CH_CFG_USE_MEMCORE) || defined(__DOXYGEN__)
+#define CH_CFG_USE_MEMCORE                  TRUE
+#endif
+
+/**
+ * @brief   Heap Allocator APIs.
+ * @details If enabled then the memory heap allocator APIs are included
+ *          in the kernel.
+ *
+ * @note    The default is @p TRUE.
+ */
+#if !defined(CH_CFG_USE_HEAP) || defined(__DOXYGEN__)
+#define CH_CFG_USE_HEAP                     TRUE
+#endif
+
+/**
+ * @brief   Memory Pools Allocator APIs.
+ * @details If enabled then the memory pools allocator APIs are included
+ *          in the kernel.
+ *
+ * @note    The default is @p TRUE.
+ */
+#if !defined(CH_CFG_USE_MEMPOOLS) || defined(__DOXYGEN__)
+#define CH_CFG_USE_MEMPOOLS                 TRUE
+#endif
+
+/**
  * @brief   Debug option, kernel statistics.
- * @note    This is a planned feature, not yet implemented.
+ *
+ * @note    Feature not currently implemented.
+ * @note    The default is @p FALSE.
  */
 #if !defined(CH_DBG_STATISTICS) || defined(__DOXYGEN__)
 #define CH_DBG_STATISTICS                   FALSE
@@ -208,6 +266,8 @@
 /**
  * @brief   Debug option, system state check.
  * @note    This is a planned feature, not yet implemented.
+ *
+ * @note    The default is @p FALSE.
  */
 #if !defined(CH_DBG_SYSTEM_STATE_CHECK) || defined(__DOXYGEN__)
 #define CH_DBG_SYSTEM_STATE_CHECK           FALSE
@@ -215,6 +275,8 @@
 
 /**
  * @brief   Debug option, parameters checks.
+ *
+ * @note    The default is @p FALSE.
  */
 #if !defined(CH_DBG_ENABLE_CHECKS) || defined(__DOXYGEN__)
 #define CH_DBG_ENABLE_CHECKS                FALSE
@@ -222,6 +284,8 @@
 
 /**
  * @brief   System assertions.
+ *
+ * @note    The default is @p FALSE.
  */
 #if !defined(CH_DBG_ENABLE_ASSERTS) || defined(__DOXYGEN__)
 #define CH_DBG_ENABLE_ASSERTS               FALSE
@@ -229,6 +293,8 @@
 
 /**
  * @brief   Stack check.
+ *
+ * @note    The default is @p FALSE.
  */
 #if !defined(CH_DBG_ENABLE_STACK_CHECK) || defined(__DOXYGEN__)
 #define CH_DBG_ENABLE_STACK_CHECK           FALSE
@@ -311,6 +377,10 @@
 #if (CH_CFG_ST_TIMEDELTA < 0) || (CH_CFG_ST_TIMEDELTA == 1)
 #error "invalid CH_CFG_ST_TIMEDELTA specified, must "                       \
        "be zero or greater than one"
+#endif
+
+#if CH_CFG_USE_MUTEXES == TRUE
+#error "mutexes not yet supported"
 #endif
 
 #if CH_DBG_STATISTICS == TRUE
@@ -1018,6 +1088,27 @@ struct nil_system {
 #define chSemWaitS(sp) chSemWaitTimeoutS(sp, TIME_INFINITE)
 
 /**
+ * @brief   Decreases the semaphore counter.
+ * @details This macro can be used when the counter is known to be positive.
+ *
+ * @param[in] sp        pointer to a @p semaphore_t structure
+ *
+ * @iclass
+ */
+#define chSemFastWaitI(sp) ((sp)->cnt--)
+
+/**
+ * @brief   Increases the semaphore counter.
+ * @details This macro can be used when the counter is known to be not
+ *          negative.
+ *
+ * @param[in] sp        pointer to a @p semaphore_t structure
+ *
+ * @iclass
+ */
+#define chSemFastSignalI(sp) ((sp)->cnt++)
+
+/**
  * @brief   Returns the semaphore counter current value.
  *
  * @iclass
@@ -1200,6 +1291,12 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
+
+/* Optional subsystems.*/
+#include "chmboxes.h"
+#include "chmemcore.h"
+#include "chmempools.h"
+#include "chheap.h"
 
 #endif /* _CH_H_ */
 

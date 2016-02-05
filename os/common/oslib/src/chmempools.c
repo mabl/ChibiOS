@@ -32,6 +32,7 @@
  *          to contain a pointer to void.
  * @pre     In order to use the memory pools APIs the @p CH_CFG_USE_MEMPOOLS option
  *          must be enabled in @p chconf.h.
+ * @note    Compatible with RT and NIL.
  * @{
  */
 

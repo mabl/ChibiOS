@@ -44,8 +44,9 @@
  *          example) from the posting side and free it on the fetching side.
  *          Another approach is to set a "done" flag into the structure pointed
  *          by the message.
- * @pre     In order to use the mailboxes APIs the @p CH_CFG_USE_MAILBOXES option
- *          must be enabled in @p chconf.h.
+ * @pre     In order to use the mailboxes APIs the @p CH_CFG_USE_MAILBOXES
+ *          option must be enabled in @p chconf.h.
+ * @note    Compatible with RT and NIL.
  * @{
  */
 

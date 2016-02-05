@@ -40,6 +40,7 @@
  *          blocks.
  * @pre     In order to use the core memory manager APIs the @p CH_CFG_USE_MEMCORE
  *          option must be enabled in @p chconf.h.
+ * @note    Compatible with RT and NIL.
  * @{
  */
 

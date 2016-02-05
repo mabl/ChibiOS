@@ -18,17 +18,17 @@
 */
 
 /**
- * @file    chmemcore.h
- * @brief   Core memory manager macros and structures.
+ * @file    chdynamic.h
+ * @brief   Dynamic threads macros and structures.
  *
- * @addtogroup memcore
+ * @addtogroup dynamic_threads
  * @{
  */
 
-#ifndef _CHMEMCORE_H_
-#define _CHMEMCORE_H_
+#ifndef _CHDYNAMIC_H_
+#define _CHDYNAMIC_H_
 
-#if (CH_CFG_USE_MEMCORE == TRUE) || defined(__DOXYGEN__)
+#if (CH_CFG_USE_DYNAMIC == TRUE) || defined(__DOXYGEN__)
 
 /*===========================================================================*/
 /* Module constants.                                                         */
@@ -42,14 +42,20 @@
 /* Derived constants and error checks.                                       */
 /*===========================================================================*/
 
+/*
+ * Module dependencies check.
+ */
+#if CH_CFG_USE_WAITEXIT == FALSE
+#error "CH_CFG_USE_DYNAMIC requires CH_CFG_USE_WAITEXIT"
+#endif
+
+#if (CH_CFG_USE_HEAP == FALSE) && (CH_CFG_USE_MEMPOOLS == FALSE)
+#error "CH_CFG_USE_DYNAMIC requires CH_CFG_USE_HEAP and/or CH_CFG_USE_MEMPOOLS"
+#endif
+
 /*===========================================================================*/
 /* Module data structures and types.                                         */
 /*===========================================================================*/
-
-/**
- * @brief   Memory get function.
- */
-typedef void *(*memgetfunc_t)(size_t size, unsigned align);
 
 /*===========================================================================*/
 /* Module macros.                                                            */
@@ -59,13 +65,22 @@ typedef void *(*memgetfunc_t)(size_t size, unsigned align);
 /* External declarations.                                                    */
 /*===========================================================================*/
 
+/*
+ * Dynamic threads APIs.
+ */
 #ifdef __cplusplus
 extern "C" {
 #endif
-  void _core_init(void);
-  void *chCoreAllocAlignedI(size_t size, unsigned align);
-  void *chCoreAllocAligned(size_t size, unsigned align);
-  size_t chCoreGetStatusX(void);
+  thread_t *chThdAddRef(thread_t *tp);
+  void chThdRelease(thread_t *tp);
+#if CH_CFG_USE_HEAP == TRUE
+  thread_t *chThdCreateFromHeap(memory_heap_t *heapp, size_t size,
+                                tprio_t prio, tfunc_t pf, void *arg);
+#endif
+#if CH_CFG_USE_MEMPOOLS == TRUE
+  thread_t *chThdCreateFromMemoryPool(memory_pool_t *mp, tprio_t prio,
+                                      tfunc_t pf, void *arg);
+#endif
 #ifdef __cplusplus
 }
 #endif
@@ -74,40 +89,8 @@ extern "C" {
 /* Module inline functions.                                                  */
 /*===========================================================================*/
 
-/**
- * @brief   Allocates a memory block.
- * @details The allocated block is guaranteed to be properly aligned for a
- *          pointer data type.
- *
- * @param[in] size      the size of the block to be allocated.
- * @return              A pointer to the allocated memory block.
- * @retval NULL         allocation failed, core memory exhausted.
- *
- * @iclass
- */
-static inline void *chCoreAllocI(size_t size) {
+#endif /* CH_CFG_USE_DYNAMIC == TRUE */
 
-  return chCoreAllocAlignedI(size, PORT_NATURAL_ALIGN);
-}
-
-/**
- * @brief   Allocates a memory block.
- * @details The allocated block is guaranteed to be properly aligned for a
- *          pointer data type.
- *
- * @param[in] size      the size of the block to be allocated.
- * @return              A pointer to the allocated memory block.
- * @retval NULL         allocation failed, core memory exhausted.
- *
- * @api
- */
-static inline void *chCoreAlloc(size_t size) {
-
-  return chCoreAllocAligned(size, PORT_NATURAL_ALIGN);
-}
-
-#endif /* CH_CFG_USE_MEMCORE == TRUE */
-
-#endif /* _CHMEMCORE_H_ */
+#endif /* _CHDYNAMIC_H_ */
 
 /** @} */

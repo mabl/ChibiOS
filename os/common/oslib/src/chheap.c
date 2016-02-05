@@ -31,6 +31,7 @@
  *          return memory blocks aligned to arbitrary powers of two.<br>
  * @pre     In order to use the heap APIs the @p CH_CFG_USE_HEAP option must
  *          be enabled in @p chconf.h.
+ * @note    Compatible with RT and NIL.
  * @{
  */
 

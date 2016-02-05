@@ -32,41 +32,42 @@ endif
 ifneq ($(findstring CH_CFG_USE_MESSAGES TRUE,$(CHCONF)),)
 KERNSRC += $(CHIBIOS)/os/rt/src/chmsg.c
 endif
-ifneq ($(findstring CH_CFG_USE_MAILBOXES TRUE,$(CHCONF)),)
-KERNSRC += $(CHIBIOS)/os/rt/src/chmboxes.c
-endif
 ifneq ($(findstring CH_CFG_USE_QUEUES TRUE,$(CHCONF)),)
 KERNSRC += $(CHIBIOS)/os/rt/src/chqueues.c
 endif
+ifneq ($(findstring CH_CFG_USE_MAILBOXES TRUE,$(CHCONF)),)
+KERNSRC += $(CHIBIOS)/os/common/oslib/src/chmboxes.c
+endif
 ifneq ($(findstring CH_CFG_USE_MEMCORE TRUE,$(CHCONF)),)
-KERNSRC += $(CHIBIOS)/os/rt/src/chmemcore.c
+KERNSRC += $(CHIBIOS)/os/common/oslib/src/chmemcore.c
 endif
 ifneq ($(findstring CH_CFG_USE_HEAP TRUE,$(CHCONF)),)
-KERNSRC += $(CHIBIOS)/os/rt/src/chheap.c
+KERNSRC += $(CHIBIOS)/os/common/oslib/src/chheap.c
 endif
 ifneq ($(findstring CH_CFG_USE_MEMPOOLS TRUE,$(CHCONF)),)
-KERNSRC += $(CHIBIOS)/os/rt/src/chmempools.c
+KERNSRC += $(CHIBIOS)/os/common/oslib/src/chmempools.c
 endif
 else
-KERNSRC = $(CHIBIOS)/os/rt/src/chsys.c \
-          $(CHIBIOS)/os/rt/src/chdebug.c \
-          $(CHIBIOS)/os/rt/src/chvt.c \
-          $(CHIBIOS)/os/rt/src/chschd.c \
-          $(CHIBIOS)/os/rt/src/chthreads.c \
-          $(CHIBIOS)/os/rt/src/chtm.c \
-          $(CHIBIOS)/os/rt/src/chstats.c \
-          $(CHIBIOS)/os/rt/src/chregistry.c \
-          $(CHIBIOS)/os/rt/src/chsem.c \
-          $(CHIBIOS)/os/rt/src/chmtx.c \
-          $(CHIBIOS)/os/rt/src/chcond.c \
-          $(CHIBIOS)/os/rt/src/chevents.c \
-          $(CHIBIOS)/os/rt/src/chmsg.c \
-          $(CHIBIOS)/os/rt/src/chmboxes.c \
-          $(CHIBIOS)/os/rt/src/chqueues.c \
-          $(CHIBIOS)/os/rt/src/chmemcore.c \
-          $(CHIBIOS)/os/rt/src/chheap.c \
-          $(CHIBIOS)/os/rt/src/chmempools.c
+KERNSRC := $(CHIBIOS)/os/rt/src/chsys.c \
+           $(CHIBIOS)/os/rt/src/chdebug.c \
+           $(CHIBIOS)/os/rt/src/chvt.c \
+           $(CHIBIOS)/os/rt/src/chschd.c \
+           $(CHIBIOS)/os/rt/src/chthreads.c \
+           $(CHIBIOS)/os/rt/src/chtm.c \
+           $(CHIBIOS)/os/rt/src/chstats.c \
+           $(CHIBIOS)/os/rt/src/chregistry.c \
+           $(CHIBIOS)/os/rt/src/chsem.c \
+           $(CHIBIOS)/os/rt/src/chmtx.c \
+           $(CHIBIOS)/os/rt/src/chcond.c \
+           $(CHIBIOS)/os/rt/src/chevents.c \
+           $(CHIBIOS)/os/rt/src/chmsg.c \
+           $(CHIBIOS)/os/rt/src/chqueues.c \
+           $(CHIBIOS)/os/common/oslib/src/chmboxes.c \
+           $(CHIBIOS)/os/common/oslib/src/chmemcore.c \
+           $(CHIBIOS)/os/common/oslib/src/chheap.c \
+           $(CHIBIOS)/os/common/oslib/src/chmempools.c
 endif
 
 # Required include directories
-KERNINC = $(CHIBIOS)/os/rt/include
+KERNINC := $(CHIBIOS)/os/rt/include \
+           $(CHIBIOS)/os/common/oslib/include
