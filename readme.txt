@@ -73,6 +73,9 @@
 *** Releases and Change Log                                               ***
 *****************************************************************************
 
+*** 3.0.6 ***
+- VAR: Fixed missing time convesion in lwIP arch module (bug #696, again).
+
 *** 3.0.5 ***
 - VAR: Fixed missing time convesion in lwIP arch module (bug #696).
 - NIL: NIL_CFG_USE_EVENTS not properly checked in NIL (bug #694).
