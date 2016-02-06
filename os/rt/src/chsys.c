@@ -134,6 +134,11 @@ void chSysInit(void) {
      initializations performed before.*/
   port_init();
 
+#if CH_DBG_STATISTICS == TRUE
+  /* Starting measurement for this thread.*/
+  chTMStartMeasurementX(&currp->p_stats);
+#endif
+
   /* It is alive now.*/
   chSysEnable();
 
