@@ -74,6 +74,7 @@
 *****************************************************************************
 
 *** 3.0.6 ***
+- HAL: Fixed chDbgAssert() still called from STM32 SPIv1 driver (bug #704).
 - RT:  Fixed useless call to chTMStartMeasurementX() in _thread_init()
        (bug #697).
 - VAR: Fixed missing time conversion in lwIP arch module (bug #696, again).
