@@ -74,6 +74,7 @@
 *****************************************************************************
 
 *** 3.0.6 ***
+- VAR: Fixed missing time convesion in lwIP arch module (bug #697).
 - VAR: Fixed missing time convesion in lwIP arch module (bug #696, again).
 
 *** 3.0.5 ***
