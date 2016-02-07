@@ -260,11 +260,9 @@ void chSchGoSleepS(tstate_t newstate) {
   otp->preempt = (tslices_t)CH_CFG_TIME_QUANTUM;
 #endif
   setcurrp(queue_fifo_remove(&ch.rlist.queue));
-#if defined(CH_CFG_IDLE_ENTER_HOOK)
   if (currp->prio == IDLEPRIO) {
     CH_CFG_IDLE_ENTER_HOOK();
   }
-#endif
   currp->state = CH_STATE_CURRENT;
   chSysSwitch(currp, otp);
 }
@@ -386,11 +384,9 @@ void chSchWakeupS(thread_t *ntp, msg_t msg) {
   else {
     thread_t *otp = chSchReadyI(currp);
     setcurrp(ntp);
-#if defined(CH_CFG_IDLE_LEAVE_HOOK)
     if (otp->prio == IDLEPRIO) {
       CH_CFG_IDLE_LEAVE_HOOK();
     }
-#endif
     ntp->state = CH_STATE_CURRENT;
     chSysSwitch(ntp, otp);
   }
@@ -458,11 +454,9 @@ void chSchDoRescheduleBehind(void) {
   otp = currp;
   /* Picks the first thread from the ready queue and makes it current.*/
   setcurrp(queue_fifo_remove(&ch.rlist.queue));
-#if defined(CH_CFG_IDLE_LEAVE_HOOK)
   if (otp->prio == IDLEPRIO) {
     CH_CFG_IDLE_LEAVE_HOOK();
   }
-#endif
   currp->state = CH_STATE_CURRENT;
 #if CH_CFG_TIME_QUANTUM > 0
   otp->preempt = (tslices_t)CH_CFG_TIME_QUANTUM;
@@ -486,11 +480,9 @@ void chSchDoRescheduleAhead(void) {
   otp = currp;
   /* Picks the first thread from the ready queue and makes it current.*/
   setcurrp(queue_fifo_remove(&ch.rlist.queue));
-#if defined(CH_CFG_IDLE_LEAVE_HOOK)
   if (otp->prio == IDLEPRIO) {
     CH_CFG_IDLE_LEAVE_HOOK();
   }
-#endif
   currp->state = CH_STATE_CURRENT;
 
   otp->state = CH_STATE_READY;

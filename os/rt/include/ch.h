@@ -69,6 +69,11 @@
 /* Core headers.*/
 #include "chtypes.h"
 #include "chconf.h"
+
+#if !defined(_CHIBIOS_RT_CONF_)
+#error "invalid configuration file"
+#endif
+
 #include "chlicense.h"
 #include "chsystypes.h"
 #include "chalign.h"

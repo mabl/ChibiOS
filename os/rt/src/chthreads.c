@@ -114,9 +114,7 @@ thread_t *_thread_init(thread_t *tp, const char *name, tprio_t prio) {
 #if CH_DBG_STATISTICS == TRUE
   chTMObjectInit(&tp->stats);
 #endif
-#if defined(CH_CFG_THREAD_INIT_HOOK)
   CH_CFG_THREAD_INIT_HOOK(tp);
-#endif
   return tp;
 }
 
@@ -502,9 +500,7 @@ void chThdExitS(msg_t msg) {
   thread_t *tp = currp;
 
   tp->u.exitcode = msg;
-#if defined(CH_CFG_THREAD_EXIT_HOOK)
   CH_CFG_THREAD_EXIT_HOOK(tp);
-#endif
 #if CH_CFG_USE_WAITEXIT == TRUE
   while (list_notempty(&tp->waiting)) {
     (void) chSchReadyI(list_remove(&tp->waiting));

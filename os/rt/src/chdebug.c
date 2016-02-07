@@ -115,6 +115,10 @@ NOINLINE static void trace_next(void) {
 #else
   ch.dbg.trace_buffer.ptr->rtstamp = (rtcnt_t)0;
 #endif
+
+  /* Trace hook, useful in order to interface debug tools.*/
+  CH_CFG_TRACE_HOOK(ch.dbg.trace_buffer.ptr);
+
   if (++ch.dbg.trace_buffer.ptr >=
       &ch.dbg.trace_buffer.buffer[CH_DBG_TRACE_BUFFER_SIZE]) {
     ch.dbg.trace_buffer.ptr = &ch.dbg.trace_buffer.buffer[0];

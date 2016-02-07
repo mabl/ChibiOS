@@ -183,9 +183,8 @@ void chSysHalt(const char *reason) {
 
   port_disable();
 
-#if defined(CH_CFG_SYSTEM_HALT_HOOK) || defined(__DOXYGEN__)
+  /* Halt hook code, usually empty.*/
   CH_CFG_SYSTEM_HALT_HOOK(reason);
-#endif
 
   /* Logging the event.*/
   _dbg_trace_halt(reason);
@@ -338,9 +337,7 @@ void chSysTimerHandlerI(void) {
   currp->time++;
 #endif
   chVTDoTickI();
-#if defined(CH_CFG_SYSTEM_TICK_HOOK)
   CH_CFG_SYSTEM_TICK_HOOK();
-#endif
 }
 
 /**

@@ -76,7 +76,7 @@
 #define CH_STATE_SNDMSGQ    (tstate_t)12     /**< @brief Sending a message,
                                                   in queue.                 */
 #define CH_STATE_SNDMSG     (tstate_t)13     /**< @brief Sent a message,
-                                                  waiting answer.          */
+                                                  waiting answer.           */
 #define CH_STATE_WTMSG      (tstate_t)14     /**< @brief Waiting for a
                                                   message.                  */
 #define CH_STATE_FINAL      (tstate_t)15     /**< @brief Thread terminated. */
@@ -167,6 +167,18 @@
 /*===========================================================================*/
 /* Derived constants and error checks.                                       */
 /*===========================================================================*/
+
+#if !defined(CH_CFG_IDLE_ENTER_HOOK)
+#error "CH_CFG_IDLE_ENTER_HOOK not defined in chconf.h"
+#endif
+
+#if !defined(CH_CFG_IDLE_LEAVE_HOOK)
+#error "CH_CFG_IDLE_LEAVE_HOOK not defined in chconf.h"
+#endif
+
+#if !defined(CH_CFG_IDLE_LOOP_HOOK)
+#error "CH_CFG_IDLE_LOOP_HOOK not defined in chconf.h"
+#endif
 
 /*===========================================================================*/
 /* Module data structures and types.                                         */
