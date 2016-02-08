@@ -14,7 +14,7 @@
 /* parasoft suppress item MISRA2012-RULE-20_9_a "The MACROS used for
    conditional compilation are all defined in ppcparams.h" */
 /* parasoft suppress item MISRA2012-RULE-19_2 "union are used to have a simpler
-   strcuture filed access" */
+   structure fields access" */
 /* parasoft suppress MISRA2012-RULE-20_1 "Some files are explicitly included
    after code statement (typedef, used in the included files)." */
 
