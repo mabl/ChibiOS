@@ -34,6 +34,17 @@
 
 #if !defined(__DOXYGEN__)
 
+/*
+ * RTOS-specific context offset.
+ */
+#if defined(_CHIBIOS_RT_CONF_)
+#define CONTEXT_OFFSET  12
+#elif defined(_CHIBIOS_NIL_CONF_)
+#define CONTEXT_OFFSET  0
+#else
+#error "invalid chconf.h"
+#endif
+
                 .set    MODE_USR, 0x10
                 .set    MODE_FIQ, 0x11
                 .set    MODE_IRQ, 0x12
@@ -256,8 +267,15 @@ _port_thread_start:
                 bl      _port_unlock_thumb
                 mov     r0, r5
                 bl      _bxr4
+#if defined(_CHIBIOS_RT_CONF_)
+                mov     r0, #0              /* MSG_OK */
                 bl      chThdExit
 _zombies:       b       _zombies
+#endif
+#if defined(_CHIBIOS_NIL_CONF_)
+                mov     r0, #0
+                bl      chSysHalt
+#endif
 _bxr4:          bx      r4
 
 #else /* !defined(THUMB_NO_INTERWORKING) */
@@ -268,9 +286,16 @@ _bxr4:          bx      r4
                 mov     r0, r5
                 mov     lr, pc
                 bx      r4
+#if defined(_CHIBIOS_RT_CONF_)
                 mov     r0, #0              /* MSG_OK */
                 bl      chThdExit
 _zombies:       b       _zombies
+#endif
+#if defined(_CHIBIOS_NIL_CONF_)
+                mov     r0, #0
+                bl      chSysHalt
+#endif
+
 #endif /* !defined(THUMB_NO_INTERWORKING) */
 
 #endif /* !defined(__DOXYGEN__) */

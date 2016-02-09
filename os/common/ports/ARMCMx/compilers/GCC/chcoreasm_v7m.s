@@ -109,11 +109,10 @@ _port_thread_start:
 #if defined(_CHIBIOS_RT_CONF_)
                 movs    r0, #0              /* MSG_OK */
                 bl      chThdExit
-#elif defined(_CHIBIOS_NIL_CONF_)
+#endif
+#if defined(_CHIBIOS_NIL_CONF_)
                 mov     r3, #0
                 bl      chSysHalt
-#else
-#error "missing RTOS identifier macro"
 #endif
 
 /*--------------------------------------------------------------------------*

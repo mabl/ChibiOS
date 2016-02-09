@@ -1,7 +1,7 @@
 # List of the ChibiOS/RT ARM generic port files.
-PORTSRC = ${CHIBIOS}/os/rt/ports/ARM/chcore.c
+PORTSRC = ${CHIBIOS}/os/common/ports/ARM/chcore.c
 
-PORTASM = $(CHIBIOS)/os/rt/ports/ARM/compilers/GCC/chcoreasm.s
+PORTASM = $(CHIBIOS)/os/common/ports/ARM/compilers/GCC/chcoreasm.s
 
-PORTINC = ${CHIBIOS}/os/rt/ports/ARM \
-          ${CHIBIOS}/os/rt/ports/ARM/compilers/GCC
+PORTINC = ${CHIBIOS}/os/common/ports/ARM \
+          ${CHIBIOS}/os/common/ports/ARM/compilers/GCC

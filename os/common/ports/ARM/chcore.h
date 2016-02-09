@@ -33,6 +33,34 @@
 /*===========================================================================*/
 
 /**
+ * @name    Port Capabilities and Constants
+ * @{
+ */
+/**
+ * @brief   This port supports a realtime counter.
+ */
+#define PORT_SUPPORTS_RT                FALSE
+
+/**
+ * @brief   Natural alignment constant.
+ * @note    It is the minimum alignment for pointer-size variables.
+ */
+#define PORT_NATURAL_ALIGN              sizeof (void *)
+
+/**
+ * @brief   Stack alignment constant.
+ * @note    It is the alignement required for the stack pointer.
+ */
+#define PORT_STACK_ALIGN                sizeof (stkalign_t)
+
+/**
+ * @brief   Working Areas alignment constant.
+ * @note    It is the alignment to be enforced for thread working areas.
+ */
+#define PORT_WORKING_AREA_ALIGN         sizeof (stkalign_t)
+/** @} */
+
+/**
  * @name    Architecture and Compiler
  * @{
  */
@@ -71,11 +99,6 @@
 
 /* Inclusion of the ARM implementation specific parameters.*/
 #include "armparams.h"
-
-/**
- * @brief   This port supports a realtime counter.
- */
-#define PORT_SUPPORTS_RT                FALSE
 
 /*===========================================================================*/
 /* Module pre-compile time settings.                                         */
@@ -223,7 +246,7 @@ struct port_intctx {
  *          @p port_intctx structure representing the stack pointer
  *          at context switch time.
  */
-struct context {
+struct port_context {
   struct port_intctx    *r13;
 };
 
@@ -236,13 +259,12 @@ struct context {
  * @details This code usually setup the context switching frame represented
  *          by an @p port_intctx structure.
  */
-#define PORT_SETUP_CONTEXT(tp, workspace, wsize, pf, arg) {                 \
-  (tp)->p_ctx.r13 = (struct port_intctx *)((uint8_t *)(workspace) +         \
-                                           (wsize) -                        \
-                                           sizeof(struct port_intctx));     \
-  (tp)->p_ctx.r13->r4 = (regarm_t)(pf);                                     \
-  (tp)->p_ctx.r13->r5 = (regarm_t)(arg);                                    \
-  (tp)->p_ctx.r13->lr = (regarm_t)(_port_thread_start);                     \
+#define PORT_SETUP_CONTEXT(tp, wbase, wtop, pf, arg) {                      \
+  (tp)->ctx.r13 = (struct port_intctx *)((uint8_t *)(wtop) -                \
+                                         sizeof (struct port_intctx));      \
+  (tp)->ctx.r13->r4 = (regarm_t)(pf);                                       \
+  (tp)->ctx.r13->r5 = (regarm_t)(arg);                                      \
+  (tp)->ctx.r13->lr = (regarm_t)(_port_thread_start);                       \
 }
 
 /**
@@ -252,6 +274,17 @@ struct context {
 #define PORT_WA_SIZE(n) (sizeof(struct port_intctx) +                       \
                          sizeof(struct port_extctx) +                       \
                          ((size_t)(n)) + ((size_t)(PORT_INT_REQUIRED_STACK)))
+
+/**
+ * @brief   Static working area allocation.
+ * @details This macro is used to allocate a static thread working area
+ *          aligned as both position and size.
+ *
+ * @param[in] s         the name to be assigned to the stack array
+ * @param[in] n         the stack size to be assigned to the thread
+ */
+#define PORT_WORKING_AREA(s, n)                                             \
+  stkalign_t s[THD_WORKING_AREA_SIZE(n) / sizeof (stkalign_t)]
 
 /**
  * @brief   Priority level verification macro.
@@ -317,7 +350,7 @@ struct context {
 #if CH_DBG_ENABLE_STACK_CHECK == TRUE
 #define port_switch(ntp, otp) {                                             \
   register struct port_intctx *r13 asm ("r13");                             \
-  if ((stkalign_t *)(r13 - 1) < otp->p_stklimit)                            \
+  if ((stkalign_t *)(r13 - 1) < otp->stklimit)                              \
   chSysHalt("stack overflow");                                              \
   _port_switch_arm(ntp, otp);                                               \
 }

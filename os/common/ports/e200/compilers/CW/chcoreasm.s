@@ -50,7 +50,20 @@
 
 #if !defined(__DOXYGEN__)
 
+/*
+ * RTOS-specific context offset.
+ */
+#if defined(_CHIBIOS_RT_CONF_)
+#define CONTEXT_OFFSET  12
+#elif defined(_CHIBIOS_NIL_CONF_)
+#define CONTEXT_OFFSET  0
+#else
+#error "invalid chconf.h"
+#endif
+
+#if defined(_CHIBIOS_RT_CONF_)
         .extern     chThdExit
+#endif
 
 #if PPC_USE_VLE == TRUE
         .section    .text_vle, 16
@@ -91,8 +104,14 @@ _port_thread_start:
         mr          r3, r31
         mtctr       r30
         se_bctrl
+#if defined(_CHIBIOS_RT_CONF_)
         se_li       r0, 0
         e_bl        chThdExit
+#endif
+#if defined(_CHIBIOS_NIL_CONF_)
+        se_li       r0, 0
+        e_bl        chSysHalt
+#endif
 
 #else /* PPC_USE_VLE == FALSE */
 

@@ -228,7 +228,7 @@ static inline void chVTObjectInit(virtual_timer_t *vtp) {
 static inline systime_t chVTGetSystemTimeX(void) {
 
 #if CH_CFG_ST_TIMEDELTA == 0
-  return ch.vtlist.vt_systime;
+  return ch.vtlist.systime;
 #else /* CH_CFG_ST_TIMEDELTA > 0 */
   return port_timer_get_time();
 #endif /* CH_CFG_ST_TIMEDELTA > 0 */
@@ -350,7 +350,7 @@ static inline bool chVTGetTimersStateI(systime_t *timep) {
 
   if (timep != NULL) {
 #if CH_CFG_ST_TIMEDELTA == 0
-    *timep = ch.vtlist.vt_next->delta;
+    *timep = ch.vtlist.next->delta;
 #else
     *timep = ch.vtlist.lasttime + ch.vtlist.next->delta +
              CH_CFG_ST_TIMEDELTA - chVTGetSystemTimeX();
@@ -504,19 +504,19 @@ static inline void chVTDoTickI(void) {
   chDbgCheckClassI();
 
 #if CH_CFG_ST_TIMEDELTA == 0
-  ch.vtlist.vt_systime++;
-  if (&ch.vtlist != (virtual_timers_list_t *)ch.vtlist.vt_next) {
+  ch.vtlist.systime++;
+  if (&ch.vtlist != (virtual_timers_list_t *)ch.vtlist.next) {
     /* The list is not empty, processing elements on top.*/
-    --ch.vtlist.vt_next->delta;
-    while (ch.vtlist.vt_next->delta == (systime_t)0) {
+    --ch.vtlist.next->delta;
+    while (ch.vtlist.next->delta == (systime_t)0) {
       virtual_timer_t *vtp;
       vtfunc_t fn;
 
-      vtp = ch.vtlist.vt_next;
+      vtp = ch.vtlist.next;
       fn = vtp->func;
       vtp->func = NULL;
       vtp->next->prev = (virtual_timer_t *)&ch.vtlist;
-      ch.vtlist.vt_next = vtp->next;
+      ch.vtlist.next = vtp->next;
       chSysUnlockFromISR();
       fn(vtp->par);
       chSysLockFromISR();
