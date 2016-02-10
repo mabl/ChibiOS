@@ -18,62 +18,146 @@
 */
 
 /**
- * @file    AVR/chcore.h
- * @brief   AVR architecture port macros and structures.
+ * @file    templates/chcore.h
+ * @brief   Port related template macros and structures.
+ * @details This file is a template of the system driver macros provided by
+ *          a port.
  *
- * @addtogroup AVR_CORE
+ * @addtogroup core
  * @{
  */
 
 #ifndef _CHCORE_H_
 #define _CHCORE_H_
 
-#include <avr/io.h>
-#include <avr/interrupt.h>
-
-#if CH_DBG_ENABLE_STACK_CHECK
-#error "option CH_DBG_ENABLE_STACK_CHECK not supported by this port"
-#endif
+/*===========================================================================*/
+/* Module constants.                                                         */
+/*===========================================================================*/
 
 /**
- * @brief   If enabled allows the idle thread to enter a low power mode.
+ * @name    Port Capabilities and Constants
+ * @{
  */
-#ifndef ENABLE_WFI_IDLE
-#define ENABLE_WFI_IDLE                 0
-#endif
-
-/**
- * @brief   Macro defining the AVR architecture.
- */
-#define PORT_ARCHITECTURE_AVR
-
-/**
- * @brief   Name of the implemented architecture.
- */
-#define PORT_ARCHITECTURE_NAME          "AVR"
-
-/**
- * @brief   Name of the architecture variant (optional).
- */
-#define PORT_CORE_VARIANT_NAME          "MegaAVR"
-
-/**
- * @brief   Name of the compiler supported by this port.
- */
-#define PORT_COMPILER_NAME              "GCC " __VERSION__
-
-/**
- * @brief   Port-specific information string.
- */
-#define PORT_INFO                       "None"
-
 /**
  * @brief   This port supports a realtime counter.
  */
 #define PORT_SUPPORTS_RT                FALSE
 
 /**
- * @brief   8 bits stack and memory alignment enforcement.
+ * @brief   Natural alignment constant.
+ * @note    It is the minimum alignment for pointer-size variables.
+ */
+#define PORT_NATURAL_ALIGN              1U
+
+/**
+ * @brief   Stack alignment constant.
+ * @note    It is the alignement required for the stack pointer.
+ */
+#define PORT_STACK_ALIGN                1U
+
+/**
+ * @brief   Working Areas alignment constant.
+ * @note    It is the alignment to be enforced for thread working areas.
+ */
+#define PORT_WORKING_AREA_ALIGN         1U
+/** @} */
+
+/**
+ * @name    Architecture and Compiler
+ * @{
+ */
+/**
+ * @brief   Macro defining an AVR architecture.
+ */
+#define PORT_ARCHITECTURE_AVR
+
+/**
+ * @brief   Macro defining the specific AVR architecture.
+ */
+#define PORT_ARCHITECTURE_AVR_MEGAAVR
+
+/**
+ * @brief   Name of the implemented architecture.
+ */
+#define PORT_ARCHITECTURE_NAME          "MegaAVR"
+
+/**
+ * @brief   Compiler name and version.
+ */
+#if defined(__GNUC__) || defined(__DOXYGEN__)
+#define PORT_COMPILER_NAME              "GCC " __VERSION__
+
+#else
+#error "unsupported compiler"
+#endif
+
+/**
+ * @brief   Port-specific information string.
+ */
+#define PORT_INFO                       "None"
+/** @} */
+
+/*===========================================================================*/
+/* Module pre-compile time settings.                                         */
+/*===========================================================================*/
+
+/**
+ * @brief   Stack size for the system idle thread.
+ * @details This size depends on the idle thread implementation, usually
+ *          the idle thread should take no more space than those reserved
+ *          by @p PORT_INT_REQUIRED_STACK.
+ */
+#if !defined(PORT_IDLE_THREAD_STACK_SIZE) || defined(__DOXYGEN__)
+#define PORT_IDLE_THREAD_STACK_SIZE     8
+#endif
+
+/**
+ * @brief   Per-thread stack overhead for interrupts servicing.
+ * @details This constant is used in the calculation of the correct working
+ *          area size.
+ */
+#if !defined(PORT_INT_REQUIRED_STACK) || defined(__DOXYGEN__)
+#define PORT_INT_REQUIRED_STACK         32
+#endif
+
+/**
+ * @brief   Enables an alternative timer implementation.
+ * @details Usually the port uses a timer interface defined in the file
+ *          @p chcore_timer.h, if this option is enabled then the file
+ *          @p chcore_timer_alt.h is included instead.
+ */
+#if !defined(PORT_USE_ALT_TIMER) || defined(__DOXYGEN__)
+#define PORT_USE_ALT_TIMER              FALSE
+#endif
+
+/**
+ * @brief   Activate for devices with extended code addressing.
+ */
+#if !defined(PORT_AVR_3BYTES_PC) || defined(__DOXYGEN__)
+#define PORT_AVR_3BYTES_PC              FALSE
+#endif
+/**
+ * @brief   Enables a "wait for interrupt" instruction in the idle loop.
+ */
+#if !defined(PORT_AVR_WFI_SLEEP_IDLE) || defined(__DOXYGEN__)
+#define PORT_AVR_WFI_SLEEP_IDLE      FALSE
+#endif
+
+/*===========================================================================*/
+/* Derived constants and error checks.                                       */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Module data structures and types.                                         */
+/*===========================================================================*/
+
+/* The following code is not processed when the file is included from an
+   asm module.*/
+#if !defined(_FROM_ASM_)
+
+/**
+ * @brief   Type of stack and memory alignment enforcement.
+ * @note    In this architecture the stack alignment is enforced to 8 bits.
  */
 typedef uint8_t stkalign_t;
 
@@ -81,8 +165,8 @@ typedef uint8_t stkalign_t;
  * @brief   Interrupt saved context.
  * @details This structure represents the stack frame saved during a
  *          preemption-capable interrupt handler.
- * @note    The field @p _next is not part of the context, it represents the
- *          offset of the structure relative to the stack pointer.
+ * @note    R2 and R13 are not saved because those are assumed to be immutable
+ *          during the system life cycle.
  */
 struct port_extctx {
   uint8_t       _next;
@@ -101,7 +185,7 @@ struct port_extctx {
   uint8_t       sr;
   uint8_t       r1;
   uint8_t       r0;
-#ifdef __AVR_3_BYTE_PC__
+#if PORT_AVR_3BYTES_PC
   uint8_t       pcx;
 #endif
   uint16_t      pc;
@@ -111,8 +195,10 @@ struct port_extctx {
  * @brief   System saved context.
  * @details This structure represents the inner stack frame during a context
  *          switching.
- * @note    The field @p _next is not part of the context, it represents the
- *          offset of the structure relative to the stack pointer.
+ * @note    R2 and R13 are not saved because those are assumed to be immutable
+ *          during the system life cycle.
+ * @note    LR is stored in the caller context so it is not present in this
+ *          structure.
  */
 struct port_intctx {
   uint8_t       _next;
@@ -134,7 +220,7 @@ struct port_intctx {
   uint8_t       r4;
   uint8_t       r3;
   uint8_t       r2;
-#ifdef __AVR_3_BYTE_PC__
+#if PORT_AVR_3BYTES_PC
   uint8_t       pcx;
 #endif
   uint8_t       pcl;
@@ -143,87 +229,78 @@ struct port_intctx {
 
 /**
  * @brief   Platform dependent part of the @p thread_t structure.
- * @details In the AVR port this structure just holds a pointer to the
- *          @p port_intctx structure representing the stack pointer at the time
- *          of the context switch.
+ * @details This structure usually contains just the saved stack pointer
+ *          defined as a pointer to a @p port_intctx structure.
  */
-struct context {
+struct port_context {
   struct port_intctx *sp;
 };
+
+#endif /* !defined(_FROM_ASM_) */
+
+/*===========================================================================*/
+/* Module macros.                                                            */
+/*===========================================================================*/
 
 /**
  * @brief   Platform dependent part of the @p chThdCreateI() API.
  * @details This code usually setup the context switching frame represented
  *          by an @p port_intctx structure.
  */
-#ifdef __AVR_3_BYTE_PC__
-#define PORT_SETUP_CONTEXT(tp, workspace, wsize, pf, arg) {                 \
-  tp->p_ctx.sp = (struct port_intctx*)((uint8_t *)workspace + wsize  -      \
-                                  sizeof(struct port_intctx));              \
-  tp->p_ctx.sp->r2  = (int)pf;                                              \
-  tp->p_ctx.sp->r3  = (int)pf >> 8;                                         \
-  tp->p_ctx.sp->r4  = (int)arg;                                             \
-  tp->p_ctx.sp->r5  = (int)arg >> 8;                                        \
-  tp->p_ctx.sp->pcx = (int)0;                                               \
-  tp->p_ctx.sp->pcl = (int)_port_thread_start >> 8;                         \
-  tp->p_ctx.sp->pch = (int)_port_thread_start;                              \
+#if PORT_AVR_3BYTES_PC || defined(__DOXYGEN__)
+#define PORT_SETUP_CONTEXT(tp, wbase, wtop, pf, arg) {                      \
+  tp->ctx.sp = (struct port_intctx *)((uint8_t *)(wtop) -                   \
+                                      sizeof(struct port_intctx));          \
+  tp->ctx.sp->r2  = (uint8_t)(pf);                                          \
+  tp->ctx.sp->r3  = (uint8_t)((pf) >> 8);                                   \
+  tp->ctx.sp->r4  = (uint8_t)(arg);                                         \
+  tp->ctx.sp->r5  = (uint8_t)((arg) >> 8);                                  \
+  tp->ctx.sp->pcx = (uint8_t)0;                                             \
+  tp->ctx.sp->pcl = (uint8_t)_port_thread_start >> 8;                       \
+  tp->ctx.sp->pch = (uint8_t)_port_thread_start;                            \
 }
-#else /* __AVR_3_BYTE_PC__ */
-#define PORT_SETUP_CONTEXT(tp, workspace, wsize, pf, arg) {                 \
-  tp->p_ctx.sp = (struct port_intctx*)((uint8_t *)workspace + wsize  -      \
-                                  sizeof(struct port_intctx));              \
-  tp->p_ctx.sp->r2  = (int)pf;                                              \
-  tp->p_ctx.sp->r3  = (int)pf >> 8;                                         \
-  tp->p_ctx.sp->r4  = (int)arg;                                             \
-  tp->p_ctx.sp->r5  = (int)arg >> 8;                                        \
-  tp->p_ctx.sp->pcl = (int)_port_thread_start >> 8;                         \
-  tp->p_ctx.sp->pch = (int)_port_thread_start;                              \
+#else /* !PORT_AVR_3BYTES_PC */
+#define PORT_SETUP_CONTEXT(tp, wbase, wtop, pf, arg) {                      \
+  tp->ctx.sp = (struct port_intctx *)((uint8_t *)(wtop) -                   \
+                                      sizeof(struct port_intctx));          \
+  tp->ctx.sp->r2  = (uint8_t)(pf);                                          \
+  tp->ctx.sp->r3  = (uint8_t)((pf) >> 8);                                   \
+  tp->ctx.sp->r4  = (uint8_t)(arg);                                         \
+  tp->ctx.sp->r5  = (uint8_t)((arg) >> 8);                                  \
+  tp->ctx.sp->pcl = (uint8_t)_port_thread_start >> 8;                       \
+  tp->ctx.sp->pch = (uint8_t)_port_thread_start;                            \
 }
-#endif /* __AVR_3_BYTE_PC__ */
-
-/**
- * @brief   Stack size for the system idle thread.
- * @details This size depends on the idle thread implementation, usually
- *          the idle thread should take no more space than those reserved
- *          by @p PORT_INT_REQUIRED_STACK.
- * @note    In this port it is set to 8.
- */
-#if !defined(PORT_IDLE_THREAD_STACK_SIZE) || defined(__DOXYGEN__)
-#define PORT_IDLE_THREAD_STACK_SIZE     8
-#endif
-
-/**
- * @brief   Per-thread stack overhead for interrupts servicing.
- * @details This constant is used in the calculation of the correct working
- *          area size.
- *          This value can be zero on those architecture where there is a
- *          separate interrupt stack and the stack space between @p port_intctx
- *          and @p port_extctx is known to be zero.
- * @note    In this port the default is 32 bytes per thread.
- */
-#if !defined(PORT_INT_REQUIRED_STACK) || defined(__DOXYGEN__)
-#define PORT_INT_REQUIRED_STACK     32
-#endif
-
-/**
- * @brief   Enforces a correct alignment for a stack area size value.
- */
-#define STACK_ALIGN(n) ((((n) - 1) | (sizeof(stkalign_t) - 1)) + 1)
+}
+#endif /* !PORT_AVR_3BYTES_PC */
 
 /**
  * @brief   Computes the thread working area global size.
+ * @note    There is no need to perform alignments in this macro.
  */
-#define PORT_WA_SIZE(n) STACK_ALIGN(sizeof(thread_t) +                       \
-                                    (sizeof(struct port_intctx) - 1) +       \
-                                    (sizeof(struct port_extctx) - 1) +       \
-                                    (n) + (PORT_INT_REQUIRED_STACK))
+#define PORT_WA_SIZE(n) ((sizeof(struct port_intctx) - 1) +                \
+                         (sizeof(struct port_extctx) - 1) +                \
+                         ((size_t)(n)) + ((size_t)(PORT_INT_REQUIRED_STACK)))
 
 /**
  * @brief   Static working area allocation.
  * @details This macro is used to allocate a static thread working area
  *          aligned as both position and size.
+ *
+ * @param[in] s         the name to be assigned to the stack array
+ * @param[in] n         the stack size to be assigned to the thread
  */
-#define WORKING_AREA(s, n) stkalign_t s[PORT_WA_SIZE(n) / sizeof(stkalign_t)]
+#define PORT_WORKING_AREA(s, n)                                             \
+  stkalign_t s[THD_WORKING_AREA_SIZE(n) / sizeof (stkalign_t)]
+
+/**
+ * @brief   Priority level verification macro.
+ */
+#define PORT_IRQ_IS_VALID_PRIORITY(n) false
+
+/**
+ * @brief   Priority level verification macro.
+ */
+#define PORT_IRQ_IS_VALID_KERNEL_PRIORITY(n) false
 
 /**
  * @brief   IRQ prologue code.
@@ -257,10 +334,44 @@ struct context {
 #define PORT_IRQ_HANDLER(id) ISR(id)
 
 /**
+ * @brief   Fast IRQ handler function declaration.
+ * @note    @p id can be a function name or a vector number depending on the
+ *          port implementation.
+ */
+#define PORT_FAST_IRQ_HANDLER(id) ISR(id)
+
+/**
  * @brief   Port-related initialization code.
  * @note    This function is empty in this port.
  */
 #define port_init()
+
+/*===========================================================================*/
+/* External declarations.                                                    */
+/*===========================================================================*/
+
+/* The following code is not processed when the file is included from an
+   asm module.*/
+#if !defined(_FROM_ASM_)
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+  void port_switch(thread_t *ntp, thread_t *otp);
+  void _port_thread_start(void);
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* !defined(_FROM_ASM_) */
+
+/*===========================================================================*/
+/* Module inline functions.                                                  */
+/*===========================================================================*/
+
+/* The following code is not processed when the file is included from an
+   asm module.*/
+#if !defined(_FROM_ASM_)
 
 /**
  * @brief   Returns a word encoding the current interrupts status.
@@ -278,8 +389,8 @@ static inline syssts_t port_get_irq_status(void) {
  * @param[in] sts       the interrupt status word
  *
  * @return              The interrupt status.
- * @retvel false        the word specified a disabled interrupts status.
- * @retvel true         the word specified an enabled interrupts status.
+ * @retval false        the word specified a disabled interrupts status.
+ * @retval true         the word specified an enabled interrupts status.
  */
 static inline bool port_irq_enabled(syssts_t sts) {
 
@@ -296,6 +407,7 @@ static inline bool port_irq_enabled(syssts_t sts) {
 static inline bool port_is_isr_context(void) {
 
   //TODO: is there any way to determine this?
+  // Yes, setting a flag in epilogue, resettint it on exit.
   return false;
 }
 
@@ -303,17 +415,21 @@ static inline bool port_is_isr_context(void) {
  * @brief   Kernel-lock action.
  * @details Usually this function just disables interrupts but may perform more
  *          actions.
- * @note    Implemented as global interrupt disable.
  */
-#define port_lock() asm volatile ("cli" : : : "memory")
+static inline void port_lock(void) {
+
+  asm volatile ("cli" : : : "memory");
+}
 
 /**
  * @brief   Kernel-unlock action.
  * @details Usually this function just enables interrupts but may perform more
  *          actions.
- * @note    Implemented as global interrupt enable.
  */
-#define port_unlock() asm volatile ("sei" : : : "memory")
+static inline void port_unlock(void) {
+
+  asm volatile ("sei" : : : "memory");
+}
 
 /**
  * @brief   Kernel-lock action from an interrupt handler.
@@ -322,7 +438,9 @@ static inline bool port_is_isr_context(void) {
  *          in its simplest form it is void.
  * @note    This function is empty in this port.
  */
-#define port_lock_from_isr()
+static inline void port_lock_from_isr(void) {
+
+}
 
 /**
  * @brief   Kernel-unlock action from an interrupt handler.
@@ -331,28 +449,35 @@ static inline bool port_is_isr_context(void) {
  *          simplest form it is void.
  * @note    This function is empty in this port.
  */
-#define port_unlock_from_isr()
+static inline void port_unlock_from_isr(void) {
+
+}
 
 /**
  * @brief   Disables all the interrupt sources.
  * @note    Of course non-maskable interrupt sources are not included.
- * @note    Implemented as global interrupt disable.
  */
-#define port_disable() asm volatile ("cli" : : : "memory")
+static inline void port_disable(void) {
+
+  asm volatile ("cli" : : : "memory");
+}
 
 /**
  * @brief   Disables the interrupt sources below kernel-level priority.
  * @note    Interrupt sources above kernel level remains enabled.
- * @note    Same as @p port_disable() in this port, there is no difference
- *          between the two states.
  */
-#define port_suspend() asm volatile ("cli" : : : "memory")
+static inline void port_suspend(void) {
+
+  asm volatile ("cli" : : : "memory");
+}
 
 /**
  * @brief   Enables all the interrupt sources.
- * @note    Implemented as global interrupt enable.
  */
-#define port_enable() asm volatile ("sei" : : : "memory")
+static inline void port_enable(void) {
+
+  asm volatile ("sei" : : : "memory");
+}
 
 /**
  * @brief   Enters an architecture-dependent IRQ-waiting mode.
@@ -360,30 +485,43 @@ static inline bool port_is_isr_context(void) {
  *          The simplest implementation is an empty function or macro but this
  *          would not take advantage of architecture-specific power saving
  *          modes.
- * @note    This port function is implemented as inlined code for performance
- *          reasons.
  */
-#if ENABLE_WFI_IDLE != 0
-#define port_wait_for_interrupt() {                                         \
-  asm volatile ("sleep" : : : "memory");                                    \
-}
-#else
-#define port_wait_for_interrupt()
-#endif
+static inline void port_wait_for_interrupt(void) {
 
-#ifdef __cplusplus
-extern "C" {
+#if PORT_AVR_WFI_SLEEP_IDLE
+  asm volatile ("sleep" : : : "memory");
 #endif
-  void port_switch(thread_t *ntp, thread_t *otp);
-  void port_halt(void);
-  void _port_thread_start(void);
-#ifdef __cplusplus
 }
-#endif
+
+/**
+ * @brief   Returns the current value of the realtime counter.
+ *
+ * @return              The realtime counter value.
+ */
+static inline rtcnt_t port_rt_get_counter_value(void) {
+
+  return 0;
+}
+
+#endif /* !defined(_FROM_ASM_) */
+
+/*===========================================================================*/
+/* Module late inclusions.                                                   */
+/*===========================================================================*/
+
+/* The following code is not processed when the file is included from an
+   asm module.*/
+#if !defined(_FROM_ASM_)
 
 #if CH_CFG_ST_TIMEDELTA > 0
+#if !PORT_USE_ALT_TIMER
 #include "chcore_timer.h"
-#endif
+#else /* PORT_USE_ALT_TIMER */
+#include "chcore_timer_alt.h"
+#endif /* PORT_USE_ALT_TIMER */
+#endif /* CH_CFG_ST_TIMEDELTA > 0 */
+
+#endif /* !defined(_FROM_ASM_) */
 
 #endif /* _CHCORE_H_ */
 

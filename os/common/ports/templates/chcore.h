@@ -130,6 +130,13 @@
 #define PORT_USE_ALT_TIMER              FALSE
 #endif
 
+/**
+ * @brief   Enables a "wait for interrupt" instruction in the idle loop.
+ */
+#if !defined(PORT_XXX_WFI_SLEEP_IDLE) || defined(__DOXYGEN__)
+#define PORT_XXX_ENABLE_WFI_IDLE      FALSE
+#endif
+
 /*===========================================================================*/
 /* Derived constants and error checks.                                       */
 /*===========================================================================*/
@@ -156,7 +163,7 @@ typedef uint64_t stkalign_t;
  *          during the system life cycle.
  */
 struct port_extctx {
- };
+};
 
 /**
  * @brief   System saved context.
@@ -406,7 +413,7 @@ static inline void port_enable(void) {
  */
 static inline void port_wait_for_interrupt(void) {
 
-#if PPC_ENABLE_WFI_IDLE
+#if PORT_XXX_ENABLE_WFI_IDLE
 #endif
 }
 

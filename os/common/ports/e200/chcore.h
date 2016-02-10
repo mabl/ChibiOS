@@ -255,7 +255,7 @@ struct port_extctx {
   regppc_t      r11;
   regppc_t      r12;
   regppc_t      padding;
- };
+};
 
 /**
  * @brief   System saved context.

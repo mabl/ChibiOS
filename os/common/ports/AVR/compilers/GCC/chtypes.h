@@ -50,18 +50,25 @@
 #endif
 /** @} */
 
-typedef bool            bool_t;         /**< Fast boolean type.             */
-typedef uint8_t         syssts_t;       /**< System status word.            */
-typedef uint8_t         tmode_t;        /**< Thread flags.                  */
-typedef uint8_t         tstate_t;       /**< Thread state.                  */
-typedef uint8_t         trefs_t;        /**< Thread references counter.     */
-typedef uint8_t         tslices_t;      /**< Thread time slices counter.    */
-typedef uint8_t         tprio_t;        /**< Thread priority.               */
-typedef int16_t         msg_t;          /**< Inter-thread message.          */
-typedef uint8_t         eventid_t;      /**< Event Id.                      */
-typedef uint8_t         eventmask_t;    /**< Event mask.                    */
-typedef uint8_t         eventflags_t;   /**< Event flags.                   */
-typedef int8_t          cnt_t;          /**< Resources counter.             */
+/**
+ * @name    Kernel types
+ * @{
+ */
+typedef uint32_t            rtcnt_t;        /**< Realtime counter.          */
+typedef uint64_t            rttime_t;       /**< Realtime accumulator.      */
+typedef uint8_t             syssts_t;       /**< System status word.        */
+typedef uint8_t             tmode_t;        /**< Thread flags.              */
+typedef uint8_t             tstate_t;       /**< Thread state.              */
+typedef uint8_t             trefs_t;        /**< Thread references counter. */
+typedef uint8_t             tslices_t;      /**< Thread time slices counter.*/
+typedef uint8_t             tprio_t;        /**< Thread priority.           */
+typedef int16_t             msg_t;          /**< Inter-thread message.      */
+typedef int32_t             eventid_t;      /**< Numeric event identifier.  */
+typedef uint8_t             eventmask_t;    /**< Mask of event identifiers. */
+typedef uint8_t             eventflags_t;   /**< Mask of event flags.       */
+typedef uint8_t             cnt_t;          /**< Generic signed counter.    */
+typedef uint8_t             ucnt_t;         /**< Generic unsigned counter.  */
+/** @} */
 
 /**
  * @brief   ROM constant modifier.
@@ -85,6 +92,11 @@ typedef int8_t          cnt_t;          /**< Resources counter.             */
  * @brief   Packed variable specifier.
  */
 #define PACKED_VAR __attribute__((packed))
+
+/**
+ * @brief   Memory alignment enforcement for variables.
+ */
+#define ALIGNED_VAR(n) __attribute__((aligned(n)))
 
 #endif /* _CHTYPES_H_ */
 

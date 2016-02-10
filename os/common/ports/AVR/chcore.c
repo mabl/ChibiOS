@@ -27,17 +27,41 @@
 
 #include "ch.h"
 
+/*===========================================================================*/
+/* Module local definitions.                                                 */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Module exported variables.                                                */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Module local types.                                                       */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Module local variables.                                                   */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Module local functions.                                                   */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Module exported functions.                                                */
+/*===========================================================================*/
+
 /**
  * @brief   Performs a context switch between two threads.
  * @details This is the most critical code in any port, this function
  *          is responsible for the context switch between 2 threads.
  * @note    The implementation of this code affects <b>directly</b> the context
  *          switch performance so optimize here as much as you can.
- * @note    The function is declared as a weak symbol, it is possible to
- *          redefine it in your application code.
  *
  * @param[in] ntp       the thread to be switched in
  * @param[in] otp       the thread to be switched out
+ *
+ * @todo    Put into an asm module, use of naked attribute is problematic.
  */
 #if !defined(__DOXYGEN__)
 __attribute__((naked, weak))
@@ -63,6 +87,7 @@ void port_switch(thread_t *ntp, thread_t *otp) {
   asm volatile ("push    r28");
   asm volatile ("push    r29");
 
+#if defined(_CHIBIOS_RT_)
   asm volatile ("movw    r30, r22");
   asm volatile ("in      r0, 0x3d");
   asm volatile ("std     Z+5, r0");
@@ -74,6 +99,21 @@ void port_switch(thread_t *ntp, thread_t *otp) {
   asm volatile ("out     0x3d, r0");
   asm volatile ("ldd     r0, Z+6");
   asm volatile ("out     0x3e, r0");
+#endif
+
+#if defined(_CHIBIOS_NIL_)
+  asm volatile ("movw    r30, r22");
+  asm volatile ("in      r0, 0x3d");
+  asm volatile ("std     Z+0, r0");
+  asm volatile ("in      r0, 0x3e");
+  asm volatile ("std     Z+1, r0");
+
+  asm volatile ("movw    r30, r24");
+  asm volatile ("ldd     r0, Z+0");
+  asm volatile ("out     0x3d, r0");
+  asm volatile ("ldd     r0, Z+1");
+  asm volatile ("out     0x3e, r0");
+#endif
 
   asm volatile ("pop     r29");
   asm volatile ("pop     r28");
@@ -94,25 +134,6 @@ void port_switch(thread_t *ntp, thread_t *otp) {
   asm volatile ("pop     r3");
   asm volatile ("pop     r2");
   asm volatile ("ret");
-}
-
-/**
- * @brief   Halts the system.
- * @details This function is invoked by the operating system when an
- *          unrecoverable error is detected (for example because a programming
- *          error in the application code that triggers an assertion while in
- *          debug mode).
- * @note    The function is declared as a weak symbol, it is possible to
- *          redefine it in your application code.
- */
-#if !defined(__DOXYGEN__)
-__attribute__((weak))
-#endif
-void port_halt(void) {
-
-  port_disable();
-  while (TRUE) {
-  }
 }
 
 /**
