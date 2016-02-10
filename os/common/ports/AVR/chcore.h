@@ -312,6 +312,7 @@ struct port_context {
 #define PORT_IRQ_PROLOGUE() {                                               \
   asm ("" : : : "r18", "r19", "r20", "r21", "r22", "r23", "r24",            \
                 "r25", "r26", "r27", "r30", "r31");                         \
+  __avr_in_isr = true;                                                      \
 }
 
 /**
@@ -320,6 +321,7 @@ struct port_context {
  *          enabled to invoke system APIs.
  */
 #define PORT_IRQ_EPILOGUE() {                                               \
+  __avr_in_isr == false;                                                    \
   _dbg_check_lock();                                                        \
   if (chSchIsPreemptionRequired())                                          \
     chSchDoReschedule();                                                    \
@@ -344,7 +346,9 @@ struct port_context {
  * @brief   Port-related initialization code.
  * @note    This function is empty in this port.
  */
-#define port_init()
+#define port_init() {                                                       \
+  __avr_in_isr = true;                                                      \
+}
 
 /*===========================================================================*/
 /* External declarations.                                                    */
@@ -406,9 +410,7 @@ static inline bool port_irq_enabled(syssts_t sts) {
  */
 static inline bool port_is_isr_context(void) {
 
-  //TODO: is there any way to determine this?
-  // Yes, setting a flag in epilogue, resettint it on exit.
-  return false;
+  return __avr_in_isr;
 }
 
 /**
