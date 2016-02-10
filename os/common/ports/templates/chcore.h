@@ -35,6 +35,34 @@
 /*===========================================================================*/
 
 /**
+ * @name    Port Capabilities and Constants
+ * @{
+ */
+/**
+ * @brief   This port supports a realtime counter.
+ */
+#define PORT_SUPPORTS_RT                FALSE
+
+/**
+ * @brief   Natural alignment constant.
+ * @note    It is the minimum alignment for pointer-size variables.
+ */
+#define PORT_NATURAL_ALIGN              sizeof (void *)
+
+/**
+ * @brief   Stack alignment constant.
+ * @note    It is the alignement required for the stack pointer.
+ */
+#define PORT_STACK_ALIGN                sizeof (stkalign_t)
+
+/**
+ * @brief   Working Areas alignment constant.
+ * @note    It is the alignment to be enforced for thread working areas.
+ */
+#define PORT_WORKING_AREA_ALIGN         sizeof (stkalign_t)
+/** @} */
+
+/**
  * @name    Architecture and Compiler
  * @{
  */
@@ -62,11 +90,6 @@
 #else
 #error "unsupported compiler"
 #endif
-
-/**
- * @brief   This port supports a realtime counter.
- */
-#define PORT_SUPPORTS_RT                FALSE
 
 /**
  * @brief   Port-specific information string.
@@ -103,7 +126,7 @@
  *          @p chcore_timer.h, if this option is enabled then the file
  *          @p chcore_timer_alt.h is included instead.
  */
-#if !defined(PORT_USE_ALT_TIMER)
+#if !defined(PORT_USE_ALT_TIMER) || defined(__DOXYGEN__)
 #define PORT_USE_ALT_TIMER              FALSE
 #endif
 
@@ -114,7 +137,6 @@
 /*===========================================================================*/
 /* Module data structures and types.                                         */
 /*===========================================================================*/
-
 
 /* The following code is not processed when the file is included from an
    asm module.*/
@@ -153,7 +175,7 @@ struct port_intctx {
  * @details This structure usually contains just the saved stack pointer
  *          defined as a pointer to a @p port_intctx structure.
  */
-struct context {
+struct port_context {
   struct port_intctx *sp;
 };
 
@@ -168,7 +190,7 @@ struct context {
  * @details This code usually setup the context switching frame represented
  *          by an @p port_intctx structure.
  */
-#define PORT_SETUP_CONTEXT(tp, workspace, wsize, pf, arg) {                 \
+#define PORT_SETUP_CONTEXT(tp, wbase, wtop, pf, arg) {                      \
 }
 
 /**
@@ -178,6 +200,17 @@ struct context {
 #define PORT_WA_SIZE(n) (sizeof(struct port_intctx) +                       \
                          sizeof(struct port_extctx) +                       \
                          ((size_t)(n)) + ((size_t)(PORT_INT_REQUIRED_STACK)))
+
+/**
+ * @brief   Static working area allocation.
+ * @details This macro is used to allocate a static thread working area
+ *          aligned as both position and size.
+ *
+ * @param[in] s         the name to be assigned to the stack array
+ * @param[in] n         the stack size to be assigned to the thread
+ */
+#define PORT_WORKING_AREA(s, n)                                             \
+  stkalign_t s[THD_WORKING_AREA_SIZE(n) / sizeof (stkalign_t)]
 
 /**
  * @brief   Priority level verification macro.
@@ -232,7 +265,7 @@ struct context {
 #else
 #define port_switch(ntp, otp) {                                             \
   register struct port_intctx *sp asm ("%r1");                              \
-  if ((stkalign_t *)(sp - 1) < otp->p_stklimit)                             \
+  if ((stkalign_t *)(sp - 1) < otp->stklimit)                               \
     chSysHalt("stack overflow");                                            \
   _port_switch(ntp, otp);                                                   \
 }
