@@ -495,12 +495,15 @@ void chSchDoRescheduleBehind(void) {
   if (otp->prio == IDLEPRIO) {
     CH_CFG_IDLE_LEAVE_HOOK();
   }
+
+  /* The extracted thread is marked as current.*/
   currp->state = CH_STATE_CURRENT;
 
 #if CH_CFG_TIME_QUANTUM > 0
   otp->preempt = (tslices_t)CH_CFG_TIME_QUANTUM;
 #endif
 
+  /* Placing in ready list behind peers.*/
   otp = chSchReadyI(otp);
 
   /* Swap operation as tail call.*/
@@ -524,8 +527,11 @@ void chSchDoRescheduleAhead(void) {
   if (otp->prio == IDLEPRIO) {
     CH_CFG_IDLE_LEAVE_HOOK();
   }
+
+  /* The extracted thread is marked as current.*/
   currp->state = CH_STATE_CURRENT;
 
+  /* Placing in ready list ahead of peers.*/
   otp = chSchReadyAheadI(otp);
 
   /* Swap operation as tail call.*/
