@@ -78,7 +78,7 @@
  *          thread.
  */
 #if !defined(PORT_ENABLE_GUARD_PAGES) || defined(__DOXYGEN__)
-#define PORT_ENABLE_GUARD_PAGES         TRUE
+#define PORT_ENABLE_GUARD_PAGES         FALSE
 #endif
 
 /**
@@ -484,7 +484,6 @@ extern "C" {
  * @brief   Port-related initialization code.
  */
 static inline void port_init(void) {
-  extern stkalign_t __main_thread_stack_base__;
 
   /* Initialization of the vector table and priority related settings.*/
   SCB->VTOR = CORTEX_VTOR_INIT;
@@ -506,17 +505,21 @@ static inline void port_init(void) {
   NVIC_SetPriority(PendSV_IRQn, CORTEX_PRIORITY_PENDSV);
 
 #if PORT_ENABLE_GUARD_PAGES == TRUE
-  /* Setting up the guard page on the main() function stack base
-     initially.*/
-  mpuConfigureRegion(MPU_REGION_0,
-                     &__main_thread_stack_base__,
-                     MPU_RASR_ATTR_AP_NA_NA |
-                     MPU_RASR_ATTR_NON_CACHEABLE |
-                     MPU_RASR_SIZE_32 |
-                     MPU_RASR_ENABLE);
+  {
+    extern stkalign_t __main_thread_stack_base__;
 
-  /* MPU is enabled.*/
-  mpuEnable(MPU_CTRL_PRIVDEFENA);
+    /* Setting up the guard page on the main() function stack base
+       initially.*/
+    mpuConfigureRegion(MPU_REGION_0,
+                       &__main_thread_stack_base__,
+                       MPU_RASR_ATTR_AP_NA_NA |
+                       MPU_RASR_ATTR_NON_CACHEABLE |
+                       MPU_RASR_SIZE_32 |
+                       MPU_RASR_ENABLE);
+
+    /* MPU is enabled.*/
+    mpuEnable(MPU_CTRL_PRIVDEFENA);
+  }
 #endif
 }
 

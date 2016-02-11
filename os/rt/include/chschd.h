@@ -496,20 +496,9 @@ struct ch_system {
 /**
  * @brief   Current thread pointer access macro.
  * @note    This macro is not meant to be used in the application code but
- *          only from within the kernel, use the @p chThdSelf() API instead.
- * @note    It is forbidden to use this macro in order to change the pointer
- *          (currp = something), use @p setcurrp() instead.
+ *          only from within the kernel, use @p chThdGetSelfX() instead.
  */
 #define currp ch.rlist.current
-
-/**
- * @brief   Current thread pointer change macro.
- * @note    This macro is not meant to be used in the application code but
- *          only from within the kernel.
- *
- * @notapi
- */
-#define setcurrp(tp) (currp = (tp))
 
 /*===========================================================================*/
 /* External declarations.                                                    */
@@ -527,6 +516,7 @@ extern "C" {
 #endif
   void _scheduler_init(void);
   thread_t *chSchReadyI(thread_t *tp);
+  thread_t *chSchReadyAheadI(thread_t *tp);
   void chSchGoSleepS(tstate_t newstate);
   msg_t chSchGoSleepTimeoutS(tstate_t newstate, systime_t time);
   void chSchWakeupS(thread_t *ntp, msg_t msg);

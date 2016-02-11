@@ -561,9 +561,6 @@ bool chSchIsPreemptionRequired(void) {
 
 /**
  * @brief   Switches to the first thread on the runnable queue.
- * @details The current thread is positioned in the ready list behind or
- *          ahead of all threads having the same priority depending on
- *          if it used its whole time slice.
  * @note    Not a user function, it is meant to be invoked by the scheduler
  *          itself or from within the port layer.
  *
