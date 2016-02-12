@@ -206,13 +206,12 @@ struct port_intctx {
  * @details This code usually setup the context switching frame represented
  *          by an @p port_intctx structure.
  */
-#define PORT_SETUP_CONTEXT(tp, workspace, wsize, pf, arg) {                 \
-  (tp)->p_ctx.r13 = (struct port_intctx *)((uint8_t *)(workspace) +         \
-                                           (wsize) -                        \
-                                           sizeof (struct port_intctx));    \
-  (tp)->p_ctx.r13->r4 = (regarm_t)(pf);                                     \
-  (tp)->p_ctx.r13->r5 = (regarm_t)(arg);                                    \
-  (tp)->p_ctx.r13->lr = (regarm_t)_port_thread_start;                       \
+#define PORT_SETUP_CONTEXT(tp, wbase, wtop, pf, arg) {                      \
+  (tp)->ctx.r13 = (struct port_intctx *)((uint8_t *)(wtop) -                \
+                                         sizeof (struct port_intctx));      \
+  (tp)->ctx.r13->r4 = (regarm_t)(pf);                                       \
+  (tp)->ctx.r13->r5 = (regarm_t)(arg);                                      \
+  (tp)->ctx.r13->lr = (regarm_t)_port_thread_start;                         \
 }
 
 /**
@@ -222,6 +221,17 @@ struct port_intctx {
 #define PORT_WA_SIZE(n) (sizeof (struct port_intctx) +                      \
                          sizeof (struct port_extctx) +                      \
                          ((size_t)(n)) + ((size_t)(PORT_INT_REQUIRED_STACK)))
+
+/**
+ * @brief   Static working area allocation.
+ * @details This macro is used to allocate a static thread working area
+ *          aligned as both position and size.
+ *
+ * @param[in] s         the name to be assigned to the stack array
+ * @param[in] n         the stack size to be assigned to the thread
+ */
+#define PORT_WORKING_AREA(s, n)                                             \
+  stkalign_t s[THD_WORKING_AREA_SIZE(n) / sizeof (stkalign_t)]
 
 /**
  * @brief   IRQ prologue code.
@@ -275,7 +285,7 @@ struct port_intctx {
 #else
 #define port_switch(ntp, otp) {                                             \
   struct port_intctx *r13 = (struct port_intctx *)__get_PSP();              \
-  if ((stkalign_t *)(r13 - 1) < (otp)->p_stklimit) {                        \
+  if ((stkalign_t *)(r13 - 1) < (otp)->stklimit) {                          \
     chSysHalt("stack overflow");                                            \
   }                                                                         \
   _port_switch(ntp, otp);                                                   \

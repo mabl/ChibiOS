@@ -260,6 +260,11 @@ void chSysInit(void) {
   nil.lock_cnt = (cnt_t)1;
 #endif
 
+  /* Heap initialization, if enabled.*/
+#if CH_CFG_USE_HEAP == TRUE
+  _heap_init();
+#endif
+
   /* Port layer initialization last because it depend on some of the
      initializations performed before.*/
   port_init();

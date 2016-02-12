@@ -87,13 +87,13 @@ thread_t *chThdCreateFromHeap(memory_heap_t *heapp, size_t size,
   if (wsp == NULL) {
     return NULL;
   }
-  
+
 #if CH_DBG_FILL_THREADS == TRUE
   _thread_memfill((uint8_t *)wsp,
                   (uint8_t *)wsp + size,
                   CH_DBG_STACK_FILL_VALUE);
 #endif
-  
+
   return chThdCreateStatic(wsp, size, prio, pf, arg);
 }
 #endif /* CH_CFG_USE_HEAP == TRUE */
@@ -105,6 +105,8 @@ thread_t *chThdCreateFromHeap(memory_heap_t *heapp, size_t size,
  * @pre     The configuration options @p CH_CFG_USE_DYNAMIC and
  *          @p CH_CFG_USE_MEMPOOLS must be enabled in order to use this
  *          function.
+ * @pre     The pool must be initialized to contain only objects with
+ *          alignment @p PORT_WORKING_AREA_ALIGN.
  * @note    A thread can terminate by calling @p chThdExit() or by simply
  *          returning from its main function.
  * @note    The memory allocated for the thread is not released automatically,
@@ -132,7 +134,7 @@ thread_t *chThdCreateFromMemoryPool(memory_pool_t *mp, tprio_t prio,
   if (wsp == NULL) {
     return NULL;
   }
-  
+
 #if CH_DBG_FILL_THREADS == TRUE
   _thread_memfill((uint8_t *)wsp,
                   (uint8_t *)wsp + mp->object_size,
