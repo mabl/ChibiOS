@@ -23,6 +23,7 @@
  *
  * @addtogroup dynamic_threads
  * @details Dynamic threads related APIs and services.
+ * @note    Compatible with RT only.
  * @{
  */
 
@@ -30,7 +31,6 @@
 
 #if (CH_CFG_USE_DYNAMIC == TRUE) || defined(__DOXYGEN__)
 
-#if 0
 /*===========================================================================*/
 /* Module local definitions.                                                 */
 /*===========================================================================*/
@@ -55,78 +55,6 @@
 /* Module exported functions.                                                */
 /*===========================================================================*/
 
-/**
- * @brief   Adds a reference to a thread object.
- * @pre     The configuration option @p CH_CFG_USE_DYNAMIC must be enabled in
- *          order to use this function.
- *
- * @param[in] tp        pointer to the thread
- * @return              The same thread pointer passed as parameter
- *                      representing the new reference.
- *
- * @api
- */
-thread_t *chThdAddRef(thread_t *tp) {
-
-  chSysLock();
-  chDbgAssert(tp->refs < (trefs_t)255, "too many references");
-  tp->refs++;
-  chSysUnlock();
-
-  return tp;
-}
-
-/**
- * @brief   Releases a reference to a thread object.
- * @details If the references counter reaches zero <b>and</b> the thread
- *          is in the @p CH_STATE_FINAL state then the thread's memory is
- *          returned to the proper allocator.
- * @pre     The configuration option @p CH_CFG_USE_DYNAMIC must be enabled in
- *          order to use this function.
- * @note    Static threads are not affected.
- *
- * @param[in] tp        pointer to the thread
- *
- * @api
- */
-void chThdRelease(thread_t *tp) {
-  trefs_t refs;
-
-  chSysLock();
-  chDbgAssert(tp->refs > (trefs_t)0, "not referenced");
-  tp->refs--;
-  refs = tp->refs;
-  chSysUnlock();
-
-  /* If the references counter reaches zero and the thread is in its
-     terminated state then the memory can be returned to the proper
-     allocator. Of course static threads are not affected.*/
-  if ((refs == (trefs_t)0) && (tp->state == CH_STATE_FINAL)) {
-    switch (tp->flags & CH_FLAG_MODE_MASK) {
-#if CH_CFG_USE_HEAP == TRUE
-    case CH_FLAG_MODE_HEAP:
-#if CH_CFG_USE_REGISTRY == TRUE
-      REG_REMOVE(tp);
-#endif
-      chHeapFree(tp->stklimit);
-      break;
-#endif
-#if CH_CFG_USE_MEMPOOLS == TRUE
-    case CH_FLAG_MODE_MPOOL:
-#if CH_CFG_USE_REGISTRY == TRUE
-      REG_REMOVE(tp);
-#endif
-      chPoolFree(tp->mpool, tp->stklimit);
-      break;
-#endif
-    default:
-      /* Nothing to do for static threads, those are removed from the
-         registry on exit.*/
-      break;
-    }
-  }
-}
-
 #if (CH_CFG_USE_HEAP == TRUE) || defined(__DOXYGEN__)
 /**
  * @brief   Creates a new thread allocating the memory from the heap.
@@ -134,8 +62,9 @@ void chThdRelease(thread_t *tp) {
  *          @p CH_CFG_USE_HEAP must be enabled in order to use this function.
  * @note    A thread can terminate by calling @p chThdExit() or by simply
  *          returning from its main function.
- * @note    The memory allocated for the thread is not released when the thread
- *          terminates but when a @p chThdWait() is performed.
+ * @note    The memory allocated for the thread is not released automatically,
+ *          it is responsibility of the creator thread to call @p chThdWait()
+ *          and then release the allocated memory.
  *
  * @param[in] heapp     heap from which allocate the memory or @p NULL for the
  *                      default heap
@@ -153,7 +82,6 @@ void chThdRelease(thread_t *tp) {
 thread_t *chThdCreateFromHeap(memory_heap_t *heapp, size_t size,
                               tprio_t prio, tfunc_t pf, void *arg) {
   void *wsp;
-  thread_t *tp;
 
   wsp = chHeapAllocAligned(heapp, size, PORT_WORKING_AREA_ALIGN);
   if (wsp == NULL) {
@@ -166,13 +94,7 @@ thread_t *chThdCreateFromHeap(memory_heap_t *heapp, size_t size,
                   CH_DBG_STACK_FILL_VALUE);
 #endif
   
-  chSysLock();
-  tp = chThdCreateI(wsp, size, prio, pf, arg);
-  tp->flags = CH_FLAG_MODE_HEAP;
-  chSchWakeupS(tp, MSG_OK);
-  chSysUnlock();
-
-  return tp;
+  return chThdCreateStatic(wsp, size, prio, pf, arg);
 }
 #endif /* CH_CFG_USE_HEAP == TRUE */
 
@@ -185,8 +107,9 @@ thread_t *chThdCreateFromHeap(memory_heap_t *heapp, size_t size,
  *          function.
  * @note    A thread can terminate by calling @p chThdExit() or by simply
  *          returning from its main function.
- * @note    The memory allocated for the thread is not released when the thread
- *          terminates but when a @p chThdWait() is performed.
+ * @note    The memory allocated for the thread is not released automatically,
+ *          it is responsibility of the creator thread to call @p chThdWait()
+ *          and then release the allocated memory.
  *
  * @param[in] mp        pointer to the memory pool object
  * @param[in] prio      the priority level for the new thread
@@ -202,7 +125,6 @@ thread_t *chThdCreateFromHeap(memory_heap_t *heapp, size_t size,
 thread_t *chThdCreateFromMemoryPool(memory_pool_t *mp, tprio_t prio,
                                     tfunc_t pf, void *arg) {
   void *wsp;
-  thread_t *tp;
 
   chDbgCheck(mp != NULL);
 
@@ -217,18 +139,9 @@ thread_t *chThdCreateFromMemoryPool(memory_pool_t *mp, tprio_t prio,
                   CH_DBG_STACK_FILL_VALUE);
 #endif
 
-  chSysLock();
-  tp = chThdCreateI(wsp, mp->object_size, prio, pf, arg);
-  tp->flags = CH_FLAG_MODE_MPOOL;
-  tp->mpool = mp;
-  chSchWakeupS(tp, MSG_OK);
-  chSysUnlock();
-
-  return tp;
+  return chThdCreateStatic(wsp, mp->object_size, prio, pf, arg);
 }
 #endif /* CH_CFG_USE_MEMPOOLS == TRUE */
-
-#endif
 
 #endif /* CH_CFG_USE_DYNAMIC == TRUE */
 

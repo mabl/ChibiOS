@@ -250,6 +250,19 @@ static inline systime_t chThdGetTicksX(thread_t *tp) {
 #endif
 
 /**
+ * @brief   Returns the stack limit of the specified thread.
+ *
+ * @param[in] tp        pointer to the thread
+ * @return              The stack limit pointer.
+ *
+ * @xclass
+ */
+static inline stkalign_t *chthdGetStackLimitX(thread_t *tp) {
+
+  return tp->stklimit;
+}
+
+/**
  * @brief   Verifies if the specified thread is in the @p CH_STATE_FINAL state.
  *
  * @param[in] tp        pointer to the thread

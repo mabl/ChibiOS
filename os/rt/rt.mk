@@ -47,6 +47,9 @@ endif
 ifneq ($(findstring CH_CFG_USE_MEMPOOLS TRUE,$(CHCONF)),)
 KERNSRC += $(CHIBIOS)/os/common/oslib/src/chmempools.c
 endif
+ifneq ($(findstring CH_CFG_USE_DYNAMIC TRUE,$(CHCONF)),)
+KERNSRC += $(CHIBIOS)/os/common/oslib/src/chdynamic.c
+endif
 else
 KERNSRC := $(CHIBIOS)/os/rt/src/chsys.c \
            $(CHIBIOS)/os/rt/src/chdebug.c \
@@ -65,7 +68,8 @@ KERNSRC := $(CHIBIOS)/os/rt/src/chsys.c \
            $(CHIBIOS)/os/common/oslib/src/chmboxes.c \
            $(CHIBIOS)/os/common/oslib/src/chmemcore.c \
            $(CHIBIOS)/os/common/oslib/src/chheap.c \
-           $(CHIBIOS)/os/common/oslib/src/chmempools.c
+           $(CHIBIOS)/os/common/oslib/src/chmempools.c \
+           $(CHIBIOS)/os/common/oslib/src/chdynamic.c
 endif
 
 # Required include directories

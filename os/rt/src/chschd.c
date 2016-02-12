@@ -491,7 +491,7 @@ bool chSchIsPreemptionRequired(void) {
  *          threads having the same priority. The thread regains its time
  *          quantum.
  * @note    Not a user function, it is meant to be invoked by the scheduler
- *          itself or from within the port layer.
+ *          itself.
  *
  * @special
  */
@@ -523,7 +523,7 @@ void chSchDoRescheduleBehind(void) {
  * @details The current thread is positioned in the ready list ahead of all
  *          threads having the same priority.
  * @note    Not a user function, it is meant to be invoked by the scheduler
- *          itself or from within the port layer.
+ *          itself.
  *
  * @special
  */

@@ -265,12 +265,12 @@ static void sem4_execute(void) {
      counter semaphore state..*/
   chBSemSignal(&bsem);
   test_assert_lock(3, chBSemGetStateI(&bsem) == FALSE, "still taken");
-  test_assert_lock(4, chSemGetCounterI(&bsem.bs_sem) == 1, "unexpected counter");
+  test_assert_lock(4, chSemGetCounterI(&bsem.sem) == 1, "unexpected counter");
 
   /* Checking signaling overflow, the counter must not go beyond 1.*/
   chBSemSignal(&bsem);
   test_assert_lock(3, chBSemGetStateI(&bsem) == FALSE, "taken");
-  test_assert_lock(5, chSemGetCounterI(&bsem.bs_sem) == 1, "unexpected counter");
+  test_assert_lock(5, chSemGetCounterI(&bsem.sem) == 1, "unexpected counter");
 }
 
 ROMCONST struct testcase testsem4 = {
