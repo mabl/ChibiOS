@@ -302,7 +302,11 @@ void chSchGoSleepS(tstate_t newstate) {
   if (currp->prio == IDLEPRIO) {
     CH_CFG_IDLE_ENTER_HOOK();
   }
+
+  /* The extracted thread is marked as current.*/
   currp->state = CH_STATE_CURRENT;
+
+  /* Swap operation as tail call.*/
   chSysSwitch(currp, otp);
 }
 
@@ -426,7 +430,11 @@ void chSchWakeupS(thread_t *ntp, msg_t msg) {
     if (otp->prio == IDLEPRIO) {
       CH_CFG_IDLE_LEAVE_HOOK();
     }
+
+    /* The extracted thread is marked as current.*/
     ntp->state = CH_STATE_CURRENT;
+
+    /* Swap operation as tail call.*/
     chSysSwitch(ntp, otp);
   }
 }
