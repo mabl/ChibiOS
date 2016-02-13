@@ -74,6 +74,8 @@
 *****************************************************************************
 
 *** 3.0.6 ***
+- NIL: Fixed ARM errata 752419 (bug #706).
+- RT:  Fixed ARM errata 752419 (bug #706).
 - HAL: Fixed chDbgAssert() still called from STM32 SPIv1 driver (bug #704).
 - RT:  Fixed useless call to chTMStartMeasurementX() in _thread_init()
        (bug #697).
