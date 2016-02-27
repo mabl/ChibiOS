@@ -74,6 +74,7 @@
 *****************************************************************************
 
 *** 3.0.6 ***
+- ALL: Startup files relicensed under Apache 2.0.
 - HAL: Fixed build error caused by STM32 SPIv1 driver (bug #710).
 - HAL: Fixed shift of signed constant causes warnings with IAR compiler
        (bug #709).

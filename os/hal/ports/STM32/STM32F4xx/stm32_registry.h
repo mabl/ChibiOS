@@ -331,15 +331,8 @@
 /* FSMC attributes.*/
 #define STM32_HAS_FSMC                      TRUE
 #define STM32_FSMC_IS_FMC                   TRUE
-#define STM32_FSMC_DMA_MSK                  (STM32_DMA_STREAM_ID_MSK(2, 0) |\
-                                             STM32_DMA_STREAM_ID_MSK(2, 1) |\
-                                             STM32_DMA_STREAM_ID_MSK(2, 2) |\
-                                             STM32_DMA_STREAM_ID_MSK(2, 3) |\
-                                             STM32_DMA_STREAM_ID_MSK(2, 4) |\
-                                             STM32_DMA_STREAM_ID_MSK(2, 5) |\
-                                             STM32_DMA_STREAM_ID_MSK(2, 6) |\
-                                             STM32_DMA_STREAM_ID_MSK(2, 7))
-#define STM32_FSMC_DMA_CHN                  0x03010201
+#define STM32_FSMC_HANDLER                  Vector100
+#define STM32_FSMC_NUMBER                   48
 
 /* CRC attributes.*/
 #define STM32_HAS_CRC                       TRUE
@@ -610,15 +603,7 @@
 
 /* FSMC attributes.*/
 #define STM32_HAS_FSMC                      TRUE
-#define STM32_FSMC_DMA_MSK                  (STM32_DMA_STREAM_ID_MSK(2, 0) |\
-                                             STM32_DMA_STREAM_ID_MSK(2, 1) |\
-                                             STM32_DMA_STREAM_ID_MSK(2, 2) |\
-                                             STM32_DMA_STREAM_ID_MSK(2, 3) |\
-                                             STM32_DMA_STREAM_ID_MSK(2, 4) |\
-                                             STM32_DMA_STREAM_ID_MSK(2, 5) |\
-                                             STM32_DMA_STREAM_ID_MSK(2, 6) |\
-                                             STM32_DMA_STREAM_ID_MSK(2, 7))
-#define STM32_FSMC_DMA_CHN                  0x03010201
+#define STM32_FSMC_IS_FMC                   FALSE
 
 /* CRC attributes.*/
 #define STM32_HAS_CRC                       TRUE
@@ -845,6 +830,7 @@
 
 /* FSMC attributes.*/
 #define STM32_HAS_FSMC                      FALSE
+#define STM32_FSMC_IS_FMC                   FALSE
 
 /* CRC attributes.*/
 #define STM32_HAS_CRC                       TRUE
@@ -1070,6 +1056,7 @@
 
 /* FSMC attributes.*/
 #define STM32_HAS_FSMC                      FALSE
+#define STM32_FSMC_IS_FMC                   FALSE
 
 /* CRC attributes.*/
 #define STM32_HAS_CRC                       TRUE
