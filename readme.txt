@@ -75,6 +75,8 @@
 
 *** 3.0.6 ***
 - ALL: Startup files relicensed under Apache 2.0.
+- VAR: Fixed state check in lwIP when SYS_LIGHTWEIGHT_PROT is disabled
+       (bug #713).
 - RT:  Fixed race condition in RT registry (bug #712). 
 - HAL: Fixed build error caused by STM32 SPIv1 driver (bug #710).
 - HAL: Fixed shift of signed constant causes warnings with IAR compiler
