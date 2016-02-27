@@ -74,6 +74,7 @@
 *****************************************************************************
 
 *** 3.0.6 ***
+- HAL: Fixed build error caused by STM32 SPIv1 driver (bug #710).
 - HAL: Fixed shift of signed constant causes warnings with IAR compiler
        (bug #709).
 - NIL: Fixed ARM errata 752419 (bug #706).
