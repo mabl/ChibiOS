@@ -95,7 +95,6 @@ void chThdRelease(thread_t *tp) {
   chDbgAssert(tp->p_refs > (trefs_t)0, "not referenced");
   tp->p_refs--;
   refs = tp->p_refs;
-  chSysUnlock();
 
   /* If the references counter reaches zero and the thread is in its
      terminated state then the memory can be returned to the proper
@@ -107,16 +106,18 @@ void chThdRelease(thread_t *tp) {
 #if CH_CFG_USE_REGISTRY == TRUE
       REG_REMOVE(tp);
 #endif
+      chSysUnlock();
       chHeapFree(tp);
-      break;
+      return;
 #endif
 #if CH_CFG_USE_MEMPOOLS == TRUE
     case CH_FLAG_MODE_MPOOL:
 #if CH_CFG_USE_REGISTRY == TRUE
       REG_REMOVE(tp);
 #endif
+      chSysUnlock();
       chPoolFree(tp->p_mpool, tp);
-      break;
+      return;
 #endif
     default:
       /* Nothing to do for static threads, those are removed from the
@@ -124,6 +125,7 @@ void chThdRelease(thread_t *tp) {
       break;
     }
   }
+  chSysUnlock();
 }
 
 #if (CH_CFG_USE_HEAP == TRUE) || defined(__DOXYGEN__)
@@ -158,7 +160,7 @@ thread_t *chThdCreateFromHeap(memory_heap_t *heapp, size_t size,
   if (wsp == NULL) {
     return NULL;
   }
-  
+
 #if CH_DBG_FILL_THREADS == TRUE
   _thread_memfill((uint8_t *)wsp,
                   (uint8_t *)wsp + sizeof(thread_t),
@@ -167,7 +169,7 @@ thread_t *chThdCreateFromHeap(memory_heap_t *heapp, size_t size,
                   (uint8_t *)wsp + size,
                   CH_DBG_STACK_FILL_VALUE);
 #endif
-  
+
   chSysLock();
   tp = chThdCreateI(wsp, size, prio, pf, arg);
   tp->p_flags = CH_FLAG_MODE_HEAP;
@@ -212,7 +214,7 @@ thread_t *chThdCreateFromMemoryPool(memory_pool_t *mp, tprio_t prio,
   if (wsp == NULL) {
     return NULL;
   }
-  
+
 #if CH_DBG_FILL_THREADS == TRUE
   _thread_memfill((uint8_t *)wsp,
                   (uint8_t *)wsp + sizeof(thread_t),
