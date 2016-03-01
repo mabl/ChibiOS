@@ -75,6 +75,7 @@
 
 *** 3.0.6 ***
 - ALL: Startup files relicensed under Apache 2.0.
+- VAR: Fixed GCC 5.2 crashes while compiling ChibiOS (bug #718).
 - VAR: Fixed state check in lwIP when SYS_LIGHTWEIGHT_PROT is disabled
        (bug #713).
 - RT:  Fixed race condition in RT registry (bug #712). 
