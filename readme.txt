@@ -75,6 +75,7 @@
 
 *** 3.0.6 ***
 - ALL: Startup files relicensed under Apache 2.0.
+- VAR: Fixed palSetMode glitching outputs (bug #723).
 - VAR: Fixed error in STM32 PWM driver regarding channels 4 and 5 (bug #722).
 - VAR: Fixed GCC 5.2 crashes while compiling ChibiOS (bug #718).
 - VAR: Fixed state check in lwIP when SYS_LIGHTWEIGHT_PROT is disabled
