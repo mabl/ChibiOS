@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+    <extension
+         id="org.chibios.spc5.components.platform.generic"
+         name="Generic Platform Component"
+         point="com.st.tools.spc5.extension.v1">
+        <component
+              icon="rsc/chibios.ico"
+              isPlatform="true">
+            <description>
+                Generic platform component for no spefic device, useful only for testing. This component does not implement any build environment.
+            </description>
+            <categories>
+               <category
+                     id="ChibiOS/Portable Components">
+               </category>
+            </categories>
+            <configuration>
+               <description>
+                  Generic platform options and settings.
+               </description>
+               <image
+                     file="rsc/chibios_48x48.png">
+                  <text>
+                     Copyright (C) Giovanni Di Sirio.
+                  </text>
+               </image>
+            </configuration>
+            <exportedFeatures>
+               <exportedFeature
+                     brief="Generic Platform"
+                     exclusive="false"
+                     id="com.st.tools.spc5.features.platform">
+               </exportedFeature>
+            </exportedFeatures>
+        </component>
+    </extension>
+</plugin>
