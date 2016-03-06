@@ -20,10 +20,10 @@
 
 /**
  * @mainpage Test Suite Specification
-[#if conf.instance.introduction.value[0]?trim != ""]
+[#if conf.instance.description.introduction.value[0]?trim != ""]
 [@utils.FormatStringAsText " * "
                            " * "
-                           utils.WithDot(conf.instance.introduction.value[0]?trim?cap_first)
+                           utils.WithDot(conf.instance.description.introduction.value[0]?trim?cap_first)
                            72 /]
 [#else]
  * No introduction.

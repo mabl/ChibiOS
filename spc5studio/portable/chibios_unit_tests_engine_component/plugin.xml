@@ -31,6 +31,19 @@ The code is conventionally generated under ./source/test and is overwritten each
                   </text>
                </image>
                <group
+                     name="Description">
+                  <property
+                        brief="Text to be used as Test Suite introduction."
+                        editable="true"
+                        name="Introduction"
+                        required="true"
+                        type="text">
+                     <default>
+                        This document has been automatically generated.
+                     </default>
+                  </property>
+               </group>
+               <group
                      name="Global Data and Code"
                      style="button">
                   <description>
@@ -52,19 +65,6 @@ The code is conventionally generated under ./source/test and is overwritten each
                   </property>
                </group>
                <property
-                     brief="Text to be used as Test Suite introduction."
-                     editable="true"
-                     name="Introduction"
-                     required="true"
-                     type="text">
-                  <default>
-                     This document has been automatically generated.
-                  </default>
-               </property>
-               <text>
-                  A Test Suite is composed by one or more Test Sequences.
-               </text>
-               <property
                      brief="Test Sequences part of the current Test Suite."
                      editable="true"
                      length="1"
@@ -72,6 +72,9 @@ The code is conventionally generated under ./source/test and is overwritten each
                      required="false"
                      type="list"
                      value="Type[96],Brief[200]">
+                  <text>
+                     A Test Suite is composed by one or more Test Sequences.
+                  </text>
                   <group
                         columns="1"
                         expanded="true"
