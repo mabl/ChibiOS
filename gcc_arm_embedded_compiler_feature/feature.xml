@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.chibios.tools.spc5.tools.gnuarm.feature"
+      id="org.chibios.tools.spc5.tools.gccarmembedded.feature"
       label="GCC ARM Embedded Compiler for SPC5Studio"
       version="1.0.0.qualifier"
       provider-name="launchpad.net/gcc-arm-embedded"
@@ -48,7 +48,7 @@ along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
          unpack="false"/>
 
    <plugin
-         id="org.chibios.tools.spc5.tools.gnuarm"
+         id="org.chibios.tools.spc5.tools.gccarmembedded"
          download-size="0"
          install-size="0"
          version="0.0.0"/>

@@ -4,11 +4,27 @@
       ChibiStudio Eclipse Update Site.
    </description>
    <feature url="features/org.chibios.eclipse.tools.feature_2.2.1.qualifier.jar" id="org.chibios.eclipse.tools.feature" version="2.2.1.qualifier">
-      <category name="ChibiStudio"/>
+      <category name="chibistudio_components"/>
    </feature>
-   <category-def name="ChibiStudio" label="ChibiStudio">
+   <feature url="features/org.chibios.spc5.components.chibios.portable.feature_1.0.0.qualifier.jar" id="org.chibios.spc5.components.chibios.portable.feature" version="1.0.0.qualifier">
+      <category name="spc5studio_components"/>
+   </feature>
+   <feature url="features/org.chibios.tools.spc5.tools.gccarmembedded.feature_1.0.0.qualifier.jar" id="org.chibios.tools.spc5.tools.gccarmembedded.feature" version="1.0.0.qualifier">
+      <category name="spc5studio_gcc_arm_embedded"/>
+   </feature>
+   <category-def name="chibistudio_components" label="ChibiStudio Eclipse Components">
       <description>
-         ChibiStudio Components and Plugins.
+         ChibiStudio Components and Plugins for Eclipse.
+      </description>
+   </category-def>
+   <category-def name="spc5studio_components" label="SPC5Studio Components">
+      <description>
+         ChibiOS additional components for SPC5Studio.
+      </description>
+   </category-def>
+   <category-def name="spc5studio_gcc_arm_embedded" label="GCC ARM Embedded compiler for SPC5Studio">
+      <description>
+         GCC ARM Embedded compiler for SPC5Studio.
       </description>
    </category-def>
 </site>
