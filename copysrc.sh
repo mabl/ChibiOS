@@ -2,7 +2,7 @@
 #chibios=/cygdrive/d/Progetti/ChibiOS-RT
 #chibios=/cygdrive/d/Progetti/ChibiOS-RT-stable-2.6.x
 #chibios=../../chibios-stable-2.6.x
-chibios=../stable_2.6.x
+chibios=../dev_2.6.x_gcc_4_9_2
 #do_templates=yes
 
 #============================================================================#
