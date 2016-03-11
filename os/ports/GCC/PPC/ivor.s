@@ -39,6 +39,7 @@
 #define _FROM_ASM_
 #include "chconf.h"
 #include "chcore.h"
+#include "boot.h"
 
 #if !defined(__DOXYGEN__)
         /*
@@ -58,7 +59,7 @@
         .type       _IVOR10, @function
 _IVOR10:
         /* Creation of the external stack frame (extctx structure).*/
-        stwu        %sp, -80(%sp)           /* Size of the extctx structure.*/
+        e_stwu      %sp, -80(%sp)           /* Size of the extctx structure.*/
 #if PPC_USE_VLE && PPC_SUPPORTS_VLE_MULTI
         e_stmvsrrw  8(%sp)                  /* Saves PC, MSR.               */
         e_stmvsprw  16(%sp)                 /* Saves CR, LR, CTR, XER.      */
@@ -90,7 +91,7 @@ _IVOR10:
 #endif /* !(PPC_USE_VLE && PPC_SUPPORTS_VLE_MULTI) */
 
         /* Reset DIE bit in TSR register.*/
-        lis         %r3, 0x0800             /* DIS bit mask.                */
+        e_lis       %r3, 0x0800             /* DIS bit mask.                */
         mtspr       336, %r3                /* TSR register.                */
 
         /* Restoring pre-IRQ MSR register value.*/
@@ -100,24 +101,24 @@ _IVOR10:
         mtMSR       %r0
 
 #if CH_DBG_SYSTEM_STATE_CHECK
-        bl          dbg_check_enter_isr
-        bl          dbg_check_lock_from_isr
+        e_bl        dbg_check_enter_isr
+        e_bl        dbg_check_lock_from_isr
 #endif
-        bl          chSysTimerHandlerI
+        e_bl        chSysTimerHandlerI
 #if CH_DBG_SYSTEM_STATE_CHECK
-        bl          dbg_check_unlock_from_isr
-        bl          dbg_check_leave_isr
+        e_bl        dbg_check_unlock_from_isr
+        e_bl        dbg_check_leave_isr
 #endif
 
         /* System tick handler invocation.*/
 #if CH_DBG_SYSTEM_STATE_CHECK
-        bl          dbg_check_lock
+        e_bl        dbg_check_lock
 #endif
-        bl          chSchIsPreemptionRequired
-        cmpli       cr0, %r3, 0
-        beq         cr0, _ivor_exit
-        bl          chSchDoReschedule
-        b           _ivor_exit
+        e_bl        chSchIsPreemptionRequired
+        e_cmpli     cr0, %r3, 0
+        e_beq       cr0, _ivor_exit
+        e_bl        chSchDoReschedule
+        e_b         _ivor_exit
 #endif /* PPC_SUPPORTS_DECREMENTER */
 
         /*
@@ -128,7 +129,7 @@ _IVOR10:
         .type       _IVOR4, @function
 _IVOR4:
         /* Creation of the external stack frame (extctx structure).*/
-        stwu        %sp, -80(%sp)           /* Size of the extctx structure.*/
+        e_stwu      %sp, -80(%sp)           /* Size of the extctx structure.*/
 #if PPC_USE_VLE && PPC_SUPPORTS_VLE_MULTI
         e_stmvsrrw  8(%sp)                  /* Saves PC, MSR.               */
         e_stmvsprw  16(%sp)                 /* Saves CR, LR, CTR, XER.      */
@@ -160,10 +161,10 @@ _IVOR4:
 #endif /* !(PPC_USE_VLE && PPC_SUPPORTS_VLE_MULTI) */
 
         /* Software vector address from the INTC register.*/
-        lis         %r3, INTC_IACKR@h
-        ori         %r3, %r3, INTC_IACKR@l  /* IACKR register address.      */
-        lwz         %r3, 0(%r3)             /* IACKR register value.        */
-        lwz         %r3, 0(%r3)
+        e_lis       %r3, HI(INTC_IACKR)
+        e_or2i      %r3, LO(INTC_IACKR)  /* IACKR register address.      */
+        e_lwz       %r3, 0(%r3)             /* IACKR register value.        */
+        e_lwz       %r3, 0(%r3)
         mtCTR       %r3                     /* Software handler address.    */
 
         /* Restoring pre-IRQ MSR register value.*/
@@ -173,22 +174,22 @@ _IVOR4:
         mtMSR       %r0
 
         /* Exectes the software handler.*/
-        bctrl
+        se_bctrl
 
         /* Informs the INTC that the interrupt has been served.*/
         mbar        0
-        lis         %r3, INTC_EOIR@h
-        ori         %r3, %r3, INTC_EOIR@l
-        stw         %r3, 0(%r3)             /* Writing any value should do. */
+        e_lis       %r3, HI(INTC_EOIR)
+        e_or2i      %r3, LO(INTC_EOIR)
+        e_stw       %r3, 0(%r3)             /* Writing any value should do. */
 
         /* Verifies if a reschedule is required.*/
 #if CH_DBG_SYSTEM_STATE_CHECK
-        bl          dbg_check_lock
+        e_bl        dbg_check_lock
 #endif
-        bl          chSchIsPreemptionRequired
-        cmpli       cr0, %r3, 0
-        beq         cr0, _ivor_exit
-        bl          chSchDoReschedule
+        e_bl        chSchIsPreemptionRequired
+        e_cmpli     cr0, %r3, 0
+        e_beq       cr0, _ivor_exit
+        e_bl        chSchDoReschedule
 
         /* Context restore.*/
         .globl      _ivor_exit
@@ -225,8 +226,8 @@ _ivor_exit:
         mtXER       %r0                     /* Restores XER.                */
         lwz         %r0, 32(%sp)            /* Restores GPR0.               */
 #endif /* !(PPC_USE_VLE && PPC_SUPPORTS_VLE_MULTI) */
-        addi        %sp, %sp, 80            /* Back to the previous frame.  */
-        rfi
+        e_addi      %sp, %sp, 80            /* Back to the previous frame.  */
+        se_rfi
 
 #endif /* !defined(__DOXYGEN__) */
 

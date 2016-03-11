@@ -43,9 +43,9 @@ void port_init(void) {
 #if PPC_SUPPORTS_IVORS
     /* The CPU supports IVOR registers, the kernel requires IVOR4 and IVOR10
        and the initialization is performed here.*/
-    asm volatile ("li          %%r3, _IVOR4@l       \t\n"
+    asm volatile ("e_li        %%r3, _IVOR4@l       \t\n"
                   "mtIVOR4     %%r3                 \t\n"
-                  "li          %%r3, _IVOR10@l      \t\n"
+                  "e_li        %%r3, _IVOR10@l      \t\n"
                   "mtIVOR10    %%r3" : : : "memory");
 #endif
 }
@@ -78,23 +78,27 @@ void port_dummy1(void) {
 
   asm (".global _port_switch");
   asm ("_port_switch:");
+#if defined(__hightec_asm)
   asm ("subi        %sp, %sp, 80");     /* Size of the intctx structure.    */
+#else
+	asm ("e_subi      %sp, %sp, 80");     /* Size of the intctx structure.    */
+#endif
   asm ("mflr        %r0");
-  asm ("stw         %r0, 84(%sp)");     /* LR into the caller frame.        */
+  asm ("e_stw       %r0, 84(%sp)");     /* LR into the caller frame.        */
   asm ("mfcr        %r0");
-  asm ("stw         %r0, 0(%sp)");      /* CR.                              */
-  asm ("stmw        %r14, 4(%sp)");     /* GPR14...GPR31.                   */
+  asm ("e_stw       %r0, 0(%sp)");      /* CR.                              */
+  asm ("e_stmw      %r14, 4(%sp)");     /* GPR14...GPR31.                   */
   
-  asm ("stw         %sp, 12(%r4)");     /* Store swapped-out stack.         */
-  asm ("lwz         %sp, 12(%r3)");     /* Load swapped-in stack.           */
+  asm ("e_stw       %sp, 12(%r4)");     /* Store swapped-out stack.         */
+  asm ("e_lwz       %sp, 12(%r3)");     /* Load swapped-in stack.           */
   
-  asm ("lmw         %r14, 4(%sp)");     /* GPR14...GPR31.                   */
-  asm ("lwz         %r0, 0(%sp)");      /* CR.                              */
+  asm ("e_lmw       %r14, 4(%sp)");     /* GPR14...GPR31.                   */
+  asm ("e_lwz       %r0, 0(%sp)");      /* CR.                              */
   asm ("mtcr        %r0");
-  asm ("lwz         %r0, 84(%sp)");     /* LR from the caller frame.        */
+  asm ("e_lwz       %r0, 84(%sp)");     /* LR from the caller frame.        */
   asm ("mtlr        %r0");
-  asm ("addi        %sp, %sp, 80");     /* Size of the intctx structure.    */
-  asm ("blr");
+  asm ("e_addi      %sp, %sp, 80");     /* Size of the intctx structure.    */
+  asm ("se_blr");
 }
 
 /**
@@ -112,8 +116,8 @@ void port_dummy2(void) {
   chSysUnlock();
   asm ("mr          %r3, %r31");        /* Thread parameter.                */
   asm ("mtctr       %r30");
-  asm ("bctrl");                        /* Invoke thread function.          */
-  asm ("bl          chThdExit");        /* Thread termination on exit.      */
+  asm ("se_bctrl");                     /* Invoke thread function.          */
+  asm ("e_bl        chThdExit");        /* Thread termination on exit.      */
 }
 
 /** @} */

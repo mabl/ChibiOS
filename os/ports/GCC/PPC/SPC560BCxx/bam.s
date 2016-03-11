@@ -44,7 +44,7 @@
         .globl      _reset_address
         .type       _reset_address, @function
 _reset_address:
-        bl          _coreinit
+        bl        _coreinit
         bl          _ivinit
 
         b           _boot_address
