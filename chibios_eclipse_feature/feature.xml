@@ -8,7 +8,7 @@
       exclusive="true">
 
    <description>
-      ChibiOS/RT Eclipse plugins collection.
+      ChibiOS extension plugins collection for Eclipse.
    </description>
 
    <copyright url="http://www.chibios.org/dokuwiki/doku.php?id=chibios:copyright">
