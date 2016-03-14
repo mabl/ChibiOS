@@ -39,7 +39,7 @@
            handler only. In order to declare an interrupt handler just create
            a function withe the same name of a vector, the symbol will
            override the weak symbol declared here.*/
-        .section    .vectors, "ax"
+        .section    .vectors, "axv"
         .align      4
         .globl      _vectors
 _vectors:

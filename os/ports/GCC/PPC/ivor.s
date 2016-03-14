@@ -47,8 +47,14 @@
          */
         .equ  INTC_IACKR, 0xfff48010
         .equ  INTC_EOIR,  0xfff48018
-
+        
+#ifdef __ghs_asm
+        .section    .handlers, "axv"
+		.vle
+#else
         .section    .handlers, "ax"
+#endif /* __ghs_asm */
+        
 
 #if PPC_SUPPORTS_DECREMENTER
         /*
@@ -59,11 +65,11 @@
         .type       _IVOR10, @function
 _IVOR10:
         /* Creation of the external stack frame (extctx structure).*/
-        e_stwu      %sp, -80(%sp)           /* Size of the extctx structure.*/
+        e_stwu        sp, -80(sp)           /* Size of the extctx structure.*/
 #if PPC_USE_VLE && PPC_SUPPORTS_VLE_MULTI
-        e_stmvsrrw  8(%sp)                  /* Saves PC, MSR.               */
-        e_stmvsprw  16(%sp)                 /* Saves CR, LR, CTR, XER.      */
-        e_stmvgprw  32(%sp)                 /* Saves GPR0, GPR3...GPR12.    */
+        e_stmvsrrw  8(sp)                  /* Saves PC, MSR.               */
+        e_stmvsprw  16(sp)                 /* Saves CR, LR, CTR, XER.      */
+        e_stmvgprw  32(sp)                 /* Saves GPR0, GPR3...GPR12.    */
 #else /* !(PPC_USE_VLE && PPC_SUPPORTS_VLE_MULTI) */
         stw         %r0, 32(%sp)            /* Saves GPR0.                  */
         mfSRR0      %r0
@@ -129,11 +135,11 @@ _IVOR10:
         .type       _IVOR4, @function
 _IVOR4:
         /* Creation of the external stack frame (extctx structure).*/
-        e_stwu      %sp, -80(%sp)           /* Size of the extctx structure.*/
+        e_stwu      sp, -80(sp)             /* Size of the extctx structure.*/
 #if PPC_USE_VLE && PPC_SUPPORTS_VLE_MULTI
-        e_stmvsrrw  8(%sp)                  /* Saves PC, MSR.               */
-        e_stmvsprw  16(%sp)                 /* Saves CR, LR, CTR, XER.      */
-        e_stmvgprw  32(%sp)                 /* Saves GPR0, GPR3...GPR12.    */
+        e_stmvsrrw  8(sp)                   /* Saves PC, MSR.               */
+        e_stmvsprw  16(sp)                  /* Saves CR, LR, CTR, XER.      */
+        e_stmvgprw  32(sp)                  /* Saves GPR0, GPR3...GPR12.    */
 #else /* !(PPC_USE_VLE && PPC_SUPPORTS_VLE_MULTI) */
         stw         %r0, 32(%sp)            /* Saves GPR0.                  */
         mfSRR0      %r0
@@ -198,9 +204,9 @@ _ivor_exit:
         bl          dbg_check_unlock
 #endif
 #if PPC_USE_VLE && PPC_SUPPORTS_VLE_MULTI
-        e_lmvgprw   32(%sp)                 /* Restores GPR0, GPR3...GPR12. */
-        e_lmvsprw   16(%sp)                 /* Restores CR, LR, CTR, XER.   */
-        e_lmvsrrw   8(%sp)                  /* Restores PC, MSR.            */
+        e_lmvgprw   32(sp)                 /* Restores GPR0, GPR3...GPR12. */
+        e_lmvsprw   16(sp)                 /* Restores CR, LR, CTR, XER.   */
+        e_lmvsrrw   8(sp)                  /* Restores PC, MSR.            */
 #else /*!(PPC_USE_VLE && PPC_SUPPORTS_VLE_MULTI) */
         lwz         %r3, 36(%sp)            /* Restores GPR3...GPR12.       */
         lwz         %r4, 40(%sp)
@@ -226,7 +232,7 @@ _ivor_exit:
         mtXER       %r0                     /* Restores XER.                */
         lwz         %r0, 32(%sp)            /* Restores GPR0.               */
 #endif /* !(PPC_USE_VLE && PPC_SUPPORTS_VLE_MULTI) */
-        e_addi      %sp, %sp, 80            /* Back to the previous frame.  */
+        e_addi      sp, sp, 80            /* Back to the previous frame.  */
         se_rfi
 
 #endif /* !defined(__DOXYGEN__) */
