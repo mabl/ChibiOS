@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: ST NIL RTOS SPC57EMxx HSM Kernel Port Component
+Bundle-Name: ST HSM RTOS SPC57EMxx HSM Kernel Port Component
 Bundle-SymbolicName: com.st.spc5.components.nil.kernel.port.gcc.spc57emxx_hsm.stonly;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Require-Bundle: org.eclipse.core.runtime,

@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: ST NIL RTOS Portable OSAL Component
+Bundle-Name: ST HSM RTOS Portable OSAL Component
 Bundle-SymbolicName: com.st.spc5.components.hal.osal.nil.stonly;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Require-Bundle: org.eclipse.core.runtime,

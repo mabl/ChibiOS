@@ -1,11 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006,2007,2008,2009,2010,
-              2011,2012,2013,2014 Giovanni Di Sirio.
-
-    This file is part of ChibiOS 
-
-    A limited, non exclusive, license has been granted to STMicroelectronics
-    for use in SPC5xx micro controllers embedded firmware.
+    HSM RTOS - Copyright (C) 2016 STMicroelectronics.
 */
 
 /* parasoft suppress item MISRA2012-DIR-4_2 "Some inline assembly code is used

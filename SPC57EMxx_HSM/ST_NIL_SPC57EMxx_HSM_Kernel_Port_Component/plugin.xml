@@ -3,7 +3,7 @@
 <plugin>
    <extension
          id="com.st.spc5.components.nil.kernel.port.gcc.spc57emxx_hsm.stonly"
-         name="ST NIL RTOS SPC57EMxx HSM Kernel Port Component"
+         name="ST HSM RTOS SPC57EMxx HSM Kernel Port Component"
          point="com.st.tools.spc5.extension.v1">
       <component
             headerName="isrs.h"
@@ -16,7 +16,7 @@
             </description>
             <categories>
                <category
-                     id="ST NIL RTOS/Platforms/SPC57EMxx HSM">
+                     id="ST HSM RTOS/Platforms/SPC57EMxx HSM">
                </category>
             </categories>
             <configuration>
@@ -27,7 +27,7 @@
                      align="left"
                      file="rsc/st48x48.png">
                   <text>
-                     NIL RTOS has been licensed to STMicroelectronics for use in resident system application code in SPC5 microcontrollers.
+                     HSM RTOS has been licensed to STMicroelectronics for use in resident system application code in SPC5 microcontrollers.
                   </text>
                </image>
                <group
@@ -128,7 +128,7 @@ CH_IRQ_HANDLER(ISR_NAME) {
             </configuration>
             <exportedFeatures>
                <exportedFeature
-                     brief="Generic NIL RTOS port interface."
+                     brief="Generic HSM RTOS port interface."
                      exclusive="false"
                      id="org.chibios.spc5.features.nil.kernel.port">
                </exportedFeature>

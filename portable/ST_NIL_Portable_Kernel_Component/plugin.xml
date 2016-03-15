@@ -4,7 +4,7 @@
 <!-- All SPC5 Component extension shall have the namespace "com.st.tools.spc5"-->
    <extension
          id="com.st.spc5.components.nil.kernel.stonly"
-         name="ST NIL RTOS Portable Kernel Component"
+         name="ST HSM RTOS Portable Kernel Component"
          point="com.st.tools.spc5.extension.v1">
       <component
             headerName="nil.h"
@@ -13,11 +13,11 @@
             icon="rsc/st16x16.png"
             isPlatform="false">
             <description>
-                NIL RTOS portable kernel files.
+                HSM RTOS portable kernel files.
             </description>
             <categories>
                <category
-                     id="ST NIL RTOS/Portable Components">
+                     id="ST HSM RTOS/Portable Components">
                </category>
             </categories>
             <configuration>
@@ -28,7 +28,7 @@
                      align="left"
                      file="rsc/st48x48.png">
                   <text>
-                     NIL RTOS has been licensed to STMicroelectronics for use in resident system application code in SPC5 microcontrollers.
+                     HSM RTOS has been licensed to STMicroelectronics for use in resident system application code in SPC5 microcontrollers.
                   </text>
                </image>
                <group
@@ -293,7 +293,7 @@ THD_FUNCTION(TASK_NAME, arg) {
            </configuration>
             <exportedFeatures>
                <exportedFeature
-                     brief="NIL RTOS kernel API interface"
+                     brief="HSM RTOS kernel API interface"
                      exclusive="false"
                      id="org.chibios.spc5.features.nil.kernel">
                </exportedFeature>

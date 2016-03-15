@@ -4,7 +4,7 @@
 <!-- All SPC5 Component extension shall have the namespace "com.st.tools.spc5"-->
    <extension
          id="com.st.spc5.components.hal.osal.nil.stonly"
-         name="ST NIL RTOS Portable OSAL Component"
+         name="ST HSM RTOS Portable OSAL Component"
          point="com.st.tools.spc5.extension.v1">
       <component
             headerName="osal.h"
@@ -13,22 +13,22 @@
             initFunction="osalInit"
             isPlatform="false">
             <description>
-                NIL RTOS OSAL interface layer. This component is required in order to interface nIL RTOS with the SPC5-HAL drivers.
+                HSM RTOS OSAL interface layer. This component is required in order to interface nIL RTOS with the SPC5-HAL drivers.
             </description>
             <categories>
                <category
-                     id="ST NIL RTOS/Portable Components">
+                     id="ST HSM RTOS/Portable Components">
                </category>
             </categories>
             <configuration>
                <description>
-                  NIL RTOS OSAL adapter for SPC5-HAL.
+                  HSM RTOS OSAL adapter for SPC5-HAL.
                </description>
                <image
                      align="left"
                      file="rsc/st48x48.png">
                   <text>
-                     NIL RTOS has been licensed to STMicroelectronics for use in resident system application code in SPC5 microcontrollers.
+                     HSM RTOS has been licensed to STMicroelectronics for use in resident system application code in SPC5 microcontrollers.
                   </text>
                </image>
             </configuration>

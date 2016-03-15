@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="com.st.spc5.components.nil.rtos.spc58nexx_hsm.stonly.feature"
-      label="ST NIL RTOS for SPC58NExx HSM Components"
+      label="ST HSM RTOS for SPC58NExx HSM Components"
       version="1.0.0.qualifier"
-      provider-name="www.chibios.org"
+      provider-name="STMicroelectronics"
       plugin="com.st.spc5.components.nil.rtos.branding"
       exclusive="true">
 
    <description>
-      ST NIL RTOS for SPC58NExx HSM Components.
+      ST HSM RTOS for SPC58NExx HSM Components.
    </description>
 
-   <copyright url="http://www.chibios.org/dokuwiki/doku.php?id=chibios:copyright">
-      ChibiOS/NIL RTOS - Copyright (C) 2013...2015 Giovanni Di Sirio.
+   <copyright>
+      HSM RTOS - Copyright (C) 2016 STMicroelectronics.
    </copyright>
 
-   <license url="http://www.chibios.org/dokuwiki/doku.php?id=chibios:license">
-      A limited, non exclusive, license has been granted to STMicroelectronics for use in SPC5xx micro controllers embedded firmware.
+   <license url="">
+      
    </license>
-
-   <url>
-      <update label="ST NIL RTOS Eclipse Update Site" url="http://www.chibios.org/eclipse/SPC5-NIL-ST"/>
-   </url>
 
    <requires>
       <import plugin="org.eclipse.core.runtime"/>
