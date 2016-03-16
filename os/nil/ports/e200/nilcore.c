@@ -61,6 +61,30 @@
 #if !defined(__DOXYGEN__)
 __attribute__((naked))
 #endif
+#ifdef __ghs__
+void port_dummy1(void) {
+
+  asm (".global _port_switch");
+  asm ("_port_switch:");
+  asm ("e_subi      sp, sp, 80");       /* Size of the intctx structure.    */
+  asm ("mflr        %r0");
+  asm ("e_stw       %r0, 84(sp)");      /* LR into the caller frame.        */
+  asm ("mfcr        %r0");
+  asm ("e_stw       %r0, 0(sp)");       /* CR.                              */
+  asm ("e_stmw      %r14, 4(sp)");      /* GPR14...GPR31.                   */
+
+  asm ("e_stw       sp, 0(%r4)");       /* Store swapped-out stack.         */
+  asm ("e_lwz       sp, 0(%r3)");       /* Load swapped-in stack.           */
+
+  asm ("e_lmw       %r14, 4(sp)");      /* GPR14...GPR31.                   */
+  asm ("e_lwz       %r0, 0(sp)");       /* CR.                              */
+  asm ("mtcr        %r0");
+  asm ("e_lwz       %r0, 84(sp)");      /* LR from the caller frame.        */
+  asm ("mtlr        %r0");
+  asm ("e_addi      sp, sp, 80");       /* Size of the intctx structure.    */
+  asm ("se_blr");
+}
+#elif __hightec_asm
 void port_dummy1(void) {
 
   asm (".global _port_switch");
@@ -83,6 +107,30 @@ void port_dummy1(void) {
   asm ("addi        %sp, %sp, 80");     /* Size of the intctx structure.    */
   asm ("blr");
 }
+#else
+void port_dummy1(void) {
+
+  asm (".global _port_switch");
+  asm ("_port_switch:");
+  asm ("e_subi      %sp, %sp, 80");     /* Size of the intctx structure.    */
+  asm ("mflr        %r0");
+  asm ("e_stw       %r0, 84(%sp)");     /* LR into the caller frame.        */
+  asm ("mfcr        %r0");
+  asm ("e_stw       %r0, 0(%sp)");      /* CR.                              */
+  asm ("e_stmw      %r14, 4(%sp)");     /* GPR14...GPR31.                   */
+
+  asm ("e_stw       %sp, 0(%r4)");      /* Store swapped-out stack.         */
+  asm ("e_lwz       %sp, 0(%r3)");      /* Load swapped-in stack.           */
+
+  asm ("e_lmw       %r14, 4(%sp)");     /* GPR14...GPR31.                   */
+  asm ("e_lwz       %r0, 0(%sp)");      /* CR.                              */
+  asm ("mtcr        %r0");
+  asm ("e_lwz       %r0, 84(%sp)");     /* LR from the caller frame.        */
+  asm ("mtlr        %r0");
+  asm ("e_addi      %sp, %sp, 80");     /* Size of the intctx structure.    */
+  asm ("se_blr");
+}
+#endif
 
 /**
  * @brief   Start a thread by invoking its work function.
@@ -99,9 +147,9 @@ void port_dummy2(void) {
   chSysUnlock();
   asm ("mr          %r3, %r31");        /* Thread parameter.                */
   asm ("mtctr       %r30");
-  asm ("bctrl");                        /* Invoke thread function.          */
-  asm ("li          %r0, 0");
-  asm ("bl          chSysHalt");        /* Thread termination on exit.      */
+  asm ("se_bctrl");                     /* Invoke thread function.          */
+  asm ("e_li        %r0, 0");
+  asm ("e_bl        chSysHalt");        /* Thread termination on exit.      */
 }
 
 /** @} */

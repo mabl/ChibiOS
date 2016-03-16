@@ -39,10 +39,17 @@
 #define _FROM_ASM_
 #include "nilconf.h"
 #include "nilcore.h"
+#include "boot.h"
 
 #if !defined(__DOXYGEN__)
 
+#ifdef __ghs_asm
+        .section    .handlers, "axv"
+		.vle
+#else
         .section    .handlers, "ax"
+#endif /* __ghs_asm */
+        
 
 #if PPC_SUPPORTS_DECREMENTER
         /*
@@ -52,12 +59,12 @@
         .globl      _IVOR10
         .type       _IVOR10, @function
 _IVOR10:
-        /* Saving the external context (port_extctx structure).*/
-        stwu        %sp, -80(%sp)
+        /* Creation of the external stack frame (extctx structure).*/
+        e_stwu        sp, -80(sp)           /* Size of the extctx structure.*/
 #if PPC_USE_VLE && PPC_SUPPORTS_VLE_MULTI
-        e_stmvsrrw  8(%sp)                  /* Saves PC, MSR.               */
-        e_stmvsprw  16(%sp)                 /* Saves CR, LR, CTR, XER.      */
-        e_stmvgprw  32(%sp)                 /* Saves GPR0, GPR3...GPR12.    */
+        e_stmvsrrw  8(sp)                  /* Saves PC, MSR.               */
+        e_stmvsprw  16(sp)                 /* Saves CR, LR, CTR, XER.      */
+        e_stmvgprw  32(sp)                 /* Saves GPR0, GPR3...GPR12.    */
 #else /* !(PPC_USE_VLE && PPC_SUPPORTS_VLE_MULTI) */
         stw         %r0, 32(%sp)            /* Saves GPR0.                  */
         mfSRR0      %r0
@@ -86,11 +93,11 @@ _IVOR10:
 
         /* Increasing the SPGR0 register.*/
         mfspr       %r0, 272
-        eaddi       %r0, %r0, 1
+        e_addi      %r0, %r0, 1
         mtspr       272, %r0
 
         /* Reset DIE bit in TSR register.*/
-        lis         %r3, 0x0800             /* DIS bit mask.                */
+        e_lis       %r3, 0x0800             /* DIS bit mask.                */
         mtspr       336, %r3                /* TSR register.                */
 
         /* Restoring pre-IRQ MSR register value.*/
@@ -102,7 +109,7 @@ _IVOR10:
         mtMSR       %r0
 
         /* System tick handler invocation.*/
-        bl          chSysTimerHandlerI
+        e_bl        chSysTimerHandlerI
 
 #if PPC_USE_IRQ_PREEMPTION
         /* Prevents preemption again.*/
@@ -110,7 +117,7 @@ _IVOR10:
 #endif
 
         /* Jumps to the common IVOR epilogue code.*/
-        b           _ivor_exit
+        e_b         _ivor_exit
 #endif /* PPC_SUPPORTS_DECREMENTER */
 
         /*
@@ -121,11 +128,11 @@ _IVOR10:
         .type       _IVOR4, @function
 _IVOR4:
         /* Saving the external context (port_extctx structure).*/
-        stwu        %sp, -80(%sp)
+        e_stwu      sp, -80(sp)             /* Size of the extctx structure.*/
 #if PPC_USE_VLE && PPC_SUPPORTS_VLE_MULTI
-        e_stmvsrrw  8(%sp)                  /* Saves PC, MSR.               */
-        e_stmvsprw  16(%sp)                 /* Saves CR, LR, CTR, XER.      */
-        e_stmvgprw  32(%sp)                 /* Saves GPR0, GPR3...GPR12.    */
+        e_stmvsrrw  8(sp)                   /* Saves PC, MSR.               */
+        e_stmvsprw  16(sp)                  /* Saves CR, LR, CTR, XER.      */
+        e_stmvgprw  32(sp)                  /* Saves GPR0, GPR3...GPR12.    */
 #else /* !(PPC_USE_VLE && PPC_SUPPORTS_VLE_MULTI) */
         stw         %r0, 32(%sp)            /* Saves GPR0.                  */
         mfSRR0      %r0
@@ -154,14 +161,14 @@ _IVOR4:
 
         /* Increasing the SPGR0 register.*/
         mfspr       %r0, 272
-        eaddi       %r0, %r0, 1
+        e_addi      %r0, %r0, 1
         mtspr       272, %r0
 
         /* Software vector address from the INTC register.*/
-        lis         %r3, INTC_IACKR_ADDR@h
-        ori         %r3, %r3, INTC_IACKR_ADDR@l
-        lwz         %r3, 0(%r3)             /* IACKR register value.        */
-        lwz         %r3, 0(%r3)
+        e_lis       %r3, HI(INTC_IACKR_ADDR)
+        e_or2i      %r3, LO(INTC_IACKR_ADDR) /* IACKR register address.      */
+        e_lwz       %r3, 0(%r3)             /* IACKR register value.        */
+        e_lwz       %r3, 0(%r3)
         mtCTR       %r3                     /* Software handler address.    */
 
         /* Restoring pre-IRQ MSR register value.*/
@@ -173,7 +180,7 @@ _IVOR4:
         mtMSR       %r0
 
         /* Exectes the software handler.*/
-        bctrl
+        se_bctrl
 
 #if PPC_USE_IRQ_PREEMPTION
         /* Prevents preemption again.*/
@@ -182,25 +189,26 @@ _IVOR4:
 
         /* Informs the INTC that the interrupt has been served.*/
         mbar        0
-        lis         %r3, INTC_EOIR_ADDR@h
-        ori         %r3, %r3, INTC_EOIR_ADDR@l
-        stw         %r3, 0(%r3)             /* Writing any value should do. */
+        e_lis       %r3, HI(INTC_EOIR_ADDR)
+        e_or2i      %r3, LO(INTC_EOIR_ADDR)
+        e_stw       %r3, 0(%r3)             /* Writing any value should do. */
+
 
         /* Common IVOR epilogue code, context restore.*/
         .globl      _ivor_exit
 _ivor_exit:
         /* Decreasing the SPGR0 register.*/
         mfspr       %r0, 272
-        eaddi       %r0, %r0, -1
+        e_addi      %r0, %r0, -1
         mtspr       272, %r0
 
-        bl          chSchRescheduleS
+        e_bl        chSchRescheduleS
 
         /* Restoring the external context.*/
 #if PPC_USE_VLE && PPC_SUPPORTS_VLE_MULTI
-        e_lmvgprw   32(%sp)                 /* Restores GPR0, GPR3...GPR12. */
-        e_lmvsprw   16(%sp)                 /* Restores CR, LR, CTR, XER.   */
-        e_lmvsrrw   8(%sp)                  /* Restores PC, MSR.            */
+        e_lmvgprw   32(sp)                 /* Restores GPR0, GPR3...GPR12. */
+        e_lmvsprw   16(sp)                 /* Restores CR, LR, CTR, XER.   */
+        e_lmvsrrw   8(sp)                  /* Restores PC, MSR.            */
 #else /*!(PPC_USE_VLE && PPC_SUPPORTS_VLE_MULTI) */
         lwz         %r3, 36(%sp)            /* Restores GPR3...GPR12.       */
         lwz         %r4, 40(%sp)
@@ -226,8 +234,8 @@ _ivor_exit:
         mtXER       %r0                     /* Restores XER.                */
         lwz         %r0, 32(%sp)            /* Restores GPR0.               */
 #endif /* !(PPC_USE_VLE && PPC_SUPPORTS_VLE_MULTI) */
-        addi        %sp, %sp, 80            /* Back to the previous frame.  */
-        rfi
+        e_addi      sp, sp, 80            /* Back to the previous frame.  */
+        se_rfi
 
 #endif /* !defined(__DOXYGEN__) */
 

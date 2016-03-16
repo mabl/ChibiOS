@@ -58,7 +58,8 @@
  */
 #if defined(__GNUC__) || defined(__DOXYGEN__)
 #define PORT_COMPILER_NAME              "GCC " __VERSION__
-
+#elif __ghs__
+#define PORT_COMPILER_NAME              "CCPPC"
 #else
 #error "unsupported compiler"
 #endif
@@ -337,23 +338,34 @@ struct port_intctx {
 }
 #endif
 
+
 /**
  * @brief   Writes to a special register.
  *
  * @param[in] spr       special register number
  * @param[in] val       value to be written, must be an automatic variable
  */
+#ifdef __ghs__
+#define port_write_spr(spr, val)                                            \
+  __MTSPR(spr,val)
+#else
 #define port_write_spr(spr, val)                                            \
   asm volatile ("mtspr   %[p0], %[p1]" : : [p0] "n" (spr), [p1] "r" (val))
-
+#endif
 /**
  * @brief   Writes to a special register.
  *
  * @param[in] spr       special register number
  * @param[in] val       returned value, must be an automatic variable
  */
+#ifdef __ghs__
+#define port_read_spr(spr, val)                                             \
+  val = __MFSPR(spr)
+#else
 #define port_read_spr(spr, val)                                             \
   asm volatile ("mfspr   %[p0], %[p1]" : [p0] "=r" (val) : [p1] "n" (spr))
+#endif
+
 
 /*===========================================================================*/
 /* External declarations.                                                    */
@@ -420,7 +432,11 @@ static inline void port_init(void) {
 static inline syssts_t port_get_irq_status(void) {
   uint32_t sts;
 
+#ifdef __ghs__
+	sts = __GETSR();
+#else
   asm volatile ("mfmsr   %[p0]" : [p0] "=r" (sts) :);
+#endif
   return sts;
 }
 
@@ -459,7 +475,11 @@ static inline bool port_is_isr_context(void) {
  */
 static inline void port_lock(void) {
 
+#ifdef __ghs__
+  __DI();
+#else
   asm volatile ("wrteei  0" : : : "memory");
+#endif
 }
 
 /**
@@ -467,7 +487,11 @@ static inline void port_lock(void) {
  */
 static inline void port_unlock(void) {
 
+#ifdef __ghs__
+  __EI();
+#else
   asm volatile("wrteei  1" : : : "memory");
+#endif
 }
 
 /**
@@ -489,7 +513,11 @@ static inline void port_unlock_from_isr(void) {
  */
 static inline void port_disable(void) {
 
+#ifdef __ghs__
+  __DI();
+#else
   asm volatile ("wrteei  0" : : : "memory");
+#endif
 }
 
 /**
@@ -497,7 +525,11 @@ static inline void port_disable(void) {
  */
 static inline void port_suspend(void) {
 
+#ifdef __ghs__
+  __DI();
+#else
   asm volatile ("wrteei  0" : : : "memory");
+#endif
 }
 
 /**
@@ -505,7 +537,11 @@ static inline void port_suspend(void) {
  */
 static inline void port_enable(void) {
 
-  asm volatile ("wrteei  1" : : : "memory");
+#ifdef __ghs__
+  __EI();
+#else
+  asm volatile("wrteei  1" : : : "memory");
+#endif
 }
 
 /**

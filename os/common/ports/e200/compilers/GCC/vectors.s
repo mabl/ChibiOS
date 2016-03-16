@@ -35,7 +35,13 @@
            handler only. In order to declare an interrupt handler just create
            a function withe the same name of a vector, the symbol will
            override the weak symbol declared here.*/
-        .section    .vectors, "ax"
+
+        .section    .vectors, "axv"
+        
+#if defined(__ghs_asm)
+        .vle
+#endif
+
         .align		4
         .globl      _vectors
 _vectors:
@@ -2600,12 +2606,12 @@ vector1020:
 vector1021:
 vector1022:
 vector1023:
-         b          _unhandled_irq
+         se_b       _unhandled_irq
 
         .weak       _unhandled_irq
         .type       _unhandled_irq, @function
 _unhandled_irq:
-         b          _unhandled_irq
+         se_b       _unhandled_irq
 
 #endif /* !defined(__DOXYGEN__) */
 
