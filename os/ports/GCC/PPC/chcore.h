@@ -129,7 +129,11 @@
 /**
  * @brief   Name of the compiler supported by this port.
  */
+#ifdef  __ghs__
+#define CH_COMPILER_NAME                "CCPPC"
+#else
 #define CH_COMPILER_NAME                "GCC " __VERSION__
+#endif
 
 /**
  * @brief   Port-specific information string.
@@ -313,6 +317,64 @@ struct context {
  */
 #define PORT_IRQ_HANDLER(id) void id(void)
 
+#ifdef __ghs__
+/**
+ * @details Implemented as global interrupt disable.
+ */
+static inline void port_lock(void) 
+{
+	asm ("wrteei  0");
+}
+
+/**
+ * @details Implemented as global interrupt enable.
+ */
+static inline void port_unlock(void)
+{
+	asm ("wrteei  1");
+}
+
+/**
+ * @details Implemented as global interrupt disable.
+ */
+static inline void port_lock_from_isr(void)
+{
+	 /*asm ("wrteei  0")*/
+}
+
+/**
+ * @details Implemented as global interrupt enable.
+ */
+static inline void port_unlock_from_isr(void)
+{
+	/*asm ("wrteei  1")*/
+}
+
+/**
+ * @details Implemented as global interrupt disable.
+ */
+static inline void port_disable(void)
+{
+  asm ("wrteei  0");
+}
+
+/**
+ * @details Same as @p port_disable() in this port, there is no difference
+ *          between the two states.
+ */
+static inline void port_suspend(void)
+{
+	asm ("wrteei  0");
+}
+
+/**
+ * @details Implemented as global interrupt enable.
+ */
+static inline void port_enable(void)
+{
+	asm ("wrteei  1");
+}
+#else
 /**
  * @details Implemented as global interrupt disable.
  */
@@ -348,6 +410,7 @@ struct context {
  * @details Implemented as global interrupt enable.
  */
 #define port_enable() asm volatile ("wrteei  1" : : : "memory")
+#endif
 
 /**
  * @brief   Performs a context switch between two threads.

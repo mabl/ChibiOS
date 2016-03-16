@@ -69,9 +69,9 @@
 #if !defined(SYSTEM_HALT_HOOK) || defined(__DOXYGEN__)
 #define chSysHalt() port_halt()
 #else
-#define chSysHalt() {                                                       \
-  SYSTEM_HALT_HOOK();                                                       \
-  port_halt();                                                              \
+static inline void chSysHalt(void) {
+  SYSTEM_HALT_HOOK();
+  port_halt();
 }
 #endif
 
@@ -99,9 +99,11 @@
  *
  * @special
  */
-#define chSysDisable() {                                                    \
-  port_disable();                                                           \
-  dbg_check_disable();                                                      \
+static inline void chSysDisable(void) {
+  port_disable();
+#if CH_DBG_SYSTEM_STATE_CHECK
+  dbg_check_disable();
+#endif
 }
 
 /**
@@ -115,9 +117,11 @@
  *
  * @special
  */
-#define chSysSuspend() {                                                    \
-  port_suspend();                                                           \
-  dbg_check_suspend();                                                      \
+static inline void chSysSuspend(void) {
+  port_suspend();
+#if CH_DBG_SYSTEM_STATE_CHECK
+  dbg_check_suspend();
+#endif
 }
 
 /**
@@ -129,9 +133,11 @@
  *
  * @special
  */
-#define chSysEnable() {                                                     \
-  dbg_check_enable();                                                       \
-  port_enable();                                                            \
+static inline void chSysEnable(void) {
+#if CH_DBG_SYSTEM_STATE_CHECK  
+  dbg_check_enable();
+#endif
+  port_enable();
 }
 
 /**
@@ -139,9 +145,11 @@
  *
  * @special
  */
-#define chSysLock() {                                                       \
-  port_lock();                                                              \
-  dbg_check_lock();                                                         \
+static inline void chSysLock(void) {
+  port_lock();
+#if CH_DBG_SYSTEM_STATE_CHECK  
+  dbg_check_lock();
+#endif
 }
 
 /**
@@ -149,9 +157,11 @@
  *
  * @special
  */
-#define chSysUnlock() {                                                     \
-  dbg_check_unlock();                                                       \
-  port_unlock();                                                            \
+static inline void chSysUnlock(void) {
+#if CH_DBG_SYSTEM_STATE_CHECK    
+  dbg_check_unlock();
+#endif
+  port_unlock();
 }
 
 /**
@@ -166,9 +176,11 @@
  *
  * @special
  */
-#define chSysLockFromIsr() {                                                \
-  port_lock_from_isr();                                                     \
-  dbg_check_lock_from_isr();                                                \
+static inline void chSysLockFromIsr(void) {
+  port_lock_from_isr();
+#if CH_DBG_SYSTEM_STATE_CHECK  
+  dbg_check_lock_from_isr();
+#endif
 }
 
 /**
@@ -184,9 +196,11 @@
  *
  * @special
  */
-#define chSysUnlockFromIsr() {                                              \
-  dbg_check_unlock_from_isr();                                              \
-  port_unlock_from_isr();                                                   \
+static inline void chSysUnlockFromIsr(void) {
+#if CH_DBG_SYSTEM_STATE_CHECK  
+  dbg_check_unlock_from_isr();
+#endif
+  port_unlock_from_isr();
 }
 /** @} */
 

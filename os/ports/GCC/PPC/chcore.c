@@ -74,15 +74,35 @@ void port_halt(void) {
 #if !defined(__DOXYGEN__)
 __attribute__((naked))
 #endif
+#ifdef __ghs__
+void port_dummy1(void) {
+	
+  asm (".global _port_switch");
+  asm ("_port_switch:");
+  asm ("e_subi      sp, sp, 80");       /* Size of the intctx structure.    */
+  asm ("mflr        %r0");
+  asm ("e_stw       %r0, 84(sp)");     /* LR into the caller frame.        */
+  asm ("mfcr        %r0");
+  asm ("e_stw       %r0, 0(sp)");      /* CR.                              */
+  asm ("e_stmw      %r14, 4(sp)");     /* GPR14...GPR31.                   */
+  
+  asm ("e_stw       sp, 12(%r4)");     /* Store swapped-out stack.         */
+  asm ("e_lwz       sp, 12(%r3)");     /* Load swapped-in stack.           */
+  
+  asm ("e_lmw       %r14, 4(sp)");     /* GPR14...GPR31.                   */
+  asm ("e_lwz       %r0, 0(sp)");      /* CR.                              */
+  asm ("mtcr        %r0");
+  asm ("e_lwz       %r0, 84(sp)");     /* LR from the caller frame.        */
+  asm ("mtlr        %r0");
+  asm ("e_addi      sp, sp, 80");     /* Size of the intctx structure.    */
+  asm ("se_blr");
+}
+#elif __hightec_asm
 void port_dummy1(void) {
 
   asm (".global _port_switch");
   asm ("_port_switch:");
-#if defined(__hightec_asm)
   asm ("subi        %sp, %sp, 80");     /* Size of the intctx structure.    */
-#else
-	asm ("e_subi      %sp, %sp, 80");     /* Size of the intctx structure.    */
-#endif
   asm ("mflr        %r0");
   asm ("e_stw       %r0, 84(%sp)");     /* LR into the caller frame.        */
   asm ("mfcr        %r0");
@@ -100,6 +120,30 @@ void port_dummy1(void) {
   asm ("e_addi      %sp, %sp, 80");     /* Size of the intctx structure.    */
   asm ("se_blr");
 }
+#else
+void port_dummy1(void) {
+
+  asm (".global _port_switch");
+  asm ("_port_switch:");
+  asm ("e_subi      %sp, %sp, 80");     /* Size of the intctx structure.    */
+  asm ("mflr        %r0");
+  asm ("e_stw       %r0, 84(%sp)");     /* LR into the caller frame.        */
+  asm ("mfcr        %r0");
+  asm ("e_stw       %r0, 0(%sp)");      /* CR.                              */
+  asm ("e_stmw      %r14, 4(%sp)");     /* GPR14...GPR31.                   */
+  
+  asm ("e_stw       %sp, 12(%r4)");     /* Store swapped-out stack.         */
+  asm ("e_lwz       %sp, 12(%r3)");     /* Load swapped-in stack.           */
+  
+  asm ("e_lmw       %r14, 4(%sp)");     /* GPR14...GPR31.                   */
+  asm ("e_lwz       %r0, 0(%sp)");      /* CR.                              */
+  asm ("mtcr        %r0");
+  asm ("e_lwz       %r0, 84(%sp)");     /* LR from the caller frame.        */
+  asm ("mtlr        %r0");
+  asm ("e_addi      %sp, %sp, 80");     /* Size of the intctx structure.    */
+  asm ("se_blr");
+}
+#endif
 
 /**
  * @brief   Start a thread by invoking its work function.
