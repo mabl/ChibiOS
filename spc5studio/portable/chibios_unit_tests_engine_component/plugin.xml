@@ -27,11 +27,21 @@ The code is conventionally generated under ./source/test and is overwritten each
                <image
                      file="rsc/chibios_48x48.png">
                   <text>
-                     Copyright (C) STMicroelectronics. Copyright (C) Giovanni Di Sirio. All rights reserved.
+                     Copyright (C) Giovanni Di Sirio. All rights reserved.
                   </text>
                </image>
                <group
                      name="Description">
+                  <property
+                        brief="Text to be used as copyright statement, it must be a C comment."
+                        editable="true"
+                        name="Copyright"
+                        required="true"
+                        type="formatted">
+                     <default>
+                        /* Copyright statement.*/
+                     </default>
+                  </property>
                   <property
                         brief="Text to be used as Test Suite introduction."
                         editable="true"
@@ -39,7 +49,7 @@ The code is conventionally generated under ./source/test and is overwritten each
                         required="true"
                         type="text">
                      <default>
-                        This document has been automatically generated.
+                        Test Suite introduction text.
                      </default>
                   </property>
                </group>
@@ -162,14 +172,13 @@ The code is conventionally generated under ./source/test and is overwritten each
                               </default>
                            </property>
                            <property
-                                 brief="Preprocessor switch enabling this test case."
+                                 brief="Preprocessor expression enabling this test case."
                                  editable="true"
                                  name="Condition"
-                                 regex="^[a-zA-Z_]*[a-zA-Z0-9_]*$"
                                  required="false"
                                  type="string">
                               <text>
-                                 An #if preprocessor directive is added to the test case in order to make it compilable only if the specified switch is defined and evaluating to "true".
+                                 An #if preprocessor directive is added to the test case in order to make it compilable only if the specified switch is defined and evaluating to &quot;true&quot;. Complex expressions should be enclosed in parenthesis because more conditions could be added.
                               </text>
                            </property>
                            <group
