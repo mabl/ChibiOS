@@ -134,7 +134,7 @@ The code is conventionally generated under ./source/test and is overwritten each
                            required="false"
                            type="string">
                         <text>
-                           An #if preprocessor directive is added to the test sequence in order to make it compilable only if the specified switch evaluates to"true". Complex expressions should be enclosed in parenthesis because more conditions could be added.
+                           An #if preprocessor directive is added to the test sequence in order to make it compilable only if the specified switch evaluates to&quot;true&quot;.
                         </text>
                      </property>
                      <property
@@ -188,7 +188,7 @@ The code is conventionally generated under ./source/test and is overwritten each
                                  required="false"
                                  type="string">
                               <text>
-                                 An #if preprocessor directive is added to the test case in order to make it compilable only if the specified switch evaluates to&quot;true&quot;. Complex expressions should be enclosed in parenthesis because more conditions could be added.
+                                 An #if preprocessor directive is added to the test case in order to make it compilable only if the specified switch evaluates to&quot;true&quot;.
                               </text>
                            </property>
                            <group

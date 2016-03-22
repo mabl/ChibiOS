@@ -20,6 +20,14 @@ ${conf.instance.description.copyright.value?trim}
                            utils.WithDot(sequence.description.value[0]?string)
                            72 /]
  *
+  [#if sequence.condition.value[0]?trim?length > 0]
+ * <h2>Conditions</h2>
+ * This sequence is only executed if the following preprocessor condition
+ * evaluates to true:
+ * - ${sequence.condition.value[0]}
+ * .
+ *
+  [/#if]
  * <h2>Test Cases</h2>
   [#if sequence.cases.case?size > 0]
     [#list sequence.cases.case as case]
@@ -31,6 +39,10 @@ ${conf.instance.description.copyright.value?trim}
   [/#if]
  */
 
+  [#if sequence.condition.value[0]?trim?length > 0]
+#if (${sequence.condition.value[0]}) || defined(__DOXYGEN__)
+
+  [/#if]
 /****************************************************************************
  * Shared code.
  ****************************************************************************/
@@ -53,7 +65,7 @@ ${sequence.shared_code.value[0]?trim}
     [#assign reqseq = reqseq?sort /]
     [#-- Checking if a condition should be generated.--]
     [#if case.condition.value[0]?trim?length > 0]
-#if ${case.condition.value[0]?trim} || defined(__DOXYGEN__)
+#if (${case.condition.value[0]?trim}) || defined(__DOXYGEN__)
     [/#if]
     [#-- Header generation.--]
 /**
@@ -173,7 +185,7 @@ static const testcase_t test_${(sequence_index + 1)?string("000")}_${(case_index
 const testcase_t * const test_sequence_${(sequence_index + 1)?string("000")}[] = {
   [#list sequence.cases.case as case]
    [#if case.condition.value[0]?trim?length > 0]
-#if ${case.condition.value[0]?trim} || defined(__DOXYGEN__)
+#if (${case.condition.value[0]?trim}) || defined(__DOXYGEN__)
     [/#if]
   &test_${(sequence_index + 1)?string("000")}_${(case_index + 1)?string("000")},
     [#if case.condition.value[0]?trim?length > 0]
@@ -182,4 +194,8 @@ const testcase_t * const test_sequence_${(sequence_index + 1)?string("000")}[] =
   [/#list]
   NULL
 };
+  [#if sequence.condition.value[0]?trim?length > 0]
+
+#endif /* ${sequence.condition.value[0]} */
+  [/#if]
 [/#list]
