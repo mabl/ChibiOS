@@ -29,14 +29,13 @@ ${conf.instance.description.copyright.value?trim}
 /**
  * @file    test_root.c
  * @brief   Test Suite root structures code.
- *
- * @addtogroup SPC5_TEST_ROOT
- * @{
  */
 
 #include "hal.h"
 #include "ch_test.h"
 #include "test_root.h"
+
+#if !defined(__DOXYGEN__)
 
 /*===========================================================================*/
 /* Module exported variables.                                                */
@@ -60,4 +59,4 @@ const testcase_t * const *test_suite[] = {
 ${conf.instance.global_data_and_code.global_code.value[0]}
 
 [/#if]
-/** @} */
+#endif /* !defined(__DOXYGEN__) */

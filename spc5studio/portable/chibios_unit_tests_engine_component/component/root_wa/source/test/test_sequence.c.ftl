@@ -10,7 +10,7 @@ ${conf.instance.description.copyright.value?trim}
 #include "test_root.h"
 
 /**
- * @page test_sequence_${(sequence_index + 1)?string("000")} ${utils.WithoutDot(sequence.brief.value[0]?string)}
+ * @page test_sequence_${(sequence_index + 1)?string("000")} [${(sequence_index + 1)?string}] ${utils.WithoutDot(sequence.brief.value[0]?string)}
  *
  * File: @ref test_sequence_${(sequence_index + 1)?string("000")}.c
  *
@@ -69,7 +69,7 @@ ${sequence.shared_code.value[0]?trim}
     [/#if]
     [#-- Header generation.--]
 /**
- * @page test_${(sequence_index + 1)?string("000")}_${(case_index + 1)?string("000")} ${utils.WithoutDot(case.brief.value[0])}
+ * @page test_${(sequence_index + 1)?string("000")}_${(case_index + 1)?string("000")} [${(sequence_index + 1)?string}.${(case_index + 1)?string}] ${utils.WithoutDot(case.brief.value[0])}
  *
  * <h2>Description</h2>
 [@utils.FormatStringAsText " * "
@@ -89,7 +89,7 @@ ${sequence.shared_code.value[0]?trim}
     [#list case.steps.step as step]
 [@utils.FormatStringAsText " * - "
                            " *   "
-                           utils.WithDot(step.description.value[0]?string)
+                           utils.WithDot("[" + (sequence_index + 1)?string + "." + (case_index + 1)?string + "." + (step_index + 1)?string + "] " + step.description.value[0]?string)
                            72 /]
     [/#list]
     [#if case.steps.step?size > 0]
@@ -131,7 +131,7 @@ static void test_${(sequence_index + 1)?string("000")}_${(case_index + 1)?string
 
 [@utils.FormatStringAsText "  /* "
                            "     "
-                           utils.WithDot(step.description.value[0]?string) + "*/"
+                           utils.WithDot("[" + (sequence_index + 1)?string + "." + (case_index + 1)?string + "." + (step_index + 1)?string + "] " + step.description.value[0]?string) + "*/"
                            72 /]
   test_set_step(${(step_index + 1)?string});
   {

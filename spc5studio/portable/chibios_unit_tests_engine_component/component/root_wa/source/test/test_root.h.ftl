@@ -6,9 +6,6 @@ ${conf.instance.description.copyright.value?trim}
 /**
  * @file    test_root.h
  * @brief   Test Suite root structures header.
- *
- * @addtogroup SPC5_TEST_ROOT
- * @{
  */
 
 #ifndef _SPC5_TEST_ROOT_H_
@@ -17,6 +14,8 @@ ${conf.instance.description.copyright.value?trim}
 [#list conf.instance.sequences.sequence as sequence]
 #include "test_sequence_${(sequence_index + 1)?string("000")}.h"
 [/#list]
+
+#if !defined(__DOXYGEN__)
 
 /*===========================================================================*/
 /* External declarations.                                                    */
@@ -39,6 +38,6 @@ extern "C" {
 ${conf.instance.global_data_and_code.global_definitions.value[0]}
 
 [/#if]
-#endif /* _SPC5_TEST_ROOT_H_ */
+#endif /* !defined(__DOXYGEN__) */
 
-/** @} */
+#endif /* _SPC5_TEST_ROOT_H_ */
