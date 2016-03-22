@@ -81,7 +81,7 @@ The code is conventionally generated under ./source/test and is overwritten each
                      name="Sequences"
                      required="false"
                      type="list"
-                     value="Type[96],Brief[200]">
+                     value="Type[96],Brief[400]">
                   <text>
                      A Test Suite is composed by one or more Test Sequences.
                   </text>
@@ -128,6 +128,16 @@ The code is conventionally generated under ./source/test and is overwritten each
                         </default>
                      </property>
                      <property
+                           brief="Preprocessor expression enabling this whole test sequence."
+                           editable="true"
+                           name="Condition"
+                           required="false"
+                           type="string">
+                        <text>
+                           An #if preprocessor directive is added to the test sequence in order to make it compilable only if the specified switch evaluates to"true". Complex expressions should be enclosed in parenthesis because more conditions could be added.
+                        </text>
+                     </property>
+                     <property
                            brief="Shared code."
                            editable="true"
                            name="Shared Code"
@@ -144,7 +154,7 @@ The code is conventionally generated under ./source/test and is overwritten each
                            name="Cases"
                            required="false"
                            type="list"
-                           value="Brief[300]">
+                           value="Brief[400]">
                         <group
                               name="Case">
                            <description>
@@ -178,7 +188,7 @@ The code is conventionally generated under ./source/test and is overwritten each
                                  required="false"
                                  type="string">
                               <text>
-                                 An #if preprocessor directive is added to the test case in order to make it compilable only if the specified switch is defined and evaluating to &quot;true&quot;. Complex expressions should be enclosed in parenthesis because more conditions could be added.
+                                 An #if preprocessor directive is added to the test case in order to make it compilable only if the specified switch evaluates to&quot;true&quot;. Complex expressions should be enclosed in parenthesis because more conditions could be added.
                               </text>
                            </property>
                            <group
@@ -230,7 +240,7 @@ Note that the code is reformatted automatically, curly braces around blocks are 
                                  name="Steps"
                                  required="false"
                                  type="list"
-                                 value="Description[300]">
+                                 value="Description[400]">
                               <group
                                     expanded="true"
                                     name="Step"
