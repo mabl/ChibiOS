@@ -47,7 +47,7 @@
           <cpp_options>
             <value>-fno-rtti</value>
           </cpp_options>
-          <use_vle index="0">
+          <use_vle disabled="true" index="0">
             <value>yes</value>
           </use_vle>
           <use_verbose_compile index="1">
@@ -197,14 +197,14 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa disabled="true" index="0">
-                  <value>GPIO Mode</value>
+                <pa disabled="true" index="1">
+                  <value>Primary</value>
                 </pa>
                 <obe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <hys disabled="true">
                   <value>false</value>
@@ -247,14 +247,14 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa disabled="true" index="0">
-                  <value>GPIO Mode</value>
+                <pa disabled="true" index="1">
+                  <value>Primary</value>
                 </pa>
                 <obe disabled="true">
                   <value>false</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <hys disabled="true">
                   <value>false</value>
@@ -304,7 +304,7 @@
                   <value>false</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <hys disabled="true">
                   <value>false</value>
@@ -354,7 +354,7 @@
                   <value>false</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <hys disabled="true">
                   <value>false</value>
@@ -404,7 +404,7 @@
                   <value>false</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <hys disabled="true">
                   <value>false</value>
@@ -451,10 +451,10 @@
                   <value>GPIO Mode</value>
                 </pa>
                 <obe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <hys disabled="true">
                   <value>false</value>
@@ -501,10 +501,10 @@
                   <value>GPIO Mode</value>
                 </pa>
                 <obe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <hys disabled="true">
                   <value>false</value>
@@ -551,10 +551,10 @@
                   <value>GPIO Mode</value>
                 </pa>
                 <obe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <hys disabled="true">
                   <value>false</value>
@@ -601,10 +601,10 @@
                   <value>GPIO Mode</value>
                 </pa>
                 <obe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <hys disabled="true">
                   <value>false</value>
@@ -644,6 +644,7 @@
         </initialization_code>
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.hal.platform.spc563mxx">
+        <clock_tree />
         <initialization_settings>
           <do_not_init>
             <value>false</value>

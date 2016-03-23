@@ -223,10 +223,10 @@
                   <value>false</value>
                 </apc>
                 <obe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode disabled="true" index="0">
                   <value>Push-Pull</value>
@@ -915,6 +915,11 @@
         </initialization_code>
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.hal.platform.spc560pxx">
+        <clock_tree>
+          <run_mode disabled="true">
+            <value>DRUN</value>
+          </run_mode>
+        </clock_tree>
         <initialization_settings>
           <do_not_init>
             <value>false</value>

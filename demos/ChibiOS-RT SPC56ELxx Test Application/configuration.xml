@@ -50,7 +50,7 @@
           <cpp_options>
             <value>-fno-rtti -fno-exceptions</value>
           </cpp_options>
-          <use_vle index="0">
+          <use_vle disabled="true" index="0">
             <value>yes</value>
           </use_vle>
           <use_verbose_compile index="1">
@@ -216,10 +216,10 @@
                   <value>false</value>
                 </apc>
                 <obe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode disabled="true" index="0">
                   <value>Push-Pull</value>
@@ -837,6 +837,7 @@
         </initialization_code>
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.hal.platform.spc56elxx">
+        <clock_tree />
         <initialization_settings>
           <do_not_init>
             <value>false</value>
@@ -936,6 +937,9 @@
           <flexcan1 index="10">
             <value>11</value>
           </flexcan1>
+          <flexcan2 index="10">
+            <value>11</value>
+          </flexcan2>
           <flexpwm0_sm0 index="6">
             <value>7</value>
           </flexpwm0_sm0>
@@ -1229,6 +1233,12 @@
           <flexcan1_use_external_clock>
             <value>false</value>
           </flexcan1_use_external_clock>
+          <flexcan2>
+            <value>false</value>
+          </flexcan2>
+          <flexcan2_use_external_clock>
+            <value>false</value>
+          </flexcan2_use_external_clock>
           <flexcan_enable_filters>
             <value>false</value>
           </flexcan_enable_filters>
