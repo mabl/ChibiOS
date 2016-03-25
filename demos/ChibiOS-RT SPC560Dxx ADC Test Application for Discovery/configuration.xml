@@ -36,16 +36,16 @@
             <value>ppc-freevle-eabi-</value>
           </compiler_variant>
           <optimization_level index="3">
-            <value>-O2</value>
+            <value>-O2 speed</value>
           </optimization_level>
           <common_options>
-            <value>-ggdb -fomit-frame-pointer -falign-functions=16 -msoft-float</value>
+            <value>-gdwarf-2 -fomit-frame-pointer -falign-functions=16 -mno-spe -msoft-float</value>
           </common_options>
           <c_options>
             <value />
           </c_options>
           <cpp_options>
-            <value>-fno-rtti</value>
+            <value>-fno-rtti -fno-exceptions</value>
           </cpp_options>
           <use_vle disabled="true" index="0">
             <value>yes</value>
@@ -283,10 +283,10 @@
                   <value>false</value>
                 </apc>
                 <obe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode disabled="true" index="0">
                   <value>Push-Pull</value>
@@ -766,7 +766,7 @@
           <disable_watchdog>
             <value>true</value>
           </disable_watchdog>
-          <fmpll0_settings>
+          <fmpll_settings>
             <idf_value>
               <value>2</value>
             </idf_value>
@@ -776,11 +776,46 @@
             <odf_value index="2">
               <value>SPC5_FMPLL_ODF_DIV8</value>
             </odf_value>
-          </fmpll0_settings>
+            <progressive_clock_switching>
+              <value>false</value>
+            </progressive_clock_switching>
+            <mask_fail_output>
+              <value>false</value>
+            </mask_fail_output>
+            <fm_enable>
+              <value>false</value>
+            </fm_enable>
+            <spread_type disabled="true" index="0">
+              <value>Center Spread</value>
+            </spread_type>
+            <modulation_period disabled="true">
+              <value>0</value>
+            </modulation_period>
+            <increment_step disabled="true">
+              <value>0</value>
+            </increment_step>
+          </fmpll_settings>
+          <cmu_settings>
+            <cme disabled="true">
+              <value>false</value>
+            </cme>
+            <rcdiv disabled="true" index="0">
+              <value>No Division</value>
+            </rcdiv>
+            <hfref disabled="true">
+              <value>4095</value>
+            </hfref>
+            <lfref disabled="true">
+              <value>0</value>
+            </lfref>
+            <md disabled="true">
+              <value>0</value>
+            </md>
+          </cmu_settings>
           <clocks>
-            <fxosc_divider index="0">
+            <xosc_divider index="0">
               <value>1</value>
-            </fxosc_divider>
+            </xosc_divider>
             <firc_divider index="0">
               <value>1</value>
             </firc_divider>
@@ -793,6 +828,18 @@
             <peripheral_set_3_clock_divider index="2">
               <value>2</value>
             </peripheral_set_3_clock_divider>
+            <sirc_divider disabled="true" index="3">
+              <value>4</value>
+            </sirc_divider>
+            <api_rtc_clock_source disabled="true" index="1">
+              <value>SIRCDIV</value>
+            </api_rtc_clock_source>
+            <clkout_clock_source index="2">
+              <value>FMPLL</value>
+            </clkout_clock_source>
+            <clkout_clock_divider index="1">
+              <value>2</value>
+            </clkout_clock_divider>
             <clock_failure_hook>
               <value>osalSysHalt("clock failure")</value>
             </clock_failure_hook>
@@ -800,6 +847,454 @@
               <value>20</value>
             </emios0_global_prescaler>
           </clocks>
+          <clock_points>
+            <xosc disabled="true">
+              <value>16000000</value>
+            </xosc>
+            <xoscdiv disabled="true">
+              <value>16000000</value>
+            </xoscdiv>
+            <firc disabled="true">
+              <value>16000000</value>
+            </firc>
+            <fircdiv disabled="true">
+              <value>16000000</value>
+            </fircdiv>
+            <sirc disabled="true">
+              <value>128000</value>
+            </sirc>
+            <fmpll_in disabled="true">
+              <value>8000000</value>
+            </fmpll_in>
+            <fmpll_vco disabled="true">
+              <value>384000000</value>
+            </fmpll_vco>
+            <fmpll_out disabled="true">
+              <value>48000000</value>
+            </fmpll_out>
+            <sysclk disabled="true">
+              <value>48000000</value>
+            </sysclk>
+            <peripheral_set1 disabled="true">
+              <value>24000000</value>
+            </peripheral_set1>
+            <peripheral_set2 disabled="true">
+              <value>24000000</value>
+            </peripheral_set2>
+            <peripheral_set3 disabled="true">
+              <value>24000000</value>
+            </peripheral_set3>
+            <clkout disabled="true">
+              <value>24000000</value>
+            </clkout>
+          </clock_points>
+          <module_entry>
+            <final_run_mode index="1">
+              <value>RUN0</value>
+            </final_run_mode>
+            <run_modes>
+              <reset disabled="true">
+                <value>true</value>
+              </reset>
+              <safe disabled="true">
+                <value>true</value>
+              </safe>
+              <drun disabled="true">
+                <value>true</value>
+              </drun>
+              <run0 disabled="true">
+                <value>true</value>
+              </run0>
+              <run1>
+                <value>true</value>
+              </run1>
+              <run2>
+                <value>true</value>
+              </run2>
+              <run3>
+                <value>true</value>
+              </run3>
+              <halt>
+                <value>true</value>
+              </halt>
+              <stop>
+                <value>true</value>
+              </stop>
+              <standby>
+                <value>true</value>
+              </standby>
+              <safe_state_settings>
+                <pdo>
+                  <value>true</value>
+                </pdo>
+                <mvron disabled="true">
+                  <value>true</value>
+                </mvron>
+                <dflaon disabled="true" index="0">
+                  <value>Normal</value>
+                </dflaon>
+                <cflaon disabled="true" index="0">
+                  <value>Normal</value>
+                </cflaon>
+                <fmpllon disabled="true">
+                  <value>false</value>
+                </fmpllon>
+                <xoscon disabled="true">
+                  <value>false</value>
+                </xoscon>
+                <fircon disabled="true">
+                  <value>true</value>
+                </fircon>
+                <sysclk disabled="true" index="0">
+                  <value>FIRC</value>
+                </sysclk>
+              </safe_state_settings>
+              <drun_state_settings>
+                <pdo disabled="true">
+                  <value>false</value>
+                </pdo>
+                <mvron disabled="true">
+                  <value>true</value>
+                </mvron>
+                <dflaon index="0">
+                  <value>Normal</value>
+                </dflaon>
+                <cflaon index="0">
+                  <value>Normal</value>
+                </cflaon>
+                <fmpllon>
+                  <value>true</value>
+                </fmpllon>
+                <xoscon>
+                  <value>true</value>
+                </xoscon>
+                <fircon disabled="true">
+                  <value>true</value>
+                </fircon>
+                <sysclk index="4">
+                  <value>System PLL</value>
+                </sysclk>
+              </drun_state_settings>
+              <run0_state_settings>
+                <pdo disabled="true">
+                  <value>false</value>
+                </pdo>
+                <mvron disabled="true">
+                  <value>true</value>
+                </mvron>
+                <dflaon index="0">
+                  <value>Normal</value>
+                </dflaon>
+                <cflaon index="0">
+                  <value>Normal</value>
+                </cflaon>
+                <fmpllon>
+                  <value>true</value>
+                </fmpllon>
+                <xoscon>
+                  <value>true</value>
+                </xoscon>
+                <fircon disabled="true">
+                  <value>true</value>
+                </fircon>
+                <sysclk index="4">
+                  <value>System PLL</value>
+                </sysclk>
+              </run0_state_settings>
+              <run1_state_settings>
+                <pdo disabled="true">
+                  <value>false</value>
+                </pdo>
+                <mvron disabled="true">
+                  <value>true</value>
+                </mvron>
+                <dflaon index="0">
+                  <value>Normal</value>
+                </dflaon>
+                <cflaon index="0">
+                  <value>Normal</value>
+                </cflaon>
+                <fmpllon>
+                  <value>false</value>
+                </fmpllon>
+                <xoscon>
+                  <value>false</value>
+                </xoscon>
+                <fircon disabled="true">
+                  <value>true</value>
+                </fircon>
+                <sysclk index="0">
+                  <value>FIRC</value>
+                </sysclk>
+              </run1_state_settings>
+              <run2_state_settings>
+                <pdo disabled="true">
+                  <value>false</value>
+                </pdo>
+                <mvron disabled="true">
+                  <value>true</value>
+                </mvron>
+                <dflaon index="0">
+                  <value>Normal</value>
+                </dflaon>
+                <cflaon index="0">
+                  <value>Normal</value>
+                </cflaon>
+                <fmpllon>
+                  <value>false</value>
+                </fmpllon>
+                <xoscon>
+                  <value>false</value>
+                </xoscon>
+                <fircon disabled="true">
+                  <value>true</value>
+                </fircon>
+                <sysclk index="0">
+                  <value>FIRC</value>
+                </sysclk>
+              </run2_state_settings>
+              <run3_state_settings>
+                <pdo disabled="true">
+                  <value>false</value>
+                </pdo>
+                <mvron disabled="true">
+                  <value>true</value>
+                </mvron>
+                <dflaon index="0">
+                  <value>Normal</value>
+                </dflaon>
+                <cflaon index="0">
+                  <value>Normal</value>
+                </cflaon>
+                <fmpllon>
+                  <value>false</value>
+                </fmpllon>
+                <xoscon>
+                  <value>false</value>
+                </xoscon>
+                <fircon disabled="true">
+                  <value>true</value>
+                </fircon>
+                <sysclk index="0">
+                  <value>FIRC</value>
+                </sysclk>
+              </run3_state_settings>
+              <halt_state_settings>
+                <pdo disabled="true">
+                  <value>false</value>
+                </pdo>
+                <mvron>
+                  <value>true</value>
+                </mvron>
+                <dflaon disabled="true" index="0">
+                  <value>Normal</value>
+                </dflaon>
+                <cflaon disabled="true" index="0">
+                  <value>Normal</value>
+                </cflaon>
+                <fmpllon>
+                  <value>false</value>
+                </fmpllon>
+                <xoscon>
+                  <value>false</value>
+                </xoscon>
+                <fircon>
+                  <value>true</value>
+                </fircon>
+                <sysclk index="0">
+                  <value>FIRC</value>
+                </sysclk>
+              </halt_state_settings>
+              <stop_state_settings>
+                <pdo>
+                  <value>false</value>
+                </pdo>
+                <mvron>
+                  <value>true</value>
+                </mvron>
+                <dflaon disabled="true" index="2">
+                  <value>Power Down</value>
+                </dflaon>
+                <cflaon disabled="true" index="2">
+                  <value>Power Down</value>
+                </cflaon>
+                <fmpllon disabled="true">
+                  <value>false</value>
+                </fmpllon>
+                <xoscon disabled="true">
+                  <value>false</value>
+                </xoscon>
+                <fircon>
+                  <value>true</value>
+                </fircon>
+                <sysclk index="0">
+                  <value>FIRC</value>
+                </sysclk>
+              </stop_state_settings>
+              <standby_state_settings>
+                <pdo disabled="true">
+                  <value>true</value>
+                </pdo>
+                <mvron disabled="true">
+                  <value>false</value>
+                </mvron>
+                <dflaon disabled="true" index="2">
+                  <value>Power Down</value>
+                </dflaon>
+                <cflaon disabled="true" index="2">
+                  <value>Power Down</value>
+                </cflaon>
+                <fmpllon disabled="true">
+                  <value>false</value>
+                </fmpllon>
+                <xoscon disabled="true">
+                  <value>false</value>
+                </xoscon>
+                <fircon>
+                  <value>true</value>
+                </fircon>
+                <sysclk disabled="true" index="5">
+                  <value>Clock Disabled</value>
+                </sysclk>
+              </standby_state_settings>
+            </run_modes>
+            <peripherals_control__run_>
+              <pc3>
+                <safe>
+                  <value>false</value>
+                </safe>
+                <drun>
+                  <value>false</value>
+                </drun>
+                <run0>
+                  <value>false</value>
+                </run0>
+                <run1>
+                  <value>false</value>
+                </run1>
+                <run2>
+                  <value>false</value>
+                </run2>
+                <run3>
+                  <value>false</value>
+                </run3>
+              </pc3>
+              <pc4>
+                <safe>
+                  <value>false</value>
+                </safe>
+                <drun>
+                  <value>false</value>
+                </drun>
+                <run0>
+                  <value>false</value>
+                </run0>
+                <run1>
+                  <value>false</value>
+                </run1>
+                <run2>
+                  <value>false</value>
+                </run2>
+                <run3>
+                  <value>false</value>
+                </run3>
+              </pc4>
+              <pc5>
+                <safe>
+                  <value>false</value>
+                </safe>
+                <drun>
+                  <value>false</value>
+                </drun>
+                <run0>
+                  <value>false</value>
+                </run0>
+                <run1>
+                  <value>false</value>
+                </run1>
+                <run2>
+                  <value>false</value>
+                </run2>
+                <run3>
+                  <value>false</value>
+                </run3>
+              </pc5>
+              <pc6>
+                <safe>
+                  <value>false</value>
+                </safe>
+                <drun>
+                  <value>false</value>
+                </drun>
+                <run0>
+                  <value>false</value>
+                </run0>
+                <run1>
+                  <value>false</value>
+                </run1>
+                <run2>
+                  <value>false</value>
+                </run2>
+                <run3>
+                  <value>false</value>
+                </run3>
+              </pc6>
+              <pc7>
+                <safe>
+                  <value>false</value>
+                </safe>
+                <drun>
+                  <value>false</value>
+                </drun>
+                <run0>
+                  <value>false</value>
+                </run0>
+                <run1>
+                  <value>false</value>
+                </run1>
+                <run2>
+                  <value>false</value>
+                </run2>
+                <run3>
+                  <value>false</value>
+                </run3>
+              </pc7>
+            </peripherals_control__run_>
+            <peripherals_control__low_power_>
+              <pc4>
+                <halt0>
+                  <value>false</value>
+                </halt0>
+                <stop0>
+                  <value>false</value>
+                </stop0>
+              </pc4>
+              <pc5>
+                <halt0>
+                  <value>false</value>
+                </halt0>
+                <stop0>
+                  <value>false</value>
+                </stop0>
+              </pc5>
+              <pc6>
+                <halt0>
+                  <value>false</value>
+                </halt0>
+                <stop0>
+                  <value>false</value>
+                </stop0>
+              </pc6>
+              <pc7>
+                <halt0>
+                  <value>false</value>
+                </halt0>
+                <stop0>
+                  <value>false</value>
+                </stop0>
+              </pc7>
+            </peripherals_control__low_power_>
+          </module_entry>
         </initialization_settings>
         <irq_priority_settings>
           <adc1 index="11">

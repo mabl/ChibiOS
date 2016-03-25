@@ -39,7 +39,7 @@
             <value>-O0</value>
           </optimization_level>
           <common_options>
-            <value>-ggdb -fomit-frame-pointer -falign-functions=16 -msoft-float</value>
+            <value>-gdwarf-2 -fomit-frame-pointer -falign-functions=16 -msoft-float</value>
           </common_options>
           <c_options>
             <value />
