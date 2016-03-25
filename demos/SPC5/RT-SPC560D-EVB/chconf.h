@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -25,8 +25,8 @@
  * @{
  */
 
-#ifndef _CHCONF_H_
-#define _CHCONF_H_
+#ifndef CHCONF_H
+#define CHCONF_H
 
 #define _CHIBIOS_RT_CONF_
 
@@ -265,14 +265,6 @@
 #define CH_CFG_USE_MAILBOXES                TRUE
 
 /**
- * @brief   I/O Queues APIs.
- * @details If enabled then the I/O queues APIs are included in the kernel.
- *
- * @note    The default is @p TRUE.
- */
-#define CH_CFG_USE_QUEUES                   TRUE
-
-/**
  * @brief   Core Memory Manager APIs.
  * @details If enabled then the core memory manager APIs are included
  *          in the kernel.
@@ -336,7 +328,7 @@
  *
  * @note    The default is @p FALSE.
  */
-#define CH_DBG_SYSTEM_STATE_CHECK           TRUE
+#define CH_DBG_SYSTEM_STATE_CHECK           FALSE
 
 /**
  * @brief   Debug option, parameters checks.
@@ -345,7 +337,7 @@
  *
  * @note    The default is @p FALSE.
  */
-#define CH_DBG_ENABLE_CHECKS                TRUE
+#define CH_DBG_ENABLE_CHECKS                FALSE
 
 /**
  * @brief   Debug option, consistency checks.
@@ -355,7 +347,7 @@
  *
  * @note    The default is @p FALSE.
  */
-#define CH_DBG_ENABLE_ASSERTS               TRUE
+#define CH_DBG_ENABLE_ASSERTS               FALSE
 
 /**
  * @brief   Debug option, trace buffer.
@@ -364,7 +356,7 @@
  *
  * @note    The default is @p CH_DBG_TRACE_MASK_NONE.
  */
-#define CH_DBG_TRACE_MASK                   CH_DBG_TRACE_MASK_ALL
+#define CH_DBG_TRACE_MASK                   CH_DBG_TRACE_MASK_NONE
 
 /**
  * @brief   Trace buffer entries.
@@ -383,7 +375,7 @@
  * @note    The default failure mode is to halt the system with the global
  *          @p panic_msg variable set to @p NULL.
  */
-#define CH_DBG_ENABLE_STACK_CHECK           TRUE
+#define CH_DBG_ENABLE_STACK_CHECK           FALSE
 
 /**
  * @brief   Debug option, stacks initialization.
@@ -393,7 +385,7 @@
  *
  * @note    The default is @p FALSE.
  */
-#define CH_DBG_FILL_THREADS                 TRUE
+#define CH_DBG_FILL_THREADS                 FALSE
 
 /**
  * @brief   Debug option, threads profiling.
@@ -404,7 +396,7 @@
  * @note    This debug option is not currently compatible with the
  *          tickless mode.
  */
-#define CH_DBG_THREADS_PROFILING            FALSE
+#define CH_DBG_THREADS_PROFILING            TRUE
 
 /** @} */
 
@@ -524,6 +516,6 @@
 /* Port-specific settings (override port settings defaulted in chcore.h).    */
 /*===========================================================================*/
 
-#endif  /* _CHCONF_H_ */
+#endif  /* CHCONF_H */
 
 /** @} */

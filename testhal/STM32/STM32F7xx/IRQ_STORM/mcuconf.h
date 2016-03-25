@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
     limitations under the License.
 */
 
-#ifndef _MCUCONF_H_
-#define _MCUCONF_H_
+#ifndef MCUCONF_H
+#define MCUCONF_H
 
 /*
  * STM32F4xx drivers configuration.
@@ -301,8 +301,8 @@
 #define STM32_SPI_SPI2_DMA_PRIORITY         1
 #define STM32_SPI_SPI3_DMA_PRIORITY         1
 #define STM32_SPI_SPI4_DMA_PRIORITY         1
-#define STM32_SPI_SPI4_DMA_PRIORITY         1
-#define STM32_SPI_SPI4_DMA_PRIORITY         1
+#define STM32_SPI_SPI5_DMA_PRIORITY         1
+#define STM32_SPI_SPI6_DMA_PRIORITY         1
 #define STM32_SPI_SPI1_IRQ_PRIORITY         10
 #define STM32_SPI_SPI2_IRQ_PRIORITY         10
 #define STM32_SPI_SPI3_IRQ_PRIORITY         10
@@ -378,4 +378,4 @@
  */
 #define STM32_WDG_USE_IWDG                  FALSE
 
-#endif /* _MCUCONF_H_ */
+#endif /* MCUCONF_H */

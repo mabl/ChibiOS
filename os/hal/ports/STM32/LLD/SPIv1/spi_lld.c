@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -116,7 +116,7 @@ SPIDriver SPID6;
 /* Driver local variables and types.                                         */
 /*===========================================================================*/
 
-static uint16_t dummytx;
+static const uint16_t dummytx = 0xFFFFU;
 static uint16_t dummyrx;
 
 /*===========================================================================*/
@@ -183,8 +183,6 @@ static void spi_lld_serve_tx_interrupt(SPIDriver *spip, uint32_t flags) {
  * @notapi
  */
 void spi_lld_init(void) {
-
-  dummytx = 0xFFFF;
 
 #if STM32_SPI_USE_SPI1
   spiObjectInit(&SPID1);
@@ -361,12 +359,12 @@ void spi_lld_start(SPIDriver *spip) {
                             STM32_SPI_SPI4_IRQ_PRIORITY,
                             (stm32_dmaisr_t)spi_lld_serve_rx_interrupt,
                             (void *)spip);
-      chDbgAssert(!b, "stream already allocated");
+      osalDbgAssert(!b, "stream already allocated");
       b = dmaStreamAllocate(spip->dmatx,
                             STM32_SPI_SPI4_IRQ_PRIORITY,
                             (stm32_dmaisr_t)spi_lld_serve_tx_interrupt,
                             (void *)spip);
-      chDbgAssert(!b, "stream already allocated");
+      osalDbgAssert(!b, "stream already allocated");
       rccEnableSPI4(FALSE);
     }
 #endif
@@ -377,12 +375,12 @@ void spi_lld_start(SPIDriver *spip) {
                             STM32_SPI_SPI5_IRQ_PRIORITY,
                             (stm32_dmaisr_t)spi_lld_serve_rx_interrupt,
                             (void *)spip);
-      chDbgAssert(!b, "stream already allocated");
+      osalDbgAssert(!b, "stream already allocated");
       b = dmaStreamAllocate(spip->dmatx,
                             STM32_SPI_SPI5_IRQ_PRIORITY,
                             (stm32_dmaisr_t)spi_lld_serve_tx_interrupt,
                             (void *)spip);
-      chDbgAssert(!b, "stream already allocated");
+      osalDbgAssert(!b, "stream already allocated");
       rccEnableSPI5(FALSE);
     }
 #endif
@@ -393,12 +391,12 @@ void spi_lld_start(SPIDriver *spip) {
                             STM32_SPI_SPI6_IRQ_PRIORITY,
                             (stm32_dmaisr_t)spi_lld_serve_rx_interrupt,
                             (void *)spip);
-      chDbgAssert(!b, "stream already allocated");
+      osalDbgAssert(!b, "stream already allocated");
       b = dmaStreamAllocate(spip->dmatx,
                             STM32_SPI_SPI6_IRQ_PRIORITY,
                             (stm32_dmaisr_t)spi_lld_serve_tx_interrupt,
                             (void *)spip);
-      chDbgAssert(!b, "stream already allocated");
+      osalDbgAssert(!b, "stream already allocated");
       rccEnableSPI6(FALSE);
     }
 #endif

@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -22,8 +22,8 @@
  * @{
  */
 
-#ifndef _MPU_H_
-#define _MPU_H_
+#ifndef MPU_H
+#define MPU_H
 
 /*===========================================================================*/
 /* Driver constants.                                                         */
@@ -203,6 +203,6 @@ extern "C" {
 }
 #endif
 
-#endif /* _MPU_H_ */
+#endif /* MPU_H */
 
 /** @} */

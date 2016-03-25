@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio.
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio.
 
     This file is part of ChibiOS.
 
@@ -28,8 +28,8 @@
  * @{
  */
 
-#ifndef _CH_H_
-#define _CH_H_
+#ifndef CH_H
+#define CH_H
 
 /**
  * @brief   ChibiOS/RT identification macro.
@@ -98,13 +98,12 @@
 #include "chmemcore.h"
 #include "chheap.h"
 #include "chmempools.h"
-#include "chqueues.h"
-#include "chstreams.h"
+#include "chdynamic.h"
 
 #if !defined(_CHIBIOS_RT_CONF_)
 #error "missing or wrong configuration file"
 #endif
 
-#endif /* _CH_H_ */
+#endif /* CH_H */
 
 /** @} */

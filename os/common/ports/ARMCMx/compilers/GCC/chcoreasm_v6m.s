@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio.
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio.
 
     This file is part of ChibiOS.
 
@@ -105,8 +105,14 @@ _port_thread_start:
                 cpsie   i
                 mov     r0, r5
                 blx     r4
+#if defined(_CHIBIOS_RT_CONF_)
                 movs    r0, #0              /* MSG_OK */
                 bl      chThdExit
+#endif
+#if defined(_CHIBIOS_NIL_CONF_)
+                mov     r3, #0
+                bl      chSysHalt
+#endif
 
 /*--------------------------------------------------------------------------*
  * Post-IRQ switch code.

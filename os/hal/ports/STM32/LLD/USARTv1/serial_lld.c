@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -194,7 +194,7 @@ static void serve_interrupt(SerialDriver *sdp) {
     msg_t b;
     osalSysLockFromISR();
     b = oqGetI(&sdp->oqueue);
-    if (b < Q_OK) {
+    if (b < MSG_OK) {
       chnAddFlagsI(sdp, CHN_OUTPUT_EMPTY);
       u->CR1 = (cr1 & ~USART_CR1_TXEIE) | USART_CR1_TCIE;
     }

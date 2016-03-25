@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio.
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio.
 
     This file is part of ChibiOS.
 
@@ -25,8 +25,8 @@
  * @{
  */
 
-#ifndef _CHLICENSE_H_
-#define _CHLICENSE_H_
+#ifndef CHLICENSE_H
+#define CHLICENSE_H
 
 /*===========================================================================*/
 /* Module constants.                                                         */
@@ -237,6 +237,6 @@
 /* Module inline functions.                                                  */
 /*===========================================================================*/
 
-#endif /* _CHLICENSE_H_ */
+#endif /* CHLICENSE_H */
 
 /** @} */

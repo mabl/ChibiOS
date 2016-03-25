@@ -2,7 +2,7 @@
 *** Files Organization                                                    ***
 *****************************************************************************
 
---{root}                  - ChibiOS/RT directory.
+--{root}                  - ChibiOS directory.
   +--readme.txt           - This file.
   +--documentation.html   - Shortcut to the web documentation page.
   +--license.txt          - GPL license text.
@@ -34,6 +34,14 @@
   |  |  +--index.html     - Local documentation access (after rebuild).
   +--ext/                 - External libraries, not part of ChibiOS/RT.
   +--os/                  - ChibiOS components.
+  |  +--common/           - Shared OS modules.
+  |  |  +--abstractions/  - API emulator wrappers.
+  |  |  |  +--cmsis_os/   - CMSIS OS emulation layer for RT (ARMCMx port only).
+  |  |  |  +--nasa_osal/  - NASA Operating System Abstraction Layer for RT.
+  |  |  +--ext/           - Vendor files used by the OS.
+  |  |  +--oslib/         - RTOS modules usable by both RT and NIL.
+  |  |  +--ports/         - RTOS ports usable by both RT and NIL.
+  |  |  +--startup/       - Startup support for all compilers and platforms.
   |  +--hal/              - HAL component.
   |  |  +--boards/        - HAL board support files.
   |  |  +--dox/           - HAL documentation resources.
@@ -48,14 +56,12 @@
   |  |  +--dox/           - NIL documentation resources.
   |  |  +--include/       - NIL high level headers.
   |  |  +--src/           - NIL high level source.
-  |  |  +--ports/         - NIL ports.
-  |  |  +--templates/     - NIL port template files.
+  |  |  +--templates/     - NIL configuration template files.
   |  +--rt/               - RT RTOS component.
   |  |  +--dox/           - RT documentation resources.
   |  |  +--include/       - RT high level headers.
   |  |  +--src/           - RT high level source.
-  |  |  +--ports/         - RT ports.
-  |  |  +--templates/     - RT port template files.
+  |  |  +--templates/     - RT configuration template files.
   |  +--various/          - Various portable support files.
   +--test/                - Kernel test suite source code.
   |  +--lib/              - Portable test engine.
@@ -72,10 +78,102 @@
 *** Releases and Change Log                                               ***
 *****************************************************************************
 
-*** RT 3.2.0 ***
-- OPT: Removed the p_msg field from the thread_t structure saving a
+*** Next ***
+- HAL: All high level file names have been renamed and prefixed with "hal_"
+       in order to minimize the risk of name conflicts when integrating
+       external libraries. 
+- LIB: Added Guarded Memory Pools to RT and NIL.
+- NIL: Updated the NIL test suite by generating the code using the new system.
+- RT:  Removed I/O Queues and Streams interface, now those exists (much
+       improved) inside the HAL.
+- HAL: Improvements to the I/O queues now timeouts are absolute for
+       iqReadTimeout() and oqWriteTimeout functions.
+- RT:  Added a NASA-OSAL API emulator over the RT kernel.
+- RT:  Added RT-STM32L476-DISCOVERY demo.
+- HAL: Added more STM32L4xx testhal demos.
+- HAL: Updated all STM32F476 mcuconf.h files.
+- ALL: Startup files relicensed under Apache 2.0.
+- ALL: Enhanced GCC .ld files with multiple flash regions and capability to
+       insert additional sections within the standard loading rules.
+- VAR: The shell now accepts quoted arguments.
+- VAR: Centralized all usual shell commands into a single shell_cmd.c
+       file. This will allow to update all demos with a single change.
+       Each single command can be disabled using preprocessor switches.
+       Shell files are now located under ./os/various/shell and have a
+       dedicated shell.mk file.
+- ALL: Reorganized source tree, now ports are shared between RT and NIL.
+- RT:  Merged RT4.
+- NIL: Merged NIL2.
+- NIL: Added STM32F7 demo.
+- HAL: Fixed prescaler not initialized in STM32 ADCv1 (bug #725)
+       (backported to 16.1.5).
+- HAL: Fixed missing DAC section in STM32F072 mcuconf.h files (bug #724)
+       (backported to 16.1.5).
+- VAR: Fixed palSetMode glitching outputs (bug #723)(backported to 3.0.6
+       and 16.1.4).
+- VAR: Fixed error in STM32 PWM driver regarding channels 4 and 5 (bug #722)
+       (backported to 3.0.6 and 16.1.4).
+- VAR: Fixed wrong flash and ram size in linker script for maple mini
+       (bug #719).
+- VAR: Fixed GCC 5.2 crashes while compiling ChibiOS (bug #718)(backported
+       to 3.0.6 and 16.1.4).
+- HAL: Fixed wrong definition in STM32L4 ext_lld_isr.h (bug #717)
+       (backported to 16.1.4).
+- HAL: Fixed wrong definitions in STM32F746 mcuconf.h files (bug #716)
+       (backported to 16.1.4).
+- RT:  Fixed wrong SysTick initialization in generic demos (bug #715)
+       (backported to 16.1.4).
+- NIL: Fixed wrong SysTick initialization in generic demos (bug #715)
+       (backported to 16.1.4).
+- HAL: Fixed usbStop does not resume threads suspended in synchronous calls
+       to usbTransmit (bug #714)(backported to 16.1.4).
+- VAR: Fixed state check in lwIP when SYS_LIGHTWEIGHT_PROT is disabled
+       (bug #713)(backported to 2.6.10, 3.0.6 and 16.1.4). 
+- RT:  Removed the p_msg field from the thread_t structure saving a
        msg_t-sized field from the structure. Messages now use a new field
-       into the p_u union. Now synchnorous messages are even faster.
+       into the p_u union. Now synchronous messages are even faster.
+- HAL: Fixed IAR warnings in ext_lld_isr.c (bug #711)(backported to 16.1.4).
+- HAL: Fixed build error caused by STM32 SPIv1 driver (bug #710)(backported
+       to 3.0.6 and 16.1.4).
+- HAL: Fixed shift of signed constant causes warnings with IAR compiler
+       (bug #709)(backported to 2.6.10, 3.0.6 and 16.1.4).
+- HAL: Fixed wrong RTCv2 settings for STM32L4 (bug #708)(backported
+       to 16.1.4).
+- HAL: Fixed missing OTGv1 support for STM32L4 (bug #707)(backported
+       to 16.1.4).
+- NIL: Fixed ARM errata 752419 (bug #706)(backported to 2.6.10,
+       3.0.6 and 16.1.4).
+- RT:  Fixed ARM errata 752419 (bug #706)(backported to 2.6.10,
+       3.0.6 and 16.1.4).
+- HAL: Fixed unused variable in STM32 SPIv2 driver (bug #705)(backported
+       to 16.1.3).
+- HAL: Fixed chDbgAssert() still called from STM32 SPIv1 driver (bug #704)
+       (backported to 3.0.6 and 16.1.3).
+- HAL: Fixed broken demo for STM32F429 (bug #703)(backported to 16.1.3).
+- HAL: Fixed wrong macro definition for palWriteLine (bug #702)(backported
+       to 16.1.3).
+- HAL: Fixed error is buffer queues (bug #701)(backported to 16.1.3).
+- HAL: Fixed F105_F107 CANv1 build failure (bug #699).
+- HAL: Fixed typos in STM32F0 RCC enable/disable macros (bug #698)(backported
+       to 16.1.3).
+- RT:  Fixed useless call to chTMStartMeasurementX() in _thread_init()
+       (bug #697)(backported to 3.0.6 and 16.1.3).
+- VAR: Fixed missing time conversion in lwIP arch module (bug #696)
+       (backported to 2.6.10, 3.0.5 and 16.1.2).
+- HAL: Fixed incorrect handling of TIME_IMMEDIATE in the HAL buffer queues
+       (bug #695)(backported to 16.1.2).
+- NIL: Fixed NIL_CFG_USE_EVENTS not properly checked in NIL (bug #694)
+       (backported to 3.0.5 and 16.1.1).
+- RT:  Fixed ISR statistics are not updated from a critical zone in RT
+       (bug #693)(backported to 3.0.5 and 16.1.1).
+- NIL: Fixed NIL test suite calls I and S functions outside critical zone
+       (bug #692)(backported to 3.0.5 and 16.1.1).
+- NIL: Fixed protocol violation in NIL OSAL (bug #691)(backported to
+       3.0.5 and 16.1.1).
+- HAL: Fixed error in HAL buffer queues (bug #689)(backported to 16.1.1).
+- RT:  Fixed tm_stop - best case bug (bug #688)(backported to 16.1.1
+       and 3.0.5).
+- ALL: Several minor documentation/formatting-related fixes.
 
 *** 16.1.0 ***
 - RT:  Added CodeWarrior compiler support to the e200 port.

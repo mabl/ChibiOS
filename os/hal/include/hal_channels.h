@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -33,8 +33,8 @@
  * @{
  */
 
-#ifndef _HAL_CHANNELS_H_
-#define _HAL_CHANNELS_H_
+#ifndef HAL_CHANNELS_H
+#define HAL_CHANNELS_H
 
 /**
  * @brief   @p BaseChannel specific methods.
@@ -282,6 +282,6 @@ typedef struct {
 }
 /** @} */
 
-#endif /* _HAL_CHANNELS_H_ */
+#endif /* HAL_CHANNELS_H */
 
 /** @} */

@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio.
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio.
 
     This file is part of ChibiOS.
 
@@ -25,8 +25,8 @@
  * @{
  */
 
-#ifndef _CHSYS_H_
-#define _CHSYS_H_
+#ifndef CHSYS_H
+#define CHSYS_H
 
 /*lint -sem(chSysHalt, r_no)*/
 
@@ -481,6 +481,6 @@ static inline thread_t *chSysGetIdleThreadX(void) {
 }
 #endif /* CH_CFG_NO_IDLE_THREAD == FALSE */
 
-#endif /* _CHSYS_H_ */
+#endif /* CHSYS_H */
 
 /** @} */

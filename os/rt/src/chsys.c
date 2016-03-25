@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio.
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio.
 
     This file is part of ChibiOS.
 
@@ -38,6 +38,13 @@
 /*===========================================================================*/
 /* Module exported variables.                                                */
 /*===========================================================================*/
+
+#if (CH_CFG_NO_IDLE_THREAD == FALSE) || defined(__DOXYGEN__)
+/**
+ * @brief   Idle thread working area.
+ */
+THD_WORKING_AREA(ch_idle_thread_wa, PORT_IDLE_THREAD_STACK_SIZE);
+#endif
 
 /*===========================================================================*/
 /* Module local types.                                                       */
@@ -121,7 +128,7 @@ void chSysInit(void) {
   currp = _thread_init(&ch.mainthread, "main", NORMALPRIO);
 #else
   /* Now this instructions flow becomes the idle thread.*/
-  currp = _thread_init(&ch.mainthread, "idle", IDLEPRIO));
+  currp = _thread_init(&ch.mainthread, "idle", IDLEPRIO);
 #endif
 
   /* Setting up the base address of the static main thread stack.*/
@@ -136,7 +143,7 @@ void chSysInit(void) {
 
 #if CH_DBG_STATISTICS == TRUE
   /* Starting measurement for this thread.*/
-  chTMStartMeasurementX(&currp->p_stats);
+  chTMStartMeasurementX(&currp->stats);
 #endif
 
   /* It is alive now.*/
@@ -152,8 +159,8 @@ void chSysInit(void) {
   {
     static const thread_descriptor_t idle_descriptor = {
       "idle",
-      THD_WORKING_AREA_BASE(ch.idle_thread_wa),
-      THD_WORKING_AREA_END(ch.idle_thread_wa),
+      THD_WORKING_AREA_BASE(ch_idle_thread_wa),
+      THD_WORKING_AREA_END(ch_idle_thread_wa),
       IDLEPRIO,
       _idle_thread,
       NULL

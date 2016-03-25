@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -90,6 +90,7 @@ extern "C" {
   bool _test_assert(unsigned point, bool condition);
   bool _test_assert_sequence(unsigned point, char *expected);
   bool _test_assert_time_window(unsigned point, systime_t start, systime_t end);
+  void test_terminate_threads(void);
   void test_wait_threads(void);
   systime_t test_wait_tick(void);
   void test_start_timer(unsigned ms);

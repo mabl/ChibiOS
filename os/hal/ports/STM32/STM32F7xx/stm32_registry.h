@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -482,15 +482,6 @@
 #define STM32_FSMC_IS_FMC                   TRUE
 #define STM32_FSMC_HANDLER                  Vector100
 #define STM32_FSMC_NUMBER                   48
-#define STM32_FSMC_DMA_MSK                  (STM32_DMA_STREAM_ID_MSK(2, 0) |\
-                                             STM32_DMA_STREAM_ID_MSK(2, 1) |\
-                                             STM32_DMA_STREAM_ID_MSK(2, 2) |\
-                                             STM32_DMA_STREAM_ID_MSK(2, 3) |\
-                                             STM32_DMA_STREAM_ID_MSK(2, 4) |\
-                                             STM32_DMA_STREAM_ID_MSK(2, 5) |\
-                                             STM32_DMA_STREAM_ID_MSK(2, 6) |\
-                                             STM32_DMA_STREAM_ID_MSK(2, 7))
-#define STM32_FSMC_DMA_CHN                  0x00000000
 
 /* LTDC attributes.*/
 #define STM32_LTDC_EV_HANDLER               Vector1A0

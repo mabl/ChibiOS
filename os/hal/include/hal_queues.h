@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -22,13 +22,8 @@
  * @{
  */
 
-#ifndef _HAL_QUEUES_H_
-#define _HAL_QUEUES_H_
-
-/* The ChibiOS/RT kernel provides the following definitions by itself, this
-   check is performed in order to avoid conflicts. */
-#if !defined(_CHIBIOS_RT_) || (CH_CFG_USE_QUEUES == FALSE) ||               \
-    defined(__DOXYGEN__)
+#ifndef HAL_QUEUES_H
+#define HAL_QUEUES_H
 
 /**
  * @name    Queue functions returned status value
@@ -37,8 +32,8 @@
 #define Q_OK            MSG_OK      /**< @brief Operation successful.       */
 #define Q_TIMEOUT       MSG_TIMEOUT /**< @brief Timeout condition.          */
 #define Q_RESET         MSG_RESET   /**< @brief Queue has been reset.       */
-#define Q_EMPTY         (msg_t)-3   /**< @brief Queue empty.                */
-#define Q_FULL          (msg_t)-4   /**< @brief Queue full,                 */
+#define Q_EMPTY         MSG_TIMEOUT /**< @brief Queue empty.                */
+#define Q_FULL          MSG_TIMEOUT /**< @brief Queue full,                 */
 /** @} */
 
 /**
@@ -187,7 +182,7 @@ typedef io_queue_t input_queue_t;
  *
  * @param[in] iqp       pointer to an @p input_queue_t structure
  * @return              A byte value from the queue.
- * @retval Q_RESET      if the queue has been reset.
+ * @retval MSG_RESET    if the queue has been reset.
  *
  * @api
  */
@@ -268,8 +263,8 @@ typedef io_queue_t output_queue_t;
  * @param[in] oqp       pointer to an @p output_queue_t structure
  * @param[in] b         the byte value to be written in the queue
  * @return              The operation status.
- * @retval Q_OK         if the operation succeeded.
- * @retval Q_RESET      if the queue has been reset.
+ * @retval MSG_OK       if the operation succeeded.
+ * @retval MSG_RESET    if the queue has been reset.
  *
  * @api
  */
@@ -298,38 +293,6 @@ extern "C" {
 }
 #endif
 
-#else /* defined(_CHIBIOS_RT_) && CH_CFG_USE_QUEUES */
-
-/* If ChibiOS is being used and its own queues subsystem is activated then
-   this module will use the ChibiOS queues code.*/
-#define qSizeX(qp)                          chQSizeX(qp)
-#define qSpaceI(qp)                         chQSpaceI(qp)
-#define qGetLink(qp)                        chQGetLinkX(qp)
-#define iqGetFullI(iqp)                     chIQGetFullI(iqp)
-#define iqGetEmptyI(iqp)                    chIQGetEmptyI(iqp)
-#define iqIsEmptyI(iqp)                     chIQIsEmptyI(iqp)
-#define iqIsFullI(iqp)                      chIQIsFullI(iqp)
-#define iqGet(iqp)                          chIQGet(iqp)
-#define oqGetFullI(oqp)                     chOQGetFullI(oqp)
-#define oqGetEmptyI(oqp)                    chOQGetEmptyI(oqp)
-#define oqIsEmptyI(oqp)                     chOQIsEmptyI(oqp)
-#define oqIsFullI(oqp)                      chOQIsFullI(oqp)
-#define oqPut(oqp, b)                       chOQPut(oqp, b)
-#define iqObjectInit(iqp, bp, size, infy, link)                             \
-  chIQObjectInit(iqp, bp, size, infy, link)
-#define iqResetI(iqp)                       chIQResetI(iqp)
-#define iqPutI(iqp, b)                      chIQPutI(iqp, b)
-#define iqGetTimeout(iqp, time)             chIQGetTimeout(iqp, time)
-#define iqReadTimeout(iqp, bp, n, time)     chIQReadTimeout(iqp, bp, n, time)
-#define oqObjectInit(oqp, bp, size, onfy, link)                             \
-  chOQObjectInit(oqp, bp, size, onfy, link)
-#define oqResetI(oqp)                       chOQResetI(oqp)
-#define oqPutTimeout(oqp, b, time)          chOQPutTimeout(oqp, b, time)
-#define oqGetI(oqp)                         chOQGetI(oqp)
-#define oqWriteTimeout(oqp, bp, n, time)    chOQWriteTimeout(oqp, bp, n, time)
-
-#endif /* defined(_CHIBIOS_RT_) || (CH_CFG_USE_QUEUES == FALSE) */
-
-#endif /* _HAL_QUEUES_H_ */
+#endif /* HAL_QUEUES_H */
 
 /** @} */

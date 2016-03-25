@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio.
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio.
 
     This file is part of ChibiOS.
 
@@ -25,8 +25,8 @@
  * @{
  */
 
-#ifndef _CHHEAP_H_
-#define _CHHEAP_H_
+#ifndef CHHEAP_H
+#define CHHEAP_H
 
 #if (CH_CFG_USE_HEAP == TRUE) || defined(__DOXYGEN__)
 
@@ -102,6 +102,13 @@ struct memory_heap {
 /* Module macros.                                                            */
 /*===========================================================================*/
 
+/**
+ * @brief   Allocation of an aligned static heap buffer.
+ */
+#define CH_HEAP_AREA(name, size)                                            \
+  ALIGNED_VAR(CH_HEAP_ALIGNMENT)                                            \
+  uint8_t name[MEM_ALIGN_NEXT((size), CH_HEAP_ALIGNMENT)]
+
 /*===========================================================================*/
 /* External declarations.                                                    */
 /*===========================================================================*/
@@ -159,6 +166,6 @@ static inline size_t chHeapGetSize(const void *p) {
 
 #endif /* CH_CFG_USE_HEAP == TRUE */
 
-#endif /* _CHHEAP_H_ */
+#endif /* CHHEAP_H */
 
 /** @} */

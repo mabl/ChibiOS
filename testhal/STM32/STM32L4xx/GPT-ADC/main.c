@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -81,10 +81,10 @@ static const ADCConversionGroup adcgrpcfg1 = {
   ADC_TR(0, 4095),                                          /* TR1      */
   {                                                         /* SMPR[2]  */
     ADC_SMPR1_SMP_AN0(ADC_SMPR_SMP_247P5),
-    ADC_SMPR2_SMP_AN11(ADC_SMPR_SMP_247P5)
+    ADC_SMPR1_SMP_AN2(ADC_SMPR_SMP_247P5)
   },
   {                                                         /* SQR[4]   */
-    ADC_SQR1_SQ1_N(ADC_CHANNEL_IN0) | ADC_SQR1_SQ2_N(ADC_CHANNEL_IN11),
+    ADC_SQR1_SQ1_N(ADC_CHANNEL_IN0) | ADC_SQR1_SQ2_N(ADC_CHANNEL_IN2),
     0,
     0,
     0
@@ -147,7 +147,7 @@ int main(void) {
 
   /*
    * Starts an ADC continuous conversion triggered with a period of
-   * 1/10000 second.
+   * 1/1000000 second.
    */
   adcStartConversion(&ADCD1, &adcgrpcfg1, samples1, ADC_GRP1_BUF_DEPTH);
   gptStartContinuous(&GPTD4, 100);

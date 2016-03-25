@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -25,8 +25,8 @@
  * @{
  */
 
-#ifndef _CHCONF_H_
-#define _CHCONF_H_
+#ifndef CHCONF_H
+#define CHCONF_H
 
 #define _CHIBIOS_NIL_CONF_
 
@@ -65,7 +65,7 @@
  *          option defines the maximum amount of time allowed for
  *          timeouts.
  */
-#define CH_CFG_ST_FREQUENCY                 50000
+#define CH_CFG_ST_FREQUENCY                 5000
 
 /**
  * @brief   Time delta constant for the tick-less mode.
@@ -271,6 +271,6 @@
 
 #define CORTEX_VTOR_INIT                    0x00200000U
 
-#endif  /* _CHCONF_H_ */
+#endif  /* CHCONF_H */
 
 /** @} */

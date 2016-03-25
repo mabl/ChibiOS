@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -488,10 +488,6 @@ struct SPIDriver {
    * @brief   TX DMA mode bit mask.
    */
   uint32_t                  txdmamode;
-  /**
-   * @brief   Frame size in bytes.
-   */
-  size_t                    fsize;
 };
 
 /*===========================================================================*/

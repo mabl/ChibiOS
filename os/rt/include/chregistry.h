@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio.
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio.
 
     This file is part of ChibiOS.
 
@@ -25,8 +25,8 @@
  * @{
  */
 
-#ifndef _CHREGISTRY_H_
-#define _CHREGISTRY_H_
+#ifndef CHREGISTRY_H
+#define CHREGISTRY_H
 
 #if (CH_CFG_USE_REGISTRY == TRUE) || defined(__DOXYGEN__)
 
@@ -108,6 +108,9 @@ extern "C" {
   extern ROMCONST chdebug_t ch_debug;
   thread_t *chRegFirstThread(void);
   thread_t *chRegNextThread(thread_t *tp);
+  thread_t *chRegFindThreadByName(const char *name);
+  thread_t *chRegFindThreadByPointer(thread_t *tp);
+  thread_t *chRegFindThreadByWorkingArea(stkalign_t *wa);
 #ifdef __cplusplus
 }
 #endif
@@ -177,6 +180,6 @@ static inline void chRegSetThreadNameX(thread_t *tp, const char *name) {
 #endif
 }
 
-#endif /* _CHREGISTRY_H_ */
+#endif /* CHREGISTRY_H */
 
 /** @} */

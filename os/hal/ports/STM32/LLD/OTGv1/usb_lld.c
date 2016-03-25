@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -690,10 +690,7 @@ void usb_lld_init(void) {
   {
     void *wsp = USBD1.wa_pump;
     _thread_memfill((uint8_t *)wsp,
-                    (uint8_t *)wsp + sizeof(thread_t),
-                    CH_DBG_THREAD_FILL_VALUE);
-    _thread_memfill((uint8_t *)wsp + sizeof(thread_t),
-                    (uint8_t *)wsp + sizeof(USBD1.wa_pump),
+                    (uint8_t *)wsp + sizeof (USBD1.wa_pump),
                     CH_DBG_STACK_FILL_VALUE);
   }
 #endif /* CH_DBG_FILL_THREADS */
@@ -714,10 +711,7 @@ void usb_lld_init(void) {
   {
     void *wsp = USBD2.wa_pump;
     _thread_memfill((uint8_t *)wsp,
-                    (uint8_t *)wsp + sizeof(thread_t),
-                    CH_DBG_THREAD_FILL_VALUE);
-    _thread_memfill((uint8_t *)wsp + sizeof(thread_t),
-                    (uint8_t *)wsp + sizeof(USBD2.wa_pump),
+                    (uint8_t *)wsp + sizeof (USBD2.wa_pump),
                     CH_DBG_STACK_FILL_VALUE);
   }
 #endif /* CH_DBG_FILL_THREADS */
@@ -861,10 +855,16 @@ void usb_lld_start(USBDriver *usbp) {
 #if defined(_CHIBIOS_RT_)
     /* Creates the data pump thread. Note, it is created only once.*/
     if (usbp->tr == NULL) {
-      usbp->tr = chThdCreateI(usbp->wa_pump, sizeof usbp->wa_pump,
-                              STM32_USB_OTG_THREAD_PRIO,
-                              usb_lld_pump, usbp);
-      chThdStartI(usbp->tr);
+      thread_descriptor_t usbpump_descriptor = {
+        "usb_pump",
+        THD_WORKING_AREA_BASE(usbp->wa_pump),
+        THD_WORKING_AREA_END(usbp->wa_pump),
+        STM32_USB_OTG_THREAD_PRIO,
+        usb_lld_pump,
+        (void *)usbp
+      };
+
+      usbp->tr = chThdCreateI(&usbpump_descriptor);
       chSchRescheduleS();
   }
 #endif
@@ -1286,9 +1286,6 @@ void usb_lld_pump(void *p) {
   USBDriver *usbp = (USBDriver *)p;
   stm32_otg_t *otgp = usbp->otg;
 
-#if defined(_CHIBIOS_RT_)
-  chRegSetThreadName("usb_lld_pump");
-#endif
   osalSysLock();
   while (true) {
     usbep_t ep;

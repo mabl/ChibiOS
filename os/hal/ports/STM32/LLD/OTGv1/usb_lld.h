@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -189,6 +189,8 @@
 #define STM32_USBCLK                        STM32_PLL48CLK
 #elif defined(STM32F10X_CL)
 #define STM32_USBCLK                        STM32_OTGFSCLK
+#elif defined(STM32L4XX)
+#define STM32_USBCLK                        STM32_48CLK
 #else
 #error "unsupported STM32 platform for OTG functionality"
 #endif
@@ -263,7 +265,7 @@ typedef struct {
 #endif
   /* End of the mandatory fields.*/
   /**
-   * @brief   Total transmit transfer size.
+   * @brief   Total receive transfer size.
    */
   size_t                        totsize;
 } USBOutEndpointState;

@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -22,8 +22,8 @@
  * @{
  */
 
-#ifndef _OSALCONF_H_
-#define _OSALCONF_H_
+#ifndef OSALCONF_H
+#define OSALCONF_H
 
 /**
  * @brief   Frequency in Hertz of the system tick.
@@ -62,6 +62,6 @@
 }
 #endif
 
-#endif /* _OSALCONF_H_ */
+#endif /* OSALCONF_H */
 
 /** @} */

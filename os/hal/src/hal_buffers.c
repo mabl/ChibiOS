@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -352,6 +352,8 @@ size_t ibqReadTimeout(input_buffers_queue_t *ibqp, uint8_t *bp,
                       size_t n, systime_t timeout) {
   size_t r = 0;
   systime_t deadline;
+
+  osalDbgCheck(n > 0U);
 
   osalSysLock();
 
@@ -725,6 +727,8 @@ size_t obqWriteTimeout(output_buffers_queue_t *obqp, const uint8_t *bp,
                        size_t n, systime_t timeout) {
   size_t w = 0;
   systime_t deadline;
+
+  osalDbgCheck(n > 0U);
 
   osalSysLock();
 

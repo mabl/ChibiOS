@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio.
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio.
 
     This file is part of ChibiOS.
 
@@ -25,8 +25,8 @@
  * @{
  */
 
-#ifndef _CHCORE_V7M_H_
-#define _CHCORE_V7M_H_
+#ifndef CHCORE_V7M_H
+#define CHCORE_V7M_H
 
 /*===========================================================================*/
 /* Module constants.                                                         */
@@ -363,11 +363,11 @@ struct port_intctx {
  *          by an @p port_intctx structure.
  */
 #define PORT_SETUP_CONTEXT(tp, wbase, wtop, pf, arg) {                      \
-  (tp)->ctx.r13 = (struct port_intctx *)((uint8_t *)(wtop) -                \
-                                         sizeof (struct port_intctx));      \
-  (tp)->ctx.r13->r4 = (regarm_t)(pf);                                       \
-  (tp)->ctx.r13->r5 = (regarm_t)(arg);                                      \
-  (tp)->ctx.r13->lr = (regarm_t)_port_thread_start;                         \
+  (tp)->ctx.sp = (struct port_intctx *)((uint8_t *)(wtop) -                 \
+                                        sizeof (struct port_intctx));       \
+  (tp)->ctx.sp->r4 = (regarm_t)(pf);                                        \
+  (tp)->ctx.sp->r5 = (regarm_t)(arg);                                       \
+  (tp)->ctx.sp->lr = (regarm_t)_port_thread_start;                          \
 }
 
 /**
@@ -693,6 +693,6 @@ static inline rtcnt_t port_rt_get_counter_value(void) {
 
 #endif /* !defined(_FROM_ASM_) */
 
-#endif /* _CHCORE_V7M_H_ */
+#endif /* CHCORE_V7M_H */
 
 /** @} */

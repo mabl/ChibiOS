@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -78,7 +78,7 @@ OSAL_IRQ_HANDLER(STM32_TIM2_HANDLER) {
   gpt_lld_serve_interrupt(&PWMD2, sr);
 #endif
 
-#if STM32_GPT_USE_TIM2
+#if STM32_ST_USE_TIM2
   st_lld_serve_interrupt();
 #endif
 

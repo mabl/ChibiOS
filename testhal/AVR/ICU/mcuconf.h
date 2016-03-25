@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
     limitations under the License.
 */
 
-#ifndef _MCUCONF_H_
-#define _MCUCONF_H_
+#ifndef MCUCONF_H
+#define MCUCONF_H
 
 /*
  * AVR drivers configuration.
@@ -77,4 +77,4 @@
 #define AVR_SPI_USE_SPI1                   FALSE
 #define AVR_SPI_USE_16BIT_POLLED_EXCHANGE  FALSE
 
-#endif /* _MCUCONF_H_ */
+#endif /* MCUCONF_H */

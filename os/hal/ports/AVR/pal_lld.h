@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@
 /**
  * @brief   AVR setup registers.
  */
-typedef struct  {
+typedef struct {
   uint8_t  out;
   uint8_t  dir;
 } avr_gpio_setup_t;
@@ -65,7 +65,7 @@ typedef struct  {
  *          ports, the ports with abnormal layout cannot be used through
  *          PAL driver. Example: PORT F on Mega128.
  */
-typedef struct  {
+typedef struct {
   volatile uint8_t  in;
   volatile uint8_t  dir;
   volatile uint8_t  out;

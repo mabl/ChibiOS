@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -22,8 +22,8 @@
  * @{
  */
 
-#ifndef _USB_CDC_H_
-#define _USB_CDC_H_
+#ifndef USB_CDC_H
+#define USB_CDC_H
 
 /*===========================================================================*/
 /* Driver constants.                                                         */
@@ -131,6 +131,6 @@ typedef struct {
 /* External declarations.                                                    */
 /*===========================================================================*/
 
-#endif /* _USB_CDC_H_ */
+#endif /* USB_CDC_H */
 
 /** @} */

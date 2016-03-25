@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -48,7 +48,6 @@
  * - @subpage test_benchmarks_010
  * - @subpage test_benchmarks_011
  * - @subpage test_benchmarks_012
- * - @subpage test_benchmarks_013
  * .
  * @file testbmk.c Kernel Benchmarks
  * @brief Kernel Benchmarks source file
@@ -312,7 +311,11 @@ static void bmk6_execute(void) {
   test_wait_tick();
   test_start_timer(1000);
   do {
+#if CH_CFG_USE_REGISTRY
+    chThdRelease(chThdCreateStatic(wap, WA_SIZE, prio, thread1, NULL));
+#else
     chThdCreateStatic(wap, WA_SIZE, prio, thread1, NULL);
+#endif
     n++;
 #if defined(SIMULATOR)
     _sim_check_for_interrupts();
@@ -344,7 +347,8 @@ ROMCONST struct testcase testbmk6 = {
 
 static THD_FUNCTION(thread3, p) {
 
-  while (!*(bool *)p)
+  (void)p;
+  while (!chThdShouldTerminateX())
     chSemWait(&sem1);
 }
 
@@ -355,13 +359,12 @@ static void bmk7_setup(void) {
 
 static void bmk7_execute(void) {
   uint32_t n;
-  bool terminate = false;
 
-  threads[0] = chThdCreateStatic(wa[0], WA_SIZE, chThdGetPriorityX()+5, thread3, &terminate);
-  threads[1] = chThdCreateStatic(wa[1], WA_SIZE, chThdGetPriorityX()+4, thread3, &terminate);
-  threads[2] = chThdCreateStatic(wa[2], WA_SIZE, chThdGetPriorityX()+3, thread3, &terminate);
-  threads[3] = chThdCreateStatic(wa[3], WA_SIZE, chThdGetPriorityX()+2, thread3, &terminate);
-  threads[4] = chThdCreateStatic(wa[4], WA_SIZE, chThdGetPriorityX()+1, thread3, &terminate);
+  threads[0] = chThdCreateStatic(wa[0], WA_SIZE, chThdGetPriorityX()+5, thread3, NULL);
+  threads[1] = chThdCreateStatic(wa[1], WA_SIZE, chThdGetPriorityX()+4, thread3, NULL);
+  threads[2] = chThdCreateStatic(wa[2], WA_SIZE, chThdGetPriorityX()+3, thread3, NULL);
+  threads[3] = chThdCreateStatic(wa[3], WA_SIZE, chThdGetPriorityX()+2, thread3, NULL);
+  threads[4] = chThdCreateStatic(wa[4], WA_SIZE, chThdGetPriorityX()+1, thread3, NULL);
 
   n = 0;
   test_wait_tick();
@@ -373,7 +376,7 @@ static void bmk7_execute(void) {
     _sim_check_for_interrupts();
 #endif
   } while (!test_timer_done);
-  terminate = true;
+  test_terminate_threads();
   chSemReset(&sem1, 0);
   test_wait_threads();
 
@@ -401,44 +404,39 @@ ROMCONST struct testcase testbmk7 = {
  * The performance is calculated by measuring the number of iterations after
  * a second of continuous operations.
  */
-typedef struct {
-  bool terminate;
-  uint32_t n;
-} params_t;
 
 static THD_FUNCTION(thread8, p) {
-  params_t *pp = (params_t *)p;
 
   do {
     chThdYield();
     chThdYield();
     chThdYield();
     chThdYield();
-    pp->n += 4;
+    (*(uint32_t *)p) += 4;
 #if defined(SIMULATOR)
     _sim_check_for_interrupts();
 #endif
-  } while (!pp->terminate);
+  } while(!chThdShouldTerminateX());
 }
 
 static void bmk8_execute(void) {
-  params_t params = {false, 0};
+  uint32_t n;
 
-  params.n = 0;
+  n = 0;
   test_wait_tick();
 
-  threads[0] = chThdCreateStatic(wa[0], WA_SIZE, chThdGetPriorityX()-1, thread8, (void *)&params);
-  threads[1] = chThdCreateStatic(wa[1], WA_SIZE, chThdGetPriorityX()-1, thread8, (void *)&params);
-  threads[2] = chThdCreateStatic(wa[2], WA_SIZE, chThdGetPriorityX()-1, thread8, (void *)&params);
-  threads[3] = chThdCreateStatic(wa[3], WA_SIZE, chThdGetPriorityX()-1, thread8, (void *)&params);
-  threads[4] = chThdCreateStatic(wa[4], WA_SIZE, chThdGetPriorityX()-1, thread8, (void *)&params);
+  threads[0] = chThdCreateStatic(wa[0], WA_SIZE, chThdGetPriorityX()-1, thread8, (void *)&n);
+  threads[1] = chThdCreateStatic(wa[1], WA_SIZE, chThdGetPriorityX()-1, thread8, (void *)&n);
+  threads[2] = chThdCreateStatic(wa[2], WA_SIZE, chThdGetPriorityX()-1, thread8, (void *)&n);
+  threads[3] = chThdCreateStatic(wa[3], WA_SIZE, chThdGetPriorityX()-1, thread8, (void *)&n);
+  threads[4] = chThdCreateStatic(wa[4], WA_SIZE, chThdGetPriorityX()-1, thread8, (void *)&n);
 
   chThdSleepSeconds(1);
-  params.terminate = true;
+  test_terminate_threads();
   test_wait_threads();
 
   test_print("--- Score : ");
-  test_printn(params.n);
+  test_printn(n);
   test_println(" ctxswc/S");
 }
 
@@ -449,57 +447,8 @@ ROMCONST struct testcase testbmk8 = {
   bmk8_execute
 };
 
-#if CH_CFG_USE_QUEUES || defined(__DOXYGEN__)
 /**
- * @page test_benchmarks_009 I/O Queues throughput
- *
- * <h2>Description</h2>
- * Four bytes are written and then read from an @p InputQueue into a continuous
- * loop.<br>
- * The performance is calculated by measuring the number of iterations after
- * a second of continuous operations.
- */
-
-static void bmk9_execute(void) {
-  uint32_t n;
-  static uint8_t ib[16];
-  static input_queue_t iq;
-
-  chIQObjectInit(&iq, ib, sizeof(ib), NULL, NULL);
-  n = 0;
-  test_wait_tick();
-  test_start_timer(1000);
-  do {
-    chSysLock();
-    chIQPutI(&iq, 0);
-    chIQPutI(&iq, 1);
-    chIQPutI(&iq, 2);
-    chIQPutI(&iq, 3);
-    chSysUnlock();
-    (void)chIQGet(&iq);
-    (void)chIQGet(&iq);
-    (void)chIQGet(&iq);
-    (void)chIQGet(&iq);
-    n++;
-#if defined(SIMULATOR)
-    _sim_check_for_interrupts();
-#endif
-  } while (!test_timer_done);
-  test_print("--- Score : ");
-  test_printn(n * 4);
-  test_println(" bytes/S");
-}
-
-ROMCONST struct testcase testbmk9 = {
-  "Benchmark, I/O Queues throughput",
-  NULL,
-  NULL,
-  bmk9_execute
-};
-#endif /* CH_CFG_USE_QUEUES */
-
-/**
- * @page test_benchmarks_010 Virtual Timers set/reset performance
+ * @page test_benchmarks_009 Virtual Timers set/reset performance
  *
  * <h2>Description</h2>
  * A virtual timer is set and immediately reset into a continuous loop.<br>
@@ -509,7 +458,7 @@ ROMCONST struct testcase testbmk9 = {
 
 static void tmo(void *param) {(void)param;}
 
-static void bmk10_execute(void) {
+static void bmk09_execute(void) {
   static virtual_timer_t vt1, vt2;
   uint32_t n = 0;
 
@@ -532,16 +481,16 @@ static void bmk10_execute(void) {
   test_println(" timers/S");
 }
 
-ROMCONST struct testcase testbmk10 = {
+ROMCONST struct testcase testbmk9 = {
   "Benchmark, virtual timers set/reset",
   NULL,
   NULL,
-  bmk10_execute
+  bmk09_execute
 };
 
 #if CH_CFG_USE_SEMAPHORES || defined(__DOXYGEN__)
 /**
- * @page test_benchmarks_011 Semaphores wait/signal performance
+ * @page test_benchmarks_010 Semaphores wait/signal performance
  *
  * <h2>Description</h2>
  * A counting semaphore is taken/released into a continuous loop, no Context
@@ -550,12 +499,12 @@ ROMCONST struct testcase testbmk10 = {
  * a second of continuous operations.
  */
 
-static void bmk11_setup(void) {
+static void bmk10_setup(void) {
 
   chSemObjectInit(&sem1, 1);
 }
 
-static void bmk11_execute(void) {
+static void bmk10_execute(void) {
   uint32_t n = 0;
 
   test_wait_tick();
@@ -579,17 +528,17 @@ static void bmk11_execute(void) {
   test_println(" wait+signal/S");
 }
 
-ROMCONST struct testcase testbmk11 = {
+ROMCONST struct testcase testbmk10 = {
   "Benchmark, semaphores wait/signal",
-  bmk11_setup,
+  bmk10_setup,
   NULL,
-  bmk11_execute
+  bmk10_execute
 };
 #endif
 
 #if CH_CFG_USE_MUTEXES || defined(__DOXYGEN__)
 /**
- * @page test_benchmarks_012 Mutexes lock/unlock performance
+ * @page test_benchmarks_011 Mutexes lock/unlock performance
  *
  * <h2>Description</h2>
  * A mutex is locked/unlocked into a continuous loop, no Context Switch happens
@@ -598,12 +547,12 @@ ROMCONST struct testcase testbmk11 = {
  * a second of continuous operations.
  */
 
-static void bmk12_setup(void) {
+static void bmk11_setup(void) {
 
   chMtxObjectInit(&mtx1);
 }
 
-static void bmk12_execute(void) {
+static void bmk11_execute(void) {
   uint32_t n = 0;
 
   test_wait_tick();
@@ -627,22 +576,22 @@ static void bmk12_execute(void) {
   test_println(" lock+unlock/S");
 }
 
-ROMCONST struct testcase testbmk12 = {
+ROMCONST struct testcase testbmk11 = {
   "Benchmark, mutexes lock/unlock",
-  bmk12_setup,
+  bmk11_setup,
   NULL,
-  bmk12_execute
+  bmk11_execute
 };
 #endif
 
 /**
- * @page test_benchmarks_013 RAM Footprint
+ * @page test_benchmarks_012 RAM Footprint
  *
  * <h2>Description</h2>
  * The memory size of the various kernel objects is printed.
  */
 
-static void bmk13_execute(void) {
+static void bmk12_execute(void) {
 
   test_print("--- System: ");
   test_printn(sizeof(ch_system_t));
@@ -676,7 +625,7 @@ static void bmk13_execute(void) {
   test_printn(sizeof(condition_variable_t));
   test_println(" bytes");
 #endif
-#if CH_CFG_USE_QUEUES || defined(__DOXYGEN__)
+#if 0
   test_print("--- Queue : ");
   test_printn(sizeof(io_queue_t));
   test_println(" bytes");
@@ -688,11 +637,11 @@ static void bmk13_execute(void) {
 #endif
 }
 
-ROMCONST struct testcase testbmk13 = {
+ROMCONST struct testcase testbmk12 = {
   "Benchmark, RAM footprint",
   NULL,
   NULL,
-  bmk13_execute
+  bmk12_execute
 };
 
 /**
@@ -712,17 +661,14 @@ ROMCONST struct testcase * ROMCONST patternbmk[] = {
   &testbmk7,
 #endif
   &testbmk8,
-#if CH_CFG_USE_QUEUES || defined(__DOXYGEN__)
   &testbmk9,
-#endif
-  &testbmk10,
 #if CH_CFG_USE_SEMAPHORES || defined(__DOXYGEN__)
-  &testbmk11,
+  &testbmk10,
 #endif
 #if CH_CFG_USE_MUTEXES || defined(__DOXYGEN__)
-  &testbmk12,
+  &testbmk11,
 #endif
-  &testbmk13,
+  &testbmk12,
 #endif
   NULL
 };

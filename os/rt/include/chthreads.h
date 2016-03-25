@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio.
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio.
 
     This file is part of ChibiOS.
 
@@ -25,8 +25,8 @@
  * @{
  */
 
-#ifndef _CHTHREADS_H_
-#define _CHTHREADS_H_
+#ifndef CHTHREADS_H
+#define CHTHREADS_H
 
 /*lint -sem(chThdExit, r_no) -sem(chThdExitS, r_no)*/
 
@@ -181,7 +181,17 @@ extern "C" {
   thread_t *chThdCreateStatic(void *wsp, size_t size,
                               tprio_t prio, tfunc_t pf, void *arg);
   thread_t *chThdStart(thread_t *tp);
+#if CH_CFG_USE_REGISTRY == TRUE
+  thread_t *chThdAddRef(thread_t *tp);
+  void chThdRelease(thread_t *tp);
+#endif
+  void chThdExit(msg_t msg);
+  void chThdExitS(msg_t msg);
+#if CH_CFG_USE_WAITEXIT == TRUE
+  msg_t chThdWait(thread_t *tp);
+#endif
   tprio_t chThdSetPriority(tprio_t newprio);
+  void chThdTerminate(thread_t *tp);
   msg_t chThdSuspendS(thread_reference_t *trp);
   msg_t chThdSuspendTimeoutS(thread_reference_t *trp, systime_t timeout);
   void chThdResumeI(thread_reference_t *trp, msg_t msg);
@@ -194,11 +204,6 @@ extern "C" {
   void chThdSleepUntil(systime_t time);
   systime_t chThdSleepUntilWindowed(systime_t prev, systime_t next);
   void chThdYield(void);
-  void chThdExit(msg_t msg);
-  void chThdExitS(msg_t msg);
-#if CH_CFG_USE_WAITEXIT == TRUE
-  msg_t chThdWait(thread_t *tp);
-#endif
 #ifdef __cplusplus
 }
 #endif
@@ -274,6 +279,19 @@ static inline stkalign_t *chthdGetStackLimitX(thread_t *tp) {
 static inline bool chThdTerminatedX(thread_t *tp) {
 
   return (bool)(tp->state == CH_STATE_FINAL);
+}
+
+/**
+ * @brief   Verifies if the current thread has a termination request pending.
+ *
+ * @retval true         termination request pending.
+ * @retval false        termination request not pending.
+ *
+ * @xclass
+ */
+static inline bool chThdShouldTerminateX(void) {
+
+  return (bool)((chThdGetSelfX()->flags & CH_FLAG_TERMINATE) != (tmode_t)0);
 }
 
 /**
@@ -365,6 +383,6 @@ static inline void chThdDoDequeueNextI(threads_queue_t *tqp, msg_t msg) {
   (void) chSchReadyI(tp);
 }
 
-#endif /* _CHTHREADS_H_ */
+#endif /* CHTHREADS_H */
 
 /** @} */

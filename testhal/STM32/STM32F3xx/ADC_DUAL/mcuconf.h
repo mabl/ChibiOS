@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
     limitations under the License.
 */
 
-#ifndef _MCUCONF_H_
-#define _MCUCONF_H_
+#ifndef MCUCONF_H
+#define MCUCONF_H
 
 /*
  * STM32F3xx drivers configuration.
@@ -98,6 +98,17 @@
  */
 #define STM32_CAN_USE_CAN1                  FALSE
 #define STM32_CAN_CAN1_IRQ_PRIORITY         11
+
+/*
+ * DAC driver system settings.
+ */
+#define STM32_DAC_DUAL_MODE                 FALSE
+#define STM32_DAC_USE_DAC1_CH1              TRUE
+#define STM32_DAC_USE_DAC1_CH2              TRUE
+#define STM32_DAC_DAC1_CH1_IRQ_PRIORITY     10
+#define STM32_DAC_DAC1_CH2_IRQ_PRIORITY     10
+#define STM32_DAC_DAC1_CH1_DMA_PRIORITY     2
+#define STM32_DAC_DAC1_CH2_DMA_PRIORITY     2
 
 /*
  * EXT driver system settings.
@@ -239,4 +250,4 @@
  */
 #define STM32_WDG_USE_IWDG                  FALSE
 
-#endif /* _MCUCONF_H_ */
+#endif /* MCUCONF_H */

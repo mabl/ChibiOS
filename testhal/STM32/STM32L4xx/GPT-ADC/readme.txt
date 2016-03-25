@@ -8,6 +8,7 @@ The demo runs on an ST NUCLEO-L476RG board.
 
 ** The Demo **
 
+The application demonstrates the use of the STM32L4xx ADC driver triggered by GPT.
 
 ** Build Procedure **
 

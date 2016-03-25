@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -664,7 +664,7 @@ static inline void osalSysUnlockFromISR(void) {
  *
  * @xclass
  */
-static inline syssts_t osalSysGetStatusAndLockX(void)  {
+static inline syssts_t osalSysGetStatusAndLockX(void) {
   syssts_t sts;
 
 #if CORTEX_MODEL == 0

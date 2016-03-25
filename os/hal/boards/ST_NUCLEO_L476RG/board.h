@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -349,7 +349,7 @@
                                      PIN_ODR_HIGH(GPIOA_ARD_D1) |           \
                                      PIN_ODR_HIGH(GPIOA_ARD_D0) |           \
                                      PIN_ODR_HIGH(GPIOA_ARD_A2) |           \
-                                     PIN_ODR_HIGH(GPIOA_ARD_D13) |          \
+                                     PIN_ODR_LOW(GPIOA_ARD_D13) |           \
                                      PIN_ODR_HIGH(GPIOA_ARD_D12) |          \
                                      PIN_ODR_HIGH(GPIOA_ARD_D11) |          \
                                      PIN_ODR_HIGH(GPIOA_ARD_D7) |           \
@@ -376,11 +376,11 @@
                                      PIN_AFIO_AF(GPIOA_SWDIO, 0) |          \
                                      PIN_AFIO_AF(GPIOA_SWCLK, 0) |          \
                                      PIN_AFIO_AF(GPIOA_PIN15, 0))
-#define VAL_GPIOA_ASCR              (PIN_ASCR_DISABLED(GPIOA_ARD_A0) |      \
-                                     PIN_ASCR_DISABLED(GPIOA_ARD_A1) |      \
+#define VAL_GPIOA_ASCR              (PIN_ASCR_ENABLED(GPIOA_ARD_A0) |       \
+                                     PIN_ASCR_ENABLED(GPIOA_ARD_A1) |       \
                                      PIN_ASCR_DISABLED(GPIOA_ARD_D1) |      \
                                      PIN_ASCR_DISABLED(GPIOA_ARD_D0) |      \
-                                     PIN_ASCR_DISABLED(GPIOA_ARD_A2) |      \
+                                     PIN_ASCR_ENABLED(GPIOA_ARD_A2) |       \
                                      PIN_ASCR_DISABLED(GPIOA_ARD_D13) |     \
                                      PIN_ASCR_DISABLED(GPIOA_ARD_D12) |     \
                                      PIN_ASCR_DISABLED(GPIOA_ARD_D11) |     \
@@ -525,7 +525,7 @@
                                      PIN_AFIO_AF(GPIOB_PIN13, 0) |          \
                                      PIN_AFIO_AF(GPIOB_PIN14, 0) |          \
                                      PIN_AFIO_AF(GPIOB_PIN15, 0))
-#define VAL_GPIOB_ASCR              (PIN_ASCR_DISABLED(GPIOB_ARD_A3) |      \
+#define VAL_GPIOB_ASCR              (PIN_ASCR_ENABLED(GPIOB_ARD_A3) |       \
                                      PIN_ASCR_DISABLED(GPIOB_PIN1) |        \
                                      PIN_ASCR_DISABLED(GPIOB_PIN2) |        \
                                      PIN_ASCR_DISABLED(GPIOB_ARD_D3) |      \
@@ -674,8 +674,8 @@
                                      PIN_AFIO_AF(GPIOC_BUTTON, 0) |         \
                                      PIN_AFIO_AF(GPIOC_PIN14, 0) |          \
                                      PIN_AFIO_AF(GPIOC_PIN15, 0))
-#define VAL_GPIOC_ASCR              (PIN_ASCR_DISABLED(GPIOC_ARD_A5) |      \
-                                     PIN_ASCR_DISABLED(GPIOC_ARD_A4) |      \
+#define VAL_GPIOC_ASCR              (PIN_ASCR_ENABLED(GPIOC_ARD_A5) |       \
+                                     PIN_ASCR_ENABLED(GPIOC_ARD_A4) |       \
                                      PIN_ASCR_DISABLED(GPIOC_PIN2) |        \
                                      PIN_ASCR_DISABLED(GPIOC_PIN3) |        \
                                      PIN_ASCR_DISABLED(GPIOC_PIN4) |        \

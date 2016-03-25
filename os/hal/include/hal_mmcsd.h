@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -24,8 +24,8 @@
  * @{
  */
 
-#ifndef _HAL_MMCSD_H_
-#define _HAL_MMCSD_H_
+#ifndef HAL_MMCSD_H
+#define HAL_MMCSD_H
 
 #if (HAL_USE_MMC_SPI == TRUE) || (HAL_USE_SDC == TRUE) || defined(__DOXYGEN__)
 
@@ -493,6 +493,6 @@ extern "C" {
 
 #endif /* HAL_USE_MMC_SPI == TRUE || HAL_USE_MMC_SDC == TRUE */
 
-#endif /* _HAL_MMCSD_H_ */
+#endif /* HAL_MMCSD_H */
 
 /** @} */

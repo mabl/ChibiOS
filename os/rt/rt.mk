@@ -32,8 +32,8 @@ endif
 ifneq ($(findstring CH_CFG_USE_MESSAGES TRUE,$(CHCONF)),)
 KERNSRC += $(CHIBIOS)/os/rt/src/chmsg.c
 endif
-ifneq ($(findstring CH_CFG_USE_QUEUES TRUE,$(CHCONF)),)
-KERNSRC += $(CHIBIOS)/os/rt/src/chqueues.c
+ifneq ($(findstring CH_CFG_USE_DYNAMIC TRUE,$(CHCONF)),)
+KERNSRC += $(CHIBIOS)/os/rt/src/chdynamic.c
 endif
 ifneq ($(findstring CH_CFG_USE_MAILBOXES TRUE,$(CHCONF)),)
 KERNSRC += $(CHIBIOS)/os/common/oslib/src/chmboxes.c
@@ -46,9 +46,6 @@ KERNSRC += $(CHIBIOS)/os/common/oslib/src/chheap.c
 endif
 ifneq ($(findstring CH_CFG_USE_MEMPOOLS TRUE,$(CHCONF)),)
 KERNSRC += $(CHIBIOS)/os/common/oslib/src/chmempools.c
-endif
-ifneq ($(findstring CH_CFG_USE_DYNAMIC TRUE,$(CHCONF)),)
-KERNSRC += $(CHIBIOS)/os/common/oslib/src/chdynamic.c
 endif
 else
 KERNSRC := $(CHIBIOS)/os/rt/src/chsys.c \
@@ -64,12 +61,11 @@ KERNSRC := $(CHIBIOS)/os/rt/src/chsys.c \
            $(CHIBIOS)/os/rt/src/chcond.c \
            $(CHIBIOS)/os/rt/src/chevents.c \
            $(CHIBIOS)/os/rt/src/chmsg.c \
-           $(CHIBIOS)/os/rt/src/chqueues.c \
+           $(CHIBIOS)/os/rt/src/chdynamic.c \
            $(CHIBIOS)/os/common/oslib/src/chmboxes.c \
            $(CHIBIOS)/os/common/oslib/src/chmemcore.c \
            $(CHIBIOS)/os/common/oslib/src/chheap.c \
-           $(CHIBIOS)/os/common/oslib/src/chmempools.c \
-           $(CHIBIOS)/os/common/oslib/src/chdynamic.c
+           $(CHIBIOS)/os/common/oslib/src/chmempools.c
 endif
 
 # Required include directories

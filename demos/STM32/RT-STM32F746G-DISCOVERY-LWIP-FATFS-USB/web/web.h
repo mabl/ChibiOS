@@ -1,5 +1,5 @@
 /*
-    ChibiOS/RT - Copyright (C) 2006-2013 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -21,8 +21,8 @@
  * @{
  */
 
-#ifndef _WEB_H_
-#define _WEB_H_
+#ifndef WEB_H
+#define WEB_H
 
 #if !defined(WEB_THREAD_STACK_SIZE)
 #define WEB_THREAD_STACK_SIZE           1024
@@ -50,6 +50,6 @@ extern "C" {
 }
 #endif
 
-#endif /* _WEB_H_ */
+#endif /* WEB_H */
 
 /** @} */

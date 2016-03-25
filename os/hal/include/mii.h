@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -22,8 +22,8 @@
  * @{
  */
 
-#ifndef _MII_H_
-#define _MII_H_
+#ifndef MII_H
+#define MII_H
 
 /**
  * @name    Generic MII registers
@@ -170,6 +170,6 @@
 #define MII_LAN8742A_ID         0x0007C130
 /** @} */
 
-#endif /* _MII_H_ */
+#endif /* MII_H */
 
 /** @} */

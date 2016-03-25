@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio.
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio.
 
     This file is part of ChibiOS.
 
@@ -25,8 +25,8 @@
  * @{
  */
 
-#ifndef _CHMTX_H_
-#define _CHMTX_H_
+#ifndef CHMTX_H
+#define CHMTX_H
 
 #if (CH_CFG_USE_MUTEXES == TRUE) || defined(__DOXYGEN__)
 
@@ -108,6 +108,7 @@ extern "C" {
   void chMtxUnlock(mutex_t *mp);
   void chMtxUnlockS(mutex_t *mp);
   void chMtxUnlockAll(void);
+  void chMtxUnlockAllS(void);
 #ifdef __cplusplus
 }
 #endif
@@ -148,6 +149,6 @@ static inline mutex_t *chMtxGetNextMutexS(void) {
 
 #endif /* CH_CFG_USE_MUTEXES == TRUE */
 
-#endif /* _CHMTX_H_ */
+#endif /* CHMTX_H */
 
 /** @} */

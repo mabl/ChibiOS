@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -252,7 +252,7 @@ OSAL_IRQ_HANDLER(AVR_SD1_TX_VECT) {
   osalSysLockFromISR();
   b = sdRequestDataI(&SD1);
   osalSysUnlockFromISR();
-  if (b < Q_OK)
+  if (b < MSG_OK)
     UCSR0B &= ~(1 << UDRIE0);
   else
     UDR0 = b;
@@ -295,7 +295,7 @@ OSAL_IRQ_HANDLER(AVR_SD2_TX_VECT) {
   osalSysLockFromISR();
   b = sdRequestDataI(&SD2);
   osalSysUnlockFromISR();
-  if (b < Q_OK)
+  if (b < MSG_OK)
     UCSR1B &= ~(1 << UDRIE1);
   else
     UDR1 = b;

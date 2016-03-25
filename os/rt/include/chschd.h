@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio.
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio.
 
     This file is part of ChibiOS.
 
@@ -25,8 +25,8 @@
  * @{
  */
 
-#ifndef _CHSCHD_H_
-#define _CHSCHD_H_
+#ifndef CHSCHD_H
+#define CHSCHD_H
 
 /*===========================================================================*/
 /* Module constants.                                                         */
@@ -51,9 +51,8 @@
                                                  priority.                  */
 #define IDLEPRIO            (tprio_t)1      /**< @brief Idle priority.      */
 #define LOWPRIO             (tprio_t)2      /**< @brief Lowest priority.    */
-#define NORMALPRIO          (tprio_t)64     /**< @brief Normal priority.    */
-#define HIGHPRIO            (tprio_t)127    /**< @brief Highest priority.   */
-#define ABSPRIO             (tprio_t)255    /**< @brief Greatest priority.  */
+#define NORMALPRIO          (tprio_t)128    /**< @brief Normal priority.    */
+#define HIGHPRIO            (tprio_t)255    /**< @brief Highest priority.   */
 /** @} */
 
 /**
@@ -219,131 +218,148 @@ struct ch_thread {
   /* End of the fields shared with the ReadyList structure. */
 #if (CH_CFG_USE_REGISTRY == TRUE) || defined(__DOXYGEN__)
   /**
-   * @brief Thread name or @p NULL.
+   * @brief   Thread name or @p NULL.
    */
   const char            *name;
 #endif
   /**
-   * @brief Thread stack boundary.
-   * @note  This pointer matches with the working area base address.
+   * @brief   Thread stack boundary.
+   * @note    This pointer matches with the working area base address.
    */
   stkalign_t            *stklimit;
   /**
-   * @brief Current thread state.
+   * @brief   Current thread state.
    */
   tstate_t              state;
   /**
-   * @brief Number of ticks remaining to this thread.
+   * @brief   Various thread flags.
+   */
+  tmode_t               flags;
+#if (CH_CFG_USE_REGISTRY == TRUE) || defined(__DOXYGEN__)
+  /**
+   * @brief   References to this thread.
+   */
+  trefs_t               refs;
+#endif
+  /**
+   * @brief   Number of ticks remaining to this thread.
    */
 #if (CH_CFG_TIME_QUANTUM > 0) || defined(__DOXYGEN__)
   tslices_t             preempt;
 #endif
 #if (CH_DBG_THREADS_PROFILING == TRUE) || defined(__DOXYGEN__)
   /**
-   * @brief Thread consumed time in ticks.
-   * @note  This field can overflow.
+   * @brief   Thread consumed time in ticks.
+   * @note    This field can overflow.
    */
   volatile systime_t    time;
 #endif
   /**
-   * @brief State-specific fields.
-   * @note  All the fields declared in this union are only valid in the
-   *        specified state or condition and are thus volatile.
+   * @brief   State-specific fields.
+   * @note    All the fields declared in this union are only valid in the
+   *          specified state or condition and are thus volatile.
    */
   union {
     /**
-     * @brief Thread wakeup code.
-     * @note  This field contains the low level message sent to the thread
-     *        by the waking thread or interrupt handler. The value is valid
-     *        after exiting the @p chSchWakeupS() function.
+     * @brief   Thread wakeup code.
+     * @note    This field contains the low level message sent to the thread
+     *          by the waking thread or interrupt handler. The value is valid
+     *          after exiting the @p chSchWakeupS() function.
      */
     msg_t               rdymsg;
     /**
-     * @brief Thread exit code.
-     * @note  The thread termination code is stored in this field in order
-     *        to be retrieved by the thread performing a @p chThdWait() on
-     *        this thread.
+     * @brief   Thread exit code.
+     * @note    The thread termination code is stored in this field in order
+     *          to be retrieved by the thread performing a @p chThdWait() on
+     *          this thread.
      */
     msg_t               exitcode;
     /**
-     * @brief Pointer to a generic "wait" object.
-     * @note  This field is used to get a generic pointer to a synchronization
-     *        object and is valid when the thread is in one of the wait
-     *        states.
+     * @brief   Pointer to a generic "wait" object.
+     * @note    This field is used to get a generic pointer to a synchronization
+     *          object and is valid when the thread is in one of the wait
+     *          states.
      */
     void                *wtobjp;
     /**
-     * @brief Pointer to a generic thread reference object.
-     * @note  This field is used to get a pointer to a synchronization
-     *        object and is valid when the thread is in @p CH_STATE_SUSPENDED
-     *        state.
+     * @brief   Pointer to a generic thread reference object.
+     * @note    This field is used to get a pointer to a synchronization
+     *          object and is valid when the thread is in @p CH_STATE_SUSPENDED
+     *          state.
      */
     thread_reference_t  *wttrp;
 #if (CH_CFG_USE_MESSAGES == TRUE) || defined(__DOXYGEN__)
     /**
-     * @brief Thread sent message.
+     * @brief   Thread sent message.
      */
     msg_t               sentmsg;
 #endif
 #if (CH_CFG_USE_SEMAPHORES == TRUE) || defined(__DOXYGEN__)
     /**
-     * @brief Pointer to a generic semaphore object.
-     * @note  This field is used to get a pointer to a synchronization
-     *        object and is valid when the thread is in @p CH_STATE_WTSEM
-     *        state.
+     * @brief   Pointer to a generic semaphore object.
+     * @note    This field is used to get a pointer to a synchronization
+     *          object and is valid when the thread is in @p CH_STATE_WTSEM
+     *          state.
      */
     struct ch_semaphore *wtsemp;
 #endif
 #if (CH_CFG_USE_MUTEXES == TRUE) || defined(__DOXYGEN__)
     /**
-     * @brief Pointer to a generic mutex object.
-     * @note  This field is used to get a pointer to a synchronization
-     *        object and is valid when the thread is in @p CH_STATE_WTMTX
-     *        state.
+     * @brief   Pointer to a generic mutex object.
+     * @note    This field is used to get a pointer to a synchronization
+     *          object and is valid when the thread is in @p CH_STATE_WTMTX
+     *          state.
      */
     struct ch_mutex     *wtmtxp;
 #endif
 #if (CH_CFG_USE_EVENTS == TRUE) || defined(__DOXYGEN__)
     /**
-     * @brief Enabled events mask.
-     * @note  This field is only valid while the thread is in the
-     *        @p CH_STATE_WTOREVT or @p CH_STATE_WTANDEVT states.
+     * @brief   Enabled events mask.
+     * @note    This field is only valid while the thread is in the
+     *          @p CH_STATE_WTOREVT or @p CH_STATE_WTANDEVT states.
      */
     eventmask_t         ewmask;
 #endif
   }                     u;
 #if (CH_CFG_USE_WAITEXIT == TRUE) || defined(__DOXYGEN__)
   /**
-   * @brief Termination waiting list.
+   * @brief   Termination waiting list.
    */
   threads_list_t        waiting;
 #endif
 #if (CH_CFG_USE_MESSAGES == TRUE) || defined(__DOXYGEN__)
   /**
-   * @brief Messages queue.
+   * @brief   Messages queue.
    */
   threads_queue_t       msgqueue;
 #endif
 #if (CH_CFG_USE_EVENTS == TRUE) || defined(__DOXYGEN__)
   /**
-   * @brief Pending events mask.
+   * @brief   Pending events mask.
    */
   eventmask_t           epending;
 #endif
 #if (CH_CFG_USE_MUTEXES == TRUE) || defined(__DOXYGEN__)
   /**
-   * @brief List of the mutexes owned by this thread.
-   * @note  The list is terminated by a @p NULL in this field.
+   * @brief   List of the mutexes owned by this thread.
+   * @note    The list is terminated by a @p NULL in this field.
    */
   struct ch_mutex       *mtxlist;
   /**
-   * @brief Thread's own, non-inherited, priority.
+   * @brief   Thread's own, non-inherited, priority.
    */
   tprio_t               realprio;
 #endif
+#if ((CH_CFG_USE_DYNAMIC == TRUE) && (CH_CFG_USE_MEMPOOLS == TRUE)) ||      \
+    defined(__DOXYGEN__)
+  /**
+   * @brief   Memory Pool where the thread workspace is returned.
+   */
+  void                  *mpool;
+#endif
 #if (CH_DBG_STATISTICS == TRUE) || defined(__DOXYGEN__)
   /**
-   * @brief Thread statistics.
+   * @brief   Thread statistics.
    */
   time_measurement_t    stats;
 #endif
@@ -473,12 +489,6 @@ struct ch_system {
    * @brief   Global kernel statistics.
    */
   kernel_stats_t        kernel_stats;
-#endif
-#if CH_CFG_NO_IDLE_THREAD == FALSE
-  /**
-   * @brief   Idle thread working area.
-   */
-  THD_WORKING_AREA(idle_thread_wa, PORT_IDLE_THREAD_STACK_SIZE);
 #endif
 };
 
@@ -764,6 +774,6 @@ static inline void chSchPreemption(void) {
 #endif /* CH_CFG_TIME_QUANTUM == 0 */
 }
 
-#endif /* _CHSCHD_H_ */
+#endif /* CHSCHD_H */
 
 /** @} */

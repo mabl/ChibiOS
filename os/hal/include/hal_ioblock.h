@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -31,8 +31,8 @@
  * @{
  */
 
-#ifndef _HAL_IOBLOCK_H_
-#define _HAL_IOBLOCK_H_
+#ifndef HAL_IOBLOCK_H
+#define HAL_IOBLOCK_H
 
 /**
  * @brief   Driver state machine possible states.
@@ -260,6 +260,6 @@ typedef struct {
 
 /** @} */
 
-#endif /* _HAL_IOBLOCK_H_ */
+#endif /* HAL_IOBLOCK_H */
 
 /** @} */

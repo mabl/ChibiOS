@@ -1,8 +1,0 @@
-- Protected Pools. This would require the use of an MPU. Variables could
-  be declared to belong to a "protected pool" (a memory section). Pools would
-  be by default not accessible by threads unless threads attach them using an
-  API. This would allow to have variables that are only accessible by certain
-  threads improving system safety.
-  - The number of pools that a thread could attach would be limited by the
-    number of available MPU descriptors.
-  - How to handle pools from ISRs?

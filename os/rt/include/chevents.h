@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio.
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio.
 
     This file is part of ChibiOS.
 
@@ -28,8 +28,8 @@
  * @{
  */
 
-#ifndef _CHEVENTS_H_
-#define _CHEVENTS_H_
+#ifndef CHEVENTS_H
+#define CHEVENTS_H
 
 #if (CH_CFG_USE_EVENTS == TRUE) || defined(__DOXYGEN__)
 
@@ -256,8 +256,21 @@ static inline void chEvtBroadcastI(event_source_t *esp) {
   chEvtBroadcastFlagsI(esp, (eventflags_t)0);
 }
 
+/**
+ * @brief   Returns the events mask.
+ * @details The pending events mask is returned but not altered in any way.
+ *
+ * @return              The pending events mask.
+ *
+ * @api
+ */
+static inline eventmask_t chEvtGetEventsX(void) {
+
+  return currp->epending;
+}
+
 #endif /* CH_CFG_USE_EVENTS == TRUE */
 
-#endif /* _CHEVENTS_H_ */
+#endif /* CHEVENTS_H */
 
 /** @} */

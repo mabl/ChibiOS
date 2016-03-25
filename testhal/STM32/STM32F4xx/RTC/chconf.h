@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -25,8 +25,10 @@
  * @{
  */
 
-#ifndef _CHCONF_H_
-#define _CHCONF_H_
+#ifndef CHCONF_H
+#define CHCONF_H
+
+#define _CHIBIOS_RT_CONF_
 
 /*===========================================================================*/
 /**
@@ -260,15 +262,7 @@
  * @note    The default is @p TRUE.
  * @note    Requires @p CH_CFG_USE_SEMAPHORES.
  */
-#define CH_CFG_USE_MAILBOXES                FALSE
-
-/**
- * @brief   I/O Queues APIs.
- * @details If enabled then the I/O queues APIs are included in the kernel.
- *
- * @note    The default is @p TRUE.
- */
-#define CH_CFG_USE_QUEUES                   TRUE
+#define CH_CFG_USE_MAILBOXES                TRUE
 
 /**
  * @brief   Core Memory Manager APIs.
@@ -277,7 +271,7 @@
  *
  * @note    The default is @p TRUE.
  */
-#define CH_CFG_USE_MEMCORE                  FALSE
+#define CH_CFG_USE_MEMCORE                  TRUE
 
 /**
  * @brief   Heap Allocator APIs.
@@ -289,7 +283,7 @@
  *          @p CH_CFG_USE_SEMAPHORES.
  * @note    Mutexes are recommended.
  */
-#define CH_CFG_USE_HEAP                     FALSE
+#define CH_CFG_USE_HEAP                     TRUE
 
 /**
  * @brief   Memory Pools Allocator APIs.
@@ -298,7 +292,7 @@
  *
  * @note    The default is @p TRUE.
  */
-#define CH_CFG_USE_MEMPOOLS                 FALSE
+#define CH_CFG_USE_MEMPOOLS                 TRUE
 
 /**
  * @brief   Dynamic Threads APIs.
@@ -309,7 +303,7 @@
  * @note    Requires @p CH_CFG_USE_WAITEXIT.
  * @note    Requires @p CH_CFG_USE_HEAP and/or @p CH_CFG_USE_MEMPOOLS.
  */
-#define CH_CFG_USE_DYNAMIC                  FALSE
+#define CH_CFG_USE_DYNAMIC                  TRUE
 
 /** @} */
 
@@ -325,7 +319,7 @@
  *
  * @note    The default is @p FALSE.
  */
-#define CH_DBG_STATISTICS                   TRUE
+#define CH_DBG_STATISTICS                   FALSE
 
 /**
  * @brief   Debug option, system state check.
@@ -360,9 +354,16 @@
  * @details If enabled then the context switch circular trace buffer is
  *          activated.
  *
- * @note    The default is @p FALSE.
+ * @note    The default is @p CH_DBG_TRACE_MASK_NONE.
  */
-#define CH_DBG_ENABLE_TRACE                 TRUE
+#define CH_DBG_TRACE_MASK                   CH_DBG_TRACE_MASK_ALL
+
+/**
+ * @brief   Trace buffer entries.
+ * @note    The trace buffer is only allocated if @p CH_DBG_TRACE_MASK is
+ *          different from @p CH_DBG_TRACE_MASK_NONE.
+ */
+#define CH_DBG_TRACE_BUFFER_SIZE            128
 
 /**
  * @brief   Debug option, stack checks.
@@ -427,10 +428,6 @@
 /**
  * @brief   Threads finalization hook.
  * @details User finalization code added to the @p chThdExit() API.
- *
- * @note    It is inserted into lock zone.
- * @note    It is also invoked when the threads simply return in order to
- *          terminate.
  */
 #define CH_CFG_THREAD_EXIT_HOOK(tp) {                                       \
   /* Add threads finalization code here.*/                                  \
@@ -445,12 +442,27 @@
 }
 
 /**
+ * @brief   ISR enter hook.
+ */
+#define CH_CFG_IRQ_PROLOGUE_HOOK() {                                        \
+  /* IRQ prologue code here.*/                                              \
+}
+
+/**
+ * @brief   ISR exit hook.
+ */
+#define CH_CFG_IRQ_EPILOGUE_HOOK() {                                        \
+  /* IRQ epilogue code here.*/                                              \
+}
+
+/**
  * @brief   Idle thread enter hook.
  * @note    This hook is invoked within a critical zone, no OS functions
  *          should be invoked from here.
  * @note    This macro can be used to activate a power saving mode.
  */
 #define CH_CFG_IDLE_ENTER_HOOK() {                                          \
+  /* Idle-enter code here.*/                                                \
 }
 
 /**
@@ -460,6 +472,7 @@
  * @note    This macro can be used to deactivate a power saving mode.
  */
 #define CH_CFG_IDLE_LEAVE_HOOK() {                                          \
+  /* Idle-leave code here.*/                                                \
 }
 
 /**
@@ -488,12 +501,21 @@
   /* System halt code here.*/                                               \
 }
 
+/**
+ * @brief   Trace hook.
+ * @details This hook is invoked each time a new record is written in the
+ *          trace buffer.
+ */
+#define CH_CFG_TRACE_HOOK(tep) {                                            \
+  /* Trace code here.*/                                                     \
+}
+
 /** @} */
 
 /*===========================================================================*/
 /* Port-specific settings (override port settings defaulted in chcore.h).    */
 /*===========================================================================*/
 
-#endif  /* _CHCONF_H_ */
+#endif  /* CHCONF_H */
 
 /** @} */

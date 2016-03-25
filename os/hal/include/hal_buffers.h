@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -22,8 +22,8 @@
  * @{
  */
 
-#ifndef _HAL_BUFFERS_H_
-#define _HAL_BUFFERS_H_
+#ifndef HAL_BUFFERS_H
+#define HAL_BUFFERS_H
 
 /*===========================================================================*/
 /* Driver constants.                                                         */
@@ -270,6 +270,6 @@ extern "C" {
 }
 #endif
 
-#endif /* _HAL_BUFFERS_H_ */
+#endif /* HAL_BUFFERS_H */
 
 /** @} */

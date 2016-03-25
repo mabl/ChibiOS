@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -146,7 +146,7 @@ void _pal_lld_setgroupmode(ioportid_t port,
   uint32_t moder   = (mode & PAL_STM32_MODE_MASK) >> 0;
   uint32_t otyper  = (mode & PAL_STM32_OTYPE_MASK) >> 2;
   uint32_t ospeedr = (mode & PAL_STM32_OSPEED_MASK) >> 3;
-  uint32_t pupdr   = (mode & PAL_STM32_PUDR_MASK) >> 5;
+  uint32_t pupdr   = (mode & PAL_STM32_PUPDR_MASK) >> 5;
   uint32_t altr    = (mode & PAL_STM32_ALTERNATE_MASK) >> 7;
   uint32_t ascr    = (mode & PAL_STM32_ASCR_MASK) >> 11;
   uint32_t lockr   = (mode & PAL_STM32_LOCKR_MASK) >> 12;
@@ -156,18 +156,31 @@ void _pal_lld_setgroupmode(ioportid_t port,
       uint32_t altrmask, m1, m2, m4;
 
       altrmask = altr << ((bit & 7) * 4);
-      m4 = 15 << ((bit & 7) * 4);
-      if (bit < 8)
-        port->AFRL = (port->AFRL & ~m4) | altrmask;
-      else
-        port->AFRH = (port->AFRH & ~m4) | altrmask;
       m1 = 1 << bit;
+      m2 = 3 << (bit * 2);
+      m4 = 15 << ((bit & 7) * 4);
       port->OTYPER  = (port->OTYPER & ~m1) | otyper;
       port->ASCR    = (port->ASCR & ~m1) | ascr;
-      m2 = 3 << (bit * 2);
       port->OSPEEDR = (port->OSPEEDR & ~m2) | ospeedr;
       port->PUPDR   = (port->PUPDR & ~m2) | pupdr;
-      port->MODER   = (port->MODER & ~m2) | moder;
+       if (moder == PAL_STM32_MODE_ALTERNATE) {
+        /* If going in alternate mode then the alternate number is set
+           before switching mode in order to avoid glitches.*/
+        if (bit < 8)
+          port->AFRL = (port->AFRL & ~m4) | altrmask;
+        else
+          port->AFRH = (port->AFRH & ~m4) | altrmask;
+        port->MODER   = (port->MODER & ~m2) | moder;
+      }
+      else {
+        /* If going into a non-alternate mode then the mode is switched
+           before setting the alternate mode in order to avoid glitches.*/
+        port->MODER   = (port->MODER & ~m2) | moder;
+        if (bit < 8)
+          port->AFRL = (port->AFRL & ~m4) | altrmask;
+        else
+          port->AFRH = (port->AFRH & ~m4) | altrmask;
+      }
       port->LOCKR   = (port->LOCKR & ~m1) | lockr;
     }
     mask >>= 1;

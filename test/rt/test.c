@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@
 #include "testevt.h"
 #include "testheap.h"
 #include "testpools.h"
-#include "testqueues.h"
+#include "testdyn.h"
 #include "testbmk.h"
 
 /*
@@ -51,7 +51,7 @@ static ROMCONST struct testcase * ROMCONST *patterns[] = {
   patternevt,
   patternheap,
   patternpools,
-  patternqueues,
+  patterndyn,
   patternbmk,
   NULL
 };
@@ -93,13 +93,13 @@ void test_printn(uint32_t n) {
   char buf[16], *p;
 
   if (!n)
-    chSequentialStreamPut(chp, '0');
+    streamPut(chp, '0');
   else {
     p = buf;
     while (n)
       *p++ = (n % 10) + '0', n /= 10;
     while (p > buf)
-      chSequentialStreamPut(chp, *--p);
+      streamPut(chp, *--p);
   }
 }
 
@@ -111,7 +111,7 @@ void test_printn(uint32_t n) {
 void test_print(const char *msgp) {
 
   while (*msgp)
-    chSequentialStreamPut(chp, *msgp++);
+    streamPut(chp, *msgp++);
 }
 
 /**
@@ -122,7 +122,7 @@ void test_print(const char *msgp) {
 void test_println(const char *msgp) {
 
   test_print(msgp);
-  chSequentialStreamWrite(chp, (const uint8_t *)"\r\n", 2);
+  streamWrite(chp, (const uint8_t *)"\r\n", 2);
 }
 
 /*
@@ -137,7 +137,7 @@ static void print_tokens(void) {
   char *cp = tokens_buffer;
 
   while (cp < tokp)
-    chSequentialStreamPut(chp, *cp++);
+    streamPut(chp, *cp++);
 }
 
 /**
@@ -190,6 +190,17 @@ bool _test_assert_time_window(unsigned point, systime_t start, systime_t end) {
 /*
  * Threads utils.
  */
+
+/**
+ * @brief   Sets a termination request in all the test-spawned threads.
+ */
+void test_terminate_threads(void) {
+  int i;
+
+  for (i = 0; i < MAX_THREADS; i++)
+    if (threads[i])
+      chThdTerminate(threads[i]);
+}
 
 /**
  * @brief   Waits for the completion of all the test-spawned threads.
@@ -291,8 +302,8 @@ static void print_line(void) {
   unsigned i;
 
   for (i = 0; i < 76; i++)
-    chSequentialStreamPut(chp, '-');
-  chSequentialStreamWrite(chp, (const uint8_t *)"\r\n", 2);
+    streamPut(chp, '-');
+  streamWrite(chp, (const uint8_t *)"\r\n", 2);
 }
 
 /**

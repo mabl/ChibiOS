@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
     limitations under the License.
 */
 
-#ifndef _MCUCONF_H_
-#define _MCUCONF_H_
+#ifndef MCUCONF_H
+#define MCUCONF_H
 
 /*
  * STM32L1xx drivers configuration.
@@ -99,15 +99,15 @@
  * GPT driver system settings.
  */
 #define STM32_GPT_USE_TIM2                  FALSE
-#define STM32_GPT_USE_TIM3                  FALSE
-#define STM32_GPT_USE_TIM4                  FALSE
+#define STM32_GPT_USE_TIM3                  TRUE
+#define STM32_GPT_USE_TIM4                  TRUE
 #define STM32_GPT_USE_TIM6                  FALSE
 #define STM32_GPT_USE_TIM7                  FALSE
 #define STM32_GPT_USE_TIM9                  FALSE
 #define STM32_GPT_USE_TIM11                 FALSE
 #define STM32_GPT_TIM2_IRQ_PRIORITY         7
-#define STM32_GPT_TIM3_IRQ_PRIORITY         7
-#define STM32_GPT_TIM4_IRQ_PRIORITY         7
+#define STM32_GPT_TIM3_IRQ_PRIORITY         10
+#define STM32_GPT_TIM4_IRQ_PRIORITY         6
 #define STM32_GPT_TIM6_IRQ_PRIORITY         7
 #define STM32_GPT_TIM7_IRQ_PRIORITY         7
 #define STM32_GPT_TIM9_IRQ_PRIORITY         7
@@ -203,4 +203,4 @@
  */
 #define STM32_WDG_USE_IWDG                  FALSE
 
-#endif /* _MCUCONF_H_ */
+#endif /* MCUCONF_H */

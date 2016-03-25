@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -89,17 +89,10 @@
 #endif
 
 /**
- * @brief   EXTI16 interrupt priority level setting.
+ * @brief   EXTI16-EXTI35..38 interrupt priority level setting.
  */
-#if !defined(STM32_EXT_EXTI16_IRQ_PRIORITY) || defined(__DOXYGEN__)
-#define STM32_EXT_EXTI16_IRQ_PRIORITY       6
-#endif
-
-/**
- * @brief   EXTI17 interrupt priority level setting.
- */
-#if !defined(STM32_EXT_EXTI17_IRQ_PRIORITY) || defined(__DOXYGEN__)
-#define STM32_EXT_EXTI17_IRQ_PRIORITY       6
+#if !defined(STM32_EXT_EXTI1635_38_IRQ_PRIORITY) || defined(__DOXYGEN__)
+#define STM32_EXT_EXTI1635_38_IRQ_PRIORIT   6
 #endif
 
 /**
