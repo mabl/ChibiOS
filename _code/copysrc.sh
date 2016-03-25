@@ -1,6 +1,6 @@
 #!/bin/bash
 code=.
-chibios=../../../trunk
+chibios=../../../branches/dev_16.1.x_sprint9
 #do_templates=yes
 
 #============================================================================#
@@ -12,7 +12,7 @@ echo "Portable Kernel"
 if [ ! -d $do_templates ]
 then
   cp ${chibios}/os/nil/templates/nilconf.h                  ../portable/NIL_Portable_Kernel_Component/component/cfg/nilconf.h.ftl
-fi
+fi 
 cp -R ${chibios}/os/nil/include                             ../portable/NIL_Portable_Kernel_Component/component/lib
 cp -R ${chibios}/os/nil/src                                 ../portable/NIL_Portable_Kernel_Component/component/lib
 
