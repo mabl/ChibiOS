@@ -47,10 +47,8 @@
  * @name    Priority constants
  * @{
  */
-#define NOPRIO              (tprio_t)0      /**< @brief Ready list header
-                                                 priority.                  */
-#define IDLEPRIO            (tprio_t)1      /**< @brief Idle priority.      */
-#define LOWPRIO             (tprio_t)2      /**< @brief Lowest priority.    */
+#define IDLEPRIO            (tprio_t)0      /**< @brief Idle priority.      */
+#define LOWPRIO             (tprio_t)1      /**< @brief Lowest priority.    */
 #define NORMALPRIO          (tprio_t)128    /**< @brief Normal priority.    */
 #define HIGHPRIO            (tprio_t)255    /**< @brief Highest priority.   */
 /** @} */
@@ -60,8 +58,9 @@
  * @{
  */
 #define CH_STATE_READY      (tstate_t)0      /**< @brief Waiting on the
-                                                  ready list.               */
-#define CH_STATE_CURRENT    (tstate_t)1      /**< @brief Currently running. */
+                                                  ready list or running.    */
+#define CH_STATE_UNLINKED   (tstate_t)1      /**< @brief Transitory debug
+                                                         state.             */
 #define CH_STATE_WTSTART    (tstate_t)2      /**< @brief Just created.      */
 #define CH_STATE_SUSPENDED  (tstate_t)3      /**< @brief Suspended state.   */
 #define CH_STATE_QUEUED     (tstate_t)4      /**< @brief On an I/O queue.   */
@@ -85,9 +84,9 @@
  * @details Each element in an array initialized with this macro can be
  *          indexed using the numeric thread state values.
  */
-#define CH_STATE_NAMES                                                     \
-  "READY", "CURRENT", "WTSTART", "SUSPENDED", "QUEUED", "WTSEM", "WTMTX",  \
-  "WTCOND", "SLEEPING", "WTEXIT", "WTOREVT", "WTANDEVT", "SNDMSGQ",        \
+#define CH_STATE_NAMES                                                      \
+  "READY", "UNLINKED", "WTSTART", "SUSPENDED", "QUEUED", "WTSEM", "WTMTX",  \
+  "WTCOND", "SLEEPING", "WTEXIT", "WTOREVT", "WTANDEVT", "SNDMSGQ",         \
   "SNDMSG", "WTMSG", "FINAL"
 /** @} */
 
@@ -205,17 +204,13 @@ struct ch_threads_queue {
  *          by shrinking this structure.
  */
 struct ch_thread {
-  thread_t              *next;      /**< @brief Next in the list/queue.     */
-  /* End of the fields shared with the threads_list_t structure.*/
-  thread_t              *prev;      /**< @brief Previous in the queue.      */
-  /* End of the fields shared with the threads_queue_t structure.*/
+  threads_queue_t       queue;      /**< @brief Threads queue header.       */
   tprio_t               prio;       /**< @brief Thread priority.            */
   struct port_context   ctx;        /**< @brief Processor context.          */
 #if (CH_CFG_USE_REGISTRY == TRUE) || defined(__DOXYGEN__)
   thread_t              *newer;     /**< @brief Newer registry element.     */
   thread_t              *older;     /**< @brief Older registry element.     */
 #endif
-  /* End of the fields shared with the ReadyList structure. */
 #if (CH_CFG_USE_REGISTRY == TRUE) || defined(__DOXYGEN__)
   /**
    * @brief   Thread name or @p NULL.
@@ -409,24 +404,6 @@ struct ch_virtual_timers_list {
 };
 
 /**
- * @extends threads_queue_t
- */
-struct ch_ready_list {
-  threads_queue_t       queue;      /**< @brief Threads queue.              */
-  tprio_t               prio;       /**< @brief This field must be
-                                                initialized to zero.        */
-  struct port_context   ctx;        /**< @brief Not used, present because
-                                                offsets.                    */
-#if (CH_CFG_USE_REGISTRY == TRUE) || defined(__DOXYGEN__)
-  thread_t              *newer;     /**< @brief Newer registry element.     */
-  thread_t              *older;     /**< @brief Older registry element.     */
-#endif
-  /* End of the fields shared with the thread_t structure.*/
-  thread_t              *current;   /**< @brief The currently running
-                                                thread.                     */
-};
-
-/**
  * @brief   System debug data structure.
  */
 struct ch_system_debug {
@@ -463,9 +440,20 @@ struct ch_system_debug {
  */
 struct ch_system {
   /**
-   * @brief   Ready list header.
+   * @brief The currently running thread.
    */
-  ready_list_t          rlist;
+  thread_t              *current;
+  /**
+   * @brief  Idle thread descriptor.
+   * @note   This structure is also the header element of the ready list.
+   */
+  thread_t              idlethread;
+#if (CH_CFG_MAIN_IS_IDLE == FALSE) || defined(__DOXYGEN__)
+ /**
+   * @brief   Main thread descriptor.
+   */
+  thread_t              mainthread;
+#endif
   /**
    * @brief   Virtual timers delta list header.
    */
@@ -474,10 +462,6 @@ struct ch_system {
    * @brief   System debug.
    */
   system_debug_t        dbg;
-  /**
-   * @brief   Main thread descriptor.
-   */
-  thread_t              mainthread;
 #if (CH_CFG_USE_TM == TRUE) || defined(__DOXYGEN__)
   /**
    * @brief   Time measurement calibration data.
@@ -508,7 +492,12 @@ struct ch_system {
  * @note    This macro is not meant to be used in the application code but
  *          only from within the kernel, use @p chThdGetSelfX() instead.
  */
-#define currp ch.rlist.current
+#define currp ch.current
+
+/**
+ * @brief   Ready list alias.
+ */
+#define rlist idlethread
 
 /*===========================================================================*/
 /* External declarations.                                                    */
@@ -526,7 +515,6 @@ extern "C" {
 #endif
   void _scheduler_init(void);
   thread_t *chSchReadyI(thread_t *tp);
-  thread_t *chSchReadyAheadI(thread_t *tp);
   void chSchGoSleepS(tstate_t newstate);
   msg_t chSchGoSleepTimeoutS(tstate_t newstate, systime_t time);
   void chSchWakeupS(thread_t *ntp, msg_t msg);
@@ -536,8 +524,8 @@ extern "C" {
   void chSchDoRescheduleAhead(void);
   void chSchDoReschedule(void);
 #if CH_CFG_OPTIMIZE_SPEED == FALSE
-  void queue_prio_insert(thread_t *tp, threads_queue_t *tqp);
-  void queue_insert(thread_t *tp, threads_queue_t *tqp);
+  thread_t *queue_prio_insert(thread_t *tp, threads_queue_t *tqp);
+  thread_t *queue_insert(thread_t *tp, threads_queue_t *tqp);
   thread_t *queue_fifo_remove(threads_queue_t *tqp);
   thread_t *queue_lifo_remove(threads_queue_t *tqp);
   thread_t *queue_dequeue(thread_t *tp);
@@ -634,43 +622,47 @@ static inline bool queue_notempty(const threads_queue_t *tqp) {
 #if CH_CFG_OPTIMIZE_SPEED == TRUE
 static inline void list_insert(thread_t *tp, threads_list_t *tlp) {
 
-  tp->next = tlp->next;
+  tp->queue.next = tlp->next;
   tlp->next = tp;
 }
 
 static inline thread_t *list_remove(threads_list_t *tlp) {
 
   thread_t *tp = tlp->next;
-  tlp->next = tp->next;
+  tlp->next = tp->queue.next;
 
   return tp;
 }
 
-static inline void queue_prio_insert(thread_t *tp, threads_queue_t *tqp) {
+static inline thread_t *queue_prio_insert(thread_t *tp, threads_queue_t *tqp) {
 
   thread_t *cp = (thread_t *)tqp;
   do {
-    cp = cp->next;
+    cp = cp->queue.next;
   } while ((cp != (thread_t *)tqp) && (cp->prio >= tp->prio));
-  tp->next = cp;
-  tp->prev = cp->prev;
-  tp->prev->next = tp;
-  cp->prev = tp;
+  tp->queue.next             = cp;
+  tp->queue.prev             = cp->queue.prev;
+  tp->queue.prev->queue.next = tp;
+  cp->queue.prev             = tp;
+
+  return tp;
 }
 
-static inline void queue_insert(thread_t *tp, threads_queue_t *tqp) {
+static inline thread_t *queue_insert(thread_t *tp, threads_queue_t *tqp) {
 
-  tp->next = (thread_t *)tqp;
-  tp->prev = tqp->prev;
-  tp->prev->next = tp;
-  tqp->prev = tp;
+  tp->queue.next             = (thread_t *)tqp;
+  tp->queue.prev             = tqp->prev;
+  tp->queue.prev->queue.next = tp;
+  tqp->prev                  = tp;
+
+  return tp;
 }
 
 static inline thread_t *queue_fifo_remove(threads_queue_t *tqp) {
   thread_t *tp = tqp->next;
 
-  tqp->next = tp->next;
-  tqp->next->prev = (thread_t *)tqp;
+  tqp->next                  = tp->queue.next;
+  tqp->next->queue.prev      = (thread_t *)tqp;
 
   return tp;
 }
@@ -678,20 +670,36 @@ static inline thread_t *queue_fifo_remove(threads_queue_t *tqp) {
 static inline thread_t *queue_lifo_remove(threads_queue_t *tqp) {
   thread_t *tp = tqp->prev;
 
-  tqp->prev = tp->prev;
-  tqp->prev->next = (thread_t *)tqp;
+  tqp->prev                  = tp->queue.prev;
+  tqp->prev->queue.next      = (thread_t *)tqp;
 
   return tp;
 }
 
 static inline thread_t *queue_dequeue(thread_t *tp) {
 
-  tp->prev->next = tp->next;
-  tp->next->prev = tp->prev;
+  tp->queue.prev->queue.next = tp->queue.next;
+  tp->queue.next->queue.prev = tp->queue.prev;
 
   return tp;
 }
 #endif /* CH_CFG_OPTIMIZE_SPEED == TRUE */
+
+/**
+ * @brief   Removes the current thread from the ready list.
+ * @note    This function must only be called before calling @p chSchGoSleepS()
+ *          or @p chSchGoSleepTimeoutsS().
+ *
+ * @return              The removed thread pointer.
+ *
+ * @iclass
+ */
+static inline thread_t *chSchUnlinkI(void) {
+
+  currp->state = CH_STATE_UNLINKED;
+
+  return queue_dequeue(currp);
+}
 
 /**
  * @brief   Determines if the current thread must reschedule.
@@ -708,7 +716,7 @@ static inline bool chSchIsRescRequiredI(void) {
 
   chDbgCheckClassI();
 
-  return firstprio(&ch.rlist.queue) > currp->prio;
+  return currp != ch.rlist.queue.next;
 }
 
 /**
@@ -726,7 +734,7 @@ static inline bool chSchCanYieldS(void) {
 
   chDbgCheckClassS();
 
-  return firstprio(&ch.rlist.queue) >= currp->prio;
+  return currp->queue.next->prio >= currp->prio;
 }
 
 /**
@@ -753,22 +761,22 @@ static inline void chSchDoYieldS(void) {
  * @special
  */
 static inline void chSchPreemption(void) {
-  tprio_t p1 = firstprio(&ch.rlist.queue);
-  tprio_t p2 = currp->prio;
+//  tprio_t p1 = firstprio(&ch.rlist.queue);
+//  tprio_t p2 = currp->prio;
 
 #if CH_CFG_TIME_QUANTUM > 0
   if (currp->preempt > (tslices_t)0) {
-    if (p1 > p2) {
+    if (currp != ch.rlist.queue.next) {
       chSchDoRescheduleAhead();
     }
   }
   else {
-    if (p1 >= p2) {
+    if (currp->queue.next->prio >= currp->prio) {
       chSchDoRescheduleBehind();
     }
   }
 #else /* CH_CFG_TIME_QUANTUM == 0 */
-  if (p1 >= p2) {
+  if (currp != ch.rlist.queue.next) {
     chSchDoRescheduleAhead();
   }
 #endif /* CH_CFG_TIME_QUANTUM == 0 */

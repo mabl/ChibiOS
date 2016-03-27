@@ -217,6 +217,7 @@ msg_t chCondWaitS(condition_variable_t *cp) {
 
   /* Start waiting on the condition variable, on exit the mutex is taken
      again.*/
+  chSchUnlinkI();
   ctp->u.wtobjp = cp;
   queue_prio_insert(ctp, &cp->queue);
   chSchGoSleepS(CH_STATE_WTCOND);
@@ -307,6 +308,7 @@ msg_t chCondWaitTimeoutS(condition_variable_t *cp, systime_t time) {
 
   /* Start waiting on the condition variable, on exit the mutex is taken
      again.*/
+  chSchUnlinkI();
   currp->u.wtobjp = cp;
   queue_prio_insert(currp, &cp->queue);
   msg = chSchGoSleepTimeoutS(CH_STATE_WTCOND, time);

@@ -133,7 +133,7 @@ extern "C" {
 static inline void chRegSetThreadName(const char *name) {
 
 #if CH_CFG_USE_REGISTRY == TRUE
-  ch.rlist.current->name = name;
+  currp->name = name;
 #else
   (void)name;
 #endif

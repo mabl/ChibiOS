@@ -135,7 +135,7 @@ thread_t *chRegFirstThread(void) {
   thread_t *tp;
 
   chSysLock();
-  tp = ch.rlist.newer;
+  tp = &ch.idlethread;
 #if CH_CFG_USE_DYNAMIC == TRUE
   tp->refs++;
 #endif
@@ -161,13 +161,13 @@ thread_t *chRegNextThread(thread_t *tp) {
   chSysLock();
   ntp = tp->newer;
   /*lint -save -e9087 -e740 [11.3, 1.3] Cast required by list handling.*/
-  if (ntp == (thread_t *)&ch.rlist) {
+  if (ntp == (thread_t *)&ch.idlethread) {
   /*lint -restore*/
     ntp = NULL;
   }
 #if CH_CFG_USE_DYNAMIC == TRUE
   else {
-    chDbgAssert(ntp->refs < (trefs_t)255, "too many references");
+    chDbgAssert(ntp->refs < ((trefs_t)-1), "too many references");
     ntp->refs++;
   }
 #endif

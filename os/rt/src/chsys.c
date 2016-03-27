@@ -39,7 +39,7 @@
 /* Module exported variables.                                                */
 /*===========================================================================*/
 
-#if (CH_CFG_NO_IDLE_THREAD == FALSE) || defined(__DOXYGEN__)
+#if (CH_CFG_MAIN_IS_IDLE == FALSE) || defined(__DOXYGEN__)
 /**
  * @brief   Idle thread working area.
  */
@@ -58,7 +58,7 @@ THD_WORKING_AREA(ch_idle_thread_wa, PORT_IDLE_THREAD_STACK_SIZE);
 /* Module local functions.                                                   */
 /*===========================================================================*/
 
-#if (CH_CFG_NO_IDLE_THREAD == FALSE) || defined(__DOXYGEN__)
+#if (CH_CFG_MAIN_IS_IDLE == FALSE) || defined(__DOXYGEN__)
 /**
  * @brief   This function implements the idle thread infinite loop.
  * @details The function puts the processor in the lowest power mode capable
@@ -69,7 +69,7 @@ THD_WORKING_AREA(ch_idle_thread_wa, PORT_IDLE_THREAD_STACK_SIZE);
  *
  * @param[in] p         the thread parameter, unused in this scenario
  */
-static void _idle_thread(void *p) {
+static THD_FUNCTION(_idle_thread, p) {
 
   (void)p;
 
@@ -123,22 +123,42 @@ void chSysInit(void) {
   _dbg_trace_init();
 #endif
 
-#if CH_CFG_NO_IDLE_THREAD == FALSE
+#if CH_CFG_MAIN_IS_IDLE == FALSE
+  {
+    /* Note, ch.idlethread is already in the ready list because it is the
+       list header, _scheduler_init() took care of it.*/
+    thread_t *tp = _thread_init(&ch.idlethread, "idle", IDLEPRIO);
+    tp->stklimit = THD_WORKING_AREA_BASE(ch_idle_thread_wa);
+
+#if CH_DBG_FILL_THREADS == TRUE
+    _thread_memfill((uint8_t *)THD_WORKING_AREA_BASE(ch_idle_thread_wa),
+                    (uint8_t *)THD_WORKING_AREA_END(ch_idle_thread_wa),
+                    CH_DBG_STACK_FILL_VALUE);
+#endif
+
+    /* Setting up the port-dependent part of the working area.*/
+    PORT_SETUP_CONTEXT(tp,
+                       THD_WORKING_AREA_BASE(ch_idle_thread_wa),
+                       THD_WORKING_AREA_END(ch_idle_thread_wa),
+                       _idle_thread, NULL);
+  }
+
   /* Now this instructions flow becomes the main thread.*/
-  currp = _thread_init(&ch.mainthread, "main", NORMALPRIO);
+  currp = queue_prio_insert(_thread_init(&ch.mainthread,
+                                         (const char *)&ch_debug,
+                                         NORMALPRIO),
+                            &ch.rlist.queue);
 #else
   /* Now this instructions flow becomes the idle thread.*/
-  currp = _thread_init(&ch.mainthread, "idle", IDLEPRIO);
+  currp = queue_prio_insert(_thread_init(&ch.mainthread, "idle", IDLEPRIO),
+                            &ch.rlist.queue);
 #endif
 
   /* Setting up the base address of the static main thread stack.*/
   currp->stklimit = &__main_thread_stack_base__;
 
-  /* Setting up the caller as current thread.*/
-  currp->state = CH_STATE_CURRENT;
-
-  /* Port layer initialization last because it depend on some of the
-     initializations performed before.*/
+  /* Port layer initialization last because it can depend on some of the
+     initializations performed before (stklimit).*/
   port_init();
 
 #if CH_DBG_STATISTICS == TRUE
@@ -148,30 +168,6 @@ void chSysInit(void) {
 
   /* It is alive now.*/
   chSysEnable();
-
-#if CH_CFG_USE_REGISTRY == TRUE
-  /* Note, &ch_debug points to the string "main" if the registry is
-     active.*/
-  chRegSetThreadName((const char *)&ch_debug);
-#endif
-
-#if CH_CFG_NO_IDLE_THREAD == FALSE
-  {
-    static const thread_descriptor_t idle_descriptor = {
-      "idle",
-      THD_WORKING_AREA_BASE(ch_idle_thread_wa),
-      THD_WORKING_AREA_END(ch_idle_thread_wa),
-      IDLEPRIO,
-      _idle_thread,
-      NULL
-    };
-
-    /* This thread has the lowest priority in the system, its role is just to
-       serve interrupts in its context while keeping the lowest energy saving
-       mode compatible with the system status.*/
-    (void) chThdCreate(&idle_descriptor);
-  }
-#endif
 }
 
 /**
@@ -242,14 +238,14 @@ bool chSysIntegrityCheckI(unsigned testmask) {
     tp = ch.rlist.queue.next;
     while (tp != (thread_t *)&ch.rlist.queue) {
       n++;
-      tp = tp->next;
+      tp = tp->queue.next;
     }
 
     /* Scanning the ready list backward.*/
     tp = ch.rlist.queue.prev;
     while (tp != (thread_t *)&ch.rlist.queue) {
       n--;
-      tp = tp->prev;
+      tp = tp->queue.prev;
     }
 
     /* The number of elements must match.*/

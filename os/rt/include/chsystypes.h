@@ -80,13 +80,6 @@ typedef struct ch_threads_list threads_list_t;
 typedef struct ch_threads_queue threads_queue_t;
 
 /**
- * @extends threads_queue_t
- *
- * @brief   Type of a ready list header.
- */
-typedef struct ch_ready_list ready_list_t;
-
-/**
  * @brief   Type of a Virtual Timer callback function.
  */
 typedef void (*vtfunc_t)(void *p);

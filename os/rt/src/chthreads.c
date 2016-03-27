@@ -563,6 +563,7 @@ msg_t chThdWait(thread_t *tp) {
 #endif
 
   if (tp->state != CH_STATE_FINAL) {
+    chSchUnlinkI();
     list_insert(currp, &tp->waiting);
     chSchGoSleepS(CH_STATE_WTEXIT);
   }
@@ -861,6 +862,7 @@ msg_t chThdEnqueueTimeoutS(threads_queue_t *tqp, systime_t timeout) {
     return MSG_TIMEOUT;
   }
 
+  chSchUnlinkI();
   queue_insert(currp, tqp);
 
   return chSchGoSleepTimeoutS(CH_STATE_QUEUED, timeout);

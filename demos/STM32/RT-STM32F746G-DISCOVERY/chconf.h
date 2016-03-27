@@ -97,13 +97,13 @@
 #define CH_CFG_MEMCORE_SIZE                 0
 
 /**
- * @brief   Idle thread automatic spawn suppression.
+ * @brief   No dedicated idle thread if enabled.
  * @details When this option is activated the function @p chSysInit()
  *          does not spawn the idle thread. The application @p main()
  *          function becomes the idle thread and must implement an
  *          infinite loop.
  */
-#define CH_CFG_NO_IDLE_THREAD               FALSE
+#define CH_CFG_MAIN_IS_IDLE                 FALSE
 
 /** @} */
 

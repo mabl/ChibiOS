@@ -221,7 +221,7 @@ extern "C" {
   */
 static inline thread_t *chThdGetSelfX(void) {
 
-  return ch.rlist.current;
+  return currp;
 }
 
 /**

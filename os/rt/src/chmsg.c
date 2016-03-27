@@ -90,6 +90,7 @@ msg_t chMsgSend(thread_t *tp, msg_t msg) {
   chDbgCheck(tp != NULL);
 
   chSysLock();
+  chSchUnlinkI();
   ctp->u.sentmsg = msg;
   msg_insert(ctp, &tp->msgqueue);
   if (tp->state == CH_STATE_WTMSG) {

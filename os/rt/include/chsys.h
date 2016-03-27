@@ -381,16 +381,14 @@ static inline void chSysLock(void) {
  */
 static inline void chSysUnlock(void) {
 
-  _dbg_check_unlock();
-  _stats_stop_measure_crit_thd();
-
   /* The following condition can be triggered by the use of i-class functions
      in a critical section not followed by a chSchResceduleS(), this means
      that the current thread has a lower priority than the next thread in
      the ready list.*/
-  chDbgAssert((ch.rlist.queue.next == (thread_t *)&ch.rlist.queue) ||
-              (ch.rlist.current->prio >= ch.rlist.queue.next->prio),
-              "priority order violation");
+  chDbgAssert(!chSchIsRescRequiredI(), "priority order violation");
+
+  _dbg_check_unlock();
+  _stats_stop_measure_crit_thd();
 
   port_unlock();
 }
@@ -462,7 +460,7 @@ static inline void chSysUnconditionalUnlock(void) {
   }
 }
 
-#if (CH_CFG_NO_IDLE_THREAD == FALSE) || defined(__DOXYGEN__)
+#if (CH_CFG_MAIN_IS_IDLE == FALSE) || defined(__DOXYGEN__)
 /**
  * @brief   Returns a pointer to the idle thread.
  * @pre     In order to use this function the option @p CH_CFG_NO_IDLE_THREAD
@@ -477,7 +475,7 @@ static inline void chSysUnconditionalUnlock(void) {
  */
 static inline thread_t *chSysGetIdleThreadX(void) {
 
-  return ch.rlist.queue.prev;
+  return &ch.idlethread;
 }
 #endif /* CH_CFG_NO_IDLE_THREAD == FALSE */
 

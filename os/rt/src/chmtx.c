@@ -194,12 +194,13 @@ void chMtxLockS(mutex_t *mp) {
           break;
 #endif
         case CH_STATE_READY:
+          tp = queue_dequeue(tp);
 #if CH_DBG_ENABLE_ASSERTS == TRUE
           /* Prevents an assertion in chSchReadyI().*/
-          tp->state = CH_STATE_CURRENT;
+          tp->state = CH_STATE_UNLINKED;
 #endif
           /* Re-enqueues tp with its new priority on the ready list.*/
-          (void) chSchReadyI(queue_dequeue(tp));
+          (void) chSchReadyI(tp);
           break;
         default:
           /* Nothing to do for other states.*/
@@ -209,6 +210,7 @@ void chMtxLockS(mutex_t *mp) {
       }
 
       /* Sleep on the mutex.*/
+      chSchUnlinkI();
       queue_prio_insert(ctp, &mp->queue);
       ctp->u.wtmtxp = mp;
       chSchGoSleepS(CH_STATE_WTMTX);
@@ -376,11 +378,11 @@ void chMtxUnlock(mutex_t *mp) {
       mp->next = tp->mtxlist;
       tp->mtxlist = mp;
 
-      /* Note, not using chSchWakeupS() becuase that function expects the
+      /* Note, not using chSchWakeupS() because that function expects the
          current thread to have the higher or equal priority than the ones
          in the ready list. This is not necessarily true here because we
          just changed priority.*/
-      (void) chSchReadyI(tp);
+      (void) chSchReadyI(tp); /* TODO no more true.*/
       chSchRescheduleS();
     }
     else {
