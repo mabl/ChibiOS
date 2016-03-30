@@ -1,5 +1,5 @@
 /*
-    ChibiOS - Copyright (C) 2006..2015 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -233,13 +233,16 @@ msg_t test_execute(BaseSequentialStream *stream) {
   test_println("***");
   test_print("*** Compiled:     ");
   test_println(__DATE__ " - " __TIME__);
-#ifdef PLATFORM_NAME
+#if defined(PLATFORM_NAME)
   test_print("*** Platform:     ");
   test_println(PLATFORM_NAME);
 #endif
-#ifdef BOARD_NAME
+#if defined(BOARD_NAME)
   test_print("*** Test Board:   ");
   test_println(BOARD_NAME);
+#endif
+#if defined(TEST_REPORT_HOOK_HEADER)
+  TEST_REPORT_HOOK_HEADER
 #endif
   test_println("");
 
@@ -282,6 +285,10 @@ msg_t test_execute(BaseSequentialStream *stream) {
     test_println("FAILURE");
   else
     test_println("SUCCESS");
+
+#if defined(TEST_REPORT_HOOK_END)
+  TEST_REPORT_HOOK_END
+#endif
 
   return (msg_t)test_global_fail;
 }
