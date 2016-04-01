@@ -39,7 +39,7 @@
 #define _FROM_ASM_
 #include "nilconf.h"
 #include "nilcore.h"
-#include "boot.h"
+#include "checkCompiler.h"
 
 #if !defined(__DOXYGEN__)
 
