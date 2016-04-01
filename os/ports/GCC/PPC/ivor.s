@@ -39,7 +39,7 @@
 #define _FROM_ASM_
 #include "chconf.h"
 #include "chcore.h"
-#include "boot.h"
+#include "checkCompiler.h"
 
 #if !defined(__DOXYGEN__)
         /*
