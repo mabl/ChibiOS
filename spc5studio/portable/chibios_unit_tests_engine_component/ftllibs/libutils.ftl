@@ -113,7 +113,11 @@ ${pn}${line}
   [#list lines as line]
     [#if (line_index > 0) || (line?trim?length > 0)]
       [#if line?trim?length > 0]
+        [#if line[0] == "#"]
+${line?chop_linebreak}
+        [#else]
 ${start + line?chop_linebreak}
+        [/#if]
       [#else]
 
       [/#if]
