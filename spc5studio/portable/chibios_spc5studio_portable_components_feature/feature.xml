@@ -2,7 +2,7 @@
 <feature
       id="org.chibios.spc5.components.chibios.portable.feature"
       label="ChibiOS Portable Components"
-      version="1.1.0.qualifier"
+      version="1.2.0.qualifier"
       provider-name="www.chibios.org"
       plugin="org.chibios.spc5.chibios.branding"
       exclusive="true">

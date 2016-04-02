@@ -10,6 +10,9 @@ ${conf.instance.description.copyright.value?trim}
 #include "test_root.h"
 
 /**
+ * @file    test_sequence_${(sequence_index + 1)?string("000")}.c
+ * @brief   Test Sequence ${(sequence_index + 1)?string("000")} code.
+ *
  * @page test_sequence_${(sequence_index + 1)?string("000")} [${(sequence_index + 1)?string}] ${utils.WithoutDot(sequence.brief.value[0]?string)}
  *
  * File: @ref test_sequence_${(sequence_index + 1)?string("000")}.c

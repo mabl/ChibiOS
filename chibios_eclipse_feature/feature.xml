@@ -2,7 +2,7 @@
 <feature
       id="org.chibios.eclipse.tools.feature"
       label="ChibiOS Eclipse Tools"
-      version="2.3.0.qualifier"
+      version="2.4.0.qualifier"
       provider-name="www.chibios.org"
       plugin="org.chibios.chibistudio.branding"
       exclusive="true">

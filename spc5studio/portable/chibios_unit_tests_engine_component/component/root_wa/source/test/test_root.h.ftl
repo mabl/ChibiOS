@@ -8,8 +8,8 @@ ${conf.instance.description.copyright.value?trim}
  * @brief   Test Suite root structures header.
  */
 
-#ifndef _SPC5_TEST_ROOT_H_
-#define _SPC5_TEST_ROOT_H_
+#ifndef TEST_ROOT_H
+#define TEST_ROOT_H
 
 [#list conf.instance.sequences.sequence as sequence]
 #include "test_sequence_${(sequence_index + 1)?string("000")}.h"
@@ -40,4 +40,4 @@ ${conf.instance.global_data_and_code.global_definitions.value[0]}
 [/#if]
 #endif /* !defined(__DOXYGEN__) */
 
-#endif /* _SPC5_TEST_ROOT_H_ */
+#endif /* TEST_ROOT_H */

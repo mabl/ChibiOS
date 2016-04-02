@@ -26,8 +26,8 @@
 [@license.EmitLicenseAsText /]
 */
 
-#ifndef _BOARD_H_
-#define _BOARD_H_
+#ifndef BOARD_H
+#define BOARD_H
 
 /*
  * Setup for ${doc1.board.board_name[0]} board.
@@ -348,4 +348,4 @@ extern "C" {
 #endif
 #endif /* _FROM_ASM_ */
 
-#endif /* _BOARD_H_ */
+#endif /* BOARD_H */
