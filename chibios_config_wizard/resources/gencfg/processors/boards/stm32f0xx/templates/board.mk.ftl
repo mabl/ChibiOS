@@ -22,9 +22,9 @@
 [#import "/@lib/libutils.ftl" as utils /]
 [@pp.changeOutputFile name="board.mk" /]
 [#if doc1.board.configuration_settings.hal_version[0]?trim == "2.6.x"]
-  [#assign path = "{CHIBIOS}/boards/" /]
+  [#assign path = "(CHIBIOS)/boards/" /]
 [#else]
-  [#assign path = "{CHIBIOS}/os/hal/boards/" /]
+  [#assign path = "(CHIBIOS)/os/hal/boards/" /]
 [/#if]
 # List of all the board related files.
 BOARDSRC = ${'$'}${path}${doc1.board.board_id[0]}/board.c
