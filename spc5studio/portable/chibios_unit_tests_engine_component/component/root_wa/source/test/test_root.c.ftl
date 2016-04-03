@@ -46,7 +46,13 @@ ${conf.instance.description.copyright.value?trim}
  */
 const testcase_t * const *test_suite[] = {
 [#list conf.instance.sequences.sequence as sequence]
+  [#if sequence.condition.value[0]?trim?length > 0]
+#if (${sequence.condition.value[0]}) || defined(__DOXYGEN__)
+  [/#if]
   test_sequence_${(sequence_index + 1)?string("000")},
+  [#if sequence.condition.value[0]?trim?length > 0]
+#endif
+  [/#if]
 [/#list]
   NULL
 };
