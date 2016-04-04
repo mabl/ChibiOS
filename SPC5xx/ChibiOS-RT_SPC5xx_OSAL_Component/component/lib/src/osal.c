@@ -131,6 +131,15 @@ void osalThreadResumeS(thread_reference_t *trp, msg_t msg) {
   }
 }
 
+void wakeup(void *p) {
+    Thread *tp = (Thread *)p;
+
+    chSysUnlockFromIsr();
+    tp->p_u.rdymsg = RDY_TIMEOUT;
+    chSchReadyI(dequeue(tp));
+    chSysUnlockFromIsr();
+}
+
 /**
  * @brief   Enqueues the caller thread.
  * @details The caller thread is enqueued and put to sleep until it is
@@ -155,15 +164,6 @@ void osalThreadResumeS(thread_reference_t *trp, msg_t msg) {
  * @sclass
  */
 msg_t osalThreadEnqueueTimeoutS(threads_queue_t *tqp, systime_t time) {
-
-  void wakeup(void *p) {
-    Thread *tp = (Thread *)p;
-
-    chSysUnlockFromIsr();
-    tp->p_u.rdymsg = RDY_TIMEOUT;
-    chSchReadyI(dequeue(tp));
-    chSysUnlockFromIsr();
-  }
 
   if (TIME_IMMEDIATE == time)
     return MSG_TIMEOUT;

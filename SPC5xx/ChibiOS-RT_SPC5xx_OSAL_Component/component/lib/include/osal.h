@@ -334,7 +334,11 @@ void osalIsrDisable(void) {
 static inline
 void osalIsrWait(void) {
 
+#ifdef __ghs__
+  asm ("wait");
+#else
   asm volatile ("wait" : : : "memory");
+#endif
 }
 
 /**
