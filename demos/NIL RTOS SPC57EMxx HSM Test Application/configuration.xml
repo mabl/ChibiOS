@@ -19,7 +19,7 @@
           <irq_stack_size>
             <value>0</value>
           </irq_stack_size>
-          <boot_mode index="0">
+          <boot_mode disabled="true" index="0">
             <value>Execute from Flash</value>
           </boot_mode>
           <load_address disabled="true">
@@ -37,6 +37,9 @@
           <clock_divider_0>
             <value>0</value>
           </clock_divider_0>
+          <set_busy_flag_on_boot>
+            <value>false</value>
+          </set_busy_flag_on_boot>
         </runtime_settings>
         <build_settings>
           <application_name>
@@ -46,7 +49,7 @@
             <value>ppc-freevle-eabi-</value>
           </compiler_variant>
           <optimization_level index="3">
-            <value>-O2</value>
+            <value>-O2 speed</value>
           </optimization_level>
           <common_options>
             <value>-ggdb -fomit-frame-pointer -falign-functions=16 -mno-spe -msoft-float</value>
@@ -80,6 +83,138 @@
         </linker_settings>
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.nil.rtos.spc57emxx_hsm" />
+      <instance locked="false" id="org.chibios.spc5.components.spc5hal">
+        <enabled_drivers>
+          <tm disabled="true">
+            <value>false</value>
+          </tm>
+          <pal>
+            <value>true</value>
+          </pal>
+          <adc disabled="true">
+            <value>false</value>
+          </adc>
+          <can disabled="true">
+            <value>false</value>
+          </can>
+          <ext disabled="true">
+            <value>false</value>
+          </ext>
+          <gpt disabled="true">
+            <value>false</value>
+          </gpt>
+          <i2c disabled="true">
+            <value>false</value>
+          </i2c>
+          <icu disabled="true">
+            <value>false</value>
+          </icu>
+          <mac disabled="true">
+            <value>false</value>
+          </mac>
+          <mmc_spi disabled="true">
+            <value>false</value>
+          </mmc_spi>
+          <pwm disabled="true">
+            <value>false</value>
+          </pwm>
+          <serial disabled="true">
+            <value>false</value>
+          </serial>
+          <spi disabled="true">
+            <value>false</value>
+          </spi>
+          <uart disabled="true">
+            <value>false</value>
+          </uart>
+        </enabled_drivers>
+        <serial_driver_settings>
+          <default_bit_rate disabled="true">
+            <value>38400</value>
+          </default_bit_rate>
+          <buffers_size disabled="true">
+            <value>16</value>
+          </buffers_size>
+        </serial_driver_settings>
+        <adc_driver_settings>
+          <enable_synchronous_functions disabled="true">
+            <value>true</value>
+          </enable_synchronous_functions>
+          <enable_mutual_exclusion_functions disabled="true">
+            <value>false</value>
+          </enable_mutual_exclusion_functions>
+        </adc_driver_settings>
+        <can_driver_settings>
+          <enable_sleep_mode_functions disabled="true">
+            <value>true</value>
+          </enable_sleep_mode_functions>
+        </can_driver_settings>
+        <i2c_driver_settings>
+          <enable_mutual_exclusion_functions disabled="true">
+            <value>false</value>
+          </enable_mutual_exclusion_functions>
+        </i2c_driver_settings>
+        <mac_driver_settings>
+          <enable_events disabled="true">
+            <value>true</value>
+          </enable_events>
+        </mac_driver_settings>
+        <mmc_spi_driver_settings>
+          <nice_waiting disabled="true">
+            <value>true</value>
+          </nice_waiting>
+        </mmc_spi_driver_settings>
+        <spi_driver_settings>
+          <enable_synchronous_functions disabled="true">
+            <value>true</value>
+          </enable_synchronous_functions>
+          <enable_mutual_exclusion_functions disabled="true">
+            <value>false</value>
+          </enable_mutual_exclusion_functions>
+        </spi_driver_settings>
+      </instance>
+      <instance locked="false" id="org.chibios.spc5.components.hal.board.spc57emxx.z0">
+        <identification>
+          <board_identifier>
+            <value>GENERIC_SPC57EMXX_HSM</value>
+          </board_identifier>
+          <board_name>
+            <value>Generic SPC57EMxx HSM</value>
+          </board_name>
+        </identification>
+        <clock_settings>
+          <xosc_clock>
+            <value>100000000</value>
+          </xosc_clock>
+        </clock_settings>
+        <initialization_code>
+          <pre_clock_initialization_code>
+            <value />
+          </pre_clock_initialization_code>
+          <post_clock_initialization_code>
+            <value />
+          </post_clock_initialization_code>
+          <late_initialization_code>
+            <value />
+          </late_initialization_code>
+          <board_initialization_code>
+            <value />
+          </board_initialization_code>
+        </initialization_code>
+      </instance>
+      <instance locked="false" id="org.chibios.spc5.components.hal.platform.spc57emxx.z0">
+        <initialization_settings>
+          <do_not_init>
+            <value>false</value>
+          </do_not_init>
+        </initialization_settings>
+        <irq_priority_settings>
+          <pit index="7">
+            <value>8</value>
+          </pit>
+        </irq_priority_settings>
+      </instance>
+      <instance locked="false" id="org.chibios.spc5.components.hal.osal.nil" />
       <instance locked="false" id="org.chibios.spc5.components.nil.kernel">
         <general_options>
           <system_tick_counter_resolution index="1">
