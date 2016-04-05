@@ -783,7 +783,6 @@ vector485:
         .type       _unhandled_irq, @function
 _unhandled_irq:
          se_b       _unhandled_irq
-
 #endif /* !defined(__DOXYGEN__) */
 
 /** @} */
