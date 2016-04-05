@@ -21,7 +21,7 @@
           <irq_stack_size>
             <value>0</value>
           </irq_stack_size>
-          <boot_mode index="0">
+          <boot_mode disabled="true" index="0">
             <value>Execute from Flash</value>
           </boot_mode>
           <load_address index="0">
@@ -68,6 +68,7 @@
             <value />
           </custom_sections>
         </linker_settings>
+        <mcu_group />
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.rtos.spc560dxx" />
       <instance locked="false" id="org.chibios.spc5.components.spc5hal">
@@ -863,6 +864,9 @@
             <sirc disabled="true">
               <value>128000</value>
             </sirc>
+            <sircdiv disabled="true">
+              <value>32000</value>
+            </sircdiv>
             <fmpll_in disabled="true">
               <value>8000000</value>
             </fmpll_in>
@@ -1717,6 +1721,11 @@
             <value>None</value>
           </linflex2>
         </linflex_settings>
+        <clock_tree>
+          <run_mode disabled="true">
+            <value>DRUN</value>
+          </run_mode>
+        </clock_tree>
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.kernel">
         <kernel_options>

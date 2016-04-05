@@ -21,7 +21,7 @@
           <irq_stack_size>
             <value>0</value>
           </irq_stack_size>
-          <boot_mode index="0">
+          <boot_mode disabled="true" index="0">
             <value>Execute from Flash</value>
           </boot_mode>
           <load_address index="0">
@@ -42,7 +42,7 @@
             <value>ppc-freevle-eabi-</value>
           </compiler_variant>
           <optimization_level index="3">
-            <value>-O2</value>
+            <value>-O2 speed</value>
           </optimization_level>
           <common_options>
             <value>-gdwarf-2 -fomit-frame-pointer -falign-functions=16</value>
@@ -53,7 +53,7 @@
           <cpp_options>
             <value>-fno-rtti</value>
           </cpp_options>
-          <use_vle index="0">
+          <use_vle disabled="true" index="0">
             <value>yes</value>
           </use_vle>
           <use_verbose_compile index="1">
@@ -74,6 +74,7 @@
             <value />
           </custom_sections>
         </linker_settings>
+        <mcu_group />
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.rtos.spc56ecxx" />
       <instance locked="false" id="org.chibios.spc5.components.spc5hal">
@@ -209,8 +210,8 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa disabled="true" index="0">
-                  <value>GPIO Mode</value>
+                <pa disabled="true" index="1">
+                  <value>Alternate 1</value>
                 </pa>
                 <smc disabled="true">
                   <value>false</value>
@@ -219,10 +220,10 @@
                   <value>false</value>
                 </apc>
                 <obe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode disabled="true" index="0">
                   <value>Push-Pull</value>
@@ -272,7 +273,7 @@
                   <value>false</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode disabled="true" index="0">
                   <value>Push-Pull</value>
@@ -322,7 +323,7 @@
                   <value>false</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode disabled="true" index="0">
                   <value>Push-Pull</value>
@@ -372,7 +373,7 @@
                   <value>false</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode disabled="true" index="0">
                   <value>Push-Pull</value>
@@ -422,7 +423,7 @@
                   <value>false</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode disabled="true" index="0">
                   <value>Push-Pull</value>
@@ -472,7 +473,7 @@
                   <value>false</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode disabled="true" index="0">
                   <value>Push-Pull</value>
@@ -519,10 +520,10 @@
                   <value>false</value>
                 </apc>
                 <obe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode disabled="true" index="0">
                   <value>Push-Pull</value>
@@ -569,10 +570,10 @@
                   <value>false</value>
                 </apc>
                 <obe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode disabled="true" index="0">
                   <value>Push-Pull</value>
@@ -619,10 +620,10 @@
                   <value>false</value>
                 </apc>
                 <obe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode disabled="true" index="0">
                   <value>Push-Pull</value>
@@ -669,10 +670,10 @@
                   <value>false</value>
                 </apc>
                 <obe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode disabled="true" index="0">
                   <value>Push-Pull</value>

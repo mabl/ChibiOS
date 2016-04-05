@@ -19,7 +19,7 @@
           <irq_stack_size>
             <value>0</value>
           </irq_stack_size>
-          <boot_mode index="0">
+          <boot_mode disabled="true" index="0">
             <value>Execute from Flash</value>
           </boot_mode>
           <load_address index="0">
@@ -34,7 +34,7 @@
             <value>ppc-freevle-eabi-</value>
           </compiler_variant>
           <optimization_level index="3">
-            <value>-O2</value>
+            <value>-O2 speed</value>
           </optimization_level>
           <common_options>
             <value>-gdwarf-2 -fomit-frame-pointer -falign-functions=16</value>
@@ -45,7 +45,7 @@
           <cpp_options>
             <value>-fno-rtti -fno-exceptions</value>
           </cpp_options>
-          <use_vle index="0">
+          <use_vle disabled="true" index="0">
             <value>yes</value>
           </use_vle>
           <use_verbose_compile index="1">
@@ -195,14 +195,14 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa disabled="true" index="0">
-                  <value>GPIO Mode</value>
+                <pa disabled="true" index="1">
+                  <value>Primary</value>
                 </pa>
                 <obe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <hys disabled="true">
                   <value>false</value>
@@ -245,14 +245,14 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa disabled="true" index="0">
-                  <value>GPIO Mode</value>
+                <pa disabled="true" index="1">
+                  <value>Primary</value>
                 </pa>
                 <obe disabled="true">
                   <value>false</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <hys disabled="true">
                   <value>false</value>
@@ -302,7 +302,7 @@
                   <value>false</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <hys disabled="true">
                   <value>false</value>
@@ -352,7 +352,7 @@
                   <value>false</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <hys disabled="true">
                   <value>false</value>
@@ -402,7 +402,7 @@
                   <value>false</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <hys disabled="true">
                   <value>false</value>
@@ -452,7 +452,7 @@
                   <value>false</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <hys disabled="true">
                   <value>false</value>
@@ -499,10 +499,10 @@
                   <value>GPIO Mode</value>
                 </pa>
                 <obe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <hys disabled="true">
                   <value>false</value>
@@ -549,10 +549,10 @@
                   <value>GPIO Mode</value>
                 </pa>
                 <obe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <hys disabled="true">
                   <value>false</value>
@@ -599,10 +599,10 @@
                   <value>GPIO Mode</value>
                 </pa>
                 <obe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <hys disabled="true">
                   <value>false</value>
@@ -649,10 +649,10 @@
                   <value>GPIO Mode</value>
                 </pa>
                 <obe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <hys disabled="true">
                   <value>false</value>
@@ -702,7 +702,7 @@
           <allow_overclocking>
             <value>false</value>
           </allow_overclocking>
-          <fmpll0_settings>
+          <fmpll_settings>
             <prediv_value>
               <value>2</value>
             </prediv_value>
@@ -712,12 +712,41 @@
             <rfd_value index="0">
               <value>SPC5_RFD_DIV2</value>
             </rfd_value>
-          </fmpll0_settings>
+          </fmpll_settings>
           <clocks>
+            <sys_clock_divider index="0">
+              <value>1</value>
+            </sys_clock_divider>
             <emios_global_prescaler>
               <value>20</value>
             </emios_global_prescaler>
+            <can_clock_divider index="0">
+              <value>1</value>
+            </can_clock_divider>
           </clocks>
+          <clock_points>
+            <xosc disabled="true">
+              <value>8000000</value>
+            </xosc>
+            <fmpll_in disabled="true">
+              <value>4000000</value>
+            </fmpll_in>
+            <fmpll_vco disabled="true">
+              <value>300000000</value>
+            </fmpll_vco>
+            <fmpll_out disabled="true">
+              <value>150000000</value>
+            </fmpll_out>
+            <sys_clk disabled="true">
+              <value>150000000</value>
+            </sys_clk>
+            <emios_clk disabled="true">
+              <value>7500000</value>
+            </emios_clk>
+            <can_clk disabled="true">
+              <value>150000000</value>
+            </can_clk>
+          </clock_points>
         </initialization_settings>
         <irq_priority_settings>
           <dspi_b index="9">
@@ -1605,6 +1634,7 @@
             </mailboxes_configuration>
           </can_configurations>
         </flexcan_settings>
+        <clock_tree />
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.kernel">
         <kernel_options>

@@ -21,7 +21,7 @@
           <irq_stack_size>
             <value>0</value>
           </irq_stack_size>
-          <boot_mode index="0">
+          <boot_mode disabled="true" index="0">
             <value>Execute from Flash</value>
           </boot_mode>
           <load_address index="0">
@@ -68,6 +68,7 @@
             <value />
           </custom_sections>
         </linker_settings>
+        <mcu_group />
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.rtos.spc560bxx" />
       <instance locked="false" id="org.chibios.spc5.components.spc5hal">

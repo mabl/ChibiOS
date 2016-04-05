@@ -36,7 +36,7 @@
             <value>ppc-freevle-eabi-</value>
           </compiler_variant>
           <optimization_level index="3">
-            <value>-O2</value>
+            <value>-O2 speed</value>
           </optimization_level>
           <common_options>
             <value>-gdwarf-2 -fomit-frame-pointer -falign-functions=16 -msoft-float</value>
@@ -68,6 +68,7 @@
             <value />
           </custom_sections>
         </linker_settings>
+        <mcu_group />
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.rtos.spc560dxx" />
       <instance locked="false" id="org.chibios.spc5.components.spc5hal">
@@ -283,10 +284,10 @@
                   <value>false</value>
                 </apc>
                 <obe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </obe>
                 <ibe disabled="true">
-                  <value>false</value>
+                  <value>true</value>
                 </ibe>
                 <ode disabled="true" index="0">
                   <value>Push-Pull</value>
@@ -863,6 +864,9 @@
             <sirc disabled="true">
               <value>128000</value>
             </sirc>
+            <sircdiv disabled="true">
+              <value>32000</value>
+            </sircdiv>
             <fmpll_in disabled="true">
               <value>8000000</value>
             </fmpll_in>
@@ -1607,6 +1611,11 @@
             <value>None</value>
           </linflex2>
         </linflex_settings>
+        <clock_tree>
+          <run_mode disabled="true">
+            <value>DRUN</value>
+          </run_mode>
+        </clock_tree>
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.kernel">
         <kernel_options>

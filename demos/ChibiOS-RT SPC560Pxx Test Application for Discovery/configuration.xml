@@ -21,7 +21,7 @@
           <irq_stack_size>
             <value>0</value>
           </irq_stack_size>
-          <boot_mode index="0">
+          <boot_mode disabled="true" index="0">
             <value>Execute from Flash</value>
           </boot_mode>
           <load_address index="0">
@@ -35,8 +35,8 @@
           <compiler_variant index="0">
             <value>ppc-freevle-eabi-</value>
           </compiler_variant>
-          <optimization_level index="0">
-            <value>-O0</value>
+          <optimization_level index="3">
+            <value>-O2 speed</value>
           </optimization_level>
           <common_options>
             <value>-gdwarf-2 -fomit-frame-pointer -falign-functions=16 -msoft-float</value>
@@ -1704,6 +1704,11 @@
             <value>None</value>
           </linflex1>
         </linflex_settings>
+        <clock_tree>
+          <run_mode disabled="true">
+            <value>DRUN</value>
+          </run_mode>
+        </clock_tree>
       </instance>
       <instance locked="false" id="org.chibios.spc5.components.kernel">
         <kernel_options>
