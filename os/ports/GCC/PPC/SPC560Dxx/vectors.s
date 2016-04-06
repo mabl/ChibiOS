@@ -45,7 +45,6 @@
         .vle
 #endif
 
-
         .align      4
         .globl      _vectors
 _vectors:

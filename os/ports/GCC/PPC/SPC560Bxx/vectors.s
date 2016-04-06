@@ -40,6 +40,11 @@
            a function withe the same name of a vector, the symbol will
            override the weak symbol declared here.*/
         .section    .vectors, "axv"
+
+#if defined(__ghs_asm)
+        .vle
+#endif
+
         .align      4
         .globl      _vectors
 _vectors:

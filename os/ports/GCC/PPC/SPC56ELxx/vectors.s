@@ -39,6 +39,11 @@
            handler only. In order to declare an interrupt handler just create
            a function withe the same name of a vector, the symbol will
            override the weak symbol declared here.*/
+
+#if defined(__ghs_asm)
+        .vle
+#endif  
+
         .section    .vectors, "axv"
         .align		4
         .globl      _vectors
