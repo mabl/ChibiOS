@@ -41,12 +41,19 @@
  */
 void port_init(void) {
 #if PPC_SUPPORTS_IVORS
+#ifdef __ghs__
+  asm ("e_li        %r3, %lo(_IVOR4)    \t\n"
+       "mtIVOR4     %r3                 \t\n"
+       "e_li        %r3, %lo(_IVOR10)   \t\n"
+       "mtIVOR10    %r3");
+#else
     /* The CPU supports IVOR registers, the kernel requires IVOR4 and IVOR10
        and the initialization is performed here.*/
     asm volatile ("e_li        %%r3, _IVOR4@l       \t\n"
                   "mtIVOR4     %%r3                 \t\n"
                   "e_li        %%r3, _IVOR10@l      \t\n"
                   "mtIVOR10    %%r3" : : : "memory");
+#endif
 #endif
 }
 
