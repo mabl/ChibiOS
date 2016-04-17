@@ -3,7 +3,7 @@
 [@pp.dropOutputFile /]
 [#list conf.instance.sequences.sequence as sequence]
   [@pp.changeOutputFile name="test_sequence_" + (sequence_index + 1)?string("000") + ".c" /]
-${conf.instance.description.copyright.value?trim}
+[@utils.EmitIndentedCCode "" 2 conf.instance.description.copyright.value[0] /]
 
 #include "hal.h"
 #include "ch_test.h"
@@ -51,7 +51,7 @@ ${conf.instance.description.copyright.value?trim}
  ****************************************************************************/
 
   [#if sequence.shared_code.value[0]?trim?length > 0]
-${sequence.shared_code.value[0]?trim}
+[@utils.EmitIndentedCCode "" 2 sequence.shared_code.value[0] /]
   [/#if]
 
 /****************************************************************************

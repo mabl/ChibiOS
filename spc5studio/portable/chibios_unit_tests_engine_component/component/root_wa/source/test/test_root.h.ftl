@@ -1,7 +1,8 @@
 [#ftl]
+[#import "/@ftllibs/libutils.ftl" as utils /]
 [@pp.dropOutputFile /]
 [@pp.changeOutputFile name="test_root.h" /]
-${conf.instance.description.copyright.value?trim}
+[@utils.EmitIndentedCCode "" 2 conf.instance.description.copyright.value[0] /]
 
 /**
  * @file    test_root.h
@@ -35,7 +36,7 @@ extern "C" {
 /*===========================================================================*/
 
 [#if conf.instance.global_data_and_code.global_definitions.value[0]?trim?length > 0]
-${conf.instance.global_data_and_code.global_definitions.value[0]}
+[@utils.EmitIndentedCCode "" 2 conf.instance.global_data_and_code.global_definitions.value[0] /]
 
 [/#if]
 #endif /* !defined(__DOXYGEN__) */

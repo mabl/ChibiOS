@@ -2,7 +2,7 @@
 [#import "/@ftllibs/libutils.ftl" as utils /]
 [@pp.dropOutputFile /]
 [@pp.changeOutputFile name="test_root.c" /]
-${conf.instance.description.copyright.value?trim}
+[@utils.EmitIndentedCCode "" 2 conf.instance.description.copyright.value[0] /]
 
 /**
  * @mainpage Test Suite Specification
@@ -62,7 +62,7 @@ const testcase_t * const *test_suite[] = {
 /*===========================================================================*/
 
 [#if conf.instance.global_data_and_code.global_code.value[0]?trim?length > 0]
-${conf.instance.global_data_and_code.global_code.value[0]}
+[@utils.EmitIndentedCCode "" 2 conf.instance.global_data_and_code.global_code.value[0] /]
 
 [/#if]
 #endif /* !defined(__DOXYGEN__) */

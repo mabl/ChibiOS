@@ -1,8 +1,9 @@
 [#ftl]
+[#import "/@ftllibs/libutils.ftl" as utils /]
 [@pp.dropOutputFile /]
 [#list conf.instance.sequences.sequence as sequence]
   [@pp.changeOutputFile name="test_sequence_" + (sequence_index + 1)?string("000") + ".h" /]
-${conf.instance.description.copyright.value?trim}
+[@utils.EmitIndentedCCode "" 2 conf.instance.description.copyright.value[0] /]
 
 /**
  * @file    test_sequence_${(sequence_index + 1)?string("000")}.h
