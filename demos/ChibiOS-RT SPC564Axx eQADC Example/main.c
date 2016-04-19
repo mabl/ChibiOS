@@ -19,7 +19,7 @@
    automatically.*/
 #include "components.h"
 
-#include "adc_lld_cfg.h"
+#include "hal_adc_lld_cfg.h"
 
 /*
  * Buffers used for the ADC conversions, note, the constants are defined
