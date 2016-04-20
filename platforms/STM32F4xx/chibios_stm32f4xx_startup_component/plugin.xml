@@ -6,7 +6,9 @@
          name="ChibiOS STM32F4xx Startup Component"
          point="com.st.tools.spc5.extension.v1">
         <component
-            isPlatform="true">
+              headerName="cmparams.h"
+              icon="rsc/chibios.ico"
+              isPlatform="true">
             <description>
                 Startup and build support for STM32F4xx.
             </description>
@@ -64,31 +66,462 @@
                    </property>
                 </group>
                 <group
-                      columns="2"
+                      columns="3"
                       name="Memory Layout Settings">
                    <description>
-                      Flash/RAM/external memory organization.
+                      Flash/RAM/external memory areas organization.
                    </description>
                    <property
                          brief="Memory address of flash area 0."
-                         default="0x08000000"
+                         default="0x8000000"
                          editable="true"
                          name="Flash 0 address"
+                         required="true"
+                         type="unsigned">
+                   </property>
+                   <property
+                         brief="Memory size of flash area 0."
+                         default="1024"
+                         editable="true"
+                         name="Flash 0 size"
                          required="true"
                          type="unsigned">
                       <metadata
                             class="com.st.tools.spc5.extensions.UnitHandler"
                             name="Memory Unit"
-                            value="kB,1024,MB,1048576,B,1">
+                            value="kB,MB,B">
                       </metadata>
                    </property>
                    <property
-                         brief="Memory size of flash area 0."
-                         default="1"
+                         brief="Area brief description."
+                         default="Main Flash"
                          editable="true"
-                         name="Flash 0 size"
+                         name="Flash 0 Info"
+                         required="false"
+                         type="string">
+                   </property>
+                   <property
+                         brief="Memory address of flash area 1."
+                         default="0"
+                         editable="true"
+                         name="Flash 1 address"
                          required="true"
                          type="unsigned">
+                   </property>
+                   <property
+                         brief="Memory size of flash area 1."
+                         default="0"
+                         editable="true"
+                         name="Flash 1 size"
+                         required="true"
+                         type="unsigned">
+                      <metadata
+                            class="com.st.tools.spc5.extensions.UnitHandler"
+                            name="Memory Unit"
+                            value="kB,MB,B">
+                      </metadata>
+                   </property>
+                   <property
+                         brief="Area brief description."
+                         editable="true"
+                         name="Flash 1 Info"
+                         required="false"
+                         type="string">
+                   </property>
+                   <property
+                         brief="Memory address of flash area 2."
+                         default="0"
+                         editable="true"
+                         name="Flash 2 address"
+                         required="true"
+                         type="unsigned">
+                   </property>
+                   <property
+                         brief="Memory size of flash area 2."
+                         default="0"
+                         editable="true"
+                         name="Flash 2 size"
+                         required="true"
+                         type="unsigned">
+                      <metadata
+                            class="com.st.tools.spc5.extensions.UnitHandler"
+                            name="Memory Unit"
+                            value="kB,MB,B">
+                      </metadata>
+                   </property>
+                   <property
+                         brief="Area brief description."
+                         editable="true"
+                         name="Flash 2 Info"
+                         required="false"
+                         type="string">
+                   </property>
+                   <property
+                         brief="Memory address of flash area 3."
+                         default="0"
+                         editable="true"
+                         name="Flash 3 address"
+                         required="true"
+                         type="unsigned">
+                   </property>
+                   <property
+                         brief="Memory size of flash area 3."
+                         default="0"
+                         editable="true"
+                         name="Flash 3 size"
+                         required="true"
+                         type="unsigned">
+                      <metadata
+                            class="com.st.tools.spc5.extensions.UnitHandler"
+                            name="Memory Unit"
+                            value="kB,MB,B">
+                      </metadata>
+                   </property>
+                   <property
+                         brief="Area brief description."
+                         editable="true"
+                         name="Flash 3 Info"
+                         required="false"
+                         type="string">
+                   </property>
+                   <property
+                         brief="Memory address of flash area 4."
+                         default="0"
+                         editable="true"
+                         name="Flash 4 address"
+                         required="true"
+                         type="unsigned">
+                   </property>
+                   <property
+                         brief="Memory size of flash area 4."
+                         default="0"
+                         editable="true"
+                         name="Flash 4 size"
+                         required="true"
+                         type="unsigned">
+                      <metadata
+                            class="com.st.tools.spc5.extensions.UnitHandler"
+                            name="Memory Unit"
+                            value="kB,MB,B">
+                      </metadata>
+                   </property>
+                   <property
+                         brief="Area brief description."
+                         editable="true"
+                         name="Flash 4 Info"
+                         required="false"
+                         type="string">
+                   </property>
+                   <property
+                         brief="Memory address of flash area 5."
+                         default="0"
+                         editable="true"
+                         name="Flash 5 address"
+                         required="true"
+                         type="unsigned">
+                   </property>
+                   <property
+                         brief="Memory size of flash area 5."
+                         default="0"
+                         editable="true"
+                         name="Flash 5 size"
+                         required="true"
+                         type="unsigned">
+                      <metadata
+                            class="com.st.tools.spc5.extensions.UnitHandler"
+                            name="Memory Unit"
+                            value="kB,MB,B">
+                      </metadata>
+                   </property>
+                   <property
+                         brief="Area brief description."
+                         editable="true"
+                         name="Flash 5 Info"
+                         required="false"
+                         type="string">
+                   </property>
+                   <property
+                         brief="Memory address of flash area 6."
+                         default="0"
+                         editable="true"
+                         name="Flash 6 address"
+                         required="true"
+                         type="unsigned">
+                   </property>
+                   <property
+                         brief="Memory size of flash area 6."
+                         default="0"
+                         editable="true"
+                         name="Flash 6 size"
+                         required="true"
+                         type="unsigned">
+                      <metadata
+                            class="com.st.tools.spc5.extensions.UnitHandler"
+                            name="Memory Unit"
+                            value="kB,MB,B">
+                      </metadata>
+                   </property>
+                   <property
+                         brief="Area brief description."
+                         editable="true"
+                         name="Flash 6 Info"
+                         required="false"
+                         type="string">
+                   </property>
+                   <property
+                         brief="Memory address of flash area 7."
+                         default="0"
+                         editable="true"
+                         name="Flash 7 address"
+                         required="true"
+                         type="unsigned">
+                   </property>
+                   <property
+                         brief="Memory size of flash area 7."
+                         default="0"
+                         editable="true"
+                         name="Flash 7 size"
+                         required="true"
+                         type="unsigned">
+                      <metadata
+                            class="com.st.tools.spc5.extensions.UnitHandler"
+                            name="Memory Unit"
+                            value="kB,MB,B">
+                      </metadata>
+                   </property>
+                   <property
+                         brief="Area brief description."
+                         editable="true"
+                         name="Flash 7 Info"
+                         required="false"
+                         type="string">
+                   </property>
+                   <property
+                         brief="Memory address of RAM area 0."
+                         default="0x20000000"
+                         editable="true"
+                         name="RAM 0 address"
+                         required="true"
+                         type="unsigned">
+                   </property>
+                   <property
+                         brief="Memory size of RAM area 0."
+                         default="128"
+                         editable="true"
+                         name="RAM 0 size"
+                         required="true"
+                         type="unsigned">
+                      <metadata
+                            class="com.st.tools.spc5.extensions.UnitHandler"
+                            name="Memory Unit"
+                            value="kB,MB,B">
+                      </metadata>
+                   </property>
+                   <property
+                         brief="Area brief description."
+                         default="SRAM"
+                         editable="true"
+                         name="RAM 0 Info"
+                         required="false"
+                         type="string">
+                   </property>
+                   <property
+                         brief="Memory address of RAM area 1."
+                         default="0"
+                         editable="true"
+                         name="RAM 1 address"
+                         required="true"
+                         type="unsigned">
+                   </property>
+                   <property
+                         brief="Memory size of RAM area 1."
+                         default="0"
+                         editable="true"
+                         name="RAM 1 size"
+                         required="true"
+                         type="unsigned">
+                      <metadata
+                            class="com.st.tools.spc5.extensions.UnitHandler"
+                            name="Memory Unit"
+                            value="kB,MB,B">
+                      </metadata>
+                   </property>
+                   <property
+                         brief="Area brief description."
+                         editable="true"
+                         name="RAM 1 Info"
+                         required="false"
+                         type="string">
+                   </property>
+                     <property
+                         brief="Memory address of RAM area 2."
+                         default="0"
+                         editable="true"
+                         name="RAM 2 address"
+                         required="true"
+                         type="unsigned">
+                   </property>
+                   <property
+                         brief="Memory size of RAM area 2."
+                         default="0"
+                         editable="true"
+                         name="RAM 2 size"
+                         required="true"
+                         type="unsigned">
+                      <metadata
+                            class="com.st.tools.spc5.extensions.UnitHandler"
+                            name="Memory Unit"
+                            value="kB,MB,B">
+                      </metadata>
+                   </property>
+                   <property
+                         brief="Area brief description."
+                         editable="true"
+                         name="RAM 2 Info"
+                         required="false"
+                         type="string">
+                   </property>
+                    <property
+                         brief="Memory address of RAM area 3."
+                         default="0"
+                         editable="true"
+                         name="RAM 3 address"
+                         required="true"
+                         type="unsigned">
+                   </property>
+                   <property
+                         brief="Memory size of RAM area 3."
+                         default="0"
+                         editable="true"
+                         name="RAM 3 size"
+                         required="true"
+                         type="unsigned">
+                      <metadata
+                            class="com.st.tools.spc5.extensions.UnitHandler"
+                            name="Memory Unit"
+                            value="kB,MB,B">
+                      </metadata>
+                   </property>
+                   <property
+                         brief="Area brief description."
+                         editable="true"
+                         name="RAM 3 Info"
+                         required="false"
+                         type="string">
+                   </property>
+                   <property
+                         brief="Memory address of RAM area 4."
+                         default="0x10000000"
+                         editable="true"
+                         name="RAM 4 address"
+                         required="true"
+                         type="unsigned">
+                   </property>
+                   <property
+                         brief="Memory size of RAM area 4."
+                         default="16"
+                         editable="true"
+                         name="RAM 4 size"
+                         required="true"
+                         type="unsigned">
+                      <metadata
+                            class="com.st.tools.spc5.extensions.UnitHandler"
+                            name="Memory Unit"
+                            value="kB,MB,B">
+                      </metadata>
+                   </property>
+                   <property
+                         brief="Area brief description."
+                         default="CCM SRAM"
+                         editable="true"
+                         name="RAM 4 Info"
+                         required="false"
+                         type="string">
+                   </property>
+                   <property
+                         brief="Memory address of RAM area 5."
+                         default="0x40024000"
+                         editable="true"
+                         name="RAM 5 address"
+                         required="true"
+                         type="unsigned">
+                   </property>
+                   <property
+                         brief="Memory size of RAM area 5."
+                         default="4"
+                         editable="true"
+                         name="RAM 5 size"
+                         required="true"
+                         type="unsigned">
+                      <metadata
+                            class="com.st.tools.spc5.extensions.UnitHandler"
+                            name="Memory Unit"
+                            value="kB,MB,B">
+                      </metadata>
+                   </property>
+                   <property
+                         brief="Area brief description."
+                         default="Backup SRAM"
+                         editable="true"
+                         name="RAM 5 Info"
+                         required="false"
+                         type="string">
+                   </property>
+                   <property
+                         brief="Memory address of RAM area 6."
+                         default="0"
+                         editable="true"
+                         name="RAM 6 address"
+                         required="true"
+                         type="unsigned">
+                   </property>
+                   <property
+                         brief="Memory size of RAM area 6."
+                         default="0"
+                         editable="true"
+                         name="RAM 6 size"
+                         required="true"
+                         type="unsigned">
+                      <metadata
+                            class="com.st.tools.spc5.extensions.UnitHandler"
+                            name="Memory Unit"
+                            value="kB,MB,B">
+                      </metadata>
+                   </property>
+                   <property
+                         brief="Area brief description."
+                         editable="true"
+                         name="RAM 6 Info"
+                         required="false"
+                         type="string">
+                   </property>
+                   <property
+                         brief="Memory address of RAM area 7."
+                         default="0"
+                         editable="true"
+                         name="RAM 7 address"
+                         required="true"
+                         type="unsigned">
+                   </property>
+                   <property
+                         brief="Memory size of RAM area 7."
+                         default="0"
+                         editable="true"
+                         name="RAM 7 size"
+                         required="true"
+                         type="unsigned">
+                      <metadata
+                            class="com.st.tools.spc5.extensions.UnitHandler"
+                            name="Memory Unit"
+                            value="kB,MB,B">
+                      </metadata>
+                   </property>
+                   <property
+                         brief="Area brief description."
+                         editable="true"
+                         name="RAM 7 Info"
+                         required="false"
+                         type="string">
                    </property>
                 </group>
                 <group
