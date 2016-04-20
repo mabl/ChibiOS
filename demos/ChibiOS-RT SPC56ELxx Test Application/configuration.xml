@@ -87,22 +87,22 @@
           <can>
             <value>false</value>
           </can>
-          <ext disabled="true">
+          <ext>
             <value>false</value>
           </ext>
-          <gpt disabled="true">
+          <gpt>
             <value>false</value>
           </gpt>
-          <i2c disabled="true">
+          <i2c>
             <value>false</value>
           </i2c>
           <icu>
             <value>false</value>
           </icu>
-          <mac disabled="true">
+          <mac>
             <value>false</value>
           </mac>
-          <mmc_spi disabled="true">
+          <mmc_spi>
             <value>false</value>
           </mmc_spi>
           <pwm>
@@ -114,7 +114,7 @@
           <spi>
             <value>false</value>
           </spi>
-          <uart disabled="true">
+          <uart>
             <value>false</value>
           </uart>
         </enabled_drivers>
@@ -127,15 +127,15 @@
           </buffers_size>
         </serial_driver_settings>
         <adc_driver_settings>
-          <enable_synchronous_functions disabled="true">
+          <enable_synchronous_functions>
             <value>true</value>
           </enable_synchronous_functions>
-          <enable_mutual_exclusion_functions disabled="true">
+          <enable_mutual_exclusion_functions>
             <value>false</value>
           </enable_mutual_exclusion_functions>
         </adc_driver_settings>
         <can_driver_settings>
-          <enable_sleep_mode_functions disabled="true">
+          <enable_sleep_mode_functions>
             <value>true</value>
           </enable_sleep_mode_functions>
         </can_driver_settings>
@@ -155,10 +155,10 @@
           </nice_waiting>
         </mmc_spi_driver_settings>
         <spi_driver_settings>
-          <enable_synchronous_functions disabled="true">
+          <enable_synchronous_functions>
             <value>true</value>
           </enable_synchronous_functions>
-          <enable_mutual_exclusion_functions disabled="true">
+          <enable_mutual_exclusion_functions>
             <value>false</value>
           </enable_mutual_exclusion_functions>
         </spi_driver_settings>
@@ -206,31 +206,31 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa disabled="true" index="1">
+                <pa index="1">
                   <value>Alternate 1</value>
                 </pa>
-                <smc disabled="true">
+                <smc>
                   <value>false</value>
                 </smc>
-                <apc disabled="true">
+                <apc>
                   <value>false</value>
                 </apc>
-                <obe disabled="true">
+                <obe>
                   <value>true</value>
                 </obe>
-                <ibe disabled="true">
+                <ibe>
                   <value>true</value>
                 </ibe>
-                <ode disabled="true" index="0">
+                <ode index="0">
                   <value>Push-Pull</value>
                 </ode>
-                <src disabled="true" index="0">
+                <src index="0">
                   <value>Slow</value>
                 </src>
-                <wpe disabled="true" index="0">
+                <wpe index="0">
                   <value>Disabled</value>
                 </wpe>
-                <wps disabled="true" index="0">
+                <wps index="0">
                   <value>Pull-Down</value>
                 </wps>
               </advanced>
@@ -256,31 +256,31 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa disabled="true" index="0">
+                <pa index="0">
                   <value>GPIO Mode</value>
                 </pa>
-                <smc disabled="true">
+                <smc>
                   <value>false</value>
                 </smc>
-                <apc disabled="true">
+                <apc>
                   <value>false</value>
                 </apc>
-                <obe disabled="true">
+                <obe>
                   <value>false</value>
                 </obe>
-                <ibe disabled="true">
+                <ibe>
                   <value>true</value>
                 </ibe>
-                <ode disabled="true" index="0">
+                <ode index="0">
                   <value>Push-Pull</value>
                 </ode>
-                <src disabled="true" index="0">
+                <src index="0">
                   <value>Slow</value>
                 </src>
-                <wpe disabled="true" index="0">
+                <wpe index="0">
                   <value>Disabled</value>
                 </wpe>
-                <wps disabled="true" index="0">
+                <wps index="0">
                   <value>Pull-Down</value>
                 </wps>
               </advanced>
@@ -306,31 +306,31 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa disabled="true" index="0">
+                <pa index="0">
                   <value>GPIO Mode</value>
                 </pa>
-                <smc disabled="true">
+                <smc>
                   <value>false</value>
                 </smc>
-                <apc disabled="true">
+                <apc>
                   <value>false</value>
                 </apc>
-                <obe disabled="true">
+                <obe>
                   <value>false</value>
                 </obe>
-                <ibe disabled="true">
+                <ibe>
                   <value>true</value>
                 </ibe>
-                <ode disabled="true" index="0">
+                <ode index="0">
                   <value>Push-Pull</value>
                 </ode>
-                <src disabled="true" index="0">
+                <src index="0">
                   <value>Slow</value>
                 </src>
-                <wpe disabled="true" index="0">
+                <wpe index="0">
                   <value>Disabled</value>
                 </wpe>
-                <wps disabled="true" index="0">
+                <wps index="0">
                   <value>Pull-Down</value>
                 </wps>
               </advanced>
@@ -356,31 +356,31 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa disabled="true" index="0">
+                <pa index="0">
                   <value>GPIO Mode</value>
                 </pa>
-                <smc disabled="true">
+                <smc>
                   <value>false</value>
                 </smc>
-                <apc disabled="true">
+                <apc>
                   <value>false</value>
                 </apc>
-                <obe disabled="true">
+                <obe>
                   <value>false</value>
                 </obe>
-                <ibe disabled="true">
+                <ibe>
                   <value>true</value>
                 </ibe>
-                <ode disabled="true" index="0">
+                <ode index="0">
                   <value>Push-Pull</value>
                 </ode>
-                <src disabled="true" index="0">
+                <src index="0">
                   <value>Slow</value>
                 </src>
-                <wpe disabled="true" index="0">
+                <wpe index="0">
                   <value>Disabled</value>
                 </wpe>
-                <wps disabled="true" index="0">
+                <wps index="0">
                   <value>Pull-Down</value>
                 </wps>
               </advanced>
@@ -406,31 +406,31 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa disabled="true" index="0">
+                <pa index="0">
                   <value>GPIO Mode</value>
                 </pa>
-                <smc disabled="true">
+                <smc>
                   <value>false</value>
                 </smc>
-                <apc disabled="true">
+                <apc>
                   <value>false</value>
                 </apc>
-                <obe disabled="true">
+                <obe>
                   <value>false</value>
                 </obe>
-                <ibe disabled="true">
+                <ibe>
                   <value>true</value>
                 </ibe>
-                <ode disabled="true" index="0">
+                <ode index="0">
                   <value>Push-Pull</value>
                 </ode>
-                <src disabled="true" index="0">
+                <src index="0">
                   <value>Slow</value>
                 </src>
-                <wpe disabled="true" index="0">
+                <wpe index="0">
                   <value>Disabled</value>
                 </wpe>
-                <wps disabled="true" index="0">
+                <wps index="0">
                   <value>Pull-Down</value>
                 </wps>
               </advanced>
@@ -456,31 +456,31 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa disabled="true" index="0">
+                <pa index="0">
                   <value>GPIO Mode</value>
                 </pa>
-                <smc disabled="true">
+                <smc>
                   <value>false</value>
                 </smc>
-                <apc disabled="true">
+                <apc>
                   <value>false</value>
                 </apc>
-                <obe disabled="true">
+                <obe>
                   <value>false</value>
                 </obe>
-                <ibe disabled="true">
+                <ibe>
                   <value>true</value>
                 </ibe>
-                <ode disabled="true" index="0">
+                <ode index="0">
                   <value>Push-Pull</value>
                 </ode>
-                <src disabled="true" index="0">
+                <src index="0">
                   <value>Slow</value>
                 </src>
-                <wpe disabled="true" index="0">
+                <wpe index="0">
                   <value>Disabled</value>
                 </wpe>
-                <wps disabled="true" index="0">
+                <wps index="0">
                   <value>Pull-Down</value>
                 </wps>
               </advanced>
@@ -506,31 +506,31 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa disabled="true" index="0">
+                <pa index="0">
                   <value>GPIO Mode</value>
                 </pa>
-                <smc disabled="true">
+                <smc>
                   <value>false</value>
                 </smc>
-                <apc disabled="true">
+                <apc>
                   <value>false</value>
                 </apc>
-                <obe disabled="true">
+                <obe>
                   <value>true</value>
                 </obe>
-                <ibe disabled="true">
+                <ibe>
                   <value>true</value>
                 </ibe>
-                <ode disabled="true" index="0">
+                <ode index="0">
                   <value>Push-Pull</value>
                 </ode>
-                <src disabled="true" index="0">
+                <src index="0">
                   <value>Slow</value>
                 </src>
-                <wpe disabled="true" index="0">
+                <wpe index="0">
                   <value>Disabled</value>
                 </wpe>
-                <wps disabled="true" index="0">
+                <wps index="0">
                   <value>Pull-Down</value>
                 </wps>
               </advanced>
@@ -556,31 +556,31 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa disabled="true" index="0">
+                <pa index="0">
                   <value>GPIO Mode</value>
                 </pa>
-                <smc disabled="true">
+                <smc>
                   <value>false</value>
                 </smc>
-                <apc disabled="true">
+                <apc>
                   <value>false</value>
                 </apc>
-                <obe disabled="true">
+                <obe>
                   <value>true</value>
                 </obe>
-                <ibe disabled="true">
+                <ibe>
                   <value>true</value>
                 </ibe>
-                <ode disabled="true" index="0">
+                <ode index="0">
                   <value>Push-Pull</value>
                 </ode>
-                <src disabled="true" index="0">
+                <src index="0">
                   <value>Slow</value>
                 </src>
-                <wpe disabled="true" index="0">
+                <wpe index="0">
                   <value>Disabled</value>
                 </wpe>
-                <wps disabled="true" index="0">
+                <wps index="0">
                   <value>Pull-Down</value>
                 </wps>
               </advanced>
@@ -606,31 +606,31 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa disabled="true" index="0">
+                <pa index="0">
                   <value>GPIO Mode</value>
                 </pa>
-                <smc disabled="true">
+                <smc>
                   <value>false</value>
                 </smc>
-                <apc disabled="true">
+                <apc>
                   <value>false</value>
                 </apc>
-                <obe disabled="true">
+                <obe>
                   <value>true</value>
                 </obe>
-                <ibe disabled="true">
+                <ibe>
                   <value>true</value>
                 </ibe>
-                <ode disabled="true" index="0">
+                <ode index="0">
                   <value>Push-Pull</value>
                 </ode>
-                <src disabled="true" index="0">
+                <src index="0">
                   <value>Slow</value>
                 </src>
-                <wpe disabled="true" index="0">
+                <wpe index="0">
                   <value>Disabled</value>
                 </wpe>
-                <wps disabled="true" index="0">
+                <wps index="0">
                   <value>Pull-Down</value>
                 </wps>
               </advanced>
@@ -656,31 +656,31 @@
                 </latched_state>
               </settings>
               <advanced>
-                <pa disabled="true" index="0">
+                <pa index="0">
                   <value>GPIO Mode</value>
                 </pa>
-                <smc disabled="true">
+                <smc>
                   <value>false</value>
                 </smc>
-                <apc disabled="true">
+                <apc>
                   <value>false</value>
                 </apc>
-                <obe disabled="true">
+                <obe>
                   <value>true</value>
                 </obe>
-                <ibe disabled="true">
+                <ibe>
                   <value>true</value>
                 </ibe>
-                <ode disabled="true" index="0">
+                <ode index="0">
                   <value>Push-Pull</value>
                 </ode>
-                <src disabled="true" index="0">
+                <src index="0">
                   <value>Slow</value>
                 </src>
-                <wpe disabled="true" index="0">
+                <wpe index="0">
                   <value>Disabled</value>
                 </wpe>
-                <wps disabled="true" index="0">
+                <wps index="0">
                   <value>Pull-Down</value>
                 </wps>
               </advanced>
@@ -869,13 +869,13 @@
             <fm_enable>
               <value>false</value>
             </fm_enable>
-            <spread_type disabled="true" index="0">
+            <spread_type index="0">
               <value>Center Spread</value>
             </spread_type>
-            <modulation_period disabled="true">
+            <modulation_period>
               <value>0</value>
             </modulation_period>
-            <increment_step disabled="true">
+            <increment_step>
               <value>0</value>
             </increment_step>
           </fmpll0_settings>
@@ -901,13 +901,13 @@
             <fm_enable>
               <value>false</value>
             </fm_enable>
-            <spread_type disabled="true" index="0">
+            <spread_type index="0">
               <value>Center Spread</value>
             </spread_type>
-            <modulation_period disabled="true">
+            <modulation_period>
               <value>0</value>
             </modulation_period>
-            <increment_step disabled="true">
+            <increment_step>
               <value>0</value>
             </increment_step>
           </fmpll1_settings>
@@ -1019,6 +1019,9 @@
             <fmpll1_1d1_out disabled="true">
               <value>80000000</value>
             </fmpll1_1d1_out>
+            <sysclk disabled="true">
+              <value>120000000</value>
+            </sysclk>
             <clkout disabled="true">
               <value>30000000</value>
             </clkout>
