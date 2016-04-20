@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: GCC ARM Embedded compiler plugin for SPC5Studio
+Bundle-SymbolicName: org.chibios.tools.spc5.tools.gccarmembedded;singleton:=true
+Bundle-Version: 4.9.3.2015q3
+Bundle-Vendor: launchpad.net/gcc-arm-embedded
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.8.0"
+Bundle-ActivationPolicy: lazy
+Eclipse-PlatformFilter: (& (osgi.ws=win32) (osgi.os=win32))
