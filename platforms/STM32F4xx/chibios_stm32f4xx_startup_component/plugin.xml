@@ -12,7 +12,7 @@
             </description>
             <categories>
                <category
-                     id="ARM Cortex-Mx">
+                     id="ChibiOS/Startup Components/ARM Cortex-Mx">
                </category>
             </categories>
             <configuration>
@@ -33,7 +33,7 @@
                    </description>
                    <property
                         brief="Specific STM32F4xx model, the setting affects memory sizes in the linker script."
-                        default="1"
+                        default="2"
                         name="Specific Model"
                         editable="true"
                         required="true"
@@ -64,26 +64,31 @@
                    </property>
                 </group>
                 <group
+                      columns="2"
                       name="Memory Layout Settings">
                    <description>
-                      RAM memory organization.
+                      Flash/RAM/external memory organization.
                    </description>
                    <property
-                         brief="The DMA-accessible RAM can be organized in an unified section or separate sections with a dedicated Ethernet section."
-                         default="0"
+                         brief="Memory address of flash area 0."
+                         default="0x08000000"
                          editable="true"
-                         name="RAM Areas Organization"
+                         name="Flash 0 address"
                          required="true"
-                         type="enum"
-                         value="128KB[192KB],112KB+16KB[+64KB]">
+                         type="unsigned">
+                      <metadata
+                            class="com.st.tools.spc5.extensions.UnitHandler"
+                            name="Memory Unit"
+                            value="kB,1024,MB,1048576,B,1">
+                      </metadata>
                    </property>
                    <property
-                         brief="If selected then the stacks are allocated into the CCM RAM memory."
-                         default="false"
+                         brief="Memory size of flash area 0."
+                         default="1"
                          editable="true"
-                         name="Use CCM RAM for Stacks"
+                         name="Flash 0 size"
                          required="true"
-                         type="boolean">
+                         type="unsigned">
                    </property>
                 </group>
                 <group
@@ -121,12 +126,12 @@
                     </property>
                     <property
                         brief="Enables the Cortex-M4 internal FPU."
-                        default="1"
+                        default="0"
                         name="Enable FPU"
                         editable="true"
                         required="true"
                         type="enum"
-                        value="yes,no">
+                        value="no,softfp,hardfp">
                     </property>
                     <property
                         brief="Common options to be passed to both the C and C++ compilers."
@@ -159,6 +164,15 @@
                         required="true"
                         type="enum"
                         value="yes,no">
+                    </property>
+                    <property
+                          brief="Enables Link Time Optimizations. This can result in smaller and faster code."
+                          default="0"
+                          editable="true"
+                          name="Use LTO"
+                          required="true"
+                          type="enum"
+                          value="yes,no">
                     </property>
                     <property
                         brief="Enables a verbose build log instead of the simplified one."
