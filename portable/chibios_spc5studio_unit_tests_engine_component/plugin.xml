@@ -2,7 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
     <extension
-         id="org.chibios.spc5.components.chibios_unitary_tests_engine"
+         id="org.chibios.spc5.components.portable.chibios_unitary_tests_engine"
          name="ChibiOS Unit Tests Engine Component"
          point="com.st.tools.spc5.extension.v1">
         <component

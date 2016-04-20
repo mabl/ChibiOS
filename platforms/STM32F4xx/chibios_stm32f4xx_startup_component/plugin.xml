@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+    <extension
+         id="org.chibios.spc5.components.stm32f4xx.startup"
+         name="ChibiOS STM32F4xx Startup Component"
+         point="com.st.tools.spc5.extension.v1">
+        <component
+            isPlatform="true">
+            <description>
+                Startup and build support for STM32F4xx.
+            </description>
+            <categories>
+               <category
+                     id="ARM Cortex-Mx">
+               </category>
+            </categories>
+            <configuration>
+                <description>
+                  STM32F4xx startup options and settings.
+                </description>
+               <image
+                     align="left"
+                     file="rsc/chibios48x48.png">
+                  <text>
+                     ChibiOS is GPL3-licensed free software.
+                  </text>
+               </image>
+                <group
+                     name="Device Settings">
+                   <description>
+                     Device-related settings.
+                   </description>
+                   <property
+                        brief="Specific STM32F4xx model, the setting affects memory sizes in the linker script."
+                        default="1"
+                        name="Specific Model"
+                        editable="true"
+                        required="true"
+                        type="enum"
+                        value="STM32F405xx,STM32F415xx,STM32F407xx,STM32F417xx,STM32F427xx,STM32F437xx,STM32F429xx,STM32F439xx,STM32F401xC,STM32F401xE,STM32F411xE,STM32F446xx,STM32F469xx,STM32F479xx">
+                   </property>
+                </group>
+                <group
+                      name="Runtime Settings">
+                   <description>
+                      Runtime-related settings.
+                   </description>
+                   <property
+                         brief="IRQ and Exceptions stack size."
+                         default="2048"
+                         editable="true"
+                         name="IRQ Stack Size"
+                         required="true"
+                         type="unsigned">
+                   </property>
+                   <property
+                         brief="C runtime stack size."
+                         default="2048"
+                         editable="true"
+                         name="C Stack Size"
+                         required="true"
+                         type="unsigned">
+                   </property>
+                </group>
+                <group
+                      name="Memory Layout Settings">
+                   <description>
+                      RAM memory organization.
+                   </description>
+                   <property
+                         brief="The DMA-accessible RAM can be organized in an unified section or separate sections with a dedicated Ethernet section."
+                         default="0"
+                         editable="true"
+                         name="RAM Areas Organization"
+                         required="true"
+                         type="enum"
+                         value="128KB[192KB],112KB+16KB[+64KB]">
+                   </property>
+                   <property
+                         brief="If selected then the stacks are allocated into the CCM RAM memory."
+                         default="false"
+                         editable="true"
+                         name="Use CCM RAM for Stacks"
+                         required="true"
+                         type="boolean">
+                   </property>
+                </group>
+                <group
+                     name="Build Settings">
+                    <description>
+                     Compiler related options and switches.
+                    </description>
+                    <property
+                        brief="Application binaries base name."
+                        default="out"
+                        name="Application Name"
+                        editable="true"
+                        length="16"
+                        regex="[a-zA-Z_]+"
+                        required="true"
+                        type="string">
+                    </property>
+                    <property
+                          brief="GCC prefix string, this string can be different in different GCC-based compilers."
+                          default="0"
+                          editable="false"
+                          name="Compiler Variant"
+                          required="true"
+                          type="enum"
+                          value="arm-none-eabi-">
+                    </property>
+                    <property
+                        brief="GCC optimization level, this setting affects code size and execution speed. It is recommended to use -O0 during debug."
+                        default="3"
+                        name="Optimization Level"
+                        editable="true"
+                        required="true"
+                        type="enum"
+                        value="-O0,-Os,-O1,-O2,-O3">
+                    </property>
+                    <property
+                        brief="Enables the Cortex-M4 internal FPU."
+                        default="1"
+                        name="Enable FPU"
+                        editable="true"
+                        required="true"
+                        type="enum"
+                        value="yes,no">
+                    </property>
+                    <property
+                        brief="Common options to be passed to both the C and C++ compilers."
+                        default="-ggdb -fomit-frame-pointer -falign-functions=16"
+                        name="Common Options"
+                        editable="true"
+                        required="false"
+                        type="string">
+                    </property>
+                    <property
+                          brief="Options for the C modules only."
+                          editable="true"
+                          name="C Options"
+                          required="false"
+                          type="string">
+                    </property>
+                    <property
+                          brief="Options for the C++ modules only."
+                          default="-fno-rtti -fno-exceptions"
+                          editable="true"
+                          name="CPP Options"
+                          required="false"
+                          type="string">
+                    </property>
+                    <property
+                        brief="Enables garbage collection of unused memory objects."
+                        default="0"
+                        name="Use Linker GC"
+                        editable="true"
+                        required="true"
+                        type="enum"
+                        value="yes,no">
+                    </property>
+                    <property
+                        brief="Enables a verbose build log instead of the simplified one."
+                        default="1"
+                        name="Use Verbose Compile"
+                        editable="true"
+                        required="true"
+                        type="enum"
+                        value="yes,no">
+                    </property>
+                </group>
+            </configuration>
+            <exportedFeatures>
+               <exportedFeature
+                     brief="This feature declares a GCC build environment for the project."
+                     exclusive="false"
+                     id="com.st.tools.spc5.features.build.gccenv">
+               </exportedFeature>
+               <exportedFeature
+                     brief="This feature declares an Cortex-Mx based project."
+                     exclusive="false"
+                     id="com.st.tools.spc5.features.platform.arm.cortex.mx">
+               </exportedFeature>
+               <exportedFeature
+                     brief="This feature declares an Cortex-M4 based project."
+                     exclusive="false"
+                     id="com.st.tools.spc5.features.platform.arm.cortex.m4">
+               </exportedFeature>
+               <exportedFeature
+                     brief="This feature declares an STM32F4xx based project."
+                     exclusive="false"
+                     id="com.st.tools.spc5.features.platform.stm32f4xx">
+               </exportedFeature>
+            </exportedFeatures>
+        </component>
+    </extension>
+</plugin>
