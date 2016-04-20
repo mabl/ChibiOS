@@ -44,6 +44,7 @@
                    </property>
                 </group>
                 <group
+                      columns="2"
                       name="Runtime Settings">
                    <description>
                       Runtime-related settings.
@@ -66,466 +67,8 @@
                    </property>
                 </group>
                 <group
-                      columns="3"
-                      name="Memory Layout Settings">
-                   <description>
-                      Flash/RAM/external memory areas organization.
-                   </description>
-                   <property
-                         brief="Memory address of flash area 0."
-                         default="0x8000000"
-                         editable="true"
-                         name="Flash 0 address"
-                         required="true"
-                         type="unsigned">
-                   </property>
-                   <property
-                         brief="Memory size of flash area 0."
-                         default="1024"
-                         editable="true"
-                         name="Flash 0 size"
-                         required="true"
-                         type="unsigned">
-                      <metadata
-                            class="com.st.tools.spc5.extensions.UnitHandler"
-                            name="Memory Unit"
-                            value="kB,MB,B">
-                      </metadata>
-                   </property>
-                   <property
-                         brief="Area brief description."
-                         default="Main Flash"
-                         editable="true"
-                         name="Flash 0 Info"
-                         required="false"
-                         type="string">
-                   </property>
-                   <property
-                         brief="Memory address of flash area 1."
-                         default="0"
-                         editable="true"
-                         name="Flash 1 address"
-                         required="true"
-                         type="unsigned">
-                   </property>
-                   <property
-                         brief="Memory size of flash area 1."
-                         default="0"
-                         editable="true"
-                         name="Flash 1 size"
-                         required="true"
-                         type="unsigned">
-                      <metadata
-                            class="com.st.tools.spc5.extensions.UnitHandler"
-                            name="Memory Unit"
-                            value="kB,MB,B">
-                      </metadata>
-                   </property>
-                   <property
-                         brief="Area brief description."
-                         editable="true"
-                         name="Flash 1 Info"
-                         required="false"
-                         type="string">
-                   </property>
-                   <property
-                         brief="Memory address of flash area 2."
-                         default="0"
-                         editable="true"
-                         name="Flash 2 address"
-                         required="true"
-                         type="unsigned">
-                   </property>
-                   <property
-                         brief="Memory size of flash area 2."
-                         default="0"
-                         editable="true"
-                         name="Flash 2 size"
-                         required="true"
-                         type="unsigned">
-                      <metadata
-                            class="com.st.tools.spc5.extensions.UnitHandler"
-                            name="Memory Unit"
-                            value="kB,MB,B">
-                      </metadata>
-                   </property>
-                   <property
-                         brief="Area brief description."
-                         editable="true"
-                         name="Flash 2 Info"
-                         required="false"
-                         type="string">
-                   </property>
-                   <property
-                         brief="Memory address of flash area 3."
-                         default="0"
-                         editable="true"
-                         name="Flash 3 address"
-                         required="true"
-                         type="unsigned">
-                   </property>
-                   <property
-                         brief="Memory size of flash area 3."
-                         default="0"
-                         editable="true"
-                         name="Flash 3 size"
-                         required="true"
-                         type="unsigned">
-                      <metadata
-                            class="com.st.tools.spc5.extensions.UnitHandler"
-                            name="Memory Unit"
-                            value="kB,MB,B">
-                      </metadata>
-                   </property>
-                   <property
-                         brief="Area brief description."
-                         editable="true"
-                         name="Flash 3 Info"
-                         required="false"
-                         type="string">
-                   </property>
-                   <property
-                         brief="Memory address of flash area 4."
-                         default="0"
-                         editable="true"
-                         name="Flash 4 address"
-                         required="true"
-                         type="unsigned">
-                   </property>
-                   <property
-                         brief="Memory size of flash area 4."
-                         default="0"
-                         editable="true"
-                         name="Flash 4 size"
-                         required="true"
-                         type="unsigned">
-                      <metadata
-                            class="com.st.tools.spc5.extensions.UnitHandler"
-                            name="Memory Unit"
-                            value="kB,MB,B">
-                      </metadata>
-                   </property>
-                   <property
-                         brief="Area brief description."
-                         editable="true"
-                         name="Flash 4 Info"
-                         required="false"
-                         type="string">
-                   </property>
-                   <property
-                         brief="Memory address of flash area 5."
-                         default="0"
-                         editable="true"
-                         name="Flash 5 address"
-                         required="true"
-                         type="unsigned">
-                   </property>
-                   <property
-                         brief="Memory size of flash area 5."
-                         default="0"
-                         editable="true"
-                         name="Flash 5 size"
-                         required="true"
-                         type="unsigned">
-                      <metadata
-                            class="com.st.tools.spc5.extensions.UnitHandler"
-                            name="Memory Unit"
-                            value="kB,MB,B">
-                      </metadata>
-                   </property>
-                   <property
-                         brief="Area brief description."
-                         editable="true"
-                         name="Flash 5 Info"
-                         required="false"
-                         type="string">
-                   </property>
-                   <property
-                         brief="Memory address of flash area 6."
-                         default="0"
-                         editable="true"
-                         name="Flash 6 address"
-                         required="true"
-                         type="unsigned">
-                   </property>
-                   <property
-                         brief="Memory size of flash area 6."
-                         default="0"
-                         editable="true"
-                         name="Flash 6 size"
-                         required="true"
-                         type="unsigned">
-                      <metadata
-                            class="com.st.tools.spc5.extensions.UnitHandler"
-                            name="Memory Unit"
-                            value="kB,MB,B">
-                      </metadata>
-                   </property>
-                   <property
-                         brief="Area brief description."
-                         editable="true"
-                         name="Flash 6 Info"
-                         required="false"
-                         type="string">
-                   </property>
-                   <property
-                         brief="Memory address of flash area 7."
-                         default="0"
-                         editable="true"
-                         name="Flash 7 address"
-                         required="true"
-                         type="unsigned">
-                   </property>
-                   <property
-                         brief="Memory size of flash area 7."
-                         default="0"
-                         editable="true"
-                         name="Flash 7 size"
-                         required="true"
-                         type="unsigned">
-                      <metadata
-                            class="com.st.tools.spc5.extensions.UnitHandler"
-                            name="Memory Unit"
-                            value="kB,MB,B">
-                      </metadata>
-                   </property>
-                   <property
-                         brief="Area brief description."
-                         editable="true"
-                         name="Flash 7 Info"
-                         required="false"
-                         type="string">
-                   </property>
-                   <property
-                         brief="Memory address of RAM area 0."
-                         default="0x20000000"
-                         editable="true"
-                         name="RAM 0 address"
-                         required="true"
-                         type="unsigned">
-                   </property>
-                   <property
-                         brief="Memory size of RAM area 0."
-                         default="128"
-                         editable="true"
-                         name="RAM 0 size"
-                         required="true"
-                         type="unsigned">
-                      <metadata
-                            class="com.st.tools.spc5.extensions.UnitHandler"
-                            name="Memory Unit"
-                            value="kB,MB,B">
-                      </metadata>
-                   </property>
-                   <property
-                         brief="Area brief description."
-                         default="SRAM"
-                         editable="true"
-                         name="RAM 0 Info"
-                         required="false"
-                         type="string">
-                   </property>
-                   <property
-                         brief="Memory address of RAM area 1."
-                         default="0"
-                         editable="true"
-                         name="RAM 1 address"
-                         required="true"
-                         type="unsigned">
-                   </property>
-                   <property
-                         brief="Memory size of RAM area 1."
-                         default="0"
-                         editable="true"
-                         name="RAM 1 size"
-                         required="true"
-                         type="unsigned">
-                      <metadata
-                            class="com.st.tools.spc5.extensions.UnitHandler"
-                            name="Memory Unit"
-                            value="kB,MB,B">
-                      </metadata>
-                   </property>
-                   <property
-                         brief="Area brief description."
-                         editable="true"
-                         name="RAM 1 Info"
-                         required="false"
-                         type="string">
-                   </property>
-                     <property
-                         brief="Memory address of RAM area 2."
-                         default="0"
-                         editable="true"
-                         name="RAM 2 address"
-                         required="true"
-                         type="unsigned">
-                   </property>
-                   <property
-                         brief="Memory size of RAM area 2."
-                         default="0"
-                         editable="true"
-                         name="RAM 2 size"
-                         required="true"
-                         type="unsigned">
-                      <metadata
-                            class="com.st.tools.spc5.extensions.UnitHandler"
-                            name="Memory Unit"
-                            value="kB,MB,B">
-                      </metadata>
-                   </property>
-                   <property
-                         brief="Area brief description."
-                         editable="true"
-                         name="RAM 2 Info"
-                         required="false"
-                         type="string">
-                   </property>
-                    <property
-                         brief="Memory address of RAM area 3."
-                         default="0"
-                         editable="true"
-                         name="RAM 3 address"
-                         required="true"
-                         type="unsigned">
-                   </property>
-                   <property
-                         brief="Memory size of RAM area 3."
-                         default="0"
-                         editable="true"
-                         name="RAM 3 size"
-                         required="true"
-                         type="unsigned">
-                      <metadata
-                            class="com.st.tools.spc5.extensions.UnitHandler"
-                            name="Memory Unit"
-                            value="kB,MB,B">
-                      </metadata>
-                   </property>
-                   <property
-                         brief="Area brief description."
-                         editable="true"
-                         name="RAM 3 Info"
-                         required="false"
-                         type="string">
-                   </property>
-                   <property
-                         brief="Memory address of RAM area 4."
-                         default="0x10000000"
-                         editable="true"
-                         name="RAM 4 address"
-                         required="true"
-                         type="unsigned">
-                   </property>
-                   <property
-                         brief="Memory size of RAM area 4."
-                         default="16"
-                         editable="true"
-                         name="RAM 4 size"
-                         required="true"
-                         type="unsigned">
-                      <metadata
-                            class="com.st.tools.spc5.extensions.UnitHandler"
-                            name="Memory Unit"
-                            value="kB,MB,B">
-                      </metadata>
-                   </property>
-                   <property
-                         brief="Area brief description."
-                         default="CCM SRAM"
-                         editable="true"
-                         name="RAM 4 Info"
-                         required="false"
-                         type="string">
-                   </property>
-                   <property
-                         brief="Memory address of RAM area 5."
-                         default="0x40024000"
-                         editable="true"
-                         name="RAM 5 address"
-                         required="true"
-                         type="unsigned">
-                   </property>
-                   <property
-                         brief="Memory size of RAM area 5."
-                         default="4"
-                         editable="true"
-                         name="RAM 5 size"
-                         required="true"
-                         type="unsigned">
-                      <metadata
-                            class="com.st.tools.spc5.extensions.UnitHandler"
-                            name="Memory Unit"
-                            value="kB,MB,B">
-                      </metadata>
-                   </property>
-                   <property
-                         brief="Area brief description."
-                         default="Backup SRAM"
-                         editable="true"
-                         name="RAM 5 Info"
-                         required="false"
-                         type="string">
-                   </property>
-                   <property
-                         brief="Memory address of RAM area 6."
-                         default="0"
-                         editable="true"
-                         name="RAM 6 address"
-                         required="true"
-                         type="unsigned">
-                   </property>
-                   <property
-                         brief="Memory size of RAM area 6."
-                         default="0"
-                         editable="true"
-                         name="RAM 6 size"
-                         required="true"
-                         type="unsigned">
-                      <metadata
-                            class="com.st.tools.spc5.extensions.UnitHandler"
-                            name="Memory Unit"
-                            value="kB,MB,B">
-                      </metadata>
-                   </property>
-                   <property
-                         brief="Area brief description."
-                         editable="true"
-                         name="RAM 6 Info"
-                         required="false"
-                         type="string">
-                   </property>
-                   <property
-                         brief="Memory address of RAM area 7."
-                         default="0"
-                         editable="true"
-                         name="RAM 7 address"
-                         required="true"
-                         type="unsigned">
-                   </property>
-                   <property
-                         brief="Memory size of RAM area 7."
-                         default="0"
-                         editable="true"
-                         name="RAM 7 size"
-                         required="true"
-                         type="unsigned">
-                      <metadata
-                            class="com.st.tools.spc5.extensions.UnitHandler"
-                            name="Memory Unit"
-                            value="kB,MB,B">
-                      </metadata>
-                   </property>
-                   <property
-                         brief="Area brief description."
-                         editable="true"
-                         name="RAM 7 Info"
-                         required="false"
-                         type="string">
-                   </property>
-                </group>
-                <group
-                     name="Build Settings">
+                      columns="2"
+                      name="Build Settings">
                     <description>
                      Compiler related options and switches.
                     </description>
@@ -549,73 +92,698 @@
                           value="arm-none-eabi-">
                     </property>
                     <property
-                        brief="GCC optimization level, this setting affects code size and execution speed. It is recommended to use -O0 during debug."
-                        default="3"
-                        name="Optimization Level"
-                        editable="true"
-                        required="true"
-                        type="enum"
-                        value="-O0,-Os,-O1,-O2,-O3">
-                    </property>
-                    <property
-                        brief="Enables the Cortex-M4 internal FPU."
-                        default="0"
-                        name="Enable FPU"
-                        editable="true"
-                        required="true"
-                        type="enum"
-                        value="no,softfp,hardfp">
-                    </property>
-                    <property
-                        brief="Common options to be passed to both the C and C++ compilers."
-                        default="-ggdb -fomit-frame-pointer -falign-functions=16"
-                        name="Common Options"
-                        editable="true"
-                        required="false"
-                        type="string">
-                    </property>
-                    <property
-                          brief="Options for the C modules only."
-                          editable="true"
-                          name="C Options"
-                          required="false"
-                          type="string">
-                    </property>
-                    <property
-                          brief="Options for the C++ modules only."
-                          default="-fno-rtti -fno-exceptions"
-                          editable="true"
-                          name="CPP Options"
-                          required="false"
-                          type="string">
-                    </property>
-                    <property
-                        brief="Enables garbage collection of unused memory objects."
-                        default="0"
-                        name="Use Linker GC"
-                        editable="true"
-                        required="true"
-                        type="enum"
-                        value="yes,no">
-                    </property>
-                    <property
-                          brief="Enables Link Time Optimizations. This can result in smaller and faster code."
-                          default="0"
-                          editable="true"
-                          name="Use LTO"
-                          required="true"
-                          type="enum"
-                          value="yes,no">
-                    </property>
-                    <property
                         brief="Enables a verbose build log instead of the simplified one."
                         default="1"
-                        name="Use Verbose Compile"
+                        name="Verbose Compile"
                         editable="true"
                         required="true"
                         type="enum"
                         value="yes,no">
                     </property>
+                </group>
+                <group
+                      columns="2"
+                      name="Compiler Settings">
+                   <property
+                         brief="GCC optimization level, this setting affects code size and execution speed. It is recommended to use -O0 during debug."
+                         default="3"
+                         editable="true"
+                         name="Optimization Level"
+                         required="true"
+                         type="enum"
+                         value="-O0,-Os,-O1,-O2,-O3">
+                   </property>
+                   <property
+                         brief="Enables the Cortex-M4 internal FPU."
+                         default="0"
+                         editable="true"
+                         name="Enable FPU"
+                         required="true"
+                         type="enum"
+                         value="no,softfp,hardfp">
+                   </property>
+                   <property
+                         brief="Enables Link Time Optimizations. This can result in smaller and faster code."
+                         default="0"
+                         editable="true"
+                         name="Use LTO"
+                         required="true"
+                         type="enum"
+                         value="yes,no">
+                   </property>
+                   <property
+                         brief="Common options to be passed to both the C and C++ compilers."
+                         default="-ggdb -fomit-frame-pointer -falign-functions=16"
+                         editable="true"
+                         name="Common Options"
+                         required="false"
+                         type="string">
+                   </property>
+                   <property
+                         brief="Options for the C modules only."
+                         editable="true"
+                         name="C Options"
+                         required="false"
+                         type="string">
+                   </property>
+                   <property
+                         brief="Options for the C++ modules only."
+                         default="-fno-rtti -fno-exceptions"
+                         editable="true"
+                         name="CPP Options"
+                         required="false"
+                         type="string">
+                   </property>
+                </group>
+                <group
+                      columns="1"
+                      name="Linker Settings">
+                   <property
+                         brief="Extra options for the linker."
+                         editable="true"
+                         name="Linker Options"
+                         required="false"
+                         type="string">
+                   </property>
+                   <property
+                         brief="Enables garbage collection of unused memory objects."
+                         default="true"
+                         editable="true"
+                         name="Use Linker GC"
+                         required="true"
+                         type="boolean">
+                   </property>
+                   <group
+                         columns="3"
+                         name="Memory Regions Layout">
+                      <description>
+                         Flash/RAM/external memory regions organization.
+                      </description>
+                      <property
+                            brief="Memory address of flash area 0."
+                            default="0x8000000"
+                            editable="true"
+                            name="Flash 0 address"
+                            required="true"
+                            type="unsigned">
+                      </property>
+                      <property
+                            brief="Memory size of flash area 0."
+                            default="1024"
+                            editable="true"
+                            name="Flash 0 size"
+                            required="true"
+                            type="unsigned">
+                         <metadata
+                               class="com.st.tools.spc5.extensions.UnitHandler"
+                               name="Memory Unit"
+                               value="kB,MB,B">
+                         </metadata>
+                      </property>
+                      <property
+                            brief="Area brief description."
+                            default="Main Flash"
+                            editable="true"
+                            name="Flash 0 Info"
+                            required="false"
+                            type="string">
+                      </property>
+                      <property
+                            brief="Memory address of flash area 1."
+                            default="0"
+                            editable="true"
+                            name="Flash 1 address"
+                            required="true"
+                            type="unsigned">
+                      </property>
+                      <property
+                            brief="Memory size of flash area 1."
+                            default="0"
+                            editable="true"
+                            name="Flash 1 size"
+                            required="true"
+                            type="unsigned">
+                         <metadata
+                               class="com.st.tools.spc5.extensions.UnitHandler"
+                               name="Memory Unit"
+                               value="kB,MB,B">
+                         </metadata>
+                      </property>
+                      <property
+                            brief="Area brief description."
+                            editable="true"
+                            name="Flash 1 Info"
+                            required="false"
+                            type="string">
+                      </property>
+                      <property
+                            brief="Memory address of flash area 2."
+                            default="0"
+                            editable="true"
+                            name="Flash 2 address"
+                            required="true"
+                            type="unsigned">
+                      </property>
+                      <property
+                            brief="Memory size of flash area 2."
+                            default="0"
+                            editable="true"
+                            name="Flash 2 size"
+                            required="true"
+                            type="unsigned">
+                         <metadata
+                               class="com.st.tools.spc5.extensions.UnitHandler"
+                               name="Memory Unit"
+                               value="kB,MB,B">
+                         </metadata>
+                      </property>
+                      <property
+                            brief="Area brief description."
+                            editable="true"
+                            name="Flash 2 Info"
+                            required="false"
+                            type="string">
+                      </property>
+                      <property
+                            brief="Memory address of flash area 3."
+                            default="0"
+                            editable="true"
+                            name="Flash 3 address"
+                            required="true"
+                            type="unsigned">
+                      </property>
+                      <property
+                            brief="Memory size of flash area 3."
+                            default="0"
+                            editable="true"
+                            name="Flash 3 size"
+                            required="true"
+                            type="unsigned">
+                         <metadata
+                               class="com.st.tools.spc5.extensions.UnitHandler"
+                               name="Memory Unit"
+                               value="kB,MB,B">
+                         </metadata>
+                      </property>
+                      <property
+                            brief="Area brief description."
+                            editable="true"
+                            name="Flash 3 Info"
+                            required="false"
+                            type="string">
+                      </property>
+                      <property
+                            brief="Memory address of flash area 4."
+                            default="0"
+                            editable="true"
+                            name="Flash 4 address"
+                            required="true"
+                            type="unsigned">
+                      </property>
+                      <property
+                            brief="Memory size of flash area 4."
+                            default="0"
+                            editable="true"
+                            name="Flash 4 size"
+                            required="true"
+                            type="unsigned">
+                         <metadata
+                               class="com.st.tools.spc5.extensions.UnitHandler"
+                               name="Memory Unit"
+                               value="kB,MB,B">
+                         </metadata>
+                      </property>
+                      <property
+                            brief="Area brief description."
+                            editable="true"
+                            name="Flash 4 Info"
+                            required="false"
+                            type="string">
+                      </property>
+                      <property
+                            brief="Memory address of flash area 5."
+                            default="0"
+                            editable="true"
+                            name="Flash 5 address"
+                            required="true"
+                            type="unsigned">
+                      </property>
+                      <property
+                            brief="Memory size of flash area 5."
+                            default="0"
+                            editable="true"
+                            name="Flash 5 size"
+                            required="true"
+                            type="unsigned">
+                         <metadata
+                               class="com.st.tools.spc5.extensions.UnitHandler"
+                               name="Memory Unit"
+                               value="kB,MB,B">
+                         </metadata>
+                      </property>
+                      <property
+                            brief="Area brief description."
+                            editable="true"
+                            name="Flash 5 Info"
+                            required="false"
+                            type="string">
+                      </property>
+                      <property
+                            brief="Memory address of flash area 6."
+                            default="0"
+                            editable="true"
+                            name="Flash 6 address"
+                            required="true"
+                            type="unsigned">
+                      </property>
+                      <property
+                            brief="Memory size of flash area 6."
+                            default="0"
+                            editable="true"
+                            name="Flash 6 size"
+                            required="true"
+                            type="unsigned">
+                         <metadata
+                               class="com.st.tools.spc5.extensions.UnitHandler"
+                               name="Memory Unit"
+                               value="kB,MB,B">
+                         </metadata>
+                      </property>
+                      <property
+                            brief="Area brief description."
+                            editable="true"
+                            name="Flash 6 Info"
+                            required="false"
+                            type="string">
+                      </property>
+                      <property
+                            brief="Memory address of flash area 7."
+                            default="0"
+                            editable="true"
+                            name="Flash 7 address"
+                            required="true"
+                            type="unsigned">
+                      </property>
+                      <property
+                            brief="Memory size of flash area 7."
+                            default="0"
+                            editable="true"
+                            name="Flash 7 size"
+                            required="true"
+                            type="unsigned">
+                         <metadata
+                               class="com.st.tools.spc5.extensions.UnitHandler"
+                               name="Memory Unit"
+                               value="kB,MB,B">
+                         </metadata>
+                      </property>
+                      <property
+                            brief="Area brief description."
+                            editable="true"
+                            name="Flash 7 Info"
+                            required="false"
+                            type="string">
+                      </property>
+                      <property
+                            brief="Memory address of RAM area 0."
+                            default="0x20000000"
+                            editable="true"
+                            name="RAM 0 address"
+                            required="true"
+                            type="unsigned">
+                      </property>
+                      <property
+                            brief="Memory size of RAM area 0."
+                            default="128"
+                            editable="true"
+                            name="RAM 0 size"
+                            required="true"
+                            type="unsigned">
+                         <metadata
+                               class="com.st.tools.spc5.extensions.UnitHandler"
+                               name="Memory Unit"
+                               value="kB,MB,B">
+                         </metadata>
+                      </property>
+                      <property
+                            brief="Area brief description."
+                            default="SRAM"
+                            editable="true"
+                            name="RAM 0 Info"
+                            required="false"
+                            type="string">
+                      </property>
+                      <property
+                            brief="Memory address of RAM area 1."
+                            default="0"
+                            editable="true"
+                            name="RAM 1 address"
+                            required="true"
+                            type="unsigned">
+                      </property>
+                      <property
+                            brief="Memory size of RAM area 1."
+                            default="0"
+                            editable="true"
+                            name="RAM 1 size"
+                            required="true"
+                            type="unsigned">
+                         <metadata
+                               class="com.st.tools.spc5.extensions.UnitHandler"
+                               name="Memory Unit"
+                               value="kB,MB,B">
+                         </metadata>
+                      </property>
+                      <property
+                            brief="Area brief description."
+                            editable="true"
+                            name="RAM 1 Info"
+                            required="false"
+                            type="string">
+                      </property>
+                      <property
+                            brief="Memory address of RAM area 2."
+                            default="0"
+                            editable="true"
+                            name="RAM 2 address"
+                            required="true"
+                            type="unsigned">
+                      </property>
+                      <property
+                            brief="Memory size of RAM area 2."
+                            default="0"
+                            editable="true"
+                            name="RAM 2 size"
+                            required="true"
+                            type="unsigned">
+                         <metadata
+                               class="com.st.tools.spc5.extensions.UnitHandler"
+                               name="Memory Unit"
+                               value="kB,MB,B">
+                         </metadata>
+                      </property>
+                      <property
+                            brief="Area brief description."
+                            editable="true"
+                            name="RAM 2 Info"
+                            required="false"
+                            type="string">
+                      </property>
+                      <property
+                            brief="Memory address of RAM area 3."
+                            default="0"
+                            editable="true"
+                            name="RAM 3 address"
+                            required="true"
+                            type="unsigned">
+                      </property>
+                      <property
+                            brief="Memory size of RAM area 3."
+                            default="0"
+                            editable="true"
+                            name="RAM 3 size"
+                            required="true"
+                            type="unsigned">
+                         <metadata
+                               class="com.st.tools.spc5.extensions.UnitHandler"
+                               name="Memory Unit"
+                               value="kB,MB,B">
+                         </metadata>
+                      </property>
+                      <property
+                            brief="Area brief description."
+                            editable="true"
+                            name="RAM 3 Info"
+                            required="false"
+                            type="string">
+                      </property>
+                      <property
+                            brief="Memory address of RAM area 4."
+                            default="0x10000000"
+                            editable="true"
+                            name="RAM 4 address"
+                            required="true"
+                            type="unsigned">
+                      </property>
+                      <property
+                            brief="Memory size of RAM area 4."
+                            default="16"
+                            editable="true"
+                            name="RAM 4 size"
+                            required="true"
+                            type="unsigned">
+                         <metadata
+                               class="com.st.tools.spc5.extensions.UnitHandler"
+                               name="Memory Unit"
+                               value="kB,MB,B">
+                         </metadata>
+                      </property>
+                      <property
+                            brief="Area brief description."
+                            default="CCM SRAM"
+                            editable="true"
+                            name="RAM 4 Info"
+                            required="false"
+                            type="string">
+                      </property>
+                      <property
+                            brief="Memory address of RAM area 5."
+                            default="0x40024000"
+                            editable="true"
+                            name="RAM 5 address"
+                            required="true"
+                            type="unsigned">
+                      </property>
+                      <property
+                            brief="Memory size of RAM area 5."
+                            default="4"
+                            editable="true"
+                            name="RAM 5 size"
+                            required="true"
+                            type="unsigned">
+                         <metadata
+                               class="com.st.tools.spc5.extensions.UnitHandler"
+                               name="Memory Unit"
+                               value="kB,MB,B">
+                         </metadata>
+                      </property>
+                      <property
+                            brief="Area brief description."
+                            default="Backup SRAM"
+                            editable="true"
+                            name="RAM 5 Info"
+                            required="false"
+                            type="string">
+                      </property>
+                      <property
+                            brief="Memory address of RAM area 6."
+                            default="0"
+                            editable="true"
+                            name="RAM 6 address"
+                            required="true"
+                            type="unsigned">
+                      </property>
+                      <property
+                            brief="Memory size of RAM area 6."
+                            default="0"
+                            editable="true"
+                            name="RAM 6 size"
+                            required="true"
+                            type="unsigned">
+                         <metadata
+                               class="com.st.tools.spc5.extensions.UnitHandler"
+                               name="Memory Unit"
+                               value="kB,MB,B">
+                         </metadata>
+                      </property>
+                      <property
+                            brief="Area brief description."
+                            editable="true"
+                            name="RAM 6 Info"
+                            required="false"
+                            type="string">
+                      </property>
+                      <property
+                            brief="Memory address of RAM area 7."
+                            default="0"
+                            editable="true"
+                            name="RAM 7 address"
+                            required="true"
+                            type="unsigned">
+                      </property>
+                      <property
+                            brief="Memory size of RAM area 7."
+                            default="0"
+                            editable="true"
+                            name="RAM 7 size"
+                            required="true"
+                            type="unsigned">
+                         <metadata
+                               class="com.st.tools.spc5.extensions.UnitHandler"
+                               name="Memory Unit"
+                               value="kB,MB,B">
+                         </metadata>
+                      </property>
+                      <property
+                            brief="Area brief description."
+                            editable="true"
+                            name="RAM 7 Info"
+                            required="false"
+                            type="string">
+                      </property>
+                   </group>
+                   <group
+                         columns="2"
+                         name="Memory Sections Assignment">
+                      <description>
+                         Assignment of the various standard segments to the defined memory areas. Note that the VMA region is where the code is used, the LMA region is where the region where the code is loaded, usually the two coincide.
+                      </description>
+                      <property
+                            brief="Region where to allocate the vectors table."
+                            default="0"
+                            editable="true"
+                            name="Vectors Segment VMA"
+                            required="true"
+                            type="enum"
+                            value="Flash 0,Flash 1,Flash 2,Flash 3,Flash 4,Flash 5,Flash 6,Flash 7,RAM 0,RAM 1,RAM 2,RAM 3,RAM 4,RAM 5,RAM 6,RAM 7">
+                      </property>
+                      <property
+                            brief="Region where to allocate the vectors table."
+                            default="0"
+                            editable="true"
+                            name="Vectors Segment LMA"
+                            required="true"
+                            type="enum"
+                            value="Flash 0,Flash 1,Flash 2,Flash 3,Flash 4,Flash 5,Flash 6,Flash 7">
+                      </property>
+                      <property
+                            brief="Region where to allocate the constructors and destructors tables."
+                            default="0"
+                            editable="true"
+                            name="xTORS Segments VMA"
+                            required="true"
+                            type="enum"
+                            value="Flash 0,Flash 1,Flash 2,Flash 3,Flash 4,Flash 5,Flash 6,Flash 7,RAM 0,RAM 1,RAM 2,RAM 3,RAM 4,RAM 5,RAM 6,RAM 7">
+                      </property>
+                      <property
+                            brief="Region where to allocate the constructors and destructors tables."
+                            default="0"
+                            editable="true"
+                            name="xTORS Segments LMA"
+                            required="true"
+                            type="enum"
+                            value="Flash 0,Flash 1,Flash 2,Flash 3,Flash 4,Flash 5,Flash 6,Flash 7">
+                      </property>
+                      <property
+                            brief="Region where to allocate the code text segment."
+                            default="0"
+                            editable="true"
+                            name="TEXT Segment VMA"
+                            required="true"
+                            type="enum"
+                            value="Flash 0,Flash 1,Flash 2,Flash 3,Flash 4,Flash 5,Flash 6,Flash 7,RAM 0,RAM 1,RAM 2,RAM 3,RAM 4,RAM 5,RAM 6,RAM 7">
+                      </property>
+                      <property
+                            brief="Region where to allocate the code text segment."
+                            default="0"
+                            editable="true"
+                            name="TEXT Segment LMA"
+                            required="true"
+                            type="enum"
+                            value="Flash 0,Flash 1,Flash 2,Flash 3,Flash 4,Flash 5,Flash 6,Flash 7">
+                      </property>
+                      <property
+                            brief="Region where to allocate the read-only data segment."
+                            default="0"
+                            editable="true"
+                            name="RODATA Gegment VMA"
+                            required="true"
+                            type="enum"
+                            value="Flash 0,Flash 1,Flash 2,Flash 3,Flash 4,Flash 5,Flash 6,Flash 7,RAM 0,RAM 1,RAM 2,RAM 3,RAM 4,RAM 5,RAM 6,RAM 7">
+                      </property>
+                      <property
+                            brief="Region where to allocate the read-only data segment."
+                            default="0"
+                            editable="true"
+                            name="RODATA Segment LMA"
+                            required="true"
+                            type="enum"
+                            value="Flash 0,Flash 1,Flash 2,Flash 3,Flash 4,Flash 5,Flash 6,Flash 7">
+                      </property>
+                      <property
+                            brief="Region where to allocate read-only various compiler-related data."
+                            default="0"
+                            editable="true"
+                            name="Various Segments VMA"
+                            required="true"
+                            type="enum"
+                            value="Flash 0,Flash 1,Flash 2,Flash 3,Flash 4,Flash 5,Flash 6,Flash 7,RAM 0,RAM 1,RAM 2,RAM 3,RAM 4,RAM 5,RAM 6,RAM 7">
+                      </property>
+                      <property
+                            brief="Region where to allocate read-only various compiler-related data segments."
+                            default="0"
+                            editable="true"
+                            name="Various Segments LMA"
+                            required="true"
+                            type="enum"
+                            value="Flash 0,Flash 1,Flash 2,Flash 3,Flash 4,Flash 5,Flash 6,Flash 7">
+                      </property>
+                      <line></line>
+                      <property
+                            brief="RAM region where to allocate the Main Stack."
+                            default="0"
+                            editable="true"
+                            name="Main Stack RAM"
+                            required="true"
+                            type="enum"
+                            value="RAM 0,RAM 1,RAM 2,RAM 3,RAM 4,RAM 5,RAM 6,RAM 7">
+                      </property>
+                      <property
+                            brief="RAM region where to allocate the Process Stack."
+                            default="0"
+                            editable="true"
+                            name="Process Stack RAM"
+                            required="true"
+                            type="enum"
+                            value="RAM 0,RAM 1,RAM 2,RAM 3,RAM 4,RAM 5,RAM 6,RAM 7">
+                      </property>
+                      <property
+                            brief="RAM region where to allocate the DATA segment."
+                            default="0"
+                            editable="true"
+                            name="DATA Segment RAM"
+                            required="true"
+                            type="enum"
+                            value="RAM 0,RAM 1,RAM 2,RAM 3,RAM 4,RAM 5,RAM 6,RAM 7">
+                      </property>
+                      <property
+                            brief="Rregion where to allocate the DATA segment initialization data."
+                            default="0"
+                            editable="true"
+                            name="DATA Segment RAM LMA"
+                            required="true"
+                            type="enum"
+                            value="Flash 0,Flash 1,Flash 2,Flash 3,Flash 4,Flash 5,Flash 6,Flash 7">
+                      </property>
+                      <property
+                            brief="RAM region where to allocate the BSS segment."
+                            default="0"
+                            editable="true"
+                            name="BSS Segment RAM"
+                            required="true"
+                            type="enum"
+                            value="RAM 0,RAM 1,RAM 2,RAM 3,RAM 4,RAM 5,RAM 6,RAM 7">
+                      </property>
+                      <property
+                            brief="RAM region where to allocate the default heap."
+                            default="0"
+                            editable="true"
+                            name="Heap RAM"
+                            required="true"
+                            type="enum"
+                            value="RAM 0,RAM 1,RAM 2,RAM 3,RAM 4,RAM 5,RAM 6,RAM 7">
+                      </property>
+                   </group>
                 </group>
             </configuration>
             <exportedFeatures>
