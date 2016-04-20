@@ -10,7 +10,8 @@
               icon="rsc/chibios.ico"
               isPlatform="true">
             <description>
-                Startup and build support for STM32F4xx.
+                Startup and build support for STM32F4xx. Includes the
+                required CMSIS device headers.
             </description>
             <categories>
                <category
