@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Generic Platform Component
-Bundle-SymbolicName: org.chibios.spc5.components.platform.generic;singleton:=true
+Bundle-Name: Generic Startup Component
+Bundle-SymbolicName: org.chibios.spc5.components.portable.generic_startup;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,

@@ -2,8 +2,8 @@
 <?eclipse version="3.4"?>
 <plugin>
     <extension
-         id="org.chibios.spc5.components.platform.generic"
-         name="Generic Platform Component"
+         id="org.chibios.spc5.components.portable.generic_startup"
+         name="Generic Startup Component"
          point="com.st.tools.spc5.extension.v1">
         <component
               icon="rsc/chibios.ico"
