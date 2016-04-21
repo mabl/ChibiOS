@@ -30,7 +30,8 @@
                   </text>
                </image>
                 <group
-                     name="Device Settings">
+                      name="Device Settings"
+                      style="collapsable">
                    <description>
                      Device-related settings.
                    </description>
@@ -46,7 +47,8 @@
                 </group>
                 <group
                       columns="2"
-                      name="Runtime Settings">
+                      name="Runtime Settings"
+                      style="collapsable">
                    <description>
                       Runtime-related settings.
                    </description>
@@ -69,7 +71,8 @@
                 </group>
                 <group
                       columns="2"
-                      name="Build Settings">
+                      name="Build Settings"
+                      style="collapsable">
                     <description>
                      Compiler related options and switches.
                     </description>
@@ -104,7 +107,8 @@
                 </group>
                 <group
                       columns="2"
-                      name="Compiler Settings">
+                      name="Compiler Settings"
+                      style="collapsable">
                    <property
                          brief="GCC optimization level, this setting affects code size and execution speed. It is recommended to use -O0 during debug."
                          default="3"
@@ -158,7 +162,8 @@
                 </group>
                 <group
                       columns="1"
-                      name="Linker Settings">
+                      name="Linker Settings"
+                      style="collapsable">
                    <property
                          brief="Extra options for the linker."
                          editable="true"
@@ -176,7 +181,8 @@
                    </property>
                    <group
                          columns="3"
-                         name="Memory Regions Layout">
+                         name="Memory Regions Layout"
+                         style="collapsable">
                       <description>
                          Flash/RAM/external memory regions organization. Incorrect settings could result in errors at link time.
                       </description>
@@ -635,7 +641,8 @@
                    </group>
                    <group
                          columns="2"
-                         name="Memory Sections Assignment">
+                         name="Memory Sections Assignment"
+                         style="collapsable">
                       <description>
                          Assignment of the various standard segments to the defined memory areas. Note that the VMA region is where the code is used, the LMA region is where the region where the code is loaded, usually the two coincide. Incorrect settings could result in errors at link time.
                       </description>
@@ -776,7 +783,7 @@
                             value="RAM 0,RAM 1,RAM 2,RAM 3,RAM 4,RAM 5,RAM 6,RAM 7">
                       </property>
                       <property
-                            brief="RAM region where to allocate the default heap."
+                            brief="RAM region where to allocate the default heap. The heap takes up all the unused part of the region."
                             default="0"
                             editable="true"
                             name="Heap RAM"
@@ -787,14 +794,15 @@
                    </group>
                    <group
                          columns="1"
-                         name="Load Rules">
+                         name="Load Rules"
+                         style="collapsable">
                       <description>
                          Loading rules, this box can contain definition of SECTIONS LD rules or inclusion of predefined rules, see the LD manual for details. Incorrect settings could result in errors at link time.
                       </description>
                       <property
                             editable="true"
                             name="Rules"
-                            required="true"
+                            required="false"
                             type="formatted">
                          <default>
                             /* Generic rules inclusion.*/
