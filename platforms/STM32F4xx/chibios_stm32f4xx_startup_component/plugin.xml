@@ -178,7 +178,7 @@
                          columns="3"
                          name="Memory Regions Layout">
                       <description>
-                         Flash/RAM/external memory regions organization.
+                         Flash/RAM/external memory regions organization. Incorrect settings could result in errors at link time.
                       </description>
                       <property
                             brief="Memory address of flash area 0."
@@ -637,7 +637,7 @@
                          columns="2"
                          name="Memory Sections Assignment">
                       <description>
-                         Assignment of the various standard segments to the defined memory areas. Note that the VMA region is where the code is used, the LMA region is where the region where the code is loaded, usually the two coincide.
+                         Assignment of the various standard segments to the defined memory areas. Note that the VMA region is where the code is used, the LMA region is where the region where the code is loaded, usually the two coincide. Incorrect settings could result in errors at link time.
                       </description>
                       <property
                             brief="Region where to allocate the vectors table."
@@ -697,7 +697,7 @@
                             brief="Region where to allocate the read-only data segment."
                             default="0"
                             editable="true"
-                            name="RODATA Gegment VMA"
+                            name="RODATA Segment VMA"
                             required="true"
                             type="enum"
                             value="Flash 0,Flash 1,Flash 2,Flash 3,Flash 4,Flash 5,Flash 6,Flash 7,RAM 0,RAM 1,RAM 2,RAM 3,RAM 4,RAM 5,RAM 6,RAM 7">
@@ -734,7 +734,7 @@
                             brief="RAM region where to allocate the Main Stack."
                             default="0"
                             editable="true"
-                            name="Main Stack RAM"
+                            name="Main Stack Segment RAM"
                             required="true"
                             type="enum"
                             value="RAM 0,RAM 1,RAM 2,RAM 3,RAM 4,RAM 5,RAM 6,RAM 7">
@@ -743,7 +743,7 @@
                             brief="RAM region where to allocate the Process Stack."
                             default="0"
                             editable="true"
-                            name="Process Stack RAM"
+                            name="Process Stack Segment RAM"
                             required="true"
                             type="enum"
                             value="RAM 0,RAM 1,RAM 2,RAM 3,RAM 4,RAM 5,RAM 6,RAM 7">
@@ -783,6 +783,23 @@
                             required="true"
                             type="enum"
                             value="RAM 0,RAM 1,RAM 2,RAM 3,RAM 4,RAM 5,RAM 6,RAM 7">
+                      </property>
+                   </group>
+                   <group
+                         columns="1"
+                         name="Load Rules">
+                      <description>
+                         Loading rules, this box can contain definition of SECTIONS LD rules or inclusion of predefined rules, see the LD manual for details. Incorrect settings could result in errors at link time.
+                      </description>
+                      <property
+                            editable="true"
+                            name="Rules"
+                            required="true"
+                            type="formatted">
+                         <default>
+                            /* Generic rules inclusion.*/
+INCLUDE rules.ld
+                         </default>
                       </property>
                    </group>
                 </group>
