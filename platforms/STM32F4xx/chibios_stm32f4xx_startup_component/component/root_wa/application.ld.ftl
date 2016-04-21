@@ -1,199 +1,97 @@
 [#ftl]
+[#import "/@ftllibs/libutils.ftl" as utils /]
+[#macro memory_unit s]
+  [#if s == "kB"]
+k[#rt]
+  [#elseif s == "MB"]
+M[#rt]
+  [#else]
+[#rt]
+  [/#if]
+[/#macro]
 [@pp.dropOutputFile /]
 [@pp.changeOutputFile name="application.ld" /]
 /*
-    ChibiOS/RT - Copyright (C) 2006,2007,2008,2009,2010,
-                 2011,2012 Giovanni Di Sirio.
+    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
-    This file is part of ChibiOS/RT.
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-    ChibiOS/RT is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 3 of the License, or
-    (at your option) any later version.
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    ChibiOS/RT is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-                                      ---
-
-    A special exception to the GPL can be applied should you wish to distribute
-    a combined work that includes ChibiOS/RT, without being obliged to provide
-    the source code for any proprietary components. See the file exception.txt
-    for full details of how and when the exception can be applied.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 /*
- * ST32F4xx memory setup.
+ * ${conf.instance.device_settings.specific_model.value[0]} memory setup.
  */
-__main_stack_size__     = ${conf.instance.runtime_settings.irq_stack_size.value[0]};
-__process_stack_size__  = ${conf.instance.runtime_settings.c_stack_size.value[0]};
-
 MEMORY
 {
-[#if conf.instance.platform_settings.specific_model.value[0] == "STM32F4xxyE"]
-    flash : org = 0x08000000, len = 512k
-[#if conf.instance.memory_layout_settings.ram_areas_organization[0].@index[0]?string == "0"]
-    ram : org = 0x20000000, len = 128k
-[#else]
-    ram : org = 0x20000000, len = 112k
-    ethram : org = 0x2001C000, len = 16k
-[/#if]
-    ccmram : org = 0x10000000, len = 64k
-[#elseif conf.instance.platform_settings.specific_model.value[0] == "STM32F4xxyG"]
-    flash : org = 0x08000000, len = 1M
-[#if conf.instance.memory_layout_settings.ram_areas_organization[0].@index[0]?string == "0"]
-    ram : org = 0x20000000, len = 128k
-[#else]
-    ram : org = 0x20000000, len = 112k
-    ethram : org = 0x2001C000, len = 16k
-[/#if]
-    ccmram : org = 0x10000000, len = 64k
-[#elseif conf.instance.platform_settings.specific_model.value[0] == "STM32F4xxyI"]
-    flash : org = 0x08000000, len = 2M
-[#if conf.instance.memory_layout_settings.ram_areas_organization[0].@index[0]?string == "0"]
-    ram : org = 0x20000000, len = 128k
-[#else]
-    ram : org = 0x20000000, len = 112k
-    ethram : org = 0x2001C000, len = 16k
-[/#if]
-    ram2 : org = 0x20020000, len = 64k
-    ccmram : org = 0x10000000, len = 64k
-[#else]
-[#stop "unknown ST32F4xx model"]
-[/#if]
+    flash0  : org = ${conf.instance.linker_settings.memory_regions_layout.flash_0_address.value[0]}, len = ${conf.instance.linker_settings.memory_regions_layout.flash_0_size.value[0]}[@memory_unit s=conf.instance.linker_settings.memory_regions_layout.flash_0_size.metadatas.metadata[0].unit.@name[0]?string /]
+    flash1  : org = ${conf.instance.linker_settings.memory_regions_layout.flash_1_address.value[0]}, len = ${conf.instance.linker_settings.memory_regions_layout.flash_1_size.value[0]}[@memory_unit s=conf.instance.linker_settings.memory_regions_layout.flash_1_size.metadatas.metadata[0].unit.@name[0]?string /]
+    flash2  : org = ${conf.instance.linker_settings.memory_regions_layout.flash_2_address.value[0]}, len = ${conf.instance.linker_settings.memory_regions_layout.flash_2_size.value[0]}[@memory_unit s=conf.instance.linker_settings.memory_regions_layout.flash_2_size.metadatas.metadata[0].unit.@name[0]?string /]
+    flash3  : org = ${conf.instance.linker_settings.memory_regions_layout.flash_3_address.value[0]}, len = ${conf.instance.linker_settings.memory_regions_layout.flash_3_size.value[0]}[@memory_unit s=conf.instance.linker_settings.memory_regions_layout.flash_3_size.metadatas.metadata[0].unit.@name[0]?string /]
+    flash4  : org = ${conf.instance.linker_settings.memory_regions_layout.flash_4_address.value[0]}, len = ${conf.instance.linker_settings.memory_regions_layout.flash_4_size.value[0]}[@memory_unit s=conf.instance.linker_settings.memory_regions_layout.flash_4_size.metadatas.metadata[0].unit.@name[0]?string /]
+    flash5  : org = ${conf.instance.linker_settings.memory_regions_layout.flash_5_address.value[0]}, len = ${conf.instance.linker_settings.memory_regions_layout.flash_5_size.value[0]}[@memory_unit s=conf.instance.linker_settings.memory_regions_layout.flash_5_size.metadatas.metadata[0].unit.@name[0]?string /]
+    flash6  : org = ${conf.instance.linker_settings.memory_regions_layout.flash_6_address.value[0]}, len = ${conf.instance.linker_settings.memory_regions_layout.flash_6_size.value[0]}[@memory_unit s=conf.instance.linker_settings.memory_regions_layout.flash_6_size.metadatas.metadata[0].unit.@name[0]?string /]
+    flash7  : org = ${conf.instance.linker_settings.memory_regions_layout.flash_7_address.value[0]}, len = ${conf.instance.linker_settings.memory_regions_layout.flash_7_size.value[0]}[@memory_unit s=conf.instance.linker_settings.memory_regions_layout.flash_7_size.metadatas.metadata[0].unit.@name[0]?string /]
+    ram0    : org = ${conf.instance.linker_settings.memory_regions_layout.ram_0_address.value[0]}, len = ${conf.instance.linker_settings.memory_regions_layout.ram_0_size.value[0]}[@memory_unit s=conf.instance.linker_settings.memory_regions_layout.ram_0_size.metadatas.metadata[0].unit.@name[0]?string /]
+    ram1    : org = ${conf.instance.linker_settings.memory_regions_layout.ram_1_address.value[0]}, len = ${conf.instance.linker_settings.memory_regions_layout.ram_1_size.value[0]}[@memory_unit s=conf.instance.linker_settings.memory_regions_layout.ram_1_size.metadatas.metadata[0].unit.@name[0]?string /]
+    ram2    : org = ${conf.instance.linker_settings.memory_regions_layout.ram_2_address.value[0]}, len = ${conf.instance.linker_settings.memory_regions_layout.ram_2_size.value[0]}[@memory_unit s=conf.instance.linker_settings.memory_regions_layout.ram_2_size.metadatas.metadata[0].unit.@name[0]?string /]
+    ram3    : org = ${conf.instance.linker_settings.memory_regions_layout.ram_3_address.value[0]}, len = ${conf.instance.linker_settings.memory_regions_layout.ram_3_size.value[0]}[@memory_unit s=conf.instance.linker_settings.memory_regions_layout.ram_3_size.metadatas.metadata[0].unit.@name[0]?string /]
+    ram4    : org = ${conf.instance.linker_settings.memory_regions_layout.ram_4_address.value[0]}, len = ${conf.instance.linker_settings.memory_regions_layout.ram_4_size.value[0]}[@memory_unit s=conf.instance.linker_settings.memory_regions_layout.ram_4_size.metadatas.metadata[0].unit.@name[0]?string /]
+    ram5    : org = ${conf.instance.linker_settings.memory_regions_layout.ram_5_address.value[0]}, len = ${conf.instance.linker_settings.memory_regions_layout.ram_5_size.value[0]}[@memory_unit s=conf.instance.linker_settings.memory_regions_layout.ram_5_size.metadatas.metadata[0].unit.@name[0]?string /]
+    ram6    : org = ${conf.instance.linker_settings.memory_regions_layout.ram_6_address.value[0]}, len = ${conf.instance.linker_settings.memory_regions_layout.ram_6_size.value[0]}[@memory_unit s=conf.instance.linker_settings.memory_regions_layout.ram_6_size.metadatas.metadata[0].unit.@name[0]?string /]
+    ram7    : org = ${conf.instance.linker_settings.memory_regions_layout.ram_7_address.value[0]}, len = ${conf.instance.linker_settings.memory_regions_layout.ram_7_size.value[0]}[@memory_unit s=conf.instance.linker_settings.memory_regions_layout.ram_7_size.metadatas.metadata[0].unit.@name[0]?string /]
 }
 
-__ram_start__           = ORIGIN(ram);
-__ram_size__            = LENGTH(ram);
-__ram_end__             = __ram_start__ + __ram_size__;
+/* For each data/text section two region are defined, a virtual region
+   and a load region (_LMA suffix).*/
 
-SECTIONS
-{
-    . = 0;
-    _text = .;
+/* Flash region to be used for exception vectors.*/
+REGION_ALIAS("VECTORS_FLASH", ${conf.instance.linker_settings.memory_sections_assignment.vectors_segment_vma.value[0]?lower_case?replace(" ", "")});
+REGION_ALIAS("VECTORS_FLASH_LMA", ${conf.instance.linker_settings.memory_sections_assignment.vectors_segment_lma.value[0]?lower_case?replace(" ", "")});
 
-    startup : ALIGN(16) SUBALIGN(16)
-    {
-        KEEP(*(vectors))
-    } > flash
+/* Flash region to be used for constructors and destructors.*/
+REGION_ALIAS("XTORS_FLASH", ${conf.instance.linker_settings.memory_sections_assignment.xtors_segments_lma.value[0]?lower_case?replace(" ", "")});
+REGION_ALIAS("XTORS_FLASH_LMA", ${conf.instance.linker_settings.memory_sections_assignment.xtors_segments_lma.value[0]?lower_case?replace(" ", "")});
 
-    constructors : ALIGN(4) SUBALIGN(4)
-    {
-        PROVIDE(__init_array_start = .);
-        KEEP(*(SORT(.init_array.*)))
-        KEEP(*(.init_array))
-        PROVIDE(__init_array_end = .);
-    } > flash
+/* Flash region to be used for code text.*/
+REGION_ALIAS("TEXT_FLASH", ${conf.instance.linker_settings.memory_sections_assignment.text_segment_lma.value[0]?lower_case?replace(" ", "")});
+REGION_ALIAS("TEXT_FLASH_LMA", ${conf.instance.linker_settings.memory_sections_assignment.text_segment_vma.value[0]?lower_case?replace(" ", "")});
 
-    destructors : ALIGN(4) SUBALIGN(4)
-    {
-        PROVIDE(__fini_array_start = .);
-        KEEP(*(.fini_array))
-        KEEP(*(SORT(.fini_array.*)))
-        PROVIDE(__fini_array_end = .);
-    } > flash
+/* Flash region to be used for read only data.*/
+REGION_ALIAS("RODATA_FLASH", ${conf.instance.linker_settings.memory_sections_assignment.rodata_segment_lma.value[0]?lower_case?replace(" ", "")});
+REGION_ALIAS("RODATA_FLASH_LMA", ${conf.instance.linker_settings.memory_sections_assignment.rodata_segment_vma.value[0]?lower_case?replace(" ", "")});
 
-    .text : ALIGN(16) SUBALIGN(16)
-    {
-        *(.text.startup.*)
-        *(.text)
-        *(.text.*)
-        *(.rodata)
-        *(.rodata.*)
-        *(.glue_7t)
-        *(.glue_7)
-        *(.gcc*)
-    } > flash
+/* Flash region to be used for various.*/
+REGION_ALIAS("VARIOUS_FLASH", ${conf.instance.linker_settings.memory_sections_assignment.various_segments_lma.value[0]?lower_case?replace(" ", "")});
+REGION_ALIAS("VARIOUS_FLASH_LMA", ${conf.instance.linker_settings.memory_sections_assignment.various_segments_vma.value[0]?lower_case?replace(" ", "")});
 
-    .ARM.extab :
-    {
-        *(.ARM.extab* .gnu.linkonce.armextab.*)
-    } > flash
+/* Flash region to be used for RAM(n) initialization data.*/
+REGION_ALIAS("RAM_INIT_FLASH_LMA", ${conf.instance.linker_settings.memory_sections_assignment.ram_init_data_segments_lma.value[0]?lower_case?replace(" ", "")});
 
-    .ARM.exidx : {
-        PROVIDE(__exidx_start = .);
-        *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-        PROVIDE(__exidx_end = .);
-     } > flash
+/* RAM region to be used for Main stack. This stack accommodates the processing
+   of all exceptions and interrupts.*/
+REGION_ALIAS("MAIN_STACK_RAM", ${conf.instance.linker_settings.memory_sections_assignment.main_stack_segment_ram.value[0]?lower_case?replace(" ", "")});
 
-    .eh_frame_hdr :
-    {
-        *(.eh_frame_hdr)
-    } > flash
+/* RAM region to be used for the process stack. This is the stack used by
+   the main() function.*/
+REGION_ALIAS("PROCESS_STACK_RAM", ${conf.instance.linker_settings.memory_sections_assignment.process_stack_segment_ram.value[0]?lower_case?replace(" ", "")});
 
-    .eh_frame : ONLY_IF_RO
-    {
-        *(.eh_frame)
-    } > flash
-    
-    .textalign : ONLY_IF_RO
-    {
-        . = ALIGN(8);
-    } > flash
+/* RAM region to be used for data segment.*/
+REGION_ALIAS("DATA_RAM", ${conf.instance.linker_settings.memory_sections_assignment.data_segment_ram.value[0]?lower_case?replace(" ", "")});
+REGION_ALIAS("DATA_RAM_LMA", ${conf.instance.linker_settings.memory_sections_assignment.data_segment_init_data_lma.value[0]?lower_case?replace(" ", "")});
 
-    _etext = .;
-    _textdata = _etext;
+/* RAM region to be used for BSS segment.*/
+REGION_ALIAS("BSS_RAM", ${conf.instance.linker_settings.memory_sections_assignment.bss_segment_ram.value[0]?lower_case?replace(" ", "")});
 
-    .stacks :
-    {
-        . = ALIGN(8);
-        __main_stack_base__ = .;
-        . += __main_stack_size__;
-        . = ALIGN(8);
-        __main_stack_end__ = .;
-        __process_stack_base__ = .;
-        __main_thread_stack_base__ = .;
-        . += __process_stack_size__;
-        . = ALIGN(8);
-        __process_stack_end__ = .;
-        __main_thread_stack_end__ = .;
-[#if conf.instance.memory_layout_settings.ram_areas_organization[0].@index[0]?string == "0"]
-    } > ram
-[#else]
-    } > ccmram
-[/#if]
+/* RAM region to be used for the default heap.*/
+REGION_ALIAS("HEAP_RAM", ${conf.instance.linker_settings.memory_sections_assignment.heap_ram.value[0]?lower_case?replace(" ", "")});
 
-    .ccm :
-    {
-        PROVIDE(_cmm_start = .);
-        PROVIDE(_cmm_end = .);
-    } > ccmram
-
-    .data :
-    {
-        . = ALIGN(4);
-        PROVIDE(_data = .);
-        *(.data)
-        . = ALIGN(4);
-        *(.data.*)
-        . = ALIGN(4);
-        *(.ramtext)
-        . = ALIGN(4);
-        PROVIDE(_edata = .);
-    } > ram AT > flash
-
-    .bss :
-    {
-        . = ALIGN(4);
-        PROVIDE(_bss_start = .);
-        *(.bss)
-        . = ALIGN(4);
-        *(.bss.*)
-        . = ALIGN(4);
-        *(COMMON)
-        . = ALIGN(4);
-        PROVIDE(_bss_end = .);
-    } > ram    
-}
-
-PROVIDE(end = .);
-_end            = .;
-
-__heap_base__   = _end;
-__heap_end__    = __ram_end__;
+[@utils.EmitIndentedCCode "" 2 conf.instance.linker_settings.load_rules.sections.value[0] /]

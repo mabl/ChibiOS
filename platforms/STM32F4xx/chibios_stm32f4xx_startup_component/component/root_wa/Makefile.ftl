@@ -1,6 +1,7 @@
 [#ftl]
 [@pp.dropOutputFile /]
 [@pp.changeOutputFile name="Makefile" /]
+[#if false]
 ##############################################################################
 # Build global options
 # NOTE: Can be overridden externally.
@@ -163,3 +164,4 @@ else
 endif
 
 include ${global.component_path}/lib/rsc/rules.mk
+[/#if]
