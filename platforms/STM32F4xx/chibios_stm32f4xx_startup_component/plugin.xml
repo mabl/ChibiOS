@@ -847,7 +847,7 @@ INCLUDE rules.ld
                <exportedFeature
                      brief="This feature declares an Cortex-Mx based project."
                      exclusive="false"
-                     id="org.chibios.spc5.features..platform.arm.cortex.mx">
+                     id="org.chibios.spc5.features.platform.arm.cortex.mx">
                </exportedFeature>
                <exportedFeature
                      brief="This feature declares an Cortex-M4 based project."

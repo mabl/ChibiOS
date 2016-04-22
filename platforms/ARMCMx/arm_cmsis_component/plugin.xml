@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+    <extension
+         id="org.chibios.spc5.components.arm.cortex.mx.cmsis"
+         name="ChibiOS ARM CMSIS Component"
+         point="com.st.tools.spc5.extension.v1">
+        <component
+              icon="rsc/arm.ico"
+              isPlatform="true">
+            <description>
+                CMSIS software encapsulated as component.
+            </description>
+            <categories>
+               <category
+                     id="ChibiOS/Startup Components/ARM Cortex-Mx">
+               </category>
+            </categories>
+            <configuration>
+                <description>
+                  STM32F4xx startup options and settings.
+                </description>
+               <image
+                     align="left"
+                     file="rsc/arm48x48.png">
+                  <text>
+                     The ARM® Cortex® Microcontroller Software Interface Standard (CMSIS) is a vendor-independent hardware abstraction layer for the Cortex-M processor series.
+                  </text>
+               </image>
+            </configuration>
+            <exportedFeatures>
+               <exportedFeature
+                     brief="This feature declares presence of CMSIS software in the application tree."
+                     exclusive="false"
+                     id="org.chibios.spc5.features.libraries.arm.cmsis">
+               </exportedFeature>
+            </exportedFeatures>
+        </component>
+    </extension>
+</plugin>
