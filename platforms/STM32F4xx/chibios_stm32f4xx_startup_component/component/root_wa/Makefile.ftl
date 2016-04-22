@@ -1,7 +1,6 @@
 [#ftl]
 [@pp.dropOutputFile /]
 [@pp.changeOutputFile name="Makefile" /]
-[#if false]
 ##############################################################################
 # Build global options
 # NOTE: Can be overridden externally.
@@ -9,22 +8,36 @@
 
 # Compiler options here.
 ifeq ($(USE_OPT),)
-  USE_OPT = ${conf.instance.build_settings.optimization_level.value[0]} ${conf.instance.build_settings.common_options.value[0]}
+  USE_OPT = ${conf.instance.compiler_settings.optimization_level.value[0]} ${conf.instance.compiler_settings.common_options.value[0]}
 endif
 
 # C specific options here (added to USE_OPT).
 ifeq ($(USE_COPT),)
-  USE_COPT = ${conf.instance.build_settings.c_options.value[0]}
+  USE_COPT = ${conf.instance.compiler_settings.c_options.value[0]}
 endif
 
 # C++ specific options here (added to USE_OPT).
 ifeq ($(USE_CPPOPT),)
-  USE_CPPOPT = ${conf.instance.build_settings.cpp_options.value[0]}
+  USE_CPPOPT = ${conf.instance.compiler_settings.cpp_options.value[0]}
 endif
 
 # Enable this if you want the linker to remove unused code and data
 ifeq ($(USE_LINK_GC),)
-  USE_LINK_GC = ${conf.instance.build_settings.use_linker_gc.value[0]}
+[#if conf.instance.linker_settings.use_linker_gc.value[0]?string == "true"]
+  USE_LINK_GC = yes
+[#else]
+  USE_LINK_GC = no
+[/#if]
+endif
+
+# Linker extra options here.
+ifeq ($(USE_LDOPT),)
+  USE_LDOPT = ${conf.instance.linker_settings.linker_options.value[0]}
+endif
+
+# Enable this if you want link time optimizations (LTO)
+ifeq ($(USE_LTO),)
+  USE_LTO = yes
 endif
 
 # If enabled, this option allows to compile the application in THUMB mode.
@@ -34,7 +47,17 @@ endif
 
 # Enable this if you want to see the full log while compiling.
 ifeq ($(USE_VERBOSE_COMPILE),)
-  USE_VERBOSE_COMPILE = ${conf.instance.build_settings.use_verbose_compile.value[0]}
+[#if conf.instance.build_settings.verbose_compile.value[0]?string == "true"]
+  USE_VERBOSE_COMPILE = yes
+[#else]
+  USE_VERBOSE_COMPILE = no
+[/#if]
+endif
+
+# If enabled, this option makes the build process faster by not compiling
+# modules not used in the current configuration.
+ifeq ($(USE_SMART_BUILD),)
+  USE_SMART_BUILD = yes
 endif
 
 #
@@ -45,10 +68,21 @@ endif
 # Architecture or project specific options
 #
 
-# Enables the use of FPU on Cortex-M4.
-# Enable this if you really want to use the STM FWLib.
+# Stack size to be allocated to the Cortex-M process stack. This stack is
+# the stack used by the main() thread.
+ifeq ($(USE_PROCESS_STACKSIZE),)
+  USE_PROCESS_STACKSIZE = ${conf.instance.runtime_settings.c_stack_size.value[0]}
+endif
+
+# Stack size to the allocated to the Cortex-M main/exceptions stack. This
+# stack is used for processing interrupts and exceptions.
+ifeq ($(USE_EXCEPTIONS_STACKSIZE),)
+  USE_EXCEPTIONS_STACKSIZE = ${conf.instance.runtime_settings.irq_stack_size.value[0]}
+endif
+
+# Enables the use of FPU (no, softfp, hard).
 ifeq ($(USE_FPU),)
-  USE_FPU = no
+  USE_FPU = ${conf.instance.compiler_settings.enable_fpu.value[0]}
 endif
 
 #
@@ -113,7 +147,9 @@ LD   = $(TRGT)gcc
 #LD   = $(TRGT)g++
 CP   = $(TRGT)objcopy
 AS   = $(TRGT)gcc -x assembler-with-cpp
+AR   = $(TRGT)ar
 OD   = $(TRGT)objdump
+SZ   = $(TRGT)size
 HEX  = $(CP) -O ihex
 BIN  = $(CP) -O binary
 
@@ -124,10 +160,10 @@ AOPT =
 TOPT = -mthumb -DTHUMB
 
 # Define C warning options here
-CWARN = -Wall -Wextra -Wstrict-prototypes
+CWARN = -Wall -Wextra -Wundef -Wstrict-prototypes
 
 # Define C++ warning options here
-CPPWARN = -Wall -Wextra
+CPPWARN = -Wall -Wextra -Wundef
 
 #
 # Compiler settings
@@ -138,7 +174,7 @@ CPPWARN = -Wall -Wextra
 #
 
 # List all default C defines here, like -D_DEBUG=1
-DDEFS   = -D${conf.instance.platform_settings.specific_model.value[0]}
+DDEFS   = -D${conf.instance.device_settings.specific_model.value[0]}
 
 # List all default ASM defines here, like -D_DEBUG=1
 DADEFS  =
@@ -156,12 +192,5 @@ DLIBS   =
 # End of default section
 ##############################################################################
 
-ifeq ($(USE_FPU),yes)
-  USE_OPT += -mfloat-abi=softfp -mfpu=fpv4-sp-d16 -fsingle-precision-constant
-  DDEFS += -DCORTEX_USE_FPU=TRUE
-else
-  DDEFS += -DCORTEX_USE_FPU=FALSE
-endif
-
-include ${global.component_path}/lib/rsc/rules.mk
-[/#if]
+RULESPATH = ./components/chibios_stm32f4xx_startup_component/lib/rsc
+include $(RULESPATH)/rules.mk
