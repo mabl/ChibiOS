@@ -3,17 +3,17 @@
 <plugin>
     <extension
          id="org.chibios.spc5.components.arm.cortex.mx.cmsis"
-         name="ChibiOS ARM CMSIS Component"
+         name="ARM CMSIS Component"
          point="com.st.tools.spc5.extension.v1">
         <component
               icon="rsc/arm.ico"
-              isPlatform="true">
+              isPlatform="false">
             <description>
                 CMSIS software encapsulated as component.
             </description>
             <categories>
                <category
-                     id="ChibiOS/Startup Components/ARM Cortex-Mx">
+                     id="ChibiOS/Libraries/ARM CMSIS">
                </category>
             </categories>
             <configuration>

@@ -2,11 +2,11 @@
 [@pp.dropOutputFile /]
 [@pp.changeOutputFile name="component.mak" /]
 # List of library files exported by the component.
-LIB_C_SRC       += ${global.component_path}/lib/src/crt0.c
+LIB_C_SRC       += ${global.component_path}/lib/src/crt1.c
 
 LIB_CPP_SRC     +=
 
-LIB_ASM_SRC     +=
+LIB_ASM_SRC     += ${global.component_path}/lib/src/crt0_v7m.s
 
 LIB_INCLUDES    += ${global.component_path}/lib/include
 
