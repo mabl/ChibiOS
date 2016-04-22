@@ -8,7 +8,7 @@ LIB_CPP_SRC     +=
 
 LIB_ASM_SRC     +=
 
-LIB_INCLUDES    +=
+LIB_INCLUDES    += ${global.component_path}/lib/include
 
 APP_C_SRC       +=
 
