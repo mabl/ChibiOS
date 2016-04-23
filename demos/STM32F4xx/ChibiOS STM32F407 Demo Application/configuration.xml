@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SPC5-Config version="1.0.0">
+  <application name="ChibiOS STM32F407 Demo Application" version="1.0.0" standalone="true" locked="false">
+    <description>Demo application built using the ChibiOS set of components for SPC5Studio.</description>
+    <component id="org.chibios.spc5.components.stm32f4xx.startup" />
+    <instances>
+      <instance locked="false" id="org.chibios.spc5.components.stm32f4xx.startup">
+        <device_settings>
+          <specific_model index="2">
+            <value>STM32F407xx</value>
+          </specific_model>
+        </device_settings>
+        <runtime_settings>
+          <irq_stack_size>
+            <value>2048</value>
+          </irq_stack_size>
+          <c_stack_size>
+            <value>2048</value>
+          </c_stack_size>
+        </runtime_settings>
+        <build_settings>
+          <application_name>
+            <value>out</value>
+          </application_name>
+          <compiler_variant disabled="true" index="0">
+            <value>arm-none-eabi-</value>
+          </compiler_variant>
+          <verbose_compile>
+            <value>false</value>
+          </verbose_compile>
+          <smart_build>
+            <value>false</value>
+          </smart_build>
+        </build_settings>
+        <compiler_settings>
+          <optimization_level index="3">
+            <value>-O2</value>
+          </optimization_level>
+          <enable_fpu index="0">
+            <value>no</value>
+          </enable_fpu>
+          <use_lto index="0">
+            <value>yes</value>
+          </use_lto>
+          <common_options>
+            <value>-ggdb -fomit-frame-pointer -falign-functions=16</value>
+          </common_options>
+          <c_options>
+            <value />
+          </c_options>
+          <cpp_options>
+            <value>-fno-rtti -fno-exceptions</value>
+          </cpp_options>
+        </compiler_settings>
+        <linker_settings>
+          <linker_options>
+            <value />
+          </linker_options>
+          <use_linker_gc>
+            <value>true</value>
+          </use_linker_gc>
+          <memory_regions_layout>
+            <flash_0_address>
+              <value>0x8000000</value>
+            </flash_0_address>
+            <flash_0_size>
+              <value>1024</value>
+              <metadatas>
+                <metadata name="unit">
+                  <actual_value>1024.0</actual_value>
+                  <unit factor="1.0" name="kB" />
+                </metadata>
+              </metadatas>
+            </flash_0_size>
+            <flash_0_info>
+              <value>Main Flash</value>
+            </flash_0_info>
+            <flash_1_address>
+              <value>0</value>
+            </flash_1_address>
+            <flash_1_size>
+              <value>0</value>
+              <metadatas>
+                <metadata name="unit">
+                  <actual_value>0.0</actual_value>
+                  <unit factor="1.0" name="kB" />
+                </metadata>
+              </metadatas>
+            </flash_1_size>
+            <flash_1_info>
+              <value />
+            </flash_1_info>
+            <flash_2_address>
+              <value>0</value>
+            </flash_2_address>
+            <flash_2_size>
+              <value>0</value>
+              <metadatas>
+                <metadata name="unit">
+                  <actual_value>0.0</actual_value>
+                  <unit factor="1.0" name="kB" />
+                </metadata>
+              </metadatas>
+            </flash_2_size>
+            <flash_2_info>
+              <value />
+            </flash_2_info>
+            <flash_3_address>
+              <value>0</value>
+            </flash_3_address>
+            <flash_3_size>
+              <value>0</value>
+              <metadatas>
+                <metadata name="unit">
+                  <actual_value>0.0</actual_value>
+                  <unit factor="1.0" name="kB" />
+                </metadata>
+              </metadatas>
+            </flash_3_size>
+            <flash_3_info>
+              <value />
+            </flash_3_info>
+            <flash_4_address>
+              <value>0</value>
+            </flash_4_address>
+            <flash_4_size>
+              <value>0</value>
+              <metadatas>
+                <metadata name="unit">
+                  <actual_value>0.0</actual_value>
+                  <unit factor="1.0" name="kB" />
+                </metadata>
+              </metadatas>
+            </flash_4_size>
+            <flash_4_info>
+              <value />
+            </flash_4_info>
+            <flash_5_address>
+              <value>0</value>
+            </flash_5_address>
+            <flash_5_size>
+              <value>0</value>
+              <metadatas>
+                <metadata name="unit">
+                  <actual_value>0.0</actual_value>
+                  <unit factor="1.0" name="kB" />
+                </metadata>
+              </metadatas>
+            </flash_5_size>
+            <flash_5_info>
+              <value />
+            </flash_5_info>
+            <flash_6_address>
+              <value>0</value>
+            </flash_6_address>
+            <flash_6_size>
+              <value>0</value>
+              <metadatas>
+                <metadata name="unit">
+                  <actual_value>0.0</actual_value>
+                  <unit factor="1.0" name="kB" />
+                </metadata>
+              </metadatas>
+            </flash_6_size>
+            <flash_6_info>
+              <value />
+            </flash_6_info>
+            <flash_7_address>
+              <value>0</value>
+            </flash_7_address>
+            <flash_7_size>
+              <value>0</value>
+              <metadatas>
+                <metadata name="unit">
+                  <actual_value>0.0</actual_value>
+                  <unit factor="1.0" name="kB" />
+                </metadata>
+              </metadatas>
+            </flash_7_size>
+            <flash_7_info>
+              <value />
+            </flash_7_info>
+            <ram_0_address>
+              <value>0x20000000</value>
+            </ram_0_address>
+            <ram_0_size>
+              <value>128</value>
+              <metadatas>
+                <metadata name="unit">
+                  <actual_value>128.0</actual_value>
+                  <unit factor="1.0" name="kB" />
+                </metadata>
+              </metadatas>
+            </ram_0_size>
+            <ram_0_info>
+              <value>SRAM</value>
+            </ram_0_info>
+            <ram_1_address>
+              <value>0</value>
+            </ram_1_address>
+            <ram_1_size>
+              <value>0</value>
+              <metadatas>
+                <metadata name="unit">
+                  <actual_value>0.0</actual_value>
+                  <unit factor="1.0" name="kB" />
+                </metadata>
+              </metadatas>
+            </ram_1_size>
+            <ram_1_info>
+              <value />
+            </ram_1_info>
+            <ram_2_address>
+              <value>0</value>
+            </ram_2_address>
+            <ram_2_size>
+              <value>0</value>
+              <metadatas>
+                <metadata name="unit">
+                  <actual_value>0.0</actual_value>
+                  <unit factor="1.0" name="kB" />
+                </metadata>
+              </metadatas>
+            </ram_2_size>
+            <ram_2_info>
+              <value />
+            </ram_2_info>
+            <ram_3_address>
+              <value>0</value>
+            </ram_3_address>
+            <ram_3_size>
+              <value>0</value>
+              <metadatas>
+                <metadata name="unit">
+                  <actual_value>0.0</actual_value>
+                  <unit factor="1.0" name="kB" />
+                </metadata>
+              </metadatas>
+            </ram_3_size>
+            <ram_3_info>
+              <value />
+            </ram_3_info>
+            <ram_4_address>
+              <value>0x10000000</value>
+            </ram_4_address>
+            <ram_4_size>
+              <value>16</value>
+              <metadatas>
+                <metadata name="unit">
+                  <actual_value>16.0</actual_value>
+                  <unit factor="1.0" name="kB" />
+                </metadata>
+              </metadatas>
+            </ram_4_size>
+            <ram_4_info>
+              <value>CCM SRAM</value>
+            </ram_4_info>
+            <ram_5_address>
+              <value>0x40024000</value>
+            </ram_5_address>
+            <ram_5_size>
+              <value>4</value>
+              <metadatas>
+                <metadata name="unit">
+                  <actual_value>4.0</actual_value>
+                  <unit factor="1.0" name="kB" />
+                </metadata>
+              </metadatas>
+            </ram_5_size>
+            <ram_5_info>
+              <value>Backup SRAM</value>
+            </ram_5_info>
+            <ram_6_address>
+              <value>0</value>
+            </ram_6_address>
+            <ram_6_size>
+              <value>0</value>
+              <metadatas>
+                <metadata name="unit">
+                  <actual_value>0.0</actual_value>
+                  <unit factor="1.0" name="kB" />
+                </metadata>
+              </metadatas>
+            </ram_6_size>
+            <ram_6_info>
+              <value />
+            </ram_6_info>
+            <ram_7_address>
+              <value>0</value>
+            </ram_7_address>
+            <ram_7_size>
+              <value>0</value>
+              <metadatas>
+                <metadata name="unit">
+                  <actual_value>0.0</actual_value>
+                  <unit factor="1.0" name="kB" />
+                </metadata>
+              </metadatas>
+            </ram_7_size>
+            <ram_7_info>
+              <value />
+            </ram_7_info>
+          </memory_regions_layout>
+          <memory_sections_assignment>
+            <vectors_segment_vma index="0">
+              <value>Flash 0</value>
+            </vectors_segment_vma>
+            <vectors_segment_lma index="0">
+              <value>Flash 0</value>
+            </vectors_segment_lma>
+            <xtors_segments_vma index="0">
+              <value>Flash 0</value>
+            </xtors_segments_vma>
+            <xtors_segments_lma index="0">
+              <value>Flash 0</value>
+            </xtors_segments_lma>
+            <text_segment_vma index="0">
+              <value>Flash 0</value>
+            </text_segment_vma>
+            <text_segment_lma index="0">
+              <value>Flash 0</value>
+            </text_segment_lma>
+            <rodata_segment_vma index="0">
+              <value>Flash 0</value>
+            </rodata_segment_vma>
+            <rodata_segment_lma index="0">
+              <value>Flash 0</value>
+            </rodata_segment_lma>
+            <data_segment_init_data_lma index="0">
+              <value>Flash 0</value>
+            </data_segment_init_data_lma>
+            <various_segments_vma index="0">
+              <value>Flash 0</value>
+            </various_segments_vma>
+            <various_segments_lma index="0">
+              <value>Flash 0</value>
+            </various_segments_lma>
+            <ram_init_data_segments_lma index="0">
+              <value>Flash 0</value>
+            </ram_init_data_segments_lma>
+            <main_stack_segment_ram index="0">
+              <value>RAM 0</value>
+            </main_stack_segment_ram>
+            <process_stack_segment_ram index="0">
+              <value>RAM 0</value>
+            </process_stack_segment_ram>
+            <data_segment_ram index="0">
+              <value>RAM 0</value>
+            </data_segment_ram>
+            <bss_segment_ram index="0">
+              <value>RAM 0</value>
+            </bss_segment_ram>
+            <heap_ram index="0">
+              <value>RAM 0</value>
+            </heap_ram>
+          </memory_sections_assignment>
+          <load_rules>
+            <sections>
+              <value><![CDATA[/* Generic rules inclusion.*/
+INCLUDE rules.ld]]></value>
+            </sections>
+          </load_rules>
+        </linker_settings>
+      </instance>
+    </instances>
+    <exportedFeatures />
+  </application>
+</SPC5-Config>
