@@ -119,7 +119,7 @@ CPPSRC =    $(LIB_CPP_SRC) \
             $(U_CPP_SRC)
 
 # List ASM source files here
-ASMSRC =    $(LIB_ASM_SRC) \
+ASMXSRC =   $(LIB_ASM_SRC) \
             $(APP_ASM_SRC) \
             $(U_ASM_SRC)
 

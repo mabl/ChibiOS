@@ -6,9 +6,11 @@ LIB_C_SRC       += ${global.component_path}/lib/src/crt1.c
 
 LIB_CPP_SRC     +=
 
-LIB_ASM_SRC     += ${global.component_path}/lib/src/crt0_v7m.s
+LIB_ASM_SRC     += ${global.component_path}/lib/src/crt0_v7m.S
 
-LIB_INCLUDES    += ${global.component_path}/lib/include
+LIB_INCLUDES    += ${global.component_path}/lib/include \
+                   ${global.component_path}/lib/include\device \
+                   ${global.component_path}/lib/include\cmsis
 
 APP_C_SRC       +=
 
