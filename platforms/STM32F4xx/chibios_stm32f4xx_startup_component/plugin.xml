@@ -845,6 +845,11 @@ INCLUDE rules.ld
                      id="org.chibios.spc5.features.build.gccenv">
                </exportedFeature>
                <exportedFeature
+                     brief="This feature declares an ARMv7-M based project."
+                     exclusive="false"
+                     id="org.chibios.spc5.features.platform.armv7m">
+               </exportedFeature>
+               <exportedFeature
                      brief="This feature declares an Cortex-Mx based project."
                      exclusive="false"
                      id="org.chibios.spc5.features.platform.arm.cortex.mx">
@@ -858,6 +863,21 @@ INCLUDE rules.ld
                      brief="This feature declares an STM32F4xx based project."
                      exclusive="false"
                      id="org.chibios.spc5.features.platform.stm32f4xx">
+               </exportedFeature>
+               <exportedFeature
+                     brief="The feature declares presence of CMSIS headers."
+                     exclusive="false"
+                     id="org.chibios.spc5.features.platform.headers.cmsis">
+               </exportedFeature>
+               <exportedFeature
+                     brief="The feature declares presence of CMSIS compliant device headers."
+                     exclusive="false"
+                     id="org.chibios.spc5.features.platform.headers.cmsis.device">
+               </exportedFeature>
+               <exportedFeature
+                     brief="This feature declares presence of a cmparams.h header."
+                     exclusive="false"
+                     id="org.chibios.spc5.features.platform.headers.cmparams">
                </exportedFeature>
             </exportedFeatures>
         </component>

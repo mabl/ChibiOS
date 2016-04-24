@@ -3,8 +3,8 @@
 <plugin>
 <!-- All SPC5 Component extension shall have the namespace "com.st.tools.spc5"-->
    <extension
-         id="org.chibios.spc5.components.kernel.rt"
-         name="ChibiOS-RT for ARM V7M Component"
+         id="org.chibios.spc5.components.kernel.rt.arm.v7m"
+         name="ChibiOS-RT for ARMv7-M Component"
          point="com.st.tools.spc5.extension.v1">
       <component
             headerName="ch.h"
@@ -32,39 +32,29 @@
                   </text>
                </image>
                <group
-                     columns="1"
-                     expanded="false"
-                     name="Kernel Options"
-                     style="collapsable">
+                     expanded="true"
+                     name="Kernel Settings">
                   <description>
-                     Miscellaneous kernel parameters.
+                     General kernel settings.
                   </description>
                   <property
-                        brief="Kernel parameter CH_FREQUENCY"
-                        default="1000"
+                        brief="Optimizes the kernel for speed rather than size."
+                        default="true"
                         editable="true"
-                        name="System Tick Clock Frequency"
+                        name="Optimize for Speed"
                         required="true"
-                        type="unsigned">
+                        type="boolean">
                   </property>
                   <property
-                        brief="Kernel parameter CH_TIME_QUANTUM"
-                        default="20"
+                        brief="Time quantum for roud robin scheduling in ticks. This option is not compatible with tick-less mode."
+                        default="0"
                         editable="true"
                         name="Time Quantum"
                         required="true"
                         type="unsigned">
                   </property>
                   <property
-                        brief="Kernel parameter CH_MEMCORE_SIZE, if set to zero then all the available RAM is used"
-                        default="0"
-                        editable="true"
-                        name="Memory Core Size"
-                        required="true"
-                        type="unsigned">
-                  </property>
-                  <property
-                        brief="Kernel parameter CH_NO_IDLE_THREAD"
+                        brief="If enabled then an idle thread is not spawned and the main() function acts as idle thread."
                         default="false"
                         editable="true"
                         name="No Internal Idle Thread"
@@ -73,32 +63,67 @@
                   </property>
                </group>
                <group
-                     columns="1"
-                     expanded="false"
-                     name="Performance Options"
+                     columns="3"
+                     expanded="true"
+                     name="System Timer Settings"
                      style="collapsable">
                   <description>
-                     Options regarding performance.
+                     Miscellaneous kernel parameters.
                   </description>
                   <property
-                        brief="Kernel option CH_OPTIMIZE_SPEED"
-                        default="true"
+                        brief="Width in bits of the system time type."
+                        default="1"
                         editable="true"
-                        name="Optimize for Speed"
+                        name="System Time Resolution"
                         required="true"
-                        type="boolean">
+                        type="enum"
+                        value="16,32">
+                     <text>
+                        The system time resolution, together with the system tick frequency, defines the maximum time for intervals and timeouts.
+                     </text>
+                  </property>
+                  <property
+                        brief="Frequency of system tick."
+                        default="1000"
+                        editable="true"
+                        name="System Tick Clock Frequency"
+                        required="true"
+                        type="unsigned">
+                     <text>
+                        The system tick frequency defines the time resolution for intervals and timeouts.
+                     </text>
+                  </property>
+                  <property
+                        brief="When greater or equal to two enables the tick-less mode."
+                        default="0"
+                        editable="true"
+                        name="Time Delta"
+                        required="true"
+                        type="enum"
+                        value="0,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20">
+                     <text>
+                        The zero values enables the classic ticked mode, values greater or equal to two enable the tick-less mode. Higher deltas decrease timing accuracy but make possible higher absolute system tick frequencies.
+                     </text>
                   </property>
                </group>
                <group
-                     columns="1"
-                     expanded="false"
+                     columns="3"
+                     expanded="true"
                      name="Subsystem Options"
                      style="collapsable">
                   <description>
                      Options for enabling or disabling the various subsystems.
                   </description>
                   <property
-                        brief="Kernel option CH_USE_REGISTRY"
+                        brief="Time measurement sysbsystem enable."
+                        default="true"
+                        editable="true"
+                        name="Use Time Measurement"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables the kernel registry for enhanced debugging."
                         default="true"
                         editable="true"
                         name="Use Registry"
@@ -106,7 +131,7 @@
                         type="boolean">
                   </property>
                   <property
-                        brief="Kernel option CH_USE_WAITEXIT"
+                        brief="Enables the function chThdWait()."
                         default="true"
                         editable="true"
                         name="Use Wait/Exit"
@@ -114,7 +139,7 @@
                         type="boolean">
                   </property>
                   <property
-                        brief="Kernel option CH_USE_SEMAPHORES"
+                        brief="Enables semaphores."
                         default="true"
                         editable="true"
                         name="Use Semaphores"
@@ -122,7 +147,7 @@
                         type="boolean">
                   </property>
                   <property
-                        brief="Kernel option CH_USE_SEMAPHORES_PRIORITY"
+                        brief="If enabled then semaphore queues are ordered by priority."
                         default="false"
                         editable="true"
                         name="Use Semaphores Priority"
@@ -130,7 +155,7 @@
                         type="boolean">
                   </property>
                   <property
-                        brief="Kernel option CH_USE_SEMSW"
+                        brief="Enables the function chSemWaitSignal()."
                         default="true"
                         editable="true"
                         name="Use Semaphores Atomic Wait/Signal"
@@ -138,7 +163,7 @@
                         type="boolean">
                   </property>
                   <property
-                        brief="Kernel option CH_USE_MUTEXES"
+                        brief="Enables mutexes."
                         default="true"
                         editable="true"
                         name="Use Mutexes"
@@ -146,7 +171,16 @@
                         type="boolean">
                   </property>
                   <property
-                        brief="Kernel option CH_USE_CONDVARS"
+                        brief="If enabled then mutextes can be recursively taken."
+                        default="false"
+                        editable="true"
+                        name="Use Recursive Mutexes"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <padding></padding>
+                  <property
+                        brief="Enables condition variables, requires mutexes."
                         default="true"
                         editable="true"
                         name="Use Condition Variables"
@@ -154,15 +188,16 @@
                         type="boolean">
                   </property>
                   <property
-                        brief="Kernel option CH_USE_CONDVARS_TIMEOUT"
+                        brief="Enables timeouts on the coditional variables API."
                         default="true"
                         editable="true"
                         name="Use Condition Variables with Timeout"
                         required="true"
                         type="boolean">
                   </property>
+                  <padding></padding>
                   <property
-                        brief="Kernel option CH_USE_EVENTS"
+                        brief="Enables event flags and event sources."
                         default="true"
                         editable="true"
                         name="Use Events"
@@ -170,15 +205,16 @@
                         type="boolean">
                   </property>
                   <property
-                        brief="Kernel option CH_USE_EVENTS_TIMEOUT"
+                        brief="Enables timeouts on the events API."
                         default="true"
                         editable="true"
                         name="Use Events with Timeout"
                         required="true"
                         type="boolean">
                   </property>
+                  <padding></padding>
                   <property
-                        brief="Kernel option CH_USE_MESSAGES"
+                        brief="Enables synchronous messages."
                         default="true"
                         editable="true"
                         name="Use Messages"
@@ -186,31 +222,30 @@
                         type="boolean">
                   </property>
                   <property
-                        brief="Kernel option CH_USE_MESSAGES_PRIORITY"
+                        brief="If enabled then synchronous messages queues are ordered by priority."
                         default="false"
                         editable="true"
                         name="Use Messages Priority"
                         required="true"
                         type="boolean">
                   </property>
+                  <padding></padding>
                   <property
-                        brief="Kernel option CH_USE_MAILBOXES"
+                        brief="Enables mailboxes."
                         default="true"
                         editable="true"
                         name="Use Mailboxes"
                         required="true"
                         type="boolean">
                   </property>
+               </group>
+               <group
+                     columns="2"
+                     expanded="true"
+                     name="Memory Management"
+                     style="collapsable">
                   <property
-                        brief="Kernel option CH_USE_QUEUES"
-                        default="true"
-                        editable="true"
-                        name="Use Queues"
-                        required="true"
-                        type="boolean">
-                  </property>
-                  <property
-                        brief="Kernel option CH_USE_MEMCORE"
+                        brief="Enables the kernel core memory manager."
                         default="true"
                         editable="true"
                         name="Use Memory Core Allocator"
@@ -218,7 +253,15 @@
                         type="boolean">
                   </property>
                   <property
-                        brief="Kernel option CH_USE_HEAP"
+                        brief="Size for memory heap, if set to zero then all the available heap area is used."
+                        default="0"
+                        editable="true"
+                        name="Memory Core Size"
+                        required="true"
+                        type="unsigned">
+                  </property>
+                  <property
+                        brief="Enables the heap allocator."
                         default="true"
                         editable="true"
                         name="Use Heap Allocator"
@@ -226,15 +269,7 @@
                         type="boolean">
                   </property>
                   <property
-                        brief="Kernel option CH_USE_MALLOC_HEAP"
-                        default="false"
-                        editable="true"
-                        name="Use malloc for Heap"
-                        required="true"
-                        type="boolean">
-                  </property>
-                  <property
-                        brief="Kernel option CH_USE_MEMPOOLS"
+                        brief="Enables the pool allocator."
                         default="true"
                         editable="true"
                         name="Use Memory Pools Allocator"
@@ -242,7 +277,7 @@
                         type="boolean">
                   </property>
                   <property
-                        brief="Kernel option CH_USE_DYNAMIC"
+                        brief="Enables dynamic threading, requires the heap and/or pool allocators."
                         default="true"
                         editable="true"
                         name="Use Dynamic Extensions"
@@ -252,7 +287,65 @@
                </group>
                <group
                      columns="1"
-                     expanded="false"
+                     expanded="true"
+                     name="Hooks"
+                     style="collapsable">
+                  <description>
+                     The kernel functionality can be extended by using the hooks mechanisms. Hooks allow to insert user-defined code in specific kernel code paths. Note that hook code is inserted into a macro definition so lines must be terminated by a \.
+                  </description>
+                  <property
+                        brief="This code is hooked into the THREAD_EXT_FIELDS macro"
+                        editable="true"
+                        name="Thread Extra Fields Hook"
+                        required="false"
+                        type="formatted">
+                  </property>
+                  <property
+                        brief="This code is hooked into the THREAD_EXT_INIT_HOOK macro"
+                        editable="true"
+                        name="Thread Initialization Hook"
+                        required="false"
+                        type="formatted">
+                  </property>
+                  <property
+                        brief="This code is hooked into the THREAD_EXT_EXIT_HOOK macro"
+                        editable="true"
+                        name="Thread Finalization Hook"
+                        required="false"
+                        type="formatted">
+                  </property>
+                  <property
+                        brief="This code is hooked into the THREAD_CONTEXT_SWITCH_HOOK macro"
+                        editable="true"
+                        name="Thread Context Switch Hook"
+                        required="false"
+                        type="formatted">
+                  </property>
+                  <property
+                        brief="This code is hooked into the IDLE_LOOP_HOOK macro"
+                        editable="true"
+                        name="Idle Loop Hook"
+                        required="false"
+                        type="formatted">
+                  </property>
+                  <property
+                        brief="This code is hooked into the SYSTEM_TICK_EVENT_HOOK macro"
+                        editable="true"
+                        name="System Tick Hook"
+                        required="false"
+                        type="formatted">
+                  </property>
+                  <property
+                        brief="This code is hooked into the SYSTEM_HALT_HOOK macro"
+                        editable="true"
+                        name="System Halt Hook"
+                        required="false"
+                        type="formatted">
+                  </property>
+               </group>
+               <group
+                     columns="1"
+                     expanded="true"
                      name="Debug Options"
                      style="collapsable">
                   <description>
@@ -315,80 +408,38 @@
                         type="boolean">
                   </property>
                </group>
-               <group
-                     columns="1"
-                     expanded="false"
-                     name="Hooks"
-                     style="collapsable">
-                  <description>
-                     The kernel functionality can be extended by using the hooks mechanisms. Hooks allow to insert user-defined code in specific kernel code paths. Note that hook code is inserted into a macro definition so lines must be terminated by a \.
-                  </description>
-                  <property
-                        brief="This code is hooked into the THREAD_EXT_FIELDS macro"
-                        editable="true"
-                        name="Thread Extra Fields Hook"
-                        required="false"
-                        type="formatted">
-                  </property>
-                  <property
-                        brief="This code is hooked into the THREAD_EXT_INIT_HOOK macro"
-                        editable="true"
-                        name="Thread Initialization Hook"
-                        required="false"
-                        type="formatted">
-                  </property>
-                  <property
-                        brief="This code is hooked into the THREAD_EXT_EXIT_HOOK macro"
-                        editable="true"
-                        name="Thread Finalization Hook"
-                        required="false"
-                        type="formatted">
-                  </property>
-                  <property
-                        brief="This code is hooked into the THREAD_CONTEXT_SWITCH_HOOK macro"
-                        editable="true"
-                        name="Thread Context Switch Hook"
-                        required="false"
-                        type="formatted">
-                  </property>
-                  <property
-                        brief="This code is hooked into the IDLE_LOOP_HOOK macro"
-                        editable="true"
-                        name="Idle Loop Hook"
-                        required="false"
-                        type="formatted">
-                  </property>
-                  <property
-                        brief="This code is hooked into the SYSTEM_TICK_EVENT_HOOK macro"
-                        editable="true"
-                        name="System Tick Hook"
-                        required="false"
-                        type="formatted">
-                  </property>
-                  <property
-                        brief="This code is hooked into the SYSTEM_HALT_HOOK macro"
-                        editable="true"
-                        name="System Halt Hook"
-                        required="false"
-                        type="formatted">
-                  </property>
-               </group>
            </configuration>
             <exportedFeatures>
                <exportedFeature
-                     brief="ChibiOS/RT kernel API interface"
+                     brief="ChibiOS/RT kernel API interface."
                      exclusive="false"
-                     id="org.chibios.spc5.features.kernel">
+                     id="org.chibios.spc5.features.kernel.rt">
                </exportedFeature>
                <exportedFeature
-                     brief="ChibiOS/RT kernel configuration interface"
+                     brief="ChibiOS/RT kernel configuration interface."
                      exclusive="false"
-                     id="org.chibios.spc5.features.kernel.configuration">
+                     id="org.chibios.spc5.features.kernel.rt.configuration">
+               </exportedFeature>
+               <exportedFeature
+                     brief="ChibiOS port layer."
+                     exclusive="false"
+                     id="org.chibios.spc5.features.kernel.port">
+               </exportedFeature>
+               <exportedFeature
+                     brief="ChibiOS port layer for ARMv7-M."
+                     exclusive="false"
+                     id="org.chibios.spc5.features.kernel.port.armv7m">
                </exportedFeature>
             </exportedFeatures>
             <requiredFeatures>
                <requiredFeature
-                     id="org.chibios.spc5.features.kernel.port">
+                     id="org.chibios.spc5.features.platform.armv7m">
+               </requiredFeature>
+               <requiredFeature
+                     id="org.chibios.spc5.features.platform.headers.cmsis">
+               </requiredFeature>
+               <requiredFeature
+                     id="org.chibios.spc5.features.platform.headers.cmparams">
                </requiredFeature>
             </requiredFeatures>
       </component>

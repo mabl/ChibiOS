@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: ChibiOS-RT for ARM V7M Component
-Bundle-SymbolicName: org.chibios.spc5.components.kernel.rt;singleton:=true
+Bundle-Name: ChibiOS-RT for ARMv7-M Component
+Bundle-SymbolicName: org.chibios.spc5.components.kernel.rt.arm.v7m;singleton:=true
 Bundle-Version: 4.0.0.qualifier
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
