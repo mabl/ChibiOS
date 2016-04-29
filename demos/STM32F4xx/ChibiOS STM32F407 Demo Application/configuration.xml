@@ -70,7 +70,7 @@
               <metadatas>
                 <metadata name="unit">
                   <actual_value>1024.0</actual_value>
-                  <unit factor="1.0" name="kB" />
+                  <unit factor="1.0" name="" />
                 </metadata>
               </metadatas>
             </flash_0_size>
@@ -85,7 +85,7 @@
               <metadatas>
                 <metadata name="unit">
                   <actual_value>0.0</actual_value>
-                  <unit factor="1.0" name="kB" />
+                  <unit factor="1.0" name="" />
                 </metadata>
               </metadatas>
             </flash_1_size>
@@ -100,7 +100,7 @@
               <metadatas>
                 <metadata name="unit">
                   <actual_value>0.0</actual_value>
-                  <unit factor="1.0" name="kB" />
+                  <unit factor="1.0" name="" />
                 </metadata>
               </metadatas>
             </flash_2_size>
@@ -115,7 +115,7 @@
               <metadatas>
                 <metadata name="unit">
                   <actual_value>0.0</actual_value>
-                  <unit factor="1.0" name="kB" />
+                  <unit factor="1.0" name="" />
                 </metadata>
               </metadatas>
             </flash_3_size>
@@ -130,7 +130,7 @@
               <metadatas>
                 <metadata name="unit">
                   <actual_value>0.0</actual_value>
-                  <unit factor="1.0" name="kB" />
+                  <unit factor="1.0" name="" />
                 </metadata>
               </metadatas>
             </flash_4_size>
@@ -145,7 +145,7 @@
               <metadatas>
                 <metadata name="unit">
                   <actual_value>0.0</actual_value>
-                  <unit factor="1.0" name="kB" />
+                  <unit factor="1.0" name="" />
                 </metadata>
               </metadatas>
             </flash_5_size>
@@ -160,7 +160,7 @@
               <metadatas>
                 <metadata name="unit">
                   <actual_value>0.0</actual_value>
-                  <unit factor="1.0" name="kB" />
+                  <unit factor="1.0" name="" />
                 </metadata>
               </metadatas>
             </flash_6_size>
@@ -175,7 +175,7 @@
               <metadatas>
                 <metadata name="unit">
                   <actual_value>0.0</actual_value>
-                  <unit factor="1.0" name="kB" />
+                  <unit factor="1.0" name="" />
                 </metadata>
               </metadatas>
             </flash_7_size>
@@ -190,7 +190,7 @@
               <metadatas>
                 <metadata name="unit">
                   <actual_value>128.0</actual_value>
-                  <unit factor="1.0" name="kB" />
+                  <unit factor="1.0" name="" />
                 </metadata>
               </metadatas>
             </ram_0_size>
@@ -205,7 +205,7 @@
               <metadatas>
                 <metadata name="unit">
                   <actual_value>0.0</actual_value>
-                  <unit factor="1.0" name="kB" />
+                  <unit factor="1.0" name="" />
                 </metadata>
               </metadatas>
             </ram_1_size>
@@ -220,7 +220,7 @@
               <metadatas>
                 <metadata name="unit">
                   <actual_value>0.0</actual_value>
-                  <unit factor="1.0" name="kB" />
+                  <unit factor="1.0" name="" />
                 </metadata>
               </metadatas>
             </ram_2_size>
@@ -235,7 +235,7 @@
               <metadatas>
                 <metadata name="unit">
                   <actual_value>0.0</actual_value>
-                  <unit factor="1.0" name="kB" />
+                  <unit factor="1.0" name="" />
                 </metadata>
               </metadatas>
             </ram_3_size>
@@ -250,7 +250,7 @@
               <metadatas>
                 <metadata name="unit">
                   <actual_value>16.0</actual_value>
-                  <unit factor="1.0" name="kB" />
+                  <unit factor="1.0" name="" />
                 </metadata>
               </metadatas>
             </ram_4_size>
@@ -265,7 +265,7 @@
               <metadatas>
                 <metadata name="unit">
                   <actual_value>4.0</actual_value>
-                  <unit factor="1.0" name="kB" />
+                  <unit factor="1.0" name="" />
                 </metadata>
               </metadatas>
             </ram_5_size>
@@ -280,7 +280,7 @@
               <metadatas>
                 <metadata name="unit">
                   <actual_value>0.0</actual_value>
-                  <unit factor="1.0" name="kB" />
+                  <unit factor="1.0" name="" />
                 </metadata>
               </metadatas>
             </ram_6_size>
@@ -295,7 +295,7 @@
               <metadatas>
                 <metadata name="unit">
                   <actual_value>0.0</actual_value>
-                  <unit factor="1.0" name="kB" />
+                  <unit factor="1.0" name="" />
                 </metadata>
               </metadatas>
             </ram_7_size>
@@ -369,9 +369,6 @@ INCLUDE rules.ld]]></value>
           <optimize_for_speed>
             <value>true</value>
           </optimize_for_speed>
-          <time_quantum>
-            <value>0</value>
-          </time_quantum>
           <no_internal_idle_thread>
             <value>false</value>
           </no_internal_idle_thread>
@@ -381,11 +378,14 @@ INCLUDE rules.ld]]></value>
             <value>32</value>
           </system_time_resolution>
           <system_tick_clock_frequency>
-            <value>1000</value>
+            <value>10000</value>
           </system_tick_clock_frequency>
-          <time_delta index="0">
-            <value>0</value>
+          <time_delta index="1">
+            <value>2</value>
           </time_delta>
+          <time_quantum>
+            <value>0</value>
+          </time_quantum>
         </system_timer_settings>
         <subsystem_options>
           <use_time_measurement>
@@ -451,6 +451,47 @@ INCLUDE rules.ld]]></value>
             <value>true</value>
           </use_dynamic_extensions>
         </memory_management>
+        <debug_options>
+          <enable_statistics>
+            <value>false</value>
+          </enable_statistics>
+          <enable_system_state_checker>
+            <value>false</value>
+          </enable_system_state_checker>
+          <enable_function_parameters_checks>
+            <value>false</value>
+          </enable_function_parameters_checks>
+          <enable_assertions>
+            <value>false</value>
+          </enable_assertions>
+          <enable_stack_check>
+            <value>false</value>
+          </enable_stack_check>
+          <enable_fill_threads>
+            <value>false</value>
+          </enable_fill_threads>
+          <enable_threads_profiling>
+            <value>true</value>
+          </enable_threads_profiling>
+          <trace_buffer_enable>
+            <value>false</value>
+          </trace_buffer_enable>
+          <trace_buffer_size>
+            <value>128</value>
+          </trace_buffer_size>
+          <trace_context_switch>
+            <value>false</value>
+          </trace_context_switch>
+          <trace_isrs>
+            <value>false</value>
+          </trace_isrs>
+          <trace_halt>
+            <value>false</value>
+          </trace_halt>
+          <trace_user_events>
+            <value>false</value>
+          </trace_user_events>
+        </debug_options>
         <hooks>
           <thread_extra_fields_hook>
             <value />
@@ -474,29 +515,6 @@ INCLUDE rules.ld]]></value>
             <value />
           </system_halt_hook>
         </hooks>
-        <debug_options>
-          <enable_system_state_checker>
-            <value>false</value>
-          </enable_system_state_checker>
-          <enable_function_parameters_checks>
-            <value>false</value>
-          </enable_function_parameters_checks>
-          <enable_assertions>
-            <value>false</value>
-          </enable_assertions>
-          <enable_trace_buffer>
-            <value>false</value>
-          </enable_trace_buffer>
-          <enable_stack_check>
-            <value>false</value>
-          </enable_stack_check>
-          <enable_fill_threads>
-            <value>false</value>
-          </enable_fill_threads>
-          <enable_threads_profiling>
-            <value>true</value>
-          </enable_threads_profiling>
-        </debug_options>
       </instance>
     </instances>
     <exportedFeatures />

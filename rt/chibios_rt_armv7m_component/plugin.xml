@@ -46,14 +46,6 @@
                         type="boolean">
                   </property>
                   <property
-                        brief="Time quantum for roud robin scheduling in ticks. This option is not compatible with tick-less mode."
-                        default="0"
-                        editable="true"
-                        name="Time Quantum"
-                        required="true"
-                        type="unsigned">
-                  </property>
-                  <property
                         brief="If enabled then an idle thread is not spawned and the main() function acts as idle thread."
                         default="false"
                         editable="true"
@@ -63,7 +55,7 @@
                   </property>
                </group>
                <group
-                     columns="3"
+                     columns="2"
                      expanded="true"
                      name="System Timer Settings"
                      style="collapsable">
@@ -104,6 +96,17 @@
                      <text>
                         The zero values enables the classic ticked mode, values greater or equal to two enable the tick-less mode. Higher deltas decrease timing accuracy but make possible higher absolute system tick frequencies.
                      </text>
+                  </property>
+                  <property
+                        brief="Time quantum for roud robin scheduling in ticks. This option is not compatible with tick-less mode."
+                        default="0"
+                        editable="true"
+                        name="Time Quantum"
+                        required="true"
+                        type="unsigned">
+                     <override
+                           editable="test:../time_delta/value/text()=&quot;0&quot;">
+                     </override>
                   </property>
                </group>
                <group
@@ -286,6 +289,139 @@
                   </property>
                </group>
                <group
+                     columns="2"
+                     expanded="true"
+                     name="Debug Options"
+                     style="collapsable">
+                  <description>
+                     Debug-related options.
+                  </description>
+                  <property
+                        brief="Enables advanced kernel statistics."
+                        default="false"
+                        editable="true"
+                        name="Enable Statistics"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables the system state checker."
+                        default="false"
+                        editable="true"
+                        name="Enable System State Checker"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables functions parameters checks."
+                        default="false"
+                        editable="true"
+                        name="Enable Function Parameters Checks"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables kernel assertions."
+                        default="false"
+                        editable="true"
+                        name="Enable Assertions"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables threads stack overflow checks."
+                        default="false"
+                        editable="true"
+                        name="Enable Stack Check"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables the filler for stack areas, allows to calculate stack usage."
+                        default="false"
+                        editable="true"
+                        name="Enable Fill Threads"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables threads profiling, not compatible with the tick-less mode."
+                        default="false"
+                        editable="true"
+                        name="Enable Threads Profiling"
+                        required="true"
+                        type="boolean">
+                     <override
+                           editable="test:../../system_timer_settings/time_delta/value/text()=&quot;0&quot;">
+                     </override>
+                  </property>
+                  <line></line>
+                  <text>
+                     Trace buffer related settings. Note that the tracing options are just the initial setup, single events can be also enabled/disabled at runtime using the tracer API.
+                  </text>
+                  <property
+                        brief="Enables the tracing subsystem."
+                        default="false"
+                        editable="true"
+                        name="Trace Buffer Enable"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Size of the trace buffer, each entry takes 20 bytes of RAM on 32 bits CPUs."
+                        default="128"
+                        editable="true"
+                        min="16"
+                        name="Trace Buffer Size"
+                        required="true"
+                        type="unsigned">
+                     <override
+                           editable="test:../trace_buffer_enable/value/text()=&quot;true&quot;">
+                     </override>
+                  </property>
+                  <property
+                        brief="If enabled then context switches are traced."
+                        default="false"
+                        editable="true"
+                        name="Trace Context Switch"
+                        required="true"
+                        type="boolean">
+                     <override
+                           editable="test:../trace_buffer_enable/value/text()=&quot;true&quot;">
+                     </override>
+                  </property>
+                  <property
+                        brief="If enabled then ISR-enter and ISR-leave events are traced. Note this can fill the trace buffer very quickly."
+                        editable="true"
+                        name="Trace ISRs"
+                        required="true"
+                        type="boolean">
+                     <override
+                           editable="test:../trace_buffer_enable/value/text()=&quot;true&quot;">
+                     </override>
+                  </property>
+                  <property
+                        brief="If enabled then the halt event is traced, halt events are always final."
+                        editable="true"
+                        name="Trace Halt"
+                        required="true"
+                        type="boolean">
+                     <override
+                           editable="test:../trace_buffer_enable/value/text()=&quot;true&quot;">
+                     </override>
+                  </property>
+                  <property
+                        brief="If enabled then user events are traced, user events are generated by explicit calls to the tracer chDbgWriteTrace() API."
+                        editable="true"
+                        name="Trace User Events"
+                        required="true"
+                        type="boolean">
+                     <override
+                           editable="test:../trace_buffer_enable/value/text()=&quot;true&quot;">
+                     </override>
+                  </property>
+               </group>
+               <group
                      columns="1"
                      expanded="true"
                      name="Hooks"
@@ -341,71 +477,6 @@
                         name="System Halt Hook"
                         required="false"
                         type="formatted">
-                  </property>
-               </group>
-               <group
-                     columns="1"
-                     expanded="true"
-                     name="Debug Options"
-                     style="collapsable">
-                  <description>
-                     Debug-related options.
-                  </description>
-                  <property
-                        brief="Kernel option CH_DBG_SYSTEM_STATE_CHECK"
-                        default="false"
-                        editable="true"
-                        name="Enable System State Checker"
-                        required="true"
-                        type="boolean">
-                  </property>
-                  <property
-                        brief="Kernel option CH_DBG_ENABLE_CHECKS"
-                        default="false"
-                        editable="true"
-                        name="Enable Function Parameters Checks"
-                        required="true"
-                        type="boolean">
-                  </property>
-                  <property
-                        brief="Kernel option CH_DBG_ENABLE_ASSERTS"
-                        default="false"
-                        editable="true"
-                        name="Enable Assertions"
-                        required="true"
-                        type="boolean">
-                  </property>
-                  <property
-                        brief="Kernel option CH_DBG_ENABLE_TRACE"
-                        default="false"
-                        editable="true"
-                        name="Enable Trace Buffer"
-                        required="true"
-                        type="boolean">
-                  </property>
-                  <property
-                        brief="Kernel option CH_DBG_ENABLE_STACK_CHECK"
-                        default="false"
-                        editable="true"
-                        name="Enable Stack Check"
-                        required="true"
-                        type="boolean">
-                  </property>
-                  <property
-                        brief="Kernel option CH_DBG_FILL_THREADS"
-                        default="false"
-                        editable="true"
-                        name="Enable Fill Threads"
-                        required="true"
-                        type="boolean">
-                  </property>
-                  <property
-                        brief="Kernel option CH_DBG_THREADS_PROFILING"
-                        default="true"
-                        editable="true"
-                        name="Enable Threads Profiling"
-                        required="true"
-                        type="boolean">
                   </property>
                </group>
            </configuration>
