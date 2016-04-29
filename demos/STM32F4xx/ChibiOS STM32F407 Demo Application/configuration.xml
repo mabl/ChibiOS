@@ -68,9 +68,9 @@
             <flash_0_size>
               <value>1024</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>1024.0</actual_value>
-                  <unit factor="1.0" name="" />
+                  <unit factor="1.0" name="kB" />
                 </metadata>
               </metadatas>
             </flash_0_size>
@@ -83,9 +83,9 @@
             <flash_1_size>
               <value>0</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>0.0</actual_value>
-                  <unit factor="1.0" name="" />
+                  <unit factor="1.0" name="kB" />
                 </metadata>
               </metadatas>
             </flash_1_size>
@@ -98,9 +98,9 @@
             <flash_2_size>
               <value>0</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>0.0</actual_value>
-                  <unit factor="1.0" name="" />
+                  <unit factor="1.0" name="kB" />
                 </metadata>
               </metadatas>
             </flash_2_size>
@@ -113,9 +113,9 @@
             <flash_3_size>
               <value>0</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>0.0</actual_value>
-                  <unit factor="1.0" name="" />
+                  <unit factor="1.0" name="kB" />
                 </metadata>
               </metadatas>
             </flash_3_size>
@@ -128,9 +128,9 @@
             <flash_4_size>
               <value>0</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>0.0</actual_value>
-                  <unit factor="1.0" name="" />
+                  <unit factor="1.0" name="kB" />
                 </metadata>
               </metadatas>
             </flash_4_size>
@@ -143,9 +143,9 @@
             <flash_5_size>
               <value>0</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>0.0</actual_value>
-                  <unit factor="1.0" name="" />
+                  <unit factor="1.0" name="kB" />
                 </metadata>
               </metadatas>
             </flash_5_size>
@@ -158,9 +158,9 @@
             <flash_6_size>
               <value>0</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>0.0</actual_value>
-                  <unit factor="1.0" name="" />
+                  <unit factor="1.0" name="kB" />
                 </metadata>
               </metadatas>
             </flash_6_size>
@@ -173,9 +173,9 @@
             <flash_7_size>
               <value>0</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>0.0</actual_value>
-                  <unit factor="1.0" name="" />
+                  <unit factor="1.0" name="kB" />
                 </metadata>
               </metadatas>
             </flash_7_size>
@@ -188,9 +188,9 @@
             <ram_0_size>
               <value>128</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>128.0</actual_value>
-                  <unit factor="1.0" name="" />
+                  <unit factor="1.0" name="kB" />
                 </metadata>
               </metadatas>
             </ram_0_size>
@@ -203,9 +203,9 @@
             <ram_1_size>
               <value>0</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>0.0</actual_value>
-                  <unit factor="1.0" name="" />
+                  <unit factor="1.0" name="kB" />
                 </metadata>
               </metadatas>
             </ram_1_size>
@@ -218,9 +218,9 @@
             <ram_2_size>
               <value>0</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>0.0</actual_value>
-                  <unit factor="1.0" name="" />
+                  <unit factor="1.0" name="kB" />
                 </metadata>
               </metadatas>
             </ram_2_size>
@@ -233,9 +233,9 @@
             <ram_3_size>
               <value>0</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>0.0</actual_value>
-                  <unit factor="1.0" name="" />
+                  <unit factor="1.0" name="kB" />
                 </metadata>
               </metadatas>
             </ram_3_size>
@@ -248,9 +248,9 @@
             <ram_4_size>
               <value>16</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>16.0</actual_value>
-                  <unit factor="1.0" name="" />
+                  <unit factor="1.0" name="kB" />
                 </metadata>
               </metadatas>
             </ram_4_size>
@@ -263,9 +263,9 @@
             <ram_5_size>
               <value>4</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>4.0</actual_value>
-                  <unit factor="1.0" name="" />
+                  <unit factor="1.0" name="kB" />
                 </metadata>
               </metadatas>
             </ram_5_size>
@@ -278,9 +278,9 @@
             <ram_6_size>
               <value>0</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>0.0</actual_value>
-                  <unit factor="1.0" name="" />
+                  <unit factor="1.0" name="kB" />
                 </metadata>
               </metadatas>
             </ram_6_size>
@@ -293,9 +293,9 @@
             <ram_7_size>
               <value>0</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>0.0</actual_value>
-                  <unit factor="1.0" name="" />
+                  <unit factor="1.0" name="kB" />
                 </metadata>
               </metadatas>
             </ram_7_size>
@@ -383,7 +383,7 @@ INCLUDE rules.ld]]></value>
           <time_delta index="1">
             <value>2</value>
           </time_delta>
-          <time_quantum>
+          <time_quantum disabled="true">
             <value>0</value>
           </time_quantum>
         </system_timer_settings>
@@ -470,25 +470,25 @@ INCLUDE rules.ld]]></value>
           <enable_fill_threads>
             <value>false</value>
           </enable_fill_threads>
-          <enable_threads_profiling>
+          <enable_threads_profiling disabled="true">
             <value>true</value>
           </enable_threads_profiling>
           <trace_buffer_enable>
             <value>false</value>
           </trace_buffer_enable>
-          <trace_buffer_size>
+          <trace_buffer_size disabled="true">
             <value>128</value>
           </trace_buffer_size>
-          <trace_context_switch>
+          <trace_context_switch disabled="true">
             <value>false</value>
           </trace_context_switch>
-          <trace_isrs>
+          <trace_isrs disabled="true">
             <value>false</value>
           </trace_isrs>
-          <trace_halt>
+          <trace_halt disabled="true">
             <value>false</value>
           </trace_halt>
-          <trace_user_events>
+          <trace_user_events disabled="true">
             <value>false</value>
           </trace_user_events>
         </debug_options>
