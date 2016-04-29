@@ -430,53 +430,163 @@
                      The kernel functionality can be extended by using the hooks mechanisms. Hooks allow to insert user-defined code in specific kernel code paths. Note that hook code is inserted into a macro definition so lines must be terminated by a \.
                   </description>
                   <property
-                        brief="This code is hooked into the THREAD_EXT_FIELDS macro"
+                        brief="This code is hooked into the CH_CFG_THREAD_EXT_FIELDS macro."
                         editable="true"
                         name="Thread Extra Fields Hook"
                         required="false"
                         type="formatted">
                   </property>
                   <property
-                        brief="This code is hooked into the THREAD_EXT_INIT_HOOK macro"
+                        brief="This code is hooked into the CH_CFG_THREAD_EXT_INIT_HOOK macro."
                         editable="true"
                         name="Thread Initialization Hook"
                         required="false"
                         type="formatted">
                   </property>
                   <property
-                        brief="This code is hooked into the THREAD_EXT_EXIT_HOOK macro"
+                        brief="This code is hooked into the CH_CFG_THREAD_EXT_EXIT_HOOK macro."
                         editable="true"
                         name="Thread Finalization Hook"
                         required="false"
                         type="formatted">
                   </property>
                   <property
-                        brief="This code is hooked into the THREAD_CONTEXT_SWITCH_HOOK macro"
+                        brief="This code is hooked into the CH_CFG_THREAD_CONTEXT_SWITCH_HOOK macro."
                         editable="true"
                         name="Thread Context Switch Hook"
                         required="false"
                         type="formatted">
                   </property>
                   <property
-                        brief="This code is hooked into the IDLE_LOOP_HOOK macro"
+                        brief="This code is hooked into the CH_CFG_IRQ_PROLOGUE_HOOK macro."
+                        editable="true"
+                        name="IRQ Prologue Hook"
+                        required="false"
+                        type="formatted">
+                  </property>
+                  <property
+                        brief="This code is hooked into the CH_CFG_IRQ_EPILOGUE_HOOK macro."
+                        editable="true"
+                        name="IRQ Epilogue Hook"
+                        required="false"
+                        type="formatted">
+                  </property>
+                  <property
+                        brief="This code is hooked into the CH_CFG_IDLE_ENTER_HOOK macro."
+                        editable="true"
+                        name="Idle Enter Hook"
+                        required="false"
+                        type="formatted">
+                  </property>
+                  <property
+                        brief="This code is hooked into the CH_CFG_IDLE_LEAVE_HOOK macro."
+                        editable="true"
+                        name="Idle Leave Hook"
+                        required="false"
+                        type="formatted">
+                  </property>
+                  <property
+                        brief="This code is hooked into the CH_CFG_IDLE_LOOP_HOOK macro."
                         editable="true"
                         name="Idle Loop Hook"
                         required="false"
                         type="formatted">
                   </property>
                   <property
-                        brief="This code is hooked into the SYSTEM_TICK_EVENT_HOOK macro"
+                        brief="This code is hooked into the CH_CFG_SYSTEM_TICK_EVENT_HOOK macro."
                         editable="true"
                         name="System Tick Hook"
                         required="false"
                         type="formatted">
                   </property>
                   <property
-                        brief="This code is hooked into the SYSTEM_HALT_HOOK macro"
+                        brief="This code is hooked into the CH_CFG_SYSTEM_HALT_HOOK macro."
                         editable="true"
                         name="System Halt Hook"
                         required="false"
                         type="formatted">
+                  </property>
+                  <property
+                        brief="This code is hooked into the CH_CFG_TRACE_HOOK macro."
+                        editable="true"
+                        name="Trace Hook"
+                        required="false"
+                        type="formatted">
+                  </property>
+               </group>
+               <group
+                     columns="2"
+                     expanded="true"
+                     name="ARMv7-M Specific Settings"
+                     style="collapsable">
+                  <description>
+                     Settings specific of the ARMv7-M port.
+                  </description>
+                  <property
+                        brief="Stack size allocated for the Idle Thread."
+                        default="16"
+                        editable="true"
+                        name="Idle Thread Stack Size"
+                        required="true"
+                        type="unsigned">
+                     <text>
+                        The stack usage of the Idle Thread is affected by compiler and optimization level. 16 is a safe value, change it at your own risk.
+                     </text>
+                  </property>
+                  <property
+                        brief="Per-thread stack requirement for IRQ servicing."
+                        default="64"
+                        editable="true"
+                        name="IRQ Required Stack"
+                        required="true"
+                        type="unsigned">
+                     <text>
+                        IRQ servicing require some space in thread stacks. The requirement is affected by the compiler and optimization level,  64 is a safe value, change it at your own risk. Space saved optimizing this option is multiplied for the number of threads in the system.
+                     </text>
+                  </property>
+                  <property
+                        brief="If enabled then the file chcore_timer_alt.h is included."
+                        default="false"
+                        editable="true"
+                        name="Use Alternate Timer Implementation"
+                        required="true"
+                        type="boolean">
+                     <text>
+                        If enabled then the file chcore_timer_alt.h is included. It is application responsibility to provide the file and implement a complete timer interface within.
+                     </text>
+                  </property>
+                  <property
+                        brief="If enabled then the MPU is used for stack overflow check."
+                        default="false"
+                        editable="true"
+                        name="Enable MPU"
+                        required="true"
+                        type="boolean">
+                     <text>
+                        This options enables the use of MPU for stacks overflow checks. The stack checking option must be enabled in the Debug Options section. This option uses 32 additional bytes per-thread.
+                     </text>
+                  </property>
+                  <property
+                        brief="Enables a WFI instruction in the Idle Thread loop."
+                        default="false"
+                        editable="true"
+                        name="Enable WFI"
+                        required="true"
+                        type="boolean">
+                     <text>
+                        This option reduces power consumption but is not compatible with some debuggers, only enable on the final code.
+                     </text>
+                  </property>
+                  <property
+                        brief="If enabled then IRQs are globally enabled/disabled by the kernel critical zones."
+                        default="false"
+                        editable="true"
+                        name="Simplified IRQ Masking Handling"
+                        required="true"
+                        type="boolean">
+                     <text>
+                        This option makes the kernel smaller and faster but adds jitter and latency to IRQ servicing because IRQ are globally masked instead of partially masked.
+                     </text>
                   </property>
                </group>
            </configuration>

@@ -505,6 +505,18 @@ INCLUDE rules.ld]]></value>
           <thread_context_switch_hook>
             <value />
           </thread_context_switch_hook>
+          <irq_prologue_hook>
+            <value />
+          </irq_prologue_hook>
+          <irq_epilogue_hook>
+            <value />
+          </irq_epilogue_hook>
+          <idle_enter_hook>
+            <value />
+          </idle_enter_hook>
+          <idle_leave_hook>
+            <value />
+          </idle_leave_hook>
           <idle_loop_hook>
             <value />
           </idle_loop_hook>
@@ -514,7 +526,30 @@ INCLUDE rules.ld]]></value>
           <system_halt_hook>
             <value />
           </system_halt_hook>
+          <trace_hook>
+            <value />
+          </trace_hook>
         </hooks>
+        <armv7_m_specific_settings>
+          <idle_thread_stack_size>
+            <value>16</value>
+          </idle_thread_stack_size>
+          <irq_required_stack>
+            <value>64</value>
+          </irq_required_stack>
+          <use_alternate_timer_implementation>
+            <value>false</value>
+          </use_alternate_timer_implementation>
+          <enable_mpu>
+            <value>false</value>
+          </enable_mpu>
+          <enable_wfi>
+            <value>false</value>
+          </enable_wfi>
+          <simplified_irq_masking_handling>
+            <value>false</value>
+          </simplified_irq_masking_handling>
+        </armv7_m_specific_settings>
       </instance>
     </instances>
     <exportedFeatures />
