@@ -543,9 +543,9 @@ INCLUDE rules.ld]]></value>
           <enable_wfi>
             <value>false</value>
           </enable_wfi>
-          <simplified_irq_masking_handling>
+          <simplified_irq_masking>
             <value>false</value>
-          </simplified_irq_masking_handling>
+          </simplified_irq_masking>
         </armv7_m_specific_settings>
       </instance>
     </instances>

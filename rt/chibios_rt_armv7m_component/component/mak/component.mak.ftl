@@ -45,12 +45,14 @@ LIB_C_SRC       += ${global.component_path}/lib/src/chsys.c \
                    ${global.component_path}/lib/src/chmempools.c \
 [/#if]
 [#if conf.instance.memory_management.use_dynamic_extensions.value[0]?lower_case == "true"]
-                   ${global.component_path}/lib/src/chdynamic.c
+                   ${global.component_path}/lib/src/chdynamic.c \
 [/#if]
+                   ${global.component_path}/lib/src/chcore.c \
+                   ${global.component_path}/lib/src/chcore_v7m.c
 
 LIB_CPP_SRC     +=
 
-LIB_ASM_SRC     +=
+LIB_ASM_SRC     += ${global.component_path}/lib/src/chcore_v7m.S
 
 LIB_INCLUDES    += ${global.component_path}/lib/include
 

@@ -9,7 +9,22 @@ chibios=../chibios_trunk
 #============================================================================#
 
 #============================================================================#
-# STM32F4xx  Components.                                                     #
+# RT Kernel Components.                                                      #
+#============================================================================#
+
+# STM32F4xx RT Kernel for ARMv7-M.
+echo "STM32F4xx RT Kernel for ARMv7-M files"
+cp -f ${chibios}/os/rt/src/*.c                                              ./rt/chibios_rt_armv7m_component/component/lib/src/
+cp -f ${chibios}/os/rt/include/*.h                                          ./rt/chibios_rt_armv7m_component/component/lib/include/
+cp -f ${chibios}/os/common/ports/ARMCMx/chcore.c                            ./rt/chibios_rt_armv7m_component/component/lib/src/
+cp -f ${chibios}/os/common/ports/ARMCMx/chcore_v7m.c                        ./rt/chibios_rt_armv7m_component/component/lib/src/
+cp -f ${chibios}/os/common/ports/ARMCMx/chcore.h                            ./rt/chibios_rt_armv7m_component/component/lib/include/
+cp -f ${chibios}/os/common/ports/ARMCMx/chcore_v7m.h                        ./rt/chibios_rt_armv7m_component/component/lib/include/
+cp -f ${chibios}/os/common/ports/ARMCMx/compilers/GCC/chcore_v7m.S          ./rt/chibios_rt_armv7m_component/component/lib/src/
+cp -f ${chibios}/os/common/ports/ARMCMx/compilers/GCC/*.h                   ./rt/chibios_rt_armv7m_component/component/lib/include/
+
+#============================================================================#
+# STM32F4xx Components.                                                      #
 #============================================================================#
 
 # STM32F4xx Startup.

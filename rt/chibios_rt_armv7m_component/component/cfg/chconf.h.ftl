@@ -310,7 +310,11 @@
  * @note    Requires @p CH_CFG_USE_WAITEXIT.
  * @note    Requires @p CH_CFG_USE_HEAP and/or @p CH_CFG_USE_MEMPOOLS.
  */
+[#if conf.instance.memory_management.use_dynamic_extensions.@disabled[0]??]
+#define CH_CFG_USE_DYNAMIC                  FALSE
+[#else]
 #define CH_CFG_USE_DYNAMIC                  ${conf.instance.memory_management.use_dynamic_extensions.value[0]?upper_case}
+[/#if]
 
 /** @} */
 
@@ -362,7 +366,24 @@
  *
  * @note    The default is @p CH_DBG_TRACE_MASK_DISABLED.
  */
-#define CH_DBG_TRACE_MASK                   CH_DBG_TRACE_MASK_ALL
+[#if conf.instance.debug_options.trace_buffer_enable.value[0]?string == "true"]
+  [#assign s = "0" /]
+  [#if conf.instance.debug_options.trace_context_switch.value[0]?string == "true"]
+    [#assign s = s + " | CH_DBG_TRACE_MASK_SWITCH" /]
+  [/#if]
+  [#if conf.instance.debug_options.trace_isrs.value[0]?string == "true"]
+    [#assign s = s + " | CH_DBG_TRACE_MASK_ISR" /]
+  [/#if]
+  [#if conf.instance.debug_options.trace_halt.value[0]?string == "true"]
+    [#assign s = s + " | CH_DBG_TRACE_MASK_HALT" /]
+  [/#if]
+  [#if conf.instance.debug_options.trace_user_events.value[0]?string == "true"]
+    [#assign s = s + " | CH_DBG_TRACE_MASK_USER" /]
+  [/#if]
+#define CH_DBG_TRACE_MASK                   (${s})
+[#else]
+#define CH_DBG_TRACE_MASK                   CH_DBG_TRACE_MASK_DISABLED
+[/#if]
 
 /**
  * @brief   Trace buffer entries.
@@ -525,6 +546,58 @@ ${conf.instance.hooks.trace_hook.value[0]}[#rt]
 /*===========================================================================*/
 /* Port-specific settings (override port settings defaulted in chcore.h).    */
 /*===========================================================================*/
+
+/**
+ * @brief   Enables an alternative timer implementation.
+ * @details Usually the port uses a timer interface defined in the file
+ *          @p chcore_timer.h, if this option is enabled then the file
+ *          @p chcore_timer_alt.h is included instead.
+ */
+#define PORT_USE_ALT_TIMER                  ${conf.instance.armv7_m_specific_settings.use_alternate_timer_implementation.value[0]?upper_case}
+
+/**
+ * @brief   Enables stack overflow guard pages using MPU.
+ * @note    This option can only be enabled if also option
+ *          @p CH_DBG_ENABLE_STACK_CHECK is enabled.
+ * @note    The use of this option has an overhead of 32 bytes for each
+ *          thread.
+ */
+#define PORT_ENABLE_GUARD_PAGES             ${conf.instance.armv7_m_specific_settings.enable_mpu.value[0]?upper_case}
+
+/**
+ * @brief   Stack size for the system idle thread.
+ * @details This size depends on the idle thread implementation, usually
+ *          the idle thread should take no more space than those reserved
+ *          by @p PORT_INT_REQUIRED_STACK.
+ * @note    In this port it is set to 16 because the idle thread does have
+ *          a stack frame when compiling without optimizations. You may
+ *          reduce this value to zero when compiling with optimizations.
+ */
+#define PORT_IDLE_THREAD_STACK_SIZE         ${conf.instance.armv7_m_specific_settings.idle_thread_stack_size.value[0]?string}
+
+/**
+ * @brief   Per-thread stack overhead for interrupts servicing.
+ * @details This constant is used in the calculation of the correct working
+ *          area size.
+ * @note    In this port this value is conservatively set to 64 because the
+ *          function @p chSchDoReschedule() can have a stack frame, especially
+ *          with compiler optimizations disabled. The value can be reduced
+ *          when compiler optimizations are enabled.
+ */
+#define PORT_INT_REQUIRED_STACK             ${conf.instance.armv7_m_specific_settings.irq_required_stack.value[0]?string}
+
+/**
+ * @brief   Enables the use of the WFI instruction in the idle thread loop.
+ */
+#define CORTEX_ENABLE_WFI_IDLE              ${conf.instance.armv7_m_specific_settings.enable_wfi.value[0]?upper_case}
+
+/**
+ * @brief   Simplified priority handling flag.
+ * @details Activating this option makes the Kernel work in compact mode.
+ *          In compact mode interrupts are disabled globally instead of
+ *          raising the priority mask to some intermediate level.
+ */
+#define CORTEX_SIMPLIFIED_PRIORITY          ${conf.instance.armv7_m_specific_settings.simplified_irq_masking.value[0]?upper_case}
 
 #endif  /* CHCONF_H */
 

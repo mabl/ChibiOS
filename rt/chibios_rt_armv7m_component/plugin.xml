@@ -279,6 +279,9 @@
                         name="Use Dynamic Extensions"
                         required="true"
                         type="boolean">
+                     <override
+                           editable="test:../use_heap_allocator/value/text()=&quot;true&quot; or ../use_memory_pools_allocator/value/text()=&quot;true&quot;">
+                     </override>
                   </property>
                </group>
                <group
@@ -574,7 +577,7 @@
                         brief="If enabled then IRQs are globally enabled/disabled by the kernel critical zones."
                         default="false"
                         editable="true"
-                        name="Simplified IRQ Masking Handling"
+                        name="Simplified IRQ Masking"
                         required="true"
                         type="boolean">
                      <text>
