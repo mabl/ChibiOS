@@ -57,7 +57,7 @@
                <group
                      columns="2"
                      expanded="true"
-                     name="System Timer Settings"
+                     name="System Time"
                      style="collapsable">
                   <description>
                      Miscellaneous kernel parameters.
@@ -112,7 +112,7 @@
                <group
                      columns="3"
                      expanded="true"
-                     name="Subsystem Options"
+                     name="Subsystems"
                      style="collapsable">
                   <description>
                      Options for enabling or disabling the various subsystems.
@@ -157,14 +157,7 @@
                         required="true"
                         type="boolean">
                   </property>
-                  <property
-                        brief="Enables the function chSemWaitSignal()."
-                        default="true"
-                        editable="true"
-                        name="Use Semaphores Atomic Wait/Signal"
-                        required="true"
-                        type="boolean">
-                  </property>
+                  <padding></padding>
                   <property
                         brief="Enables mutexes."
                         default="true"
@@ -432,28 +425,28 @@
                   <property
                         brief="This code is hooked into the CH_CFG_THREAD_EXT_FIELDS macro."
                         editable="true"
-                        name="Thread Extra Fields Hook"
+                        name="Threads Extra Fields Hook"
                         required="false"
                         type="formatted">
                   </property>
                   <property
                         brief="This code is hooked into the CH_CFG_THREAD_EXT_INIT_HOOK macro."
                         editable="true"
-                        name="Thread Initialization Hook"
+                        name="Threads Initialization Hook"
                         required="false"
                         type="formatted">
                   </property>
                   <property
                         brief="This code is hooked into the CH_CFG_THREAD_EXT_EXIT_HOOK macro."
                         editable="true"
-                        name="Thread Finalization Hook"
+                        name="Threads Finalization Hook"
                         required="false"
                         type="formatted">
                   </property>
                   <property
                         brief="This code is hooked into the CH_CFG_THREAD_CONTEXT_SWITCH_HOOK macro."
                         editable="true"
-                        name="Thread Context Switch Hook"
+                        name="Threads Context Switch Hook"
                         required="false"
                         type="formatted">
                   </property>
