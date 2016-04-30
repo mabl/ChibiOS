@@ -52,7 +52,7 @@ LIB_C_SRC       += ${global.component_path}/lib/src/chsys.c \
 
 LIB_CPP_SRC     +=
 
-LIB_ASM_SRC     += ${global.component_path}/lib/src/chcore_v7m.S
+LIB_ASM_SRC     += ${global.component_path}/lib/src/chcoreasm_v7m.S
 
 LIB_INCLUDES    += ${global.component_path}/lib/include
 
