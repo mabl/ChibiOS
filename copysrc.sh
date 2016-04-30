@@ -8,18 +8,25 @@ chibios=../chibios_trunk
 # Portable Components.                                                       #
 #============================================================================#
 
+# ChibiOS Product License.
+echo "ChibiOS Product License files"
+cp -f ${chibios}/os/license/*.h                                             ./portable/chibios_product_license_component/component/lib/include/
+
 #============================================================================#
 # RT Kernel Components.                                                      #
 #============================================================================#
 
-# STM32F4xx RT Kernel for ARMv7-M.
-echo "STM32F4xx RT Kernel for ARMv7-M files"
+# ChibiOS/RT Kernel for ARMv7-M.
+echo "ChibiOS/RT Kernel for ARMv7-M files"
 cp -f ${chibios}/os/rt/src/*.c                                              ./rt/chibios_rt_armv7m_component/component/lib/src/
 cp -f ${chibios}/os/rt/include/*.h                                          ./rt/chibios_rt_armv7m_component/component/lib/include/
+cp -f ${chibios}/os/common/oslib/src/*.c                                    ./rt/chibios_rt_armv7m_component/component/lib/src/
+cp -f ${chibios}/os/common/oslib/include/*.h                                ./rt/chibios_rt_armv7m_component/component/lib/include/
 cp -f ${chibios}/os/common/ports/ARMCMx/chcore.c                            ./rt/chibios_rt_armv7m_component/component/lib/src/
 cp -f ${chibios}/os/common/ports/ARMCMx/chcore_v7m.c                        ./rt/chibios_rt_armv7m_component/component/lib/src/
 cp -f ${chibios}/os/common/ports/ARMCMx/chcore.h                            ./rt/chibios_rt_armv7m_component/component/lib/include/
 cp -f ${chibios}/os/common/ports/ARMCMx/chcore_v7m.h                        ./rt/chibios_rt_armv7m_component/component/lib/include/
+cp -f ${chibios}/os/common/ports/ARMCMx/mpu.h                               ./rt/chibios_rt_armv7m_component/component/lib/include/
 cp -f ${chibios}/os/common/ports/ARMCMx/compilers/GCC/chcoreasm_v7m.S       ./rt/chibios_rt_armv7m_component/component/lib/src/
 cp -f ${chibios}/os/common/ports/ARMCMx/compilers/GCC/*.h                   ./rt/chibios_rt_armv7m_component/component/lib/include/
 

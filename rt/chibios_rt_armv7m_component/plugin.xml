@@ -8,7 +8,7 @@
          point="com.st.tools.spc5.extension.v1">
       <component
             headerName="ch.h"
-            hidden="true"
+            hidden="false"
             initFunction="chSysInit"
             icon="rsc/chibios.ico"
             isPlatform="false">

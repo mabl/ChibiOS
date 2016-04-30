@@ -66,10 +66,10 @@
               <value>0x8000000</value>
             </flash_0_address>
             <flash_0_size>
-              <value>0</value>
+              <value>1024</value>
               <metadatas>
                 <metadata name="unit">
-                  <actual_value>0.0</actual_value>
+                  <actual_value>1024.0</actual_value>
                   <unit factor="1.0" name="kB" />
                 </metadata>
               </metadatas>
@@ -186,10 +186,10 @@
               <value>0x20000000</value>
             </ram_0_address>
             <ram_0_size>
-              <value>0</value>
+              <value>128</value>
               <metadatas>
                 <metadata name="unit">
-                  <actual_value>0.0</actual_value>
+                  <actual_value>128.0</actual_value>
                   <unit factor="1.0" name="kB" />
                 </metadata>
               </metadatas>
@@ -246,10 +246,10 @@
               <value>0x10000000</value>
             </ram_4_address>
             <ram_4_size>
-              <value>0</value>
+              <value>16</value>
               <metadatas>
                 <metadata name="unit">
-                  <actual_value>0.0</actual_value>
+                  <actual_value>16.0</actual_value>
                   <unit factor="1.0" name="kB" />
                 </metadata>
               </metadatas>
@@ -261,10 +261,10 @@
               <value>0x40024000</value>
             </ram_5_address>
             <ram_5_size>
-              <value>0</value>
+              <value>4</value>
               <metadatas>
                 <metadata name="unit">
-                  <actual_value>0.0</actual_value>
+                  <actual_value>4.0</actual_value>
                   <unit factor="1.0" name="kB" />
                 </metadata>
               </metadatas>
@@ -548,6 +548,7 @@ INCLUDE rules.ld]]></value>
           </simplified_irq_masking>
         </armv7_m_specific_settings>
       </instance>
+      <instance locked="false" id="org.chibios.spc5.components.chibios.license" />
     </instances>
     <exportedFeatures />
   </application>
