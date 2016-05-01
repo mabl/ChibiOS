@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+<!-- All SPC5 Component extension shall have the namespace "com.st.tools.spc5"-->
+   <extension
+         id="org.chibios.spc5.components.stm32f4xx.hal"
+         name="ChibiOS-HAL for STM32F4xx Component"
+         point="com.st.tools.spc5.extension.v1">
+      <component
+            headerName="hal.h"
+            hidden="true"
+            icon="rsc/chibios.ico"
+            initFunction="halInit"
+            isPlatform="false">
+            <description>
+                ChibiOS/HAL for STM32F4xx.
+            </description>
+            <categories>
+               <category
+                     id="ChibiOST/HAL">
+               </category>
+            </categories>
+            <configuration>
+               <description>
+                  HAL options and settings.
+               </description>
+               <image
+                     align="left"
+                     file="rsc/chibios48x48.png">
+                  <text>
+                     ChibiOST is GPL3-licensed free software.
+                  </text>
+               </image>
+               <group
+                     columns="3"
+                     expanded="true"
+                     name="Enabled Drivers"
+                     style="collapsable">
+                  <description>
+                     Select which drivers are needed in your application. Disabled drivers take no system resource.
+                  </description>
+                  <property
+                        brief="This options globally enables/disables the TM driver."
+                        default="false"
+                        editable="true"
+                        name="TM"
+                        required="true"
+                        type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.hal.counter">
+                     </override>
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the PAL driver."
+                        default="true"
+                        editable="true"
+                        name="PAL"
+                        required="true"
+                        type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.pal"></override>
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the ADC driver."
+                        default="false"
+                        editable="true"
+                        name="ADC"
+                        required="true"
+                        type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.adc"></override>
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the CAN driver."
+                        default="false"
+                        editable="true"
+                        name="CAN"
+                        required="true"
+                        type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.can"></override>
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the EXT driver."
+                        default="false"
+                        editable="true"
+                        name="EXT"
+                        required="true"
+                        type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.ext"></override>
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the GPT driver."
+                        default="false"
+                        editable="true"
+                        name="GPT"
+                        required="true"
+                        type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.gpt"></override>
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the I2C driver."
+                        default="false"
+                        editable="true"
+                        name="I2C"
+                        required="true"
+                        type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.i2c"></override>
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the ICU driver."
+                        default="false"
+                        editable="true"
+                        name="ICU"
+                        required="true"
+                        type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.icu"></override>
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the MAC driver."
+                        default="false"
+                        editable="true"
+                        name="MAC"
+                        required="true"
+                        type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.mac"></override>
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the MMC over SPI driver."
+                        default="false"
+                        editable="true"
+                        name="MMC SPI"
+                        required="true"
+                        type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.mmc_spi"></override>
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the PWM driver."
+                        default="false"
+                        editable="true"
+                        name="PWM"
+                        required="true"
+                        type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.pwm"></override>
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the RTC driver."
+                        default="false"
+                        editable="true"
+                        name="RTC"
+                        required="true"
+                        type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.rtc"></override>
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the SDC driver."
+                        default="false"
+                        editable="true"
+                        name="SDC"
+                        required="true"
+                        type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.sdc"></override>
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the Serial driver."
+                        default="false"
+                        editable="true"
+                        name="Serial"
+                        required="true"
+                        type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.serial"></override>
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the SPI driver."
+                        default="false"
+                        editable="true"
+                        name="SPI"
+                        required="true"
+                        type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.spi"></override>
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the Serial over USB driver."
+                        default="false"
+                        editable="true"
+                        name="Serial USB"
+                        required="true"
+                        type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.serial_usb"></override>
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the UART driver."
+                        default="false"
+                        editable="true"
+                        name="UART"
+                        required="true"
+                        type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.uart"></override>
+                  </property>
+                  <property
+                        brief="This options globally enables/disables the USB driver."
+                        default="false"
+                        editable="true"
+                        name="USB"
+                        required="true"
+                        type="boolean">
+                     <override
+                           editable="@org.chibios.spc5.features.hal.implementations.usb"></override>
+                  </property>
+               </group>
+               <group
+                     columns="1"
+                     expanded="false"
+                     name="Serial Driver Settings"
+                     style="collapsable">
+                  <description>
+                     Settings related to the Serial driver.
+                  </description>
+                  <property
+                        brief="Bit rate for the default driver configuration."
+                        default="38400"
+                        editable="true"
+                        min="300"
+                        name="Default Bit Rate"
+                        required="true"
+                        type="unsigned">
+                  </property>
+                  <property
+                        brief="Size of the TX and RX circular buffers."
+                        default="16"
+                        editable="true"
+                        min="4"
+                        name="Buffers Size"
+                        required="true"
+                        type="unsigned">
+                  </property>
+               </group>
+               <group
+                     columns="1"
+                     expanded="false"
+                     name="ADC Driver Settings"
+                     style="collapsable">
+                  <description>
+                     Settings related to the ADC driver.
+                  </description>
+                  <property
+                        brief="Enables the synchronous API functions."
+                        default="true"
+                        editable="true"
+                        name="Enable Synchronous Functions"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables the dedicated API functions for mutual exclusion on driver access."
+                        default="false"
+                        editable="true"
+                        name="Enable Mutual Exclusion Functions"
+                        required="true"
+                        type="boolean">
+                  </property>
+               </group>
+               <group
+                     columns="1"
+                     expanded="false"
+                     name="CAN Driver Settings"
+                     style="collapsable">
+                  <description>
+                     Settings related to the CAN driver.
+                  </description>
+                  <property
+                        brief="Enables the sleep mode API functions."
+                        default="true"
+                        editable="true"
+                        name="Enable Sleep Mode Functions"
+                        required="true"
+                        type="boolean">
+                  </property>
+               </group>
+               <group
+                     columns="1"
+                     expanded="false"
+                     name="I2C Driver Settings"
+                     style="collapsable">
+                  <description>
+                     Settings related to the I2C driver.
+                  </description>
+                  <property
+                        brief="Enables the dedicated API functions for mutual exclusion on driver access."
+                        default="false"
+                        editable="true"
+                        name="Enable Mutual Exclusion Functions"
+                        required="true"
+                        type="boolean">
+                  </property>
+               </group>
+               <group
+                     columns="1"
+                     expanded="false"
+                     name="MAC Driver Settings"
+                     style="collapsable">
+                  <description>
+                     Settings related to the MAC driver.
+                  </description>
+                  <property
+                        brief="Enables the generation of events on frames reception."
+                        default="true"
+                        editable="true"
+                        name="Enable Events"
+                        required="true"
+                        type="boolean">
+                  </property>
+               </group>
+               <group
+                     columns="1"
+                     expanded="false"
+                     name="MMC SPI Driver Settings"
+                     style="collapsable">
+                  <description>
+                     Settings related to the MMC over SPI driver.
+                  </description>
+                  <property
+                        brief="If enabled this options inserts delays into the MMC waiting routines."
+                        default="true"
+                        editable="true"
+                        name="Nice Waiting"
+                        required="true"
+                        type="boolean">
+                  </property>
+               </group>
+               <group
+                     columns="1"
+                     expanded="false"
+                     name="SDC Driver Settings"
+                     style="collapsable">
+                  <description>
+                     Settings related to the SDC driver.
+                  </description>
+                  <property
+                        brief="Number of initialization attempts before rejecting the card."
+                        default="1"
+                        editable="true"
+                        min="1"
+                        name="Init Retry"
+                        required="true"
+                        type="unsigned">
+                  </property>
+                  <property
+                        brief="If enabled this options inserts delays into the SDC waiting routines."
+                        default="true"
+                        editable="true"
+                        name="Nice Waiting"
+                        required="true"
+                        type="boolean">
+                  </property>
+               </group>
+               <group
+                     columns="1"
+                     expanded="false"
+                     name="SPI Driver Settings"
+                     style="collapsable">
+                  <description>
+                     Settings related to the SPI driver.
+                  </description>
+                  <property
+                        brief="Enables the synchronous API functions."
+                        default="true"
+                        editable="true"
+                        name="Enable Synchronous Functions"
+                        required="true"
+                        type="boolean">
+                  </property>
+                  <property
+                        brief="Enables the dedicated API functions for mutual exclusion on driver access."
+                        default="false"
+                        editable="true"
+                        name="Enable Mutual Exclusion Functions"
+                        required="true"
+                        type="boolean">
+                  </property>
+               </group>
+            </configuration>
+            <requiredFeatures>
+               <requiredFeature
+                     id="org.chibios.spc5.features.kernel">
+               </requiredFeature>
+               <requiredFeature
+                     id="org.chibios.spc5.features.board">
+               </requiredFeature>
+            </requiredFeatures>
+            <exportedFeatures>
+               <exportedFeature
+                     brief="ChibiOS/RT hardware abstraction layer (HAL) API interface."
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal">
+               </exportedFeature>
+               <exportedFeature
+                     brief="ChibiOS/RT hardware abstraction layer (HAL) configuration interface."
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.configuration">
+               </exportedFeature>
+            </exportedFeatures>
+      </component>
+   </extension>
+
+</plugin>
