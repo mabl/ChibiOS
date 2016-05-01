@@ -6,8 +6,7 @@
          name="ChibiOS HAL OSAL for RT Component"
          point="com.st.tools.spc5.extension.v1">
         <component
-              headerName="osal.h"
-              hidden="false"
+              hidden="true"
               icon="rsc/chibios.ico"
               initFunction=""
               isPlatform="false">
@@ -29,179 +28,22 @@
                      Copyright (C) Giovanni Di Sirio. All rights reserved.
                   </text>
                </image>
-               <group
-                     columns="1"
-                     expanded="true"
-                     name="Debug"
-                     style="collapsable">
-                  <description>
-                     Debug related options.
-                  </description>
-                  <property
-                        brief="If selected then the function parameters checks are enabled."
-                        default="false"
-                        editable="true"
-                        name="Enable Parameters Checks"
-                        required="true"
-                        type="boolean">
-                  </property>
-                  <property
-                        brief="If selected then the assertion checks are enabled."
-                        default="false"
-                        editable="true"
-                        name="Enable Assertions"
-                        required="true"
-                        type="boolean">
-                  </property>
-               </group>
-                <group
-                      columns="1"
-                      expanded="true"
-                      name="ISRs"
-                      style="collapsable">
-                   <description>
-                      Interrupt related options.
-                   </description>
-                   <property
-                         brief="Frequency in Hertz of the system tick timer."
-                         default="1000"
-                         editable="true"
-                         max="100000"
-                         min="1"
-                         name="Systick Frequency"
-                         required="true"
-                         type="unsigned">
-                   </property>
-                   <property
-                         brief="If selected then ISRs can be preempted by higher priority interrupts."
-                         default="false"
-                         editable="true"
-                         name="Preemptable ISRs"
-                         required="true"
-                         type="boolean">
-                   </property>
-                   <property
-                         brief="You can put in this field a statement to be executed while the system is in the idle loop."
-                         editable="true"
-                         name="Idle Hook"
-                         required="false"
-                         type="string">
-                   </property>
-                   <property
-                         brief="List of the interrupt vectors to be enabled on startup."
-                         editable="true"
-                         length="0"
-                         min="0"
-                         name="Enabled Vectors"
-                         required="false"
-                         type="list"
-                         value="Identifier,Number,Priority,Name Override">
-                      <group
-                            columns="1"
-                            expanded="true"
-                            name="Vector"
-                            style="collapsable">
-                         <description>
-                            Interrupt vector settings.
-                         </description>
-                         <property
-                               brief="Unique symbolic name to be assigned to the vector."
-                               default="IDENTIFIER"
-                               editable="true"
-                               name="Identifier"
-                               regex="^[a-zA-Z_][a-zA-Z0-9_]*$"
-                               required="true"
-                               type="string">
-                         </property>
-                         <property
-                               brief="Number of the interrupt vector to be enabled."
-                               default="0"
-                               editable="true"
-                               max="935"
-                               min="0"
-                               name="Number"
-                               required="true"
-                               type="unsigned">
-                         </property>
-                         <property
-                               brief="Cores where the ISR is routed."
-                               default="2"
-                               editable="true"
-                               name="Cores"
-                               required="true"
-                               type="enum"
-                               value="Core 0,Core 1,Core 2,Cores 0-1,Cores 0-2,Cores 1-2,Cores 0-1-2">
-                         </property>
-                         <property
-                               brief="Priority to be assigned to the interrupt vector."
-                               default="7"
-                               editable="true"
-                               name="Priority"
-                               required="true"
-                               type="enum"
-                               value="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15">
-                         </property>
-                         <property
-                               brief="This setting, if specified, overrides the default vector name which is in the form &quot;vectorN&quot;."
-                               editable="true"
-                               name="Name Override"
-                               regex="^[a-zA-Z_][a-zA-Z0-9_]*$|^$"
-                               required="false"
-                               type="string">
-                         </property>
-                         <property
-                               brief="ISR code, if empty then the ISR must be written by the user."
-                               editable="true"
-                               name="ISR Code"
-                               required="false"
-                               type="formatted">
-                            <default>
-                               /*
- * ${isr_identifier} ISR function (vector ${isr_vector}).
- */
-OSAL_IRQ_HANDLER(${isr_name}) {
-
-  OSAL_IRQ_PROLOGUE();
-
-  /* ISR code here.*/
-
-  OSAL_IRQ_EPILOGUE();
-}
-                            </default>
-                            <text>
-                               Put your ISR code in this box, an ISR template code is generated by default. Note that if this bos is fully empty then the ISR function is not generated and the user can define the ISR in any other module, ISR initialization is still generated.
-                            </text>
-                         </property>
-                      </group>
-                   </property>
-                   <property
-                         brief="Comma separated list of headers to be included in the ISRs module other than components.h."
-                         editable="true"
-                         name="Headers"
-                         regex="^$|^([a-zA-Z_]([a-zA-Z0-9_\-/]*\.h[a-zA-Z_]*))|^(([a-zA-Z_]([a-zA-Z0-9_\-/]*\.h[a-zA-Z_]*),)+([a-zA-Z_]([a-zA-Z0-9_\-/]*\.h[a-zA-Z_]*)))$"
-                         required="false"
-                         type="string">
-                   </property>
-                </group>
             </configuration>
             <exportedFeatures>
                <exportedFeature
                      brief="This interface declares a generic OSAL service."
                      exclusive="false"
-                     id="org.chibios.features.osal">
+                     id="org.chibios.features.hal.osal">
                </exportedFeature>
                <exportedFeature
-                     brief="This interface declares an OSAL service for SPC5xx."
+                     brief="This interface declares an OSAL service for ChibiOS/RT"
                      exclusive="false"
-                     id="org.chibios.features.osal.spc5xx">
+                     id="org.chibios.features.hal.osal.rt">
                </exportedFeature>
             </exportedFeatures>
             <requiredFeatures>
                <requiredFeature
-                     id="com.st.tools.spc5.features.build.gccenv">
-               </requiredFeature>
-               <requiredFeature
-                     id="com.st.tools.spc5.features.platform.hal.spc58ecxx">
+                     id="org.chibios.spc5.features.kernel.rt">
                </requiredFeature>
             </requiredFeatures>
         </component>

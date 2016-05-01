@@ -34,10 +34,10 @@
             </configuration>
             <requiredFeatures>
                <requiredFeature
-                     id="org.chibios.spc5.features.board">
+                     id="org.chibios.spc5.features.hal.board.stm32f4xx">
                </requiredFeature>
                <requiredFeature
-                     id="org.chibios.spc5.features.osal">
+                     id="org.chibios.spc5.features.hal.osal">
                </requiredFeature>
             </requiredFeatures>
             <exportedFeatures>
@@ -45,6 +45,11 @@
                      brief="ChibiOS/RT hardware abstraction layer (HAL) API interface."
                      exclusive="false"
                      id="org.chibios.spc5.features.hal">
+               </exportedFeature>
+               <exportedFeature
+                     brief="ChibiOS/RT hardware abstraction layer (HAL) API interface."
+                     exclusive="false"
+                     id="org.chibios.spc5.features.hal.port.stm32f4xx">
                </exportedFeature>
                <exportedFeature
                      brief="ChibiOS/RT hardware abstraction layer (HAL) configuration interface."
