@@ -68,7 +68,7 @@
             <flash_0_size>
               <value>1024</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>1024.0</actual_value>
                   <unit factor="1.0" name="kB" />
                 </metadata>
@@ -83,7 +83,7 @@
             <flash_1_size>
               <value>0</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>0.0</actual_value>
                   <unit factor="1.0" name="kB" />
                 </metadata>
@@ -98,7 +98,7 @@
             <flash_2_size>
               <value>0</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>0.0</actual_value>
                   <unit factor="1.0" name="kB" />
                 </metadata>
@@ -113,7 +113,7 @@
             <flash_3_size>
               <value>0</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>0.0</actual_value>
                   <unit factor="1.0" name="kB" />
                 </metadata>
@@ -128,7 +128,7 @@
             <flash_4_size>
               <value>0</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>0.0</actual_value>
                   <unit factor="1.0" name="kB" />
                 </metadata>
@@ -143,7 +143,7 @@
             <flash_5_size>
               <value>0</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>0.0</actual_value>
                   <unit factor="1.0" name="kB" />
                 </metadata>
@@ -158,7 +158,7 @@
             <flash_6_size>
               <value>0</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>0.0</actual_value>
                   <unit factor="1.0" name="kB" />
                 </metadata>
@@ -173,7 +173,7 @@
             <flash_7_size>
               <value>0</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>0.0</actual_value>
                   <unit factor="1.0" name="kB" />
                 </metadata>
@@ -188,7 +188,7 @@
             <ram_0_size>
               <value>128</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>128.0</actual_value>
                   <unit factor="1.0" name="kB" />
                 </metadata>
@@ -203,7 +203,7 @@
             <ram_1_size>
               <value>0</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>0.0</actual_value>
                   <unit factor="1.0" name="kB" />
                 </metadata>
@@ -218,7 +218,7 @@
             <ram_2_size>
               <value>0</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>0.0</actual_value>
                   <unit factor="1.0" name="kB" />
                 </metadata>
@@ -233,7 +233,7 @@
             <ram_3_size>
               <value>0</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>0.0</actual_value>
                   <unit factor="1.0" name="kB" />
                 </metadata>
@@ -248,7 +248,7 @@
             <ram_4_size>
               <value>16</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>16.0</actual_value>
                   <unit factor="1.0" name="kB" />
                 </metadata>
@@ -263,7 +263,7 @@
             <ram_5_size>
               <value>4</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>4.0</actual_value>
                   <unit factor="1.0" name="kB" />
                 </metadata>
@@ -278,7 +278,7 @@
             <ram_6_size>
               <value>0</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>0.0</actual_value>
                   <unit factor="1.0" name="kB" />
                 </metadata>
@@ -293,7 +293,7 @@
             <ram_7_size>
               <value>0</value>
               <metadatas>
-                <metadata name="unit">
+                <metadata name="Memory Unit">
                   <actual_value>0.0</actual_value>
                   <unit factor="1.0" name="kB" />
                 </metadata>
