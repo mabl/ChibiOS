@@ -75,6 +75,8 @@
 
 *** 3.0.6 ***
 - ALL: Startup files relicensed under Apache 2.0.
+- HAL: Fixed DAC driver not enabled for STM32F4x7 and STM32F4x9 devices
+       (bug #739).
 - HAL: Fixed STM32 dac bug when using only channel 2 in direct mode (bug #734).
 - RT:  Fixed bug in chSchPreemption() function (bug #728).
 - VAR: Fixed palSetMode glitching outputs (bug #723).
