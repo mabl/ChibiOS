@@ -13,7 +13,7 @@
     stop -> stop [label=" flashStop()"];
     stop -> ready [label=" flashStart()"];
     ready -> stop [label=" flashStop()"];
-    ready -> read [label=" flashRead()"];
+    ready -> read [label=" flashRead()\nflashVerifyErase()"];
     read -> ready [label=" return"];
     ready -> program [label=" flashProgram()"];
     program -> ready [label=" return"];
