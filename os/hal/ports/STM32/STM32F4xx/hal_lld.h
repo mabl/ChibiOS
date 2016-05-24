@@ -1272,7 +1272,7 @@
  */
 #if (STM32_I2SSRC == STM32_I2SSRC_PLLI2S) || defined(__DOXYGEN__)
 /**
- * @brief   PLL activation flag.
+ * @brief   PLLI2S activation flag.
  */
 #define STM32_ACTIVATE_PLLI2S       TRUE
 #else
