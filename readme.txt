@@ -74,6 +74,7 @@
 *****************************************************************************
 
 *** 3.0.6 ***
+- HAL: Fixed wrong comments and indent in STM32F4xx hal_lld.h (bug #746).
 - HAL: Removed wrong SAI masks in STM32F4xx hal_lld.h (bug #745).
 - HAL: Fixed wrong mask placement in STM32F4xx hal_lld.h (bug #744).
 - HAL: Fixed wrong indent in STM32F4xx hal_lld.h (bug #743).
