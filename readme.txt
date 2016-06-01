@@ -74,6 +74,7 @@
 *****************************************************************************
 
 *** 3.0.6 ***
+- HAL: Added board folder in STM32F4xx-USB-CDC demo (bug #749).
 - HAL: Fixed wrong comments in STM32F4xx GPT demo (bug #748).
 - HAL: Fixed wrong comments and indent in STM32F4xx hal_lld.h (bug #746).
 - HAL: Removed wrong SAI masks in STM32F4xx hal_lld.h (bug #745).
