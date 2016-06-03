@@ -30,6 +30,7 @@
 									<listOptionValue builtIn="false" value="C:/SPC5Studio/eclipse/plugins/com.st.tools.spc5.tools.hightec.win32_1.0.0.201306281422/hightec/lib/gcc/ppc-ht-eabi/4.6.3/include"/>
 									<listOptionValue builtIn="false" value="C:/SPC5Studio/eclipse/plugins/com.st.tools.spc5.tools.gnu.gcc.ppcvle.win32_1.0.0.201604281547/toolchain/include/sys"/>
 									<listOptionValue builtIn="false" value="C:/SPC5Studio/eclipse/plugins/com.st.tools.spc5.tools.gnu.gcc.ppcvle.win32_1.0.0.201604281547/toolchain/include"/>
+									<listOptionValue builtIn="false" value="C:/SPC5Studio/eclipse/plugins/com.st.tools.spc5.tools.gnu.gcc.ppcvle.win32_1.0.0.201604281547/toolchain/lib/gcc/powerpc-eabivle/4.9.2/include/"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.208573279" languageId="org.eclipse.cdt.core.assembly" languageName="Assembly" sourceContentType="org.eclipse.cdt.core.asmSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
@@ -42,6 +43,7 @@
 									<listOptionValue builtIn="false" value="C:/SPC5Studio/eclipse/plugins/com.st.tools.spc5.tools.hightec.win32_1.0.0.201306281422/hightec/lib/gcc/ppc-ht-eabi/4.6.3/include"/>
 									<listOptionValue builtIn="false" value="C:/SPC5Studio/eclipse/plugins/com.st.tools.spc5.tools.gnu.gcc.ppcvle.win32_1.0.0.201604281547/toolchain/include/sys"/>
 									<listOptionValue builtIn="false" value="C:/SPC5Studio/eclipse/plugins/com.st.tools.spc5.tools.gnu.gcc.ppcvle.win32_1.0.0.201604281547/toolchain/include"/>
+									<listOptionValue builtIn="false" value="C:/SPC5Studio/eclipse/plugins/com.st.tools.spc5.tools.gnu.gcc.ppcvle.win32_1.0.0.201604281547/toolchain/lib/gcc/powerpc-eabivle/4.9.2/include/"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.216355393" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
@@ -51,6 +53,7 @@
 									<listOptionValue builtIn="false" value="C:/SPC5Studio/eclipse/plugins/com.st.tools.spc5.tools.hightec.win32_1.0.0.201306281422/hightec/lib/gcc/ppc-ht-eabi/4.6.3/include"/>
 									<listOptionValue builtIn="false" value="C:/SPC5Studio/eclipse/plugins/com.st.tools.spc5.tools.gnu.gcc.ppcvle.win32_1.0.0.201604281547/toolchain/include/sys"/>
 									<listOptionValue builtIn="false" value="C:/SPC5Studio/eclipse/plugins/com.st.tools.spc5.tools.gnu.gcc.ppcvle.win32_1.0.0.201604281547/toolchain/include"/>
+									<listOptionValue builtIn="false" value="C:/SPC5Studio/eclipse/plugins/com.st.tools.spc5.tools.gnu.gcc.ppcvle.win32_1.0.0.201604281547/toolchain/lib/gcc/powerpc-eabivle/4.9.2/include/"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1029110504" languageId="org.eclipse.cdt.core.gcc" languageName="GNU C" sourceContentType="org.eclipse.cdt.core.cSource,org.eclipse.cdt.core.cHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
