@@ -25,26 +25,29 @@
 							</builder>
 							<tool id="org.eclipse.cdt.build.core.settings.holder.libs.977441816" name="holder for library settings" superClass="org.eclipse.cdt.build.core.settings.holder.libs"/>
 							<tool id="org.eclipse.cdt.build.core.settings.holder.510504564" name="Assembly" superClass="org.eclipse.cdt.build.core.settings.holder">
-								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.1197081251" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
+								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.1197081251" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
 									<listOptionValue builtIn="false" value="C:/SPC5Studio/eclipse/plugins/com.st.tools.spc5.tools.hightec.win32_1.0.0.201306281422/hightec/ppc-ht-eabi/include"/>
 									<listOptionValue builtIn="false" value="C:/SPC5Studio/eclipse/plugins/com.st.tools.spc5.tools.hightec.win32_1.0.0.201306281422/hightec/lib/gcc/ppc-ht-eabi/4.6.3/include"/>
 									<listOptionValue builtIn="false" value="C:/SPC5Studio/eclipse/plugins/com.st.tools.spc5.tools.gnu.gcc.ppcvle.win32_1.0.0.201604281547/toolchain/include/sys"/>
+									<listOptionValue builtIn="false" value="C:/SPC5Studio/eclipse/plugins/com.st.tools.spc5.tools.gnu.gcc.ppcvle.win32_1.0.0.201604281547/toolchain/include"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1484737364" languageId="org.eclipse.cdt.core.assembly" languageName="Assembly" sourceContentType="org.eclipse.cdt.core.asmSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
 							<tool id="org.eclipse.cdt.build.core.settings.holder.1470940252" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder">
-								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.306732357" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
+								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.306732357" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
 									<listOptionValue builtIn="false" value="C:/SPC5Studio/eclipse/plugins/com.st.tools.spc5.tools.hightec.win32_1.0.0.201306281422/hightec/ppc-ht-eabi/include"/>
 									<listOptionValue builtIn="false" value="C:/SPC5Studio/eclipse/plugins/com.st.tools.spc5.tools.hightec.win32_1.0.0.201306281422/hightec/lib/gcc/ppc-ht-eabi/4.6.3/include"/>
 									<listOptionValue builtIn="false" value="C:/SPC5Studio/eclipse/plugins/com.st.tools.spc5.tools.gnu.gcc.ppcvle.win32_1.0.0.201604281547/toolchain/include/sys"/>
+									<listOptionValue builtIn="false" value="C:/SPC5Studio/eclipse/plugins/com.st.tools.spc5.tools.gnu.gcc.ppcvle.win32_1.0.0.201604281547/toolchain/include"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1967326225" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
 							<tool id="org.eclipse.cdt.build.core.settings.holder.1367834406" name="GNU C" superClass="org.eclipse.cdt.build.core.settings.holder">
-								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.603754472" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
+								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.603754472" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
 									<listOptionValue builtIn="false" value="C:/SPC5Studio/eclipse/plugins/com.st.tools.spc5.tools.hightec.win32_1.0.0.201306281422/hightec/ppc-ht-eabi/include"/>
 									<listOptionValue builtIn="false" value="C:/SPC5Studio/eclipse/plugins/com.st.tools.spc5.tools.hightec.win32_1.0.0.201306281422/hightec/lib/gcc/ppc-ht-eabi/4.6.3/include"/>
 									<listOptionValue builtIn="false" value="C:/SPC5Studio/eclipse/plugins/com.st.tools.spc5.tools.gnu.gcc.ppcvle.win32_1.0.0.201604281547/toolchain/include/sys"/>
+									<listOptionValue builtIn="false" value="C:/SPC5Studio/eclipse/plugins/com.st.tools.spc5.tools.gnu.gcc.ppcvle.win32_1.0.0.201604281547/toolchain/include"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1996961059" languageId="org.eclipse.cdt.core.gcc" languageName="GNU C" sourceContentType="org.eclipse.cdt.core.cSource,org.eclipse.cdt.core.cHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
