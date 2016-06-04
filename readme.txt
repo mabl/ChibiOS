@@ -74,6 +74,8 @@
 *****************************************************************************
 
 *** 3.0.6 ***
+- HAL: Fixed CMSIS function osThreadGetPriority() does not return correct
+       priority (bug #752).
 - HAL: Fixed wrong conditional branches in _adc_isr_error_code (bug #751).
 - HAL: Added board folder in STM32F4xx-USB_CDC demo (bug #749).
 - HAL: Fixed wrong comments in STM32F4xx GPT demo (bug #748).
