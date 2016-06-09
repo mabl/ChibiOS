@@ -74,6 +74,7 @@
 *****************************************************************************
 
 *** 3.0.6 ***
+- HAL: Fixed wrong info in readme of LWIP related demos (bug #755).
 - HAL: Fixed errors in documentation related to OTG peripheral switches 
        (bug #753).
 - HAL: Fixed CMSIS function osThreadGetPriority() does not return correct
