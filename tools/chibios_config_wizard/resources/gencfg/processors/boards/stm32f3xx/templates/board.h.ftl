@@ -321,7 +321,7 @@ ${line + ")"}
       [#assign name = names[0] /]
     [/#if]
     [#assign alternate = pin.@Alternate[0]?trim /]
-    [#assign out = "PIN_AFIO_AF(" + port_name + "_" + name + ", " + alternate + ")" /]
+    [#assign out = "PIN_AFIO_AF(" + port_name + "_" + name + ", " + alternate + "U)" /]
     [#if pin_index == 0]
       [#assign line = "#define VAL_" + port_name + "_AFRL              (" + out /]
     [#elseif pin_index == 8]
