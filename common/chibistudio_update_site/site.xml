@@ -3,7 +3,7 @@
    <description name="ChibiStudio Update Site" url="http://www.chibios.org/eclipse/chibistudio">
       ChibiStudio Eclipse Update Site.
    </description>
-   <feature url="features/org.chibios.eclipse.tools.feature_2.4.0.qualifier.jar" id="org.chibios.eclipse.tools.feature" version="2.4.0.qualifier">
+   <feature url="features/org.chibios.eclipse.tools.feature_2.4.1.qualifier.jar" id="org.chibios.eclipse.tools.feature" version="2.4.1.qualifier">
       <category name="chibistudio_components"/>
    </feature>
    <category-def name="chibistudio_components" label="ChibiStudio Eclipse Components">

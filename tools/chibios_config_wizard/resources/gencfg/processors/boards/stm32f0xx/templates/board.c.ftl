@@ -35,6 +35,11 @@
 [@license.EmitLicenseAsText /]
 */
 
+/*
+ * This file has been automatically generated using ChibiStudio board
+ * generator plugin. Do not edit manually.
+ */
+
 [#list doc1.board.headers.header as header]
 #include "${header[0]?string?trim}"
 [/#list]
