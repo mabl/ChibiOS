@@ -56,6 +56,21 @@
                      exclusive="false"
                      id="org.chibios.spc5.features.hal.configuration">
                </exportedFeature>
+               <exportedFeature
+                     brief="The device uses GPIOv2 peripherals."
+                     exclusive="true"
+                     id="org.chibios.spc5.features.device.stm32f4xx.architecture.gpiov2">
+               </exportedFeature>
+               <exportedFeature
+                     brief="The device uses SPIv1 peripherals."
+                     exclusive="true"
+                     id="org.chibios.spc5.features.device.stm32f4xx.architecture.spiv1">
+               </exportedFeature>
+               <exportedFeature
+                     brief="The device uses USARTv1 peripherals."
+                     exclusive="true"
+                     id="org.chibios.spc5.features.device.stm32f4xx.architecture.usartv1">
+               </exportedFeature>
             </exportedFeatures>
       </component>
    </extension>
