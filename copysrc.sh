@@ -1,7 +1,5 @@
 #!/bin/bash
-chibios=../chibios_trunk
-#chibios=../../ChibiStudio/chibios_trunk
-#chibios=../../ChibiStudio/chibios
+chibios=../chibios-trunk
 #do_templates=yes
 
 #============================================================================#
@@ -10,7 +8,7 @@ chibios=../chibios_trunk
 
 # ChibiOS Product License.
 echo "ChibiOS Product License files"
-cp -f ${chibios}/os/license/*.h                                             ./portable/chibios_product_license_component/component/lib/include/
+cp -f ${chibios}/os/license/*.h                                         ./portable/chibios_product_license_component/component/lib/include/
 
 #============================================================================#
 # RT Kernel Components.                                                      #
