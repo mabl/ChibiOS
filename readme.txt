@@ -74,6 +74,7 @@
 *****************************************************************************
 
 *** 3.0.6 ***
+- HAL: Fixed wrong check in win32 simulator serial driver (bug #765).
 - HAL: Fixed wrong info in readme of LWIP related demos (bug #755).
 - HAL: Fixed errors in documentation related to OTG peripheral switches 
        (bug #753).
