@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SPC5-Config version="1.0.0">
-  <application name="SPC564Axx Test Application" version="1.0.0" standalone="true" locked="false">
+  <application name="ChibiOS-RT SPC564Axx Test Application" version="1.0.0" standalone="true" locked="false">
     <description>Test application for the SPC564Axx created using the SPC5's Application Wizard.</description>
     <component id="com.st.tools.spc5.components.platform.spc564axx" version="1.0.0">
       <component id="org.chibios.spc5.components.rtos.spc564axx" version="2.6.4" />
