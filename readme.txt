@@ -76,6 +76,8 @@
 *** 3.0.6 ***
 - HAL: Fixed addition semicolon in cpp wrapper (bug #774).
 - HAL: Fixed function gpt_lld_polled_delay() is broken on STM32 (bug #775).
+- HAL: Fixed invalid output initialization for STM32 DACx channels 2 
+       (bug #773).
 - HAL: Fixed wrong check in win32 simulator serial driver (bug #765).
 - HAL: Fixed wrong info in readme of LWIP related demos (bug #755).
 - HAL: Fixed errors in documentation related to OTG peripheral switches 
