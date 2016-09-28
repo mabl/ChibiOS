@@ -74,6 +74,8 @@
 *****************************************************************************
 
 *** 3.0.6 ***
+- HAL: Fixed wrong registry for STM32F205xx and STM32F215xx port 
+       (bug #780).
 - HAL: Fixed wrong HSE checks and PLL2 enable switch in STM32F105 and
        STM32F107 port (bug #779).
 - HAL: Added DAC configs in RT-STM32F051-DISCOVERY\mcuconf.h (bug #777).
