@@ -45,11 +45,11 @@ typedef struct nil_thread thread_t;
  */
 #define _NIL_                           /**< @brief Nil RTOS identification.*/
 
-#define CH_KERNEL_VERSION      "0.1.0alpha"
+#define CH_KERNEL_VERSION      "0.1.1alpha"
 
 #define CH_KERNEL_MAJOR        0
 #define CH_KERNEL_MINOR        1
-#define CH_KERNEL_PATCH        0
+#define CH_KERNEL_PATCH        1
 /** @} */
 
 /**
@@ -364,7 +364,7 @@ typedef struct {
   /**
    * @brief   System time.
    */
-  systime_t             systime;
+  volatile systime_t 	systime;
 #endif
 #if NIL_CFG_ST_TIMEDELTA > 0 || defined(__DOXYGEN__)
   /**

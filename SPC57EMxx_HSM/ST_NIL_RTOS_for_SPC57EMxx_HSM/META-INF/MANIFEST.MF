@@ -12,6 +12,6 @@ Require-Bundle: org.eclipse.core.runtime,
  com.st.spc5.components.hal.osal.nil.stonly;bundle-version="1.0.0",
  com.st.spc5.components.nil.kernel.stonly;bundle-version="1.0.0",
  com.st.spc5.components.nil.kernel.port.gcc.spc57emxx_hsm.stonly;bundle-version="1.0.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: .
 Bundle-Vendor: chibios.org
