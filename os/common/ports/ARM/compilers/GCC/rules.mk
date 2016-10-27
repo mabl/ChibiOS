@@ -89,8 +89,8 @@ else
   ACSRC += $(CSRC)
   ACPPSRC += $(CPPSRC)
 endif
-ASRC	  = $(ACSRC)$(ACPPSRC)
-TSRC	  = $(TCSRC)$(TCPPSRC)
+ASRC      = $(ACSRC) $(ACPPSRC)
+TSRC      = $(TCSRC) $(TCPPSRC)
 SRCPATHS  = $(sort $(dir $(ASMXSRC)) $(dir $(ASMSRC)) $(dir $(ASRC)) $(dir $(TSRC)))
 
 # Various directories
@@ -127,21 +127,24 @@ CPPFLAGS  = $(MCFLAGS) $(OPT) $(CPPOPT) $(CPPWARN) -Wa,-alms=$(LSTDIR)/$(notdir 
 LDFLAGS   = $(MCFLAGS) $(OPT) -nostartfiles $(LLIBDIR) -Wl,-Map=$(BUILDDIR)/$(PROJECT).map,--cref,--no-warn-mismatch,--library-path=$(RULESPATH),--script=$(LDSCRIPT)$(LDOPT)
 
 # Thumb interwork enabled only if needed because it kills performance.
-ifneq ($(TSRC),)
+ifneq ($(strip $(TSRC)),)
   CFLAGS   += -DTHUMB_PRESENT
   CPPFLAGS += -DTHUMB_PRESENT
   ASFLAGS  += -DTHUMB_PRESENT
-  ifneq ($(ASRC),)
+  ASXFLAGS += -DTHUMB_PRESENT
+  ifneq ($(strip $(ASRC)),)
     # Mixed ARM and THUMB mode.
     CFLAGS   += -mthumb-interwork
     CPPFLAGS += -mthumb-interwork
     ASFLAGS  += -mthumb-interwork
+    ASXFLAGS += -mthumb-interwork
     LDFLAGS  += -mthumb-interwork
   else
     # Pure THUMB mode, THUMB C code cannot be called by ARM asm code directly.
     CFLAGS   += -mno-thumb-interwork -DTHUMB_NO_INTERWORKING
     CPPFLAGS += -mno-thumb-interwork -DTHUMB_NO_INTERWORKING
     ASFLAGS  += -mno-thumb-interwork -DTHUMB_NO_INTERWORKING -mthumb
+    ASXFLAGS += -mno-thumb-interwork -DTHUMB_NO_INTERWORKING -mthumb
     LDFLAGS  += -mno-thumb-interwork -mthumb
   endif
 else
@@ -149,11 +152,13 @@ else
   CFLAGS   += -mno-thumb-interwork
   CPPFLAGS += -mno-thumb-interwork
   ASFLAGS  += -mno-thumb-interwork
+  ASXFLAGS += -mno-thumb-interwork
   LDFLAGS  += -mno-thumb-interwork
 endif
 
 # Generate dependency information
 ASFLAGS  += -MD -MP -MF .dep/$(@F).d
+ASXFLAGS += -MD -MP -MF .dep/$(@F).d
 CFLAGS   += -MD -MP -MF .dep/$(@F).d
 CPPFLAGS += -MD -MP -MF .dep/$(@F).d
 
@@ -240,7 +245,7 @@ else
 	@$(CC) -c $(ASXFLAGS) $(TOPT) -I. $(IINCDIR) $< -o $@
 endif
 
-%.elf: $(OBJS) $(LDSCRIPT)
+$(BUILDDIR)/$(PROJECT).elf: $(OBJS) $(LDSCRIPT)
 ifeq ($(USE_VERBOSE_COMPILE),yes)
 	@echo
 	$(LD) $(OBJS) $(LDFLAGS) $(LIBS) -o $@
@@ -249,7 +254,7 @@ else
 	@$(LD) $(OBJS) $(LDFLAGS) $(LIBS) -o $@
 endif
 
-%.hex: %.elf $(LDSCRIPT)
+%.hex: %.elf
 ifeq ($(USE_VERBOSE_COMPILE),yes)
 	$(HEX) $< $@
 else
@@ -257,7 +262,7 @@ else
 	@$(HEX) $< $@
 endif
 
-%.bin: %.elf $(LDSCRIPT)
+%.bin: %.elf
 ifeq ($(USE_VERBOSE_COMPILE),yes)
 	$(BIN) $< $@
 else
@@ -265,7 +270,7 @@ else
 	@$(BIN) $< $@
 endif
 
-%.dmp: %.elf $(LDSCRIPT)
+%.dmp: %.elf
 ifeq ($(USE_VERBOSE_COMPILE),yes)
 	$(OD) $(ODFLAGS) $< > $@
 	$(SZ) $<
@@ -276,7 +281,7 @@ else
 	@$(SZ) $<
 endif
 
-%.list: %.elf $(LDSCRIPT)
+%.list: %.elf
 ifeq ($(USE_VERBOSE_COMPILE),yes)
 	$(OD) -S $< > $@
 else
