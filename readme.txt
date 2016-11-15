@@ -74,6 +74,8 @@
 *****************************************************************************
 
 *** 3.0.6 ***
+- HAL: Fixed missing ARPE bit in CR1 initialization on STM32 GPT driver
+       (bug #791).
 - VAR: Fixed GCC garbage collector discards code in syscalls.c (bug #789).
 - HAL: Fixed Makefile dependencies not generated for .S files (bug #787).
 - HAL: Fixed wrong bit offset in STM32F37x ADC_CR2_EXTSEL_SRC() macro
