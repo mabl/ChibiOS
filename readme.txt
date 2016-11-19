@@ -74,7 +74,8 @@
 *****************************************************************************
 
 *** 3.0.6 ***
-- RT:  Fixed double empty lines (bug #793).
+- HAL: Fixed double empty lines in HAL (bug #794).
+- RT:  Fixed double empty lines in RT (bug #793).
 - HAL: Fixed missing ARPE bit in CR1 initialization on STM32 GPT driver
        (bug #791).
 - VAR: Fixed GCC garbage collector discards code in syscalls.c (bug #789).

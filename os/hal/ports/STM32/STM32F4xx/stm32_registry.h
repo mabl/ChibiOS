@@ -25,7 +25,6 @@
 #ifndef _STM32_REGISTRY_H_
 #define _STM32_REGISTRY_H_
 
-
 #if defined(STM32F439xx) || defined(STM32F429xx)
 #define STM32F429_439xx
 
