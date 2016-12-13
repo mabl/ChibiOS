@@ -74,6 +74,7 @@
 *****************************************************************************
 
 *** 3.0.6 ***
+- VAR: Fixed missing const qualifier in local shell commands array (bug #797).
 - HAL: Fixed double empty lines in HAL (bug #794).
 - RT:  Fixed double empty lines in RT (bug #793).
 - HAL: Fixed missing ARPE bit in CR1 initialization on STM32 GPT driver
