@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="ChibiOS SPC5Studio Components Update Site" url="http://www.chibios.org/eclipse/spc5studio">
+      ChibiOS SPC5Studio Components Update Site.
+   </description>
+   <feature url="features/org.chibios.spc5.components.portable.feature_1.2.0.qualifier.jar" id="org.chibios.spc5.components.portable.feature" version="1.2.0.qualifier">
+      <category name="Components"/>
+   </feature>
+   <feature url="features/org.chibios.tools.spc5.tools.gccarmembedded.feature_1.0.0.qualifier.jar" id="org.chibios.tools.spc5.tools.gccarmembedded.feature" version="1.0.0.qualifier">
+      <category name="Tools"/>
+   </feature>
+   <category-def name="Components" label="Components"/>
+   <category-def name="Tools" label="Tools"/>
+</site>
