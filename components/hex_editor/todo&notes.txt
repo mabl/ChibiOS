@@ -1,0 +1,9 @@
+Problemi noti:
+
+Non si mette nel taborder giusto.
+
+Da fare:
+
+Selezione range indirizzi.
+Togliere bordino 3D allo slider.
+Separatori opzionali nella schermata.

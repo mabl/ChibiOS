@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="4">
+    <Name Value="ChibiOSUnits"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <SearchPaths>
+        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
+      </SearchPaths>
+    </CompilerOptions>
+    <Files Count="7">
+      <Item1>
+        <Filename Value="DynamicLists.pas"/>
+        <UnitName Value="DynamicLists"/>
+      </Item1>
+      <Item2>
+        <Filename Value="S19.pas"/>
+        <UnitName Value="S19"/>
+      </Item2>
+      <Item3>
+        <Filename Value="LineParser.pas"/>
+        <UnitName Value="LineParser"/>
+      </Item3>
+      <Item4>
+        <Filename Value="Chars.pas"/>
+        <UnitName Value="Chars"/>
+      </Item4>
+      <Item5>
+        <Filename Value="LinkedLists.pas"/>
+        <UnitName Value="LinkedLists"/>
+      </Item5>
+      <Item6>
+        <Filename Value="ByteArrayUtils.pas"/>
+        <UnitName Value="ByteArrayUtils"/>
+      </Item6>
+      <Item7>
+        <Filename Value="TextStream.pas"/>
+        <UnitName Value="TextStream"/>
+      </Item7>
+    </Files>
+    <RequiredPkgs Count="2">
+      <Item1>
+        <PackageName Value="LCL"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="FCL"/>
+      </Item2>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+    </PublishOptions>
+  </Package>
+</CONFIG>
