@@ -88,6 +88,7 @@ type
   protected
     { Protected declarations }
     procedure Loaded; override;
+    function CanAutoSize(var NewWidth, NewHeight: Integer): Boolean; override;
   public
     { Public declarations }
     Modified: Boolean;
@@ -520,6 +521,11 @@ begin
     NewHeight := MinRows * RowPixels;
   FRows := NewHeight div RowPixels;
   NewHeight := FRows * RowPixels + DWord(ComputeBevelOffset);
+end;
+
+function THexEdit.CanAutoSize(var NewWidth, NewHeight: Integer): Boolean;
+begin
+  result := false;
 end;
 
 procedure THexEdit.KeyDownEvent(Sender: TObject;
