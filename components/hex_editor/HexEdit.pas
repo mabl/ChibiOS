@@ -36,7 +36,7 @@ type
     Scroll: TScrollBar;
     FAddressSize: TAddressSize; // Tipo campo indirizzi.
     FRecordSize: TRecordSize;   // Tipo campo hex.
-    FBorderStyle: TBorderStyle; // Tipo bordo.
+//    FBorderStyle: TBorderStyle; // Tipo bordo.
     function GetAddressSize: TAddressSize;
     procedure SetAddressSize(Size: TAddressSize);
     function GetRecordSize: TRecordSize;
@@ -103,7 +103,7 @@ type
     property EditBuffer: TDynamicByteArray read GetBuffer write SetBuffer;
   published
     { Published declarations }
-    property BorderStyle: TBorderStyle read FBorderStyle write SetBorderStyle;
+    property BorderStyle: TBorderStyle read GetBorderStyle write SetBorderStyle;
     property AddressSize: TAddressSize read GetAddressSize write SetAddressSize;
     property RecordSize: TRecordSize read GetRecordSize write SetRecordSize;
     property Rows: Integer read GetRows write SetRows;
@@ -255,6 +255,7 @@ end;
 //procedure THexEdit.SetBorderStyle(Style: TBorderStyle);
 //begin
 //  FBorderStyle := Style;
+//  BorderStyle := Style;
 //  if Style = bsSingle then
 //    BevelKind := bkTile
 //  else
@@ -271,7 +272,7 @@ end;
 
 function THexEdit.ComputeWidth: Integer;
 begin
-  result := AddrPixSize + RecPixSize + AsciiPixSize + 17 + ComputeBevelOffset;
+  result := AddrPixSize + RecPixSize + AsciiPixSize + Scroll.Width + 2 + ComputeBevelOffset;
 end;
 
 procedure THexEdit.ComputeScrollMetrics;
@@ -729,6 +730,16 @@ end;
 constructor THexEdit.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
+  // Defaults scrollbar.
+  Scroll := TScrollBar.Create(self);
+  Scroll.Parent := self;
+  Scroll.Kind := sbVertical;
+  Scroll.TabStop := False;
+  Scroll.Min := 0;
+  Scroll.Max := 0;                // Modificato in ComputeScrollMetrics.
+  Scroll.SmallChange := 1;
+  Scroll.LargeChange := 1;        // Modificato in ComputeScrollMetrics.
+  Scroll.OnScroll := ScrollEvent;
   if csDesigning in ComponentState then
   begin
     // Defaults creando il componente a design time.
@@ -748,16 +759,6 @@ begin
   OnMouseDown := MouseDownEvent;
   // Property varie.
 //  BevelInner := bvLowered;
-  // Defaults scrollbar.
-  Scroll := TScrollBar.Create(self);
-  Scroll.Parent := self;
-  Scroll.Kind := sbVertical;
-  Scroll.TabStop := False;
-  Scroll.Min := 0;
-  Scroll.Max := 0;                // Modificato in ComputeScrollMetrics.
-  Scroll.SmallChange := 1;
-  Scroll.LargeChange := 1;        // Modificato in ComputeScrollMetrics.
-  Scroll.OnScroll := ScrollEvent;
   // Impostazione font.
   Canvas.Font.Name := 'Courier New';
   Canvas.Font.Size := 10;
