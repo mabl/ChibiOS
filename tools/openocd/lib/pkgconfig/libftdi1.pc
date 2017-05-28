@@ -1,0 +1,11 @@
+prefix=/mingw32
+exec_prefix=/mingw32/bin
+libdir=/mingw32/bin
+includedir=/mingw32/include/libftdi1
+
+Name: libftdi1
+Description: Library to program and control the FTDI USB controller
+Requires: libusb-1.0
+Version: 1.2
+Libs: -L${libdir} -lftdi1
+Cflags: -I${includedir}
