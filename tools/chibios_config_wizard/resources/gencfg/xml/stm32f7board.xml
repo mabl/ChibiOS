@@ -21,6 +21,7 @@
     HSEBypass="false"
     LSEFrequency="32768"
     LSEBypass="false"
+    LSEDrive="3 High Drive (default)"
     VDD="300" />
   <ports>
     <GPIOA>
