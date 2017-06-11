@@ -332,6 +332,8 @@ enum ftdi_eeprom_value
     CHANNEL_C_RS485    = 53,
     CHANNEL_D_RS485    = 54,
     RELEASE_NUMBER     = 55,
+    EXTERNAL_OSCILLATOR= 56,
+    USER_DATA_ADDR     = 57,
 };
 
 /**
@@ -350,20 +352,27 @@ struct ftdi_device_list
 #define POWER_SAVE_DISABLE_H 0x80
 
 #define USE_SERIAL_NUM 0x08
-enum ftdi_cbus_func  /* FIXME: Recheck value, especially the last */
+enum ftdi_cbus_func
 {
     CBUS_TXDEN = 0, CBUS_PWREN = 1, CBUS_RXLED = 2, CBUS_TXLED = 3, CBUS_TXRXLED = 4,
     CBUS_SLEEP = 5, CBUS_CLK48 = 6, CBUS_CLK24 = 7, CBUS_CLK12 = 8, CBUS_CLK6 =  9,
-    CBUS_IOMODE = 0xa, CBUS_BB_WR = 0xb, CBUS_BB_RD = 0xc, CBUS_BB   = 0xd
+    CBUS_IOMODE = 0xa, CBUS_BB_WR = 0xb, CBUS_BB_RD = 0xc
 };
 
-enum ftdi_cbush_func  /* FIXME: Recheck value, especially the last */
+enum ftdi_cbush_func
 {
-    CBUSH_TRISTATE = 0, CBUSH_RXLED = 1, CBUSH_TXLED = 2, CBUSH_TXRXLED = 3, CBUSH_PWREN = 4,
-    CBUSH_SLEEP = 5, CBUSH_DRIVE_0 = 6, CBUSG_DRIVE1 = 7, CBUSH_IOMODE = 8, CBUSH_TXDEN =  9,
-    CBUSH_CLK30 = 10, CBUSH_CLK15 = 11, CBUSH_CLK7_5 = 12, CBUSH_BAT_DETECT = 13,
-    CBUSH_BAT_DETECT_NEG = 14, CBUSH_I2C_TXE = 15, CBUSH_I2C_RXF = 16, CBUSH_VBUS_SENSE = 17,
-    CBUSH_BB_WR = 18, CBUSH_BB_RD = 19, CBUSH_TIME_STAMP = 20, CBUSH_AWAKE = 21,
+    CBUSH_TRISTATE = 0, CBUSH_TXLED = 1, CBUSH_RXLED = 2, CBUSH_TXRXLED = 3, CBUSH_PWREN = 4,
+    CBUSH_SLEEP = 5, CBUSH_DRIVE_0 = 6, CBUSH_DRIVE1 = 7, CBUSH_IOMODE = 8, CBUSH_TXDEN =  9,
+    CBUSH_CLK30 = 10, CBUSH_CLK15 = 11, CBUSH_CLK7_5 = 12
+};
+
+enum ftdi_cbusx_func
+{
+    CBUSX_TRISTATE = 0, CBUSX_TXLED = 1, CBUSX_RXLED = 2, CBUSX_TXRXLED = 3, CBUSX_PWREN = 4,
+    CBUSX_SLEEP = 5, CBUSX_DRIVE_0 = 6, CBUSX_DRIVE1 = 7, CBUSX_IOMODE = 8, CBUSX_TXDEN =  9,
+    CBUSX_CLK24 = 10, CBUSX_CLK12 = 11, CBUSX_CLK6 = 12, CBUSX_BAT_DETECT = 13,
+    CBUSX_BAT_DETECT_NEG = 14, CBUSX_I2C_TXE = 15, CBUSX_I2C_RXF = 16, CBUSX_VBUS_SENSE = 17,
+    CBUSX_BB_WR = 18, CBUSX_BB_RD = 19, CBUSX_TIME_STAMP = 20, CBUSX_AWAKE = 21
 };
 
 /** Invert TXD# */
@@ -471,9 +480,13 @@ extern "C"
     void ftdi_list_free(struct ftdi_device_list **devlist);
     void ftdi_list_free2(struct ftdi_device_list *devlist);
     int ftdi_usb_get_strings(struct ftdi_context *ftdi, struct libusb_device *dev,
-                             char * manufacturer, int mnf_len,
-                             char * description, int desc_len,
-                             char * serial, int serial_len);
+                             char *manufacturer, int mnf_len,
+                             char *description, int desc_len,
+                             char *serial, int serial_len);
+    int ftdi_usb_get_strings2(struct ftdi_context *ftdi, struct libusb_device *dev,
+                              char *manufacturer, int mnf_len,
+                              char *description, int desc_len,
+                              char *serial, int serial_len);
     int ftdi_eeprom_set_strings(struct ftdi_context *ftdi, char * manufacturer,
                                 char * product, char * serial);
 
@@ -512,6 +525,7 @@ extern "C"
 
     struct ftdi_transfer_control *ftdi_read_data_submit(struct ftdi_context *ftdi, unsigned char *buf, int size);
     int ftdi_transfer_data_done(struct ftdi_transfer_control *tc);
+    void ftdi_transfer_data_cancel(struct ftdi_transfer_control *tc, struct timeval * to);
 
     int ftdi_set_bitmode(struct ftdi_context *ftdi, unsigned char bitmask, unsigned char mode);
     int ftdi_disable_bitbang(struct ftdi_context *ftdi);
@@ -543,6 +557,8 @@ extern "C"
 
     int ftdi_get_eeprom_buf(struct ftdi_context *ftdi, unsigned char * buf, int size);
     int ftdi_set_eeprom_buf(struct ftdi_context *ftdi, const unsigned char * buf, int size);
+
+    int ftdi_set_eeprom_user_data(struct ftdi_context *ftdi, const char * buf, int size);
 
     int ftdi_read_eeprom(struct ftdi_context *ftdi);
     int ftdi_read_chipid(struct ftdi_context *ftdi, unsigned int *chipid);

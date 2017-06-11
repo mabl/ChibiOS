@@ -6,6 +6,6 @@ includedir=/mingw32/include/libftdi1
 Name: libftdipp1
 Description: C++ wrapper for libftdi1
 Requires: libftdi1
-Version: 1.2
+Version: 1.3
 Libs: -L${libdir} -lftdipp1
 Cflags: -I${includedir}
