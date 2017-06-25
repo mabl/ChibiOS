@@ -1,7 +1,7 @@
 [#ftl]
 [#--
     ChibiOS - Copyright (C) 2006,2007,2008,2009,2010,
-              2011,2012,2013,2014 Giovanni Di Sirio.
+              2011,2012,2013,2014,2015,2016,2017 Giovanni Di Sirio.
 
     This file is part of ChibiOS.
 
@@ -21,13 +21,17 @@
 [@pp.dropOutputFile /]
 [#import "/@lib/libutils.ftl" as utils /]
 [@pp.changeOutputFile name="board.mk" /]
-[#if doc1.board.configuration_settings.hal_version[0]?trim == "2.6.x"]
-  [#assign path = "(CHIBIOS)/boards/" /]
+[#if doc1.board.configuration_settings.board_files_path[0]??]
+  [#assign path = doc1.board.configuration_settings.board_files_path[0]?string?trim?ensure_ends_with("/") /]
 [#else]
-  [#assign path = "(CHIBIOS)/os/hal/boards/" /]
+  [#if doc1.board.configuration_settings.hal_version[0]?trim == "2.6.x"]
+    [#assign path = "$(CHIBIOS)/boards/" /]
+  [#else]
+    [#assign path = "$(CHIBIOS)/os/hal/boards/" /]
+  [/#if]
 [/#if]
 # List of all the board related files.
-BOARDSRC = ${'$'}${path}${doc1.board.board_id[0]}/board.c
+BOARDSRC = ${path}${doc1.board.board_id[0]}/board.c
 
 # Required include directories
-BOARDINC = ${'$'}${path}${doc1.board.board_id[0]}
+BOARDINC = ${path}${doc1.board.board_id[0]}
