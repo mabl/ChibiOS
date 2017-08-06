@@ -1,0 +1,40 @@
+<!ELEMENT model (chip_description?,boards?,group*)>
+<!ATTLIST model chipname CDATA #REQUIRED>
+
+<!ELEMENT chip_description (#PCDATA)>
+
+<!ELEMENT boards (board*)>
+
+<!ELEMENT board EMPTY>
+<!ATTLIST board id CDATA #REQUIRED>
+<!ATTLIST board name CDATA #REQUIRED>
+<!ATTLIST board designer CDATA #IMPLIED>
+
+<!ELEMENT group (registergroup*)>
+<!ATTLIST group name CDATA #REQUIRED>
+<!ATTLIST group description CDATA #IMPLIED>
+
+<!ELEMENT registergroup (register*)>
+<!ATTLIST registergroup name CDATA #REQUIRED>
+<!ATTLIST registergroup description CDATA #IMPLIED>
+
+<!ELEMENT register (description?,field*)>
+<!ATTLIST register name CDATA #REQUIRED>
+<!ATTLIST register description CDATA #IMPLIED>
+<!ATTLIST register address CDATA #REQUIRED>
+<!ATTLIST register resetvalue CDATA #IMPLIED>
+<!ATTLIST register access CDATA #IMPLIED>
+<!ATTLIST register size CDATA #IMPLIED>
+
+<!ELEMENT description (#PCDATA)>
+
+<!ELEMENT field (description?,interpretation*)>
+<!ATTLIST field board_id CDATA #IMPLIED>
+<!ATTLIST field name CDATA #REQUIRED>
+<!ATTLIST field description CDATA #IMPLIED>
+<!ATTLIST field bitoffset CDATA #REQUIRED>
+<!ATTLIST field bitlength CDATA #REQUIRED>
+
+<!ELEMENT interpretation EMPTY>
+<!ATTLIST interpretation key CDATA #REQUIRED>
+<!ATTLIST interpretation text CDATA #REQUIRED>
