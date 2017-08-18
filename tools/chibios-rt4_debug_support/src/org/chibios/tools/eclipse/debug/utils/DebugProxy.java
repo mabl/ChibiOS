@@ -289,7 +289,7 @@ public class DebugProxy {
       // are optional so are placed within try-catch.
       long stklimit;
       try {
-        stklimit = HexUtils.parseNumber(evaluateExpression("(uint32_t)((struct ch_thread *)" + current + ")->stklimit"));
+        stklimit = HexUtils.parseNumber(evaluateExpression("(uint32_t)((struct ch_thread *)" + current + ")->wabase"));
         map.put("stklimit", Long.toString(stklimit));
       } catch (DebugProxyException e) {
         map.put("stklimit", "-");
