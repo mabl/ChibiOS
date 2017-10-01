@@ -72,8 +72,10 @@
 *** Releases and Change Log                                               ***
 *****************************************************************************
 
-*** 16.1.9 ***
+*** 16.1.10 ***
 - HAL: Fixed various STM32 registry problems (bug #889).
+
+*** 16.1.9 ***
 - HAL: Fixed USB GET_DESCRIPTOR not handled for Interface Recipients (bug #885).
 - RT:  MAILBOX_DECL size parameter is actually a count (bug #884).
 - HAL: Fixed error in uartReceiveTimeout() and uartSendTimeout() (bug #883).
