@@ -73,6 +73,7 @@
 *****************************************************************************
 
 *** 16.1.10 ***
+- HAL: Fixed IRQ sharing issue in STM32 DMAv1 driver (bug #891).
 - HAL: Fixed various STM32 registry problems (bug #889).
 
 *** 16.1.9 ***
