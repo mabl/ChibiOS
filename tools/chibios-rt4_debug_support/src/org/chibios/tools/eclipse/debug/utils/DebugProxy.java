@@ -310,7 +310,7 @@ public class DebugProxy {
         }
       }
 
-      if ((stklimit < 0) || (stack < 0))
+      if ((stklimit <= 0) || (stack <= 0))
           map.put("stkunused", "-");
       else {
         if ((stack < 0) || (stack < stklimit))
