@@ -60,6 +60,18 @@ The code is conventionally generated under ./source/test and is overwritten each
                      In this section it is possible to define global functions and data structures to be shared among all test sequences.
                   </description>
                   <property
+                        brief="Generated code and structures name prefix."
+                        default="test_"
+                        editable="true"
+                        name="Code Prefix"
+                        regex="[a-zA-Z_]*"
+                        required="false"
+                        type="string">
+                     <text>
+                        The generated code will be prefixed with the content of this field. Lower case for variables and functions, upper case for definitions and macros. The default prefix is &quot;test_&quot;.
+                     </text>
+                  </property>
+                  <property
                         brief="Global Header file content."
                         editable="true"
                         name="Global Definitions"
