@@ -199,7 +199,7 @@ void mtxRemapRam(void) {
   L1C_InvalidateICacheAll();
 
   /* Ivalidate Region */
-  cacheCleanRegion(IRAM_ADDR, IRAM_SIZE);
+  cacheCleanRegion((void*)IRAM_ADDR, IRAM_SIZE);
   /* Ivalidate Region */
   cacheInvalidateRegion((void*)0, IRAM_SIZE);
 }
