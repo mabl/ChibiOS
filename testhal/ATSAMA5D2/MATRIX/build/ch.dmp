@@ -1,0 +1,223 @@
+
+build/ch.elf:     file format elf32-littlearm
+build/ch.elf
+architecture: arm, flags 0x00000112:
+EXEC_P, HAS_SYMS, D_PAGED
+start address 0x002000d0
+
+Program Header:
+    LOAD off    0x00010000 vaddr 0x00200000 paddr 0x00200000 align 2**16
+         filesz 0x00000824 memsz 0x00000828 flags rwx
+    LOAD off    0x00010858 vaddr 0x00210858 paddr 0x00200828 align 2**16
+         filesz 0x00000000 memsz 0x00000078 flags rw-
+    LOAD off    0x00020000 vaddr 0x00210000 paddr 0x00210000 align 2**16
+         filesz 0x00000000 memsz 0x00000858 flags rw-
+private flags = 5000200: [Version5 EABI] [soft-float ABI]
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 startup       000000c4  00200000  00200000  00010000  2**4
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .text         00000754  002000d0  002000d0  000100d0  2**4
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .textalign    00000004  00200824  00200824  00010824  2**0
+                  ALLOC
+  3 .stacks       00000858  00210000  00210000  00020000  2**0
+                  ALLOC
+  4 .data         00000000  00210858  00210858  00010824  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  5 .bss          00000078  00210858  00200828  00010858  2**2
+                  ALLOC
+  6 .ram0         00000000  002108d0  002108d0  00010824  2**2
+                  CONTENTS
+  7 .ram1         00000000  00000000  00000000  00010824  2**2
+                  CONTENTS
+  8 .ram2         00000000  00000000  00000000  00010824  2**2
+                  CONTENTS
+  9 .ram3         00000000  00000000  00000000  00010824  2**2
+                  CONTENTS
+ 10 .ram4         00000000  00000000  00000000  00010824  2**2
+                  CONTENTS
+ 11 .ram5         00000000  00000000  00000000  00010824  2**2
+                  CONTENTS
+ 12 .ram6         00000000  00000000  00000000  00010824  2**2
+                  CONTENTS
+ 13 .ram7         00000000  00000000  00000000  00010824  2**2
+                  CONTENTS
+ 14 .ARM.attributes 00000033  00000000  00000000  00010824  2**0
+                  CONTENTS, READONLY
+ 15 .comment      00000059  00000000  00000000  00010857  2**0
+                  CONTENTS, READONLY
+ 16 .debug_line   000006ca  00000000  00000000  000108b0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 17 .debug_info   000012aa  00000000  00000000  00010f7a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 18 .debug_abbrev 000003be  00000000  00000000  00012224  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 19 .debug_aranges 00000110  00000000  00000000  000125e8  2**3
+                  CONTENTS, READONLY, DEBUGGING
+ 20 .debug_ranges 00000098  00000000  00000000  000126f8  2**3
+                  CONTENTS, READONLY, DEBUGGING
+ 21 .debug_loc    000004a1  00000000  00000000  00012790  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 22 .debug_str    00000909  00000000  00000000  00012c31  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 23 .debug_frame  00000138  00000000  00000000  0001353c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+SYMBOL TABLE:
+00200000 l    d  startup	00000000 startup
+002000d0 l    d  .text	00000000 .text
+00200824 l    d  .textalign	00000000 .textalign
+00210000 l    d  .stacks	00000000 .stacks
+00210858 l    d  .data	00000000 .data
+00210858 l    d  .bss	00000000 .bss
+002108d0 l    d  .ram0	00000000 .ram0
+00000000 l    d  .ram1	00000000 .ram1
+00000000 l    d  .ram2	00000000 .ram2
+00000000 l    d  .ram3	00000000 .ram3
+00000000 l    d  .ram4	00000000 .ram4
+00000000 l    d  .ram5	00000000 .ram5
+00000000 l    d  .ram6	00000000 .ram6
+00000000 l    d  .ram7	00000000 .ram7
+00000000 l    d  .ARM.attributes	00000000 .ARM.attributes
+00000000 l    d  .comment	00000000 .comment
+00000000 l    d  .debug_line	00000000 .debug_line
+00000000 l    d  .debug_info	00000000 .debug_info
+00000000 l    d  .debug_abbrev	00000000 .debug_abbrev
+00000000 l    d  .debug_aranges	00000000 .debug_aranges
+00000000 l    d  .debug_ranges	00000000 .debug_ranges
+00000000 l    d  .debug_loc	00000000 .debug_loc
+00000000 l    d  .debug_str	00000000 .debug_str
+00000000 l    d  .debug_frame	00000000 .debug_frame
+00000000 l    df *ABS*	00000000 build/obj/vectors.o
+00200020 l       startup	00000000 _reset
+00200024 l       startup	00000000 _undefined
+00200028 l       startup	00000000 _swi
+0020002c l       startup	00000000 _prefetch
+00200030 l       startup	00000000 _abort
+00200038 l       startup	00000000 _irq
+00200034 l       startup	00000000 _fiq
+00000000 l    df *ABS*	00000000 build/obj/boot.o
+b6d81c4c l       *ABS*	00000000 AIC_REDIR_KEY
+f8030050 l       *ABS*	00000000 SFR_SN1
+f8030054 l       *ABS*	00000000 SFR_AICREDIR
+f8030058 l       *ABS*	00000000 SFR_L2CC_HRAMC
+00a00100 l       *ABS*	00000000 L2CC_CR
+00000000 l    df *ABS*	00000000 build/obj/crt0.o
+00000010 l       *ABS*	00000000 MODE_USR
+00000011 l       *ABS*	00000000 MODE_FIQ
+00000012 l       *ABS*	00000000 MODE_IRQ
+00000013 l       *ABS*	00000000 MODE_SVC
+00000017 l       *ABS*	00000000 MODE_ABT
+0000001b l       *ABS*	00000000 MODE_UND
+0000001f l       *ABS*	00000000 MODE_SYS
+00000080 l       *ABS*	00000000 I_BIT
+00000040 l       *ABS*	00000000 F_BIT
+0020013c l       .text	00000000 dataloop
+00200158 l       .text	00000000 bssloop
+00000000 l    df *ABS*	00000000 build/obj/chcoreasm.o
+00000010 l       *ABS*	00000000 MODE_USR
+00000011 l       *ABS*	00000000 MODE_FIQ
+00000012 l       *ABS*	00000000 MODE_IRQ
+00000013 l       *ABS*	00000000 MODE_SVC
+00000016 l       *ABS*	00000000 MODE_MON
+00000017 l       *ABS*	00000000 MODE_ABT
+0000001b l       *ABS*	00000000 MODE_UND
+0000001f l       *ABS*	00000000 MODE_SYS
+00000080 l       *ABS*	00000000 I_BIT
+00000040 l       *ABS*	00000000 F_BIT
+00000001 l       *ABS*	00000000 SCR_NS
+00000002 l       *ABS*	00000000 SCR_IRQ
+00000004 l       *ABS*	00000000 SCR_FIQ
+00000008 l       *ABS*	00000000 SCR_EA
+00000010 l       *ABS*	00000000 SCR_FW
+00000020 l       *ABS*	00000000 SCR_AW
+00000002 l       *ABS*	00000000 MON_S_SCR
+00000005 l       *ABS*	00000000 MON_NS_SCR
+00200220 l       .text	00000000 _mon_fiq_ret_arm
+002002b0 l       .text	00000000 _fiq_ret_arm
+00200318 l       .text	00000000 _zombies
+00000000 l    df *ABS*	00000000 
+00200330 l     F .text	00000064 mtxSetSlaveSplitAddr
+002003a0 l     F .text	00000030 mtxConfigSlaveSec
+002003d0 l     F .text	0000005c go2ns
+00200430 l     F .text	000001fc sama_clock_init
+00200630 l     F .text	0000003c chSchReadyAheadI
+00200670 l     F .text	0000003c chSchReadyI
+002006b0 l     F .text	00000038 chSchGoSleepS
+002006f0 l     F .text	00000070 chThdExitS
+00210858 l     O .bss	00000078 ch
+00000000 l    df *ABS*	00000000 
+002108d0 l       .ram0	00000000 __ram0_free__
+002108d0 l       .ram0	00000000 __heap_base__
+002007c0 g     F .text	00000010 chThdExit
+00000000 g       startup	00000000 __ram4_start__
+00000000 g       .ram1	00000000 __ram1_free__
+00000000 g       startup	00000000 __ram6_start__
+00200828 g       .stacks	00000000 _etext
+00000858 g       *ABS*	00000000 __stacks_total_size__
+00000000 g       *ABS*	00000000 __ram5_end__
+00000000 g       *ABS*	00000000 __ram5_size__
+0020003c  w      startup	00000000 Irq_Handler
+00210858 g       .bss	00000000 _bss_start
+002001fc g       .text	00000000 Mon_Fiq_Handler
+0020003c  w      startup	00000000 Abort_Handler
+00220000 g       *ABS*	00000000 __heap_end__
+00000000 g       *ABS*	00000000 __ram1_size__
+00000008 g       *ABS*	00000000 __abt_stack_size__
+00200040 g       startup	00000000 Boot_Handler
+00000000 g       .ram7	00000000 __ram7_free__
+00000000 g       *ABS*	00000000 __ram4_size__
+00000000 g       *ABS*	00000000 __ram1_end__
+00000000 g       *ABS*	00000000 __ram4_end__
+00010000 g       *ABS*	00000000 __ram0_size__
+002108d0 g       .bss	00000000 _bss_end
+002000d0 g       .text	00000000 Reset_Handler
+0020003c  w      startup	00000000 Swi_Handler
+00000000 g       .ram5	00000000 __ram5_free__
+00200810 g     F .text	00000004 __default_exit
+00000000 g       *ABS*	00000000 __ram6_end__
+002007d0 g     F .text	00000040 chSchDoReschedule
+00000000 g       .ram6	00000000 __ram6_free__
+00200000 g       startup	00000000 _start
+00000000 g       *ABS*	00000000 __ram7_size__
+00000400 g       *ABS*	00000000 __irq_stack_size__
+0020029c g       .text	00000000 Fiq_Handler
+002001a0 g       .text	00000000 _port_switch_arm
+00000400 g       *ABS*	00000000 __sys_stack_size__
+00200820 g     F .text	00000004 __late_init
+0020003c  w      startup	00000000 Prefetch_Handler
+00000000 g       startup	00000000 __ram7_start__
+002001b0 g       .text	00000000 Mon_Irq_Handler
+00000000 g       *ABS*	00000000 __ram3_size__
+00200828 g       *ABS*	00000000 _textdata
+00000000 g       startup	00000000 _text
+00000000 g       *ABS*	00000000 __ram3_end__
+00000000 g       *ABS*	00000000 __ram2_size__
+00000000 g       startup	00000000 __ram1_start__
+00200760 g     F .text	00000048 main
+00000000 g       *ABS*	00000000 __ram6_size__
+00000000 g       .ram3	00000000 __ram3_free__
+00200300 g       .text	00000000 _port_thread_start
+00210858 g       .stacks	00000000 __stacks_end__
+00000000 g       *ABS*	00000000 __ram2_end__
+00210858 g       .data	00000000 _data
+00000000 g       startup	00000000 __ram2_start__
+00000000 g       *ABS*	00000000 __ram7_end__
+00210858 g       .data	00000000 _edata
+0020003c  w      startup	00000000 _unhandled_exception
+00210000 g       .stacks	00000000 __main_thread_stack_base__
+00210000 g       startup	00000000 __ram0_start__
+00000000 g       startup	00000000 __ram5_start__
+00000040 g       *ABS*	00000000 __fiq_stack_size__
+00000000 g       .ram2	00000000 __ram2_free__
+00000008 g       *ABS*	00000000 __svc_stack_size__
+00000000 g       .ram4	00000000 __ram4_free__
+00220000 g       *ABS*	00000000 __ram0_end__
+00000008 g       *ABS*	00000000 __und_stack_size__
+00210000 g       .stacks	00000000 __stacks_base__
+0020003c  w      startup	00000000 Und_Handler
+002007b0 g     F .text	0000000c __early_init
+00000000 g       startup	00000000 __ram3_start__
+
+

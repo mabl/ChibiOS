@@ -1,0 +1,1343 @@
+
+build/ch.elf:     file format elf32-littlearm
+
+
+Disassembly of section startup:
+
+00200000 <_start>:
+/*
+ * System entry points.
+ */
+                .global _start
+_start:
+                ldr     pc, _reset
+  200000:	e59ff018 	ldr	pc, [pc, #24]	; 200020 <_reset>
+                ldr     pc, _undefined
+  200004:	e59ff018 	ldr	pc, [pc, #24]	; 200024 <_undefined>
+                ldr     pc, _swi
+  200008:	e59ff018 	ldr	pc, [pc, #24]	; 200028 <_swi>
+                ldr     pc, _prefetch
+  20000c:	e59ff018 	ldr	pc, [pc, #24]	; 20002c <_prefetch>
+                ldr     pc, _abort
+  200010:	e59ff018 	ldr	pc, [pc, #24]	; 200030 <_abort>
+                nop
+  200014:	e320f000 	nop	{0}
+                ldr     pc, _irq
+  200018:	e59ff018 	ldr	pc, [pc, #24]	; 200038 <_irq>
+                ldr     pc, _fiq
+  20001c:	e59ff010 	ldr	pc, [pc, #16]	; 200034 <_fiq>
+
+00200020 <_reset>:
+  200020:	00200040 	.word	0x00200040
+
+00200024 <_undefined>:
+  200024:	0020003c 	.word	0x0020003c
+
+00200028 <_swi>:
+  200028:	0020003c 	.word	0x0020003c
+
+0020002c <_prefetch>:
+  20002c:	0020003c 	.word	0x0020003c
+
+00200030 <_abort>:
+  200030:	0020003c 	.word	0x0020003c
+
+00200034 <_fiq>:
+  200034:	0020029c 	.word	0x0020029c
+
+00200038 <_irq>:
+  200038:	0020003c 	.word	0x0020003c
+
+0020003c <Abort_Handler>:
+Fiq_Handler:
+                .weak   Irq_Handler
+Irq_Handler:
+                .weak   _unhandled_exception
+_unhandled_exception:
+                b       _unhandled_exception
+  20003c:	eafffffe 	b	20003c <Abort_Handler>
+
+00200040 <Boot_Handler>:
+				.global Boot_Handler
+Boot_Handler:
+				/*
+				 * Set VBAR to system vectors table
+				 */
+                ldr		r0, =_start
+  200040:	e59f0058 	ldr	r0, [pc, #88]	; 2000a0 <Boot_Handler+0x60>
+                mcr 	p15, 0, r0, c12, c0, 0
+  200044:	ee0c0f10 	mcr	15, 0, r0, cr12, cr0, {0}
+                /*
+                 * Do not redirect secure interrupts to AIC
+                 */
+				ldr		r0, =AIC_REDIR_KEY
+  200048:	e59f0054 	ldr	r0, [pc, #84]	; 2000a4 <Boot_Handler+0x64>
+				ldr             r1, =SFR_SN1
+  20004c:	e59f1054 	ldr	r1, [pc, #84]	; 2000a8 <Boot_Handler+0x68>
+				ldr		r1, [r1]
+  200050:	e5911000 	ldr	r1, [r1]
+				eor		r0, r0, r1
+  200054:	e0200001 	eor	r0, r0, r1
+				bic		r0, r0, #0x1
+  200058:	e3c00001 	bic	r0, r0, #1
+				ldr		r1, =SFR_AICREDIR
+  20005c:	e59f1048 	ldr	r1, [pc, #72]	; 2000ac <Boot_Handler+0x6c>
+				str		r0, [r1]
+  200060:	e5810000 	str	r0, [r1]
+                /*
+                 * Reset SCTLR Settings
+                 */
+                mrc     p15, 0, r0, c1, c0, 0       // Read CP15 System Control register
+  200064:	ee110f10 	mrc	15, 0, r0, cr1, cr0, {0}
+                bic     r0, r0, #(0x1 << 12)        // Clear I bit 12 to disable I Cache
+  200068:	e3c00a01 	bic	r0, r0, #4096	; 0x1000
+                bic     r0, r0, #(0x1 <<  2)        // Clear C bit  2 to disable D Cache
+  20006c:	e3c00004 	bic	r0, r0, #4
+                bic     r0, r0, #0x1                // Clear M bit  0 to disable MMU
+  200070:	e3c00001 	bic	r0, r0, #1
+                bic     r0, r0, #(0x1 << 11)        // Clear Z bit 11 to disable branch prediction
+  200074:	e3c00b02 	bic	r0, r0, #2048	; 0x800
+                bic     r0, r0, #(0x1 << 13)        // Clear V bit 13 to disable hivecs
+  200078:	e3c00a02 	bic	r0, r0, #8192	; 0x2000
+                mcr     p15, 0, r0, c1, c0, 0       // Write value back to CP15 System Control register
+  20007c:	ee010f10 	mcr	15, 0, r0, cr1, cr0, {0}
+                isb
+  200080:	f57ff06f 	isb	sy
+                /*
+                 * Turn off L2Cache
+                 */
+                bic     r0, r0, #0x1
+  200084:	e3c00001 	bic	r0, r0, #1
+                ldr     r1, =L2CC_CR
+  200088:	e59f1020 	ldr	r1, [pc, #32]	; 2000b0 <Boot_Handler+0x70>
+                str     r0, [r1]
+  20008c:	e5810000 	str	r0, [r1]
+                /*
+                 * Configure the L2 cache to be used as an internal SRAM
+                 */
+                bic     r0, r0, #0x1
+  200090:	e3c00001 	bic	r0, r0, #1
+                ldr     r1, =SFR_L2CC_HRAMC
+  200094:	e59f1018 	ldr	r1, [pc, #24]	; 2000b4 <Boot_Handler+0x74>
+                str     r0, [r1]
+  200098:	e5810000 	str	r0, [r1]
+                b       Reset_Handler
+  20009c:	ea00000b 	b	2000d0 <Reset_Handler>
+				.global Boot_Handler
+Boot_Handler:
+				/*
+				 * Set VBAR to system vectors table
+				 */
+                ldr		r0, =_start
+  2000a0:	00200000 	.word	0x00200000
+                mcr 	p15, 0, r0, c12, c0, 0
+                /*
+                 * Do not redirect secure interrupts to AIC
+                 */
+				ldr		r0, =AIC_REDIR_KEY
+  2000a4:	b6d81c4c 	.word	0xb6d81c4c
+				ldr             r1, =SFR_SN1
+  2000a8:	f8030050 	.word	0xf8030050
+				ldr		r1, [r1]
+				eor		r0, r0, r1
+				bic		r0, r0, #0x1
+				ldr		r1, =SFR_AICREDIR
+  2000ac:	f8030054 	.word	0xf8030054
+                isb
+                /*
+                 * Turn off L2Cache
+                 */
+                bic     r0, r0, #0x1
+                ldr     r1, =L2CC_CR
+  2000b0:	00a00100 	.word	0x00a00100
+                str     r0, [r1]
+                /*
+                 * Configure the L2 cache to be used as an internal SRAM
+                 */
+                bic     r0, r0, #0x1
+                ldr     r1, =SFR_L2CC_HRAMC
+  2000b4:	f8030058 	.word	0xf8030058
+	...
+ * Default boot handler. Jump to Reset_Handler.
+ */
+                .section .boot, "ax"
+                .weak	Boot_Handler
+Boot_Handler:
+                b       Reset_Handler
+  2000c0:	ea000002 	b	2000d0 <Reset_Handler>
+
+Disassembly of section .text:
+
+002000d0 <Reset_Handler>:
+                .global Reset_Handler
+Reset_Handler:
+                /*
+                 * Stack pointers initialization.
+                 */
+                ldr     r0, =__stacks_end__
+  2000d0:	e59f0098 	ldr	r0, [pc, #152]	; 200170 <bssloop+0x18>
+                /* Undefined */
+                msr     CPSR_c, #MODE_UND | I_BIT | F_BIT
+  2000d4:	e321f0db 	msr	CPSR_c, #219	; 0xdb
+                mov     sp, r0
+  2000d8:	e1a0d000 	mov	sp, r0
+                ldr     r1, =__und_stack_size__
+  2000dc:	e59f1090 	ldr	r1, [pc, #144]	; 200174 <bssloop+0x1c>
+                sub     r0, r0, r1
+  2000e0:	e0400001 	sub	r0, r0, r1
+                /* Abort */
+                msr     CPSR_c, #MODE_ABT | I_BIT | F_BIT
+  2000e4:	e321f0d7 	msr	CPSR_c, #215	; 0xd7
+                mov     sp, r0
+  2000e8:	e1a0d000 	mov	sp, r0
+                ldr     r1, =__abt_stack_size__
+  2000ec:	e59f1084 	ldr	r1, [pc, #132]	; 200178 <bssloop+0x20>
+                sub     r0, r0, r1
+  2000f0:	e0400001 	sub	r0, r0, r1
+                /* FIQ */
+                msr     CPSR_c, #MODE_FIQ | I_BIT | F_BIT
+  2000f4:	e321f0d1 	msr	CPSR_c, #209	; 0xd1
+                mov     sp, r0
+  2000f8:	e1a0d000 	mov	sp, r0
+                ldr     r1, =__fiq_stack_size__
+  2000fc:	e59f1078 	ldr	r1, [pc, #120]	; 20017c <bssloop+0x24>
+                sub     r0, r0, r1
+  200100:	e0400001 	sub	r0, r0, r1
+                /* IRQ */
+                msr     CPSR_c, #MODE_IRQ | I_BIT | F_BIT
+  200104:	e321f0d2 	msr	CPSR_c, #210	; 0xd2
+                mov     sp, r0
+  200108:	e1a0d000 	mov	sp, r0
+                ldr     r1, =__irq_stack_size__
+  20010c:	e59f106c 	ldr	r1, [pc, #108]	; 200180 <bssloop+0x28>
+                sub     r0, r0, r1
+  200110:	e0400001 	sub	r0, r0, r1
+                /* Supervisor */
+                msr     CPSR_c, #MODE_SVC | I_BIT | F_BIT
+  200114:	e321f0d3 	msr	CPSR_c, #211	; 0xd3
+                mov     sp, r0
+  200118:	e1a0d000 	mov	sp, r0
+                ldr     r1, =__svc_stack_size__
+  20011c:	e59f1060 	ldr	r1, [pc, #96]	; 200184 <bssloop+0x2c>
+                sub     r0, r0, r1
+  200120:	e0400001 	sub	r0, r0, r1
+                /* System */
+                msr     CPSR_c, #MODE_SYS | I_BIT | F_BIT
+  200124:	e321f0df 	msr	CPSR_c, #223	; 0xdf
+                mov     sp, r0
+  200128:	e1a0d000 	mov	sp, r0
+//                sub     r0, r0, r1
+                /*
+                 * Early initialization.
+                 */
+#if !defined(THUMB_NO_INTERWORKING)
+                bl      __early_init
+  20012c:	eb00019f 	bl	2007b0 <__early_init>
+
+                /*
+                 * Data initialization.
+                 * NOTE: It assumes that the DATA size is a multiple of 4.
+                 */
+                ldr     r1, =_textdata
+  200130:	e59f1050 	ldr	r1, [pc, #80]	; 200188 <bssloop+0x30>
+                ldr     r2, =_data
+  200134:	e59f2050 	ldr	r2, [pc, #80]	; 20018c <bssloop+0x34>
+                ldr     r3, =_edata
+  200138:	e59f3050 	ldr	r3, [pc, #80]	; 200190 <bssloop+0x38>
+
+0020013c <dataloop>:
+dataloop:
+                cmp     r2, r3
+  20013c:	e1520003 	cmp	r2, r3
+                ldrlo   r0, [r1], #4
+  200140:	34910004 	ldrcc	r0, [r1], #4
+                strlo   r0, [r2], #4
+  200144:	34820004 	strcc	r0, [r2], #4
+                blo     dataloop
+  200148:	3afffffb 	bcc	20013c <dataloop>
+                /*
+                 * BSS initialization.
+                 * NOTE: It assumes that the BSS size is a multiple of 4.
+                 */
+                mov     r0, #0
+  20014c:	e3a00000 	mov	r0, #0
+                ldr     r1, =_bss_start
+  200150:	e59f103c 	ldr	r1, [pc, #60]	; 200194 <bssloop+0x3c>
+                ldr     r2, =_bss_end
+  200154:	e59f203c 	ldr	r2, [pc, #60]	; 200198 <bssloop+0x40>
+
+00200158 <bssloop>:
+bssloop:
+                cmp     r1, r2
+  200158:	e1510002 	cmp	r1, r2
+                strlo   r0, [r1], #4
+  20015c:	34810004 	strcc	r0, [r1], #4
+                blo     bssloop
+  200160:	3afffffc 	bcc	200158 <bssloop>
+                /*
+                 * Late initialization.
+                 */
+#if !defined(THUMB_NO_INTERWORKING)
+                bl      __late_init
+  200164:	eb0001ad 	bl	200820 <__late_init>
+                bl      main
+                ldr     r1, =__default_exit
+                bx      r1
+                .code   32
+#else /* !defined(THUMB_NO_INTERWORKING) */
+                bl      main
+  200168:	eb00017c 	bl	200760 <main>
+                b       __default_exit
+  20016c:	ea0001a7 	b	200810 <__default_exit>
+                .global Reset_Handler
+Reset_Handler:
+                /*
+                 * Stack pointers initialization.
+                 */
+                ldr     r0, =__stacks_end__
+  200170:	00210858 	.word	0x00210858
+                /* Undefined */
+                msr     CPSR_c, #MODE_UND | I_BIT | F_BIT
+                mov     sp, r0
+                ldr     r1, =__und_stack_size__
+  200174:	00000008 	.word	0x00000008
+                sub     r0, r0, r1
+                /* Abort */
+                msr     CPSR_c, #MODE_ABT | I_BIT | F_BIT
+                mov     sp, r0
+                ldr     r1, =__abt_stack_size__
+  200178:	00000008 	.word	0x00000008
+                sub     r0, r0, r1
+                /* FIQ */
+                msr     CPSR_c, #MODE_FIQ | I_BIT | F_BIT
+                mov     sp, r0
+                ldr     r1, =__fiq_stack_size__
+  20017c:	00000040 	.word	0x00000040
+                sub     r0, r0, r1
+                /* IRQ */
+                msr     CPSR_c, #MODE_IRQ | I_BIT | F_BIT
+                mov     sp, r0
+                ldr     r1, =__irq_stack_size__
+  200180:	00000400 	.word	0x00000400
+                sub     r0, r0, r1
+                /* Supervisor */
+                msr     CPSR_c, #MODE_SVC | I_BIT | F_BIT
+                mov     sp, r0
+                ldr     r1, =__svc_stack_size__
+  200184:	00000008 	.word	0x00000008
+
+                /*
+                 * Data initialization.
+                 * NOTE: It assumes that the DATA size is a multiple of 4.
+                 */
+                ldr     r1, =_textdata
+  200188:	00200828 	.word	0x00200828
+                ldr     r2, =_data
+  20018c:	00210858 	.word	0x00210858
+                ldr     r3, =_edata
+  200190:	00210858 	.word	0x00210858
+                /*
+                 * BSS initialization.
+                 * NOTE: It assumes that the BSS size is a multiple of 4.
+                 */
+                mov     r0, #0
+                ldr     r1, =_bss_start
+  200194:	00210858 	.word	0x00210858
+                ldr     r2, =_bss_end
+  200198:	002108d0 	.word	0x002108d0
+  20019c:	00000000 	.word	0x00000000
+
+002001a0 <_port_switch_arm>:
+                .balign 16
+
+                .code   32
+                .global _port_switch_arm
+_port_switch_arm:
+                stmfd   sp!, {r4, r5, r6, r7, r8, r9, r10, r11, lr}
+  2001a0:	e92d4ff0 	push	{r4, r5, r6, r7, r8, r9, sl, fp, lr}
+                str     sp, [r1, #12]
+  2001a4:	e581d00c 	str	sp, [r1, #12]
+                ldr     sp, [r0, #12]
+  2001a8:	e590d00c 	ldr	sp, [r0, #12]
+                ldmfd   sp!, {r4, r5, r6, r7, r8, r9, r10, r11, pc}
+  2001ac:	e8bd8ff0 	pop	{r4, r5, r6, r7, r8, r9, sl, fp, pc}
+
+002001b0 <Mon_Irq_Handler>:
+                // secure context. The non secure IRQ handler has
+                // the responsibility to return into secure state via a smc.
+                //
+                // The thread is interrupted in the same way that local FIQ.
+                // The frame is created in the system stack of the current thread
+                msr     CPSR_c, #MODE_SYS | I_BIT | F_BIT
+  2001b0:	e321f0df 	msr	CPSR_c, #223	; 0xdf
+                stmfd   sp!, {r0-r3, r12, lr}
+  2001b4:	e92d500f 	push	{r0, r1, r2, r3, ip, lr}
+                msr     CPSR_c, #MODE_MON | I_BIT | F_BIT
+  2001b8:	e321f0d6 	msr	CPSR_c, #214	; 0xd6
+                mrs     r0, SPSR
+  2001bc:	e14f0000 	mrs	r0, SPSR
+                mov     r1, lr
+  2001c0:	e1a0100e 	mov	r1, lr
+                msr     CPSR_c, #MODE_SYS | I_BIT | F_BIT
+  2001c4:	e321f0df 	msr	CPSR_c, #223	; 0xdf
+                stmfd   sp!, {r0, r1}           // Push R0=SPSR, R1=LR_IRQ.
+  2001c8:	e92d0003 	push	{r0, r1}
+
+                /* Save the s_ctx e recover the ns_ctx */
+
+                // Re-establish the original conditions
+                ldmfd   sp!, {r0, r1}           // Pop R0=SPSR, R1=LR_IRQ.
+  2001cc:	e8bd0003 	pop	{r0, r1}
+                msr     CPSR_c, #MODE_MON | I_BIT | F_BIT
+  2001d0:	e321f0d6 	msr	CPSR_c, #214	; 0xd6
+                msr     SPSR_fsxc, r0
+  2001d4:	e16ff000 	msr	SPSR_fsxc, r0
+                mov     lr, r1
+  2001d8:	e1a0e001 	mov	lr, r1
+                msr     CPSR_c, #MODE_SYS | I_BIT | F_BIT
+  2001dc:	e321f0df 	msr	CPSR_c, #223	; 0xdf
+                ldmfd   sp!, {r0-r3, r12, lr}
+  2001e0:	e8bd500f 	pop	{r0, r1, r2, r3, ip, lr}
+                msr     CPSR_c, #MODE_MON | I_BIT | F_BIT
+  2001e4:	e321f0d6 	msr	CPSR_c, #214	; 0xd6
+                stmfd   sp!, {lr}               // save lr into monitor stack
+  2001e8:	e92d4000 	stmfd	sp!, {lr}
+                ldr     lr, =MON_NS_SCR         // set non-secure SCR before return
+  2001ec:	e3a0e005 	mov	lr, #5
+                mrc     p15, 0, lr, c1, c1, 0
+  2001f0:	ee11ef11 	mrc	15, 0, lr, cr1, cr1, {0}
+                ldmfd   sp!, {lr}
+  2001f4:	e8bd4000 	ldmfd	sp!, {lr}
+                subs    pc, lr, #4              // return into non-secure world
+  2001f8:	e25ef004 	subs	pc, lr, #4
+
+002001fc <Mon_Fiq_Handler>:
+                // Here the fiq is taken from non-secure state, via the FIQ vector
+                // that is in the mon vector table.
+                // Current mode is monitor (so current state is secure).
+                // Note also that we never leave secure state while sec FIQ was disabled,
+                // then it's always safe to process the FIQ here.
+                stmfd   sp!, {lr}               // save lr into monitor stack
+  2001fc:	e92d4000 	stmfd	sp!, {lr}
+                ldr     lr, =MON_S_SCR          // set secure SCR before to switch to FIQ mode
+  200200:	e3a0e002 	mov	lr, #2
+                mrc     p15, 0, lr, c1, c1, 0
+  200204:	ee11ef11 	mrc	15, 0, lr, cr1, cr1, {0}
+                cpsid   if, #MODE_FIQ           // secure FIQ mode
+  200208:	f10e00d1 	cpsid	if,#17
+                stmfd   sp!, {r0-r3, r12}       // IRQ frame, save scratch registers
+  20020c:	e92d100f 	push	{r0, r1, r2, r3, ip}
+                ldr     r0, =ARM_IRQ_VECTOR_REG
+  200210:	e59f0104 	ldr	r0, [pc, #260]	; 20031c <_zombies+0x4>
+                ldr     r0, [r0]
+  200214:	e5900000 	ldr	r0, [r0]
+                ldr     lr, =_mon_fiq_ret_arm   // ISR return point.
+  200218:	e59fe100 	ldr	lr, [pc, #256]	; 200320 <_zombies+0x8>
+                bx      r0                      // Calling the ISR.
+  20021c:	e12fff10 	bx	r0
+
+00200220 <_mon_fiq_ret_arm>:
+_mon_fiq_ret_arm:
+                cmp     r0, #0
+  200220:	e3500000 	cmp	r0, #0
+                ldmfd   sp!, {r0-r3, r12}
+  200224:	e8bd100f 	pop	{r0, r1, r2, r3, ip}
+                cpsid   if, #MODE_MON
+  200228:	f10e00d6 	cpsid	if,#22
+                ldr     lr, =MON_NS_SCR         // set non-secure SCR before return
+  20022c:	e3a0e005 	mov	lr, #5
+                mrceq   p15, 0, lr, c1, c1, 0   // only if it will return
+  200230:	0e11ef11 	mrceq	15, 0, lr, cr1, cr1, {0}
+                ldmfd   sp!, {lr}
+  200234:	e8bd4000 	ldmfd	sp!, {lr}
+                subeqs  pc, lr, #4              // No reschedule, returns.
+  200238:	025ef004 	subseq	pc, lr, #4
+
+                // Now the frame is created in the system stack
+                // relative to non secure context,
+                // the IRQ and monitor stacks are empty,
+                // the state is secure.
+                msr     CPSR_c, #MODE_SYS | I_BIT | F_BIT
+  20023c:	e321f0df 	msr	CPSR_c, #223	; 0xdf
+                stmfd   sp!, {r0-r3, r12, lr}
+  200240:	e92d500f 	push	{r0, r1, r2, r3, ip, lr}
+                mov		r0, sp
+  200244:	e1a0000d 	mov	r0, sp
+                msr     CPSR_c, #MODE_MON | I_BIT | F_BIT
+  200248:	e321f0d6 	msr	CPSR_c, #214	; 0xd6
+                stmfd	sp!, {r0}				// address of ns_ctx in mon stack
+  20024c:	e92d0001 	stmfd	sp!, {r0}
+                mrs     r0, SPSR
+  200250:	e14f0000 	mrs	r0, SPSR
+                mov     r1, lr
+  200254:	e1a0100e 	mov	r1, lr
+                msr     CPSR_c, #MODE_SYS | I_BIT | F_BIT
+  200258:	e321f0df 	msr	CPSR_c, #223	; 0xdf
+                stmfd   sp!, {r0, r1}           // Push R0=SPSR, R1=LR_IRQ.
+  20025c:	e92d0003 	push	{r0, r1}
+                mov		r0, sp
+  200260:	e1a0000d 	mov	r0, sp
+
+                // Context switch.
+#if CH_DBG_SYSTEM_STATE_CHECK
+                bl      _dbg_check_lock
+#endif
+                bl      chSchDoReschedule
+  200264:	eb000159 	bl	2007d0 <chSchDoReschedule>
+#if CH_DBG_SYSTEM_STATE_CHECK
+                bl      _dbg_check_unlock
+#endif
+
+                // Re-establish the IRQ conditions again.
+                ldmfd   sp!, {r0, r1}           // Pop R0=SPSR, R1=LR_IRQ.
+  200268:	e8bd0003 	pop	{r0, r1}
+                msr     CPSR_c, #MODE_MON | I_BIT | F_BIT
+  20026c:	e321f0d6 	msr	CPSR_c, #214	; 0xd6
+                msr     SPSR_fsxc, r0
+  200270:	e16ff000 	msr	SPSR_fsxc, r0
+                mov     lr, r1
+  200274:	e1a0e001 	mov	lr, r1
+                ldmfd	sp!, {r0}				// ns_ctx no longer exists, cleanup mon stack
+  200278:	e8bd0001 	ldmfd	sp!, {r0}
+                msr     CPSR_c, #MODE_SYS | I_BIT | F_BIT
+  20027c:	e321f0df 	msr	CPSR_c, #223	; 0xdf
+                ldmfd   sp!, {r0-r3, r12, lr}
+  200280:	e8bd500f 	pop	{r0, r1, r2, r3, ip, lr}
+                msr     CPSR_c, #MODE_MON | I_BIT | F_BIT
+  200284:	e321f0d6 	msr	CPSR_c, #214	; 0xd6
+                stmfd   sp!, {lr}               // save lr into mon stack
+  200288:	e92d4000 	stmfd	sp!, {lr}
+                ldr     lr, =MON_NS_SCR         // set non-secure SCR before return
+  20028c:	e3a0e005 	mov	lr, #5
+                mrc     p15, 0, lr, c1, c1, 0
+  200290:	ee11ef11 	mrc	15, 0, lr, cr1, cr1, {0}
+                ldmfd   sp!, {lr}
+  200294:	e8bd4000 	ldmfd	sp!, {lr}
+                subs    pc, lr, #4              // return into non-secure world
+  200298:	e25ef004 	subs	pc, lr, #4
+
+0020029c <Fiq_Handler>:
+ *
+ */
+Fiq_Handler:
+                // the fiq is taken locally from secure state
+                // current mode is fiq
+                stmfd   sp!, {r0-r3, r12, lr}   // save scratch registers and lr
+  20029c:	e92d500f 	push	{r0, r1, r2, r3, ip, lr}
+                ldr     r0, =ARM_IRQ_VECTOR_REG
+  2002a0:	e59f0074 	ldr	r0, [pc, #116]	; 20031c <_zombies+0x4>
+                ldr     r0, [r0]
+  2002a4:	e5900000 	ldr	r0, [r0]
+                ldr     lr, =_fiq_ret_arm       // ISR return point.
+  2002a8:	e59fe074 	ldr	lr, [pc, #116]	; 200324 <_zombies+0xc>
+                bx      r0                      // Calling the ISR.
+  2002ac:	e12fff10 	bx	r0
+
+002002b0 <_fiq_ret_arm>:
+_fiq_ret_arm:
+                cmp     r0, #0
+  2002b0:	e3500000 	cmp	r0, #0
+                ldmfd   sp!, {r0-r3, r12, lr}
+  2002b4:	e8bd500f 	pop	{r0, r1, r2, r3, ip, lr}
+                subeqs  pc, lr, #4              // No reschedule, returns.
+  2002b8:	025ef004 	subseq	pc, lr, #4
+
+                // Now the frame is created in the system stack of the current
+                // thread, the IRQ stack is empty.
+                msr     CPSR_c, #MODE_SYS | I_BIT | F_BIT
+  2002bc:	e321f0df 	msr	CPSR_c, #223	; 0xdf
+                stmfd   sp!, {r0-r3, r12, lr}
+  2002c0:	e92d500f 	push	{r0, r1, r2, r3, ip, lr}
+                msr     CPSR_c, #MODE_FIQ | I_BIT | F_BIT
+  2002c4:	e321f0d1 	msr	CPSR_c, #209	; 0xd1
+                mrs     r0, SPSR
+  2002c8:	e14f0000 	mrs	r0, SPSR
+                mov     r1, lr
+  2002cc:	e1a0100e 	mov	r1, lr
+                msr     CPSR_c, #MODE_SYS | I_BIT | F_BIT
+  2002d0:	e321f0df 	msr	CPSR_c, #223	; 0xdf
+                stmfd   sp!, {r0, r1}           // Push R0=SPSR, R1=LR_IRQ.
+  2002d4:	e92d0003 	push	{r0, r1}
+
+                // Context switch.
+#if CH_DBG_SYSTEM_STATE_CHECK
+                bl      _dbg_check_lock
+#endif
+                bl      chSchDoReschedule
+  2002d8:	eb00013c 	bl	2007d0 <chSchDoReschedule>
+#if CH_DBG_SYSTEM_STATE_CHECK
+                bl      _dbg_check_unlock
+#endif
+
+                // Re-establish the IRQ conditions again.
+                ldmfd   sp!, {r0, r1}           // Pop R0=SPSR, R1=LR_IRQ.
+  2002dc:	e8bd0003 	pop	{r0, r1}
+                msr     CPSR_c, #MODE_FIQ | I_BIT | F_BIT
+  2002e0:	e321f0d1 	msr	CPSR_c, #209	; 0xd1
+                msr     SPSR_fsxc, r0
+  2002e4:	e16ff000 	msr	SPSR_fsxc, r0
+                mov     lr, r1
+  2002e8:	e1a0e001 	mov	lr, r1
+                msr     CPSR_c, #MODE_SYS | I_BIT | F_BIT
+  2002ec:	e321f0df 	msr	CPSR_c, #223	; 0xdf
+                ldmfd   sp!, {r0-r3, r12, lr}
+  2002f0:	e8bd500f 	pop	{r0, r1, r2, r3, ip, lr}
+                msr     CPSR_c, #MODE_FIQ | I_BIT | F_BIT
+  2002f4:	e321f0d1 	msr	CPSR_c, #209	; 0xd1
+                subs    pc, lr, #4
+  2002f8:	e25ef004 	subs	pc, lr, #4
+  2002fc:	e320f000 	nop	{0}
+
+00200300 <_port_thread_start>:
+                .globl  _port_thread_start
+_port_thread_start:
+#if CH_DBG_SYSTEM_STATE_CHECK
+                bl      _dbg_check_unlock
+#endif
+				msr     CPSR_c, #MODE_SYS | I_BIT
+  200300:	e321f09f 	msr	CPSR_c, #159	; 0x9f
+                mov     r0, r5
+  200304:	e1a00005 	mov	r0, r5
+                mov     lr, pc
+  200308:	e1a0e00f 	mov	lr, pc
+                bx      r4
+  20030c:	e12fff14 	bx	r4
+#if defined(_CHIBIOS_RT_CONF_)
+                mov     r0, #0              /* MSG_OK */
+  200310:	e3a00000 	mov	r0, #0
+                bl      chThdExit
+  200314:	eb000129 	bl	2007c0 <chThdExit>
+
+00200318 <_zombies>:
+_zombies:       b       _zombies
+  200318:	eafffffe 	b	200318 <_zombies>
+                stmfd   sp!, {lr}               // save lr into monitor stack
+                ldr     lr, =MON_S_SCR          // set secure SCR before to switch to FIQ mode
+                mrc     p15, 0, lr, c1, c1, 0
+                cpsid   if, #MODE_FIQ           // secure FIQ mode
+                stmfd   sp!, {r0-r3, r12}       // IRQ frame, save scratch registers
+                ldr     r0, =ARM_IRQ_VECTOR_REG
+  20031c:	f803c010 	.word	0xf803c010
+                ldr     r0, [r0]
+                ldr     lr, =_mon_fiq_ret_arm   // ISR return point.
+  200320:	00200220 	.word	0x00200220
+                // the fiq is taken locally from secure state
+                // current mode is fiq
+                stmfd   sp!, {r0-r3, r12, lr}   // save scratch registers and lr
+                ldr     r0, =ARM_IRQ_VECTOR_REG
+                ldr     r0, [r0]
+                ldr     lr, =_fiq_ret_arm       // ISR return point.
+  200324:	002002b0 	.word	0x002002b0
+	...
+
+00200330 <mtxSetSlaveSplitAddr>:
+ * @param[in] slaveID   Slave MATRIX ID.
+ * @param[in] areaSize  Split size area.
+ * @param[in] mask      Region securable area.
+ */
+void mtxSetSlaveSplitAddr(Matrix *mtxp, uint8_t slaveID,
+         uint8_t areaSize, uint8_t mask) {
+  200330:	e92d4010 	push	{r4, lr}
+
+  mtxDisableWP(mtxp);
+  200334:	e3a0cb15 	mov	ip, #21504	; 0x5400
+  200338:	e344cd41 	movt	ip, #19777	; 0x4d41
+  20033c:	e580c1e4 	str	ip, [r0, #484]	; 0x1e4
+  uint8_t i = mask, j = 0;
+  uint32_t value = 0;
+  200340:	e3a04000 	mov	r4, #0
+ */
+void mtxSetSlaveSplitAddr(Matrix *mtxp, uint8_t slaveID,
+         uint8_t areaSize, uint8_t mask) {
+
+  mtxDisableWP(mtxp);
+  uint8_t i = mask, j = 0;
+  200344:	e1a0e004 	mov	lr, r4
+  uint32_t value = 0;
+  for (i = 1; (i <= mask) && (j < 32); i <<= 1, j += 4) {
+  200348:	e3a0c001 	mov	ip, #1
+  20034c:	ea000006 	b	20036c <mtxSetSlaveSplitAddr+0x3c>
+    if (i & mask)
+  200350:	e11c0003 	tst	ip, r3
+  200354:	0a000000 	beq	20035c <mtxSetSlaveSplitAddr+0x2c>
+      value |= areaSize << j;
+  200358:	e1844e12 	orr	r4, r4, r2, lsl lr
+         uint8_t areaSize, uint8_t mask) {
+
+  mtxDisableWP(mtxp);
+  uint8_t i = mask, j = 0;
+  uint32_t value = 0;
+  for (i = 1; (i <= mask) && (j < 32); i <<= 1, j += 4) {
+  20035c:	e1a0c08c 	lsl	ip, ip, #1
+  200360:	e6efc07c 	uxtb	ip, ip
+  200364:	e28ee004 	add	lr, lr, #4
+  200368:	e6efe07e 	uxtb	lr, lr
+  20036c:	e15c0003 	cmp	ip, r3
+  200370:	8a000001 	bhi	20037c <mtxSetSlaveSplitAddr+0x4c>
+  200374:	e35e001f 	cmp	lr, #31
+  200378:	9afffff4 	bls	200350 <mtxSetSlaveSplitAddr+0x20>
+    if (i & mask)
+      value |= areaSize << j;
+  }
+  mtxp->MATRIX_SASSR[slaveID] = value;
+  20037c:	e2811090 	add	r1, r1, #144	; 0x90
+  200380:	e7804101 	str	r4, [r0, r1, lsl #2]
+  mtxEnableWP(mtxp);
+  200384:	e3053401 	movw	r3, #21505	; 0x5401
+  200388:	e3443d41 	movt	r3, #19777	; 0x4d41
+  20038c:	e58031e4 	str	r3, [r0, #484]	; 0x1e4
+  200390:	e8bd8010 	pop	{r4, pc}
+	...
+
+002003a0 <mtxConfigSlaveSec>:
+ */
+void mtxConfigSlaveSec(Matrix *mtxp, uint8_t slaveID,
+        uint8_t selMask, uint8_t readMask,
+        uint8_t writeMask) {
+
+  mtxDisableWP(mtxp);
+  2003a0:	e3a0cb15 	mov	ip, #21504	; 0x5400
+  2003a4:	e344cd41 	movt	ip, #19777	; 0x4d41
+  2003a8:	e580c1e4 	str	ip, [r0, #484]	; 0x1e4
+  mtxp->MATRIX_SSR[slaveID] = selMask | (readMask << 8) |
+  2003ac:	e1822403 	orr	r2, r2, r3, lsl #8
+  2003b0:	e5dd3000 	ldrb	r3, [sp]
+  2003b4:	e1823803 	orr	r3, r2, r3, lsl #16
+  2003b8:	e2811080 	add	r1, r1, #128	; 0x80
+  2003bc:	e7803101 	str	r3, [r0, r1, lsl #2]
+                              (writeMask << 16);
+  mtxEnableWP(mtxp);
+  2003c0:	e3053401 	movw	r3, #21505	; 0x5401
+  2003c4:	e3443d41 	movt	r3, #19777	; 0x4d41
+  2003c8:	e58031e4 	str	r3, [r0, #484]	; 0x1e4
+  2003cc:	e12fff1e 	bx	lr
+
+002003d0 <go2ns>:
+#include "hal.h"
+
+/*
+ * @brief Fragment to turn execution into non-secure mode
+ */
+void go2ns(void) {
+  2003d0:	e92d4030 	push	{r4, r5, lr}
+  2003d4:	e24dd00c 	sub	sp, sp, #12
+  /* Configure SRAM0 as not secure Read and not secure write */
+  mtxConfigSlaveSec(MATRIX0,H64MX_SLAVE_SRAM, LOWER_AREA_SECURABLE,
+  2003d8:	e3a04902 	mov	r4, #32768	; 0x8000
+  2003dc:	e34f4001 	movt	r4, #61441	; 0xf001
+  2003e0:	e3a05001 	mov	r5, #1
+  2003e4:	e58d5000 	str	r5, [sp]
+  2003e8:	e1a03005 	mov	r3, r5
+  2003ec:	e3a02000 	mov	r2, #0
+  2003f0:	e3a0100a 	mov	r1, #10
+  2003f4:	e1a00004 	mov	r0, r4
+  2003f8:	ebffffe8 	bl	2003a0 <mtxConfigSlaveSec>
+                      NOT_SECURE_READ, NOT_SECURE_WRITE);
+  /* Configure SRAM1 upper area as not secure Read and secure write */
+  mtxConfigSlaveSec(MATRIX0, H64MX_SLAVE_L2C_SRAM, UPPER_AREA_SECURABLE,
+  2003fc:	e3a03000 	mov	r3, #0
+  200400:	e58d3000 	str	r3, [sp]
+  200404:	e1a03005 	mov	r3, r5
+  200408:	e1a02005 	mov	r2, r5
+  20040c:	e3a0100b 	mov	r1, #11
+  200410:	e1a00004 	mov	r0, r4
+  200414:	ebffffe1 	bl	2003a0 <mtxConfigSlaveSec>
+                    NOT_SECURE_READ, SECURE_WRITE);
+  asm(
+  200418:	ee110f11 	mrc	15, 0, r0, cr1, cr1, {0}
+  20041c:	e3800001 	orr	r0, r0, #1
+  200420:	ee010f11 	mcr	15, 0, r0, cr1, cr1, {0}
+    "mrc p15, 0, r0, c1, c1, 0\n\t" /* Set NS bit into SCR register */
+    "orr r0, r0, #1\n\t"            /* bit 0 is the NS bit */
+    "mcr p15, 0, r0, c1, c1, 0\n\t"
+  );
+}
+  200424:	e28dd00c 	add	sp, sp, #12
+  200428:	e8bd8030 	pop	{r4, r5, pc}
+  20042c:	00000000 	andeq	r0, r0, r0
+
+00200430 <sama_clock_init>:
+ */
+void sama_clock_init(void) {
+#if !SAMA_NO_INIT
+  uint32_t mor, pllar, mckr, mainf;
+  /* Disabling PMC write protection. */
+  pmcDisableWP();
+  200430:	e3a03901 	mov	r3, #16384	; 0x4000
+  200434:	e34f3001 	movt	r3, #61441	; 0xf001
+  200438:	e3a02c43 	mov	r2, #17152	; 0x4300
+  20043c:	e345204d 	movt	r2, #20557	; 0x504d
+  200440:	e58320e4 	str	r2, [r3, #228]	; 0xe4
+
+  /* 
+   * Enforcing the reset default configuration of clock tree. 
+   */  
+  /* Setting Slow Clock source to OSCRC. */
+  SCKC->SCKC_CR = 0U;
+  200444:	e3a02902 	mov	r2, #32768	; 0x8000
+  200448:	e34f2804 	movt	r2, #63492	; 0xf804
+  20044c:	e3a01000 	mov	r1, #0
+  200450:	e5821050 	str	r1, [r2, #80]	; 0x50
+
+  /* Enabling MOSCRC. */
+  PMC->CKGR_MOR |= (CKGR_MOR_KEY_PASSWD | CKGR_MOR_MOSCRCEN);
+  200454:	e5932020 	ldr	r2, [r3, #32]
+  200458:	e3822837 	orr	r2, r2, #3604480	; 0x370000
+  20045c:	e3822008 	orr	r2, r2, #8
+  200460:	e5832020 	str	r2, [r3, #32]
+  while (!(PMC->PMC_SR & PMC_SR_MOSCRCS))
+  200464:	e3a03901 	mov	r3, #16384	; 0x4000
+  200468:	e34f3001 	movt	r3, #61441	; 0xf001
+  20046c:	e5933068 	ldr	r3, [r3, #104]	; 0x68
+  200470:	e3130802 	tst	r3, #131072	; 0x20000
+  200474:	0afffffa 	beq	200464 <sama_clock_init+0x34>
+    ;                                       /* Waits until MOSCRC is stable.*/
+
+  /* Switching Main Oscillator Source to MOSRC. */
+  mor = PMC->CKGR_MOR | CKGR_MOR_KEY_PASSWD;
+  200478:	e3a02901 	mov	r2, #16384	; 0x4000
+  20047c:	e34f2001 	movt	r2, #61441	; 0xf001
+  200480:	e5923020 	ldr	r3, [r2, #32]
+  mor &= ~CKGR_MOR_MOSCSEL;
+  200484:	e3c33401 	bic	r3, r3, #16777216	; 0x1000000
+  200488:	e3833837 	orr	r3, r3, #3604480	; 0x370000
+  mor |= SAMA_MOSC_MOSCRC;
+  PMC->CKGR_MOR = mor;
+  20048c:	e5823020 	str	r3, [r2, #32]
+
+  while (!(PMC->PMC_SR & PMC_SR_MOSCSELS))
+  200490:	e3a03901 	mov	r3, #16384	; 0x4000
+  200494:	e34f3001 	movt	r3, #61441	; 0xf001
+  200498:	e5933068 	ldr	r3, [r3, #104]	; 0x68
+  20049c:	e3130801 	tst	r3, #65536	; 0x10000
+  2004a0:	0afffffa 	beq	200490 <sama_clock_init+0x60>
+    ;                                       /* Waits until MOSCSEL has changed.*/
+
+  /* Switching Master Clock source to Main Clock. */
+  mckr = PMC->PMC_MCKR;
+  2004a4:	e3a02901 	mov	r2, #16384	; 0x4000
+  2004a8:	e34f2001 	movt	r2, #61441	; 0xf001
+  2004ac:	e5923030 	ldr	r3, [r2, #48]	; 0x30
+  mckr &= ~PMC_MCKR_CSS_Msk;
+  2004b0:	e3c33003 	bic	r3, r3, #3
+  mckr |= PMC_MCKR_CSS_MAIN_CLK;
+  2004b4:	e3833001 	orr	r3, r3, #1
+  PMC->PMC_MCKR = mckr;
+  2004b8:	e5823030 	str	r3, [r2, #48]	; 0x30
+
+  while (!(PMC->PMC_SR & PMC_SR_MCKRDY))
+  2004bc:	e3a03901 	mov	r3, #16384	; 0x4000
+  2004c0:	e34f3001 	movt	r3, #61441	; 0xf001
+  2004c4:	e5933068 	ldr	r3, [r3, #104]	; 0x68
+  2004c8:	e3130008 	tst	r3, #8
+  2004cc:	0afffffa 	beq	2004bc <sama_clock_init+0x8c>
+    ;                                       /* Waits until Master Clock is stable.*/
+
+  /* Counter Clock Source to MOSCRC. */
+  PMC->CKGR_MCFR &= ~CKGR_MCFR_CCSS;
+  2004d0:	e3a03901 	mov	r3, #16384	; 0x4000
+  2004d4:	e34f3001 	movt	r3, #61441	; 0xf001
+  2004d8:	e5932024 	ldr	r2, [r3, #36]	; 0x24
+  2004dc:	e3c22401 	bic	r2, r2, #16777216	; 0x1000000
+  2004e0:	e5832024 	str	r2, [r3, #36]	; 0x24
+
+  /*
+   * Main oscillator configuration block.
+   */
+  /* Setting Slow clock source. */
+  SCKC->SCKC_CR = SAMA_OSC_SEL;
+  2004e4:	e3a03902 	mov	r3, #32768	; 0x8000
+  2004e8:	e34f3804 	movt	r3, #63492	; 0xf804
+  2004ec:	e3a02008 	mov	r2, #8
+  2004f0:	e5832050 	str	r2, [r3, #80]	; 0x50
+  while ((SAMA_OSC_SEL && !(PMC->PMC_SR & PMC_SR_OSCSELS)) ||
+  2004f4:	e3a03901 	mov	r3, #16384	; 0x4000
+  2004f8:	e34f3001 	movt	r3, #61441	; 0xf001
+  2004fc:	e5933068 	ldr	r3, [r3, #104]	; 0x68
+  200500:	e3130080 	tst	r3, #128	; 0x80
+  200504:	0afffffa 	beq	2004f4 <sama_clock_init+0xc4>
+        (!SAMA_OSC_SEL &&  (PMC->PMC_SR & PMC_SR_OSCSELS)))
+    ;                                       /* Waits until MOSCxxS switch is done.*/
+  mor = PMC->CKGR_MOR | CKGR_MOR_KEY_PASSWD;
+  200508:	e3a03901 	mov	r3, #16384	; 0x4000
+  20050c:	e34f3001 	movt	r3, #61441	; 0xf001
+  200510:	e5931020 	ldr	r1, [r3, #32]
+#if SAMA_MOSCXT_ENABLED
+  mor |= CKGR_MOR_MOSCXTEN;
+  200514:	e3812837 	orr	r2, r1, #3604480	; 0x370000
+  200518:	e3822001 	orr	r2, r2, #1
+  PMC->CKGR_MOR = mor;
+  20051c:	e5832020 	str	r2, [r3, #32]
+  while (!(PMC->PMC_SR & PMC_SR_MOSCXTS))
+  200520:	e3a03901 	mov	r3, #16384	; 0x4000
+  200524:	e34f3001 	movt	r3, #61441	; 0xf001
+  200528:	e5933068 	ldr	r3, [r3, #104]	; 0x68
+  20052c:	e3130001 	tst	r3, #1
+  200530:	0afffffa 	beq	200520 <sama_clock_init+0xf0>
+    ;                                       /* Waits until MOSCXT is stable.*/
+  /* Counter Clock Source to MOSCXT. */
+  PMC->CKGR_MCFR |= CKGR_MCFR_CCSS;
+  200534:	e3a03901 	mov	r3, #16384	; 0x4000
+  200538:	e34f3001 	movt	r3, #61441	; 0xf001
+  20053c:	e5932024 	ldr	r2, [r3, #36]	; 0x24
+  200540:	e3822401 	orr	r2, r2, #16777216	; 0x1000000
+  200544:	e5832024 	str	r2, [r3, #36]	; 0x24
+#else
+  mor &= ~CKGR_MOR_MOSCXTEN;
+  PMC->CKGR_MOR = mor;
+#endif
+
+  PMC->CKGR_MCFR |= CKGR_MCFR_RCMEAS;
+  200548:	e5932024 	ldr	r2, [r3, #36]	; 0x24
+  20054c:	e3822601 	orr	r2, r2, #1048576	; 0x100000
+  200550:	e5832024 	str	r2, [r3, #36]	; 0x24
+  while (!(PMC->CKGR_MCFR & CKGR_MCFR_MAINFRDY))
+  200554:	e3a03901 	mov	r3, #16384	; 0x4000
+  200558:	e34f3001 	movt	r3, #61441	; 0xf001
+  20055c:	e5933024 	ldr	r3, [r3, #36]	; 0x24
+  200560:	e3130801 	tst	r3, #65536	; 0x10000
+  200564:	0afffffa 	beq	200554 <sama_clock_init+0x124>
+    ;
+  mainf = CKGR_MCFR_MAINF(PMC->CKGR_MCFR);
+  200568:	e3a03901 	mov	r3, #16384	; 0x4000
+  20056c:	e34f3001 	movt	r3, #61441	; 0xf001
+  200570:	e5932024 	ldr	r2, [r3, #36]	; 0x24
+   */
+  (void)mainf;
+
+  /* Switching Main Clock source. */
+  mor &= ~CKGR_MOR_MOSCSEL;
+  mor |= SAMA_MOSC_SEL;
+  200574:	e3a02001 	mov	r2, #1
+  200578:	e3402137 	movt	r2, #311	; 0x137
+  20057c:	e1812002 	orr	r2, r1, r2
+  PMC->CKGR_MOR = mor;
+  200580:	e5832020 	str	r2, [r3, #32]
+
+  /* Eventually disabling MOSCRC. */
+#if !SAMA_MOSCRC_ENABLED
+  PMC->CKGR_MOR &= ~ CKGR_MOR_MOSCRCEN;
+  200584:	e5932020 	ldr	r2, [r3, #32]
+  200588:	e3c22008 	bic	r2, r2, #8
+  20058c:	e5832020 	str	r2, [r3, #32]
+ */
+  pllar = SAMA_PLLA_ONE | CKGR_PLLAR_PLLACOUNT(0x3F);
+#if SAMA_ACTIVATE_PLLA
+  pllar |= CKGR_PLLAR_DIVA_BYPASS | SAMA_PLLA_MUL;
+#endif
+  PMC->CKGR_PLLAR = pllar;                  /* Writing PLLA register.       */
+  200590:	e3032f01 	movw	r2, #16129	; 0x3f01
+  200594:	e3422148 	movt	r2, #8520	; 0x2148
+  200598:	e5832028 	str	r2, [r3, #40]	; 0x28
+
+#if SAMA_ACTIVATE_PLLA
+  while (!(PMC->PMC_SR & PMC_SR_LOCKA))
+  20059c:	e3a03901 	mov	r3, #16384	; 0x4000
+  2005a0:	e34f3001 	movt	r3, #61441	; 0xf001
+  2005a4:	e5933068 	ldr	r3, [r3, #104]	; 0x68
+  2005a8:	e3130002 	tst	r3, #2
+  2005ac:	0afffffa 	beq	20059c <sama_clock_init+0x16c>
+#endif
+
+/*
+ * Master clock configuration block.
+ */
+  mckr = PMC->PMC_MCKR;
+  2005b0:	e3a03901 	mov	r3, #16384	; 0x4000
+  2005b4:	e34f3001 	movt	r3, #61441	; 0xf001
+  2005b8:	e5931030 	ldr	r1, [r3, #48]	; 0x30
+  mckr &= ~PMC_MCKR_CSS_Msk;
+  2005bc:	e3c12003 	bic	r2, r1, #3
+  mckr |= SAMA_MCK_SEL;
+  2005c0:	e3822002 	orr	r2, r2, #2
+  PMC->PMC_MCKR = mckr;
+  2005c4:	e5832030 	str	r2, [r3, #48]	; 0x30
+  while (!(PMC->PMC_SR & PMC_SR_MCKRDY))
+  2005c8:	e3a03901 	mov	r3, #16384	; 0x4000
+  2005cc:	e34f3001 	movt	r3, #61441	; 0xf001
+  2005d0:	e5933068 	ldr	r3, [r3, #104]	; 0x68
+  2005d4:	e3130008 	tst	r3, #8
+  2005d8:	0afffffa 	beq	2005c8 <sama_clock_init+0x198>
+  2005dc:	e30f2c8c 	movw	r2, #64652	; 0xfc8c
+  2005e0:	e34f2eff 	movt	r2, #65279	; 0xfeff
+  2005e4:	e0022001 	and	r2, r2, r1
+  /* Note that prescaler and divider must be changed with separate accesses.*/
+  mckr |= SAMA_MCK_PRES;
+  mckr |= SAMA_MCK_MDIV;
+  mckr |= SAMA_H64MX_H32MX_DIV;
+#if SAMA_PLLADIV2_EN
+  mckr |= PMC_MCKR_PLLADIV2;
+  2005e8:	e3013302 	movw	r3, #4866	; 0x1302
+  2005ec:	e3403100 	movt	r3, #256	; 0x100
+  2005f0:	e1823003 	orr	r3, r2, r3
+#else
+  mckr &= ~PMC_MCKR_PLLADIV2;
+#endif
+  PMC->PMC_MCKR = mckr;
+  2005f4:	e3a02901 	mov	r2, #16384	; 0x4000
+  2005f8:	e34f2001 	movt	r2, #61441	; 0xf001
+  2005fc:	e5823030 	str	r3, [r2, #48]	; 0x30
+  while (!(PMC->PMC_SR & PMC_SR_MCKRDY))
+  200600:	e3a03901 	mov	r3, #16384	; 0x4000
+  200604:	e34f3001 	movt	r3, #61441	; 0xf001
+  200608:	e5933068 	ldr	r3, [r3, #104]	; 0x68
+  20060c:	e3130008 	tst	r3, #8
+  200610:	0afffffa 	beq	200600 <sama_clock_init+0x1d0>
+    ;                                       /* Waits until MCK is stable.   */
+
+  /* Enabling write protection.  */
+  pmcEnableWP();
+  200614:	e3a03901 	mov	r3, #16384	; 0x4000
+  200618:	e34f3001 	movt	r3, #61441	; 0xf001
+  20061c:	e3042301 	movw	r2, #17153	; 0x4301
+  200620:	e345204d 	movt	r2, #20557	; 0x504d
+  200624:	e58320e4 	str	r2, [r3, #228]	; 0xe4
+  200628:	e12fff1e 	bx	lr
+  20062c:	00000000 	andeq	r0, r0, r0
+
+00200630 <chSchReadyAheadI>:
+  chDbgCheck(tp != NULL);
+  chDbgAssert((tp->state != CH_STATE_READY) &&
+              (tp->state != CH_STATE_FINAL),
+              "invalid state");
+
+  tp->state = CH_STATE_READY;
+  200630:	e3a03000 	mov	r3, #0
+  200634:	e5c03020 	strb	r3, [r0, #32]
+  cp = (thread_t *)&ch.rlist.queue;
+  200638:	e3003858 	movw	r3, #2136	; 0x858
+  20063c:	e3403021 	movt	r3, #33	; 0x21
+  do {
+    cp = cp->queue.next;
+  200640:	e5933000 	ldr	r3, [r3]
+  } while (cp->prio > tp->prio);
+  200644:	e5931008 	ldr	r1, [r3, #8]
+  200648:	e5902008 	ldr	r2, [r0, #8]
+  20064c:	e1510002 	cmp	r1, r2
+  200650:	8afffffa 	bhi	200640 <chSchReadyAheadI+0x10>
+  /* Insertion on prev.*/
+  tp->queue.next             = cp;
+  200654:	e5803000 	str	r3, [r0]
+  tp->queue.prev             = cp->queue.prev;
+  200658:	e5932004 	ldr	r2, [r3, #4]
+  20065c:	e5802004 	str	r2, [r0, #4]
+  tp->queue.prev->queue.next = tp;
+  200660:	e5820000 	str	r0, [r2]
+  cp->queue.prev             = tp;
+  200664:	e5830004 	str	r0, [r3, #4]
+
+  return tp;
+}
+  200668:	e12fff1e 	bx	lr
+  20066c:	00000000 	andeq	r0, r0, r0
+
+00200670 <chSchReadyI>:
+  chDbgCheck(tp != NULL);
+  chDbgAssert((tp->state != CH_STATE_READY) &&
+              (tp->state != CH_STATE_FINAL),
+              "invalid state");
+
+  tp->state = CH_STATE_READY;
+  200670:	e3a03000 	mov	r3, #0
+  200674:	e5c03020 	strb	r3, [r0, #32]
+  cp = (thread_t *)&ch.rlist.queue;
+  200678:	e3003858 	movw	r3, #2136	; 0x858
+  20067c:	e3403021 	movt	r3, #33	; 0x21
+  do {
+    cp = cp->queue.next;
+  200680:	e5933000 	ldr	r3, [r3]
+  } while (cp->prio >= tp->prio);
+  200684:	e5931008 	ldr	r1, [r3, #8]
+  200688:	e5902008 	ldr	r2, [r0, #8]
+  20068c:	e1510002 	cmp	r1, r2
+  200690:	2afffffa 	bcs	200680 <chSchReadyI+0x10>
+  /* Insertion on prev.*/
+  tp->queue.next             = cp;
+  200694:	e5803000 	str	r3, [r0]
+  tp->queue.prev             = cp->queue.prev;
+  200698:	e5932004 	ldr	r2, [r3, #4]
+  20069c:	e5802004 	str	r2, [r0, #4]
+  tp->queue.prev->queue.next = tp;
+  2006a0:	e5820000 	str	r0, [r2]
+  cp->queue.prev             = tp;
+  2006a4:	e5830004 	str	r0, [r3, #4]
+
+  return tp;
+}
+  2006a8:	e12fff1e 	bx	lr
+  2006ac:	00000000 	andeq	r0, r0, r0
+
+002006b0 <chSchGoSleepS>:
+ *
+ * @param[in] newstate  the new thread state
+ *
+ * @sclass
+ */
+void chSchGoSleepS(tstate_t newstate) {
+  2006b0:	e92d4010 	push	{r4, lr}
+  thread_t *otp = currp;
+  2006b4:	e3003858 	movw	r3, #2136	; 0x858
+  2006b8:	e3403021 	movt	r3, #33	; 0x21
+  2006bc:	e5931018 	ldr	r1, [r3, #24]
+
+  chDbgCheckClassS();
+
+  /* New state.*/
+  otp->state = newstate;
+  2006c0:	e5c10020 	strb	r0, [r1, #32]
+  tp->queue.prev->queue.next = tp;
+  tqp->prev                  = tp;
+}
+
+static inline thread_t *queue_fifo_remove(threads_queue_t *tqp) {
+  thread_t *tp = tqp->next;
+  2006c4:	e5930000 	ldr	r0, [r3]
+
+  tqp->next             = tp->queue.next;
+  2006c8:	e5902000 	ldr	r2, [r0]
+  2006cc:	e5832000 	str	r2, [r3]
+  tqp->next->queue.prev = (thread_t *)tqp;
+  2006d0:	e5823004 	str	r3, [r2, #4]
+     time quantum when it will wakeup.*/
+  otp->preempt = (tslices_t)CH_CFG_TIME_QUANTUM;
+#endif
+
+  /* Next thread in ready list becomes current.*/
+  currp = queue_fifo_remove(&ch.rlist.queue);
+  2006d4:	e5830018 	str	r0, [r3, #24]
+  currp->state = CH_STATE_CURRENT;
+  2006d8:	e3a03001 	mov	r3, #1
+  2006dc:	e5c03020 	strb	r3, [r0, #32]
+  if (currp->prio == IDLEPRIO) {
+    CH_CFG_IDLE_ENTER_HOOK();
+  }
+
+  /* Swap operation as tail call.*/
+  chSysSwitch(currp, otp);
+  2006e0:	ebfffeae 	bl	2001a0 <_port_switch_arm>
+  2006e4:	e8bd8010 	pop	{r4, pc}
+	...
+
+002006f0 <chThdExitS>:
+ *
+ * @param[in] msg       thread exit code
+ *
+ * @sclass
+ */
+void chThdExitS(msg_t msg) {
+  2006f0:	e92d4010 	push	{r4, lr}
+  thread_t *tp = currp;
+  2006f4:	e3003858 	movw	r3, #2136	; 0x858
+  2006f8:	e3403021 	movt	r3, #33	; 0x21
+  2006fc:	e5934018 	ldr	r4, [r3, #24]
+
+  /* Storing exit message.*/
+  tp->u.exitcode = msg;
+  200700:	e5840028 	str	r0, [r4, #40]	; 0x28
+  200704:	ea000002 	b	200714 <chThdExitS+0x24>
+}
+
+static inline thread_t *list_remove(threads_list_t *tlp) {
+
+  thread_t *tp = tlp->next;
+  tlp->next = tp->queue.next;
+  200708:	e5903000 	ldr	r3, [r0]
+  20070c:	e584302c 	str	r3, [r4, #44]	; 0x2c
+  CH_CFG_THREAD_EXIT_HOOK(tp);
+
+#if CH_CFG_USE_WAITEXIT == TRUE
+  /* Waking up any waiting thread.*/
+  while (list_notempty(&tp->waiting)) {
+    (void) chSchReadyI(list_remove(&tp->waiting));
+  200710:	ebffffd6 	bl	200670 <chSchReadyI>
+  /* Exit handler hook.*/
+  CH_CFG_THREAD_EXIT_HOOK(tp);
+
+#if CH_CFG_USE_WAITEXIT == TRUE
+  /* Waking up any waiting thread.*/
+  while (list_notempty(&tp->waiting)) {
+  200714:	e284302c 	add	r3, r4, #44	; 0x2c
+ *
+ * @notapi
+ */
+static inline bool list_notempty(threads_list_t *tlp) {
+
+  return (bool)(tlp->next != (thread_t *)tlp);
+  200718:	e594002c 	ldr	r0, [r4, #44]	; 0x2c
+  20071c:	e1530000 	cmp	r3, r0
+  200720:	1afffff8 	bne	200708 <chThdExitS+0x18>
+
+#if CH_CFG_USE_REGISTRY == TRUE
+  /* Static threads with no references are immediately removed from the
+     registry because there is no memory to recover.*/
+#if CH_CFG_USE_DYNAMIC == TRUE
+  if ((tp->refs == (trefs_t)0) &&
+  200724:	e5d43022 	ldrb	r3, [r4, #34]	; 0x22
+  200728:	e3530000 	cmp	r3, #0
+  20072c:	1a000008 	bne	200754 <chThdExitS+0x64>
+      ((tp->flags & CH_FLAG_MODE_MASK) == CH_FLAG_MODE_STATIC)) {
+  200730:	e5d43021 	ldrb	r3, [r4, #33]	; 0x21
+
+#if CH_CFG_USE_REGISTRY == TRUE
+  /* Static threads with no references are immediately removed from the
+     registry because there is no memory to recover.*/
+#if CH_CFG_USE_DYNAMIC == TRUE
+  if ((tp->refs == (trefs_t)0) &&
+  200734:	e3130003 	tst	r3, #3
+  200738:	1a000005 	bne	200754 <chThdExitS+0x64>
+      ((tp->flags & CH_FLAG_MODE_MASK) == CH_FLAG_MODE_STATIC)) {
+    REG_REMOVE(tp);
+  20073c:	e5943014 	ldr	r3, [r4, #20]
+  200740:	e5942010 	ldr	r2, [r4, #16]
+  200744:	e5832010 	str	r2, [r3, #16]
+  200748:	e5943010 	ldr	r3, [r4, #16]
+  20074c:	e5942014 	ldr	r2, [r4, #20]
+  200750:	e5832014 	str	r2, [r3, #20]
+  }
+#endif
+#endif
+
+  /* Going into final state.*/
+  chSchGoSleepS(CH_STATE_FINAL);
+  200754:	e3a0000f 	mov	r0, #15
+  200758:	ebffffd4 	bl	2006b0 <chSchGoSleepS>
+  20075c:	e8bd8010 	pop	{r4, pc}
+
+00200760 <main>:
+/*
+ * Application entry point.
+ */
+int main(void) {
+  200760:	e92d4010 	push	{r4, lr}
+  /* SRAM1 split at 64K */
+  mtxSetSlaveSplitAddr(MATRIX0, H64MX_SLAVE_L2C_SRAM, MATRIX_AREA_SIZE_64K,
+  200764:	e3a03001 	mov	r3, #1
+  200768:	e3a02004 	mov	r2, #4
+  20076c:	e3a0100b 	mov	r1, #11
+  200770:	e3a00902 	mov	r0, #32768	; 0x8000
+  200774:	e34f0001 	movt	r0, #61441	; 0xf001
+  200778:	ebfffeec 	bl	200330 <mtxSetSlaveSplitAddr>
+                       REGION_0);
+
+  uint32_t *writeNotSecureSRAM1 = (uint32_t *)(0x220000 + 61 * 1024); /* Lower area region SRAM1 */
+  uint32_t *writeSecureSRAM1 = (uint32_t *)(0x220000 + 65 * 1024);    /* Upper area region SRAM1 */
+  /* Go into Not Secure Mode*/
+  go2ns();
+  20077c:	ebffff13 	bl	2003d0 <go2ns>
+  /* Writing in SRAM1 Lower Area */
+  *writeNotSecureSRAM1 = 0xAA55AA55; /* writing succeeded*/
+  200780:	e3a03a0f 	mov	r3, #61440	; 0xf000
+  200784:	e3403022 	movt	r3, #34	; 0x22
+  200788:	e30a2a55 	movw	r2, #43605	; 0xaa55
+  20078c:	e7df2812 	bfi	r2, r2, #16, #16
+  200790:	e5832400 	str	r2, [r3, #1024]	; 0x400
+  /* Writing in SRAM1 Upper Area */
+  *writeSecureSRAM1 = 0xAA55AA55;    /* writing not succeeded*/
+  200794:	e30a3a55 	movw	r3, #43605	; 0xaa55
+  200798:	e7df3813 	bfi	r3, r3, #16, #16
+  20079c:	e3a02823 	mov	r2, #2293760	; 0x230000
+  2007a0:	e5823400 	str	r3, [r2, #1024]	; 0x400
+  2007a4:	eafffffe 	b	2007a4 <main+0x44>
+	...
+
+002007b0 <__early_init>:
+/**
+ * @brief   Early initialization code.
+ * @details This initialization must be performed just after stack setup
+ *          and before any other initialization.
+ */
+void __early_init(void) {
+  2007b0:	e92d4010 	push	{r4, lr}
+
+  sama_clock_init();
+  2007b4:	ebffff1d 	bl	200430 <sama_clock_init>
+  2007b8:	e8bd8010 	pop	{r4, pc}
+  2007bc:	00000000 	andeq	r0, r0, r0
+
+002007c0 <chThdExit>:
+ *
+ * @param[in] msg       thread exit code
+ *
+ * @api
+ */
+void chThdExit(msg_t msg) {
+  2007c0:	e92d4010 	push	{r4, lr}
+ * @details In this port it disables the FIQ sources and keeps IRQ sources
+ *          disabled.
+ */
+static inline void port_lock(void) {
+
+  __asm volatile ("msr     CPSR_c, #0xDF" : : : "memory");
+  2007c4:	e321f0df 	msr	CPSR_c, #223	; 0xdf
+
+  chSysLock();
+  chThdExitS(msg);
+  2007c8:	ebffffc8 	bl	2006f0 <chThdExitS>
+  2007cc:	e8bd8010 	pop	{r4, pc}
+
+002007d0 <chSchDoReschedule>:
+ * @note    Not a user function, it is meant to be invoked by the scheduler
+ *          itself or from within the port layer.
+ *
+ * @special
+ */
+void chSchDoReschedule(void) {
+  2007d0:	e92d4010 	push	{r4, lr}
+  thread_t *otp = currp;
+  2007d4:	e3004858 	movw	r4, #2136	; 0x858
+  2007d8:	e3404021 	movt	r4, #33	; 0x21
+  2007dc:	e5940018 	ldr	r0, [r4, #24]
+  tp->queue.prev->queue.next = tp;
+  tqp->prev                  = tp;
+}
+
+static inline thread_t *queue_fifo_remove(threads_queue_t *tqp) {
+  thread_t *tp = tqp->next;
+  2007e0:	e5943000 	ldr	r3, [r4]
+
+  tqp->next             = tp->queue.next;
+  2007e4:	e5932000 	ldr	r2, [r3]
+  2007e8:	e5842000 	str	r2, [r4]
+  tqp->next->queue.prev = (thread_t *)tqp;
+  2007ec:	e5824004 	str	r4, [r2, #4]
+
+  /* Picks the first thread from the ready queue and makes it current.*/
+  currp = queue_fifo_remove(&ch.rlist.queue);
+  2007f0:	e5843018 	str	r3, [r4, #24]
+  currp->state = CH_STATE_CURRENT;
+  2007f4:	e3a02001 	mov	r2, #1
+  2007f8:	e5c32020 	strb	r2, [r3, #32]
+    otp = chSchReadyAheadI(otp);
+  }
+#else /* !(CH_CFG_TIME_QUANTUM > 0) */
+  /* If the round-robin mechanism is disabled then the thread goes always
+     ahead of its peers.*/
+  otp = chSchReadyAheadI(otp);
+  2007fc:	ebffff8b 	bl	200630 <chSchReadyAheadI>
+#endif /* !(CH_CFG_TIME_QUANTUM > 0) */
+
+  /* Swap operation as tail call.*/
+  chSysSwitch(currp, otp);
+  200800:	e1a01000 	mov	r1, r0
+  200804:	e5940018 	ldr	r0, [r4, #24]
+  200808:	ebfffe64 	bl	2001a0 <_port_switch_arm>
+  20080c:	e8bd8010 	pop	{r4, pc}
+
+00200810 <__default_exit>:
+ */
+#if !defined(__DOXYGEN__)
+__attribute__((noreturn, weak))
+#endif
+/*lint -save -e9075 [8.4] All symbols are invoked from asm context.*/
+void __default_exit(void) {
+  200810:	eafffffe 	b	200810 <__default_exit>
+	...
+
+00200820 <__late_init>:
+ */
+#if !defined(__DOXYGEN__)
+__attribute__((weak))
+#endif
+/*lint -save -e9075 [8.4] All symbols are invoked from asm context.*/
+void __late_init(void) {}
+  200820:	e12fff1e 	bx	lr

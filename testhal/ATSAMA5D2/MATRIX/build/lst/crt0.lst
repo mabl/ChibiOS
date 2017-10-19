@@ -1,0 +1,199 @@
+ARM GAS  /tmp/ccTWGjLe.s 			page 1
+
+
+   1              	# 1 "../../../os/common/startup/ARM/compilers/GCC/crt0.S"
+   1              	/*
+   1              	...
+   0              	
+   0              	
+   2              	    ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
+   3              	
+   4              	    Licensed under the Apache License, Version 2.0 (the "License");
+   5              	    you may not use this file except in compliance with the License.
+   6              	    You may obtain a copy of the License at
+   7              	
+   8              	        http://www.apache.org/licenses/LICENSE-2.0
+   9              	
+  10              	    Unless required by applicable law or agreed to in writing, software
+  11              	    distributed under the License is distributed on an "AS IS" BASIS,
+  12              	    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  13              	    See the License for the specific language governing permissions and
+  14              	    limitations under the License.
+  15              	*/
+  16              	
+  17              	/**
+  18              	 * @file    crt0.S
+  19              	 * @brief   Generic ARM startup file.
+  20              	 *
+  21              	 * @addtogroup ARM_GCC_STARTUP
+  22              	 * @{
+  23              	 */
+  24              	
+  25              	#if !defined(__DOXYGEN__)
+  26              	
+  27              	                .set    MODE_USR, 0x10
+  28              	                .set    MODE_FIQ, 0x11
+  29              	                .set    MODE_IRQ, 0x12
+  30              	                .set    MODE_SVC, 0x13
+  31              	                .set    MODE_ABT, 0x17
+  32              	                .set    MODE_UND, 0x1B
+  33              	                .set    MODE_SYS, 0x1F
+  34              	
+  35              	                .set    I_BIT, 0x80
+  36              	                .set    F_BIT, 0x40
+  37              	
+  38              	                .text
+  39              	                .code   32
+  40              	                .balign 4
+  41              	
+  42              	/*
+  43              	 * Reset handler.
+  44              	 */
+  45              	                .global Reset_Handler
+  46              	Reset_Handler:
+  47              	                /*
+  48              	                 * Stack pointers initialization.
+  49              	                 */
+  50 0000 98009FE5 	                ldr     r0, =__stacks_end__
+  51              	                /* Undefined */
+  52 0004 DBF021E3 	                msr     CPSR_c, #MODE_UND | I_BIT | F_BIT
+  53 0008 00D0A0E1 	                mov     sp, r0
+ARM GAS  /tmp/ccTWGjLe.s 			page 2
+
+
+  54 000c 90109FE5 	                ldr     r1, =__und_stack_size__
+  55 0010 010040E0 	                sub     r0, r0, r1
+  56              	                /* Abort */
+  57 0014 D7F021E3 	                msr     CPSR_c, #MODE_ABT | I_BIT | F_BIT
+  58 0018 00D0A0E1 	                mov     sp, r0
+  59 001c 84109FE5 	                ldr     r1, =__abt_stack_size__
+  60 0020 010040E0 	                sub     r0, r0, r1
+  61              	                /* FIQ */
+  62 0024 D1F021E3 	                msr     CPSR_c, #MODE_FIQ | I_BIT | F_BIT
+  63 0028 00D0A0E1 	                mov     sp, r0
+  64 002c 78109FE5 	                ldr     r1, =__fiq_stack_size__
+  65 0030 010040E0 	                sub     r0, r0, r1
+  66              	                /* IRQ */
+  67 0034 D2F021E3 	                msr     CPSR_c, #MODE_IRQ | I_BIT | F_BIT
+  68 0038 00D0A0E1 	                mov     sp, r0
+  69 003c 6C109FE5 	                ldr     r1, =__irq_stack_size__
+  70 0040 010040E0 	                sub     r0, r0, r1
+  71              	                /* Supervisor */
+  72 0044 D3F021E3 	                msr     CPSR_c, #MODE_SVC | I_BIT | F_BIT
+  73 0048 00D0A0E1 	                mov     sp, r0
+  74 004c 60109FE5 	                ldr     r1, =__svc_stack_size__
+  75 0050 010040E0 	                sub     r0, r0, r1
+  76              	                /* System */
+  77 0054 DFF021E3 	                msr     CPSR_c, #MODE_SYS | I_BIT | F_BIT
+  78 0058 00D0A0E1 	                mov     sp, r0
+  79              	//                ldr     r1, =__sys_stack_size__
+  80              	//                sub     r0, r0, r1
+  81              	                /*
+  82              	                 * Early initialization.
+  83              	                 */
+  84              	#if !defined(THUMB_NO_INTERWORKING)
+  85 005c FEFFFFEB 	                bl      __early_init
+  86              	#else /* defined(THUMB_NO_INTERWORKING) */
+  87              	                add     r0, pc, #1
+  88              	                bx      r0
+  89              	                .code   16
+  90              	                bl      __early_init
+  91              	                mov     r0, pc
+  92              	                bx      r0
+  93              	                .code   32
+  94              	#endif /* defined(THUMB_NO_INTERWORKING) */
+  95              	
+  96              	                /*
+  97              	                 * Data initialization.
+  98              	                 * NOTE: It assumes that the DATA size is a multiple of 4.
+  99              	                 */
+ 100 0060 50109FE5 	                ldr     r1, =_textdata
+ 101 0064 50209FE5 	                ldr     r2, =_data
+ 102 0068 50309FE5 	                ldr     r3, =_edata
+ 103              	dataloop:
+ 104 006c 030052E1 	                cmp     r2, r3
+ 105 0070 04009134 	                ldrlo   r0, [r1], #4
+ 106 0074 04008234 	                strlo   r0, [r2], #4
+ 107 0078 FBFFFF3A 	                blo     dataloop
+ 108              	                /*
+ 109              	                 * BSS initialization.
+ 110              	                 * NOTE: It assumes that the BSS size is a multiple of 4.
+ARM GAS  /tmp/ccTWGjLe.s 			page 3
+
+
+ 111              	                 */
+ 112 007c 0000A0E3 	                mov     r0, #0
+ 113 0080 3C109FE5 	                ldr     r1, =_bss_start
+ 114 0084 3C209FE5 	                ldr     r2, =_bss_end
+ 115              	bssloop:
+ 116 0088 020051E1 	                cmp     r1, r2
+ 117 008c 04008134 	                strlo   r0, [r1], #4
+ 118 0090 FCFFFF3A 	                blo     bssloop
+ 119              	                /*
+ 120              	                 * Late initialization.
+ 121              	                 */
+ 122              	#if !defined(THUMB_NO_INTERWORKING)
+ 123 0094 FEFFFFEB 	                bl      __late_init
+ 124              	#else /* defined(THUMB_NO_INTERWORKING) */
+ 125              	                add     r0, pc, #1
+ 126              	                bx      r0
+ 127              	                .code   16
+ 128              	                bl      __late_init
+ 129              	                mov     r0, pc
+ 130              	                bx      r0
+ 131              	                .code   32
+ 132              	#endif /* defined(THUMB_NO_INTERWORKING) */
+ 133              	
+ 134              	                /*
+ 135              	                 * Main program invocation.
+ 136              	                 */
+ 137              	#if defined(THUMB_NO_INTERWORKING)
+ 138              	                add     r0, pc, #1
+ 139              	                bx      r0
+ 140              	                .code   16
+ 141              	                bl      main
+ 142              	                ldr     r1, =__default_exit
+ 143              	                bx      r1
+ 144              	                .code   32
+ 145              	#else /* !defined(THUMB_NO_INTERWORKING) */
+ 146 0098 FEFFFFEB 	                bl      main
+ 147 009c FEFFFFEA 	                b       __default_exit
+ 147      00000000 
+ 147      00000000 
+ 147      00000000 
+ 147      00000000 
+ARM GAS  /tmp/ccTWGjLe.s 			page 4
+
+
+DEFINED SYMBOLS
+../../../os/common/startup/ARM/compilers/GCC/crt0.S:27     *ABS*:0000000000000010 MODE_USR
+../../../os/common/startup/ARM/compilers/GCC/crt0.S:28     *ABS*:0000000000000011 MODE_FIQ
+../../../os/common/startup/ARM/compilers/GCC/crt0.S:29     *ABS*:0000000000000012 MODE_IRQ
+../../../os/common/startup/ARM/compilers/GCC/crt0.S:30     *ABS*:0000000000000013 MODE_SVC
+../../../os/common/startup/ARM/compilers/GCC/crt0.S:31     *ABS*:0000000000000017 MODE_ABT
+../../../os/common/startup/ARM/compilers/GCC/crt0.S:32     *ABS*:000000000000001b MODE_UND
+../../../os/common/startup/ARM/compilers/GCC/crt0.S:33     *ABS*:000000000000001f MODE_SYS
+../../../os/common/startup/ARM/compilers/GCC/crt0.S:35     *ABS*:0000000000000080 I_BIT
+../../../os/common/startup/ARM/compilers/GCC/crt0.S:36     *ABS*:0000000000000040 F_BIT
+../../../os/common/startup/ARM/compilers/GCC/crt0.S:40     .text:0000000000000000 $a
+../../../os/common/startup/ARM/compilers/GCC/crt0.S:46     .text:0000000000000000 Reset_Handler
+../../../os/common/startup/ARM/compilers/GCC/crt0.S:103    .text:000000000000006c dataloop
+../../../os/common/startup/ARM/compilers/GCC/crt0.S:115    .text:0000000000000088 bssloop
+../../../os/common/startup/ARM/compilers/GCC/crt0.S:147    .text:00000000000000a0 $d
+
+UNDEFINED SYMBOLS
+__stacks_end__
+__und_stack_size__
+__abt_stack_size__
+__fiq_stack_size__
+__irq_stack_size__
+__svc_stack_size__
+__early_init
+_textdata
+_data
+_edata
+_bss_start
+_bss_end
+__late_init
+main
+__default_exit

@@ -1,0 +1,108 @@
+ARM GAS  /tmp/cco9C9Ne.s 			page 1
+
+
+   1              	# 1 "../../../os/common/startup/ARM/devices/SAMA5D2/boot.S"
+   1              	/*
+   1              	...
+   0              	
+   0              	
+   2              	    ChibiOS - Copyright (C) 2006..2017 Giovanni Di Sirio
+   3              	
+   4              	    Licensed under the Apache License, Version 2.0 (the "License");
+   5              	    you may not use this file except in compliance with the License.
+   6              	    You may obtain a copy of the License at
+   7              	
+   8              	        http://www.apache.org/licenses/LICENSE-2.0
+   9              	
+  10              	    Unless required by applicable law or agreed to in writing, software
+  11              	    distributed under the License is distributed on an "AS IS" BASIS,
+  12              	    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  13              	    See the License for the specific language governing permissions and
+  14              	    limitations under the License.
+  15              	*/
+  16              	
+  17              	/**
+  18              	 * @file    SAMA5D2/boot.S
+  19              	 * @brief   SAMA5D2 boot-related code.
+  20              	 *
+  21              	 * @addtogroup SAMA5D2_BOOT
+  22              	 * @{
+  23              	 */
+  24              	#if !defined(__DOXYGEN__)
+  25              	
+  26              	                .set    AIC_REDIR_KEY,  0x5B6C0E26 << 1
+  27              	                .set    SFR_SN1, 	    0xF8030050
+  28              	                .set	SFR_AICREDIR,   0xF8030054
+  29              	                .set    SFR_L2CC_HRAMC, 0xF8030058
+  30              	                .set    L2CC_CR,        0x00A00100
+  31              	
+  32              	                .section .boot
+  33              	                .code   32
+  34              	                .balign 4
+  35              	/*
+  36              	 * Boot initialization code
+  37              	 */
+  38              					.global Boot_Handler
+  39              	Boot_Handler:
+  40              					/*
+  41              					 * Set VBAR to system vectors table
+  42              					 */
+  43 0000 58009FE5 	                ldr		r0, =_start
+  44 0004 100F0CEE 	                mcr 	p15, 0, r0, c12, c0, 0
+  45              	                /*
+  46              	                 * Do not redirect secure interrupts to AIC
+  47              	                 */
+  48 0008 54009FE5 					ldr		r0, =AIC_REDIR_KEY
+  49 000c 54109FE5 					ldr             r1, =SFR_SN1
+  50 0010 001091E5 					ldr		r1, [r1]
+  51 0014 010020E0 					eor		r0, r0, r1
+  52 0018 0100C0E3 					bic		r0, r0, #0x1
+  53 001c 48109FE5 					ldr		r1, =SFR_AICREDIR
+ARM GAS  /tmp/cco9C9Ne.s 			page 2
+
+
+  54 0020 000081E5 					str		r0, [r1]
+  55              	                /*
+  56              	                 * Reset SCTLR Settings
+  57              	                 */
+  58 0024 100F11EE 	                mrc     p15, 0, r0, c1, c0, 0       // Read CP15 System Control register
+  59 0028 010AC0E3 	                bic     r0, r0, #(0x1 << 12)        // Clear I bit 12 to disable I Cache
+  60 002c 0400C0E3 	                bic     r0, r0, #(0x1 <<  2)        // Clear C bit  2 to disable D Cache
+  61 0030 0100C0E3 	                bic     r0, r0, #0x1                // Clear M bit  0 to disable MMU
+  62 0034 020BC0E3 	                bic     r0, r0, #(0x1 << 11)        // Clear Z bit 11 to disable branch prediction
+  63 0038 020AC0E3 	                bic     r0, r0, #(0x1 << 13)        // Clear V bit 13 to disable hivecs
+  64 003c 100F01EE 	                mcr     p15, 0, r0, c1, c0, 0       // Write value back to CP15 System Control regi
+  65 0040 6FF07FF5 	                isb
+  66              	                /*
+  67              	                 * Turn off L2Cache
+  68              	                 */
+  69 0044 0100C0E3 	                bic     r0, r0, #0x1
+  70 0048 20109FE5 	                ldr     r1, =L2CC_CR
+  71 004c 000081E5 	                str     r0, [r1]
+  72              	                /*
+  73              	                 * Configure the L2 cache to be used as an internal SRAM
+  74              	                 */
+  75 0050 0100C0E3 	                bic     r0, r0, #0x1
+  76 0054 18109FE5 	                ldr     r1, =SFR_L2CC_HRAMC
+  77 0058 000081E5 	                str     r0, [r1]
+  78 005c FEFFFFEA 	                b       Reset_Handler
+  78      00000000 
+  78      4C1CD8B6 
+  78      500003F8 
+  78      540003F8 
+ARM GAS  /tmp/cco9C9Ne.s 			page 3
+
+
+DEFINED SYMBOLS
+../../../os/common/startup/ARM/devices/SAMA5D2/boot.S:26     *ABS*:00000000b6d81c4c AIC_REDIR_KEY
+../../../os/common/startup/ARM/devices/SAMA5D2/boot.S:27     *ABS*:00000000f8030050 SFR_SN1
+../../../os/common/startup/ARM/devices/SAMA5D2/boot.S:28     *ABS*:00000000f8030054 SFR_AICREDIR
+../../../os/common/startup/ARM/devices/SAMA5D2/boot.S:29     *ABS*:00000000f8030058 SFR_L2CC_HRAMC
+../../../os/common/startup/ARM/devices/SAMA5D2/boot.S:30     *ABS*:0000000000a00100 L2CC_CR
+../../../os/common/startup/ARM/devices/SAMA5D2/boot.S:39     .boot:0000000000000000 Boot_Handler
+../../../os/common/startup/ARM/devices/SAMA5D2/boot.S:43     .boot:0000000000000000 $a
+../../../os/common/startup/ARM/devices/SAMA5D2/boot.S:78     .boot:0000000000000060 $d
+
+UNDEFINED SYMBOLS
+_start
+Reset_Handler
