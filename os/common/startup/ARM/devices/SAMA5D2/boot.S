@@ -37,21 +37,21 @@
  */
 				.global Boot_Handler
 Boot_Handler:
-				/*
-				 * Set VBAR to system vectors table
-				 */
-                ldr		r0, =_start
-                mcr 	p15, 0, r0, c12, c0, 0
+                /*
+                 * Set VBAR to system vectors table
+                 */
+                ldr     r0, =_start
+                mcr     p15, 0, r0, c12, c0, 0
                 /*
                  * Do not redirect secure interrupts to AIC
                  */
-				ldr		r0, =AIC_REDIR_KEY
-				ldr             r1, =SFR_SN1
-				ldr		r1, [r1]
-				eor		r0, r0, r1
-				bic		r0, r0, #0x1
-				ldr		r1, =SFR_AICREDIR
-				str		r0, [r1]
+				ldr     r0, =AIC_REDIR_KEY
+				ldr     r1, =SFR_SN1
+				ldr     r1, [r1]
+				eor     r0, r0, r1
+				bic     r0, r0, #0x1
+				ldr     r1, =SFR_AICREDIR
+				str     r0, [r1]
                 /*
                  * Reset SCTLR Settings
                  */
