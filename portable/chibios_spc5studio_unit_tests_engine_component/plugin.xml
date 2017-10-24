@@ -33,6 +33,14 @@ The code is conventionally generated under ./source/test and is overwritten each
                <group
                      name="Description">
                   <property
+                        brief="One line brief description."
+                        default="Brief description."
+                        editable="true"
+                        name="Brief"
+                        required="true"
+                        type="string">
+                  </property>
+                  <property
                         brief="Text to be used as copyright statement, it must be a C comment."
                         editable="true"
                         name="Copyright"

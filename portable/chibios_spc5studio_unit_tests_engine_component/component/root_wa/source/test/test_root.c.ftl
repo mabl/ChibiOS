@@ -34,7 +34,6 @@
  */
 
 #include "hal.h"
-#include "ch_test.h"
 #include "${prefix_lower}test_root.h"
 
 #if !defined(__DOXYGEN__)
@@ -44,19 +43,27 @@
 /*===========================================================================*/
 
 /**
- * @brief   Array of all the test sequences.
+ * @brief   Array of test sequences.
  */
-const testcase_t * const *${prefix_lower}test_suite[] = {
+const testsequence_t * const ${prefix_lower}test_suite_array[] = {
 [#list conf.instance.sequences.sequence as sequence]
   [#if sequence.condition.value[0]?trim?length > 0]
 #if (${sequence.condition.value[0]}) || defined(__DOXYGEN__)
   [/#if]
-  ${prefix_lower}test_sequence_${(sequence_index + 1)?string("000")},
+  &${prefix_lower}test_sequence_${(sequence_index + 1)?string("000")},
   [#if sequence.condition.value[0]?trim?length > 0]
 #endif
   [/#if]
 [/#list]
   NULL
+};
+
+/**
+ * @brief   Test suite root structure.
+ */
+const testsuite_t ${prefix_lower}test_suite = {
+  "${utils.WithoutDot(conf.instance.description.brief.value[0]?trim)}",
+  ${prefix_lower}test_suite_array
 };
 
 /*===========================================================================*/

@@ -14,6 +14,8 @@
 #ifndef ${prefix_upper}TEST_ROOT_H
 #define ${prefix_upper}TEST_ROOT_H
 
+#include "ch_test.h"
+
 [#list conf.instance.sequences.sequence as sequence]
 #include "${prefix_lower}test_sequence_${(sequence_index + 1)?string("000")}.h"
 [/#list]
@@ -24,7 +26,7 @@
 /* External declarations.                                                    */
 /*===========================================================================*/
 
-extern const testcase_t * const *${prefix_lower}test_suite[];
+extern const testsuite_t ${prefix_lower}test_suite;
 
 #ifdef __cplusplus
 extern "C" {
