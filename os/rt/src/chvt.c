@@ -162,6 +162,9 @@ void chVTDoSetI(virtual_timer_t *vtp, systime_t delay,
   /* The delta list is scanned in order to find the correct position for
      this timer. */
   while (p->vt_delta < delta) {
+    /* Debug assert if the timer is already in the list.*/
+    chDbgAssert(p != vtp, "timer already armed");
+
     delta -= p->vt_delta;
     p = p->vt_next;
   }
@@ -171,12 +174,14 @@ void chVTDoSetI(virtual_timer_t *vtp, systime_t delay,
   vtp->vt_prev = vtp->vt_next->vt_prev;
   vtp->vt_prev->vt_next = vtp;
   p->vt_prev = vtp;
-  vtp->vt_delta = delta
+  vtp->vt_delta = delta;
+
+  /* Calculate new delta for the following entry.*/
+  p->delta -= delta;
 
   /* Special case when the timer is in last position in the list, the
-     value in the header must be restored.*/;
-  p->vt_delta -= delta;
-  ch.vtlist.vt_delta = (systime_t)-1;
+     value in the header must be restored.*/
+  ch.vtlist.delta = (systime_t)-1;
 }
 
 /**
