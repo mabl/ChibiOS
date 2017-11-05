@@ -73,6 +73,8 @@
 *****************************************************************************
 
 *** 16.1.10 ***
+- HAL: Fixed function uartSendFullTimeout() failing on STM32 USARTv1 and
+       v2 drivers.
 - BLD: Fixed USE_OPT not passed to assembler in rules.mk (bug #892).
 - HAL: Fixed IRQ sharing issue in STM32 DMAv1 driver (bug #891).
 - HAL: Fixed various STM32 registry problems (bug #889).
