@@ -177,11 +177,11 @@ void chVTDoSetI(virtual_timer_t *vtp, systime_t delay,
   vtp->vt_delta = delta;
 
   /* Calculate new delta for the following entry.*/
-  p->delta -= delta;
+  p->vt_delta -= delta;
 
   /* Special case when the timer is in last position in the list, the
      value in the header must be restored.*/
-  ch.vtlist.delta = (systime_t)-1;
+  ch.vtlist.vt_delta = (systime_t)-1;
 }
 
 /**
