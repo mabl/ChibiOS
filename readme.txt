@@ -73,6 +73,7 @@
 *****************************************************************************
 
 *** 16.1.10 ***
+- HAL: Fixed DAC CH2 marked as not present in STM32F091 registry (bug #905).
 - HAL: Fixed function uartSendFullTimeout() failing on STM32 USARTv1 and
        v2 drivers (bug #901).
 - LIB: Fixed typo for function evtStop (bug #897).
