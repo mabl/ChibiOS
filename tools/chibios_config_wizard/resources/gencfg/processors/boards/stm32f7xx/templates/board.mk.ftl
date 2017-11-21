@@ -38,3 +38,7 @@ BOARDSRC = ${path}${doc1.board.board_id[0]}/board.c
 
 # Required include directories
 BOARDINC = ${path}${doc1.board.board_id[0]}
+
+# Shared variables
+ALLCSRC += $(BOARDSRC)
+ALLINC  += $(BOARDINC)
