@@ -73,6 +73,8 @@
 *****************************************************************************
 
 *** 16.1.10 ***
+- RT:  Fixed gcc7 implicit-fallthrough (bug #906).
+- HAL: Fixed gcc7 implicit-fallthrough (bug #906).
 - HAL: Fixed DAC CH2 marked as not present in STM32F091 registry (bug #905).
 - HAL: Fixed function uartSendFullTimeout() failing on STM32 USARTv1 and
        v2 drivers (bug #901).
