@@ -22,15 +22,6 @@
 [#import "/@lib/libutils.ftl" as utils /]
 [#import "/@lib/liblicense.ftl" as license /]
 [@pp.changeOutputFile name="board.c" /]
-[#if doc1.board.configuration_settings.hal_version[0]?trim == "2.6.x"]
-  [#assign varbool = "bool_t" /]
-  [#assign varfalse = "FALSE" /]
-  [#assign vartrue = "TRUE" /]
-[#else]
-  [#assign varbool = "bool" /]
-  [#assign varfalse = "false" /]
-  [#assign vartrue = "true" /]
-[/#if]
 /*
 [@license.EmitLicenseAsText /]
 */
@@ -43,11 +34,83 @@
 [#list doc1.board.headers.header as header]
 #include "${header[0]?string?trim}"
 [/#list]
-[#if doc1.board.configuration_settings.hal_version[0]?trim == "2.6.x"]
-#include "ch.h"
-[/#if]
 #include "hal.h"
+[#if doc1.board.configuration_settings.hal_version[0]?trim != "4.0.x"]
+#include "stm32_gpio.h"
+[/#if]
 
+/*===========================================================================*/
+/* Driver local definitions.                                                 */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Driver exported variables.                                                */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Driver local variables and types.                                         */
+/*===========================================================================*/
+
+[#if doc1.board.configuration_settings.hal_version[0]?trim != "4.0.x"]
+/**
+ * @brief   Type of STM32 GPIO port setup.
+ */
+typedef struct {
+  uint32_t              moder;
+  uint32_t              otyper;
+  uint32_t              ospeedr;
+  uint32_t              pupdr;
+  uint32_t              odr;
+  uint32_t              afrl;
+  uint32_t              afrh;
+} gpio_setup_t;
+
+/**
+ * @brief   Type of STM32 GPIO initialization data.
+ */
+typedef struct {
+#if STM32_HAS_GPIOA || defined(__DOXYGEN__)
+  gpio_setup_t          PAData;
+#endif
+#if STM32_HAS_GPIOB || defined(__DOXYGEN__)
+  gpio_setup_t          PBData;
+#endif
+#if STM32_HAS_GPIOC || defined(__DOXYGEN__)
+  gpio_setup_t          PCData;
+#endif
+#if STM32_HAS_GPIOD || defined(__DOXYGEN__)
+  gpio_setup_t          PDData;
+#endif
+#if STM32_HAS_GPIOE || defined(__DOXYGEN__)
+  gpio_setup_t          PEData;
+#endif
+#if STM32_HAS_GPIOF || defined(__DOXYGEN__)
+  gpio_setup_t          PFData;
+#endif
+#if STM32_HAS_GPIOG || defined(__DOXYGEN__)
+  gpio_setup_t          PGData;
+#endif
+#if STM32_HAS_GPIOH || defined(__DOXYGEN__)
+  gpio_setup_t          PHData;
+#endif
+#if STM32_HAS_GPIOI || defined(__DOXYGEN__)
+  gpio_setup_t          PIData;
+#endif
+#if STM32_HAS_GPIOJ || defined(__DOXYGEN__)
+  gpio_setup_t          PJData;
+#endif
+#if STM32_HAS_GPIOK || defined(__DOXYGEN__)
+  gpio_setup_t          PKData;
+#endif
+} gpio_config_t;
+
+[/#if]
+[#if doc1.board.configuration_settings.hal_version[0]?trim != "4.0.x"]
+/**
+ * @brief   STM32 GPIO static initialization data.
+ */
+static const gpio_config_t gpio_default_config = {
+[#else]
 #if HAL_USE_PAL || defined(__DOXYGEN__)
 /**
  * @brief   PAL setup.
@@ -55,6 +118,7 @@
  *          This variable is used by the HAL when initializing the PAL driver.
  */
 const PALConfig pal_default_config = {
+[/#if]
 #if STM32_HAS_GPIOA
   {VAL_GPIOA_MODER, VAL_GPIOA_OTYPER, VAL_GPIOA_OSPEEDR, VAL_GPIOA_PUPDR,
    VAL_GPIOA_ODR,   VAL_GPIOA_AFRL,   VAL_GPIOA_AFRH},
@@ -100,15 +164,92 @@ const PALConfig pal_default_config = {
    VAL_GPIOK_ODR,   VAL_GPIOK_AFRL,   VAL_GPIOK_AFRH}
 #endif
 };
+[#if doc1.board.configuration_settings.hal_version[0]?trim == "4.0.x"]
 #endif
+[/#if]
+
+/*===========================================================================*/
+/* Driver local functions.                                                   */
+/*===========================================================================*/
+
+[#if doc1.board.configuration_settings.hal_version[0]?trim != "4.0.x"]
+static void gpio_init(stm32_gpio_t *gpiop, const gpio_setup_t *config) {
+
+  gpiop->OTYPER  = config->otyper;
+  gpiop->OSPEEDR = config->ospeedr;
+  gpiop->PUPDR   = config->pupdr;
+  gpiop->ODR     = config->odr;
+  gpiop->AFRL    = config->afrl;
+  gpiop->AFRH    = config->afrh;
+  gpiop->MODER   = config->moder;
+}
+
+static void stm32_gpio_init(void) {
+
+  /* Enabling GPIO-related clocks, the mask comes from the
+     registry header file.*/
+  rccResetAHB1(STM32_GPIO_EN_MASK);
+  rccEnableAHB1(STM32_GPIO_EN_MASK, true);
+
+  /* Initializing all the defined GPIO ports.*/
+#if STM32_HAS_GPIOA
+  gpio_init(GPIOA, &gpio_default_config.PAData);
+#endif
+#if STM32_HAS_GPIOB
+  gpio_init(GPIOB, &gpio_default_config.PBData);
+#endif
+#if STM32_HAS_GPIOC
+  gpio_init(GPIOC, &gpio_default_config.PCData);
+#endif
+#if STM32_HAS_GPIOD
+  gpio_init(GPIOD, &gpio_default_config.PDData);
+#endif
+#if STM32_HAS_GPIOE
+  gpio_init(GPIOE, &gpio_default_config.PEData);
+#endif
+#if STM32_HAS_GPIOF
+  gpio_init(GPIOF, &gpio_default_config.PFData);
+#endif
+#if STM32_HAS_GPIOG
+  gpio_init(GPIOG, &gpio_default_config.PGData);
+#endif
+#if STM32_HAS_GPIOH
+  gpio_init(GPIOH, &gpio_default_config.PHData);
+#endif
+#if STM32_HAS_GPIOI
+  gpio_init(GPIOI, &gpio_default_config.PIData);
+#endif
+#if STM32_HAS_GPIOJ
+  gpio_init(GPIOJ, &gpio_default_config.PJData);
+#endif
+#if STM32_HAS_GPIOK
+  gpio_init(GPIOK, &gpio_default_config.PKData);
+#endif
+}
+
+[/#if]
+/*===========================================================================*/
+/* Driver interrupt handlers.                                                */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Driver exported functions.                                                */
+/*===========================================================================*/
 
 /**
  * @brief   Early initialization code.
- * @details This initialization must be performed just after stack setup
- *          and before any other initialization.
+[#if doc1.board.configuration_settings.hal_version[0]?trim != "4.0.x"]
+ * @details GPIO ports and system clocks are initialized before everything
+ *          else.
+[#else]
+ * @details System clocks are initialized before everything else.
+[/#if]
  */
 void __early_init(void) {
 
+[#if doc1.board.configuration_settings.hal_version[0]?trim != "4.0.x"]
+  stm32_gpio_init();
+[/#if]
   stm32_clock_init();
 [#if doc1.board.board_functions.__early_init[0]??]
   ${doc1.board.board_functions.__early_init[0]}
@@ -119,28 +260,28 @@ void __early_init(void) {
 /**
  * @brief   SDC card detection.
  */
-${varbool} sdc_lld_is_card_inserted(SDCDriver *sdcp) {
+bool sdc_lld_is_card_inserted(SDCDriver *sdcp) {
 [#if doc1.board.board_functions.sdc_lld_is_card_inserted[0]??]
 ${doc1.board.board_functions.sdc_lld_is_card_inserted[0]}
 [#else]
 
   (void)sdcp;
   /* TODO: Fill the implementation.*/
-  return ${vartrue};
+  return true;
 [/#if]
 }
 
 /**
  * @brief   SDC card write protection detection.
  */
-${varbool} sdc_lld_is_write_protected(SDCDriver *sdcp) {
+bool sdc_lld_is_write_protected(SDCDriver *sdcp) {
 [#if doc1.board.board_functions.sdc_lld_is_write_protected[0]??]
 ${doc1.board.board_functions.sdc_lld_is_write_protected[0]}
 [#else]
 
   (void)sdcp;
   /* TODO: Fill the implementation.*/
-  return ${varfalse};
+  return false;
 [/#if]
 }
 #endif /* HAL_USE_SDC */
@@ -149,28 +290,28 @@ ${doc1.board.board_functions.sdc_lld_is_write_protected[0]}
 /**
  * @brief   MMC_SPI card detection.
  */
-${varbool} mmc_lld_is_card_inserted(MMCDriver *mmcp) {
+bool mmc_lld_is_card_inserted(MMCDriver *mmcp) {
 [#if doc1.board.board_functions.mmc_lld_is_card_inserted[0]??]
 ${doc1.board.board_functions.mmc_lld_is_card_inserted[0]}
 [#else]
 
   (void)mmcp;
   /* TODO: Fill the implementation.*/
-  return ${vartrue};
+  return true;
 [/#if]
 }
 
 /**
  * @brief   MMC_SPI card write protection detection.
  */
-${varbool} mmc_lld_is_write_protected(MMCDriver *mmcp) {
+bool mmc_lld_is_write_protected(MMCDriver *mmcp) {
 [#if doc1.board.board_functions.mmc_lld_is_write_protected[0]??]
 ${doc1.board.board_functions.mmc_lld_is_write_protected[0]}
 [#else]
 
   (void)mmcp;
   /* TODO: Fill the implementation.*/
-  return ${varfalse};
+  return false;
 [/#if]
 }
 #endif
@@ -180,4 +321,8 @@ ${doc1.board.board_functions.mmc_lld_is_write_protected[0]}
  * @todo    Add your board-specific code, if any.
  */
 void boardInit(void) {
+
+[#if doc1.board.board_functions.boardInit[0]??]
+  ${doc1.board.board_functions.boardInit[0]}
+[/#if]
 }
