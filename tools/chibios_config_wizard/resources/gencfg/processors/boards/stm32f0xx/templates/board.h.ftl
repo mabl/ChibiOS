@@ -34,6 +34,10 @@
 #ifndef BOARD_H
 #define BOARD_H
 
+/*===========================================================================*/
+/* Driver constants.                                                         */
+/*===========================================================================*/
+
 /*
  * Setup for ${doc1.board.board_name[0]} board.
  */
@@ -44,16 +48,6 @@
 #define BOARD_${doc1.board.board_id[0]}
 #define BOARD_NAME                  "${doc1.board.board_name[0]}"
 
-[#if doc1.board.ethernet_phy[0]??]
-/*
- * Ethernet PHY type.
- */
-#define BOARD_PHY_ID                ${doc1.board.ethernet_phy.identifier[0]}
-[#if doc1.board.ethernet_phy.bus_type[0]?string == "RMII"]
-#define BOARD_PHY_RMII
-[/#if]
-
-[/#if]
 /*
  * Board oscillators-related settings.
 [#if doc1.board.clocks.@LSEFrequency[0]?number == 0]
@@ -119,6 +113,22 @@
   [/#list]
 
 [/#list]
+/*===========================================================================*/
+/* Driver pre-compile time settings.                                         */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Derived constants and error checks.                                       */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Driver data structures and types.                                         */
+/*===========================================================================*/
+
+/*===========================================================================*/
+/* Driver macros.                                                            */
+/*===========================================================================*/
+
 /*
  * I/O ports initial setup, this configuration is established soon after reset
  * in the initialization code.
@@ -342,6 +352,9 @@ ${(line + " |")?right_pad(76, " ") + "\\"}
   [/#list]
 
 [/#list]
+/*===========================================================================*/
+/* External declarations.                                                    */
+/*===========================================================================*/
 
 #if !defined(_FROM_ASM_)
 #ifdef __cplusplus
