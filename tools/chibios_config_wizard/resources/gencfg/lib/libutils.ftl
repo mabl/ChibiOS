@@ -1,7 +1,7 @@
 [#ftl]
 [#--
     ChibiOS - Copyright (C) 2006,2007,2008,2009,2010,
-              2011,2012,2013,2014,2015,2016 Giovanni Di Sirio.
+              2011,2012,2013,2014,2015,2016,2017 Giovanni Di Sirio.
 
     This file is part of ChibiOS.
 
@@ -41,7 +41,7 @@
 [#function WithoutDot s]
   [#local s = s?trim /]
   [#if s?ends_with(".")]
-    [#return s?substring(0, s?length - 2) /]
+    [#return s?substring(0, s?length - 1) /]
   [/#if]
   [#return s /]
 [/#function]
