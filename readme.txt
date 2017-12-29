@@ -74,6 +74,7 @@
 
 *** 16.1.10 ***
 - Fixed some minor documentation issues.
+- HAL: Fixed compile error HAL UART without WAIT (bug #908).
 - RT:  Fixed gcc7 implicit-fallthrough (bug #906).
 - HAL: Fixed gcc7 implicit-fallthrough (bug #906).
 - HAL: Fixed DAC CH2 marked as not present in STM32F091 registry (bug #905).
