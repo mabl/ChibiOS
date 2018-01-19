@@ -74,7 +74,6 @@
 
 *** 16.1.10 ***
 - Fixed some minor documentation issues.
-- HAL: Fixed chprintf float support for 0 precision (bug #910).
 - HAL: Fixed compile error HAL UART without WAIT (bug #908).
 - RT:  Fixed gcc7 implicit-fallthrough (bug #906).
 - HAL: Fixed gcc7 implicit-fallthrough (bug #906).
