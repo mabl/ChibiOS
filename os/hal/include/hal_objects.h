@@ -66,6 +66,21 @@ typedef struct {
   _base_object_data
 } BaseObject;
 
+/**
+ * @name    Macro Functions (BaseObject)
+ * @{
+ */
+/**
+ * @brief   Returns the instance pointer starting from an interface pointer.
+ *
+ * @param[in] type  the type of the instance pointer, it is used for casting
+ * @param[in] ip    the interface pointer
+ * @return          A pointer to the object implementing the interface
+ */
+#define objGetInstance(type, ip)                                            \
+  (type)(((size_t)(ip)) - (ip)->vmt->instance_offset)
+/** @} */
+
 #endif /* HAL_OBJECTS_H */
 
 /** @} */
