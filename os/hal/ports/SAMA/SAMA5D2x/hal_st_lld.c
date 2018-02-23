@@ -187,6 +187,9 @@ void st_lld_init(void) {
   tcDisableWP(tcp);
 
 #if OSAL_ST_MODE == OSAL_ST_MODE_FREERUNNING
+
+  /* Initializing the timer counter in free running mode.
+   * The clock source is the bus clock divided by 32.*/
   (void)rc;
   tcp->TC_CHANNEL[0].TC_EMR = 0;
   tcp->TC_CHANNEL[0].TC_CMR = TC_CMR_WAVE | TC_CMR_WAVSEL_UP |
