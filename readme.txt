@@ -167,6 +167,8 @@
        dependencies and configuration directories. This makes possible
        to have multiple non-conflicting makefiles in the same project.
        Updated the various platform.mk implementing "smart build" mode.
+- HAL: Fixed invalid implementation of palWaitPadTimeoutS() and
+       palWaitLineTimeoutS() APIs (bug #921)(backported to 18.2.1).
 - HAL: Fixed wrong DMA settings for STM32F76x I2C3 and I2C4 (bug #920)
        (backported to 18.2.1 and 17.6.4).
 - HAL: Fixed wrong flash waiting state for STM32F7xx (bug #918)
